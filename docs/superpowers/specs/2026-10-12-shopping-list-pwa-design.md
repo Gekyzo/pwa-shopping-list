@@ -48,6 +48,23 @@ Decisions taken in the brainstorm:
 - **Backup:** a menu with `Export` (downloads a JSON file) and `Import` (replaces the state after a confirmation).
 - **UI language:** English.
 
+## Layout (design E, 2026-10-12)
+
+This section replaces the tabs, the header button, the `⋮` menu and the bottom add field of the
+first version. The rules above do not change. The mock-up is `designs/e-combinada.html` (a local file, not committed).
+
+- **Header summary:** a progress ring, a title and one line of text for the open screen
+  (`tripSummary` in `src/store.js` gives the figures).
+- **Bottom menu:** `Actual`, `Próxima` with a count, `Ajustes`.
+- **Rows:** a recurrent item shows the pill `↻ siempre`. The `⋯` button opens labelled actions:
+  rename, recurrent toggle, move, delete. A tap on the name in `Actual` ticks the item.
+- **Add:** a `+` button opens a bottom sheet with the search-and-add field and a choice of the
+  target list. The sheet stays open after an add.
+- **End of trip:** `Terminar compra` calls `startNewShopping`. It shows as a banner in `Actual`
+  when all items are ticked, and in `Ajustes`. An empty `Actual` list offers to bring the items
+  of `Próxima`.
+- **Ajustes:** `Terminar compra`, export and import.
+
 ## Data model
 
 One `localStorage` key, `shopping.v1`:

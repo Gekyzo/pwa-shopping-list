@@ -16,6 +16,7 @@ import {
   searchItems,
   findByName,
   bringToList,
+  tripSummary,
 } from '../src/store.js';
 
 let counter = 0;
@@ -343,4 +344,19 @@ test('bringToList rejects an unknown id and an unknown list', () => {
   const start = build(['Bread', 'active']);
   assert.equal(bringToList(start, 'nope', 'active').error, 'Artículo no encontrado.');
   assert.equal(bringToList(start, find(start, 'Bread').id, 'other').error, 'Lista desconocida.');
+});
+
+test('tripSummary counts the items of each kind', () => {
+  const state = build(
+    ['Milk', 'active', { bought: true, recurrent: true }],
+    ['Soap', 'active', { bought: true, again: true }],
+    ['Batteries', 'active', { bought: true }],
+    ['Bread', 'active'],
+    ['Water', 'next'],
+  );
+  assert.deepEqual(tripSummary(state), { total: 4, left: 1, back: 2, gone: 1, incoming: 1 });
+});
+
+test('tripSummary of an empty state is all zero', () => {
+  assert.deepEqual(tripSummary(emptyState()), { total: 0, left: 0, back: 0, gone: 0, incoming: 0 });
 });

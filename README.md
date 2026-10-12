@@ -5,33 +5,30 @@ dependencies. The data stays in the `localStorage` of the browser.
 
 ## How it works
 
-The user interface is in Spanish. The app has two lists.
+The user interface is in Spanish. A bottom menu has three screens.
 
-- **Actual** is the list for the current trip. Tick an item when you buy it. A ticked item stays in the
-  list, crossed out.
+- **Actual** is the list for the current trip. Tap an item to tick it. A ticked item stays in the list,
+  crossed out. The header shows the progress of the trip.
 - **Próxima** is the list for the next trip.
-  - A ticked recurrent item (`↻`) shows in **Próxima** automatically.
+  - A ticked item marked `↻ siempre` (recurrent) shows in **Próxima** automatically.
   - A ticked one-time item goes to **Próxima** only when you tap `+ Próxima`.
   - You can also add items to **Próxima** directly. Such an item is recurrent by default.
-- **Nueva compra** ends the trip:
-  - ticked items that are in **Próxima** go back to **Actual**, not ticked
-  - other ticked items are deleted
-  - items that are not ticked stay in **Actual**
-  - items added to **Próxima** move to **Actual**
+- **Ajustes** has **Terminar compra**, **Exportar copia** and **Importar copia**.
 
-Other actions:
+**Terminar compra** ends the trip. It also shows as a banner in **Actual** when all items are ticked.
 
-- Tap a name to rename the item.
-- Tap `↻` to make an item recurrent or one-time.
-- Tap `⋯` to move an item to the other list or to delete it.
-- `Deshacer` shows for 5 seconds after a delete, a move and **Nueva compra**.
-- `⋮` → **Exportar copia** downloads the lists as a JSON file. **Importar copia** replaces the lists with
-  such a file.
+- ticked items that are in **Próxima** go back to **Actual**, not ticked
+- other ticked items are deleted
+- items that are not ticked stay in **Actual**
+- items added to **Próxima** move to **Actual**
 
-The field at the bottom is a search and an add in one. While you type, the items that exist already
-show above the field, with the list that each one is in. Tap one, or press **Añadir** with the same name,
-and the existing item goes to the open list (an item that is ticked becomes not ticked). A new item is
-created only when no item has that name, without case distinction.
+The `+` button opens the add sheet. The sheet is a search and an add in one. While you type, the items
+that exist already show below the field. Tap one, or press **Añadir** with the same name, and the
+existing item goes to the target list (**Para hoy** or **Para la próxima**). A new item is created only
+when no item has that name, without case distinction.
+
+Tap `⋯` on a row for **Renombrar**, **Comprar siempre** / **Solo una vez**, the move to the other list
+and **Eliminar**. `Deshacer` shows for 5 seconds after a delete, a move and **Terminar compra**.
 
 ## Develop
 

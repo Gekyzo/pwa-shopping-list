@@ -140,3 +140,18 @@ export const bringToList = (state, id, list) => {
   }
   return { state, changed: false };
 };
+
+// Figures for the header and for the preview of `startNewShopping`:
+// `back` items stay for the next trip, `gone` items are deleted, `incoming` items wait in Next.
+export const tripSummary = (state) => {
+  const active = state.items.filter((item) => item.list === 'active');
+  const bought = active.filter((item) => item.bought);
+  const back = bought.filter((item) => item.recurrent || item.again).length;
+  return {
+    total: active.length,
+    left: active.length - bought.length,
+    back,
+    gone: bought.length - back,
+    incoming: state.items.length - active.length,
+  };
+};
