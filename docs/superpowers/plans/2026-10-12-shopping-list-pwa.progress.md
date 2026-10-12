@@ -33,7 +33,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | 3 | User interface | ☑ |  | 2026-10-12 |  |
 | 4 | PWA shell | ☑ |  | 2026-10-12 |  |
 | 5 | README | ☑ |  | 2026-10-12 |  |
-| 6 | Deploy | ☐ |  |  |  |
+| 6 | Deploy | ⏸ |  |  |  |
 
 ## Blockers
 
