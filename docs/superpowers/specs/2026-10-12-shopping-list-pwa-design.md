@@ -58,6 +58,8 @@ first version. The rules above do not change. The mock-up is `designs/e-combinad
 - **Bottom menu:** `Actual`, `Próxima` with a count, `Ajustes`.
 - **Rows:** a recurrent item shows the pill `↻ siempre`. The `⋯` button opens labelled actions:
   rename, recurrent toggle, move, delete. A tap on the name in `Actual` ticks the item.
+- **Bought section:** in `Actual`, the ticked items are below one row, `N comprados`, that is
+  closed at each start of the app. A tick shows an `Undo` message for 5 seconds.
 - **Add:** a `+` button opens a bottom sheet with the search-and-add field and a choice of the
   target list. The sheet stays open after an add.
 - **End of trip:** `Terminar compra` calls `startNewShopping`. It shows as a banner in `Actual`

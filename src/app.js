@@ -25,7 +25,7 @@ const storage = (() => {
 
 let state = storage ? load(storage) : store.emptyState();
 // `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
-const ui = { view: 'active', editingId: null, openId: null, flashId: null, sheetOpen: false, target: 'active' };
+const ui = { view: 'active', editingId: null, openId: null, flashId: null, sheetOpen: false, target: 'active', boughtOpen: false };
 let toastTimer = null;
 let undoState = null;
 
@@ -131,7 +131,9 @@ const deleteAction = (item) =>
 const alwaysPill = () => el('span', { className: 'pill', textContent: '↻ siempre' });
 
 const activeRow = (item) => {
-  const toggle = () => apply(store.toggleBought(state, item.id));
+  // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
+  const toggle = () =>
+    apply(store.toggleBought(state, item.id), item.bought ? {} : { undoText: `"${item.name}" comprado.` });
   const checkbox = el('input', { type: 'checkbox', checked: item.bought, onchange: toggle });
   checkbox.setAttribute('aria-label', `Comprado: ${item.name}`);
   const name =
@@ -181,6 +183,29 @@ const itemNode = (item) => {
   return node;
 };
 
+// The ticked items of Actual, behind one row that opens and closes them.
+const boughtSection = (bought) => {
+  const button = el('button', {
+    type: 'button',
+    onclick: () => {
+      ui.boughtOpen = !ui.boughtOpen;
+      render();
+    },
+  }, [
+    el('span', { textContent: `${plural(bought.length, 'comprado', 'comprados')}` }),
+    el('span', { className: 'chevron', textContent: ui.boughtOpen ? '▾' : '▸' }),
+  ]);
+  button.setAttribute('aria-expanded', String(ui.boughtOpen));
+  return [el('li', { className: 'section' }, [button]), ...(ui.boughtOpen ? bought.map(itemNode) : [])];
+};
+
+const listNodes = (items) => {
+  if (ui.view !== 'active') return items.map(itemNode);
+  const bought = items.filter((item) => item.bought);
+  const pending = items.filter((item) => !item.bought).map(itemNode);
+  return bought.length ? [...pending, ...boughtSection(bought)] : pending;
+};
+
 // Screen
 
 const finishText = ({ back, gone }) => {
@@ -212,7 +237,7 @@ const renderList = (summary, next) => {
   const isList = ui.view !== 'settings';
   const items = ui.view === 'active' ? store.activeItems(state) : next;
   $('items').hidden = !isList;
-  $('items').replaceChildren(...(isList ? items.map(itemNode) : []));
+  $('items').replaceChildren(...(isList ? listNodes(items) : []));
   if (isList && ui.view === 'next' && items.length) {
     $('items').append(el('p', { className: 'hint', textContent: 'Lo que marques como «siempre» vuelve aquí al comprarlo.' }));
   }

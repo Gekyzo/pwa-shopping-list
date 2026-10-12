@@ -7,8 +7,9 @@ dependencies. The data stays in the `localStorage` of the browser.
 
 The user interface is in Spanish. A bottom menu has three screens.
 
-- **Actual** is the list for the current trip. Tap an item to tick it. A ticked item stays in the list,
-  crossed out. The header shows the progress of the trip.
+- **Actual** is the list for the current trip. Tap an item to tick it. A ticked item moves to
+  a collapsed section at the end of the list (`N comprados`); tap that row to open it. The header shows
+  the progress of the trip.
 - **Próxima** is the list for the next trip.
   - A ticked item marked `↻ siempre` (recurrent) shows in **Próxima** automatically.
   - A ticked one-time item goes to **Próxima** only when you tap `+ Próxima`.
