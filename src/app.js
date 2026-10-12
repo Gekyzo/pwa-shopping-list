@@ -229,7 +229,8 @@ const sendText = ({ added, already }) => {
 const sendToList = (recipe) => {
   const result = recipes.sendRecipe(state, recipe.id);
   if (result.error || result.added) apply(result, { undoText: `«${recipe.name}»: ${sendText(result)}.` });
-  else showToast(`«${recipe.name}»: todo estaba ya en la lista.`);
+  // A second tap changes nothing: keep the undo of the send that is still on the screen.
+  else showToast(`«${recipe.name}»: todo estaba ya en la lista.`, { undo: undoState });
 };
 
 const productNode = (recipe, product) => {

@@ -22,7 +22,7 @@ for that kind, use it — the template is the exemplar made executable.
 
 ## Patterns
 
-- **Immutable state.** One object `{ version, items }`. An operation returns a new
+- **Immutable state.** One object `{ version, items, recipes }`. An operation returns a new
   object and never changes its input.
 - **Errors as values.** A rejected operation returns `{ state, error }` with the
   same state object. Nothing throws for a user error.
