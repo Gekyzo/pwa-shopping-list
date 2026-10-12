@@ -600,10 +600,10 @@ const renderVersion = () => {
   const { running, latest, checking } = ui.version;
   const status = versionStatus(running, latest);
   const date = running && new Date(running.date).toLocaleString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-  $('version').textContent = running ? `Versión ${running.build} · ${date}` : 'Versión desconocida';
+  $('version').textContent = running ? `Versión ${running.version} · ${date}` : 'Versión desconocida';
   $('version-status').textContent = checking
     ? 'Comprobando…'
-    : status === 'outdated' ? `Versión ${latest.build} disponible` : VERSION_STATUS[status];
+    : status === 'outdated' ? `Versión ${latest.version} disponible` : VERSION_STATUS[status];
   $('update').hidden = checking || status !== 'outdated';
 };
 
