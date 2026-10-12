@@ -305,6 +305,23 @@ const productForm = (recipe) => {
   return el('div', { className: 'product-add' }, [form, suggestions]);
 };
 
+const editLink = (recipe) => {
+  const text = window.prompt(`Enlace de «${recipe.name}». Déjalo vacío para quitarlo.`, recipe.url);
+  if (text === null) return;
+  ui.openId = null;
+  if (text.trim() === recipe.url) render();
+  else apply(recipes.setRecipeUrl(state, recipe.id, text), { undoText: text.trim() ? 'Enlace guardado.' : 'Enlace quitado.' });
+};
+
+const linkNode = (recipe) =>
+  el('a', {
+    className: 'recipe-link',
+    href: recipe.url,
+    target: '_blank',
+    rel: 'noopener noreferrer',
+    textContent: `${new URL(recipe.url).hostname.replace(/^www\./, '')} ↗`,
+  });
+
 const recipeNode = (recipe) => {
   const open = ui.openRecipeId === recipe.id;
   let name;
@@ -336,9 +353,11 @@ const recipeNode = (recipe) => {
       () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: `Receta «${recipe.name}» eliminada.` }),
       'danger',
     );
-    node.append(el('div', { className: 'actions' }, [renameAction(recipe), remove]));
+    const link = actionButton(recipe.url ? 'Cambiar enlace' : 'Añadir enlace', () => editLink(recipe));
+    node.append(el('div', { className: 'actions' }, [renameAction(recipe), link, remove]));
   }
   if (open) {
+    if (recipe.url) node.append(linkNode(recipe));
     node.append(
       el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product))),
       productForm(recipe),

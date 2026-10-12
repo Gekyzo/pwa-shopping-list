@@ -7,6 +7,7 @@ import {
   deleteRecipe,
   addRecipeProduct,
   removeRecipeProduct,
+  setRecipeUrl,
   sendRecipe,
   recipeGroups,
 } from '../src/recipes.js';
@@ -30,7 +31,7 @@ test('addRecipe adds an empty recipe and returns its id', () => {
   const start = emptyState();
   const { state, id, error } = addRecipe(start, '  Omelette ', newId);
   assert.equal(error, undefined);
-  assert.deepEqual(state.recipes, [{ id, name: 'Omelette', products: [] }]);
+  assert.deepEqual(state.recipes, [{ id, name: 'Omelette', products: [], url: '' }]);
   assert.deepEqual(start, emptyState());
 });
 
@@ -56,7 +57,7 @@ test('addRecipe accepts the name of an item', () => {
 test('renameRecipe renames the recipe and keeps its products', () => {
   const { state, id } = withRecipe(emptyState(), 'Omelette', ['Eggs']);
   const result = renameRecipe(state, id, ' Tortilla ');
-  assert.deepEqual(result.state.recipes, [{ id, name: 'Tortilla', products: ['Eggs'] }]);
+  assert.deepEqual(result.state.recipes, [{ id, name: 'Tortilla', products: ['Eggs'], url: '' }]);
   assert.equal(state.recipes[0].name, 'Omelette');
 });
 
@@ -273,4 +274,35 @@ test('recipeGroups does not change the state', () => {
   const copy = structuredClone(state);
   recipeGroups(state);
   assert.deepEqual(state, copy);
+});
+
+const LINK = 'https://bonviveur.com/es/recetas/garbanzos-con-chorizo';
+
+test('setRecipeUrl stores a trimmed link and leaves the rest of the recipe', () => {
+  const { state, id } = withRecipe(emptyState(), 'Chickpeas', ['Chorizo']);
+  const result = setRecipeUrl(state, id, `  ${LINK} `);
+  assert.deepEqual(result.state.recipes, [{ id, name: 'Chickpeas', products: ['Chorizo'], url: LINK }]);
+  assert.equal(state.recipes[0].url, '');
+});
+
+test('setRecipeUrl adds https to a link with no scheme', () => {
+  const { state, id } = withRecipe(emptyState(), 'Chickpeas');
+  assert.equal(setRecipeUrl(state, id, 'bonviveur.com/es/recetas').state.recipes[0].url, 'https://bonviveur.com/es/recetas');
+  assert.equal(setRecipeUrl(state, id, 'http://example.com').state.recipes[0].url, 'http://example.com');
+});
+
+test('setRecipeUrl removes the link with an empty text', () => {
+  const { state, id } = withRecipe(emptyState(), 'Chickpeas');
+  const linked = setRecipeUrl(state, id, LINK).state;
+  assert.equal(setRecipeUrl(linked, id, '   ').state.recipes[0].url, '');
+});
+
+test('setRecipeUrl rejects a text that is not a web address and an unknown recipe', () => {
+  const { state, id } = withRecipe(emptyState(), 'Chickpeas');
+  ['javascript:alert(1)', 'ftp://example.com/x', 'data:text/html,x', 'two words'].forEach((text) => {
+    const result = setRecipeUrl(state, id, text);
+    assert.equal(result.error, 'El enlace no es una dirección web válida.', text);
+    assert.equal(result.state, state);
+  });
+  assert.equal(setRecipeUrl(state, 'nope', LINK).error, 'Receta no encontrada.');
 });
