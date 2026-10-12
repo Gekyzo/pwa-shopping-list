@@ -18,7 +18,7 @@ The user interface is in Spanish. A bottom menu has four screens.
   - The `+` button creates a recipe. Tap a recipe to open it, then add and remove its products.
   - `⋯` → **Añadir enlace** stores an optional web address of the recipe. The recipe row then
     shows a chain symbol, which opens the page in the browser.
-  - **A la lista** puts the products of the recipe in **Actual**. A product that is in the lists
+  - The cart button with a plus (**A la lista**) puts the products of the recipe in **Actual**. A product that is in the lists
     already is used again: no duplicate is made. A product that is new becomes a one-time item.
   - **Actual** then shows its items in groups, one for each recipe sent in this trip, and **Otros**
     for the rest. An item of two recipes shows in the two groups; one tick takes it out of both.
