@@ -28,7 +28,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 
 | # | Task | Status | Commit (subject) | Landed | Notes |
 |---|---|---|---|---|---|
-| 1 | State functions | ☐ |  |  |  |
+| 1 | State functions | ☑ |  | 2026-10-12 |  |
 | 2 | Storage | ☐ |  |  |  |
 | 3 | User interface | ☐ |  |  |  |
 | 4 | PWA shell | ☐ |  |  |  |
