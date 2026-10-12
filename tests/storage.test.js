@@ -33,6 +33,7 @@ const sample = () => ({
   ...sampleV1(),
   version: 2,
   recipes: [{ id: 'r1', name: 'Omelette', products: ['Eggs', 'Potatoes'] }],
+  sent: ['r1'],
 });
 
 test('save then load returns the same state', () => {
@@ -110,22 +111,23 @@ test('importJson drops unknown fields and repairs the bought and again rules', (
         { id: 'b', name: 'Soap', recurrent: false, list: 'active', bought: false, again: false },
       ],
       recipes: [],
+      sent: [],
     },
   });
 });
 
-test('emptyState is a version 2 state with no recipes', () => {
-  assert.deepEqual(emptyState(), { version: 2, items: [], recipes: [] });
+test('emptyState is a version 2 state with no recipes and no sent recipe', () => {
+  assert.deepEqual(emptyState(), { version: 2, items: [], recipes: [], sent: [] });
 });
 
 test('load migrates a version 1 state and adds an empty recipe list', () => {
   const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(sampleV1()) });
-  assert.deepEqual(load(storage), { ...sampleV1(), version: 2, recipes: [] });
+  assert.deepEqual(load(storage), { ...sampleV1(), version: 2, recipes: [], sent: [] });
   assert.equal(storage.getItem(CORRUPT_KEY), null);
 });
 
 test('importJson migrates a version 1 backup', () => {
-  assert.deepEqual(importJson(JSON.stringify(sampleV1())), { state: { ...sampleV1(), version: 2, recipes: [] } });
+  assert.deepEqual(importJson(JSON.stringify(sampleV1())), { state: { ...sampleV1(), version: 2, recipes: [], sent: [] } });
 });
 
 test('importJson trims recipe names and products and drops unknown fields', () => {
@@ -157,4 +159,16 @@ test('importJson rejects invalid recipes', () => {
   invalid.forEach((data) => {
     assert.deepEqual(importJson(JSON.stringify(data)), { error: 'El archivo no es una copia de seguridad de la lista.' });
   });
+});
+
+test('importJson gives an empty sent list to a version 2 state without one', () => {
+  const { sent, ...withoutSent } = sample();
+  assert.deepEqual(importJson(JSON.stringify(withoutSent)).state.sent, []);
+  assert.deepEqual(importJson(JSON.stringify({ ...sample(), sent: 'r1' })).state.sent, []);
+});
+
+test('importJson keeps in sent only the ids of recipes, one time each', () => {
+  const recipes = [...sample().recipes, { id: 'r2', name: 'Soup', products: [] }];
+  const data = { ...sample(), recipes, sent: ['r2', 'nope', 7, 'r1', 'r2', null] };
+  assert.deepEqual(importJson(JSON.stringify(data)).state.sent, ['r2', 'r1']);
 });

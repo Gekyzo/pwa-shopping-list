@@ -360,3 +360,21 @@ test('tripSummary counts the items of each kind', () => {
 test('tripSummary of an empty state is all zero', () => {
   assert.deepEqual(tripSummary(emptyState()), { total: 0, left: 0, back: 0, gone: 0, incoming: 0 });
 });
+
+test('startNewShopping empties the sent recipes and keeps the recipes', () => {
+  const recipes = [{ id: 'r1', name: 'Omelette', products: ['Bread'] }];
+  const start = { ...build(['Bread', 'active', { bought: true }]), recipes, sent: ['r1'] };
+  const { state } = startNewShopping(start);
+  assert.deepEqual(state.sent, []);
+  assert.equal(state.recipes, recipes);
+  assert.deepEqual(start.sent, ['r1']);
+});
+
+test('an item operation keeps the recipes and the sent recipes', () => {
+  const start = { ...build(['Bread', 'active']), recipes: [{ id: 'r1', name: 'Omelette', products: [] }], sent: ['r1'] };
+  const { id } = find(start, 'Bread');
+  [deleteItem(start, id), toggleBought(start, id), moveItem(start, id), renameItem(start, id, 'Loaf')].forEach(({ state }) => {
+    assert.equal(state.recipes, start.recipes);
+    assert.equal(state.sent, start.sent);
+  });
+});

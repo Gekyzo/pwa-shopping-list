@@ -34,7 +34,8 @@ export const renameRecipe = (state, id, rawName) => {
 
 export const deleteRecipe = (state, id) => {
   if (!findRecipe(state, id)) return reject(state, NOT_FOUND);
-  return { state: { ...state, recipes: state.recipes.filter((recipe) => recipe.id !== id) } };
+  const recipes = state.recipes.filter((recipe) => recipe.id !== id);
+  return { state: { ...state, recipes, sent: state.sent.filter((sentId) => sentId !== id) } };
 };
 
 export const addRecipeProduct = (state, id, rawName) => {
@@ -55,8 +56,9 @@ export const removeRecipeProduct = (state, id, name) => {
   return patchRecipe(state, id, { products: recipe.products.filter((product) => product !== name) });
 };
 
-// Puts each product of the recipe in Active as "to buy". `added` counts the items
-// that were created or changed, `already` the items that were there and pending.
+// Puts each product of the recipe in Active as "to buy" and records the recipe in `sent`.
+// `added` counts the items that were created or changed, `already` the items that were
+// there and pending. A send that changes nothing returns the same state object.
 export const sendRecipe = (state, id, newId) => {
   const recipe = findRecipe(state, id);
   if (!recipe) return reject(state, NOT_FOUND);
@@ -70,5 +72,26 @@ export const sendRecipe = (state, id, newId) => {
     if (!existing || result.changed) added += 1;
     next = result.state;
   }
+  if (!next.sent.includes(id)) next = { ...next, sent: [...next.sent, id] };
   return { state: next, added, already: recipe.products.length - added };
+};
+
+// The Active list by sent recipe. An item of two recipes is in the two groups. `items`
+// are the members still to buy, `total` counts the ticked members too, and `rest` holds
+// the items to buy that are in no group.
+export const recipeGroups = (state) => {
+  const active = state.items.filter((item) => item.list === 'active');
+  const grouped = new Set();
+  const groups = state.sent
+    .map((id) => findRecipe(state, id))
+    .filter(Boolean)
+    .map((recipe) => {
+      const products = new Set(recipe.products.map((product) => product.toLowerCase()));
+      const members = active.filter((item) => products.has(item.name.toLowerCase()));
+      members.forEach((item) => grouped.add(item.id));
+      return { recipe, items: members.filter((item) => !item.bought), total: members.length };
+    })
+    .filter((group) => group.total > 0);
+  const rest = active.filter((item) => !item.bought && !grouped.has(item.id));
+  return { groups, rest };
 };
