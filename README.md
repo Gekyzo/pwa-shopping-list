@@ -16,8 +16,8 @@ The user interface is in Spanish. A bottom menu has four screens.
   - You can also add items to **Próxima** directly. Such an item is recurrent by default.
 - **Recetas** holds recipes. A recipe is a name and a list of products.
   - The `+` button creates a recipe. Tap a recipe to open it, then add and remove its products.
-  - `⋯` → **Añadir enlace** stores an optional web address of the recipe. It shows in the open
-    recipe and opens in the browser.
+  - `⋯` → **Añadir enlace** stores an optional web address of the recipe. The recipe row then
+    shows `↗`, which opens the page in the browser.
   - **A la lista** puts the products of the recipe in **Actual**. A product that is in the lists
     already is used again: no duplicate is made. A product that is new becomes a one-time item.
   - **Actual** then shows its items in groups, one for each recipe sent in this trip, and **Otros**
