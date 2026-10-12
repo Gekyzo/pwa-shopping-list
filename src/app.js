@@ -313,14 +313,25 @@ const editLink = (recipe) => {
   else apply(recipes.setRecipeUrl(state, recipe.id, text), { undoText: text.trim() ? 'Enlace guardado.' : 'Enlace quitado.' });
 };
 
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const CHAIN =
+  'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71';
+
+// The chain symbol of a link, drawn as the icons of the bottom menu are.
+const chainIcon = () => {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', CHAIN);
+  svg.append(path);
+  return svg;
+};
+
 const linkNode = (recipe) => {
-  const link = el('a', {
-    className: 'recipe-link',
-    href: recipe.url,
-    target: '_blank',
-    rel: 'noopener noreferrer',
-    textContent: '↗',
-  });
+  const link = el('a', { className: 'recipe-link', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
+    chainIcon(),
+  ]);
   link.setAttribute('aria-label', `Abrir el enlace de ${recipe.name}`);
   return link;
 };

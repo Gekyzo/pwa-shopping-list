@@ -95,7 +95,7 @@ example `https://bonviveur.com/es/recetas/garbanzos-con-chorizo`.
   text removes the link. `Deshacer` restores the value from before.
 - **Rules:** the text is trimmed. A text with no scheme gets `https://`. Only `http` and `https`
   addresses are accepted; any other text is rejected with `El enlace no es una dirección web válida.`
-- **Show:** the row of a recipe with a link shows the symbol `↗` before `A la lista`, and no
+- **Show:** the row of a recipe with a link shows a chain symbol before `A la lista`, and no
   address. A tap opens the page in the browser (`target="_blank"`, `rel="noopener noreferrer"`).
 - **Data:** `url` in the recipe, `''` when there is no link. On read, a value that is absent or is
   not an `http` / `https` address becomes `''`; the recipe stays valid.
