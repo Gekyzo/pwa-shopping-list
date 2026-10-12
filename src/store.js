@@ -1,9 +1,11 @@
 const LISTS = ['active', 'next'];
 const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
+export const SORTS = ['added', 'name'];
+
 // `sent` holds the ids of the recipes sent to Active in this trip. `grouped` is the
-// choice of the user to show Active by those recipes.
-export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [], grouped: true });
+// choice of the user to show Active by those recipes, and `sort` the order of the two lists.
+export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [], grouped: true, sort: 'added' });
 
 const reject = (state, error) => ({ state, error });
 
@@ -89,15 +91,24 @@ export const startNewShopping = (state) => {
   return { state: { ...state, items, sent: [] } };
 };
 
+export const setSort = (state, sort) =>
+  SORTS.includes(sort) ? { state: { ...state, sort } } : reject(state, 'Orden desconocido.');
+
+const byName = (a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' });
+
+// The items in the order that the user chose. The order of `state.items` is the insertion order.
+export const sortItems = (state, items) => (state.sort === 'name' ? [...items].sort(byName) : items);
+
 export const activeItems = (state) => {
-  const active = state.items.filter((item) => item.list === 'active');
+  const active = sortItems(state, state.items.filter((item) => item.list === 'active'));
   return [...active.filter((item) => !item.bought), ...active.filter((item) => item.bought)];
 };
 
-export const nextItems = (state) => [
-  ...state.items.filter((item) => item.list === 'next'),
-  ...state.items.filter((item) => item.list === 'active' && inNextView(item)),
-];
+export const nextItems = (state) =>
+  sortItems(state, [
+    ...state.items.filter((item) => item.list === 'next'),
+    ...state.items.filter((item) => item.list === 'active' && inNextView(item)),
+  ]);
 
 const fold = (text) =>
   String(text ?? '')

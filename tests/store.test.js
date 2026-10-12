@@ -18,6 +18,8 @@ import {
   bringToList,
   tripSummary,
   arrivalMessage,
+  setSort,
+  sortItems,
 } from '../src/store.js';
 
 let counter = 0;
@@ -394,4 +396,40 @@ test('arrivalMessage uses the singular for one item', () => {
 test('arrivalMessage is null when no item of Active is left', () => {
   assert.equal(arrivalMessage(build(['Milk', 'active', { bought: true }], ['Water', 'next'])), null);
   assert.equal(arrivalMessage(emptyState()), null);
+});
+
+test('setSort sets a known sort and rejects another one', () => {
+  const start = emptyState();
+  assert.equal(start.sort, 'added');
+  const { state } = setSort(start, 'name');
+  assert.equal(state.sort, 'name');
+  assert.equal(setSort(state, 'added').state.sort, 'added');
+  assert.equal(start.sort, 'added');
+  const rejected = setSort(state, 'price');
+  assert.equal(rejected.state, state);
+  assert.equal(rejected.error, 'Orden desconocido.');
+});
+
+test('sortItems keeps the insertion order when the sort is added', () => {
+  const state = build(['Zumo', 'active'], ['Arroz', 'active']);
+  assert.equal(sortItems(state, state.items), state.items);
+});
+
+test('sortItems gives the Spanish name order without case or accent distinction', () => {
+  const state = setSort(build(['zumo', 'active'], ['Ñoquis', 'active'], ['Banana', 'active'], ['nata', 'active'], ['árbol', 'active'], ['Oca', 'active']), 'name').state;
+  const before = structuredClone(state);
+  assert.deepEqual(names(sortItems(state, state.items)), ['árbol', 'Banana', 'nata', 'Ñoquis', 'Oca', 'zumo']);
+  assert.deepEqual(state, before);
+});
+
+test('activeItems sorts by name and keeps the bought items last', () => {
+  const start = build(['Pan', 'active'], ['Zumo', 'active', { bought: true }], ['Arroz', 'active'], ['Agua', 'active', { bought: true }], ['Sal', 'next']);
+  assert.deepEqual(names(activeItems(start)), ['Pan', 'Arroz', 'Zumo', 'Agua']);
+  assert.deepEqual(names(activeItems(setSort(start, 'name').state)), ['Arroz', 'Pan', 'Agua', 'Zumo']);
+});
+
+test('nextItems is one list in name order', () => {
+  const start = build(['Sal', 'next'], ['Zumo', 'active', { bought: true, recurrent: true }], ['Arroz', 'next'], ['Leche', 'active', { bought: true, again: true }]);
+  assert.deepEqual(names(nextItems(start)), ['Sal', 'Arroz', 'Zumo', 'Leche']);
+  assert.deepEqual(names(nextItems(setSort(start, 'name').state)), ['Arroz', 'Leche', 'Sal', 'Zumo']);
 });

@@ -1,4 +1,4 @@
-import { emptyState } from './store.js';
+import { emptyState, SORTS } from './store.js';
 import { isWebUrl } from './recipes.js';
 
 export const STORAGE_KEY = 'shopping.v1';
@@ -64,7 +64,7 @@ const normalizeState = (data) => {
   const known = new Set(recipes.map((recipe) => recipe.id));
   const rawSent = Array.isArray(data.sent) ? data.sent : [];
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
-  return { version: 2, items, recipes, sent, grouped: data.grouped !== false };
+  return { version: 2, items, recipes, sent, grouped: data.grouped !== false, sort: SORTS.includes(data.sort) ? data.sort : 'added' };
 };
 
 const parse = (text) => {
