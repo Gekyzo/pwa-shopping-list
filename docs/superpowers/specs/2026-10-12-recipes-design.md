@@ -60,6 +60,32 @@ item ids would lose its products after each trip.
 - **Backup:** `Exportar copia` includes the recipes. `Importar copia` accepts a version 1 file (no
   recipes) and a version 2 file. The confirmation gives the two counts.
 
+## Groups in Actual
+
+Added after the first version. `Actual` shows its items in groups, one for each recipe that the
+user sent in the current trip.
+
+- **Sent recipes:** `A la lista` records the recipe in `sent`, one time, in send order.
+  `Terminar compra` empties `sent`. A deleted recipe leaves `sent`.
+- **Membership:** an `Actual` item is in the group of a sent recipe when the recipe has a product
+  with that name, without case distinction. An item added by hand joins the group of a sent recipe
+  that has it. A recipe that was not sent makes no group.
+- **Shared item:** an item of two sent recipes shows in the two groups. It is one record, so a tick
+  in one group ticks it in all groups, and the header counts it one time.
+- **Layout:** for each group, a header with the recipe name and `done/total` (`✓` when all its
+  items are ticked), then its items that are not ticked. Then a header `Otros` with the items of no
+  group, only when there are such items. Then the `N comprados` section, where a ticked item shows
+  one time. A sent recipe with no item in `Actual` shows no group.
+- **No sent recipe with items:** `Actual` is the flat list, as before.
+- **Row actions:** the `⋯` actions and the rename field open only in the copy of the row where the
+  user opened them.
+- **Send:** a send that only adds a group, because all its products were pending already, also
+  offers `Deshacer`.
+- **Out of scope:** a switch for the flat view, a way to remove a group other than `Deshacer`,
+  groups in `Próxima`, a reorder of groups.
+
+`src/recipes.js` exports the view `recipeGroups(state) → { groups: [{ recipe, items, total }], rest }`.
+
 ## Data model
 
 One `localStorage` key, `shopping.v1`. The key name does not change; the `version` field does.
@@ -69,6 +95,7 @@ One `localStorage` key, `shopping.v1`. The key name does not change; the `versio
   version: 2,
   items: [{ id, name, recurrent, list: 'active' | 'next', bought, again }],
   recipes: [{ id, name, products: ['Huevos', 'Patatas'] }],
+  sent: ['<recipe id>'],
 }
 ```
 
@@ -76,6 +103,10 @@ One `localStorage` key, `shopping.v1`. The key name does not change; the `versio
 has no `recipes`; the result gets `recipes: []`. The result is always version 2. `load` and
 `importJson` use the same function, so the two migrate the same way. An unknown version is rejected
 as before.
+
+`sent` is optional on read: an absent or invalid value gives `[]`, and an id that is not a string,
+names no recipe or is a duplicate is dropped. The version stays 2, because an older module drops
+the field and loses nothing but the groups.
 
 **Validation of a recipe** (`normalizeRecipe`): `id` is a string that is not empty, `name` is a
 string that is not empty after a trim, `products` is an array of strings that are not empty after a
