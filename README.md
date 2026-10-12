@@ -18,6 +18,9 @@ The user interface is in Spanish. A bottom menu has four screens.
   - The `+` button creates a recipe. Tap a recipe to open it, then add and remove its products.
   - **A la lista** puts the products of the recipe in **Actual**. A product that is in the lists
     already is used again: no duplicate is made. A product that is new becomes a one-time item.
+  - **Actual** then shows its items in groups, one for each recipe sent in this trip, and **Otros**
+    for the rest. An item of two recipes shows in the two groups; one tick takes it out of both.
+    **Terminar compra** ends the groups.
   - A recipe and an item are independent. A rename of one does not change the other.
 - **Ajustes** has **Terminar compra**, **Exportar copia** and **Importar copia**. The backup holds
   the items and the recipes.
