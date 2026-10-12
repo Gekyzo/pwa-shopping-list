@@ -1,0 +1,12 @@
+{
+  "name": "shopping",
+  "version": "1.0.0",
+  "description": "Offline shopping list PWA with an active list and a next list",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "serve": "python3 -m http.server 8080",
+    "icons": "node scripts/make-icons.mjs"
+  }
+}
