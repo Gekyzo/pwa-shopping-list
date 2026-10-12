@@ -56,8 +56,17 @@ first version. The rules above do not change. The mock-up is `designs/e-combinad
 - **Header summary:** a progress ring, a title and one line of text for the open screen
   (`tripSummary` in `src/store.js` gives the figures).
 - **Bottom menu:** `Actual`, `Próxima` with a count, `Ajustes`.
-- **Rows:** a recurrent item shows the pill `↻ siempre`. The `⋯` button opens labelled actions:
-  rename, recurrent toggle, move, delete. A tap on the name in `Actual` ticks the item.
+- **Rows:** a recurrent item shows the pill `↻ siempre`. A tap on the name in `Actual` ticks the item.
+- **Row actions (swipe, 2026-10-12):** an item row has no `⋯` button. A slide of the row shows a
+  side menu behind it:
+  - slide right: `Renombrar`, `Comprar siempre` / `Solo una vez`
+  - slide left: `A Próxima` / `A Actual`, `Eliminar`
+  - a "bought today" row of `Próxima`: `Renombrar` on one side, `Quitar de Próxima` on the other
+  - A drag of more than 40 % of the menu width (40 px at least) opens the side; a shorter drag goes
+    back (`settle` in `src/swipe.js`). A vertical drag scrolls the list. A slide never ticks the item.
+  - A tap on an action runs it and closes the row. A tap out of the open row closes it. One row
+    is open at a time.
+  - The actions are not reachable from the keyboard or a screen reader; this is accepted.
 - **Bought section:** in `Actual`, the ticked items are below one row, `N comprados`, that is
   closed at each start of the app. A tick shows an `Undo` message for 5 seconds.
 - **Add:** a `+` button opens a bottom sheet with the search-and-add field and a choice of the
