@@ -333,21 +333,24 @@ const editLink = (recipe) => {
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const CHAIN =
   'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71';
+// The cart of the bottom menu with a plus in its basket.
+const CART_PLUS =
+  'M2 3h3l2.5 12h11L21 7H6M13 8.5v4M11 10.5h4M9 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M18 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3';
 
-// The chain symbol of a link, drawn as the icons of the bottom menu are.
-const chainIcon = () => {
+// A line icon, drawn as the icons of the bottom menu are.
+const icon = (d) => {
   const svg = document.createElementNS(SVG_NS, 'svg');
   svg.setAttribute('viewBox', '0 0 24 24');
   svg.setAttribute('aria-hidden', 'true');
   const path = document.createElementNS(SVG_NS, 'path');
-  path.setAttribute('d', CHAIN);
+  path.setAttribute('d', d);
   svg.append(path);
   return svg;
 };
 
 const linkNode = (recipe) => {
   const link = el('a', { className: 'recipe-link', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
-    chainIcon(),
+    icon(CHAIN),
   ]);
   link.setAttribute('aria-label', `Abrir el enlace de ${recipe.name}`);
   return link;
@@ -375,7 +378,7 @@ const recipeNode = (recipe) => {
     );
     name.setAttribute('aria-expanded', String(open));
   }
-  const send = el('button', { type: 'button', className: 'pill send', textContent: 'A la lista', onclick: () => sendToList(recipe) });
+  const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon(CART_PLUS)]);
   send.setAttribute('aria-label', `Enviar a la lista: ${recipe.name}`);
   const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
   const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);

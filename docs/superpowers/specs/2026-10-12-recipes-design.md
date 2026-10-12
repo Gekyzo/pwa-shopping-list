@@ -27,7 +27,8 @@ item ids would lose its products after each trip.
   selector and without suggestions. The field takes the recipe name. The new recipe shows expanded,
   ready for its products.
 - **Read:** recipes in insertion order. A row shows the name, the product count, the `A la lista`
-  button and the `⋯` button. A tap on the name expands or collapses the recipe. One recipe is
+  button and the `⋯` button. The `A la lista` button shows a cart with a plus and no text; its
+  label for a screen reader is `Enviar a la lista: <recipe>`. A tap on the name expands or collapses the recipe. One recipe is
   expanded at a time.
 - **Expanded recipe:** its products in insertion order, each with a `✕` button, then an
   `Añadir producto` field. While the user types, up to 5 existing items whose name contains the
