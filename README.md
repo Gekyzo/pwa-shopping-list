@@ -11,7 +11,8 @@ The user interface is in Spanish. A bottom menu has four screens.
   a collapsed section at the end of the list (`N comprados`); tap that row to open it. The header shows
   the progress of the trip.
 - **Próxima** is the list for the next trip.
-  - A ticked item marked `↻ siempre` (recurrent) shows in **Próxima** automatically.
+  - Each row ends with a repeat icon. Tap it to make the item recurrent (green) or one-time (pale).
+  - A ticked recurrent item shows in **Próxima** automatically.
   - A ticked one-time item goes to **Próxima** only when you tap `+ Próxima`.
   - You can also add items to **Próxima** directly. Such an item is recurrent by default.
 - **Recetas** holds recipes. A recipe is a name and a list of products.
@@ -40,8 +41,7 @@ that exist already show below the field. Tap one, or press **Añadir** with the 
 existing item goes to the target list (**Para hoy** or **Para la próxima**). A new item is created only
 when no item has that name, without case distinction.
 
-Slide an item row to see its actions. A slide to the right shows **Renombrar** and **Comprar siempre** /
-**Solo una vez**. A slide to the left shows the move to the other list and **Eliminar**. A tap out of the
+Slide an item row to see its actions. A slide to the right shows **Renombrar**. A slide to the left shows the move to the other list and **Eliminar**. A tap out of the
 row closes it. A recipe row has a `⋯` button for its actions. `Deshacer` shows for 5 seconds after a delete, a move, **Terminar compra** and
 **A la lista**.
 

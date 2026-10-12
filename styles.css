@@ -373,6 +373,19 @@ button.pill {
   color: var(--muted);
 }
 
+.recur {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--line);
+}
+
+.recur[aria-pressed="true"] {
+  color: var(--accent);
+}
+
 .more {
   flex: none;
   width: 44px;
@@ -473,7 +486,8 @@ button.pill {
 
 .recipe-link svg,
 .send svg,
-.side svg {
+.side svg,
+.recur svg {
   width: 22px;
   height: 22px;
   fill: none;
