@@ -31,7 +31,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | 1 | State functions | ☑ |  | 2026-10-12 |  |
 | 2 | Storage | ☑ |  | 2026-10-12 |  |
 | 3 | User interface | ☑ |  | 2026-10-12 |  |
-| 4 | PWA shell | ☐ |  |  |  |
+| 4 | PWA shell | ☑ |  | 2026-10-12 |  |
 | 5 | README | ☐ |  |  |  |
 | 6 | Deploy | ☐ |  |  |  |
 
