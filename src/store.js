@@ -96,3 +96,47 @@ export const nextItems = (state) => [
   ...state.items.filter((item) => item.list === 'next'),
   ...state.items.filter((item) => item.list === 'active' && inNextView(item)),
 ];
+
+const fold = (text) =>
+  String(text ?? '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '');
+
+// The item that a new name would duplicate.
+export const findByName = (state, rawName) => {
+  const key = String(rawName ?? '').trim().toLowerCase();
+  return key ? state.items.find((item) => item.name.toLowerCase() === key) : undefined;
+};
+
+// Items whose name contains the query: exact match first, then prefix matches.
+export const searchItems = (state, query, limit = 5) => {
+  const key = fold(query);
+  if (!key) return [];
+  const rank = (item) => {
+    const name = fold(item.name);
+    if (name === key) return 0;
+    return name.startsWith(key) ? 1 : 2;
+  };
+  return state.items
+    .filter((item) => fold(item.name).includes(key))
+    .sort((a, b) => rank(a) - rank(b))
+    .slice(0, limit);
+};
+
+// Makes an existing item show as "to buy" in the given list. `changed` is false
+// when the item is there already.
+export const bringToList = (state, id, list) => {
+  if (!LISTS.includes(list)) return reject(state, 'Unknown list.');
+  const item = findItem(state, id);
+  if (!item) return reject(state, 'Item not found.');
+  const done = (result) => ({ ...result, changed: true });
+  if (list === 'active') {
+    if (item.list === 'next') return done(moveItem(state, id));
+    if (item.bought) return done(toggleBought(state, id));
+  } else if (!inNextView(item)) {
+    return done(item.bought ? toggleAgain(state, id) : moveItem(state, id));
+  }
+  return { state, changed: false };
+};

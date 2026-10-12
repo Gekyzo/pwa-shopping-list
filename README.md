@@ -28,7 +28,10 @@ Other actions:
 - `⋮` → **Export backup** downloads the lists as a JSON file. **Import backup** replaces the lists with
   such a file.
 
-A name is unique across the two lists, without case distinction.
+The field at the bottom is a search and an add in one. While you type, the items that exist already
+show above the field, with the list that each one is in. Tap one, or press **Add** with the same name,
+and the existing item goes to the open list (an item that is ticked becomes not ticked). A new item is
+created only when no item has that name, without case distinction.
 
 ## Develop
 

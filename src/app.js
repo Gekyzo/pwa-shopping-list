@@ -21,7 +21,7 @@ const storage = (() => {
 })();
 
 let state = storage ? load(storage) : store.emptyState();
-const ui = { tab: 'active', editingId: null, openId: null };
+const ui = { tab: 'active', editingId: null, openId: null, flashId: null };
 let toastTimer = null;
 let undoState = null;
 
@@ -166,9 +166,8 @@ const nextRow = (item) => {
 
 const itemNode = (item) => {
   const { row, actions } = ui.tab === 'active' ? activeRow(item) : nextRow(item);
-  const node = el('li', { className: item.bought && ui.tab === 'active' ? 'item bought' : 'item' }, [
-    el('div', { className: 'row' }, row),
-  ]);
+  const classes = ['item', item.bought && ui.tab === 'active' && 'bought', ui.flashId === item.id && 'flash'];
+  const node = el('li', { className: classes.filter(Boolean).join(' ') }, [el('div', { className: 'row' }, row)]);
   if (ui.openId === item.id) node.append(el('div', { className: 'actions' }, actions));
   return node;
 };
@@ -194,8 +193,44 @@ const render = () => {
   });
 
   $('start').disabled = !store.canStartNewShopping(state);
-  $('add-name').placeholder = ui.tab === 'active' ? 'Add to Active' : 'Add to Next (recurrent)';
   $('items').querySelector('.rename')?.focus();
+  $('items').querySelector('.flash')?.scrollIntoView({ block: 'nearest' });
+  ui.flashId = null;
+  renderSuggestions();
+};
+
+const LIST_LABELS = { active: 'Active', next: 'Next' };
+
+const whereText = (item) => {
+  if (item.list === 'next') return 'in Next';
+  return item.bought ? 'in Active, bought' : 'in Active';
+};
+
+const renderSuggestions = () => {
+  const matches = store.searchItems(state, $('add-name').value);
+  $('suggestions').hidden = matches.length === 0;
+  $('suggestions').replaceChildren(
+    ...matches.map((item) =>
+      el('li', {}, [
+        el('button', { type: 'button', onclick: () => useExisting(item) }, [
+          el('span', { className: 'suggestion-name', textContent: item.name }),
+          el('span', { className: 'suggestion-where', textContent: whereText(item) }),
+        ]),
+      ])),
+  );
+};
+
+// Puts an item that exists already into the open list, in place of a duplicate.
+const useExisting = (item) => {
+  const result = store.bringToList(state, item.id, ui.tab);
+  const label = LIST_LABELS[ui.tab];
+  $('add-name').value = '';
+  ui.flashId = item.id;
+  if (result.changed) apply(result, { undoText: `"${item.name}" exists already. It is now in ${label}.` });
+  else {
+    render();
+    showToast(result.error ?? `"${item.name}" is already in ${label}.`);
+  }
 };
 
 const download = (filename, text) => {
@@ -214,9 +249,16 @@ document.querySelectorAll('.tabs button').forEach((tab) => {
 $('add').addEventListener('submit', (event) => {
   event.preventDefault();
   const input = $('add-name');
-  if (apply(store.addItem(state, input.value, ui.tab))) input.value = '';
+  const existing = store.findByName(state, input.value);
+  if (existing) useExisting(existing);
+  else if (apply(store.addItem(state, input.value, ui.tab))) {
+    input.value = '';
+    renderSuggestions();
+  }
   input.focus();
 });
+
+$('add-name').addEventListener('input', renderSuggestions);
 
 $('start').addEventListener('click', () => {
   if (!apply(store.startNewShopping(state), { undoText: 'New shopping started.' })) return;
