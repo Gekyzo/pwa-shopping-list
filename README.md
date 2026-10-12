@@ -19,6 +19,8 @@ The user interface is in Spanish. A bottom menu has four screens.
   you added the items) and **Nombre** (alphabetical). One choice applies to the two lists. It shows
   when the list has two items or more.
 - **Recetas** holds recipes. A recipe is a name and a list of products.
+  - The field **Buscar receta o producto** filters the recipes while you type. It finds a recipe by
+    its name or by one of its products, without case or accent distinction.
   - The `+` button creates a recipe. Tap a recipe to open it, then add and remove its products.
   - `⋯` → **Añadir enlace** stores an optional web address of the recipe. The recipe row then
     shows a chain symbol, which opens the page in the browser.

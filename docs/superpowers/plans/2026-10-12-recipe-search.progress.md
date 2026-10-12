@@ -29,7 +29,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | # | Task | Status | Commit (subject) | Landed | Notes |
 |---|---|---|---|---|---|
 | 1 | Recipe search rule | ☑ |  | 2026-10-12 |  |
-| 2 | Search field in Recetas | ☐ |  |  |  |
+| 2 | Search field in Recetas | ☑ |  | 2026-10-12 |  |
 
 ## Blockers
 
