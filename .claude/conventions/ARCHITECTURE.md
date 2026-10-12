@@ -34,7 +34,7 @@ of the state are in `docs/superpowers/specs/2026-10-12-recipes-design.md`.
 ## Boundaries
 
 - **`localStorage`**, key `shopping.v1`: the only data store. The state is
-  `{ version: 2, items, recipes, sent, grouped }`; a version 1 state is migrated when it is read. Invalid content is
+  `{ version: 2, items, recipes, sent, grouped, sort }`; a version 1 state is migrated when it is read. Invalid content is
   kept under `shopping.v1.corrupt`.
 - **Cache API**, cache `shopping-shell-v2`: the app shell, served
   stale-while-revalidate.

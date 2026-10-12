@@ -352,25 +352,40 @@ const groupToggle = () => {
   ]);
 };
 
-const pendingNodes = () => {
+// The choice of the order of Actual and Próxima. As the group choice, it keeps the toast.
+const sortToggle = () => {
+  const option = (text, sort) => {
+    const button = actionButton(text, () => commit(store.setSort(state, sort).state));
+    button.setAttribute('aria-pressed', String(state.sort === sort));
+    return button;
+  };
+  return el('li', { className: 'groupby' }, [
+    el('span', { textContent: 'Ordenar por' }),
+    el('div', {}, [option('Añadido', 'added'), option('Nombre', 'name')]),
+  ]);
+};
+
+// `sort` holds the sort choice row, or nothing for a list too short to sort.
+const pendingNodes = (sort) => {
   const { groups, rest } = recipes.recipeGroups(state);
-  if (!groups.length) return rest.map((item) => itemNode(item));
+  if (!groups.length) return [...sort, ...rest.map((item) => itemNode(item))];
   if (!state.grouped) {
     const pending = store.activeItems(state).filter((item) => !item.bought);
-    return [groupToggle(), ...pending.map((item) => itemNode(item))];
+    return [groupToggle(), ...sort, ...pending.map((item) => itemNode(item))];
   }
   const grouped = groups.flatMap(({ recipe, items, total }) => [
     groupHead(recipe.name, items.length ? `${total - items.length}/${total}` : '✓'),
     ...items.map((item) => itemNode(item, recipe.id)),
   ]);
   const others = rest.length ? [groupHead('Otros', ''), ...rest.map((item) => itemNode(item))] : [];
-  return [groupToggle(), ...grouped, ...others];
+  return [groupToggle(), ...sort, ...grouped, ...others];
 };
 
 const listNodes = (items) => {
-  if (ui.view !== 'active') return items.map((item) => itemNode(item));
+  const sort = items.length > 1 ? [sortToggle()] : [];
+  if (ui.view !== 'active') return [...sort, ...items.map((item) => itemNode(item))];
   const bought = items.filter((item) => item.bought);
-  return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
+  return bought.length ? [...pendingNodes(sort), ...boughtSection(bought)] : pendingNodes(sort);
 };
 
 // Recipes
