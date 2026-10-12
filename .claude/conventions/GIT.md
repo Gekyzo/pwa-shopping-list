@@ -17,4 +17,4 @@ copies drift — which is the whole reason this is a link.
 
 ## Local overrides
 
-- **Remote:** `origin` is `git@github.com:Gekyzo/shopping.git`. GitHub Pages serves `main` / root, so a push to `main` is a deploy.
+- **Remote:** `origin` is `git@github.com:Gekyzo/shopping-list.git`. GitHub Pages serves `main` / root, so a push to `main` is a deploy.

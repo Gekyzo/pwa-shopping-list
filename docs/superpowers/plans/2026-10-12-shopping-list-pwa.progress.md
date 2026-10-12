@@ -33,11 +33,11 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | 3 | User interface | ☑ |  | 2026-10-12 |  |
 | 4 | PWA shell | ☑ |  | 2026-10-12 |  |
 | 5 | README | ☑ |  | 2026-10-12 |  |
-| 6 | Deploy | ⏸ |  |  |  |
+| 6 | Deploy | ◐ |  |  |  |
 
 ## Blockers
 
-- **Task 6:** the GitHub repository `Gekyzo/shopping` does not exist (`git ls-remote origin` fails) and the `gh` CLI is not installed. The user creates the empty public repository; then `git push -u origin main` and Pages from `main` / root.
+None.
 
 ## Deviations
 

@@ -51,7 +51,7 @@ When you add a file that the app loads, add it to `SHELL` in `sw.js`.
 ## Deploy
 
 The app is a static site. Each host that serves the repository root over HTTPS is sufficient. All URLs
-are relative, thus the app also works below a subpath such as `https://<user>.github.io/shopping/`.
+are relative, thus the app also works below a subpath such as `https://gekyzo.github.io/shopping-list/`.
 
 GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / root**.
 
