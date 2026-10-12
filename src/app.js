@@ -42,6 +42,8 @@ const ui = {
   target: 'active',
   boughtOpen: false,
   openRecipeId: null,
+  // The text of the search field of Recetas. It is not stored.
+  recipeQuery: '',
   // The group of Actual where the row actions are open: a recipe id, or null out of a group.
   openGroup: null,
   // The side menu of the open item row: 'start' (slide right), 'end' (slide left) or null.
@@ -556,11 +558,16 @@ const EMPTY_TEXT = {
 
 const nodesOf = (items) => {
   if (ui.view === 'settings') return [];
-  return ui.view === 'recipes' ? state.recipes.map(recipeNode) : listNodes(items);
+  return ui.view === 'recipes' ? recipes.searchRecipes(state, ui.recipeQuery).map(recipeNode) : listNodes(items);
 };
 
 const renderList = (summary, next) => {
   const items = ui.view === 'active' ? store.activeItems(state) : next;
+  const searchable = ui.view === 'recipes' && state.recipes.length > 0;
+  if (!searchable) ui.recipeQuery = '';
+  $('recipe-search').hidden = !searchable;
+  // The field is not built again by a render, so it keeps the cursor. Write it only after a reset.
+  if ($('recipe-query').value !== ui.recipeQuery) $('recipe-query').value = ui.recipeQuery;
   const nodes = nodesOf(items);
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
@@ -569,7 +576,7 @@ const renderList = (summary, next) => {
   }
 
   $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
-  $('empty-text').textContent = EMPTY_TEXT[ui.view] ?? '';
+  $('empty-text').textContent = searchable ? `Ninguna receta coincide con «${ui.recipeQuery.trim()}».` : (EMPTY_TEXT[ui.view] ?? '');
   $('bring').hidden = !(ui.view === 'active' && summary.incoming > 0);
   $('bring').textContent = `Traer ${plural(summary.incoming, 'artículo', 'artículos')} de Próxima`;
 
@@ -690,7 +697,7 @@ const submitRecipe = () => {
     return;
   }
   // The new recipe shows expanded, with the cursor in its product field.
-  Object.assign(ui, { sheetOpen: false, openRecipeId: result.id, focusProduct: true });
+  Object.assign(ui, { sheetOpen: false, openRecipeId: result.id, focusProduct: true, recipeQuery: '' });
   apply(result);
 };
 
@@ -724,7 +731,7 @@ const download = (filename, text) => {
 
 document.querySelectorAll('.bnav button').forEach((button) => {
   button.addEventListener('click', () => {
-    Object.assign(ui, { view: button.dataset.view, editingId: null, openId: null });
+    Object.assign(ui, { view: button.dataset.view, editingId: null, openId: null, recipeQuery: '' });
     render();
   });
 });
@@ -762,6 +769,11 @@ document.addEventListener(
   },
   true,
 );
+
+$('recipe-query').addEventListener('input', (event) => {
+  Object.assign(ui, { recipeQuery: event.target.value, editingId: null, openId: null });
+  render();
+});
 
 $('fab').addEventListener('click', openSheet);
 $('veil').addEventListener('click', closeSheet);

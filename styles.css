@@ -536,6 +536,22 @@ button.pill {
   background: var(--bg);
 }
 
+/* Recipe search */
+
+.search {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.search input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
 /* Settings */
 
 .settings h2 {
