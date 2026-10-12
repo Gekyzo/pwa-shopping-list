@@ -1,7 +1,8 @@
 const LISTS = ['active', 'next'];
 const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
-export const emptyState = () => ({ version: 2, items: [], recipes: [] });
+// `sent` holds the ids of the recipes sent to Active in this trip.
+export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [] });
 
 const reject = (state, error) => ({ state, error });
 
@@ -84,7 +85,7 @@ export const startNewShopping = (state) => {
   const items = state.items
     .filter((item) => !item.bought || item.recurrent || item.again)
     .map((item) => ({ ...item, list: 'active', bought: false, again: false }));
-  return { state: { ...state, items } };
+  return { state: { ...state, items, sent: [] } };
 };
 
 export const activeItems = (state) => {

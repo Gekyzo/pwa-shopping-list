@@ -55,7 +55,12 @@ const normalizeState = (data) => {
     unique(items.map((item) => lower(item.name))) &&
     unique(recipes.map((recipe) => recipe.id)) &&
     unique(recipes.map((recipe) => lower(recipe.name)));
-  return valid ? { version: 2, items, recipes } : null;
+  if (!valid) return null;
+  // `sent` only groups the Active view, so a bad entry is dropped and the state stays valid.
+  const known = new Set(recipes.map((recipe) => recipe.id));
+  const rawSent = Array.isArray(data.sent) ? data.sent : [];
+  const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
+  return { version: 2, items, recipes, sent };
 };
 
 const parse = (text) => {

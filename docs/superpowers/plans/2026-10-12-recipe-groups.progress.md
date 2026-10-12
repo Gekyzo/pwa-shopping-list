@@ -28,7 +28,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 
 | # | Task | Status | Commit (subject) | Landed | Notes |
 |---|---|---|---|---|---|
-| 1 | State and operations | ☐ |  |  |  |
+| 1 | State and operations | ☑ |  | 2026-10-12 |  |
 | 2 | Grouped screen and docs | ☐ |  |  |  |
 
 ## Blockers
