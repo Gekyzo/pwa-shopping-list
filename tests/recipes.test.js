@@ -10,6 +10,7 @@ import {
   setRecipeUrl,
   sendRecipe,
   recipeGroups,
+  setGrouped,
 } from '../src/recipes.js';
 
 let counter = 0;
@@ -305,4 +306,13 @@ test('setRecipeUrl rejects a text that is not a web address and an unknown recip
     assert.equal(result.state, state);
   });
   assert.equal(setRecipeUrl(state, 'nope', LINK).error, 'Receta no encontrada.');
+});
+
+test('setGrouped turns the grouping of Active off and on', () => {
+  const start = emptyState();
+  assert.equal(start.grouped, true);
+  const off = setGrouped(start, false).state;
+  assert.equal(off.grouped, false);
+  assert.equal(setGrouped(off, true).state.grouped, true);
+  assert.equal(start.grouped, true);
 });

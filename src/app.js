@@ -220,15 +220,32 @@ const groupHead = (title, count) =>
   el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
 
 // The items of Actual still to buy, below the sent recipe that asks for each one.
+// The choice between Actual by recipe and Actual as one list. It keeps the toast, and so the undo.
+const groupToggle = () => {
+  const option = (text, grouped) => {
+    const button = actionButton(text, () => commit(recipes.setGrouped(state, grouped).state));
+    button.setAttribute('aria-pressed', String(state.grouped === grouped));
+    return button;
+  };
+  return el('li', { className: 'groupby' }, [
+    el('span', { textContent: 'Agrupar por' }),
+    el('div', {}, [option('Recetas', true), option('Nada', false)]),
+  ]);
+};
+
 const pendingNodes = () => {
   const { groups, rest } = recipes.recipeGroups(state);
-  const others = rest.map((item) => itemNode(item));
-  if (!groups.length) return others;
+  if (!groups.length) return rest.map((item) => itemNode(item));
+  if (!state.grouped) {
+    const pending = store.activeItems(state).filter((item) => !item.bought);
+    return [groupToggle(), ...pending.map((item) => itemNode(item))];
+  }
   const grouped = groups.flatMap(({ recipe, items, total }) => [
     groupHead(recipe.name, items.length ? `${total - items.length}/${total}` : '✓'),
     ...items.map((item) => itemNode(item, recipe.id)),
   ]);
-  return others.length ? [...grouped, groupHead('Otros', ''), ...others] : grouped;
+  const others = rest.length ? [groupHead('Otros', ''), ...rest.map((item) => itemNode(item))] : [];
+  return [groupToggle(), ...grouped, ...others];
 };
 
 const listNodes = (items) => {

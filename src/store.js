@@ -1,8 +1,9 @@
 const LISTS = ['active', 'next'];
 const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
-// `sent` holds the ids of the recipes sent to Active in this trip.
-export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [] });
+// `sent` holds the ids of the recipes sent to Active in this trip. `grouped` is the
+// choice of the user to show Active by those recipes.
+export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [], grouped: true });
 
 const reject = (state, error) => ({ state, error });
 
