@@ -33,6 +33,9 @@ The user interface is in Spanish. A bottom menu has four screens.
   - A recipe and an item are independent. A rename of one does not change the other.
 - **Ajustes** has **Terminar compra**, **Exportar copia** and **Importar copia**. The backup holds
   the items and the recipes.
+  - **Versión** shows the build number and the date of the version that runs. With a connection, it
+    also reads the deployed version and shows **Al día** or **Versión N disponible**. **Actualizar**
+    then loads the new version. Without a connection it shows **Sin conexión**.
 
 **Terminar compra** ends the trip. It also shows as a banner in **Actual** when all items are ticked.
 
@@ -80,6 +83,7 @@ coordinates.
 npm test         # unit tests (node:test), Node 20 or later
 npm run serve    # http://localhost:8080
 npm run icons    # write the PNG icons again after a change in scripts/make-icons.mjs
+npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 ```
 
 | Path | Purpose |
@@ -88,6 +92,9 @@ npm run icons    # write the PNG icons again after a change in scripts/make-icon
 | `src/recipes.js` | Pure recipe functions. No DOM and no storage |
 | `src/swipe.js` | The rule that settles a row swipe. No DOM |
 | `src/storage.js` | Load, save, export and import, with validation |
+| `src/version.js` | Pure version rules: validation, comparison and the next version |
+| `version.json` | The version of the deploy, `{ build, date }`. Written by the hook |
+| `scripts/bump-version.mjs`, `.githooks/pre-push` | The version bump before a push |
 | `src/app.js` | Render and event handling |
 | `sw.js` | Service worker: precache of the app shell, then stale-while-revalidate |
 | `manifest.webmanifest`, `icons/` | Installation data |
@@ -102,7 +109,21 @@ are relative, thus the app also works below a subpath such as `https://gekyzo.gi
 GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / root**.
 
 An update shows at the second start of the app after a deploy. The first start downloads the new files
-in the background.
+in the background. **Ajustes → Versión** shows which version runs, and **Actualizar** loads the new one
+immediately.
+
+### Version
+
+A push to `main` is a deploy, and each deploy gets a new version. Run `npm run hooks` one time in each
+clone. Then the `pre-push` hook does this at a `git push` to `main`:
+
+1. If the push has no change of `version.json`, the hook adds one to `build`, sets `date`, and makes
+   the commit `Bump version to N`.
+2. The hook stops the push, because a hook cannot add a commit to the push that runs.
+3. Run `git push` again. This push passes.
+
+`git push --no-verify` skips the hook. A clone without `npm run hooks` deploys with the old version,
+and then **Versión** cannot show that deploy as new.
 
 ## Install on Android
 

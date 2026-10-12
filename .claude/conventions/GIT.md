@@ -18,3 +18,4 @@ copies drift — which is the whole reason this is a link.
 ## Local overrides
 
 - **Remote:** `origin` is `git@github.com:Gekyzo/shopping-list.git`. GitHub Pages serves `main` / root, so a push to `main` is a deploy.
+- **Version bump:** `.githooks/pre-push` writes the commit `Bump version to N` (only `version.json`) and stops the push; a second `git push` passes. This is the one exception to "No tool writes commits of its own onto the trunk". Enable the hook with `npm run hooks`.
