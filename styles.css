@@ -581,8 +581,27 @@ button.pill {
   text-align: left;
 }
 
-.group button + button {
+.group button + button,
+.group .info + button {
   border-top: 1px solid var(--line);
+}
+
+.group .info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  margin: 0;
+  padding: 0 14px;
+}
+
+#version {
+  white-space: nowrap;
+}
+
+#update {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .group small {

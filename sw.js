@@ -10,20 +10,22 @@ const SHELL = [
   './src/recipes.js',
   './src/swipe.js',
   './src/storage.js',
+  './src/version.js',
+  './version.json',
   './icons/icon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
 ];
 
+// `reload` goes past the HTTP cache, so the shell is never a mix of two deploys.
+const fill = async () => {
+  const cache = await caches.open(CACHE);
+  await cache.addAll(SHELL.map((url) => new Request(url, { cache: 'reload' })));
+};
+
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches
-      .open(CACHE)
-      // `reload` goes past the HTTP cache, so the shell is never a mix of two deploys.
-      .then((cache) => cache.addAll(SHELL.map((url) => new Request(url, { cache: 'reload' }))))
-      .then(() => self.skipWaiting()),
-  );
+  event.waitUntil(fill().then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (event) => {
@@ -65,6 +67,21 @@ const respond = async (event) => {
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
+  const url = new URL(request.url);
+  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+  // The page reads the deployed version: the cache must not answer.
+  if (url.searchParams.has('latest')) return;
   event.respondWith(respond(event));
+});
+
+// `Actualizar` of Ajustes: load the full shell of the new deploy, then answer on the port.
+self.addEventListener('message', (event) => {
+  if (event.data?.type !== 'refresh') return;
+  const [port] = event.ports;
+  event.waitUntil(
+    fill().then(
+      () => port?.postMessage({ ok: true }),
+      () => port?.postMessage({ ok: false }),
+    ),
+  );
 });

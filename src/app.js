@@ -2,6 +2,7 @@ import * as store from './store.js';
 import * as recipes from './recipes.js';
 import { settle } from './swipe.js';
 import { load, save, exportJson, importJson } from './storage.js';
+import { parseVersion, versionStatus } from './version.js';
 
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;
@@ -11,6 +12,10 @@ const ARRIVAL_MS = 10000;
 const SIDE_BUTTON = 64;
 const DRAG_START = 10;
 const CLICK_GUARD_MS = 350;
+// The wait for the service worker to load the new deploy.
+const REFRESH_MS = 15000;
+// The wait for the deployed version: a weak network can leave the request open.
+const CHECK_MS = 8000;
 const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
 const $ = (id) => document.getElementById(id);
@@ -51,6 +56,8 @@ const ui = {
   // Where the last drag left its row, so that the next render moves the row from there.
   settleFrom: null,
   focusProduct: false,
+  // `running` is the version of the cached shell; `latest` is the deployed one, read when Ajustes opens.
+  version: { running: null, latest: null, checking: false },
 };
 let toastTimer = null;
 let undoState = null;
@@ -584,6 +591,60 @@ const renderList = (summary, next) => {
   $('finish-text').textContent = finishText(summary);
 };
 
+const VERSION_STATUS = {
+  current: 'Al día',
+  unknown: 'Sin conexión',
+};
+
+const renderVersion = () => {
+  const { running, latest, checking } = ui.version;
+  const status = versionStatus(running, latest);
+  const date = running && new Date(running.date).toLocaleString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  $('version').textContent = running ? `Versión ${running.build} · ${date}` : 'Versión desconocida';
+  $('version-status').textContent = checking
+    ? 'Comprobando…'
+    : status === 'outdated' ? `Versión ${latest.build} disponible` : VERSION_STATUS[status];
+  $('update').hidden = checking || status !== 'outdated';
+};
+
+const readVersion = async (url, options) => {
+  try {
+    const response = await fetch(url, options);
+    return response.ok ? parseVersion(await response.json()) : null;
+  } catch {
+    return null;
+  }
+};
+
+// The time value in the URL goes past the cache of the host; the service worker lets `latest` through.
+const checkVersion = async () => {
+  ui.version.checking = true;
+  renderVersion();
+  const latest = await readVersion(`./version.json?latest=${Date.now()}`, {
+    cache: 'no-store',
+    signal: AbortSignal.timeout(CHECK_MS),
+  });
+  Object.assign(ui.version, { latest, checking: false });
+  renderVersion();
+};
+
+// Asks the service worker to load the shell of the new deploy. Resolves to false when it cannot.
+const refreshShell = () =>
+  new Promise((resolve) => {
+    const worker = navigator.serviceWorker?.controller;
+    if (!worker) {
+      resolve(true);
+      return;
+    }
+    const channel = new MessageChannel();
+    const timer = setTimeout(() => resolve(false), REFRESH_MS);
+    channel.port1.onmessage = (event) => {
+      clearTimeout(timer);
+      resolve(Boolean(event.data?.ok));
+    };
+    worker.postMessage({ type: 'refresh' }, [channel.port2]);
+  });
+
 const render = () => {
   const summary = store.tripSummary(state);
   const next = store.nextItems(state);
@@ -597,6 +658,7 @@ const render = () => {
   renderList(summary, next);
 
   $('settings').hidden = ui.view !== 'settings';
+  renderVersion();
   $('finish-setting').disabled = !store.canStartNewShopping(state);
   $('finish-setting-text').textContent = `${plural(summary.back, 'vuelve', 'vuelven')} · ${plural(summary.gone, 'se va', 'se van')}`;
 
@@ -733,6 +795,7 @@ document.querySelectorAll('.bnav button').forEach((button) => {
   button.addEventListener('click', () => {
     Object.assign(ui, { view: button.dataset.view, editingId: null, openId: null, recipeQuery: '' });
     render();
+    if (ui.view === 'settings') checkVersion();
   });
 });
 
@@ -802,6 +865,16 @@ $('export').addEventListener('click', () => {
 
 $('import').addEventListener('click', () => $('import-file').click());
 
+$('update').addEventListener('click', async () => {
+  $('update').disabled = true;
+  if (await refreshShell()) {
+    location.reload();
+    return;
+  }
+  $('update').disabled = false;
+  showToast('No se pudo actualizar.');
+});
+
 $('import-file').addEventListener('change', async (event) => {
   const [file] = event.target.files;
   event.target.value = '';
@@ -832,3 +905,8 @@ if (params.has('arrival')) {
 if (!storage) showToast('El almacenamiento no está disponible: los cambios no se guardan.');
 navigator.storage?.persist?.().catch(() => {});
 navigator.serviceWorker?.register('./sw.js').catch(() => {});
+// Read once at the start: the worker answers from the cache, then stores the file of the next deploy.
+readVersion('./version.json').then((running) => {
+  ui.version.running = running;
+  renderVersion();
+});
