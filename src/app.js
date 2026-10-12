@@ -35,6 +35,8 @@ const ui = {
   target: 'active',
   boughtOpen: false,
   openRecipeId: null,
+  // The group of Actual where the row actions are open: a recipe id, or null out of a group.
+  openGroup: null,
   focusProduct: false,
 };
 let toastTimer = null;
@@ -103,18 +105,23 @@ const renameInput = (entry, rename = (name) => store.renameItem(state, entry.id,
   return input;
 };
 
-const moreButton = (item) => {
+// An item of two recipes shows in two groups: `groupId` tells its copies apart.
+const isOpen = (id, groupId) => ui.openId === id && ui.openGroup === groupId;
+const isEditing = (id, groupId) => ui.editingId === id && ui.openGroup === groupId;
+
+const moreButton = (item, groupId = null) => {
+  const open = isOpen(item.id, groupId);
   const button = el('button', {
     type: 'button',
     className: 'more',
     textContent: '⋯',
     onclick: () => {
-      ui.openId = ui.openId === item.id ? null : item.id;
+      Object.assign(ui, { openId: open ? null : item.id, openGroup: groupId });
       render();
     },
   });
   button.setAttribute('aria-label', `Más acciones: ${item.name}`);
-  button.setAttribute('aria-expanded', String(ui.openId === item.id));
+  button.setAttribute('aria-expanded', String(open));
   return button;
 };
 
@@ -141,16 +148,15 @@ const deleteAction = (item) =>
 
 const alwaysPill = () => el('span', { className: 'pill', textContent: '↻ siempre' });
 
-const activeRow = (item) => {
+const activeRow = (item, groupId) => {
   // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
   const toggle = () =>
     apply(store.toggleBought(state, item.id), item.bought ? {} : { undoText: `"${item.name}" comprado.` });
   const checkbox = el('input', { type: 'checkbox', checked: item.bought, onchange: toggle });
   checkbox.setAttribute('aria-label', `Comprado: ${item.name}`);
-  const name =
-    ui.editingId === item.id
-      ? renameInput(item)
-      : el('button', { type: 'button', className: 'name', textContent: item.name, tabIndex: -1, onclick: toggle });
+  const name = isEditing(item.id, groupId)
+    ? renameInput(item)
+    : el('button', { type: 'button', className: 'name', textContent: item.name, tabIndex: -1, onclick: toggle });
   const row = [checkbox, name];
   if (item.recurrent) row.push(alwaysPill());
   else if (item.bought) {
@@ -164,7 +170,7 @@ const activeRow = (item) => {
     again.setAttribute('aria-label', `Comprar otra vez la próxima: ${item.name}`);
     row.push(again);
   }
-  row.push(moreButton(item));
+  row.push(moreButton(item, groupId));
   return { row, actions: [renameAction(item), recurrentAction(item), moveAction(item), deleteAction(item)] };
 };
 
@@ -186,11 +192,11 @@ const nextRow = (item) => {
   return { row, actions };
 };
 
-const itemNode = (item) => {
-  const { row, actions } = ui.view === 'active' ? activeRow(item) : nextRow(item);
+const itemNode = (item, groupId = null) => {
+  const { row, actions } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item);
   const classes = ['item', item.bought && ui.view === 'active' && 'bought', ui.flashId === item.id && 'flash'];
   const node = el('li', { className: classes.filter(Boolean).join(' ') }, [el('div', { className: 'row' }, row)]);
-  if (ui.openId === item.id) node.append(el('div', { className: 'actions' }, actions));
+  if (isOpen(item.id, groupId)) node.append(el('div', { className: 'actions' }, actions));
   return node;
 };
 
@@ -207,14 +213,28 @@ const boughtSection = (bought) => {
     el('span', { className: 'chevron', textContent: ui.boughtOpen ? '▾' : '▸' }),
   ]);
   button.setAttribute('aria-expanded', String(ui.boughtOpen));
-  return [el('li', { className: 'section' }, [button]), ...(ui.boughtOpen ? bought.map(itemNode) : [])];
+  return [el('li', { className: 'section' }, [button]), ...(ui.boughtOpen ? bought.map((item) => itemNode(item)) : [])];
+};
+
+const groupHead = (title, count) =>
+  el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
+
+// The items of Actual still to buy, below the sent recipe that asks for each one.
+const pendingNodes = () => {
+  const { groups, rest } = recipes.recipeGroups(state);
+  const others = rest.map((item) => itemNode(item));
+  if (!groups.length) return others;
+  const grouped = groups.flatMap(({ recipe, items, total }) => [
+    groupHead(recipe.name, items.length ? `${total - items.length}/${total}` : '✓'),
+    ...items.map((item) => itemNode(item, recipe.id)),
+  ]);
+  return others.length ? [...grouped, groupHead('Otros', ''), ...others] : grouped;
 };
 
 const listNodes = (items) => {
-  if (ui.view !== 'active') return items.map(itemNode);
+  if (ui.view !== 'active') return items.map((item) => itemNode(item));
   const bought = items.filter((item) => item.bought);
-  const pending = items.filter((item) => !item.bought).map(itemNode);
-  return bought.length ? [...pending, ...boughtSection(bought)] : pending;
+  return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
 // Recipes
@@ -228,7 +248,7 @@ const sendText = ({ added, already }) => {
 
 const sendToList = (recipe) => {
   const result = recipes.sendRecipe(state, recipe.id);
-  if (result.error || result.added) apply(result, { undoText: `«${recipe.name}»: ${sendText(result)}.` });
+  if (result.error || result.state !== state) apply(result, { undoText: `«${recipe.name}»: ${sendText(result)}.` });
   // A second tap changes nothing: keep the undo of the send that is still on the screen.
   else showToast(`«${recipe.name}»: todo estaba ya en la lista.`, { undo: undoState });
 };
