@@ -179,6 +179,35 @@ main {
   text-transform: uppercase;
 }
 
+.groupby {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.groupby div {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.groupby button {
+  min-height: 36px;
+  padding: 0 14px;
+  background: var(--surface);
+  font-size: 0.85rem;
+}
+
+.groupby button[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .group-head {
   display: flex;
   align-items: center;

@@ -77,11 +77,14 @@ user sent in the current trip.
   group, only when there are such items. Then the `N comprados` section, where a ticked item shows
   one time. A sent recipe with no item in `Actual` shows no group.
 - **No sent recipe with items:** `Actual` is the flat list, as before.
+- **Choice:** when there is a group, the first row of `Actual` is `Agrupar por` with `Recetas` and
+  `Nada`. `Nada` shows the flat list. The choice is stored as `grouped` in the state (`true` when
+  absent) and stays over trips and reloads. The change keeps a pending `Deshacer`.
 - **Row actions:** the `⋯` actions and the rename field open only in the copy of the row where the
   user opened them.
 - **Send:** a send that only adds a group, because all its products were pending already, also
   offers `Deshacer`.
-- **Out of scope:** a switch for the flat view, a way to remove a group other than `Deshacer`,
+- **Out of scope:** a way to remove a group other than `Deshacer`,
   groups in `Próxima`, a reorder of groups.
 
 `src/recipes.js` exports the view `recipeGroups(state) → { groups: [{ recipe, items, total }], rest }`.
@@ -112,6 +115,7 @@ One `localStorage` key, `shopping.v1`. The key name does not change; the `versio
   items: [{ id, name, recurrent, list: 'active' | 'next', bought, again }],
   recipes: [{ id, name, products: ['Huevos', 'Patatas'], url: '' }],
   sent: ['<recipe id>'],
+  grouped: true,
 }
 ```
 

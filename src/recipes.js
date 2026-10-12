@@ -113,3 +113,5 @@ export const recipeGroups = (state) => {
   const rest = active.filter((item) => !item.bought && !grouped.has(item.id));
   return { groups, rest };
 };
+
+export const setGrouped = (state, grouped) => ({ state: { ...state, grouped: Boolean(grouped) } });

@@ -64,7 +64,7 @@ const normalizeState = (data) => {
   const known = new Set(recipes.map((recipe) => recipe.id));
   const rawSent = Array.isArray(data.sent) ? data.sent : [];
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
-  return { version: 2, items, recipes, sent };
+  return { version: 2, items, recipes, sent, grouped: data.grouped !== false };
 };
 
 const parse = (text) => {
