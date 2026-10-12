@@ -45,6 +45,30 @@ Slide an item row to see its actions. A slide to the right shows **Renombrar**. 
 row closes it. A recipe row has a `⋯` button for its actions. `Deshacer` shows for 5 seconds after a delete, a move, **Terminar compra** and
 **A la lista**.
 
+## Reminder at the shop
+
+A PWA gets a position only while it is open, so it cannot detect an arrival. An Android automation
+app does that, and opens the app with `?arrival` in the URL:
+
+```
+https://gekyzo.github.io/shopping-list/?arrival
+```
+
+The app then shows `N artículos por comprar en Actual.` for 10 seconds. It shows nothing when no
+item of **Actual** is left to buy.
+
+Setup, for example with MacroDroid or Tasker:
+
+1. Install the app from Chrome first (see below), so that Android opens the URL in the installed
+   app and its data.
+2. Trigger: a geofence, on entry, at the shop. Use a radius of 100 to 150 m.
+3. Action: open the URL above.
+4. Let the automation app run in the background: location permission **Allow all the time**, and
+   no battery optimisation.
+
+The automation app owns the place and the accuracy of the reminder. This repository holds no
+coordinates.
+
 ## Develop
 
 ```sh
