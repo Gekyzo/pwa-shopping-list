@@ -1,9 +1,14 @@
 import * as store from './store.js';
 import * as recipes from './recipes.js';
+import { settle } from './swipe.js';
 import { load, save, exportJson, importJson } from './storage.js';
 
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;
+// Width of one button of a side menu of a row, the same as in styles.css.
+const SIDE_BUTTON = 92;
+const DRAG_START = 10;
+const CLICK_GUARD_MS = 350;
 const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
 const $ = (id) => document.getElementById(id);
@@ -37,6 +42,10 @@ const ui = {
   openRecipeId: null,
   // The group of Actual where the row actions are open: a recipe id, or null out of a group.
   openGroup: null,
+  // The side menu of the open item row: 'start' (slide right), 'end' (slide left) or null.
+  openSide: null,
+  // Where the last drag left its row, so that the next render moves the row from there.
+  settleFrom: null,
   focusProduct: false,
 };
 let toastTimer = null;
@@ -116,7 +125,7 @@ const moreButton = (item, groupId = null) => {
     className: 'more',
     textContent: '⋯',
     onclick: () => {
-      Object.assign(ui, { openId: open ? null : item.id, openGroup: groupId });
+      Object.assign(ui, { openId: open ? null : item.id, openGroup: groupId, openSide: null });
       render();
     },
   });
@@ -170,8 +179,7 @@ const activeRow = (item, groupId) => {
     again.setAttribute('aria-label', `Comprar otra vez la próxima: ${item.name}`);
     row.push(again);
   }
-  row.push(moreButton(item, groupId));
-  return { row, actions: [renameAction(item), recurrentAction(item), moveAction(item), deleteAction(item)] };
+  return { row, start: [renameAction(item), recurrentAction(item)], end: [moveAction(item), deleteAction(item)] };
 };
 
 const nextRow = (item) => {
@@ -181,23 +189,87 @@ const nextRow = (item) => {
   const row = [name];
   if (!pending) row.push(el('span', { className: 'pill', textContent: 'comprado hoy' }));
   else if (item.recurrent) row.push(alwaysPill());
-  row.push(moreButton(item));
-  const actions = pending
-    ? [renameAction(item), recurrentAction(item), moveAction(item), deleteAction(item)]
-    : [
-        renameAction(item),
-        actionButton('Quitar de Próxima', () =>
-          apply(store.removeFromNext(state, item.id), { undoText: `"${item.name}" quitado de Próxima.` })),
-      ];
-  return { row, actions };
+  if (pending) return { row, start: [renameAction(item), recurrentAction(item)], end: [moveAction(item), deleteAction(item)] };
+  const remove = actionButton('Quitar de Próxima', () =>
+    apply(store.removeFromNext(state, item.id), { undoText: `"${item.name}" quitado de Próxima.` }));
+  return { row, start: [renameAction(item)], end: [remove] };
+};
+
+const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
+
+const moveRow = (row, x) => {
+  row.style.transform = x ? `translateX(${x}px)` : '';
+};
+
+let clickGuardUntil = 0;
+
+// Lets a horizontal drag of the row show the side menu behind it. `settle` decides the result.
+const bindSwipe = (row, widths, item, groupId) => {
+  let drag = null;
+  row.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || ui.editingId === item.id) return;
+    const base = shift(isOpen(item.id, groupId) ? ui.openSide : null, widths);
+    drag = { x: event.clientX, y: event.clientY, base, active: false };
+  });
+  row.addEventListener('pointermove', (event) => {
+    if (!drag) return;
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    if (!drag.active) {
+      if (Math.abs(dy) > DRAG_START && Math.abs(dy) >= Math.abs(dx)) drag = null;
+      if (!drag || Math.abs(dx) < DRAG_START) return;
+      drag.active = true;
+      row.setPointerCapture(event.pointerId);
+      row.classList.add('dragging');
+    }
+    drag.at = Math.max(-widths.end, Math.min(widths.start, drag.base + dx));
+    moveRow(row, drag.at);
+  });
+  const finish = (event) => {
+    if (!drag) return;
+    const { active, x, at } = drag;
+    drag = null;
+    if (!active) return;
+    // The click that follows a drag must not tick the item.
+    clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+    const open = isOpen(item.id, groupId) ? ui.openSide : null;
+    const side = settle(event.clientX - x, widths, open);
+    Object.assign(ui, { openId: side ? item.id : null, openSide: side, openGroup: groupId, editingId: null });
+    ui.settleFrom = { id: item.id, groupId, x: at };
+    render();
+  };
+  row.addEventListener('pointerup', finish);
+  row.addEventListener('pointercancel', finish);
+};
+
+// A side action closes the row, then runs.
+const closing = (button) => {
+  const run = button.onclick;
+  button.onclick = () => {
+    ui.openId = null;
+    run();
+  };
+  return button;
 };
 
 const itemNode = (item, groupId = null) => {
-  const { row, actions } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item);
+  const { row, start, end } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item);
+  const open = isOpen(item.id, groupId) ? ui.openSide : null;
+  const widths = { start: start.length * SIDE_BUTTON, end: end.length * SIDE_BUTTON };
+  const rowNode = el('div', { className: 'row' }, row);
+  const sides = ['start', 'end'].map((side) =>
+    el('div', { className: `side ${side}`, inert: open !== side }, (side === 'start' ? start : end).map(closing)));
+  const from = ui.settleFrom;
+  if (from && from.id === item.id && from.groupId === groupId) {
+    // Start where the drag ended, then move to the settled place with the CSS transition.
+    moveRow(rowNode, from.x);
+    requestAnimationFrame(() => requestAnimationFrame(() => moveRow(rowNode, shift(open, widths))));
+  } else moveRow(rowNode, shift(open, widths));
+  bindSwipe(rowNode, widths, item, groupId);
   const classes = ['item', item.bought && ui.view === 'active' && 'bought', ui.flashId === item.id && 'flash'];
-  const node = el('li', { className: classes.filter(Boolean).join(' ') }, [el('div', { className: 'row' }, row)]);
-  if (isOpen(item.id, groupId)) node.append(el('div', { className: 'actions' }, actions));
-  return node;
+  return el('li', { className: classes.filter(Boolean).join(' ') }, [
+    el('div', { className: open ? 'swipe open' : 'swipe' }, [...sides, rowNode]),
+  ]);
 };
 
 // The ticked items of Actual, behind one row that opens and closes them.
@@ -490,6 +562,7 @@ const render = () => {
   ui.focusProduct = false;
   $('items').querySelector('.flash')?.scrollIntoView({ block: 'nearest' });
   ui.flashId = null;
+  ui.settleFrom = null;
   renderSheet();
 };
 
@@ -619,6 +692,32 @@ document.querySelectorAll('.seg button').forEach((button) => {
     $('add-name').focus();
   });
 });
+
+// A tap out of the open row closes it, without a render, so that the tap still does its work.
+document.addEventListener(
+  'pointerdown',
+  (event) => {
+    const box = document.querySelector('.swipe.open');
+    if (!box || box.contains(event.target)) return;
+    Object.assign(ui, { openId: null, openSide: null });
+    box.classList.remove('open');
+    moveRow(box.querySelector('.row'), 0);
+    box.querySelectorAll('.side').forEach((side) => {
+      side.inert = true;
+    });
+  },
+  true,
+);
+
+document.addEventListener(
+  'click',
+  (event) => {
+    if (Date.now() >= clickGuardUntil) return;
+    event.preventDefault();
+    event.stopPropagation();
+  },
+  true,
+);
 
 $('fab').addEventListener('click', openSheet);
 $('veil').addEventListener('click', closeSheet);
