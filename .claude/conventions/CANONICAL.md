@@ -22,14 +22,14 @@ for that kind, use it — the template is the exemplar made executable.
 
 ## Patterns
 
-- **Immutable state.** One object `{ version, items, recipes, sent, grouped }`. An operation returns a new
+- **Immutable state.** One object `{ version, items, recipes, sent, grouped, sort }`. An operation returns a new
   object and never changes its input.
 - **Errors as values.** A rejected operation returns `{ state, error }` with the
   same state object. Nothing throws for a user error.
 - **Render from state.** `src/app.js` applies an operation, saves, then builds the
   list again from the state. The DOM holds no data of its own.
 - **Derived views.** The `Next` view is computed by `nextItems`, and the groups of `Active` by
-  `recipeGroups`. An item is one
+  `recipeGroups`. The name order is computed by `sortItems`; `items` keeps the insertion order. An item is one
   record and is never copied between lists.
 - **Text only.** DOM nodes get user text through `textContent`, never `innerHTML`.
 

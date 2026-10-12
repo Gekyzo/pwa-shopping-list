@@ -15,6 +15,9 @@ The user interface is in Spanish. A bottom menu has four screens.
   - A ticked recurrent item shows in **Próxima** automatically.
   - A ticked one-time item goes to **Próxima** only when you tap `+ Próxima`.
   - You can also add items to **Próxima** directly. Such an item is recurrent by default.
+- **Ordenar por**, at the top of **Actual** and of **Próxima**, has **Añadido** (the order in which
+  you added the items) and **Nombre** (alphabetical). One choice applies to the two lists. It shows
+  when the list has two items or more.
 - **Recetas** holds recipes. A recipe is a name and a list of products.
   - The `+` button creates a recipe. Tap a recipe to open it, then add and remove its products.
   - `⋯` → **Añadir enlace** stores an optional web address of the recipe. The recipe row then
