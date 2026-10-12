@@ -30,7 +30,9 @@ item ids would lose its products after each trip.
   button and the `⋯` button. A tap on the name expands or collapses the recipe. One recipe is
   expanded at a time.
 - **Expanded recipe:** its products in insertion order, each with a `✕` button, then an
-  `Añadir producto` field. The field suggests the names of the existing items through a `<datalist>`.
+  `Añadir producto` field. While the user types, up to 5 existing items whose name contains the
+  text show below the field, without case or accent distinction (`searchItems`). An item that is
+  in the recipe already does not show. A tap on one adds it to the recipe.
 - **Update:** `⋯` → `Renombrar` renames the recipe in place. Products are added and removed in the
   expanded recipe. A product has no rename; the user removes it and adds it again.
 - **Delete:** `⋯` → `Eliminar`. No confirmation; a 5-second `Deshacer` message restores the recipe.
@@ -89,7 +91,7 @@ invalid, as one invalid item does.
 | `src/store.js` | `emptyState` returns `{ version: 2, items: [], recipes: [] }` |
 | `src/storage.js` | `normalizeRecipe`, version 1 and 2 in `normalizeState`, import messages |
 | `src/app.js` | The `recipes` view, its rows, the sheet in recipe mode, the send action |
-| `index.html` | The menu entry, the `<datalist>`, the texts that depend on the view |
+| `index.html` | The menu entry, the texts that depend on the view |
 | `styles.css` | Recipe rows, product rows, the product field |
 | `sw.js` | `./src/recipes.js` in `SHELL`; cache name `shopping-shell-v2` |
 | `tests/recipes.test.js` | New |
@@ -122,8 +124,7 @@ id and a recipe id never show on the same screen.
 - **Old backup files:** a version 1 file must still import. A test covers it.
 - **Undo of a send:** `sendRecipe` applies many operations but returns one state, so `apply` keeps
   one previous state and one `Deshacer` restores all of it.
-- **Rendering:** recipe and product names go through `textContent`. The `<datalist>` options are
-  built with `el('option', { value })`.
+- **Rendering:** recipe and product names go through `textContent`.
 - **Language:** all new text on the screen is in Spanish. Code, comments, tests and this spec are
   in English.
 
