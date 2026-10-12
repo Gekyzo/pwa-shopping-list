@@ -20,17 +20,20 @@ description: Where to look first in this component, what to ignore, and which pe
 - `src/app.js` and `styles.css` for the screen.
 - `src/storage.js` for the stored format and the backup.
 - `sw.js` for offline behaviour.
+- `src/version.js`, `version.json` and `.githooks/pre-push` for the version of a deploy.
 
 ## Tests
 
-`tests/store.test.js` and `tests/storage.test.js`. Run `npm test` (`node --test`).
-`src/app.js` and `sw.js` have no unit tests; check them in a browser with
-`npm run serve`.
+`tests/<module>.test.js` for `store`, `recipes`, `swipe`, `storage` and `version`. Run
+`npm test` (`node --test`). `src/app.js` and `sw.js` have no unit tests; check them in
+a browser with `npm run serve`. `.githooks/pre-push` has no test; check it in a scratch
+clone with a bare remote.
 
 ## Ignore
 
 - `icons/*.png`: written by `npm run icons` from `scripts/make-icons.mjs`.
 - `docs/superpowers/plans/*.progress.md`: written by `plan-current.sh`.
+- `version.json`: written by `.githooks/pre-push`. Do not edit it by hand.
 
 ## Siblings
 

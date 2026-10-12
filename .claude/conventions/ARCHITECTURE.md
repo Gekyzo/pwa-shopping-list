@@ -24,7 +24,8 @@ repository root.
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store.js` |
 | `src/swipe.js` | The rule that settles the swipe of an item row | nothing |
 | `src/storage.js` | Load, save, export, import, validation | `store.js`, `recipes.js` |
-| `src/app.js` | Render and event handling | `store.js`, `recipes.js`, `swipe.js`, `storage.js` |
+| `src/version.js` | Pure version rules: validation, comparison, the next version | nothing |
+| `src/app.js` | Render and event handling | `store.js`, `recipes.js`, `swipe.js`, `storage.js`, `version.js` |
 | `sw.js` | Offline cache of the app shell | nothing; it is not a module of the app |
 
 The data model and the behaviour rules are in
@@ -37,7 +38,13 @@ of the state are in `docs/superpowers/specs/2026-10-12-recipes-design.md`.
   `{ version: 2, items, recipes, sent, grouped, sort }`; a version 1 state is migrated when it is read. Invalid content is
   kept under `shopping.v1.corrupt`.
 - **Cache API**, cache `shopping-shell-v2`: the app shell, served
-  stale-while-revalidate.
+  stale-while-revalidate. A request with the `latest` parameter goes to the network
+  only. The message `{ type: 'refresh' }` loads the full shell again and answers
+  `{ ok }` on the message port.
+- **`version.json`**, `{ build, date }`: the version of the deploy. The app reads the
+  cached copy one time at the start (the running version) and the copy of the host
+  when `Ajustes` opens (the deployed version). `.githooks/pre-push` writes it through
+  `scripts/bump-version.mjs`; nothing else does.
 - **Network:** only the static files of the same origin. There is no API and no
   account.
 - **Files:** the JSON backup that the user exports and imports.
