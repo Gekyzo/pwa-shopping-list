@@ -313,14 +313,17 @@ const editLink = (recipe) => {
   else apply(recipes.setRecipeUrl(state, recipe.id, text), { undoText: text.trim() ? 'Enlace guardado.' : 'Enlace quitado.' });
 };
 
-const linkNode = (recipe) =>
-  el('a', {
+const linkNode = (recipe) => {
+  const link = el('a', {
     className: 'recipe-link',
     href: recipe.url,
     target: '_blank',
     rel: 'noopener noreferrer',
-    textContent: `${new URL(recipe.url).hostname.replace(/^www\./, '')} ↗`,
+    textContent: '↗',
   });
+  link.setAttribute('aria-label', `Abrir el enlace de ${recipe.name}`);
+  return link;
+};
 
 const recipeNode = (recipe) => {
   const open = ui.openRecipeId === recipe.id;
@@ -346,7 +349,8 @@ const recipeNode = (recipe) => {
   }
   const send = el('button', { type: 'button', className: 'pill send', textContent: 'A la lista', onclick: () => sendToList(recipe) });
   send.setAttribute('aria-label', `Enviar a la lista: ${recipe.name}`);
-  const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, [name, send, moreButton(recipe)])]);
+  const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
+  const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);
   if (ui.openId === recipe.id) {
     const remove = actionButton(
       'Eliminar',
@@ -357,7 +361,6 @@ const recipeNode = (recipe) => {
     node.append(el('div', { className: 'actions' }, [renameAction(recipe), link, remove]));
   }
   if (open) {
-    if (recipe.url) node.append(linkNode(recipe));
     node.append(
       el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product))),
       productForm(recipe),
