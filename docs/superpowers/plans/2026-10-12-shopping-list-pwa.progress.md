@@ -37,7 +37,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 
 ## Blockers
 
-None.
+- **Task 6:** the GitHub repository `Gekyzo/shopping` does not exist (`git ls-remote origin` fails) and the `gh` CLI is not installed. The user creates the empty public repository; then `git push -u origin main` and Pages from `main` / root.
 
 ## Deviations
 
