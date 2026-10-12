@@ -1,7 +1,7 @@
 const LISTS = ['active', 'next'];
 const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
-export const emptyState = () => ({ version: 1, items: [] });
+export const emptyState = () => ({ version: 2, items: [], recipes: [] });
 
 const reject = (state, error) => ({ state, error });
 
