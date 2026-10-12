@@ -21,12 +21,18 @@ const brokenStorage = () => ({
   },
 });
 
-const sample = () => ({
+const sampleV1 = () => ({
   version: 1,
   items: [
     { id: 'a', name: 'Bread', recurrent: false, list: 'active', bought: true, again: true },
     { id: 'b', name: 'Milk', recurrent: true, list: 'next', bought: false, again: false },
   ],
+});
+
+const sample = () => ({
+  ...sampleV1(),
+  version: 2,
+  recipes: [{ id: 'r1', name: 'Omelette', products: ['Eggs', 'Potatoes'] }],
 });
 
 test('save then load returns the same state', () => {
@@ -65,8 +71,8 @@ test('importJson rejects text that is not JSON', () => {
   assert.deepEqual(importJson('nope'), { error: 'El archivo no es un JSON válido.' });
 });
 
-test('importJson rejects another version', () => {
-  const text = JSON.stringify({ ...sample(), version: 2 });
+test('importJson rejects an unknown version', () => {
+  const text = JSON.stringify({ ...sample(), version: 3 });
   assert.deepEqual(importJson(text), { error: 'El archivo no es una copia de seguridad de la lista.' });
 });
 
@@ -98,11 +104,57 @@ test('importJson drops unknown fields and repairs the bought and again rules', (
   };
   assert.deepEqual(importJson(JSON.stringify(data)), {
     state: {
-      version: 1,
+      version: 2,
       items: [
         { id: 'a', name: 'Milk', recurrent: true, list: 'next', bought: false, again: false },
         { id: 'b', name: 'Soap', recurrent: false, list: 'active', bought: false, again: false },
       ],
+      recipes: [],
     },
+  });
+});
+
+test('emptyState is a version 2 state with no recipes', () => {
+  assert.deepEqual(emptyState(), { version: 2, items: [], recipes: [] });
+});
+
+test('load migrates a version 1 state and adds an empty recipe list', () => {
+  const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(sampleV1()) });
+  assert.deepEqual(load(storage), { ...sampleV1(), version: 2, recipes: [] });
+  assert.equal(storage.getItem(CORRUPT_KEY), null);
+});
+
+test('importJson migrates a version 1 backup', () => {
+  assert.deepEqual(importJson(JSON.stringify(sampleV1())), { state: { ...sampleV1(), version: 2, recipes: [] } });
+});
+
+test('importJson trims recipe names and products and drops unknown fields', () => {
+  const data = { ...sample(), recipes: [{ id: 'r1', name: ' Omelette ', products: [' Eggs '], note: 'x' }] };
+  assert.deepEqual(importJson(JSON.stringify(data)).state.recipes, [{ id: 'r1', name: 'Omelette', products: ['Eggs'] }]);
+});
+
+test('importJson accepts a recipe with no products and a recipe named as an item', () => {
+  const data = { ...sample(), recipes: [{ id: 'r1', name: 'Bread', products: [] }] };
+  assert.deepEqual(importJson(JSON.stringify(data)).state.recipes, [{ id: 'r1', name: 'Bread', products: [] }]);
+});
+
+test('importJson rejects invalid recipes', () => {
+  const recipe = sample().recipes[0];
+  const { recipes, ...withoutRecipes } = sample();
+  const invalid = [
+    withoutRecipes,
+    { ...sample(), recipes: 'x' },
+    { ...sample(), recipes: [null] },
+    { ...sample(), recipes: [{ ...recipe, id: '' }] },
+    { ...sample(), recipes: [{ ...recipe, name: '  ' }] },
+    { ...sample(), recipes: [{ ...recipe, products: 'Eggs' }] },
+    { ...sample(), recipes: [{ ...recipe, products: ['Eggs', 7] }] },
+    { ...sample(), recipes: [{ ...recipe, products: ['Eggs', ' '] }] },
+    { ...sample(), recipes: [{ ...recipe, products: ['Eggs', 'eggs'] }] },
+    { ...sample(), recipes: [recipe, { ...recipe, name: 'Soup' }] },
+    { ...sample(), recipes: [recipe, { ...recipe, id: 'r2', name: 'omelette' }] },
+  ];
+  invalid.forEach((data) => {
+    assert.deepEqual(importJson(JSON.stringify(data)), { error: 'El archivo no es una copia de seguridad de la lista.' });
   });
 });

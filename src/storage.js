@@ -22,14 +22,40 @@ const normalizeItem = (item) => {
 
 const unique = (values) => new Set(values).size === values.length;
 
-// Returns a clean state, or null when the data is not a version 1 state.
+const lower = (text) => text.toLowerCase();
+
+const normalizeRecipe = (recipe) => {
+  if (typeof recipe !== 'object' || recipe === null) return null;
+  const { id, name, products } = recipe;
+  const valid =
+    typeof id === 'string' &&
+    id !== '' &&
+    typeof name === 'string' &&
+    name.trim() !== '' &&
+    Array.isArray(products) &&
+    products.every((product) => typeof product === 'string' && product.trim() !== '');
+  if (!valid) return null;
+  const trimmed = products.map((product) => product.trim());
+  return unique(trimmed.map(lower)) ? { id, name: name.trim(), products: trimmed } : null;
+};
+
+const VERSIONS = [1, 2];
+
+// Returns a clean version 2 state, or null when the data is not a known state.
 const normalizeState = (data) => {
-  if (typeof data !== 'object' || data === null || data.version !== 1 || !Array.isArray(data.items)) return null;
+  if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
+  // Version 1 has no recipes.
+  const rawRecipes = data.version === 1 ? [] : data.recipes;
+  if (!Array.isArray(rawRecipes)) return null;
   const items = data.items.map(normalizeItem);
-  if (items.includes(null)) return null;
-  const idsAreUnique = unique(items.map((item) => item.id));
-  const namesAreUnique = unique(items.map((item) => item.name.toLowerCase()));
-  return idsAreUnique && namesAreUnique ? { version: 1, items } : null;
+  const recipes = rawRecipes.map(normalizeRecipe);
+  if (items.includes(null) || recipes.includes(null)) return null;
+  const valid =
+    unique(items.map((item) => item.id)) &&
+    unique(items.map((item) => lower(item.name))) &&
+    unique(recipes.map((recipe) => recipe.id)) &&
+    unique(recipes.map((recipe) => lower(recipe.name)));
+  return valid ? { version: 2, items, recipes } : null;
 };
 
 const parse = (text) => {
