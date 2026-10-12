@@ -40,8 +40,9 @@ that exist already show below the field. Tap one, or press **Añadir** with the 
 existing item goes to the target list (**Para hoy** or **Para la próxima**). A new item is created only
 when no item has that name, without case distinction.
 
-Tap `⋯` on a row for **Renombrar**, **Comprar siempre** / **Solo una vez**, the move to the other list
-and **Eliminar**. `Deshacer` shows for 5 seconds after a delete, a move, **Terminar compra** and
+Slide an item row to see its actions. A slide to the right shows **Renombrar** and **Comprar siempre** /
+**Solo una vez**. A slide to the left shows the move to the other list and **Eliminar**. A tap out of the
+row closes it. A recipe row has a `⋯` button for its actions. `Deshacer` shows for 5 seconds after a delete, a move, **Terminar compra** and
 **A la lista**.
 
 ## Develop
@@ -56,6 +57,7 @@ npm run icons    # write the PNG icons again after a change in scripts/make-icon
 |---|---|
 | `src/store.js` | Pure state functions. No DOM and no storage |
 | `src/recipes.js` | Pure recipe functions. No DOM and no storage |
+| `src/swipe.js` | The rule that settles a row swipe. No DOM |
 | `src/storage.js` | Load, save, export and import, with validation |
 | `src/app.js` | Render and event handling |
 | `sw.js` | Service worker: precache of the app shell, then stale-while-revalidate |

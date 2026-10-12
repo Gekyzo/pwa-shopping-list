@@ -153,7 +153,7 @@ main {
   background: var(--surface);
 }
 
-.item.flash {
+.item.flash .row {
   animation: flash 1.2s ease-out;
 }
 
@@ -227,12 +227,68 @@ main {
   font-size: 1rem;
 }
 
+/* An item row slides over the two side menus behind it. */
+
+.swipe {
+  position: relative;
+  overflow: hidden;
+}
+
+.side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+}
+
+.side.start {
+  left: 0;
+}
+
+.side.end {
+  right: 0;
+}
+
+.side button {
+  width: 92px;
+  height: 100%;
+  padding: 0 6px;
+  border-radius: 0;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.side button + button {
+  border-left: 1px solid var(--surface);
+}
+
+.side .danger {
+  background: var(--danger);
+  color: var(--surface);
+}
+
 .row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
   min-height: 56px;
   padding: 0 4px 0 8px;
+  background: var(--surface);
+}
+
+.swipe .row {
+  padding-right: 12px;
+  touch-action: pan-y;
+  user-select: none;
+  transition: transform 160ms ease-out;
+}
+
+.swipe .row.dragging {
+  transition: none;
 }
 
 .row input[type="checkbox"] {
