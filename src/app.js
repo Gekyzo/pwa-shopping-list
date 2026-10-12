@@ -159,9 +159,8 @@ const ICONS = {
   repeat: 'M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3',
   trash: 'M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6',
 };
-// The cart with a plus in its basket, a repeat that is struck out, a calendar with a cross.
+// The cart with a plus in its basket and a calendar with a cross.
 ICONS.cartPlus = `${ICONS.cart}M13 8.5v4M11 10.5h4`;
-ICONS.once = `${ICONS.repeat}M4 2l16 20`;
 ICONS.calendarOff = `${ICONS.calendar}M10 13.5l4 4M14 13.5l-4 4`;
 
 // A button of a side menu: an icon, with the name of the action for a screen reader.
@@ -178,9 +177,15 @@ const startRename = (entry) => {
 
 const renameAction = (item) => iconButton(ICONS.pencil, `Renombrar ${item.name}`, () => startRename(item));
 
-const recurrentAction = (item) =>
-  iconButton(item.recurrent ? ICONS.once : ICONS.repeat, `${item.recurrent ? 'Solo una vez' : 'Comprar siempre'}: ${item.name}`, () =>
-    apply(store.toggleRecurrent(state, item.id)));
+// The recurrent mark of a row. It shows on each item and a tap changes it.
+const recurrentToggle = (item) => {
+  const button = el('button', { type: 'button', className: 'recur', onclick: () => apply(store.toggleRecurrent(state, item.id)) }, [
+    icon(ICONS.repeat),
+  ]);
+  button.setAttribute('aria-pressed', String(item.recurrent));
+  button.setAttribute('aria-label', `Comprar siempre: ${item.name}`);
+  return button;
+};
 
 const moveAction = (item) => {
   const toNext = item.list === 'active';
@@ -197,8 +202,6 @@ const deleteAction = (item) =>
     'danger',
   );
 
-const alwaysPill = () => el('span', { className: 'pill', textContent: '↻ siempre' });
-
 const activeRow = (item, groupId) => {
   // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
   const toggle = () =>
@@ -209,8 +212,7 @@ const activeRow = (item, groupId) => {
     ? renameInput(item)
     : el('button', { type: 'button', className: 'name', textContent: item.name, tabIndex: -1, onclick: toggle });
   const row = [checkbox, name];
-  if (item.recurrent) row.push(alwaysPill());
-  else if (item.bought) {
+  if (item.bought && !item.recurrent) {
     const again = el('button', {
       type: 'button',
       className: item.again ? 'pill' : 'pill ghost',
@@ -221,7 +223,8 @@ const activeRow = (item, groupId) => {
     again.setAttribute('aria-label', `Comprar otra vez la próxima: ${item.name}`);
     row.push(again);
   }
-  return { row, start: [renameAction(item), recurrentAction(item)], end: [moveAction(item), deleteAction(item)] };
+  row.push(recurrentToggle(item));
+  return { row, start: [renameAction(item)], end: [moveAction(item), deleteAction(item)] };
 };
 
 const nextRow = (item) => {
@@ -230,8 +233,8 @@ const nextRow = (item) => {
     ui.editingId === item.id ? renameInput(item) : el('span', { className: 'name', textContent: item.name });
   const row = [name];
   if (!pending) row.push(el('span', { className: 'pill', textContent: 'comprado hoy' }));
-  else if (item.recurrent) row.push(alwaysPill());
-  if (pending) return { row, start: [renameAction(item), recurrentAction(item)], end: [moveAction(item), deleteAction(item)] };
+  row.push(recurrentToggle(item));
+  if (pending) return { row, start: [renameAction(item)], end: [moveAction(item), deleteAction(item)] };
   const remove = iconButton(ICONS.calendarOff, `Quitar de Próxima: ${item.name}`, () =>
     apply(store.removeFromNext(state, item.id), { undoText: `"${item.name}" quitado de Próxima.` }));
   return { row, start: [renameAction(item)], end: [remove] };
@@ -545,7 +548,7 @@ const renderList = (summary, next) => {
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
   if (ui.view === 'next' && items.length) {
-    $('items').append(el('p', { className: 'hint', textContent: 'Lo que marques como «siempre» vuelve aquí al comprarlo.' }));
+    $('items').append(el('p', { className: 'hint', textContent: 'Un artículo con ↻ activo vuelve aquí al comprarlo.' }));
   }
 
   $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
