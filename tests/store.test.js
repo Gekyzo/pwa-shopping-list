@@ -17,6 +17,7 @@ import {
   findByName,
   bringToList,
   tripSummary,
+  arrivalMessage,
 } from '../src/store.js';
 
 let counter = 0;
@@ -377,4 +378,20 @@ test('an item operation keeps the recipes and the sent recipes', () => {
     assert.equal(state.recipes, start.recipes);
     assert.equal(state.sent, start.sent);
   });
+});
+
+test('arrivalMessage counts the items of Active that are not bought', () => {
+  const state = build(['Milk', 'active'], ['Bread', 'active'], ['Soap', 'active', { bought: true }], ['Water', 'next']);
+  const before = structuredClone(state);
+  assert.equal(arrivalMessage(state), '2 artículos por comprar en Actual.');
+  assert.deepEqual(state, before);
+});
+
+test('arrivalMessage uses the singular for one item', () => {
+  assert.equal(arrivalMessage(build(['Milk', 'active'])), '1 artículo por comprar en Actual.');
+});
+
+test('arrivalMessage is null when no item of Active is left', () => {
+  assert.equal(arrivalMessage(build(['Milk', 'active', { bought: true }], ['Water', 'next'])), null);
+  assert.equal(arrivalMessage(emptyState()), null);
 });

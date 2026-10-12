@@ -157,3 +157,10 @@ export const tripSummary = (state) => {
     incoming: state.items.length - active.length,
   };
 };
+
+// The text of the toast that an arrival at the shop shows, or null when nothing is left to buy.
+export const arrivalMessage = (state) => {
+  const { left } = tripSummary(state);
+  if (left === 0) return null;
+  return `${left} ${left === 1 ? 'artículo' : 'artículos'} por comprar en Actual.`;
+};
