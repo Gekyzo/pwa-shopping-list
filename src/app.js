@@ -245,6 +245,7 @@ const productNode = (recipe, product) => {
   return el('li', {}, [el('span', { textContent: product }), remove]);
 };
 
+// The product field with the items that match the text below it. A tap on one adds it.
 const productForm = (recipe) => {
   const input = el('input', {
     type: 'text',
@@ -253,22 +254,35 @@ const productForm = (recipe) => {
     placeholder: 'Añadir producto',
     enterKeyHint: 'done',
   });
-  input.setAttribute('list', 'item-names');
   input.setAttribute('autocapitalize', 'sentences');
   input.setAttribute('aria-label', `Añadir producto a ${recipe.name}`);
+  const add = (name) => {
+    // The render builds a new field; `focusProduct` keeps the keyboard open for the next product.
+    ui.focusProduct = true;
+    if (apply(recipes.addRecipeProduct(state, recipe.id, name))) return;
+    ui.focusProduct = false;
+    input.focus();
+  };
+  const suggestions = el('ul', { className: 'suggestions' });
+  suggestions.setAttribute('aria-label', 'Artículos que ya existen');
+  const taken = new Set(recipe.products.map((product) => product.toLowerCase()));
+  input.addEventListener('input', () => {
+    const rows = store
+      .searchItems(state, input.value, Infinity)
+      .filter((item) => !taken.has(item.name.toLowerCase()))
+      .slice(0, 5)
+      .map((item) => el('li', {}, [el('button', { type: 'button', textContent: item.name, onclick: () => add(item.name) })]));
+    suggestions.replaceChildren(...rows);
+  });
   const form = el('form', { className: 'product-form', autocomplete: 'off' }, [
     input,
     el('button', { type: 'submit', className: 'primary', textContent: 'Añadir' }),
   ]);
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    // The render builds a new field; `focusProduct` keeps the keyboard open for the next product.
-    ui.focusProduct = true;
-    if (apply(recipes.addRecipeProduct(state, recipe.id, input.value))) return;
-    ui.focusProduct = false;
-    input.focus();
+    add(input.value);
   });
-  return form;
+  return el('div', { className: 'product-add' }, [form, suggestions]);
 };
 
 const recipeNode = (recipe) => {
@@ -392,8 +406,6 @@ const render = () => {
 
   $('fab').hidden = ui.view === 'settings' || ui.sheetOpen;
   $('fab').setAttribute('aria-label', ui.view === 'recipes' ? 'Crear receta' : 'Añadir artículo');
-  const names = ui.view === 'recipes' ? state.items.map((item) => el('option', { value: item.name })) : [];
-  $('item-names').replaceChildren(...names);
   $('next-count').textContent = next.length || '';
   document.querySelectorAll('.bnav button').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
