@@ -1,7 +1,8 @@
 {
-  "name": "Shopping",
-  "short_name": "Shopping",
-  "description": "Offline shopping list with an active list and a next list",
+  "name": "Lista de la compra",
+  "short_name": "Compra",
+  "description": "Lista de la compra sin conexión, con una lista actual y una lista próxima",
+  "lang": "es",
   "id": "./",
   "start_url": "./",
   "scope": "./",

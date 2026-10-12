@@ -17,4 +17,4 @@ copies drift — which is the whole reason this is a link.
 
 ## Local overrides
 
-_(none yet)_
+- **Language:** the text that the app shows to the user (`index.html`, the messages in `src/app.js`, `src/store.js` and `src/storage.js`, `manifest.webmanifest`) is in Spanish. Code, comments, tests names, docs and commits stay in English.
