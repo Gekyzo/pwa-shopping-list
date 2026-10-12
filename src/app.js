@@ -1,4 +1,5 @@
 import * as store from './store.js';
+import * as recipes from './recipes.js';
 import { load, save, exportJson, importJson } from './storage.js';
 
 const UNDO_MS = 5000;
@@ -25,7 +26,17 @@ const storage = (() => {
 
 let state = storage ? load(storage) : store.emptyState();
 // `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
-const ui = { view: 'active', editingId: null, openId: null, flashId: null, sheetOpen: false, target: 'active', boughtOpen: false };
+const ui = {
+  view: 'active',
+  editingId: null,
+  openId: null,
+  flashId: null,
+  sheetOpen: false,
+  target: 'active',
+  boughtOpen: false,
+  openRecipeId: null,
+  focusProduct: false,
+};
 let toastTimer = null;
 let undoState = null;
 
@@ -73,16 +84,16 @@ const finishTrip = (undoText = 'Compra terminada.') => {
 
 // Rows
 
-const renameInput = (item) => {
-  const input = el('input', { type: 'text', className: 'rename', value: item.name, maxLength: 80 });
-  input.setAttribute('aria-label', `Renombrar ${item.name}`);
+const renameInput = (entry, rename = (name) => store.renameItem(state, entry.id, name)) => {
+  const input = el('input', { type: 'text', className: 'rename', value: entry.name, maxLength: 80 });
+  input.setAttribute('aria-label', `Renombrar ${entry.name}`);
   let done = false;
   const finish = (keep) => {
     if (done) return;
     done = true;
     ui.editingId = null;
-    const changed = keep && input.value.trim() !== item.name;
-    if (!changed || !apply(store.renameItem(state, item.id, input.value))) render();
+    const changed = keep && input.value.trim() !== entry.name;
+    if (!changed || !apply(rename(input.value))) render();
   };
   input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') finish(true);
@@ -206,6 +217,101 @@ const listNodes = (items) => {
   return bought.length ? [...pending, ...boughtSection(bought)] : pending;
 };
 
+// Recipes
+
+const sendText = ({ added, already }) => {
+  const parts = [];
+  if (added) parts.push(plural(added, 'añadido', 'añadidos'));
+  if (already) parts.push(`${already} ya ${already === 1 ? 'estaba' : 'estaban'}`);
+  return parts.join(', ');
+};
+
+const sendToList = (recipe) => {
+  const result = recipes.sendRecipe(state, recipe.id);
+  if (result.error || result.added) apply(result, { undoText: `«${recipe.name}»: ${sendText(result)}.` });
+  else showToast(`«${recipe.name}»: todo estaba ya en la lista.`);
+};
+
+const productNode = (recipe, product) => {
+  const remove = el('button', {
+    type: 'button',
+    className: 'more',
+    textContent: '✕',
+    onclick: () =>
+      apply(recipes.removeRecipeProduct(state, recipe.id, product), { undoText: `"${product}" quitado de «${recipe.name}».` }),
+  });
+  remove.setAttribute('aria-label', `Quitar ${product}`);
+  return el('li', {}, [el('span', { textContent: product }), remove]);
+};
+
+const productForm = (recipe) => {
+  const input = el('input', {
+    type: 'text',
+    className: 'product-name',
+    maxLength: 80,
+    placeholder: 'Añadir producto',
+    enterKeyHint: 'done',
+  });
+  input.setAttribute('list', 'item-names');
+  input.setAttribute('autocapitalize', 'sentences');
+  input.setAttribute('aria-label', `Añadir producto a ${recipe.name}`);
+  const form = el('form', { className: 'product-form', autocomplete: 'off' }, [
+    input,
+    el('button', { type: 'submit', className: 'primary', textContent: 'Añadir' }),
+  ]);
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    // The render builds a new field; `focusProduct` keeps the keyboard open for the next product.
+    ui.focusProduct = true;
+    if (apply(recipes.addRecipeProduct(state, recipe.id, input.value))) return;
+    ui.focusProduct = false;
+    input.focus();
+  });
+  return form;
+};
+
+const recipeNode = (recipe) => {
+  const open = ui.openRecipeId === recipe.id;
+  let name;
+  if (ui.editingId === recipe.id) name = renameInput(recipe, (value) => recipes.renameRecipe(state, recipe.id, value));
+  else {
+    name = el(
+      'button',
+      {
+        type: 'button',
+        className: 'name',
+        onclick: () => {
+          Object.assign(ui, { openRecipeId: open ? null : recipe.id, openId: null });
+          render();
+        },
+      },
+      [
+        el('span', { textContent: recipe.name }),
+        el('small', { textContent: plural(recipe.products.length, 'producto', 'productos') }),
+      ],
+    );
+    name.setAttribute('aria-expanded', String(open));
+  }
+  const send = el('button', { type: 'button', className: 'pill send', textContent: 'A la lista', onclick: () => sendToList(recipe) });
+  send.setAttribute('aria-label', `Enviar a la lista: ${recipe.name}`);
+  const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, [name, send, moreButton(recipe)])]);
+  if (ui.openId === recipe.id) {
+    const remove = actionButton(
+      'Eliminar',
+      () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: `Receta «${recipe.name}» eliminada.` }),
+      'danger',
+    );
+    node.append(el('div', { className: 'actions' }, [renameAction(recipe), remove]));
+  }
+  if (open) {
+    node.append(
+      el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product))),
+      productForm(recipe),
+    );
+  }
+  return node;
+};
+
 // Screen
 
 const finishText = ({ back, gone }) => {
@@ -222,6 +328,11 @@ const activeSubtitle = ({ total, left }) => {
 
 const headerOf = (summary, next) => {
   if (ui.view === 'settings') return { title: 'Ajustes', subtitle: 'Lista de la compra', ring: '⚙', pct: 0 };
+  if (ui.view === 'recipes') {
+    const count = state.recipes.length;
+    const subtitle = count ? plural(count, 'receta', 'recetas') : 'Sin recetas';
+    return { title: 'Recetas', subtitle, ring: String(count), pct: 0 };
+  }
   if (ui.view === 'next') {
     const boughtToday = next.length - summary.incoming;
     const parts = [next.length ? plural(next.length, 'artículo', 'artículos') : 'Nada preparado'];
@@ -233,20 +344,28 @@ const headerOf = (summary, next) => {
   return { title: 'Compra de hoy', subtitle: activeSubtitle(summary), ring: `${total - left}/${total}`, pct };
 };
 
+const EMPTY_TEXT = {
+  active: 'La lista está vacía. Toca + para añadir un artículo.',
+  next: 'No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.',
+  recipes: 'No hay recetas. Toca + para crear una.',
+};
+
+const nodesOf = (items) => {
+  if (ui.view === 'settings') return [];
+  return ui.view === 'recipes' ? state.recipes.map(recipeNode) : listNodes(items);
+};
+
 const renderList = (summary, next) => {
-  const isList = ui.view !== 'settings';
   const items = ui.view === 'active' ? store.activeItems(state) : next;
-  $('items').hidden = !isList;
-  $('items').replaceChildren(...(isList ? listNodes(items) : []));
-  if (isList && ui.view === 'next' && items.length) {
+  const nodes = nodesOf(items);
+  $('items').hidden = ui.view === 'settings';
+  $('items').replaceChildren(...nodes);
+  if (ui.view === 'next' && items.length) {
     $('items').append(el('p', { className: 'hint', textContent: 'Lo que marques como «siempre» vuelve aquí al comprarlo.' }));
   }
 
-  $('empty').hidden = !(isList && items.length === 0);
-  $('empty-text').textContent =
-    ui.view === 'active'
-      ? 'La lista está vacía. Toca + para añadir un artículo.'
-      : 'No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.';
+  $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
+  $('empty-text').textContent = EMPTY_TEXT[ui.view] ?? '';
   $('bring').hidden = !(ui.view === 'active' && summary.incoming > 0);
   $('bring').textContent = `Traer ${plural(summary.incoming, 'artículo', 'artículos')} de Próxima`;
 
@@ -271,6 +390,9 @@ const render = () => {
   $('finish-setting-text').textContent = `${plural(summary.back, 'vuelve', 'vuelven')} · ${plural(summary.gone, 'se va', 'se van')}`;
 
   $('fab').hidden = ui.view === 'settings' || ui.sheetOpen;
+  $('fab').setAttribute('aria-label', ui.view === 'recipes' ? 'Crear receta' : 'Añadir artículo');
+  const names = ui.view === 'recipes' ? state.items.map((item) => el('option', { value: item.name })) : [];
+  $('item-names').replaceChildren(...names);
   $('next-count').textContent = next.length || '';
   document.querySelectorAll('.bnav button').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
@@ -278,6 +400,8 @@ const render = () => {
   });
 
   $('items').querySelector('.rename')?.focus();
+  if (ui.focusProduct) $('items').querySelector('.product-name')?.focus();
+  ui.focusProduct = false;
   $('items').querySelector('.flash')?.scrollIntoView({ block: 'nearest' });
   ui.flashId = null;
   renderSheet();
@@ -298,6 +422,17 @@ const whereText = (item) => {
 const renderSheet = () => {
   $('sheet').hidden = !ui.sheetOpen;
   if (!ui.sheetOpen) return;
+  const forRecipe = ui.view === 'recipes';
+  const label = forRecipe ? 'Nombre de la receta' : 'Añadir artículo a la lista';
+  $('seg').hidden = forRecipe;
+  $('add-submit').textContent = forRecipe ? 'Crear' : 'Añadir';
+  $('add-name').placeholder = label;
+  $('add-name').setAttribute('aria-label', label);
+  $('add').setAttribute('aria-label', forRecipe ? 'Crear receta' : 'Añadir artículo');
+  if (forRecipe) {
+    $('suggestions').replaceChildren();
+    return;
+  }
   document.querySelectorAll('.seg button').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.target === ui.target));
   });
@@ -343,7 +478,24 @@ const useExisting = (item) => {
   $('add-name').focus();
 };
 
+const submitRecipe = () => {
+  const input = $('add-name');
+  const result = recipes.addRecipe(state, input.value);
+  if (result.error) {
+    showToast(result.error);
+    input.focus();
+    return;
+  }
+  // The new recipe shows expanded, with the cursor in its product field.
+  Object.assign(ui, { sheetOpen: false, openRecipeId: result.id, focusProduct: true });
+  apply(result);
+};
+
 const submitAdd = () => {
+  if (ui.view === 'recipes') {
+    submitRecipe();
+    return;
+  }
   const input = $('add-name');
   const existing = store.findByName(state, input.value);
   if (existing) {
@@ -418,8 +570,11 @@ $('import-file').addEventListener('change', async (event) => {
     showToast(result.error);
     return;
   }
-  const count = result.state.items.length;
-  if (!window.confirm(`¿Sustituir las listas actuales por los ${count} artículos de la copia?`)) return;
+  const found = [
+    plural(result.state.items.length, 'artículo', 'artículos'),
+    plural(result.state.recipes.length, 'receta', 'recetas'),
+  ].join(' y ');
+  if (!window.confirm(`¿Sustituir los datos actuales por los de la copia (${found})?`)) return;
   apply(result, { undoText: 'Copia importada.' });
 });
 

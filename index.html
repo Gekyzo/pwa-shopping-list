@@ -63,6 +63,10 @@
         <span>Próxima</span>
         <em id="next-count" class="badge-count"></em>
       </button>
+      <button type="button" data-view="recipes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h13a1 1 0 0 1 1 1v17H6a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1z"/><path d="M4 17h15M9 8h6"/></svg>
+        <span>Recetas</span>
+      </button>
       <button type="button" data-view="settings">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
         <span>Ajustes</span>
@@ -76,15 +80,17 @@
         <div class="add-row">
           <input id="add-name" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80"
             placeholder="Añadir artículo a la lista" aria-label="Añadir artículo a la lista">
-          <button class="primary" type="submit">Añadir</button>
+          <button id="add-submit" class="primary" type="submit">Añadir</button>
         </div>
-        <div class="seg">
+        <div id="seg" class="seg">
           <button type="button" data-target="active">Para hoy</button>
           <button type="button" data-target="next">Para la próxima</button>
         </div>
         <ul id="suggestions" class="suggestions" aria-label="Artículos que ya existen"></ul>
       </form>
     </div>
+
+    <datalist id="item-names"></datalist>
 
     <input id="import-file" type="file" accept="application/json,.json" hidden>
 
