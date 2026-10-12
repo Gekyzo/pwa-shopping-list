@@ -1,21 +1,37 @@
-// The version of a deploy: `{ build, date }`, read from `version.json`.
+// The version of a deploy: `{ version, date }`, read from `version.json`.
+// `version` is a semantic version, `major.minor.patch`.
+
+const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
+export const LEVELS = ['major', 'minor', 'patch'];
+
+const parts = (version) => version.split('.').map(Number);
 
 // Returns the version in `data`, or null when the data is not a version.
 export const parseVersion = (data) => {
   if (!data || typeof data !== 'object') return null;
-  const { build, date } = data;
-  if (!Number.isInteger(build) || build < 1) return null;
+  const { version, date } = data;
+  if (typeof version !== 'string' || !SEMVER.test(version)) return null;
   if (typeof date !== 'string' || Number.isNaN(Date.parse(date))) return null;
-  return { build, date };
+  return { version, date };
+};
+
+// Negative when `a` is older than `b`, positive when newer, 0 when equal.
+export const compareVersions = (a, b) => {
+  const other = parts(b);
+  return parts(a).reduce((order, part, index) => order || part - other[index], 0);
 };
 
 // Compares the running version with the deployed one: 'current', 'outdated' or 'unknown'.
 export const versionStatus = (running, latest) => {
   if (!running || !latest) return 'unknown';
-  return latest.build > running.build ? 'outdated' : 'current';
+  return compareVersions(latest.version, running.version) > 0 ? 'outdated' : 'current';
 };
 
-export const nextVersion = (current, now) => ({
-  build: current ? current.build + 1 : 1,
-  date: now.toISOString(),
-});
+// The version of the next deploy. `level` is the part that goes up; the lower parts go to zero.
+export const nextVersion = (current, now, level = 'patch') => {
+  const date = now.toISOString();
+  if (!current) return { version: '1.0.0', date };
+  const index = LEVELS.indexOf(level);
+  const next = parts(current.version).map((part, at) => (at < index ? part : at === index ? part + 1 : 0));
+  return { version: next.join('.'), date };
+};

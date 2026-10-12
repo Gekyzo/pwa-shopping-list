@@ -41,10 +41,10 @@ of the state are in `docs/superpowers/specs/2026-10-12-recipes-design.md`.
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers
   `{ ok }` on the message port.
-- **`version.json`**, `{ build, date }`: the version of the deploy. The app reads the
+- **`version.json`**, `{ version, date }`: the semantic version of the deploy. The app reads the
   cached copy one time at the start (the running version) and the copy of the host
-  when `Ajustes` opens (the deployed version). `.githooks/pre-push` writes it through
-  `scripts/bump-version.mjs`; nothing else does.
+  when `Ajustes` opens (the deployed version). `scripts/bump-version.mjs` is its only writer, and
+  writes the same version to `package.json`; `.githooks/pre-push` runs it for a patch.
 - **Network:** only the static files of the same origin. There is no API and no
   account.
 - **Files:** the JSON backup that the user exports and imports.

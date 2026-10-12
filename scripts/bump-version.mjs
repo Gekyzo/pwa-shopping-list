@@ -1,9 +1,17 @@
-// Writes the version of the next deploy to version.json and prints its build number.
-// Run by .githooks/pre-push.
+// Writes the version of the next deploy to version.json and prints it. package.json gets
+// the same version. Run by .githooks/pre-push, which bumps the patch.
+// By hand, for a larger step: node scripts/bump-version.mjs minor|major, then commit.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { parseVersion, nextVersion } from '../src/version.js';
+import { parseVersion, nextVersion, LEVELS } from '../src/version.js';
 
 const file = new URL('../version.json', import.meta.url);
+const manifest = new URL('../package.json', import.meta.url);
+const [level = 'patch'] = process.argv.slice(2);
+
+if (!LEVELS.includes(level)) {
+  console.error(`Unknown level "${level}". Use one of: ${LEVELS.join(', ')}.`);
+  process.exit(1);
+}
 
 const read = () => {
   try {
@@ -13,6 +21,8 @@ const read = () => {
   }
 };
 
-const version = nextVersion(read(), new Date());
-writeFileSync(file, `${JSON.stringify(version, null, 2)}\n`);
-console.log(version.build);
+const next = nextVersion(read(), new Date(), level);
+writeFileSync(file, `${JSON.stringify(next, null, 2)}\n`);
+const data = JSON.parse(readFileSync(manifest, 'utf8'));
+writeFileSync(manifest, `${JSON.stringify({ ...data, version: next.version }, null, 2)}\n`);
+console.log(next.version);

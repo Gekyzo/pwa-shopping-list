@@ -33,7 +33,7 @@ clone with a bare remote.
 
 - `icons/*.png`: written by `npm run icons` from `scripts/make-icons.mjs`.
 - `docs/superpowers/plans/*.progress.md`: written by `plan-current.sh`.
-- `version.json`: written by `.githooks/pre-push`. Do not edit it by hand.
+- `version.json` and the `version` of `package.json`: written by `scripts/bump-version.mjs`. Do not edit them by hand.
 
 ## Siblings
 
