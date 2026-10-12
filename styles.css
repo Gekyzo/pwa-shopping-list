@@ -237,10 +237,32 @@ main {
 
 .row input[type="checkbox"] {
   flex: none;
+  display: grid;
+  place-items: center;
   width: 24px;
   height: 24px;
   margin: 12px 4px 12px 8px;
-  accent-color: var(--accent);
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  background: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.row input[type="checkbox"]:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+/* The tick: two sides of a small box, turned. */
+.row input[type="checkbox"]:checked::after {
+  content: "";
+  width: 10px;
+  height: 5px;
+  margin-top: -2px;
+  border: solid var(--accent-text);
+  border-width: 0 0 2px 2px;
+  transform: rotate(-45deg);
 }
 
 .name {
