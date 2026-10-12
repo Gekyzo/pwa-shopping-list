@@ -250,15 +250,13 @@ main {
 }
 
 .side button {
-  width: 92px;
+  display: grid;
+  place-items: center;
+  width: 64px;
   height: 100%;
-  padding: 0 6px;
   border-radius: 0;
   background: var(--accent-soft);
   color: var(--accent);
-  font-size: 0.82rem;
-  font-weight: 600;
-  line-height: 1.2;
 }
 
 .side button + button {
@@ -474,7 +472,8 @@ button.pill {
 }
 
 .recipe-link svg,
-.send svg {
+.send svg,
+.side svg {
   width: 22px;
   height: 22px;
   fill: none;
