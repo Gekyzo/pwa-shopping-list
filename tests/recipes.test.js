@@ -219,9 +219,40 @@ const twoSent = () => {
   return { state, omelette: omelette.id, flan: flan.id };
 };
 
-test('recipeGroups gives no group when no recipe was sent', () => {
-  const { state } = withRecipe(withItem(emptyState(), 'Eggs', 'active'), 'Omelette', ['Eggs']);
-  assert.deepEqual(recipeGroups(state), { groups: [], rest: state.items });
+const groupNames = (state) => recipeGroups(state).groups.map(({ recipe }) => recipe.name);
+
+test('recipeGroups groups a recipe that was not sent when all its products are in active', () => {
+  const items = withItem(withItem(withItem(emptyState(), 'Eggs', 'active'), 'POTATOES', 'active'), 'Bread', 'active');
+  const { state } = withRecipe(items, 'Omelette', ['Eggs', 'Potatoes']);
+  const { groups, rest } = recipeGroups(state);
+  assert.deepEqual(groups.map(({ recipe, items: members, total }) => [recipe.name, names(members), total]), [
+    ['Omelette', ['Eggs', 'POTATOES'], 2],
+  ]);
+  assert.deepEqual(names(rest), ['Bread']);
+  assert.deepEqual(state.sent, []);
+});
+
+test('recipeGroups counts a ticked item as a product in active', () => {
+  const { state } = withRecipe(withItem(withItem(emptyState(), 'Eggs', 'active'), 'Potatoes', 'active'), 'Omelette', ['Eggs', 'Potatoes']);
+  const ticked = toggleBought(state, find(state, 'Eggs').id).state;
+  assert.deepEqual(recipeGroups(ticked).groups.map(({ items, total }) => [names(items), total]), [[['Potatoes'], 2]]);
+});
+
+test('recipeGroups gives no group to a recipe that was not sent and has a product out of active', () => {
+  const items = withItem(withItem(emptyState(), 'Eggs', 'active'), 'Milk', 'next');
+  const missing = withRecipe(items, 'Omelette', ['Eggs', 'Potatoes']);
+  const inNext = withRecipe(missing.state, 'Flan', ['Eggs', 'Milk']);
+  const { state } = withRecipe(inNext.state, 'Soup');
+  assert.deepEqual(recipeGroups(state), { groups: [], rest: [find(state, 'Eggs')] });
+});
+
+test('recipeGroups puts the sent recipes first and each recipe one time', () => {
+  const { state } = twoSent();
+  const toast = withRecipe(state, 'Toast', ['Bread']);
+  assert.deepEqual(groupNames(toast.state), ['Omelette', 'Flan', 'Toast']);
+  const first = withRecipe(withItem(emptyState(), 'Bread', 'active'), 'Toast', ['Bread']);
+  const second = withRecipe(first.state, 'Sandwich', ['Bread']);
+  assert.deepEqual(groupNames(sendRecipe(second.state, second.id, newId).state), ['Sandwich', 'Toast']);
 });
 
 test('recipeGroups puts a shared item in each group and the other items in rest', () => {

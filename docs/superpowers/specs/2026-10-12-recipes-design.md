@@ -64,20 +64,24 @@ item ids would lose its products after each trip.
 ## Groups in Actual
 
 Added after the first version. `Actual` shows its items in groups, one for each recipe that the
-user sent in the current trip.
+user sent in the current trip and one for each other recipe whose products are all in `Actual`.
 
 - **Sent recipes:** `A la lista` records the recipe in `sent`, one time, in send order.
   `Terminar compra` empties `sent`. A deleted recipe leaves `sent`.
 - **Membership:** an `Actual` item is in the group of a sent recipe when the recipe has a product
   with that name, without case distinction. An item added by hand joins the group of a sent recipe
-  that has it. A recipe that was not sent makes no group.
+  that has it.
+- **Recipe that was not sent:** it makes a group while each of its products has an item in
+  `Actual`, ticked or not. Thus a recipe made from products that are in `Actual` already shows its
+  group with no send. With one product out of `Actual`, or with no products, it makes no group.
+  These groups come after the groups of the sent recipes, in recipe order, and are not stored.
 - **Shared item:** an item of two sent recipes shows in the two groups. It is one record, so a tick
   in one group ticks it in all groups, and the header counts it one time.
 - **Layout:** for each group, a header with the recipe name and `done/total` (`✓` when all its
   items are ticked), then its items that are not ticked. Then a header `Otros` with the items of no
   group, only when there are such items. Then the `N comprados` section, where a ticked item shows
   one time. A sent recipe with no item in `Actual` shows no group.
-- **No sent recipe with items:** `Actual` is the flat list, as before.
+- **No group:** `Actual` is the flat list, as before.
 - **Choice:** when there is a group, the first row of `Actual` is `Agrupar por` with `Recetas` and
   `Nada`. `Nada` shows the flat list. The choice is stored as `grouped` in the state (`true` when
   absent) and stays over trips and reloads. The change keeps a pending `Deshacer`.

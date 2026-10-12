@@ -347,7 +347,7 @@ const boughtSection = (bought) => {
 const groupHead = (title, count) =>
   el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
 
-// The items of Actual still to buy, below the sent recipe that asks for each one.
+// The items of Actual still to buy, below the recipe that asks for each one.
 // The choice between Actual by recipe and Actual as one list. It keeps the toast, and so the undo.
 const groupToggle = () => {
   const option = (text, grouped) => {
