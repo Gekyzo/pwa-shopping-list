@@ -1,4 +1,5 @@
 import { emptyState } from './store.js';
+import { isWebUrl } from './recipes.js';
 
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
@@ -26,7 +27,7 @@ const lower = (text) => text.toLowerCase();
 
 const normalizeRecipe = (recipe) => {
   if (typeof recipe !== 'object' || recipe === null) return null;
-  const { id, name, products } = recipe;
+  const { id, name, products, url } = recipe;
   const valid =
     typeof id === 'string' &&
     id !== '' &&
@@ -36,7 +37,10 @@ const normalizeRecipe = (recipe) => {
     products.every((product) => typeof product === 'string' && product.trim() !== '');
   if (!valid) return null;
   const trimmed = products.map((product) => product.trim());
-  return unique(trimmed.map(lower)) ? { id, name: name.trim(), products: trimmed } : null;
+  if (!unique(trimmed.map(lower))) return null;
+  // The link is optional: a value that is not a web address is dropped.
+  const link = typeof url === 'string' && isWebUrl(url.trim()) ? url.trim() : '';
+  return { id, name: name.trim(), products: trimmed, url: link };
 };
 
 const VERSIONS = [1, 2];

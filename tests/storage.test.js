@@ -32,7 +32,7 @@ const sampleV1 = () => ({
 const sample = () => ({
   ...sampleV1(),
   version: 2,
-  recipes: [{ id: 'r1', name: 'Omelette', products: ['Eggs', 'Potatoes'] }],
+  recipes: [{ id: 'r1', name: 'Omelette', products: ['Eggs', 'Potatoes'], url: 'https://example.com/omelette' }],
   sent: ['r1'],
 });
 
@@ -132,12 +132,12 @@ test('importJson migrates a version 1 backup', () => {
 
 test('importJson trims recipe names and products and drops unknown fields', () => {
   const data = { ...sample(), recipes: [{ id: 'r1', name: ' Omelette ', products: [' Eggs '], note: 'x' }] };
-  assert.deepEqual(importJson(JSON.stringify(data)).state.recipes, [{ id: 'r1', name: 'Omelette', products: ['Eggs'] }]);
+  assert.deepEqual(importJson(JSON.stringify(data)).state.recipes, [{ id: 'r1', name: 'Omelette', products: ['Eggs'], url: '' }]);
 });
 
 test('importJson accepts a recipe with no products and a recipe named as an item', () => {
   const data = { ...sample(), recipes: [{ id: 'r1', name: 'Bread', products: [] }] };
-  assert.deepEqual(importJson(JSON.stringify(data)).state.recipes, [{ id: 'r1', name: 'Bread', products: [] }]);
+  assert.deepEqual(importJson(JSON.stringify(data)).state.recipes, [{ id: 'r1', name: 'Bread', products: [], url: '' }]);
 });
 
 test('importJson rejects invalid recipes', () => {
@@ -171,4 +171,15 @@ test('importJson keeps in sent only the ids of recipes, one time each', () => {
   const recipes = [...sample().recipes, { id: 'r2', name: 'Soup', products: [] }];
   const data = { ...sample(), recipes, sent: ['r2', 'nope', 7, 'r1', 'r2', null] };
   assert.deepEqual(importJson(JSON.stringify(data)).state.sent, ['r2', 'r1']);
+});
+
+test('importJson keeps a web link of a recipe and drops any other value', () => {
+  const urlOf = (url) => {
+    const data = { ...sample(), recipes: [{ id: 'r1', name: 'Omelette', products: [], url }] };
+    return importJson(JSON.stringify(data)).state.recipes[0].url;
+  };
+  assert.equal(urlOf(' https://example.com/a '), 'https://example.com/a');
+  [undefined, 7, '', 'javascript:alert(1)', 'example.com', 'ftp://example.com'].forEach((url) => {
+    assert.equal(urlOf(url), '', String(url));
+  });
 });

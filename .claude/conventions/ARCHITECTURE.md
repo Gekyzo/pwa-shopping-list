@@ -22,7 +22,7 @@ repository root.
 |---|---|---|
 | `src/store.js` | Pure state operations and derived views | nothing |
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store.js` |
-| `src/storage.js` | Load, save, export, import, validation | `store.js` |
+| `src/storage.js` | Load, save, export, import, validation | `store.js`, `recipes.js` |
 | `src/app.js` | Render and event handling | `store.js`, `recipes.js`, `storage.js` |
 | `sw.js` | Offline cache of the app shell | nothing; it is not a module of the app |
 

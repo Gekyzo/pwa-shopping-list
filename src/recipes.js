@@ -21,7 +21,7 @@ export const addRecipe = (state, rawName, newId = () => crypto.randomUUID()) => 
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name);
   if (error) return reject(state, error);
-  const recipe = { id: newId(), name, products: [] };
+  const recipe = { id: newId(), name, products: [], url: '' };
   return { state: { ...state, recipes: [...state.recipes, recipe] }, id: recipe.id };
 };
 
@@ -36,6 +36,24 @@ export const deleteRecipe = (state, id) => {
   if (!findRecipe(state, id)) return reject(state, NOT_FOUND);
   const recipes = state.recipes.filter((recipe) => recipe.id !== id);
   return { state: { ...state, recipes, sent: state.sent.filter((sentId) => sentId !== id) } };
+};
+
+// True for an http or https address. No other scheme goes into a link of the screen.
+export const isWebUrl = (text) => {
+  try {
+    return ['http:', 'https:'].includes(new URL(text).protocol);
+  } catch {
+    return false;
+  }
+};
+
+// Sets the optional link of the recipe. An empty text removes it; a text with no scheme gets https.
+export const setRecipeUrl = (state, id, rawUrl) => {
+  if (!findRecipe(state, id)) return reject(state, NOT_FOUND);
+  const text = String(rawUrl ?? '').trim();
+  if (!text) return patchRecipe(state, id, { url: '' });
+  const url = /^[a-z][a-z\d+.-]*:/i.test(text) ? text : `https://${text}`;
+  return isWebUrl(url) ? patchRecipe(state, id, { url }) : reject(state, 'El enlace no es una dirección web válida.');
 };
 
 export const addRecipeProduct = (state, id, rawName) => {

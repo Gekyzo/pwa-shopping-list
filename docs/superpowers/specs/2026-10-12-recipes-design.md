@@ -86,6 +86,22 @@ user sent in the current trip.
 
 `src/recipes.js` exports the view `recipeGroups(state) → { groups: [{ recipe, items, total }], rest }`.
 
+## Recipe link
+
+Added after the first version. A recipe can have one optional link to its page on the web, for
+example `https://bonviveur.com/es/recetas/garbanzos-con-chorizo`.
+
+- **Edit:** `⋯` → `Añadir enlace` or `Cambiar enlace` asks for the address in a prompt. An empty
+  text removes the link. `Deshacer` restores the value from before.
+- **Rules:** the text is trimmed. A text with no scheme gets `https://`. Only `http` and `https`
+  addresses are accepted; any other text is rejected with `El enlace no es una dirección web válida.`
+- **Show:** an expanded recipe with a link shows the host of the address as its first row. A tap
+  opens the page in the browser (`target="_blank"`, `rel="noopener noreferrer"`).
+- **Data:** `url` in the recipe, `''` when there is no link. On read, a value that is absent or is
+  not an `http` / `https` address becomes `''`; the recipe stays valid.
+- `src/recipes.js` exports `setRecipeUrl(state, id, rawUrl)` and `isWebUrl(text)`. `src/storage.js`
+  imports `isWebUrl`, so the two layers accept the same addresses.
+
 ## Data model
 
 One `localStorage` key, `shopping.v1`. The key name does not change; the `version` field does.
@@ -94,7 +110,7 @@ One `localStorage` key, `shopping.v1`. The key name does not change; the `versio
 {
   version: 2,
   items: [{ id, name, recurrent, list: 'active' | 'next', bought, again }],
-  recipes: [{ id, name, products: ['Huevos', 'Patatas'] }],
+  recipes: [{ id, name, products: ['Huevos', 'Patatas'], url: '' }],
   sent: ['<recipe id>'],
 }
 ```
