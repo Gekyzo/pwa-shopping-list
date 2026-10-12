@@ -1,4 +1,4 @@
-import { addItem, bringToList, findByName } from './store.js';
+import { addItem, bringToList, findByName, sortItems } from './store.js';
 
 const NOT_FOUND = 'Receta no encontrada.';
 
@@ -98,7 +98,7 @@ export const sendRecipe = (state, id, newId) => {
 // are the members still to buy, `total` counts the ticked members too, and `rest` holds
 // the items to buy that are in no group.
 export const recipeGroups = (state) => {
-  const active = state.items.filter((item) => item.list === 'active');
+  const active = sortItems(state, state.items.filter((item) => item.list === 'active'));
   const grouped = new Set();
   const groups = state.sent
     .map((id) => findRecipe(state, id))

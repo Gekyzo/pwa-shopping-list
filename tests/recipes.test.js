@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { emptyState, addItem, toggleBought } from '../src/store.js';
+import { emptyState, addItem, toggleBought, setSort } from '../src/store.js';
 import {
   addRecipe,
   renameRecipe,
@@ -315,4 +315,16 @@ test('setGrouped turns the grouping of Active off and on', () => {
   assert.equal(off.grouped, false);
   assert.equal(setGrouped(off, true).state.grouped, true);
   assert.equal(start.grouped, true);
+});
+
+test('recipeGroups sorts the members of a group and the rest by name', () => {
+  let state = emptyState();
+  for (const name of ['Patatas', 'Sal', 'Huevos', 'Agua']) state = withItem(state, name, 'active');
+  state = { ...state, recipes: [{ id: 'r1', name: 'Tortilla', products: ['Patatas', 'Huevos'], url: '' }], sent: ['r1'] };
+  const added = recipeGroups(state);
+  assert.deepEqual(added.groups[0].items.map((item) => item.name), ['Patatas', 'Huevos']);
+  assert.deepEqual(added.rest.map((item) => item.name), ['Sal', 'Agua']);
+  const byName = recipeGroups(setSort(state, 'name').state);
+  assert.deepEqual(byName.groups[0].items.map((item) => item.name), ['Huevos', 'Patatas']);
+  assert.deepEqual(byName.rest.map((item) => item.name), ['Agua', 'Sal']);
 });
