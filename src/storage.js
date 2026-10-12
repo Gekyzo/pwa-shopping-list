@@ -66,7 +66,7 @@ export const exportJson = (state) => JSON.stringify(state, null, 2);
 
 export const importJson = (text) => {
   const { data, invalidJson } = parse(text);
-  if (invalidJson) return { error: 'The file is not valid JSON.' };
+  if (invalidJson) return { error: 'El archivo no es un JSON válido.' };
   const state = normalizeState(data);
-  return state ? { state } : { error: 'The file is not a shopping list backup.' };
+  return state ? { state } : { error: 'El archivo no es una copia de seguridad de la lista.' };
 };

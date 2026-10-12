@@ -55,7 +55,7 @@ const apply = (result, { undoText = null } = {}) => {
   }
   const previous = state;
   const saved = commit(result.state);
-  if (!saved) showToast('The change is not saved: storage is not available.');
+  if (!saved) showToast('El cambio no se ha guardado: el almacenamiento no está disponible.');
   else if (undoText) showToast(undoText, { undo: previous });
   else hideToast();
   return true;
@@ -70,7 +70,7 @@ const iconButton = (text, label, pressed, onClick) => {
 
 const renameInput = (item) => {
   const input = el('input', { type: 'text', className: 'rename', value: item.name, maxLength: 80 });
-  input.setAttribute('aria-label', `Rename ${item.name}`);
+  input.setAttribute('aria-label', `Renombrar ${item.name}`);
   let done = false;
   const finish = (keep) => {
     if (done) return;
@@ -93,7 +93,7 @@ const nameNode = (item) => {
     type: 'button',
     className: 'name',
     textContent: item.name,
-    title: 'Rename',
+    title: 'Renombrar',
     onclick: () => {
       ui.editingId = item.id;
       render();
@@ -102,10 +102,10 @@ const nameNode = (item) => {
 };
 
 const recurrentButton = (item) =>
-  iconButton('↻', `Recurrent: ${item.name}`, item.recurrent, () => apply(store.toggleRecurrent(state, item.id)));
+  iconButton('↻', `Recurrente: ${item.name}`, item.recurrent, () => apply(store.toggleRecurrent(state, item.id)));
 
 const moreButton = (item) => {
-  const button = iconButton('⋯', `More actions: ${item.name}`, null, () => {
+  const button = iconButton('⋯', `Más acciones: ${item.name}`, null, () => {
     ui.openId = ui.openId === item.id ? null : item.id;
     render();
   });
@@ -117,7 +117,7 @@ const actionButton = (text, onClick, className = '') =>
   el('button', { type: 'button', textContent: text, className, onclick: onClick });
 
 const deleteAction = (item) =>
-  actionButton('Delete', () => apply(store.deleteItem(state, item.id), { undoText: `"${item.name}" deleted.` }), 'danger');
+  actionButton('Eliminar', () => apply(store.deleteItem(state, item.id), { undoText: `"${item.name}" eliminado.` }), 'danger');
 
 const activeRow = (item) => {
   const checkbox = el('input', {
@@ -125,22 +125,22 @@ const activeRow = (item) => {
     checked: item.bought,
     onchange: () => apply(store.toggleBought(state, item.id)),
   });
-  checkbox.setAttribute('aria-label', `Bought: ${item.name}`);
+  checkbox.setAttribute('aria-label', `Comprado: ${item.name}`);
   const row = [checkbox, nameNode(item)];
   if (item.bought && !item.recurrent) {
     const again = el('button', {
       type: 'button',
       className: 'chip',
-      textContent: item.again ? '✓ Next' : '+ Next',
+      textContent: item.again ? '✓ Próxima' : '+ Próxima',
       onclick: () => apply(store.toggleAgain(state, item.id)),
     });
     again.setAttribute('aria-pressed', String(item.again));
-    again.setAttribute('aria-label', `Buy again next time: ${item.name}`);
+    again.setAttribute('aria-label', `Comprar otra vez la próxima: ${item.name}`);
     row.push(again);
   }
   row.push(recurrentButton(item), moreButton(item));
   const actions = [
-    actionButton('Move to Next', () => apply(store.moveItem(state, item.id), { undoText: `"${item.name}" moved to Next.` })),
+    actionButton('Mover a Próxima', () => apply(store.moveItem(state, item.id), { undoText: `"${item.name}" movido a Próxima.` })),
     deleteAction(item),
   ];
   return { row, actions };
@@ -149,17 +149,17 @@ const activeRow = (item) => {
 const nextRow = (item) => {
   const pending = item.list === 'next';
   const row = [nameNode(item)];
-  if (!pending) row.push(el('span', { className: 'badge', textContent: 'bought' }));
+  if (!pending) row.push(el('span', { className: 'badge', textContent: 'comprado' }));
   row.push(recurrentButton(item), moreButton(item));
   const actions = pending
     ? [
-        actionButton('Move to Active', () =>
-          apply(store.moveItem(state, item.id), { undoText: `"${item.name}" moved to Active.` })),
+        actionButton('Mover a Actual', () =>
+          apply(store.moveItem(state, item.id), { undoText: `"${item.name}" movido a Actual.` })),
         deleteAction(item),
       ]
     : [
-        actionButton('Remove from Next', () =>
-          apply(store.removeFromNext(state, item.id), { undoText: `"${item.name}" removed from Next.` })),
+        actionButton('Quitar de Próxima', () =>
+          apply(store.removeFromNext(state, item.id), { undoText: `"${item.name}" quitado de Próxima.` })),
       ];
   return { row, actions };
 };
@@ -173,8 +173,8 @@ const itemNode = (item) => {
 };
 
 const EMPTY_TEXT = {
-  active: 'The Active list is empty. Add an item below.',
-  next: 'The Next list is empty. Add the items that you buy each time, or tick a recurrent item in Active.',
+  active: 'La lista Actual está vacía. Añade un artículo abajo.',
+  next: 'La lista Próxima está vacía. Añade lo que compras siempre, o marca un artículo recurrente en Actual.',
 };
 
 const render = () => {
@@ -199,11 +199,11 @@ const render = () => {
   renderSuggestions();
 };
 
-const LIST_LABELS = { active: 'Active', next: 'Next' };
+const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
 const whereText = (item) => {
-  if (item.list === 'next') return 'in Next';
-  return item.bought ? 'in Active, bought' : 'in Active';
+  if (item.list === 'next') return 'en Próxima';
+  return item.bought ? 'en Actual, comprado' : 'en Actual';
 };
 
 const renderSuggestions = () => {
@@ -226,10 +226,10 @@ const useExisting = (item) => {
   const label = LIST_LABELS[ui.tab];
   $('add-name').value = '';
   ui.flashId = item.id;
-  if (result.changed) apply(result, { undoText: `"${item.name}" exists already. It is now in ${label}.` });
+  if (result.changed) apply(result, { undoText: `"${item.name}" ya existe. Ahora está en ${label}.` });
   else {
     render();
-    showToast(result.error ?? `"${item.name}" is already in ${label}.`);
+    showToast(result.error ?? `"${item.name}" ya está en ${label}.`);
   }
 };
 
@@ -261,7 +261,7 @@ $('add').addEventListener('submit', (event) => {
 $('add-name').addEventListener('input', renderSuggestions);
 
 $('start').addEventListener('click', () => {
-  if (!apply(store.startNewShopping(state), { undoText: 'New shopping started.' })) return;
+  if (!apply(store.startNewShopping(state), { undoText: 'Nueva compra empezada.' })) return;
   Object.assign(ui, { tab: 'active', editingId: null, openId: null });
   render();
 });
@@ -274,7 +274,7 @@ $('toast-undo').addEventListener('click', () => {
 
 $('export').addEventListener('click', () => {
   $('menu').open = false;
-  download(`shopping-${new Date().toISOString().slice(0, 10)}.json`, exportJson(state));
+  download(`compra-${new Date().toISOString().slice(0, 10)}.json`, exportJson(state));
 });
 
 $('import').addEventListener('click', () => {
@@ -292,8 +292,8 @@ $('import-file').addEventListener('change', async (event) => {
     return;
   }
   const count = result.state.items.length;
-  if (!window.confirm(`Replace the current lists with the ${count} items of the backup?`)) return;
-  apply(result, { undoText: 'Backup imported.' });
+  if (!window.confirm(`¿Sustituir las listas actuales por los ${count} artículos de la copia?`)) return;
+  apply(result, { undoText: 'Copia importada.' });
 });
 
 document.addEventListener('click', (event) => {
@@ -301,6 +301,6 @@ document.addEventListener('click', (event) => {
 });
 
 render();
-if (!storage) showToast('Storage is not available: changes are not saved.');
+if (!storage) showToast('El almacenamiento no está disponible: los cambios no se guardan.');
 navigator.storage?.persist?.().catch(() => {});
 navigator.serviceWorker?.register('./sw.js').catch(() => {});

@@ -5,31 +5,31 @@ dependencies. The data stays in the `localStorage` of the browser.
 
 ## How it works
 
-The app has two lists.
+The user interface is in Spanish. The app has two lists.
 
-- **Active** is the list for the current trip. Tick an item when you buy it. A ticked item stays in the
+- **Actual** is the list for the current trip. Tick an item when you buy it. A ticked item stays in the
   list, crossed out.
-- **Next** is the list for the next trip.
-  - A ticked recurrent item (`↻`) shows in **Next** automatically.
-  - A ticked one-time item goes to **Next** only when you tap `+ Next`.
-  - You can also add items to **Next** directly. Such an item is recurrent by default.
-- **Start new shopping** ends the trip:
-  - ticked items that are in **Next** go back to **Active**, not ticked
+- **Próxima** is the list for the next trip.
+  - A ticked recurrent item (`↻`) shows in **Próxima** automatically.
+  - A ticked one-time item goes to **Próxima** only when you tap `+ Próxima`.
+  - You can also add items to **Próxima** directly. Such an item is recurrent by default.
+- **Nueva compra** ends the trip:
+  - ticked items that are in **Próxima** go back to **Actual**, not ticked
   - other ticked items are deleted
-  - items that are not ticked stay in **Active**
-  - items added to **Next** move to **Active**
+  - items that are not ticked stay in **Actual**
+  - items added to **Próxima** move to **Actual**
 
 Other actions:
 
 - Tap a name to rename the item.
 - Tap `↻` to make an item recurrent or one-time.
 - Tap `⋯` to move an item to the other list or to delete it.
-- `Undo` shows for 5 seconds after a delete, a move and **Start new shopping**.
-- `⋮` → **Export backup** downloads the lists as a JSON file. **Import backup** replaces the lists with
+- `Deshacer` shows for 5 seconds after a delete, a move and **Nueva compra**.
+- `⋮` → **Exportar copia** downloads the lists as a JSON file. **Importar copia** replaces the lists with
   such a file.
 
 The field at the bottom is a search and an add in one. While you type, the items that exist already
-show above the field, with the list that each one is in. Tap one, or press **Add** with the same name,
+show above the field, with the list that each one is in. Tap one, or press **Añadir** with the same name,
 and the existing item goes to the open list (an item that is ticked becomes not ticked). A new item is
 created only when no item has that name, without case distinction.
 

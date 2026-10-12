@@ -52,19 +52,19 @@ test('addItem trims the name and rejects an empty one', () => {
   const start = emptyState();
   const rejected = addItem(start, '   ', 'active', newId);
   assert.equal(rejected.state, start);
-  assert.equal(rejected.error, 'Enter a name.');
+  assert.equal(rejected.error, 'Escribe un nombre.');
 });
 
 test('addItem rejects a duplicate in either list, without case distinction', () => {
   const start = build(['Milk', 'next'], ['Bread', 'active']);
   const inNext = addItem(start, ' milk ', 'active', newId);
   assert.equal(inNext.state, start);
-  assert.equal(inNext.error, '"Milk" is already in Next.');
-  assert.equal(addItem(start, 'BREAD', 'next', newId).error, '"Bread" is already in Active.');
+  assert.equal(inNext.error, '"Milk" ya está en Próxima.');
+  assert.equal(addItem(start, 'BREAD', 'next', newId).error, '"Bread" ya está en Actual.');
 });
 
 test('addItem rejects an unknown list', () => {
-  assert.equal(addItem(emptyState(), 'Milk', 'other', newId).error, 'Unknown list.');
+  assert.equal(addItem(emptyState(), 'Milk', 'other', newId).error, 'Lista desconocida.');
 });
 
 test('addItem does not change the input state', () => {
@@ -82,9 +82,9 @@ test('renameItem renames and trims', () => {
 test('renameItem rejects an empty name and a duplicate of another item', () => {
   const start = build(['Bread', 'active'], ['Milk', 'next']);
   const { id } = find(start, 'Bread');
-  assert.equal(renameItem(start, id, ' ').error, 'Enter a name.');
+  assert.equal(renameItem(start, id, ' ').error, 'Escribe un nombre.');
   const duplicate = renameItem(start, id, 'MILK');
-  assert.equal(duplicate.error, '"Milk" is already in Next.');
+  assert.equal(duplicate.error, '"Milk" ya está en Próxima.');
   assert.equal(duplicate.state, start);
 });
 
@@ -107,7 +107,7 @@ test('operations reject an unknown id', () => {
     removeFromNext(start, 'nope'),
   ];
   calls.forEach((result) => {
-    assert.equal(result.error, 'Item not found.');
+    assert.equal(result.error, 'Artículo no encontrado.');
     assert.equal(result.state, start);
   });
 });
@@ -144,7 +144,7 @@ test('toggleBought off resets again', () => {
 test('toggleBought rejects an item in next', () => {
   const start = build(['Milk', 'next']);
   const result = toggleBought(start, find(start, 'Milk').id);
-  assert.equal(result.error, 'Only items in Active can be ticked.');
+  assert.equal(result.error, 'Solo se pueden marcar los artículos de Actual.');
   assert.equal(result.state, start);
 });
 
@@ -159,13 +159,13 @@ test('toggleAgain flips again on a ticked one-time item', () => {
 test('toggleAgain rejects an item that is not ticked', () => {
   const start = build(['Soap', 'active']);
   const result = toggleAgain(start, find(start, 'Soap').id);
-  assert.equal(result.error, 'Tick the item first.');
+  assert.equal(result.error, 'Marca primero el artículo.');
   assert.equal(result.state, start);
 });
 
 test('toggleAgain rejects a recurrent item', () => {
   const start = build(['Milk', 'active', { bought: true, recurrent: true }]);
-  assert.equal(toggleAgain(start, find(start, 'Milk').id).error, 'A recurrent item is in Next already.');
+  assert.equal(toggleAgain(start, find(start, 'Milk').id).error, 'Un artículo recurrente ya está en Próxima.');
 });
 
 test('deleteItem removes the item', () => {
@@ -225,7 +225,7 @@ test('removeFromNext keeps a ticked active item and clears again and recurrent',
 
 test('removeFromNext rejects an active item that is not in the next view', () => {
   const start = build(['Bread', 'active']);
-  assert.equal(removeFromNext(start, find(start, 'Bread').id).error, 'The item is not in Next.');
+  assert.equal(removeFromNext(start, find(start, 'Bread').id).error, 'El artículo no está en Próxima.');
 });
 
 test('startNewShopping applies each rule', () => {
@@ -252,9 +252,9 @@ test('startNewShopping applies each rule', () => {
 test('startNewShopping rejects when nothing is ticked and next is empty', () => {
   const start = build(['Bread', 'active']);
   const result = startNewShopping(start);
-  assert.equal(result.error, 'Nothing to start: tick an item or add one to Next.');
+  assert.equal(result.error, 'Nada que empezar: marca un artículo o añade uno a Próxima.');
   assert.equal(result.state, start);
-  assert.equal(startNewShopping(emptyState()).error, 'Nothing to start: tick an item or add one to Next.');
+  assert.equal(startNewShopping(emptyState()).error, 'Nada que empezar: marca un artículo o añade uno a Próxima.');
 });
 
 test('startNewShopping does not change the input state', () => {
@@ -341,6 +341,6 @@ test('bringToList next: changes nothing for an item that is in the next view', (
 
 test('bringToList rejects an unknown id and an unknown list', () => {
   const start = build(['Bread', 'active']);
-  assert.equal(bringToList(start, 'nope', 'active').error, 'Item not found.');
-  assert.equal(bringToList(start, find(start, 'Bread').id, 'other').error, 'Unknown list.');
+  assert.equal(bringToList(start, 'nope', 'active').error, 'Artículo no encontrado.');
+  assert.equal(bringToList(start, find(start, 'Bread').id, 'other').error, 'Lista desconocida.');
 });

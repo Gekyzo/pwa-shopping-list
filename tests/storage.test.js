@@ -62,12 +62,12 @@ test('exportJson then importJson returns the same state', () => {
 });
 
 test('importJson rejects text that is not JSON', () => {
-  assert.deepEqual(importJson('nope'), { error: 'The file is not valid JSON.' });
+  assert.deepEqual(importJson('nope'), { error: 'El archivo no es un JSON válido.' });
 });
 
 test('importJson rejects another version', () => {
   const text = JSON.stringify({ ...sample(), version: 2 });
-  assert.deepEqual(importJson(text), { error: 'The file is not a shopping list backup.' });
+  assert.deepEqual(importJson(text), { error: 'El archivo no es una copia de seguridad de la lista.' });
 });
 
 test('importJson rejects invalid items', () => {
@@ -83,7 +83,7 @@ test('importJson rejects invalid items', () => {
     { version: 1, items: [sample().items[0], { ...sample().items[1], name: 'bread' }] },
   ];
   invalid.forEach((data) => {
-    assert.deepEqual(importJson(JSON.stringify(data)), { error: 'The file is not a shopping list backup.' });
+    assert.deepEqual(importJson(JSON.stringify(data)), { error: 'El archivo no es una copia de seguridad de la lista.' });
   });
 });
 
