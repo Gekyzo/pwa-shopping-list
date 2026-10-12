@@ -11,6 +11,7 @@ import {
   sendRecipe,
   recipeGroups,
   setGrouped,
+  searchRecipes,
 } from '../src/recipes.js';
 
 let counter = 0;
@@ -327,4 +328,45 @@ test('recipeGroups sorts the members of a group and the rest by name', () => {
   const byName = recipeGroups(setSort(state, 'name').state);
   assert.deepEqual(byName.groups[0].items.map((item) => item.name), ['Huevos', 'Patatas']);
   assert.deepEqual(byName.rest.map((item) => item.name), ['Agua', 'Sal']);
+});
+
+const cookbook = () => ({
+  ...emptyState(),
+  recipes: [
+    { id: 'r1', name: 'Tortilla', products: ['Huevos', 'Patatas'], url: '' },
+    { id: 'r2', name: 'Arroz con pollo', products: ['Arroz', 'Pollo', 'Pimentón'], url: '' },
+    { id: 'r3', name: 'Revuelto', products: ['Huevos', 'Champiñones'], url: '' },
+  ],
+});
+
+const found = (query) => searchRecipes(cookbook(), query).map((recipe) => recipe.name);
+
+test('searchRecipes returns all recipes for an empty query', () => {
+  const state = cookbook();
+  assert.equal(searchRecipes(state, ''), state.recipes);
+  assert.equal(searchRecipes(state, '   '), state.recipes);
+  assert.equal(searchRecipes(state, undefined), state.recipes);
+});
+
+test('searchRecipes matches a part of the recipe name', () => {
+  assert.deepEqual(found('torti'), ['Tortilla']);
+  assert.deepEqual(found('con'), ['Arroz con pollo']);
+});
+
+test('searchRecipes matches a product, in insertion order', () => {
+  assert.deepEqual(found('huevo'), ['Tortilla', 'Revuelto']);
+  assert.deepEqual(found('arroz'), ['Arroz con pollo']);
+});
+
+test('searchRecipes makes no case and no accent distinction', () => {
+  assert.deepEqual(found('PIMENTON'), ['Arroz con pollo']);
+  assert.deepEqual(found(' champiñón'), ['Revuelto']);
+  assert.deepEqual(found('Champinones '), ['Revuelto']);
+});
+
+test('searchRecipes returns an empty list for no match and does not change the state', () => {
+  const state = cookbook();
+  const before = structuredClone(state);
+  assert.deepEqual(searchRecipes(state, 'sushi'), []);
+  assert.deepEqual(state, before);
 });

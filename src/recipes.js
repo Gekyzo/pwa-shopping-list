@@ -1,4 +1,4 @@
-import { addItem, bringToList, findByName, sortItems } from './store.js';
+import { addItem, bringToList, findByName, fold, sortItems } from './store.js';
 
 const NOT_FOUND = 'Receta no encontrada.';
 
@@ -112,6 +112,13 @@ export const recipeGroups = (state) => {
     .filter((group) => group.total > 0);
   const rest = active.filter((item) => !item.bought && !grouped.has(item.id));
   return { groups, rest };
+};
+
+// The recipes whose name, or one of whose products, contains the query. All recipes for no query.
+export const searchRecipes = (state, query) => {
+  const key = fold(query);
+  if (!key) return state.recipes;
+  return state.recipes.filter((recipe) => [recipe.name, ...recipe.products].some((text) => fold(text).includes(key)));
 };
 
 export const setGrouped = (state, grouped) => ({ state: { ...state, grouped: Boolean(grouped) } });

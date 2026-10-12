@@ -110,7 +110,8 @@ export const nextItems = (state) =>
     ...state.items.filter((item) => item.list === 'active' && inNextView(item)),
   ]);
 
-const fold = (text) =>
+// The form of a text for a search: no case and no accent distinction.
+export const fold = (text) =>
   String(text ?? '')
     .trim()
     .toLowerCase()
