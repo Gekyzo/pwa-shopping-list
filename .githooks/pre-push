@@ -1,0 +1,39 @@
+#!/bin/sh
+# A push to main is a deploy. Each deploy gets a new version in version.json, which
+# Ajustes shows. A hook cannot add a commit to the push that runs, so it commits the
+# new version and stops: the second `git push` passes.
+# Enable: npm run hooks. Skip: git push --no-verify.
+
+ZERO=0000000000000000000000000000000000000000
+
+stop() {
+  echo "pre-push: $1" >&2
+  exit 1
+}
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$remote_ref" = refs/heads/main ] || continue
+  [ "$local_sha" = "$ZERO" ] && continue
+  # A new remote branch has no deploy to compare with.
+  [ "$remote_sha" = "$ZERO" ] && continue
+  # The remote is ahead of this clone: git rejects the push itself.
+  git cat-file -e "$remote_sha^{commit}" 2>/dev/null || continue
+  # The push has a new version already.
+  git diff --quiet "$remote_sha" "$local_sha" -- version.json || continue
+  # No commit to deploy.
+  [ "$remote_sha" = "$local_sha" ] && continue
+
+  [ "$(git symbolic-ref --quiet --short HEAD)" = main ] ||
+    stop 'the version needs a bump, but the current branch is not main.'
+  [ "$(git rev-parse HEAD)" = "$local_sha" ] ||
+    stop 'the version needs a bump, but the pushed commit is not HEAD.'
+  git diff --quiet HEAD -- version.json ||
+    stop 'version.json has a change that is not committed.'
+
+  build=$(node scripts/bump-version.mjs </dev/null) || stop 'the version bump failed.'
+  git commit --quiet -m "Bump version to $build" -- version.json </dev/null ||
+    stop 'the commit of the version bump failed.'
+  stop "Version bumped to $build. Run git push again."
+done
+
+exit 0
