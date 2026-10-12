@@ -5,6 +5,8 @@ import { load, save, exportJson, importJson } from './storage.js';
 
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;
+// The app opens by itself at an arrival, so its message stays longer.
+const ARRIVAL_MS = 10000;
 // Width of one button of a side menu of a row, the same as in styles.css.
 const SIDE_BUTTON = 64;
 const DRAG_START = 10;
@@ -51,13 +53,13 @@ const ui = {
 let toastTimer = null;
 let undoState = null;
 
-const showToast = (text, { undo = null } = {}) => {
+const showToast = (text, { undo = null, ms = undo ? UNDO_MS : MESSAGE_MS } = {}) => {
   clearTimeout(toastTimer);
   undoState = undo;
   $('toast-text').textContent = text;
   $('toast-undo').hidden = !undo;
   $('toast').hidden = false;
-  toastTimer = setTimeout(hideToast, undo ? UNDO_MS : MESSAGE_MS);
+  toastTimer = setTimeout(hideToast, ms);
 };
 
 const hideToast = () => {
@@ -791,6 +793,15 @@ $('import-file').addEventListener('change', async (event) => {
 });
 
 render();
+// An automation of the phone opens `?arrival` at the shop. The query goes away, so a reload is silent.
+const params = new URLSearchParams(location.search);
+if (params.has('arrival')) {
+  const message = store.arrivalMessage(state);
+  if (message) showToast(message, { ms: ARRIVAL_MS });
+  params.delete('arrival');
+  const query = params.toString();
+  history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
+}
 if (!storage) showToast('El almacenamiento no está disponible: los cambios no se guardan.');
 navigator.storage?.persist?.().catch(() => {});
 navigator.serviceWorker?.register('./sw.js').catch(() => {});
