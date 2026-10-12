@@ -325,3 +325,46 @@ main {
   border-radius: 10px;
   background: var(--bg);
 }
+
+.item.flash {
+  animation: flash 1.2s ease-out;
+}
+
+@keyframes flash {
+  from {
+    background: var(--accent-soft);
+  }
+}
+
+.suggestions {
+  margin: 0;
+  padding: 4px 12px 0;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  list-style: none;
+}
+
+.suggestions[hidden] {
+  display: none;
+}
+
+.suggestions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0 8px;
+  text-align: left;
+}
+
+.suggestion-name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.suggestion-where {
+  flex: none;
+  color: var(--muted);
+  font-size: 0.8rem;
+}

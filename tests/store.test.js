@@ -13,6 +13,9 @@ import {
   startNewShopping,
   activeItems,
   nextItems,
+  searchItems,
+  findByName,
+  bringToList,
 } from '../src/store.js';
 
 let counter = 0;
@@ -259,4 +262,85 @@ test('startNewShopping does not change the input state', () => {
   const copy = structuredClone(start);
   startNewShopping(start);
   assert.deepEqual(start, copy);
+});
+
+test('searchItems returns nothing for an empty query', () => {
+  const state = build(['Milk', 'active']);
+  assert.deepEqual(searchItems(state, '   '), []);
+});
+
+test('searchItems matches part of a name in both lists, without case or accent distinction', () => {
+  const state = build(['Milk', 'next'], ['Oat milk', 'active'], ['Bread', 'active'], ['Jamón', 'active']);
+  assert.deepEqual(names(searchItems(state, 'MIL')), ['Milk', 'Oat milk']);
+  assert.deepEqual(names(searchItems(state, 'jamon')), ['Jamón']);
+});
+
+test('searchItems puts the exact match first, then names that start with the query', () => {
+  const state = build(['Oat milk', 'active'], ['Milk chocolate', 'active'], ['Milk', 'next']);
+  assert.deepEqual(names(searchItems(state, 'milk')), ['Milk', 'Milk chocolate', 'Oat milk']);
+});
+
+test('searchItems respects the limit', () => {
+  const state = build(['Milk 1', 'active'], ['Milk 2', 'active'], ['Milk 3', 'active']);
+  assert.equal(searchItems(state, 'milk', 2).length, 2);
+});
+
+test('findByName finds the item with the same name, trimmed and without case distinction', () => {
+  const state = build(['Milk', 'next']);
+  assert.equal(findByName(state, '  mILK ').name, 'Milk');
+  assert.equal(findByName(state, 'Mil'), undefined);
+  assert.equal(findByName(state, ''), undefined);
+});
+
+test('bringToList active: moves an item from next', () => {
+  const start = build(['Milk', 'next']);
+  const { state, changed } = bringToList(start, find(start, 'Milk').id, 'active');
+  assert.equal(changed, true);
+  assert.equal(state.items[0].list, 'active');
+  assert.equal(state.items[0].recurrent, true);
+});
+
+test('bringToList active: unticks a bought item', () => {
+  const start = build(['Soap', 'active', { bought: true, again: true }]);
+  const { state, changed } = bringToList(start, find(start, 'Soap').id, 'active');
+  assert.equal(changed, true);
+  assert.equal(state.items[0].bought, false);
+  assert.equal(state.items[0].again, false);
+});
+
+test('bringToList active: changes nothing for an item that is there and not bought', () => {
+  const start = build(['Bread', 'active']);
+  const result = bringToList(start, find(start, 'Bread').id, 'active');
+  assert.equal(result.changed, false);
+  assert.equal(result.state, start);
+});
+
+test('bringToList next: sets again on a bought one-time item', () => {
+  const start = build(['Soap', 'active', { bought: true }]);
+  const { state, changed } = bringToList(start, find(start, 'Soap').id, 'next');
+  assert.equal(changed, true);
+  assert.equal(state.items[0].again, true);
+  assert.equal(state.items[0].list, 'active');
+});
+
+test('bringToList next: moves an item that is not bought', () => {
+  const start = build(['Bread', 'active']);
+  const { state, changed } = bringToList(start, find(start, 'Bread').id, 'next');
+  assert.equal(changed, true);
+  assert.equal(state.items[0].list, 'next');
+});
+
+test('bringToList next: changes nothing for an item that is in the next view', () => {
+  const start = build(['Water', 'next'], ['Milk', 'active', { bought: true, recurrent: true }]);
+  ['Water', 'Milk'].forEach((name) => {
+    const result = bringToList(start, find(start, name).id, 'next');
+    assert.equal(result.changed, false);
+    assert.equal(result.state, start);
+  });
+});
+
+test('bringToList rejects an unknown id and an unknown list', () => {
+  const start = build(['Bread', 'active']);
+  assert.equal(bringToList(start, 'nope', 'active').error, 'Item not found.');
+  assert.equal(bringToList(start, find(start, 'Bread').id, 'other').error, 'Unknown list.');
 });

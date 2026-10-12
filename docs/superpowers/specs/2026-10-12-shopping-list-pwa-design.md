@@ -38,6 +38,11 @@ Decisions taken in the brainstorm:
   - not ticked → stays in `Active`
   - `list: 'next'` → moves to `Active`
   - a 5-second `Undo` message restores the state from before the action
+- **Search and add:** the add field has the placeholder `Add item to list`. While the user types, up
+  to 5 existing items whose name contains the text show above the field, from the two lists, without
+  case or accent distinction. A tap on one, or a submit of a name that exists, calls `bringToList`
+  in place of a create: in `Active` an item from `Next` moves there and a ticked item becomes not ticked;
+  in `Next` a ticked one-time item gets `again` and an item that is not ticked moves there.
 - **Names:** trimmed. An empty name is rejected. A name is unique across the two lists, without case
   distinction. A duplicate is rejected and the message says in which list the item is.
 - **Backup:** a menu with `Export` (downloads a JSON file) and `Import` (replaces the state after a confirmation).

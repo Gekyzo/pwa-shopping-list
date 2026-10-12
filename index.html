@@ -39,9 +39,11 @@
       <button id="toast-undo" type="button" hidden>Undo</button>
     </div>
 
+    <ul id="suggestions" class="suggestions" aria-label="Items that exist already" hidden></ul>
+
     <form id="add" class="add" autocomplete="off">
       <input id="add-name" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80"
-        aria-label="New item">
+        placeholder="Add item to list" aria-label="Add item to list">
       <button class="primary" type="submit">Add</button>
     </form>
 
