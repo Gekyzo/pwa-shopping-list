@@ -66,6 +66,10 @@ first version. The rules above do not change. The mock-up is `designs/e-combinad
     back (`settle` in `src/swipe.js`). A vertical drag scrolls the list. A slide never ticks the item.
   - A tap on an action runs it and closes the row. A tap out of the open row closes it. One row
     is open at a time.
+  - Each action is a button with an icon and no text: a pencil (rename), a repeat sign (always;
+    struck out for one time), a calendar (to `Próxima`) or a cart (to `Actual`), a bin (delete), a
+    calendar with a cross (remove from `Próxima`). The name of the action is the label and the
+    tooltip of the button.
   - The actions are not reachable from the keyboard or a screen reader; this is accepted.
 - **Bought section:** in `Actual`, the ticked items are below one row, `N comprados`, that is
   closed at each start of the app. A tick shows an `Undo` message for 5 seconds.

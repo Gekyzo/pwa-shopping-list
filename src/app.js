@@ -6,7 +6,7 @@ import { load, save, exportJson, importJson } from './storage.js';
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;
 // Width of one button of a side menu of a row, the same as in styles.css.
-const SIDE_BUTTON = 92;
+const SIDE_BUTTON = 64;
 const DRAG_START = 10;
 const CLICK_GUARD_MS = 350;
 const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
@@ -137,23 +137,65 @@ const moreButton = (item, groupId = null) => {
 const actionButton = (text, onClick, className = '') =>
   el('button', { type: 'button', textContent: text, className, onclick: onClick });
 
-const renameAction = (item) =>
-  actionButton('Renombrar', () => {
-    Object.assign(ui, { editingId: item.id, openId: null });
-    render();
-  });
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+// A line icon, drawn as the icons of the bottom menu are.
+const icon = (d) => {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', d);
+  svg.append(path);
+  return svg;
+};
+
+const ICONS = {
+  chain:
+    'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
+  cart: 'M2 3h3l2.5 12h11L21 7H6M9 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M18 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3',
+  calendar: 'M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 10h18M8 3v4M16 3v4',
+  pencil: 'M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z',
+  repeat: 'M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3',
+  trash: 'M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6',
+};
+// The cart with a plus in its basket, a repeat that is struck out, a calendar with a cross.
+ICONS.cartPlus = `${ICONS.cart}M13 8.5v4M11 10.5h4`;
+ICONS.once = `${ICONS.repeat}M4 2l16 20`;
+ICONS.calendarOff = `${ICONS.calendar}M10 13.5l4 4M14 13.5l-4 4`;
+
+// A button of a side menu: an icon, with the name of the action for a screen reader.
+const iconButton = (d, label, onClick, className = '') => {
+  const button = el('button', { type: 'button', className, title: label, onclick: onClick }, [icon(d)]);
+  button.setAttribute('aria-label', label);
+  return button;
+};
+
+const startRename = (entry) => {
+  Object.assign(ui, { editingId: entry.id, openId: null });
+  render();
+};
+
+const renameAction = (item) => iconButton(ICONS.pencil, `Renombrar ${item.name}`, () => startRename(item));
 
 const recurrentAction = (item) =>
-  actionButton(item.recurrent ? 'Solo una vez' : 'Comprar siempre', () => apply(store.toggleRecurrent(state, item.id)));
+  iconButton(item.recurrent ? ICONS.once : ICONS.repeat, `${item.recurrent ? 'Solo una vez' : 'Comprar siempre'}: ${item.name}`, () =>
+    apply(store.toggleRecurrent(state, item.id)));
 
 const moveAction = (item) => {
-  const label = LIST_LABELS[item.list === 'active' ? 'next' : 'active'];
-  return actionButton(`A ${label}`, () =>
+  const toNext = item.list === 'active';
+  const label = LIST_LABELS[toNext ? 'next' : 'active'];
+  return iconButton(toNext ? ICONS.calendar : ICONS.cart, `Mover a ${label}: ${item.name}`, () =>
     apply(store.moveItem(state, item.id), { undoText: `"${item.name}" movido a ${label}.` }));
 };
 
 const deleteAction = (item) =>
-  actionButton('Eliminar', () => apply(store.deleteItem(state, item.id), { undoText: `"${item.name}" eliminado.` }), 'danger');
+  iconButton(
+    ICONS.trash,
+    `Eliminar ${item.name}`,
+    () => apply(store.deleteItem(state, item.id), { undoText: `"${item.name}" eliminado.` }),
+    'danger',
+  );
 
 const alwaysPill = () => el('span', { className: 'pill', textContent: '↻ siempre' });
 
@@ -190,7 +232,7 @@ const nextRow = (item) => {
   if (!pending) row.push(el('span', { className: 'pill', textContent: 'comprado hoy' }));
   else if (item.recurrent) row.push(alwaysPill());
   if (pending) return { row, start: [renameAction(item), recurrentAction(item)], end: [moveAction(item), deleteAction(item)] };
-  const remove = actionButton('Quitar de Próxima', () =>
+  const remove = iconButton(ICONS.calendarOff, `Quitar de Próxima: ${item.name}`, () =>
     apply(store.removeFromNext(state, item.id), { undoText: `"${item.name}" quitado de Próxima.` }));
   return { row, start: [renameAction(item)], end: [remove] };
 };
@@ -402,27 +444,9 @@ const editLink = (recipe) => {
   else apply(recipes.setRecipeUrl(state, recipe.id, text), { undoText: text.trim() ? 'Enlace guardado.' : 'Enlace quitado.' });
 };
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
-const CHAIN =
-  'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71';
-// The cart of the bottom menu with a plus in its basket.
-const CART_PLUS =
-  'M2 3h3l2.5 12h11L21 7H6M13 8.5v4M11 10.5h4M9 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M18 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3';
-
-// A line icon, drawn as the icons of the bottom menu are.
-const icon = (d) => {
-  const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('aria-hidden', 'true');
-  const path = document.createElementNS(SVG_NS, 'path');
-  path.setAttribute('d', d);
-  svg.append(path);
-  return svg;
-};
-
 const linkNode = (recipe) => {
   const link = el('a', { className: 'recipe-link', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
-    icon(CHAIN),
+    icon(ICONS.chain),
   ]);
   link.setAttribute('aria-label', `Abrir el enlace de ${recipe.name}`);
   return link;
@@ -450,7 +474,7 @@ const recipeNode = (recipe) => {
     );
     name.setAttribute('aria-expanded', String(open));
   }
-  const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon(CART_PLUS)]);
+  const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon(ICONS.cartPlus)]);
   send.setAttribute('aria-label', `Enviar a la lista: ${recipe.name}`);
   const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
   const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);
@@ -461,7 +485,7 @@ const recipeNode = (recipe) => {
       'danger',
     );
     const link = actionButton(recipe.url ? 'Cambiar enlace' : 'Añadir enlace', () => editLink(recipe));
-    node.append(el('div', { className: 'actions' }, [renameAction(recipe), link, remove]));
+    node.append(el('div', { className: 'actions' }, [actionButton('Renombrar', () => startRename(recipe)), link, remove]));
   }
   if (open) {
     node.append(
