@@ -47,6 +47,7 @@ export default {
     other: '{count} items come back in the next shopping.',
   },
   'finish.gone': { one: '{count} is deleted.', other: '{count} are deleted.' },
+  'trip.menu': 'Shopping options',
 
   'recipes.search': 'Search recipe or product',
   'search.label': 'Search the list',
@@ -93,7 +94,6 @@ export default {
   'shops.placeholder': 'New shop',
   'shops.empty': 'Write the first shop.',
 
-  'settings.trip': 'Shopping',
   'settings.back': { one: '{count} comes back', other: '{count} come back' },
   'settings.gone': { one: '{count} goes', other: '{count} go' },
   'settings.backup': 'Backup',

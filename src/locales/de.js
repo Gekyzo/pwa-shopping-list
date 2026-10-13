@@ -47,6 +47,7 @@ export default {
     other: '{count} Artikel kommen beim nächsten Einkauf zurück.',
   },
   'finish.gone': { one: '{count} wird gelöscht.', other: '{count} werden gelöscht.' },
+  'trip.menu': 'Optionen für den Einkauf',
 
   'recipes.search': 'Rezept oder Produkt suchen',
   'search.label': 'In der Liste suchen',
@@ -93,7 +94,6 @@ export default {
   'shops.placeholder': 'Neues Geschäft',
   'shops.empty': 'Schreibe das erste Geschäft.',
 
-  'settings.trip': 'Einkauf',
   'settings.back': { one: '{count} kommt zurück', other: '{count} kommen zurück' },
   'settings.gone': { one: '{count} geht', other: '{count} gehen' },
   'settings.backup': 'Sicherung',

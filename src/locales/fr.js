@@ -47,6 +47,7 @@ export default {
     other: '{count} articles reviennent aux prochaines courses.',
   },
   'finish.gone': { one: '{count} est supprimé.', other: '{count} sont supprimés.' },
+  'trip.menu': 'Options des courses',
 
   'recipes.search': 'Chercher une recette ou un produit',
   'search.label': 'Chercher dans la liste',
@@ -93,7 +94,6 @@ export default {
   'shops.placeholder': 'Nouveau magasin',
   'shops.empty': 'Écrivez le premier magasin.',
 
-  'settings.trip': 'Courses',
   'settings.back': { one: '{count} revient', other: '{count} reviennent' },
   'settings.gone': { one: '{count} s’en va', other: '{count} s’en vont' },
   'settings.backup': 'Sauvegarde',
