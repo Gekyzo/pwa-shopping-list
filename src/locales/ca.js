@@ -7,7 +7,7 @@ export default {
 
   'header.today': 'Compra d’avui',
   'header.next': 'Pròxima compra',
-  'header.settingsSubtitle': 'Llista de la compra',
+  'header.settingsSubtitle': 'Grocely',
   'header.empty': 'La llista és buida',
   'header.allBought': 'Tot comprat',
   'header.left': { one: 'Queda {count} article', other: 'Queden {count} articles' },

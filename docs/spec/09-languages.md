@@ -39,8 +39,9 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/app.j
 
 - **LANG-14** The data of the user: the names of items, recipes, products and shops stay as typed.
 - **LANG-15** The order by name uses the Spanish collation in each language (SORT-6).
-- **LANG-16** `manifest.webmanifest` is in Spanish: the installed name is `Lista de la compra`,
-  short name `Compra`. A static manifest cannot follow the choice of the user.
+- **LANG-16** The name of the app is `Grocely` in each language: the name and the short name of
+  `manifest.webmanifest`, the title of the page and the subtitle of `Ajustes`. The description of
+  the manifest is in Spanish. A static manifest cannot follow the choice of the user.
 - **LANG-17** The name of the backup file starts with `compra-` in each language.
 
 ## Add a language

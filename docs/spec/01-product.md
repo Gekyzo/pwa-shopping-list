@@ -2,9 +2,9 @@
 
 ## Purpose
 
-A shopping list for one person on one Android phone. It works in the shop with no connection. It
-separates what to buy now (`Actual`) from what to buy at the next trip (`Próxima`), and it brings
-back the products that the user buys each time.
+Grocely is a shopping list for one person on one Android phone. It works in the shop with no
+connection. It separates what to buy now (`Actual`) from what to buy at the next trip
+(`Próxima`), and it brings back the products that the user buys each time.
 
 ## User and device
 

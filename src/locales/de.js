@@ -7,7 +7,7 @@ export default {
 
   'header.today': 'Einkauf heute',
   'header.next': 'Nächster Einkauf',
-  'header.settingsSubtitle': 'Einkaufsliste',
+  'header.settingsSubtitle': 'Grocely',
   'header.empty': 'Die Liste ist leer',
   'header.allBought': 'Alles gekauft',
   'header.left': { one: 'Noch {count} Artikel', other: 'Noch {count} Artikel' },
