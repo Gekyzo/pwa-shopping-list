@@ -401,11 +401,11 @@ test('arrivalMessage is null when no item of Active is left', () => {
 
 test('setSort sets a known sort and rejects another one', () => {
   const start = emptyState();
-  assert.equal(start.sort, 'added');
+  assert.equal(start.sort, 'custom');
   const { state } = setSort(start, 'name');
   assert.equal(state.sort, 'name');
-  assert.equal(setSort(state, 'added').state.sort, 'added');
-  assert.equal(start.sort, 'added');
+  assert.equal(setSort(state, 'custom').state.sort, 'custom');
+  assert.equal(start.sort, 'custom');
   const rejected = setSort(state, 'price');
   assert.equal(rejected.state, state);
   assert.equal(rejected.error, 'Orden desconocido.');

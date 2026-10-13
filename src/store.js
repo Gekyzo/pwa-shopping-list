@@ -1,11 +1,12 @@
 const LISTS = ['active', 'next'];
 const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
-export const SORTS = ['added', 'name'];
+// `custom` is the order of `items`: the insertion order, changed by the moves of the user.
+export const SORTS = ['custom', 'name'];
 
 // `sent` holds the ids of the recipes sent to Active in this trip. `grouped` is the
 // choice of the user to show Active by those recipes, and `sort` the order of the two lists.
-export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [], grouped: true, sort: 'added' });
+export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [], grouped: true, sort: 'custom' });
 
 const reject = (state, error) => ({ state, error });
 
