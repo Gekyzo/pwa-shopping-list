@@ -9,7 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The icon of the app has a new drawing of the bag of vegetables, with flat colours.
 
 ## 1.0.8 - 2026-10-13
 
