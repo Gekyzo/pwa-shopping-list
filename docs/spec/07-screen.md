@@ -6,7 +6,8 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/swipe.js` and `src/secti
 
 From top to bottom: the header (ring, title, subtitle, search button, arrange button, trip
 button), the content of the section, the `+` button above the bottom bar, and the bottom bar. The message shows below the top
-edge. A sheet comes up from the bottom, over a veil.
+edge. A sheet comes up from the bottom, over a veil. The walkthrough of the first start covers all
+of it.
 
 ## Sections
 
@@ -18,13 +19,14 @@ edge. A sheet comes up from the bottom, over a veil.
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
   vertical part at least. It stops at `Actual` and at `Ajustes`.
 - **NAV-4** The slide starts on the header or on the content, but not on an item row and not on a
-  text field. It does nothing while a sheet is open or a row is lifted.
+  text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
+  (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has four groups: **Copia de seguridad** (**Exportar copia**, **Importar
-  copia**), **Idioma**, **Mano** and **Versión**. Each of the two buttons of the backup has an
-  icon before its text: an arrow that goes up out of a tray for the export, an arrow that goes
-  down into a tray for the import.
+- **NAV-6** `Ajustes` has five groups: **Copia de seguridad** (**Exportar copia**, **Importar
+  copia**), **Idioma**, **Mano**, **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
+  two buttons of the backup has an icon before its text: an arrow that goes up out of a tray for
+  the export, an arrow that goes down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
   `No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.` or `No hay
   recetas. Toca + para crear una.`
@@ -109,6 +111,43 @@ edge. A sheet comes up from the bottom, over a veil.
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3).
 
+## Onboarding
+
+- **ONB-1** The walkthrough is a layer over the full app, with four pages in this order:
+
+  | Page | Title | Teaches |
+  |---|---|---|
+  | 1 | `Dos listas` | `Actual` is the trip of today, `Próxima` holds the next one |
+  | 2 | `La compra se repite` | The recurrent mark and the result of **Terminar compra** |
+  | 3 | `Desliza una fila` | The actions of a row (ROW-3) |
+  | 4 | `Desliza la pantalla` | The slide between sections (NAV-3) and the `+` button |
+
+- **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
+- **ONB-3** **Saltar** shows at the top of each page except the last one. The button at the bottom
+  is **Siguiente**, and **Empezar** on the last page. One dot for each page shows the place of the
+  page in view; a dot is not a button.
+- **ONB-4** A horizontal slide with the measures of NAV-3 changes the page: to the left for the
+  next one, to the right for the previous one. `ArrowRight` and `ArrowLeft` do the same. The move
+  stops at the first and at the last page. The new page comes in from its side.
+- **ONB-5** **Saltar**, **Empezar** and `Escape` close the walkthrough.
+- **ONB-6** At the start the walkthrough shows when `localStorage` has no `shopping.v1` and no
+  `shopping.onboarded`. A stored state that is not valid counts as a stored state. A phone that
+  has lists thus does not see it after an update.
+- **ONB-7** A close writes `1` to `shopping.onboarded`. An app that closes with the walkthrough
+  open shows it again at the next start. The key is a preference of the device, not a part of
+  the state: `Deshacer` and an import do not change it.
+- **ONB-8** With `localStorage` not available, or not readable, the walkthrough does not show at
+  the start.
+- **ONB-9** **Ver la introducción** of `Ajustes` shows the walkthrough from page 1, at any time. A
+  close then puts the focus on that button.
+- **ONB-10** While the walkthrough is open the app below is `inert`. A message of the start stays
+  below it.
+- **ONB-11** The walkthrough is a `role="dialog"` with `aria-modal` and the label `Introducción`.
+  The focus goes to the button at the bottom when it opens and at each change of page. The dots
+  have the label `Página N de 4`. The title and the text are a live region.
+- **ONB-12** With `prefers-reduced-motion: reduce` a page changes with no animation. The
+  walkthrough keeps out of the safe-area insets. **Mano** does not change it.
+
 ## Access and display
 
 - **A11Y-1** Each icon button has an `aria-label` with the action and the name of its object, in
@@ -126,5 +165,5 @@ edge. A sheet comes up from the bottom, over a veil.
 
 ## Limits
 
-No move of a row with the keyboard, and no keyboard way to open a side menu of an item row. No
-onboarding.
+No move of a row with the keyboard, and no keyboard way to open a side menu of an item row. The
+walkthrough has no tour of recipes, shops or backup, and no marks on the real controls.

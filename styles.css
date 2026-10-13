@@ -1004,6 +1004,126 @@ body:has(.sheet-layer:not([hidden])) .toast {
   font-weight: 700;
 }
 
+/* Onboarding: the pages of the first start, over the full app. */
+
+.onboarding {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: calc(8px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+    calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+  background: var(--bg);
+  /* A horizontal slide changes the page, so the browser must not take it. */
+  touch-action: pan-y;
+  overflow: hidden auto;
+}
+
+/* The bar keeps its height on the last page, where its button does not show. */
+.onboarding-top {
+  display: flex;
+  flex: none;
+  justify-content: flex-end;
+  min-height: 44px;
+}
+
+.onboarding-top button {
+  padding: 0 12px;
+  color: var(--muted);
+}
+
+.onboarding-page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.onboarding-page.enter-next,
+.onboarding-page.enter-previous {
+  animation: enter 200ms ease-out;
+}
+
+.onboarding-page.enter-next {
+  --enter-from: 48px;
+}
+
+.onboarding-page.enter-previous {
+  --enter-from: -48px;
+}
+
+.onboarding-art svg {
+  display: block;
+  width: min(240px, 70vw);
+  height: auto;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.onboarding-art .card {
+  fill: var(--surface);
+}
+
+.onboarding-art .accent {
+  stroke: var(--accent);
+}
+
+.onboarding-art .soft {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+}
+
+.onboarding-art .solid {
+  fill: var(--accent);
+  stroke: none;
+}
+
+.onboarding-art .on-solid {
+  stroke: var(--accent-text);
+}
+
+.onboarding h2 {
+  margin: 0 0 8px;
+  font-size: 1.375rem;
+}
+
+.onboarding p {
+  max-width: 32ch;
+  margin: 0;
+  color: var(--muted);
+}
+
+.onboarding-dots {
+  display: flex;
+  flex: none;
+  justify-content: center;
+  gap: 8px;
+}
+
+.onboarding-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.onboarding-dots .on {
+  background: var(--accent);
+}
+
+.onboarding > .primary {
+  flex: none;
+  min-height: 52px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .toast,
   .sheet-layer,
@@ -1014,7 +1134,9 @@ body:has(.sheet-layer:not([hidden])) .toast {
   }
 
   main.enter-next > *,
-  main.enter-previous > * {
+  main.enter-previous > *,
+  .onboarding-page.enter-next,
+  .onboarding-page.enter-previous {
     animation: none;
   }
 }

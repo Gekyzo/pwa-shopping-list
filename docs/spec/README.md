@@ -16,7 +16,7 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 | [04-arrange.md](04-arrange.md) | Order, groups and the manual move of a row |
 | [05-shops.md](05-shops.md) | The shops of an item and the list by shop |
 | [06-recipes.md](06-recipes.md) | Recipes, the send to `Actual`, the search |
-| [07-screen.md](07-screen.md) | Sections, header, gestures, sheets, messages and undo |
+| [07-screen.md](07-screen.md) | Sections, header, gestures, sheets, messages and undo, the walkthrough |
 | [08-storage.md](08-storage.md) | The stored format, validation, migration, backup |
 | [09-languages.md](09-languages.md) | The seven languages and the rules of the text |
 | [10-offline-version.md](10-offline-version.md) | Service worker, version, deploy, installation |
@@ -37,7 +37,7 @@ the identifier in a commit body or in a test name to point at a rule.
 | `SORT`, `GROUP`, `MOVE` | 04-arrange |
 | `SHOP` | 05-shops |
 | `REC` | 06-recipes |
-| `NAV`, `ROW`, `MSG`, `A11Y` | 07-screen |
+| `NAV`, `ROW`, `MSG`, `A11Y`, `ONB` | 07-screen |
 | `STORE`, `BACKUP` | 08-storage |
 | `LANG` | 09-languages |
 | `SW`, `VER` | 10-offline-version |

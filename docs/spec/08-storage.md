@@ -10,7 +10,7 @@ Rules of `src/storage.js`, and of its use in `src/app.js`.
 | `localStorage` | `shopping.v1.corrupt` | The last stored text that was not a valid state |
 | `localStorage` | `shopping.lang` | The language that the user chose ([09-languages.md](09-languages.md)) |
 | `localStorage` | `shopping.hand` | `left` when the user chose **Izquierda** ([07-screen.md](07-screen.md), NAV-12) |
-| `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md)) |
+| `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
 | Cache API | `shopping-shell-v7` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
@@ -67,7 +67,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   that it was not saved (MSG-8).
 - **STORE-10** When `localStorage` is not available, the app works in memory and says so at the
   start: `El almacenamiento no está disponible: los cambios no se guardan.` A choice of language
-  or of hand then lasts until the app closes.
+  or of hand then lasts until the app closes, and the walkthrough shows only from `Ajustes`
+  (ONB-8).
 - **STORE-11** The app does not read a change that another tab makes. The last tab that writes
   wins.
 
