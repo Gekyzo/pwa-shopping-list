@@ -14,6 +14,8 @@ import {
   activeItems,
   nextItems,
   searchItems,
+  matchesItem,
+  filterGroups,
   findByName,
   bringToList,
   tripSummary,
@@ -518,4 +520,44 @@ test('setGroup sets each known group and rejects another one', () => {
 test('compareNames has no case and no accent distinction', () => {
   assert.deepEqual(['Zeta', 'árbol', 'beta'].sort(compareNames), ['árbol', 'beta', 'Zeta']);
   assert.equal(compareNames('lidl', 'Lidl'), 0);
+});
+
+const milk = { id: 'a', name: 'Leche', shops: ['Mercadona'] };
+const coffee = { id: 'b', name: 'Café', shops: [] };
+
+test('matchesItem matches a part of the name with no case and no accent distinction', () => {
+  assert.equal(matchesItem(milk, 'ECH'), true);
+  assert.equal(matchesItem(coffee, 'cafe'), true);
+  assert.equal(matchesItem(milk, 'cafe'), false);
+});
+
+test('matchesItem matches a part of a shop', () => {
+  assert.equal(matchesItem(milk, 'merca'), true);
+  assert.equal(matchesItem(coffee, 'merca'), false);
+});
+
+test('matchesItem matches each item for an empty query', () => {
+  assert.equal(matchesItem(coffee, ''), true);
+  assert.equal(matchesItem(coffee, '   '), true);
+});
+
+test('filterGroups keeps the matches, drops a group with no item left and keeps the totals', () => {
+  const view = {
+    groups: [
+      { shop: 'Mercadona', items: [milk], total: 3 },
+      { shop: 'Lidl', items: [coffee], total: 1 },
+    ],
+    rest: [coffee, milk],
+  };
+  const copy = structuredClone(view);
+  assert.deepEqual(filterGroups(view, 'lech'), {
+    groups: [{ shop: 'Mercadona', items: [milk], total: 3 }],
+    rest: [milk],
+  });
+  assert.deepEqual(view, copy);
+});
+
+test('filterGroups returns its input for an empty query', () => {
+  const view = { groups: [{ shop: 'Lidl', items: [], total: 2 }], rest: [] };
+  assert.equal(filterGroups(view, ' '), view);
 });
