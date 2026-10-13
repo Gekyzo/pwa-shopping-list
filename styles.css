@@ -171,6 +171,15 @@ main {
 .item {
   border-bottom: 1px solid var(--line);
   background: var(--surface);
+  /* The rows of a scope open a gap for a lifted row. `placeLifted` in app.js sets the transform. */
+  transition: transform 160ms ease-out;
+}
+
+.item.lifted {
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+  transition: none;
 }
 
 .item.flash .row {
