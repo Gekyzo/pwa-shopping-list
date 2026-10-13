@@ -4,12 +4,15 @@ import {
   STORAGE_KEY,
   CORRUPT_KEY,
   LANGUAGE_KEY,
+  HAND_KEY,
   load,
   save,
   exportJson,
   importJson,
   loadLanguage,
   saveLanguage,
+  loadHand,
+  saveHand,
 } from '#storage';
 import { emptyState } from '#store';
 
@@ -291,6 +294,38 @@ test('the language functions do not throw when the storage does', () => {
 test('the language is not part of the state', () => {
   const storage = fakeStorage();
   saveLanguage(storage, 'it');
+  assert.deepEqual(load(storage), emptyState());
+  assert.equal(storage.getItem(STORAGE_KEY), null);
+});
+
+test('loadHand returns the stored hand', () => {
+  assert.equal(loadHand(fakeStorage({ [HAND_KEY]: 'left' })), 'left');
+  assert.equal(loadHand(fakeStorage({ [HAND_KEY]: 'right' })), 'right');
+});
+
+test('loadHand returns right for no value and for an unknown value', () => {
+  assert.equal(loadHand(fakeStorage()), 'right');
+  assert.equal(loadHand(fakeStorage({ [HAND_KEY]: 'both' })), 'right');
+  assert.equal(loadHand(fakeStorage({ [HAND_KEY]: '' })), 'right');
+});
+
+test('saveHand stores left and right removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveHand(storage, 'left'), true);
+  assert.equal(storage.getItem(HAND_KEY), 'left');
+  assert.equal(saveHand(storage, 'right'), true);
+  assert.equal(storage.getItem(HAND_KEY), null);
+});
+
+test('the hand functions do not throw when the storage does', () => {
+  assert.equal(loadHand(brokenStorage()), 'right');
+  assert.equal(saveHand(brokenStorage(), 'left'), false);
+  assert.equal(saveHand(brokenStorage(), 'right'), false);
+});
+
+test('the hand is not part of the state', () => {
+  const storage = fakeStorage();
+  saveHand(storage, 'left');
   assert.deepEqual(load(storage), emptyState());
   assert.equal(storage.getItem(STORAGE_KEY), null);
 });

@@ -4,7 +4,7 @@ import * as shops from '#shops';
 import { settle } from '#swipe';
 import { direction, slideTo } from '#sections';
 import { dropIndex, moveTo, shifts } from '#reorder';
-import { load, save, exportJson, importJson, loadLanguage, saveLanguage } from '#storage';
+import { load, save, exportJson, importJson, loadLanguage, saveLanguage, loadHand, saveHand } from '#storage';
 import { parseVersion, versionStatus } from '#version';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
 
@@ -47,6 +47,9 @@ const storage = (() => {
 let chosen = storage ? loadLanguage(storage, LANGUAGES) : null;
 let lang = resolveLanguage(navigator.languages, chosen);
 let t = translator(lang);
+// The hand that holds the phone: `left` mirrors the controls, in styles.css.
+let hand = storage ? loadHand(storage) : 'right';
+document.documentElement.dataset.hand = hand;
 
 // `t` for a text that names a list: the `list` parameter is a list id.
 const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
@@ -1089,6 +1092,8 @@ const applyLanguage = () => {
     option('', t('settings.automatic')),
     ...LANGUAGES.map((code) => option(code, LANGUAGE_NAMES[code])),
   );
+  const handOption = (value, key) => el('option', { value, textContent: t(key), selected: value === hand });
+  $('hand').replaceChildren(handOption('right', 'settings.handRight'), handOption('left', 'settings.handLeft'));
   render();
 };
 
@@ -1464,6 +1469,13 @@ $('language').addEventListener('change', (event) => {
   lang = resolveLanguage(navigator.languages, chosen);
   t = translator(lang);
   applyLanguage();
+});
+
+$('hand').addEventListener('change', (event) => {
+  hand = event.target.value === 'left' ? 'left' : 'right';
+  // With no storage the choice lasts until the app closes.
+  if (storage) saveHand(storage, hand);
+  document.documentElement.dataset.hand = hand;
 });
 
 $('update').addEventListener('click', async () => {

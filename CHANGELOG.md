@@ -9,6 +9,11 @@ no change for the user has no entry.
 
 ## Unreleased
 
+### Added
+
+- **Mano** in `Ajustes`. With `Izquierda` the `+` button, the buttons of the header and the
+  controls of a row change side, for a phone held in the left hand.
+
 ### Changed
 
 - The name of the app is Grocely. It replaces `Lista de la compra` and `Compra`. The title of the
