@@ -58,6 +58,10 @@ Slide an item row to see its actions. A slide to the right shows **Renombrar**. 
 row closes it. A recipe row has a `⋯` button for its actions. `Deshacer` shows for 5 seconds after a delete, a move, **Terminar compra** and
 **A la lista**.
 
+A horizontal slide that starts out of the item rows (on the header, a banner, a recipe or the free space
+of the list) changes the section, in the order of the bottom bar: to the left for the next section, to
+the right for the previous one. The slide stops at **Actual** and at **Ajustes**.
+
 ## Reminder at the shop
 
 A PWA gets a position only while it is open, so it cannot detect an arrival. An Android automation
@@ -96,6 +100,7 @@ npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 | `src/store.js` | Pure state functions. No DOM and no storage |
 | `src/recipes.js` | Pure recipe functions. No DOM and no storage |
 | `src/swipe.js` | The rule that settles a row swipe. No DOM |
+| `src/sections.js` | The order of the sections and the rule of the slide that changes the section. No DOM |
 | `src/reorder.js` | The rules of a row move: drop place, gap and new order. No DOM |
 | `src/storage.js` | Load, save, export and import, with validation |
 | `src/version.js` | Pure version rules: validation, comparison and the next version |
