@@ -11,6 +11,8 @@ const SHELL = [
   './src/swipe.js',
   './src/storage.js',
   './src/version.js',
+  './src/voice-commands.js',
+  './src/voice.js',
   './version.json',
   './icons/icon.svg',
   './icons/icon-192.png',

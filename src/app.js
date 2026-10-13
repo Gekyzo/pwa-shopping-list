@@ -3,6 +3,8 @@ import * as recipes from './recipes.js';
 import { settle } from './swipe.js';
 import { load, save, exportJson, importJson } from './storage.js';
 import { parseVersion, versionStatus } from './version.js';
+import { interpret } from './voice-commands.js';
+import { createVoice } from './voice.js';
 
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;
@@ -58,6 +60,9 @@ const ui = {
   focusProduct: false,
   // `running` is the version of the cached shell; `latest` is the deployed one, read when Ajustes opens.
   version: { running: null, latest: null, checking: false },
+  // The voice conversation: 'idle', 'listening' or 'speaking'.
+  voice: 'idle',
+  voiceStopped: false,
 };
 let toastTimer = null;
 let undoState = null;
@@ -663,6 +668,7 @@ const render = () => {
   $('finish-setting-text').textContent = `${plural(summary.back, 'vuelve', 'vuelven')} · ${plural(summary.gone, 'se va', 'se van')}`;
 
   $('fab').hidden = ui.view === 'settings' || ui.sheetOpen;
+  $('mic').hidden = !voice.supported || $('fab').hidden;
   $('fab').setAttribute('aria-label', ui.view === 'recipes' ? 'Crear receta' : 'Añadir artículo');
   $('next-count').textContent = next.length || '';
   document.querySelectorAll('.bnav button').forEach((button) => {
@@ -783,6 +789,45 @@ const submitAdd = () => {
   input.focus();
 };
 
+// Voice
+
+const voice = createVoice({
+  Recognition: window.SpeechRecognition ?? window.webkitSpeechRecognition,
+  synth: window.speechSynthesis,
+  Utterance: window.SpeechSynthesisUtterance,
+});
+
+const setVoice = (mode) => {
+  ui.voice = mode;
+  const button = $('mic');
+  button.dataset.mode = mode;
+  button.setAttribute('aria-label', mode === 'idle' ? 'Hablar' : 'Parar la voz');
+  button.setAttribute('aria-pressed', String(mode !== 'idle'));
+};
+
+// One conversation: a command, then the answers to its questions. A change keeps its `Deshacer`.
+const converse = async () => {
+  let pending = null;
+  ui.voiceStopped = false;
+  do {
+    setVoice('listening');
+    const heard = await voice.listen();
+    if (ui.voiceStopped) break;
+    const result = heard.error ? { state, reply: heard.error, pending: null } : interpret(state, heard.text, { pending });
+    if (result.state !== state) apply(result, { undoText: result.reply });
+    else showToast(result.reply, { ms: ARRIVAL_MS });
+    pending = result.pending;
+    setVoice('speaking');
+    await voice.speak(result.reply);
+  } while (pending && !ui.voiceStopped);
+  setVoice('idle');
+};
+
+const stopVoice = () => {
+  ui.voiceStopped = true;
+  voice.stop();
+};
+
 // Events
 
 const download = (filename, text) => {
@@ -839,6 +884,7 @@ $('recipe-query').addEventListener('input', (event) => {
 });
 
 $('fab').addEventListener('click', openSheet);
+$('mic').addEventListener('click', () => (ui.voice === 'idle' ? converse() : stopVoice()));
 $('veil').addEventListener('click', closeSheet);
 $('add-name').addEventListener('input', renderSheet);
 $('add').addEventListener('submit', (event) => {
@@ -893,15 +939,20 @@ $('import-file').addEventListener('change', async (event) => {
 });
 
 render();
-// An automation of the phone opens `?arrival` at the shop. The query goes away, so a reload is silent.
+// An automation of the phone opens `?arrival` at the shop, and the shortcut of the app opens `?voice`.
+// The query goes away, so a reload is silent.
 const params = new URLSearchParams(location.search);
-if (params.has('arrival')) {
+const launch = { arrival: params.has('arrival'), voice: params.has('voice') };
+if (launch.arrival) {
   const message = store.arrivalMessage(state);
   if (message) showToast(message, { ms: ARRIVAL_MS });
-  params.delete('arrival');
+}
+if (launch.arrival || launch.voice) {
+  Object.keys(launch).forEach((key) => params.delete(key));
   const query = params.toString();
   history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
 }
+if (launch.voice && voice.supported) converse();
 if (!storage) showToast('El almacenamiento no está disponible: los cambios no se guardan.');
 navigator.storage?.persist?.().catch(() => {});
 navigator.serviceWorker?.register('./sw.js').catch(() => {});
