@@ -30,6 +30,7 @@ export default {
   'row.removeFrom': 'Treu de {list}: {name}',
   'row.shops': 'Botigues de {name}',
   'group.others': 'Altres',
+  'group.noShop': 'Sense botiga',
 
   'empty.active': 'La llista és buida. Toca + per afegir un article.',
   'empty.next': 'No hi ha res per a la pròxima compra. Toca + per afegir el que compres sempre.',
@@ -80,6 +81,7 @@ export default {
   'arrange.label': 'Agrupa i ordena',
   'arrange.groupBy': 'Agrupa per',
   'arrange.none': 'Res',
+  'arrange.shops': 'Botigues',
   'arrange.sortBy': 'Ordena per',
   'arrange.name': 'Nom',
   'arrange.custom': 'Personalitzat',

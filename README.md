@@ -23,8 +23,13 @@ uses the Spanish names. A bottom menu has four screens.
   to the end).
   One choice applies to the two lists. It shows when the list has two items or more.
 - Hold a row, then move it, to change its place in **Actual** or in **Próxima**. With
-  **Agrupar por → Recetas** a row stays in its group. A move in the order **Nombre** changes the
+  **Agrupar por → Recetas** or **Tiendas** a row stays in its group. A move in the order **Nombre** changes the
   order to **Personalizado**, which then starts from the alphabetical order.
+- A product can have one or more shops. Slide a row to the right and tap the shop icon: the sheet
+  shows each shop in use as a chip, and a field adds a new shop. A shop exists while a product has it.
+- **Agrupar por → Tiendas** shows **Actual** or **Próxima** by shop. A product of two shops is in
+  the two groups, and a product with no shop is in **Sin tienda**. One choice of **Recetas**,
+  **Tiendas** or **Nada** applies to the two lists; **Recetas** shows only in **Actual**.
 - **Recetas** holds recipes. A recipe is a name and a list of products.
   - The field **Buscar receta o producto** filters the recipes while you type. It finds a recipe by
     its name or by one of its products, without case or accent distinction.

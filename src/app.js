@@ -71,7 +71,7 @@ const ui = {
   openRecipeId: null,
   // The text of the search field of Recetas. It is not stored.
   recipeQuery: '',
-  // The group of Actual where the row actions are open: a recipe id, or null out of a group.
+  // The group where the row actions are open: a recipe id, `shop:<name>`, or null out of a group.
   openGroup: null,
   // The side menu of the open item row: 'start' (slide right), 'end' (slide left) or null.
   openSide: null,
@@ -151,7 +151,7 @@ const renameInput = (entry, rename = (name) => store.renameItem(state, entry.id,
   return input;
 };
 
-// An item of two recipes shows in two groups: `groupId` tells its copies apart.
+// An item of two recipes, or of two shops, shows in two groups: `groupId` tells its rows apart.
 const isOpen = (id, groupId) => ui.openId === id && ui.openGroup === groupId;
 const isEditing = (id, groupId) => ui.editingId === id && ui.openGroup === groupId;
 
@@ -228,10 +228,10 @@ const closeShops = () => {
 
 const shopsAction = (item) => iconButton(ICONS.shop, t('row.shops', { name: item.name }), () => openShops(item));
 
-// The name of a row, with the shops of the item below it.
+// The name of a row, with the shops of the item below it when the list is not by shop.
 const nameParts = (item) => {
   const parts = [el('span', { textContent: item.name })];
-  if (item.shops.length) parts.push(el('small', { textContent: item.shops.join(' · ') }));
+  if (item.shops.length && shownGroup() !== 'shop') parts.push(el('small', { textContent: item.shops.join(' · ') }));
   return parts;
 };
 
@@ -372,10 +372,10 @@ const activeRow = (item, groupId) => {
   return { row, start: [renameAction(item), shopsAction(item)], end: [moveAction(item), deleteAction(item)] };
 };
 
-const nextRow = (item) => {
+const nextRow = (item, groupId) => {
   const pending = item.list === 'next';
   const name =
-    ui.editingId === item.id ? renameInput(item) : el('span', { className: 'name' }, nameParts(item));
+    isEditing(item.id, groupId) ? renameInput(item) : el('span', { className: 'name' }, nameParts(item));
   const row = [name];
   if (!pending) row.push(el('span', { className: 'pill', textContent: t('row.boughtToday') }));
   row.push(recurrentToggle(item));
@@ -437,10 +437,10 @@ const bindSwipe = (row, widths, item, groupId) => {
   row.addEventListener('pointercancel', finish);
 };
 
-// The rows that a row can move among: its group of Actual, or the rows to buy of Próxima.
+// The rows that a row can move among: its group, or the rows to buy of a flat list.
 // Null for a row that does not move.
 const scopeOf = (item, groupId) => {
-  if (ui.view === 'next') return item.list === 'next' ? 'next' : null;
+  if (ui.view === 'next') return item.list === 'next' ? groupId ?? 'next' : null;
   return item.bought ? null : groupId ?? 'rest';
 };
 
@@ -595,7 +595,7 @@ const closing = (button) => {
 };
 
 const itemNode = (item, groupId = null) => {
-  const { row, start, end } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item);
+  const { row, start, end } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item, groupId);
   const open = isOpen(item.id, groupId) ? ui.openSide : null;
   const widths = { start: start.length * SIDE_BUTTON, end: end.length * SIDE_BUTTON };
   const rowNode = el('div', { className: 'row' }, row);
@@ -643,11 +643,28 @@ const boughtSection = (bought) => {
 const groupHead = (title, count) =>
   el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
 
-// The items of Actual still to buy, below the recipe that asks for each one.
+// The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
+const shopNodes = (list) => {
+  const { groups, rest } = shops.shopGroups(state, list);
+  const count = ({ items, total }) => {
+    if (list !== 'active') return '';
+    return items.length ? `${total - items.length}/${total}` : '✓';
+  };
+  const grouped = groups.flatMap((group) => [
+    groupHead(group.shop, count(group)),
+    ...group.items.map((item) => itemNode(item, `shop:${group.shop}`)),
+  ]);
+  const others = rest.length ? [groupHead(t('group.noShop'), ''), ...rest.map((item) => itemNode(item))] : [];
+  return [...grouped, ...others];
+};
+
+// The items of Actual still to buy: flat, below the recipe that asks for each one, or below
+// the shop of each one.
 const pendingNodes = () => {
+  const group = shownGroup();
+  if (group === 'shop') return shopNodes('active');
+  if (group === 'none') return store.activeItems(state).filter((item) => !item.bought).map((item) => itemNode(item));
   const { groups, rest } = recipes.recipeGroups(state);
-  if (!groups.length) return rest.map((item) => itemNode(item));
-  if (state.group !== 'recipe') return store.activeItems(state).filter((item) => !item.bought).map((item) => itemNode(item));
   const grouped = groups.flatMap(({ recipe, items, total }) => [
     groupHead(recipe.name, items.length ? `${total - items.length}/${total}` : '✓'),
     ...items.map((item) => itemNode(item, recipe.id)),
@@ -657,29 +674,46 @@ const pendingNodes = () => {
 };
 
 const listNodes = (items) => {
-  if (ui.view !== 'active') return items.map((item) => itemNode(item));
+  if (ui.view !== 'active') return shownGroup() === 'shop' ? shopNodes('next') : items.map((item) => itemNode(item));
   const bought = items.filter((item) => item.bought);
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
-// The choices that the arrange sheet has for the view: the group of Actual when a recipe has a group,
-// and the order of a list with two items or more.
+// The choices that the arrange sheet has for the view: the recipe groups of Actual when a recipe
+// has a group, the shop groups when an item of the view has a shop, and the order of a list with
+// two items or more.
 const arrangeChoices = () => {
-  if (ui.view !== 'active' && ui.view !== 'next') return { group: false, sort: false };
+  if (ui.view !== 'active' && ui.view !== 'next') return { recipe: false, shop: false, sort: false };
   const items = ui.view === 'active' ? store.activeItems(state) : store.nextItems(state);
-  return { group: ui.view === 'active' && recipes.recipeGroups(state).groups.length > 0, sort: items.length > 1 };
+  return {
+    recipe: ui.view === 'active' && recipes.recipeGroups(state).groups.length > 0,
+    shop: items.some((item) => item.shops.length > 0),
+    sort: items.length > 1,
+  };
+};
+
+// The grouping that the view shows: the choice of the user, when the view can show it.
+const shownGroup = () => {
+  const { recipe, shop } = arrangeChoices();
+  if (state.group === 'recipe' && recipe) return 'recipe';
+  return state.group === 'shop' && shop ? 'shop' : 'none';
 };
 
 const renderArrange = () => {
-  const { group, sort } = arrangeChoices();
+  const { recipe, shop, sort } = arrangeChoices();
+  const group = recipe || shop;
   if (!group && !sort) ui.arrangeOpen = false;
   $('arrange-button').hidden = !group && !sort;
   $('arrange-button').setAttribute('aria-expanded', String(ui.arrangeOpen));
   $('arrange').hidden = !ui.arrangeOpen;
   $('arrange-group').hidden = !group;
   $('arrange-sort').hidden = !sort;
+  const shows = { recipe, shop, none: true };
+  // The view shows no group for a choice that it cannot show.
+  const pressed = shownGroup();
   document.querySelectorAll('#arrange-group button').forEach((button) => {
-    button.setAttribute('aria-pressed', String(button.dataset.group === state.group));
+    button.hidden = !shows[button.dataset.group];
+    button.setAttribute('aria-pressed', String(button.dataset.group === pressed));
   });
   document.querySelectorAll('#arrange-sort button').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.sort === state.sort));
@@ -1249,8 +1283,10 @@ document.querySelectorAll('#arrange-group button').forEach((button) => {
       commit(store.setGroup(state, group).state);
       return before;
     };
-    if (group !== 'none' || state.group === 'none') {
-      const opens = group !== 'none' && state.group === 'none';
+    // The view can show no group for a choice that it cannot show.
+    const flat = shownGroup() === 'none';
+    if (group !== 'none' || flat) {
+      const opens = group !== 'none' && flat;
       // A tap on a grouping while the groups close keeps them.
       ungrouping = false;
       const before = set();

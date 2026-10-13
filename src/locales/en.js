@@ -30,6 +30,7 @@ export default {
   'row.removeFrom': 'Remove from {list}: {name}',
   'row.shops': 'Shops of {name}',
   'group.others': 'Others',
+  'group.noShop': 'No shop',
 
   'empty.active': 'The list is empty. Tap + to add an item.',
   'empty.next': 'There is nothing for the next shopping. Tap + to add what you always buy.',
@@ -80,6 +81,7 @@ export default {
   'arrange.label': 'Group and sort',
   'arrange.groupBy': 'Group by',
   'arrange.none': 'Nothing',
+  'arrange.shops': 'Shops',
   'arrange.sortBy': 'Sort by',
   'arrange.name': 'Name',
   'arrange.custom': 'Custom',
