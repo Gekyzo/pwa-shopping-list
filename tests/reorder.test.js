@@ -12,9 +12,16 @@ test('dropIndex keeps the place for a small move', () => {
   assert.equal(dropIndex(tops, heights, 1, 30), 1);
 });
 
-test('dropIndex takes the place of a neighbour when the centre passes its centre', () => {
-  assert.equal(dropIndex(tops, heights, 1, 113), 2);
-  assert.equal(dropIndex(tops, heights, 1, -1), 0);
+test('dropIndex takes the place of a neighbour when the leading edge passes its centre', () => {
+  assert.equal(dropIndex(tops, heights, 1, 84), 1);
+  assert.equal(dropIndex(tops, heights, 1, 85), 2);
+  assert.equal(dropIndex(tops, heights, 1, 28), 1);
+  assert.equal(dropIndex(tops, heights, 1, 27), 0);
+});
+
+test('dropIndex gives the end place to a row that is on it', () => {
+  assert.equal(dropIndex(tops, heights, 1, 168), 3);
+  assert.equal(dropIndex(tops, heights, 2, 0), 0);
 });
 
 test('dropIndex passes more than one row', () => {
@@ -30,8 +37,8 @@ test('dropIndex stops at the two ends', () => {
 test('dropIndex uses the height of each row', () => {
   // The second row is tall: its centre is at 56 + 60.
   const tall = { tops: [0, 56, 176], heights: [56, 120, 56] };
-  assert.equal(dropIndex(tall.tops, tall.heights, 0, 80), 0);
-  assert.equal(dropIndex(tall.tops, tall.heights, 0, 90), 1);
+  assert.equal(dropIndex(tall.tops, tall.heights, 0, 60), 0);
+  assert.equal(dropIndex(tall.tops, tall.heights, 0, 61), 1);
 });
 
 test('shifts opens the gap below for a move down', () => {
