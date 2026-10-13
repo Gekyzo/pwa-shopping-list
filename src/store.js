@@ -94,6 +94,18 @@ export const startNewShopping = (state) => {
 export const setSort = (state, sort) =>
   SORTS.includes(sort) ? { state: { ...state, sort } } : reject(state, 'Orden desconocido.');
 
+// Gives the places that the items of `ids` have in `items` to the same items, in the order of
+// `ids`. Each other item keeps its place. The same order returns the same state object.
+export const reorderItems = (state, ids) => {
+  const moved = new Set(ids);
+  if (moved.size !== ids.length) return reject(state, 'Orden no válido.');
+  const byId = new Map(state.items.map((item) => [item.id, item]));
+  if (ids.some((id) => !byId.has(id))) return reject(state, 'Artículo no encontrado.');
+  let next = 0;
+  const items = state.items.map((item) => (moved.has(item.id) ? byId.get(ids[next++]) : item));
+  return items.every((item, index) => item === state.items[index]) ? { state } : { state: { ...state, items } };
+};
+
 const byName = (a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' });
 
 // The items in the order that the user chose. The order of `state.items` is the insertion order.
