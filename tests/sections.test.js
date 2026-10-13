@@ -1,9 +1,28 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { SECTIONS, direction, slideTo } from '#sections';
+import { SECTIONS, direction, slideDirection, slideTo } from '#sections';
 
 test('SECTIONS has the order of the bottom bar', () => {
   assert.deepEqual(SECTIONS, ['active', 'next', 'recipes', 'settings']);
+});
+
+test('slideDirection is 1 for a slide to the left and -1 for a slide to the right', () => {
+  assert.equal(slideDirection(-80, 0), 1);
+  assert.equal(slideDirection(80, 0), -1);
+});
+
+test('slideDirection is 0 for a short slide', () => {
+  assert.equal(slideDirection(-59, 0), 0);
+  assert.equal(slideDirection(59, 0), 0);
+  assert.equal(slideDirection(0, 0), 0);
+  assert.equal(slideDirection(-60, 0), 1);
+});
+
+test('slideDirection is 0 for a slide that is not horizontal', () => {
+  assert.equal(slideDirection(-80, 41), 0);
+  assert.equal(slideDirection(80, -120), 0);
+  assert.equal(slideDirection(-80, 40), 1);
+  assert.equal(slideDirection(80, -40), -1);
 });
 
 test('slideTo goes to the next section on a slide to the left', () => {
