@@ -5,7 +5,7 @@ import { direction, slideTo } from '#sections';
 import { dropIndex, moveTo, shifts } from '#reorder';
 import { load, save, exportJson, importJson, loadLanguage, saveLanguage } from '#storage';
 import { parseVersion, versionStatus } from '#version';
-import { LANGUAGES, LANGUAGE_NAMES, resolveLanguage, translator } from '#i18n';
+import { LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
 
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;
@@ -862,7 +862,8 @@ const VERSION_KEYS = { current: 'version.current', unknown: 'version.unknown' };
 const renderVersion = () => {
   const { running, latest, checking } = ui.version;
   const status = versionStatus(running, latest);
-  const date = running && new Date(running.date).toLocaleString(lang, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  const dateForm = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
+  const date = running && new Date(running.date).toLocaleString(intlTag(lang), dateForm);
   $('version').textContent = running ? t('version.running', { version: running.version, date }) : t('version.none');
   $('version-status').textContent = checking
     ? t('version.checking')
