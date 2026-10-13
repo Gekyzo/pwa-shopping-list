@@ -31,6 +31,16 @@ test('one preferred language that is text, not a list, resolves too', () => {
   assert.equal(resolveLanguage('es-AR', null), 'es');
 });
 
+test('a regional language resolves to its base', () => {
+  assert.equal(resolveLanguage(['pt-BR'], null), 'pt');
+  assert.equal(resolveLanguage(['nl', 'de-AT'], null), 'de');
+  assert.equal(resolveLanguage(['ca-ES-valencia'], null), 'ca');
+});
+
+test('the languages are the seven of the design', () => {
+  assert.deepEqual(LANGUAGES, ['ca', 'de', 'en', 'es', 'fr', 'it', 'pt']);
+});
+
 test('t replaces each placeholder with its parameter', () => {
   const t = translator('es', fake);
   assert.equal(t('hello', { name: 'Ana' }), 'Hola Ana');

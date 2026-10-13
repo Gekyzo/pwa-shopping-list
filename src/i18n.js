@@ -1,11 +1,24 @@
+import ca from '#locales/ca';
+import de from '#locales/de';
 import en from '#locales/en';
 import es from '#locales/es';
+import fr from '#locales/fr';
+import it from '#locales/it';
+import pt from '#locales/pt';
 
-export const CATALOGS = { en, es };
+export const CATALOGS = { ca, de, en, es, fr, it, pt };
 export const LANGUAGES = Object.keys(CATALOGS);
 export const FALLBACK = 'en';
 // The name of each language, in that language.
-export const LANGUAGE_NAMES = { en: 'English', es: 'Español' };
+export const LANGUAGE_NAMES = {
+  ca: 'Català',
+  de: 'Deutsch',
+  en: 'English',
+  es: 'Español',
+  fr: 'Français',
+  it: 'Italiano',
+  pt: 'Português',
+};
 
 const base = (tag) => String(tag ?? '').toLowerCase().split('-')[0];
 
