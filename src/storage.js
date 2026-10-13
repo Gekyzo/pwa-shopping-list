@@ -194,3 +194,34 @@ export const saveHand = (storage, hand) => {
     return false;
   }
 };
+
+// Set after the walkthrough of the first start closed. It is a preference of the device, as the
+// hand is.
+export const ONBOARDED_KEY = 'shopping.onboarded';
+
+// A storage that cannot be read counts as seen, so the walkthrough does not show at each start.
+export const loadOnboarded = (storage) => {
+  try {
+    return storage.getItem(ONBOARDED_KEY) === '1';
+  } catch {
+    return true;
+  }
+};
+
+export const saveOnboarded = (storage) => {
+  try {
+    storage.setItem(ONBOARDED_KEY, '1');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// True when the storage holds a state, valid or not: the install is not new.
+export const hasStoredState = (storage) => {
+  try {
+    return storage.getItem(STORAGE_KEY) !== null;
+  } catch {
+    return false;
+  }
+};

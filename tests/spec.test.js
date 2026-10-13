@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { emptyState, GROUPS, SORTS } from '#store';
-import { STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY } from '#storage';
+import { STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, ONBOARDED_KEY } from '#storage';
 import { CATALOGS, FALLBACK, LANGUAGES } from '#i18n';
 
 // The facts of docs/spec/ that the code can prove. A rule of behaviour has no check here.
@@ -66,7 +66,7 @@ test('the data model has the state version, the groups and the orders of the sto
 test('the storage document has the keys of the storage and the name of the cache', () => {
   const storage = docs['08-storage.md'];
   const [, cache] = read('sw.js').match(/const CACHE = '([^']+)'/);
-  for (const key of [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, cache]) assert.ok(storage.includes(`\`${key}\``), key);
+  for (const key of [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, ONBOARDED_KEY, cache]) assert.ok(storage.includes(`\`${key}\``), key);
   assert.ok(docs['10-offline-version.md'].includes(`\`${cache}\``), cache);
 });
 
