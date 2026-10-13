@@ -1,5 +1,4 @@
 const LISTS = ['active', 'next'];
-const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
 // `custom` is the order of `items`: the insertion order, changed by the moves of the user.
 export const SORTS = ['custom', 'name'];
@@ -8,7 +7,9 @@ export const SORTS = ['custom', 'name'];
 // choice of the user to show Active by those recipes, and `sort` the order of the two lists.
 export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [], grouped: true, sort: 'custom' });
 
-const reject = (state, error) => ({ state, error });
+// An error is a message: the key of its text, with the parameters of the text. A `list`
+// parameter holds a list id. The screen turns the message into text.
+const reject = (state, key, params) => ({ state, error: params ? { key, params } : { key } });
 
 const findItem = (state, id) => state.items.find((item) => item.id === id);
 
@@ -17,67 +18,67 @@ const patchItem = (state, id, patch) => ({
 });
 
 const nameError = (state, name, ownId) => {
-  if (!name) return 'Escribe un nombre.';
+  if (!name) return ['error.nameRequired'];
   const key = name.toLowerCase();
   const duplicate = state.items.find((item) => item.id !== ownId && item.name.toLowerCase() === key);
-  return duplicate ? `"${duplicate.name}" ya está en ${LIST_LABELS[duplicate.list]}.` : null;
+  return duplicate ? ['error.duplicateItem', { name: duplicate.name, list: duplicate.list }] : null;
 };
 
 const inNextView = (item) => item.list === 'next' || (item.bought && (item.recurrent || item.again));
 
 export const addItem = (state, rawName, list, newId = () => crypto.randomUUID()) => {
-  if (!LISTS.includes(list)) return reject(state, 'Lista desconocida.');
+  if (!LISTS.includes(list)) return reject(state, 'error.unknownList');
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name);
-  if (error) return reject(state, error);
+  if (error) return reject(state, ...error);
   const item = { id: newId(), name, recurrent: list === 'next', list, bought: false, again: false };
   return { state: { ...state, items: [...state.items, item] } };
 };
 
 export const renameItem = (state, id, rawName) => {
-  if (!findItem(state, id)) return reject(state, 'Artículo no encontrado.');
+  if (!findItem(state, id)) return reject(state, 'error.itemNotFound');
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name, id);
-  return error ? reject(state, error) : patchItem(state, id, { name });
+  return error ? reject(state, ...error) : patchItem(state, id, { name });
 };
 
 export const toggleRecurrent = (state, id) => {
   const item = findItem(state, id);
-  if (!item) return reject(state, 'Artículo no encontrado.');
+  if (!item) return reject(state, 'error.itemNotFound');
   return patchItem(state, id, { recurrent: !item.recurrent, again: false });
 };
 
 export const toggleBought = (state, id) => {
   const item = findItem(state, id);
-  if (!item) return reject(state, 'Artículo no encontrado.');
-  if (item.list !== 'active') return reject(state, 'Solo se pueden marcar los artículos de Actual.');
+  if (!item) return reject(state, 'error.itemNotFound');
+  if (item.list !== 'active') return reject(state, 'error.onlyActiveTick', { list: 'active' });
   return patchItem(state, id, { bought: !item.bought, again: false });
 };
 
 export const toggleAgain = (state, id) => {
   const item = findItem(state, id);
-  if (!item) return reject(state, 'Artículo no encontrado.');
-  if (!item.bought) return reject(state, 'Marca primero el artículo.');
-  if (item.recurrent) return reject(state, 'Un artículo recurrente ya está en Próxima.');
+  if (!item) return reject(state, 'error.itemNotFound');
+  if (!item.bought) return reject(state, 'error.tickFirst');
+  if (item.recurrent) return reject(state, 'error.recurrentInNext', { list: 'next' });
   return patchItem(state, id, { again: !item.again });
 };
 
 export const deleteItem = (state, id) => {
-  if (!findItem(state, id)) return reject(state, 'Artículo no encontrado.');
+  if (!findItem(state, id)) return reject(state, 'error.itemNotFound');
   return { state: { ...state, items: state.items.filter((item) => item.id !== id) } };
 };
 
 export const moveItem = (state, id) => {
   const item = findItem(state, id);
-  if (!item) return reject(state, 'Artículo no encontrado.');
+  if (!item) return reject(state, 'error.itemNotFound');
   const list = item.list === 'active' ? 'next' : 'active';
   return patchItem(state, id, { list, bought: false, again: false });
 };
 
 export const removeFromNext = (state, id) => {
   const item = findItem(state, id);
-  if (!item) return reject(state, 'Artículo no encontrado.');
-  if (!inNextView(item)) return reject(state, 'El artículo no está en Próxima.');
+  if (!item) return reject(state, 'error.itemNotFound');
+  if (!inNextView(item)) return reject(state, 'error.notInNext', { list: 'next' });
   if (item.list === 'next') return deleteItem(state, id);
   return patchItem(state, id, { recurrent: false, again: false });
 };
@@ -85,7 +86,7 @@ export const removeFromNext = (state, id) => {
 export const canStartNewShopping = (state) => state.items.some((item) => item.bought || item.list === 'next');
 
 export const startNewShopping = (state) => {
-  if (!canStartNewShopping(state)) return reject(state, 'Nada que empezar: marca un artículo o añade uno a Próxima.');
+  if (!canStartNewShopping(state)) return reject(state, 'error.nothingToStart', { list: 'next' });
   const items = state.items
     .filter((item) => !item.bought || item.recurrent || item.again)
     .map((item) => ({ ...item, list: 'active', bought: false, again: false }));
@@ -93,7 +94,7 @@ export const startNewShopping = (state) => {
 };
 
 export const setSort = (state, sort) =>
-  SORTS.includes(sort) ? { state: { ...state, sort } } : reject(state, 'Orden desconocido.');
+  SORTS.includes(sort) ? { state: { ...state, sort } } : reject(state, 'error.unknownSort');
 
 // Gives the places that the items of `ids` have in `items` to the same items, in the order of
 // `ids`. Each other item keeps its place. The same order returns the same state object.
@@ -101,9 +102,9 @@ export const setSort = (state, sort) =>
 // screen shows them, with the move.
 export const reorderItems = (state, ids) => {
   const moved = new Set(ids);
-  if (moved.size !== ids.length) return reject(state, 'Orden no válido.');
+  if (moved.size !== ids.length) return reject(state, 'error.invalidOrder');
   const byId = new Map(state.items.map((item) => [item.id, item]));
-  if (ids.some((id) => !byId.has(id))) return reject(state, 'Artículo no encontrado.');
+  if (ids.some((id) => !byId.has(id))) return reject(state, 'error.itemNotFound');
   const base = state.sort === 'name' ? { ...state, items: sortItems(state, state.items), sort: 'custom' } : state;
   let next = 0;
   const items = base.items.map((item) => (moved.has(item.id) ? byId.get(ids[next++]) : item));
@@ -158,9 +159,9 @@ export const searchItems = (state, query, limit = 5) => {
 // Makes an existing item show as "to buy" in the given list. `changed` is false
 // when the item is there already.
 export const bringToList = (state, id, list) => {
-  if (!LISTS.includes(list)) return reject(state, 'Lista desconocida.');
+  if (!LISTS.includes(list)) return reject(state, 'error.unknownList');
   const item = findItem(state, id);
-  if (!item) return reject(state, 'Artículo no encontrado.');
+  if (!item) return reject(state, 'error.itemNotFound');
   const done = (result) => ({ ...result, changed: true });
   if (list === 'active') {
     if (item.list === 'next') return done(moveItem(state, id));
@@ -186,9 +187,8 @@ export const tripSummary = (state) => {
   };
 };
 
-// The text of the toast that an arrival at the shop shows, or null when nothing is left to buy.
+// The message of the toast that an arrival at the shop shows, or null when nothing is left to buy.
 export const arrivalMessage = (state) => {
   const { left } = tripSummary(state);
-  if (left === 0) return null;
-  return `${left} ${left === 1 ? 'artículo' : 'artículos'} por comprar en Actual.`;
+  return left === 0 ? null : { key: 'toast.arrival', params: { count: left, list: 'active' } };
 };

@@ -48,6 +48,9 @@ let t = translator(lang);
 // `t` for a text that names a list: the `list` parameter is a list id.
 const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
 
+// The text of a message of a pure module.
+const textOf = ({ key, params }) => say(key, params);
+
 let state = storage ? load(storage) : store.emptyState();
 // `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
 const ui = {
@@ -105,7 +108,7 @@ const commit = (next) => {
 // Applies a store operation. `undoText` makes the change reversible for a few seconds.
 const apply = (result, { undoText = null } = {}) => {
   if (result.error) {
-    showToast(result.error);
+    showToast(textOf(result.error));
     return false;
   }
   const previous = state;
@@ -1023,7 +1026,7 @@ const useExisting = (item) => {
   if (result.changed) apply(result, { undoText: say('toast.existsNowIn', params) });
   else {
     render();
-    showToast(result.error ?? say('error.duplicateItem', params));
+    showToast(result.error ? textOf(result.error) : say('error.duplicateItem', params));
   }
   $('add-name').focus();
 };
@@ -1032,7 +1035,7 @@ const submitRecipe = () => {
   const input = $('add-name');
   const result = recipes.addRecipe(state, input.value);
   if (result.error) {
-    showToast(result.error);
+    showToast(textOf(result.error));
     input.focus();
     return;
   }
@@ -1266,7 +1269,7 @@ $('import-file').addEventListener('change', async (event) => {
   if (!file) return;
   const result = importJson(await file.text());
   if (result.error) {
-    showToast(result.error);
+    showToast(textOf(result.error));
     return;
   }
   const found = {
@@ -1282,7 +1285,7 @@ applyLanguage();
 const params = new URLSearchParams(location.search);
 if (params.has('arrival')) {
   const message = store.arrivalMessage(state);
-  if (message) showToast(message, { ms: ARRIVAL_MS });
+  if (message) showToast(textOf(message), { ms: ARRIVAL_MS });
   params.delete('arrival');
   const query = params.toString();
   history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);

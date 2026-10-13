@@ -1,8 +1,9 @@
 import { addItem, bringToList, findByName, fold, sortItems } from '#store';
 
-const NOT_FOUND = 'Receta no encontrada.';
+const NOT_FOUND = 'error.recipeNotFound';
 
-const reject = (state, error) => ({ state, error });
+// An error is a message, as in `store.js`.
+const reject = (state, key, params) => ({ state, error: params ? { key, params } : { key } });
 
 const findRecipe = (state, id) => state.recipes.find((recipe) => recipe.id === id);
 
@@ -11,16 +12,16 @@ const patchRecipe = (state, id, patch) => ({
 });
 
 const nameError = (state, name, ownId) => {
-  if (!name) return 'Escribe un nombre.';
+  if (!name) return ['error.nameRequired'];
   const key = name.toLowerCase();
   const duplicate = state.recipes.find((recipe) => recipe.id !== ownId && recipe.name.toLowerCase() === key);
-  return duplicate ? `La receta "${duplicate.name}" ya existe.` : null;
+  return duplicate ? ['error.duplicateRecipe', { name: duplicate.name }] : null;
 };
 
 export const addRecipe = (state, rawName, newId = () => crypto.randomUUID()) => {
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name);
-  if (error) return reject(state, error);
+  if (error) return reject(state, ...error);
   const recipe = { id: newId(), name, products: [], url: '' };
   return { state: { ...state, recipes: [...state.recipes, recipe] }, id: recipe.id };
 };
@@ -29,7 +30,7 @@ export const renameRecipe = (state, id, rawName) => {
   if (!findRecipe(state, id)) return reject(state, NOT_FOUND);
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name, id);
-  return error ? reject(state, error) : patchRecipe(state, id, { name });
+  return error ? reject(state, ...error) : patchRecipe(state, id, { name });
 };
 
 export const deleteRecipe = (state, id) => {
@@ -53,24 +54,24 @@ export const setRecipeUrl = (state, id, rawUrl) => {
   const text = String(rawUrl ?? '').trim();
   if (!text) return patchRecipe(state, id, { url: '' });
   const url = /^[a-z][a-z\d+.-]*:/i.test(text) ? text : `https://${text}`;
-  return isWebUrl(url) ? patchRecipe(state, id, { url }) : reject(state, 'El enlace no es una dirección web válida.');
+  return isWebUrl(url) ? patchRecipe(state, id, { url }) : reject(state, 'error.invalidLink');
 };
 
 export const addRecipeProduct = (state, id, rawName) => {
   const recipe = findRecipe(state, id);
   if (!recipe) return reject(state, NOT_FOUND);
   const name = String(rawName ?? '').trim();
-  if (!name) return reject(state, 'Escribe un producto.');
+  if (!name) return reject(state, 'error.productRequired');
   const key = name.toLowerCase();
   const duplicate = recipe.products.find((product) => product.toLowerCase() === key);
-  if (duplicate) return reject(state, `"${duplicate}" ya está en la receta.`);
+  if (duplicate) return reject(state, 'error.duplicateProduct', { name: duplicate });
   return patchRecipe(state, id, { products: [...recipe.products, name] });
 };
 
 export const removeRecipeProduct = (state, id, name) => {
   const recipe = findRecipe(state, id);
   if (!recipe) return reject(state, NOT_FOUND);
-  if (!recipe.products.includes(name)) return reject(state, 'Producto no encontrado.');
+  if (!recipe.products.includes(name)) return reject(state, 'error.productNotFound');
   return patchRecipe(state, id, { products: recipe.products.filter((product) => product !== name) });
 };
 
@@ -80,13 +81,14 @@ export const removeRecipeProduct = (state, id, name) => {
 export const sendRecipe = (state, id, newId) => {
   const recipe = findRecipe(state, id);
   if (!recipe) return reject(state, NOT_FOUND);
-  if (!recipe.products.length) return reject(state, 'La receta no tiene productos.');
+  if (!recipe.products.length) return reject(state, 'error.recipeEmpty');
   let next = state;
   let added = 0;
   for (const product of recipe.products) {
     const existing = findByName(next, product);
     const result = existing ? bringToList(next, existing.id, 'active') : addItem(next, product, 'active', newId);
-    if (result.error) return reject(state, result.error);
+    // The error of an item operation is a message already.
+    if (result.error) return { state, error: result.error };
     if (!existing || result.changed) added += 1;
     next = result.state;
   }
