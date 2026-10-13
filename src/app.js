@@ -1074,6 +1074,7 @@ const render = () => {
 // Writes the fixed text of the page, then the text that a render builds.
 const applyLanguage = () => {
   document.documentElement.lang = lang;
+  document.title = t('app.title');
   document.querySelectorAll('[data-i18n]').forEach((node) => {
     node.textContent = t(node.dataset.i18n);
   });

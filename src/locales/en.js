@@ -8,6 +8,7 @@ export default {
   'header.today': 'Today’s shopping',
   'header.next': 'Next shopping',
   'header.settingsSubtitle': 'Grocely',
+  'app.title': 'Grocely - Shopping list',
   'header.empty': 'The list is empty',
   'header.allBought': 'All bought',
   'header.left': { one: '{count} item left', other: '{count} items left' },
