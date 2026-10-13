@@ -113,7 +113,20 @@ sheet is open.
 - **ADD-9** When the target is the list on the screen, the row of an item that the sheet brought
   flashes and scrolls into view.
 
+## Search
+
+- **LIST-20** The header of `Actual` and of `Próxima` has a search button, at the left of the
+  arrange button. It shows when the view has one item at least.
+- **LIST-21** A tap on the button opens the field **Buscar artículo o tienda** with the focus. A
+  second tap, `Escape`, or a loss of focus with an empty field closes it. A close clears the text.
+- **LIST-22** The list shows only the items whose name or one of whose shops contains the text,
+  with no case and no accent distinction. An empty text shows all items.
+- **LIST-23** The order and the grouping stay. A group with no match to buy does not show. The
+  count of a group head, the header figures and the count of the bottom bar stay those of the
+  full list.
+- **LIST-24** The text of the search is not stored. A change of section closes the search.
+
 ## Limits
 
-No quantity, no unit, no note. No add of several items from one text. No search field in the lists
-themselves.
+No quantity, no unit, no note. No add of several items from one text. No ranking of the results of
+a list search, and no match by the recipe of an item.

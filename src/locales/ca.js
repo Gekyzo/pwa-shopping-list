@@ -48,6 +48,8 @@ export default {
   'finish.gone': { one: '{count} s’elimina.', other: '{count} s’eliminen.' },
 
   'recipes.search': 'Cerca recepta o producte',
+  'search.label': 'Cerca a la llista',
+  'search.items': 'Cerca article o botiga',
   'recipe.send': 'Envia a la llista: {name}',
   'recipe.openLink': 'Obre l’enllaç de {name}',
   'recipe.rename': 'Canvia el nom',

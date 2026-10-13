@@ -150,14 +150,15 @@ export const matchesItem = (item, query) => {
   return !key || [item.name, ...item.shops].some((text) => fold(text).includes(key));
 };
 
-// A list by group with only the items that match the query: a group with no item left goes
-// away, and `total` stays the count of the full group. The same view for no query.
+// A list by group with only the items that match the query. A query takes away a group with no
+// item left. `left` is the count of the items of the full group, as `total` is, so that the head
+// of a group shows the same figures with a query and with none.
 export const filterGroups = (view, query) => {
-  if (!fold(query)) return view;
+  const searching = Boolean(fold(query));
   const matches = (item) => matchesItem(item, query);
   const groups = view.groups
-    .map((group) => ({ ...group, items: group.items.filter(matches) }))
-    .filter((group) => group.items.length > 0);
+    .map((group) => ({ ...group, items: group.items.filter(matches), left: group.items.length }))
+    .filter((group) => !searching || group.items.length > 0);
   return { groups, rest: view.rest.filter(matches) };
 };
 

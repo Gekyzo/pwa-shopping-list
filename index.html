@@ -17,6 +17,9 @@
         <h1 id="title"></h1>
         <p id="subtitle"></p>
       </div>
+      <button id="search-button" class="tool" type="button" data-i18n-attr="aria-label:search.label" aria-controls="search" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+      </button>
       <button id="arrange-button" class="tool" type="button" data-i18n-attr="aria-label:arrange.label" aria-haspopup="dialog" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
       </button>
@@ -28,8 +31,8 @@
     </div>
 
     <main>
-      <div id="recipe-search" class="search" hidden>
-        <input id="recipe-query" type="search" maxlength="80" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search" autocomplete="off" enterkeyhint="search">
+      <div id="search" class="search" hidden>
+        <input id="query" type="search" maxlength="80" autocomplete="off" enterkeyhint="search">
       </div>
 
       <ul id="items" class="items"></ul>

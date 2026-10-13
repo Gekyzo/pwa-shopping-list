@@ -69,8 +69,11 @@ const ui = {
   target: 'active',
   boughtOpen: false,
   openRecipeId: null,
-  // The text of the search field of Recetas. It is not stored.
-  recipeQuery: '',
+  // The text of the search field, which Recetas shows always and a list shows on demand. It is
+  // not stored.
+  query: '',
+  // True while the search field of Actual or of Próxima is open.
+  searchOpen: false,
   // The group where the row actions are open: a recipe id, `shop:<name>`, or null out of a group.
   openGroup: null,
   // The side menu of the open item row: 'start' (slide right), 'end' (slide left) or null.
@@ -643,12 +646,15 @@ const boughtSection = (bought) => {
 const groupHead = (title, count) =>
   el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
 
+// True for an item that the search of the list shows.
+const found = (item) => store.matchesItem(item, ui.query);
+
 // The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
 const shopNodes = (list) => {
-  const { groups, rest } = shops.shopGroups(state, list);
-  const count = ({ items, total }) => {
+  const { groups, rest } = store.filterGroups(shops.shopGroups(state, list), ui.query);
+  const count = ({ left, total }) => {
     if (list !== 'active') return '';
-    return items.length ? `${total - items.length}/${total}` : '✓';
+    return left ? `${total - left}/${total}` : '✓';
   };
   const grouped = groups.flatMap((group) => [
     groupHead(group.shop, count(group)),
@@ -663,10 +669,12 @@ const shopNodes = (list) => {
 const pendingNodes = () => {
   const group = shownGroup();
   if (group === 'shop') return shopNodes('active');
-  if (group === 'none') return store.activeItems(state).filter((item) => !item.bought).map((item) => itemNode(item));
-  const { groups, rest } = recipes.recipeGroups(state);
-  const grouped = groups.flatMap(({ recipe, items, total }) => [
-    groupHead(recipe.name, items.length ? `${total - items.length}/${total}` : '✓'),
+  if (group === 'none') {
+    return store.activeItems(state).filter((item) => !item.bought && found(item)).map((item) => itemNode(item));
+  }
+  const { groups, rest } = store.filterGroups(recipes.recipeGroups(state), ui.query);
+  const grouped = groups.flatMap(({ recipe, items, total, left }) => [
+    groupHead(recipe.name, left ? `${total - left}/${total}` : '✓'),
     ...items.map((item) => itemNode(item, recipe.id)),
   ]);
   const others = rest.length ? [groupHead(t('group.others'), ''), ...rest.map((item) => itemNode(item))] : [];
@@ -674,7 +682,7 @@ const pendingNodes = () => {
 };
 
 const listNodes = (items) => {
-  if (ui.view !== 'active') return shownGroup() === 'shop' ? shopNodes('next') : items.map((item) => itemNode(item));
+  if (ui.view !== 'active') return shownGroup() === 'shop' ? shopNodes('next') : items.filter(found).map((item) => itemNode(item));
   const bought = items.filter((item) => item.bought);
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
@@ -905,22 +913,37 @@ const headerOf = (summary, next) => {
 const EMPTY_KEYS = { active: 'empty.active', next: 'empty.next', recipes: 'empty.recipes' };
 
 const emptyText = (searchable) => {
-  if (searchable) return t('empty.noMatch', { query: ui.recipeQuery.trim() });
+  if (searchable) return t('empty.noMatch', { query: ui.query.trim() });
   return EMPTY_KEYS[ui.view] ? t(EMPTY_KEYS[ui.view]) : '';
+};
+
+// One field serves the three sections: Recetas shows it when it has a recipe, and a list shows it
+// after a tap on the search button, which a list with no item does not have.
+const renderSearch = (items, searchable) => {
+  const inList = ui.view === 'active' || ui.view === 'next';
+  const canOpen = inList && items.length > 0;
+  if (!canOpen) ui.searchOpen = false;
+  const shown = searchable || ui.searchOpen;
+  if (!shown) ui.query = '';
+  $('search-button').hidden = !canOpen;
+  $('search-button').setAttribute('aria-expanded', String(ui.searchOpen));
+  $('search').hidden = !shown;
+  const label = t(inList ? 'search.items' : 'recipes.search');
+  $('query').placeholder = label;
+  $('query').setAttribute('aria-label', label);
+  // The field is not built again by a render, so it keeps the cursor. Write it only after a reset.
+  if ($('query').value !== ui.query) $('query').value = ui.query;
 };
 
 const nodesOf = (items) => {
   if (ui.view === 'settings') return [];
-  return ui.view === 'recipes' ? recipes.searchRecipes(state, ui.recipeQuery).map(recipeNode) : listNodes(items);
+  return ui.view === 'recipes' ? recipes.searchRecipes(state, ui.query).map(recipeNode) : listNodes(items);
 };
 
 const renderList = (summary, next) => {
   const items = ui.view === 'active' ? store.activeItems(state) : next;
   const searchable = ui.view === 'recipes' && state.recipes.length > 0;
-  if (!searchable) ui.recipeQuery = '';
-  $('recipe-search').hidden = !searchable;
-  // The field is not built again by a render, so it keeps the cursor. Write it only after a reset.
-  if ($('recipe-query').value !== ui.recipeQuery) $('recipe-query').value = ui.recipeQuery;
+  renderSearch(items, searchable);
   const nodes = nodesOf(items);
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
@@ -1131,7 +1154,7 @@ const submitRecipe = () => {
     return;
   }
   // The new recipe shows expanded, with the cursor in its product field.
-  Object.assign(ui, { sheetOpen: false, openRecipeId: result.id, focusProduct: true, recipeQuery: '' });
+  Object.assign(ui, { sheetOpen: false, openRecipeId: result.id, focusProduct: true, query: '' });
   apply(result);
 };
 
@@ -1179,7 +1202,9 @@ scroller.addEventListener('animationend', (event) => {
 
 const showView = (view) => {
   const way = direction(ui.view, view);
-  Object.assign(ui, { view, editingId: null, openId: null, recipeQuery: '' });
+  // The field is shared: the focus of a list search must not go with it to Recetas.
+  $('query').blur();
+  Object.assign(ui, { view, editingId: null, openId: null, query: '', searchOpen: false });
   render();
   enter(way);
   if (ui.view === 'settings') checkVersion();
@@ -1254,9 +1279,31 @@ document.addEventListener(
   { passive: false },
 );
 
-$('recipe-query').addEventListener('input', (event) => {
-  Object.assign(ui, { recipeQuery: event.target.value, editingId: null, openId: null });
+$('query').addEventListener('input', (event) => {
+  Object.assign(ui, { query: event.target.value, editingId: null, openId: null });
   render();
+});
+
+const closeSearch = () => {
+  Object.assign(ui, { searchOpen: false, query: '' });
+  render();
+};
+
+// The press must not take the focus out of the field: the blur would close the search, and the
+// click would then open it again.
+$('search-button').addEventListener('mousedown', (event) => event.preventDefault());
+$('search-button').addEventListener('click', () => {
+  if (ui.searchOpen) {
+    closeSearch();
+    return;
+  }
+  Object.assign(ui, { searchOpen: true, openId: null, editingId: null });
+  render();
+  $('query').focus();
+});
+// An empty field of a list that loses the focus closes. The field of Recetas stays.
+$('query').addEventListener('blur', () => {
+  if (ui.searchOpen && !ui.query.trim()) closeSearch();
 });
 
 $('fab').addEventListener('click', openSheet);
@@ -1343,6 +1390,7 @@ document.addEventListener('keydown', (event) => {
     render();
   }
   if (ui.shopsId !== null) closeShops();
+  if (ui.searchOpen) closeSearch();
 });
 
 $('finish-button').addEventListener('click', () => finishTrip());

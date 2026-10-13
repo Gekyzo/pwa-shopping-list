@@ -33,6 +33,7 @@ back the products that the user buys each time.
 |---|---|
 | Two lists and the trip cycle | [03-lists.md](03-lists.md) |
 | Add with search, with no duplicate | [03-lists.md](03-lists.md) |
+| Search in `Actual` and in `Próxima` | [03-lists.md](03-lists.md) |
 | Order by name or custom, with a manual move | [04-arrange.md](04-arrange.md) |
 | Groups by recipe or by shop | [04-arrange.md](04-arrange.md) |
 | Shops of an item | [05-shops.md](05-shops.md) |
@@ -52,7 +53,6 @@ These are decisions, not gaps.
 - Geolocation in the app and system notifications.
 - Steps, quantities and photos of a recipe.
 - A screen of shops, a rename of a shop for all its items, a filter by one shop.
-- A search in `Actual` and in `Próxima` apart from the add sheet.
 - Right-to-left languages.
 
 Each feature document lists the limits of its own area.
