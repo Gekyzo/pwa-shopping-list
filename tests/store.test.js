@@ -551,13 +551,18 @@ test('filterGroups keeps the matches, drops a group with no item left and keeps 
   };
   const copy = structuredClone(view);
   assert.deepEqual(filterGroups(view, 'lech'), {
-    groups: [{ shop: 'Mercadona', items: [milk], total: 3 }],
+    groups: [{ shop: 'Mercadona', items: [milk], total: 3, left: 1 }],
     rest: [milk],
   });
   assert.deepEqual(view, copy);
 });
 
-test('filterGroups returns its input for an empty query', () => {
-  const view = { groups: [{ shop: 'Lidl', items: [], total: 2 }], rest: [] };
-  assert.equal(filterGroups(view, ' '), view);
+test('filterGroups gives `left` the count of the full group, not of the matches', () => {
+  const view = { groups: [{ shop: 'Mercadona', items: [milk, coffee], total: 3 }], rest: [] };
+  assert.deepEqual(filterGroups(view, 'lech').groups, [{ shop: 'Mercadona', items: [milk], total: 3, left: 2 }]);
+});
+
+test('filterGroups keeps each group and each item for an empty query', () => {
+  const view = { groups: [{ shop: 'Lidl', items: [], total: 2 }], rest: [coffee] };
+  assert.deepEqual(filterGroups(view, ' '), { groups: [{ shop: 'Lidl', items: [], total: 2, left: 0 }], rest: [coffee] });
 });

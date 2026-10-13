@@ -48,6 +48,8 @@ export default {
   'finish.gone': { one: '{count} é eliminado.', other: '{count} são eliminados.' },
 
   'recipes.search': 'Procurar receita ou produto',
+  'search.label': 'Procurar na lista',
+  'search.items': 'Procurar artigo ou loja',
   'recipe.send': 'Enviar para a lista: {name}',
   'recipe.openLink': 'Abrir a ligação de {name}',
   'recipe.rename': 'Mudar o nome',

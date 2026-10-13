@@ -4,8 +4,8 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/swipe.js` and `src/secti
 
 ## Layout
 
-From top to bottom: the header (ring, title, subtitle, arrange button), the content of the
-section, the `+` button above the bottom bar, and the bottom bar. The message shows below the top
+From top to bottom: the header (ring, title, subtitle, search button, arrange button), the content
+of the section, the `+` button above the bottom bar, and the bottom bar. The message shows below the top
 edge. A sheet comes up from the bottom, over a veil.
 
 ## Sections
@@ -13,7 +13,7 @@ edge. A sheet comes up from the bottom, over a veil.
 - **NAV-1** The bottom bar has four sections, in this order: `Actual`, `Próxima`, `Recetas`,
   `Ajustes`. The app starts in `Actual`.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
-  edit and clears the recipe search.
+  edit, clears the recipe search and closes the search of a list (LIST-24).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
   vertical part at least. It stops at `Actual` and at `Ajustes`.

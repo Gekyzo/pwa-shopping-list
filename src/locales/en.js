@@ -48,6 +48,8 @@ export default {
   'finish.gone': { one: '{count} is deleted.', other: '{count} are deleted.' },
 
   'recipes.search': 'Search recipe or product',
+  'search.label': 'Search the list',
+  'search.items': 'Search item or shop',
   'recipe.send': 'Send to the list: {name}',
   'recipe.openLink': 'Open the link of {name}',
   'recipe.rename': 'Rename',
