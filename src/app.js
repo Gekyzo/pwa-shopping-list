@@ -623,7 +623,7 @@ const groupHead = (title, count) =>
 const pendingNodes = () => {
   const { groups, rest } = recipes.recipeGroups(state);
   if (!groups.length) return rest.map((item) => itemNode(item));
-  if (!state.grouped) return store.activeItems(state).filter((item) => !item.bought).map((item) => itemNode(item));
+  if (state.group !== 'recipe') return store.activeItems(state).filter((item) => !item.bought).map((item) => itemNode(item));
   const grouped = groups.flatMap(({ recipe, items, total }) => [
     groupHead(recipe.name, items.length ? `${total - items.length}/${total}` : '✓'),
     ...items.map((item) => itemNode(item, recipe.id)),
@@ -655,7 +655,7 @@ const renderArrange = () => {
   $('arrange-group').hidden = !group;
   $('arrange-sort').hidden = !sort;
   document.querySelectorAll('#arrange-group button').forEach((button) => {
-    button.setAttribute('aria-pressed', String(button.dataset.grouped === String(state.grouped)));
+    button.setAttribute('aria-pressed', String(button.dataset.group === state.group));
   });
   document.querySelectorAll('#arrange-sort button').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.sort === state.sort));
@@ -1189,16 +1189,16 @@ $('arrange-veil').addEventListener('click', () => {
 // The sheet stays open after a choice, so that the group and the order change in one visit.
 document.querySelectorAll('#arrange-group button').forEach((button) => {
   button.addEventListener('click', () => {
-    const grouped = button.dataset.grouped === 'true';
+    const { group } = button.dataset;
     // The rows that stay move to their new place.
     const set = () => {
       const before = rowTops();
-      commit(recipes.setGrouped(state, grouped).state);
+      commit(store.setGroup(state, group).state);
       return before;
     };
-    if (grouped || !state.grouped) {
-      const opens = grouped && !state.grouped;
-      // A tap on Recetas while the groups close keeps them.
+    if (group !== 'none' || state.group === 'none') {
+      const opens = group !== 'none' && state.group === 'none';
+      // A tap on a grouping while the groups close keeps them.
       ungrouping = false;
       const before = set();
       // `slide` reads the places after `expand` starts, so the two effects add up to one move.

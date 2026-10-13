@@ -10,7 +10,6 @@ import {
   setRecipeUrl,
   sendRecipe,
   recipeGroups,
-  setGrouped,
   searchRecipes,
 } from '#recipes';
 
@@ -131,8 +130,8 @@ test('sendRecipe creates a one-time active item for each new product', () => {
   assert.deepEqual(
     result.state.items.map(({ id: itemId, ...rest }) => rest),
     [
-      { name: 'Eggs', recurrent: false, list: 'active', bought: false, again: false },
-      { name: 'Potatoes', recurrent: false, list: 'active', bought: false, again: false },
+      { name: 'Eggs', recurrent: false, list: 'active', bought: false, again: false, shops: [] },
+      { name: 'Potatoes', recurrent: false, list: 'active', bought: false, again: false, shops: [] },
     ],
   );
   assert.deepEqual(state.items, []);
@@ -338,15 +337,6 @@ test('setRecipeUrl rejects a text that is not a web address and an unknown recip
     assert.equal(result.state, state);
   });
   assert.deepEqual(setRecipeUrl(state, 'nope', LINK).error, { key: 'error.recipeNotFound' });
-});
-
-test('setGrouped turns the grouping of Active off and on', () => {
-  const start = emptyState();
-  assert.equal(start.grouped, true);
-  const off = setGrouped(start, false).state;
-  assert.equal(off.grouped, false);
-  assert.equal(setGrouped(off, true).state.grouped, true);
-  assert.equal(start.grouped, true);
 });
 
 test('recipeGroups sorts the members of a group and the rest by name', () => {

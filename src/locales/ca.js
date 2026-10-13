@@ -134,6 +134,7 @@ export default {
   'error.notInNext': 'L’article no és a {list}.',
   'error.nothingToStart': 'Res per començar: marca un article o afegeix-ne un a {list}.',
   'error.unknownSort': 'Ordre desconegut.',
+  'error.unknownGroup': 'Agrupació desconeguda.',
   'error.invalidOrder': 'Ordre no vàlid.',
   'error.recipeNotFound': 'Recepta no trobada.',
   'error.duplicateRecipe': 'La recepta «{name}» ja existeix.',

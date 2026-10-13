@@ -1,4 +1,4 @@
-import { emptyState, SORTS } from '#store';
+import { emptyState, GROUPS, SORTS } from '#store';
 import { isWebUrl } from '#recipes';
 
 export const STORAGE_KEY = 'shopping.v1';
@@ -6,9 +6,27 @@ export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
 
 const LISTS = ['active', 'next'];
 
+const unique = (values) => new Set(values).size === values.length;
+
+const lower = (text) => text.toLowerCase();
+
+// `shops` only groups a view, so a bad entry is dropped and the item stays valid.
+const normalizeShops = (shops) => {
+  if (!Array.isArray(shops)) return [];
+  const seen = new Set();
+  return shops
+    .filter((shop) => typeof shop === 'string')
+    .map((shop) => shop.trim())
+    .filter((shop) => {
+      if (shop === '' || seen.has(lower(shop))) return false;
+      seen.add(lower(shop));
+      return true;
+    });
+};
+
 const normalizeItem = (item) => {
   if (typeof item !== 'object' || item === null) return null;
-  const { id, name, recurrent, list, bought, again } = item;
+  const { id, name, recurrent, list, bought, again, shops } = item;
   const valid =
     typeof id === 'string' &&
     id !== '' &&
@@ -18,12 +36,29 @@ const normalizeItem = (item) => {
     [recurrent, bought, again].every((flag) => typeof flag === 'boolean');
   if (!valid) return null;
   const isBought = list === 'active' && bought;
-  return { id, name: name.trim(), recurrent, list, bought: isBought, again: isBought && !recurrent && again };
+  return {
+    id,
+    name: name.trim(),
+    recurrent,
+    list,
+    bought: isBought,
+    again: isBought && !recurrent && again,
+    shops: normalizeShops(shops),
+  };
 };
 
-const unique = (values) => new Set(values).size === values.length;
+// Each shop gets the spelling of its first use, so that two spellings do not make two groups.
+const oneSpelling = (items) => {
+  const first = new Map();
+  for (const item of items) for (const shop of item.shops) if (!first.has(lower(shop))) first.set(lower(shop), shop);
+  return items.map((item) => ({ ...item, shops: item.shops.map((shop) => first.get(lower(shop))) }));
+};
 
-const lower = (text) => text.toLowerCase();
+// Versions 1 and 2 have `grouped`, a boolean for the recipe grouping.
+const groupOf = (data) => {
+  if (GROUPS.includes(data.group)) return data.group;
+  return data.grouped === false ? 'none' : 'recipe';
+};
 
 const normalizeRecipe = (recipe) => {
   if (typeof recipe !== 'object' || recipe === null) return null;
@@ -43,9 +78,9 @@ const normalizeRecipe = (recipe) => {
   return { id, name: name.trim(), products: trimmed, url: link };
 };
 
-const VERSIONS = [1, 2];
+const VERSIONS = [1, 2, 3];
 
-// Returns a clean version 2 state, or null when the data is not a known state.
+// Returns a clean version 3 state, or null when the data is not a known state.
 const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
@@ -64,7 +99,14 @@ const normalizeState = (data) => {
   const known = new Set(recipes.map((recipe) => recipe.id));
   const rawSent = Array.isArray(data.sent) ? data.sent : [];
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
-  return { version: 2, items, recipes, sent, grouped: data.grouped !== false, sort: SORTS.includes(data.sort) ? data.sort : 'custom' };
+  return {
+    version: 3,
+    items: oneSpelling(items),
+    recipes,
+    sent,
+    group: groupOf(data),
+    sort: SORTS.includes(data.sort) ? data.sort : 'custom',
+  };
 };
 
 const parse = (text) => {
