@@ -7,7 +7,7 @@ export default {
 
   'header.today': 'Spesa di oggi',
   'header.next': 'Prossima spesa',
-  'header.settingsSubtitle': 'Lista della spesa',
+  'header.settingsSubtitle': 'Grocely',
   'header.empty': 'La lista è vuota',
   'header.allBought': 'Tutto comprato',
   'header.left': { one: 'Resta {count} articolo', other: 'Restano {count} articoli' },

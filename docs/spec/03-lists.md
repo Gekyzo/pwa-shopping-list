@@ -76,7 +76,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/app.js`.
 | `Actual` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `Quedan N artículos` | `ticked/total`, filled to that share |
 | `Próxima` | `Próxima compra` | `N artículos`, plus `N comprados hoy` when there are some; `Nada preparado` when empty | The count of the view |
 | `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | The count of recipes |
-| `Ajustes` | `Ajustes` | `Lista de la compra` | `⚙` |
+| `Ajustes` | `Ajustes` | `Grocely` | `⚙` |
 
 ## Add sheet
 

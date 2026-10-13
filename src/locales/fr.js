@@ -7,7 +7,7 @@ export default {
 
   'header.today': 'Courses du jour',
   'header.next': 'Prochaines courses',
-  'header.settingsSubtitle': 'Liste de courses',
+  'header.settingsSubtitle': 'Grocely',
   'header.empty': 'La liste est vide',
   'header.allBought': 'Tout est acheté',
   'header.left': { one: 'Il reste {count} article', other: 'Il reste {count} articles' },

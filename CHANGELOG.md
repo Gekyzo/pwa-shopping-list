@@ -11,6 +11,7 @@ no change for the user has no entry.
 
 ### Changed
 
+- The name of the app is Grocely. It replaces `Lista de la compra` and `Compra`.
 - **Exportar copia** and **Importar copia** have an icon in `Ajustes`.
 - The icon of the app has a new drawing of the bag of vegetables, with flat colours.
 
