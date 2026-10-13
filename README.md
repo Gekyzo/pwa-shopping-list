@@ -25,7 +25,7 @@ Node 20 or later.
 npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 npm test         # unit tests (node:test)
 npm run serve    # http://localhost:8080
-npm run icons    # write the PNG icons again after a change in scripts/make-icons.mjs
+npm run icons    # write the PNG icons again after a change in icons/source.png or scripts/make-icons.mjs
 ```
 
 A change of behaviour changes its rule in `docs/spec/` in the same commit. The `pre-commit` hook

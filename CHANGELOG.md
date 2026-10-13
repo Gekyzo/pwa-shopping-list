@@ -8,7 +8,9 @@ A change that is not deployed goes under `Unreleased`. After the push that deplo
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The icon of the app is a bag of vegetables. It replaces the white check mark on green.
 
 ## 1.0.7 - 2026-10-13
 
