@@ -126,6 +126,20 @@
       </div>
     </div>
 
+    <div id="shops" class="sheet-layer" hidden>
+      <div id="shops-veil" class="veil"></div>
+      <form id="shops-form" class="sheet" role="dialog" autocomplete="off">
+        <div class="grab"></div>
+        <h2 id="shops-title"></h2>
+        <div id="shops-chips" class="chips"></div>
+        <p id="shops-empty" class="hint" data-i18n="shops.empty" hidden></p>
+        <div class="add-row">
+          <input id="shops-name" type="text" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
+          <button class="primary" type="submit" data-i18n="shops.add"></button>
+        </div>
+      </form>
+    </div>
+
     <input id="import-file" type="file" accept="application/json,.json" hidden>
 
     <script type="importmap">

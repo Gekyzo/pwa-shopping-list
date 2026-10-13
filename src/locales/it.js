@@ -28,6 +28,7 @@ export default {
   'row.again': 'Compra di nuovo la prossima volta: {name}',
   'row.boughtToday': 'comprato oggi',
   'row.removeFrom': 'Togli da {list}: {name}',
+  'row.shops': 'Negozi di {name}',
   'group.others': 'Altri',
 
   'empty.active': 'La lista è vuota. Tocca + per aggiungere un articolo.',
@@ -82,6 +83,10 @@ export default {
   'arrange.sortBy': 'Ordina per',
   'arrange.name': 'Nome',
   'arrange.custom': 'Personalizzato',
+
+  'shops.add': 'Aggiungi',
+  'shops.placeholder': 'Nuovo negozio',
+  'shops.empty': 'Scrivi il primo negozio.',
 
   'settings.trip': 'Spesa',
   'settings.back': { one: '{count} torna', other: '{count} tornano' },

@@ -1,5 +1,6 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
+import * as shops from '#shops';
 import { settle } from '#swipe';
 import { direction, slideTo } from '#sections';
 import { dropIndex, moveTo, shifts } from '#reorder';
@@ -63,6 +64,8 @@ const ui = {
   sheetOpen: false,
   // The sheet of the header button, with the group and the order of the list.
   arrangeOpen: false,
+  // The item whose shop sheet is open, or null.
+  shopsId: null,
   target: 'active',
   boughtOpen: false,
   openRecipeId: null,
@@ -191,6 +194,7 @@ const ICONS = {
   calendar: 'M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 10h18M8 3v4M16 3v4',
   pencil: 'M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z',
   repeat: 'M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3',
+  shop: 'M3 9l1.5-5h15L21 9M3 9h18M4 9v11h16V9M9 20v-6h6v6',
   trash: 'M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6',
 };
 // The cart with a plus in its basket and a calendar with a cross.
@@ -210,6 +214,26 @@ const startRename = (entry) => {
 };
 
 const renameAction = (item) => iconButton(ICONS.pencil, t('row.rename', { name: item.name }), () => startRename(item));
+
+const openShops = (item) => {
+  Object.assign(ui, { shopsId: item.id, openId: null, editingId: null });
+  $('shops-name').value = '';
+  render();
+};
+
+const closeShops = () => {
+  ui.shopsId = null;
+  render();
+};
+
+const shopsAction = (item) => iconButton(ICONS.shop, t('row.shops', { name: item.name }), () => openShops(item));
+
+// The name of a row, with the shops of the item below it.
+const nameParts = (item) => {
+  const parts = [el('span', { textContent: item.name })];
+  if (item.shops.length) parts.push(el('small', { textContent: item.shops.join(' · ') }));
+  return parts;
+};
 
 // The recurrent mark of a row. It shows on each item and a tap changes it.
 const recurrentToggle = (item) => {
@@ -331,7 +355,7 @@ const activeRow = (item, groupId) => {
   checkbox.setAttribute('aria-label', t('row.bought', { name: item.name }));
   const name = isEditing(item.id, groupId)
     ? renameInput(item)
-    : el('button', { type: 'button', className: 'name', textContent: item.name, tabIndex: -1, onclick: toggle });
+    : el('button', { type: 'button', className: 'name', tabIndex: -1, onclick: toggle }, nameParts(item));
   const row = [checkbox, name];
   if (item.bought && !item.recurrent) {
     const again = el('button', {
@@ -345,21 +369,21 @@ const activeRow = (item, groupId) => {
     row.push(again);
   }
   row.push(recurrentToggle(item));
-  return { row, start: [renameAction(item)], end: [moveAction(item), deleteAction(item)] };
+  return { row, start: [renameAction(item), shopsAction(item)], end: [moveAction(item), deleteAction(item)] };
 };
 
 const nextRow = (item) => {
   const pending = item.list === 'next';
   const name =
-    ui.editingId === item.id ? renameInput(item) : el('span', { className: 'name', textContent: item.name });
+    ui.editingId === item.id ? renameInput(item) : el('span', { className: 'name' }, nameParts(item));
   const row = [name];
   if (!pending) row.push(el('span', { className: 'pill', textContent: t('row.boughtToday') }));
   row.push(recurrentToggle(item));
-  if (pending) return { row, start: [renameAction(item)], end: [moveAction(item), deleteAction(item)] };
+  if (pending) return { row, start: [renameAction(item), shopsAction(item)], end: [moveAction(item), deleteAction(item)] };
   const params = { list: 'next', name: item.name };
   const remove = iconButton(ICONS.calendarOff, say('row.removeFrom', params), () =>
     apply(store.removeFromNext(state, item.id), { undoText: say('toast.removedFrom', params) }));
-  return { row, start: [renameAction(item)], end: [remove] };
+  return { row, start: [renameAction(item), shopsAction(item)], end: [remove] };
 };
 
 const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
@@ -662,6 +686,26 @@ const renderArrange = () => {
   });
 };
 
+// The shop sheet of one item: each shop in use is a chip, pressed when the item has the shop.
+const renderShops = () => {
+  const item = state.items.find((entry) => entry.id === ui.shopsId);
+  $('shops').hidden = !item;
+  if (!item) return;
+  const title = t('row.shops', { name: item.name });
+  $('shops-title').textContent = title;
+  $('shops-form').setAttribute('aria-label', title);
+  const own = new Set(item.shops.map((shop) => shop.toLowerCase()));
+  const chips = shops.shopNames(state).map((shop) => {
+    const has = own.has(shop.toLowerCase());
+    const change = has ? shops.removeItemShop : shops.addItemShop;
+    const chip = el('button', { type: 'button', textContent: shop, onclick: () => apply(change(state, item.id, shop)) });
+    chip.setAttribute('aria-pressed', String(has));
+    return chip;
+  });
+  $('shops-chips').replaceChildren(...chips);
+  $('shops-empty').hidden = chips.length > 0;
+};
+
 // Recipes
 
 const sendText = ({ added, already }) => {
@@ -912,6 +956,8 @@ const refreshShell = () =>
 const render = () => {
   // A render builds new rows, so a lifted row loses its pointer and gets no release.
   endReorder(false);
+  // The item of the shop sheet can go while the sheet is open: an undo, or an import.
+  if (!state.items.some((item) => item.id === ui.shopsId)) ui.shopsId = null;
   const summary = store.tripSummary(state);
   const next = store.nextItems(state);
   const header = headerOf(summary, next);
@@ -929,7 +975,7 @@ const render = () => {
   const outcome = [t('settings.back', { count: summary.back }), t('settings.gone', { count: summary.gone })];
   $('finish-setting-text').textContent = outcome.join(' · ');
 
-  $('fab').hidden = ui.view === 'settings' || ui.sheetOpen || ui.arrangeOpen;
+  $('fab').hidden = ui.view === 'settings' || ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
   document.querySelectorAll('.bnav button').forEach((button) => {
@@ -945,6 +991,7 @@ const render = () => {
   ui.settleFrom = null;
   renderSheet();
   renderArrange();
+  renderShops();
 };
 
 // Writes the fixed text of the page, then the text that a render builds.
@@ -1111,7 +1158,7 @@ document.querySelectorAll('.bnav button').forEach((button) => {
 let sectionSlide = null;
 document.addEventListener('pointerdown', (event) => {
   sectionSlide = null;
-  if (!event.isPrimary || event.button !== 0 || reorder || ui.sheetOpen || ui.arrangeOpen) return;
+  if (!event.isPrimary || event.button !== 0 || reorder || ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null) return;
   if (!event.target.closest('.head, main') || event.target.closest('.swipe, input, textarea')) return;
   sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
 });
@@ -1186,6 +1233,12 @@ $('arrange-veil').addEventListener('click', () => {
   ui.arrangeOpen = false;
   render();
 });
+$('shops-veil').addEventListener('click', closeShops);
+// The sheet stays open after a new shop, so that an item gets two shops in one visit.
+$('shops-form').addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (apply(shops.addItemShop(state, ui.shopsId, $('shops-name').value))) $('shops-name').value = '';
+});
 // The sheet stays open after a choice, so that the group and the order change in one visit.
 document.querySelectorAll('#arrange-group button').forEach((button) => {
   button.addEventListener('click', () => {
@@ -1240,6 +1293,7 @@ document.addEventListener('keydown', (event) => {
     ui.arrangeOpen = false;
     render();
   }
+  if (ui.shopsId !== null) closeShops();
 });
 
 $('finish-button').addEventListener('click', () => finishTrip());
