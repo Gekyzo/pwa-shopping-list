@@ -8,6 +8,7 @@ export default {
   'header.today': 'Courses du jour',
   'header.next': 'Prochaines courses',
   'header.settingsSubtitle': 'Grocely',
+  'app.title': 'Grocely - Liste de courses',
   'header.empty': 'La liste est vide',
   'header.allBought': 'Tout est acheté',
   'header.left': { one: 'Il reste {count} article', other: 'Il reste {count} articles' },
