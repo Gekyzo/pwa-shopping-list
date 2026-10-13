@@ -47,6 +47,7 @@ export default {
     other: '{count} articoli tornano nella prossima spesa.',
   },
   'finish.gone': { one: '{count} viene eliminato.', other: '{count} vengono eliminati.' },
+  'trip.menu': 'Opzioni della spesa',
 
   'recipes.search': 'Cerca ricetta o prodotto',
   'search.label': 'Cerca nella lista',
@@ -93,7 +94,6 @@ export default {
   'shops.placeholder': 'Nuovo negozio',
   'shops.empty': 'Scrivi il primo negozio.',
 
-  'settings.trip': 'Spesa',
   'settings.back': { one: '{count} torna', other: '{count} tornano' },
   'settings.gone': { one: '{count} va via', other: '{count} vanno via' },
   'settings.backup': 'Copia di sicurezza',

@@ -4,8 +4,8 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/swipe.js` and `src/secti
 
 ## Layout
 
-From top to bottom: the header (ring, title, subtitle, search button, arrange button), the content
-of the section, the `+` button above the bottom bar, and the bottom bar. The message shows below the top
+From top to bottom: the header (ring, title, subtitle, search button, arrange button, trip
+button), the content of the section, the `+` button above the bottom bar, and the bottom bar. The message shows below the top
 edge. A sheet comes up from the bottom, over a veil.
 
 ## Sections
@@ -21,10 +21,10 @@ edge. A sheet comes up from the bottom, over a veil.
   text field. It does nothing while a sheet is open or a row is lifted.
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has four groups: **Compra** (**Terminar compra**), **Copia de seguridad**
-  (**Exportar copia**, **Importar copia**), **Idioma** and **Versión**. Each of the two buttons of
-  the backup has an icon before its text: an arrow that goes up out of a tray for the export, an
-  arrow that goes down into a tray for the import.
+- **NAV-6** `Ajustes` has three groups: **Copia de seguridad** (**Exportar copia**, **Importar
+  copia**), **Idioma** and **Versión**. Each of the two buttons of the backup has an icon before
+  its text: an arrow that goes up out of a tray for the export, an arrow that goes down into a
+  tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
   `No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.` or `No hay
   recetas. Toca + para crear una.`
@@ -87,6 +87,10 @@ edge. A sheet comes up from the bottom, over a veil.
 
 - **NAV-8** There are three sheets: add, arrange and shops. One is open at a time. A tap on the
   veil or `Escape` closes it. The `+` button does not show while a sheet is open.
+- **NAV-9** The trip button of the header has three dots. It shows in `Actual` when TRIP-1 holds.
+  A tap opens the trip menu below it, and a second tap closes the menu. The menu has one entry,
+  **Terminar compra**, with `N vuelven · N se van` below its name.
+- **NAV-10** A tap out of the trip menu or `Escape` closes it. That tap still does its own work.
 
 ## Access and display
 

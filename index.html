@@ -23,6 +23,12 @@
       <button id="arrange-button" class="tool" type="button" data-i18n-attr="aria-label:arrange.label" aria-haspopup="dialog" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
       </button>
+      <button id="trip-button" class="tool" type="button" data-i18n-attr="aria-label:trip.menu" aria-haspopup="menu" aria-controls="trip-menu" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      </button>
+      <div id="trip-menu" class="menu" role="menu" hidden>
+        <button id="finish-menu" type="button" role="menuitem"><span data-i18n="finish.button"></span><small id="finish-menu-text"></small></button>
+      </div>
     </header>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden>
@@ -49,10 +55,6 @@
       </section>
 
       <section id="settings" class="settings" hidden>
-        <h2 data-i18n="settings.trip"></h2>
-        <div class="group">
-          <button id="finish-setting" type="button"><span data-i18n="finish.button"></span><small id="finish-setting-text"></small></button>
-        </div>
         <h2 data-i18n="settings.backup"></h2>
         <div class="group">
           <button id="export" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4M12 15V3M7 8l5-5 5 5"/></svg><span data-i18n="settings.export"></span></button>

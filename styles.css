@@ -92,6 +92,7 @@ button:disabled {
   align-items: center;
   gap: 12px;
   padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
+  position: relative;
   border-bottom: 1px solid var(--line);
   touch-action: pan-y;
 }
@@ -127,9 +128,14 @@ button:disabled {
   flex: none;
   display: grid;
   place-items: center;
-  width: 44px;
+  width: 40px;
   background: var(--surface);
   color: var(--muted);
+}
+
+/* The tools stand closer to each other than to the title, so that three leave room for it. */
+.tool + .tool {
+  margin-left: -8px;
 }
 
 #search-button[aria-expanded="true"] {
@@ -144,6 +150,38 @@ button:disabled {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+/* The menu of the trip button, below the right end of the header. */
+.menu {
+  position: absolute;
+  top: calc(100% - 4px);
+  right: 12px;
+  z-index: 4;
+  min-width: 220px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  overflow: hidden;
+}
+
+.menu button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 16px;
+  border-radius: 0;
+  text-align: left;
+}
+
+.menu small {
+  color: var(--muted);
+  font-size: 0.8rem;
 }
 
 .head h1 {

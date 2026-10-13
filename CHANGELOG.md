@@ -14,6 +14,8 @@ no change for the user has no entry.
 - The name of the app is Grocely. It replaces `Lista de la compra` and `Compra`.
 - **Exportar copia** and **Importar copia** have an icon in `Ajustes`.
 - The icon of the app has a new drawing of the bag of vegetables, with flat colours.
+- **Terminar compra** is in the menu of a new button with three dots, in the header of `Actual`.
+  `Ajustes` does not have the group **Compra**.
 
 ## 1.0.8 - 2026-10-13
 

@@ -47,6 +47,7 @@ export default {
     other: '{count} articles tornen a la pròxima compra.',
   },
   'finish.gone': { one: '{count} s’elimina.', other: '{count} s’eliminen.' },
+  'trip.menu': 'Opcions de la compra',
 
   'recipes.search': 'Cerca recepta o producte',
   'search.label': 'Cerca a la llista',
@@ -93,7 +94,6 @@ export default {
   'shops.placeholder': 'Botiga nova',
   'shops.empty': 'Escriu la primera botiga.',
 
-  'settings.trip': 'Compra',
   'settings.back': { one: '{count} torna', other: '{count} tornen' },
   'settings.gone': { one: '{count} se’n va', other: '{count} se’n van' },
   'settings.backup': 'Còpia de seguretat',
