@@ -144,6 +144,23 @@ export const fold = (text) =>
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '');
 
+// True when the name or one of the shops of the item contains the query. Each item for no query.
+export const matchesItem = (item, query) => {
+  const key = fold(query);
+  return !key || [item.name, ...item.shops].some((text) => fold(text).includes(key));
+};
+
+// A list by group with only the items that match the query: a group with no item left goes
+// away, and `total` stays the count of the full group. The same view for no query.
+export const filterGroups = (view, query) => {
+  if (!fold(query)) return view;
+  const matches = (item) => matchesItem(item, query);
+  const groups = view.groups
+    .map((group) => ({ ...group, items: group.items.filter(matches) }))
+    .filter((group) => group.items.length > 0);
+  return { groups, rest: view.rest.filter(matches) };
+};
+
 // The item that a new name would duplicate.
 export const findByName = (state, rawName) => {
   const key = String(rawName ?? '').trim().toLowerCase();
