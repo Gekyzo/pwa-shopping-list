@@ -628,6 +628,52 @@ button.pill {
   box-shadow: 0 6px 14px rgb(0 0 0 / 0.28);
 }
 
+/* The microphone sits above the add button. */
+.fab.mic {
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 84px);
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.fab.mic[hidden] {
+  display: none;
+}
+
+.fab.mic svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fab.mic[data-mode='listening'] {
+  background: var(--danger);
+  color: var(--surface);
+  animation: listening 1.2s ease-in-out infinite;
+}
+
+.fab.mic[data-mode='speaking'] {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+@keyframes listening {
+  50% {
+    box-shadow: 0 0 0 10px rgb(179 38 30 / 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab.mic[data-mode='listening'] {
+    animation: none;
+  }
+}
+
 .bnav {
   display: flex;
   flex: none;

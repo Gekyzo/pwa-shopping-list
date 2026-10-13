@@ -54,6 +54,43 @@ Slide an item row to see its actions. A slide to the right shows **Renombrar**. 
 row closes it. A recipe row has a `⋯` button for its actions. `Deshacer` shows for 5 seconds after a delete, a move, **Terminar compra** and
 **A la lista**.
 
+## Voice
+
+The microphone button, above the `+` button, starts a conversation in Spanish. Tap it, say one
+command, and the app does it and says the answer. A second tap stops the conversation.
+
+| Say | Result |
+|---|---|
+| «Añade leche», «Apunta leche, pan y huevos» | Adds the items to **Actual**. An item that exists already is used again |
+| «Añade café para la próxima» | Adds the item to **Próxima** |
+| «¿Qué me falta por comprar?», «Lee la lista» | Says the items of **Actual** that are not ticked |
+| «¿Qué hay en la próxima?» | Says the items of **Próxima** |
+| «Marca el café como comprado», «Ya tengo café» | Ticks the item |
+| «Desmarca el café» | Removes the tick |
+| «Borra el pan» | Asks «¿Borro «Pan»?», then deletes on «sí» |
+| «Termina la compra» | Says how many items go and come back, then ends the trip on «sí» |
+| «Ayuda» | Says examples of commands |
+
+- A part of a name is sufficient: «marca el café» ticks **Café molido**. When two items match, the
+  app asks «¿Cuál: Café molido o Café en grano?». Answer with the name, or with «el primero».
+- «No» and «cancela» end a question without a change.
+- `Deshacer` shows after each change, as for a change by touch.
+- The word « y » and the comma separate items. Thus «añade macarrones y queso» adds two items.
+
+The voice uses the Web Speech API of the browser. Chrome sends the audio to a server of Google to
+recognise it, so the recognition needs a connection. Without one, the app says
+`El reconocimiento de voz necesita conexión.` The rest of the app works as before. The button does
+not show in a browser that has no speech recognition.
+
+The app does not answer to "Ok Google" or to Gemini: a web app cannot register a command with
+them. The nearest thing is the shortcut **Hablar** of the installed app: hold the icon of the app
+and tap **Hablar**, or drag it to the home screen to get a second icon. It opens the app with
+`?voice` in the URL, and the app listens at once. An automation app can open the same URL:
+
+```
+https://gekyzo.github.io/shopping-list/?voice
+```
+
 ## Reminder at the shop
 
 A PWA gets a position only while it is open, so it cannot detect an arrival. An Android automation
@@ -96,6 +133,8 @@ npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 | `src/version.js` | Pure version rules: validation, comparison and the next version |
 | `version.json` | The version of the deploy, `{ version, date }`. Written by the bump script |
 | `scripts/bump-version.mjs`, `.githooks/pre-push` | The version bump before a push |
+| `src/voice-commands.js` | Pure rules of the spoken commands: the text of a command to a new state and a reply |
+| `src/voice.js` | Speech recognition and speech synthesis of the browser. No DOM |
 | `src/app.js` | Render and event handling |
 | `sw.js` | Service worker: precache of the app shell, then stale-while-revalidate |
 | `manifest.webmanifest`, `icons/` | Installation data |
