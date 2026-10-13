@@ -15,9 +15,9 @@ The user interface is in Spanish. A bottom menu has four screens.
   - A ticked recurrent item shows in **Próxima** automatically.
   - A ticked one-time item goes to **Próxima** only when you tap `+ Próxima`.
   - You can also add items to **Próxima** directly. Such an item is recurrent by default.
-- **Ordenar por**, at the top of **Actual** and of **Próxima**, has **Añadido** (the order in which
-  you added the items) and **Nombre** (alphabetical). One choice applies to the two lists. It shows
-  when the list has two items or more.
+- The button at the right of the header of **Actual** and of **Próxima** opens a sheet with
+  **Ordenar por**: **Añadido** (the order in which you added the items) or **Nombre** (alphabetical).
+  One choice applies to the two lists. It shows when the list has two items or more.
 - **Recetas** holds recipes. A recipe is a name and a list of products.
   - The field **Buscar receta o producto** filters the recipes while you type. It finds a recipe by
     its name or by one of its products, without case or accent distinction.
@@ -29,8 +29,8 @@ The user interface is in Spanish. A bottom menu has four screens.
   - **Actual** then shows its items in groups, one for each recipe sent in this trip, and **Otros**
     for the rest. A recipe that was not sent also makes a group while all its products are in
     **Actual**. An item of two recipes shows in the two groups; one tick takes it out of both.
-    **Terminar compra** ends the groups of the sent recipes. **Agrupar por → Nada**, at the top of
-    the list, shows one flat list.
+    **Terminar compra** ends the groups of the sent recipes. **Agrupar por → Nada**, in the sheet
+    of the header button, shows one flat list.
   - A recipe and an item are independent. A rename of one does not change the other.
 - **Ajustes** has **Terminar compra**, **Exportar copia** and **Importar copia**. The backup holds
   the items and the recipes.

@@ -118,7 +118,27 @@ button:disabled {
 }
 
 .head-text {
+  flex: 1;
   min-width: 0;
+}
+
+.tool {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.tool svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .head h1 {
@@ -157,6 +177,19 @@ main {
   animation: flash 1.2s ease-out;
 }
 
+/* A ticked row closes before it goes to the bought section, and a group head before the list
+   becomes flat. `collapse` in app.js sets the height. */
+.items > .leaving {
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transition: height 200ms ease-out, opacity 200ms ease-out;
+}
+
+.item.gone {
+  display: none;
+}
+
 @keyframes flash {
   from {
     background: var(--accent-soft);
@@ -177,35 +210,6 @@ main {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-
-.groupby {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px 6px 16px;
-  border-bottom: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.groupby div {
-  display: flex;
-  gap: 6px;
-  margin-left: auto;
-}
-
-.groupby button {
-  min-height: 36px;
-  padding: 0 14px;
-  background: var(--surface);
-  font-size: 0.85rem;
-}
-
-.groupby button[aria-pressed="true"] {
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-weight: 700;
 }
 
 .group-head {
@@ -691,12 +695,37 @@ button.pill {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  transition: display 220ms allow-discrete;
+}
+
+/* A sheet that leaves stays on the screen for the transition, and takes no tap. */
+.sheet-layer[hidden] {
+  pointer-events: none;
 }
 
 .veil {
   position: absolute;
   inset: 0;
   background: rgb(0 0 0 / 0.45);
+  transition: opacity 220ms ease-out;
+}
+
+.sheet-layer[hidden] .veil {
+  opacity: 0;
+}
+
+.sheet-layer[hidden] .sheet {
+  transform: translateY(100%);
+}
+
+@starting-style {
+  .veil {
+    opacity: 0;
+  }
+
+  .sheet {
+    transform: translateY(100%);
+  }
 }
 
 .sheet {
@@ -706,6 +735,7 @@ button.pill {
   padding: 10px 16px calc(16px + env(safe-area-inset-bottom));
   border-radius: 22px 22px 0 0;
   background: var(--surface);
+  transition: transform 220ms ease-out;
 }
 
 .grab {
@@ -746,6 +776,13 @@ button.pill {
   min-height: 40px;
   background: var(--bg);
   font-size: 0.9rem;
+}
+
+.sheet h2 {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .seg button[aria-pressed="true"] {
@@ -793,7 +830,8 @@ button.pill {
 
 .toast {
   position: fixed;
-  top: calc(8px + env(safe-area-inset-top));
+  /* Above the add button, in reach of the thumb. */
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 80px);
   left: 12px;
   right: 12px;
   z-index: 20;
@@ -806,6 +844,26 @@ button.pill {
   background: var(--toast-bg);
   color: var(--toast-text);
   box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+  transition: opacity 180ms ease-out, transform 180ms ease-out, display 180ms allow-discrete;
+}
+
+/* The toast leaves to this state, and enters from the same one. */
+.toast[hidden] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+@starting-style {
+  .toast {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* An open sheet has the bottom of the screen, so the toast goes to the top. */
+body:has(.sheet-layer:not([hidden])) .toast {
+  top: calc(8px + env(safe-area-inset-top));
+  bottom: auto;
 }
 
 .toast span {
@@ -816,4 +874,14 @@ button.pill {
   min-height: 40px;
   padding: 0 14px;
   font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast,
+  .sheet-layer,
+  .veil,
+  .sheet,
+  .items > li {
+    transition: none;
+  }
 }

@@ -17,6 +17,9 @@
         <h1 id="title"></h1>
         <p id="subtitle"></p>
       </div>
+      <button id="arrange-button" class="tool" type="button" aria-label="Agrupar y ordenar" aria-haspopup="dialog" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+      </button>
     </header>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden>
@@ -97,6 +100,27 @@
         </div>
         <ul id="suggestions" class="suggestions" aria-label="Artículos que ya existen"></ul>
       </form>
+    </div>
+
+    <div id="arrange" class="sheet-layer" hidden>
+      <div id="arrange-veil" class="veil"></div>
+      <div class="sheet" role="dialog" aria-label="Agrupar y ordenar">
+        <div class="grab"></div>
+        <div id="arrange-group">
+          <h2>Agrupar por</h2>
+          <div class="seg">
+            <button type="button" data-grouped="true">Recetas</button>
+            <button type="button" data-grouped="false">Nada</button>
+          </div>
+        </div>
+        <div id="arrange-sort">
+          <h2>Ordenar por</h2>
+          <div class="seg">
+            <button type="button" data-sort="added">Añadido</button>
+            <button type="button" data-sort="name">Nombre</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <input id="import-file" type="file" accept="application/json,.json" hidden>
