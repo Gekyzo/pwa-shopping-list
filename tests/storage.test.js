@@ -42,7 +42,7 @@ const sampleV1 = () => ({
   ],
 });
 
-const sample = () => ({
+const sampleV2 = () => ({
   ...sampleV1(),
   version: 2,
   recipes: [{ id: 'r1', name: 'Omelette', products: ['Eggs', 'Potatoes'], url: 'https://example.com/omelette' }],
@@ -50,6 +50,15 @@ const sample = () => ({
   grouped: true,
   sort: 'custom',
 });
+
+const sample = () => {
+  const { grouped, items, ...rest } = sampleV2();
+  const [bread, milk] = items;
+  return { ...rest, version: 3, items: [{ ...bread, shops: ['Lidl', 'Market'] }, { ...milk, shops: [] }], group: 'shop' };
+};
+
+// The items of an old state, as a version 3 state has them.
+const withNoShops = (items) => items.map((item) => ({ ...item, shops: [] }));
 
 test('save then load returns the same state', () => {
   const storage = fakeStorage();
@@ -88,7 +97,7 @@ test('importJson rejects text that is not JSON', () => {
 });
 
 test('importJson rejects an unknown version', () => {
-  const text = JSON.stringify({ ...sample(), version: 3 });
+  const text = JSON.stringify({ ...sample(), version: 4 });
   assert.deepEqual(importJson(text), { error: { key: 'error.notBackup' } });
 });
 
@@ -120,31 +129,73 @@ test('importJson drops unknown fields and repairs the bought and again rules', (
   };
   assert.deepEqual(importJson(JSON.stringify(data)), {
     state: {
-      version: 2,
+      version: 3,
       items: [
-        { id: 'a', name: 'Milk', recurrent: true, list: 'next', bought: false, again: false },
-        { id: 'b', name: 'Soap', recurrent: false, list: 'active', bought: false, again: false },
+        { id: 'a', name: 'Milk', recurrent: true, list: 'next', bought: false, again: false, shops: [] },
+        { id: 'b', name: 'Soap', recurrent: false, list: 'active', bought: false, again: false, shops: [] },
       ],
       recipes: [],
       sent: [],
-      grouped: true,
+      group: 'recipe',
       sort: 'custom',
     },
   });
 });
 
-test('emptyState is a version 2 state with no recipes and no sent recipe', () => {
-  assert.deepEqual(emptyState(), { version: 2, items: [], recipes: [], sent: [], grouped: true, sort: 'custom' });
+const migratedV1 = () => ({ version: 3, items: withNoShops(sampleV1().items), recipes: [], sent: [], group: 'recipe', sort: 'custom' });
+
+test('emptyState is a version 3 state with no items, no recipes and the recipe grouping', () => {
+  assert.deepEqual(emptyState(), { version: 3, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom' });
 });
 
-test('load migrates a version 1 state and adds an empty recipe list', () => {
+test('load migrates a version 1 state', () => {
   const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(sampleV1()) });
-  assert.deepEqual(load(storage), { ...sampleV1(), version: 2, recipes: [], sent: [], grouped: true, sort: 'custom' });
+  assert.deepEqual(load(storage), migratedV1());
   assert.equal(storage.getItem(CORRUPT_KEY), null);
 });
 
 test('importJson migrates a version 1 backup', () => {
-  assert.deepEqual(importJson(JSON.stringify(sampleV1())), { state: { ...sampleV1(), version: 2, recipes: [], sent: [], grouped: true, sort: 'custom' } });
+  assert.deepEqual(importJson(JSON.stringify(sampleV1())), { state: migratedV1() });
+});
+
+test('load migrates a version 2 state', () => {
+  const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(sampleV2()) });
+  const { grouped, ...rest } = sampleV2();
+  assert.deepEqual(load(storage), { ...rest, version: 3, items: withNoShops(sampleV2().items), group: 'recipe' });
+  assert.equal(storage.getItem(CORRUPT_KEY), null);
+});
+
+test('importJson reads the grouping of a version 2 backup', () => {
+  const stateOf = (grouped) => importJson(JSON.stringify({ ...sampleV2(), grouped })).state;
+  assert.equal(stateOf(false).group, 'none');
+  [true, undefined, null, 'no', 0].forEach((value) => assert.equal(stateOf(value).group, 'recipe', String(value)));
+  assert.equal('grouped' in stateOf(false), false);
+});
+
+test('importJson keeps a known group and turns any other value into the recipe grouping', () => {
+  const groupOf = (group) => importJson(JSON.stringify({ ...sample(), group })).state.group;
+  ['recipe', 'shop', 'none'].forEach((group) => assert.equal(groupOf(group), group));
+  [undefined, null, 'aisle', 1, true].forEach((value) => assert.equal(groupOf(value), 'recipe', String(value)));
+});
+
+test('a known group wins over the old grouped field', () => {
+  assert.equal(importJson(JSON.stringify({ ...sample(), group: 'shop', grouped: false })).state.group, 'shop');
+});
+
+test('importJson repairs the shops of an item', () => {
+  const shopsOf = (shops) => {
+    const [bread, milk] = sample().items;
+    return importJson(JSON.stringify({ ...sample(), items: [{ ...bread, shops }, milk] })).state.items[0].shops;
+  };
+  [undefined, null, 'Lidl', 7, {}].forEach((value) => assert.deepEqual(shopsOf(value), [], String(value)));
+  assert.deepEqual(shopsOf([' Lidl ', '', '  ', 7, null, 'lidl', 'Market']), ['Lidl', 'Market']);
+});
+
+test('importJson gives each shop the spelling of its first use', () => {
+  const [bread, milk] = sample().items;
+  const data = { ...sample(), items: [{ ...bread, shops: ['Lidl'] }, { ...milk, shops: ['market', 'LIDL'] }] };
+  const { items } = importJson(JSON.stringify(data)).state;
+  assert.deepEqual(items.map((item) => item.shops), [['Lidl'], ['market', 'Lidl']]);
 });
 
 test('importJson trims recipe names and products and drops unknown fields', () => {
@@ -199,12 +250,6 @@ test('importJson keeps a web link of a recipe and drops any other value', () => 
   [undefined, 7, '', 'javascript:alert(1)', 'example.com', 'ftp://example.com'].forEach((url) => {
     assert.equal(urlOf(url), '', String(url));
   });
-});
-
-test('importJson keeps a grouping that is off and turns any other value on', () => {
-  const groupedOf = (grouped) => importJson(JSON.stringify({ ...sample(), grouped })).state.grouped;
-  assert.equal(groupedOf(false), false);
-  [true, undefined, null, 'no', 0].forEach((value) => assert.equal(groupedOf(value), true, String(value)));
 });
 
 test('importJson keeps the name sort and turns any other value into custom', () => {

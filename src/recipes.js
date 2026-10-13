@@ -126,5 +126,3 @@ export const searchRecipes = (state, query) => {
   if (!key) return state.recipes;
   return state.recipes.filter((recipe) => [recipe.name, ...recipe.products].some((text) => fold(text).includes(key)));
 };
-
-export const setGrouped = (state, grouped) => ({ state: { ...state, grouped: Boolean(grouped) } });

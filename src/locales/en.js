@@ -134,6 +134,7 @@ export default {
   'error.notInNext': 'The item is not in {list}.',
   'error.nothingToStart': 'Nothing to start: tick an item or add one to {list}.',
   'error.unknownSort': 'Unknown order.',
+  'error.unknownGroup': 'Unknown grouping.',
   'error.invalidOrder': 'Invalid order.',
   'error.recipeNotFound': 'Recipe not found.',
   'error.duplicateRecipe': 'The recipe “{name}” already exists.',

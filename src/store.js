@@ -3,9 +3,12 @@ const LISTS = ['active', 'next'];
 // `custom` is the order of `items`: the insertion order, changed by the moves of the user.
 export const SORTS = ['custom', 'name'];
 
-// `sent` holds the ids of the recipes sent to Active in this trip. `grouped` is the
-// choice of the user to show Active by those recipes, and `sort` the order of the two lists.
-export const emptyState = () => ({ version: 2, items: [], recipes: [], sent: [], grouped: true, sort: 'custom' });
+// The groups of a list: by the recipes sent to Active, by the shops of each item, or none.
+export const GROUPS = ['recipe', 'shop', 'none'];
+
+// `sent` holds the ids of the recipes sent to Active in this trip. `group` is the choice of the
+// user to show a list in groups, and `sort` the order of the two lists.
+export const emptyState = () => ({ version: 3, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom' });
 
 // An error is a message: the key of its text, with the parameters of the text. A `list`
 // parameter holds a list id. The screen turns the message into text.
@@ -31,7 +34,7 @@ export const addItem = (state, rawName, list, newId = () => crypto.randomUUID())
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name);
   if (error) return reject(state, ...error);
-  const item = { id: newId(), name, recurrent: list === 'next', list, bought: false, again: false };
+  const item = { id: newId(), name, recurrent: list === 'next', list, bought: false, again: false, shops: [] };
   return { state: { ...state, items: [...state.items, item] } };
 };
 
@@ -96,6 +99,9 @@ export const startNewShopping = (state) => {
 export const setSort = (state, sort) =>
   SORTS.includes(sort) ? { state: { ...state, sort } } : reject(state, 'error.unknownSort');
 
+export const setGroup = (state, group) =>
+  GROUPS.includes(group) ? { state: { ...state, group } } : reject(state, 'error.unknownGroup');
+
 // Gives the places that the items of `ids` have in `items` to the same items, in the order of
 // `ids`. Each other item keeps its place. The same order returns the same state object.
 // A move in the name order starts the custom order from the name order: the lists stay as the
@@ -111,7 +117,10 @@ export const reorderItems = (state, ids) => {
   return items.every((item, index) => item === state.items[index]) && base === state ? { state } : { state: { ...base, items } };
 };
 
-const byName = (a, b) => a.name.localeCompare(b.name, 'es', { sensitivity: 'base' });
+// The order of two names, with no case and no accent distinction.
+export const compareNames = (a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' });
+
+const byName = (a, b) => compareNames(a.name, b.name);
 
 // The items in the order that the user chose. The order of `state.items` is the insertion order.
 export const sortItems = (state, items) => (state.sort === 'name' ? [...items].sort(byName) : items);

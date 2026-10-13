@@ -134,6 +134,7 @@ export default {
   'error.notInNext': 'Der Artikel ist nicht in {list}.',
   'error.nothingToStart': 'Nichts zu beginnen: Markiere einen Artikel oder füge einen zu {list} hinzu.',
   'error.unknownSort': 'Unbekannte Reihenfolge.',
+  'error.unknownGroup': 'Unbekannte Gruppierung.',
   'error.invalidOrder': 'Ungültige Reihenfolge.',
   'error.recipeNotFound': 'Rezept nicht gefunden.',
   'error.duplicateRecipe': 'Das Rezept „{name}“ existiert schon.',
