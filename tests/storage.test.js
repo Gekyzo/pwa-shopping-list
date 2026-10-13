@@ -13,6 +13,10 @@ import {
   saveLanguage,
   loadHand,
   saveHand,
+  ONBOARDED_KEY,
+  loadOnboarded,
+  saveOnboarded,
+  hasStoredState,
 } from '#storage';
 import { emptyState } from '#store';
 
@@ -328,4 +332,52 @@ test('the hand is not part of the state', () => {
   saveHand(storage, 'left');
   assert.deepEqual(load(storage), emptyState());
   assert.equal(storage.getItem(STORAGE_KEY), null);
+});
+
+test('loadOnboarded is true when the flag is stored', () => {
+  assert.equal(loadOnboarded(fakeStorage({ [ONBOARDED_KEY]: '1' })), true);
+});
+
+test('loadOnboarded is false for no value and for another value', () => {
+  assert.equal(loadOnboarded(fakeStorage()), false);
+  assert.equal(loadOnboarded(fakeStorage({ [ONBOARDED_KEY]: '' })), false);
+  assert.equal(loadOnboarded(fakeStorage({ [ONBOARDED_KEY]: 'true' })), false);
+});
+
+test('loadOnboarded is true for a storage that throws', () => {
+  assert.equal(loadOnboarded(brokenStorage()), true);
+});
+
+test('saveOnboarded stores the flag', () => {
+  const storage = fakeStorage();
+  assert.equal(saveOnboarded(storage), true);
+  assert.equal(storage.getItem(ONBOARDED_KEY), '1');
+  assert.equal(loadOnboarded(storage), true);
+});
+
+test('saveOnboarded is false for a storage that throws', () => {
+  assert.equal(saveOnboarded(brokenStorage()), false);
+});
+
+test('hasStoredState is true for a stored state', () => {
+  const storage = fakeStorage();
+  save(storage, emptyState());
+  assert.equal(hasStoredState(storage), true);
+});
+
+test('hasStoredState is true for a stored text that is not a valid state', () => {
+  assert.equal(hasStoredState(fakeStorage({ [STORAGE_KEY]: 'not json' })), true);
+});
+
+test('hasStoredState is false for no stored state and for a storage that throws', () => {
+  assert.equal(hasStoredState(fakeStorage()), false);
+  assert.equal(hasStoredState(fakeStorage({ [ONBOARDED_KEY]: '1' })), false);
+  assert.equal(hasStoredState(brokenStorage()), false);
+});
+
+test('the flag of the walkthrough is not part of the stored state', () => {
+  const storage = fakeStorage();
+  saveOnboarded(storage);
+  assert.deepEqual(load(storage), emptyState());
+  assert.equal(exportJson(load(storage)).includes('onboarded'), false);
 });
