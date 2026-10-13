@@ -6,6 +6,7 @@ step and no dependencies. The data stays in the `localStorage` of the browser.
 
 - App: https://gekyzo.github.io/shopping-list/
 - Specification: [`docs/spec/`](docs/spec/README.md), with one identifier for each rule.
+- Changes by version: [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Install on Android
 
