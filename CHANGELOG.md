@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.9 - 2026-10-13
+
 ### Added
 
 - A walkthrough of four pages at the first start of a new install: the two lists, the trip, the
