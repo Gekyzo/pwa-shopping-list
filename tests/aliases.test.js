@@ -5,9 +5,9 @@ import { readFileSync, readdirSync } from 'node:fs';
 const root = new URL('../', import.meta.url);
 const read = (path) => readFileSync(new URL(path, root), 'utf8');
 
-const modules = readdirSync(new URL('src/', root))
+const modules = readdirSync(new URL('src/', root), { recursive: true })
   .filter((file) => file.endsWith('.js'))
-  .map((file) => file.slice(0, -'.js'.length));
+  .map((file) => file.slice(0, -'.js'.length).replaceAll('\\', '/'));
 
 const importMap = () => {
   const [, json] = read('index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/);
@@ -16,7 +16,7 @@ const importMap = () => {
 
 test('the import map of the page gives each module of src its alias', () => {
   const expected = Object.fromEntries(modules.map((name) => [`#${name}`, `./src/${name}.js`]));
-  assert.deepEqual(importMap(), expected);
+  assert.deepEqual(Object.entries(importMap()).sort(), Object.entries(expected).sort());
 });
 
 test('the import map comes before the module script of the page', () => {
