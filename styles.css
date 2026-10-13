@@ -134,7 +134,7 @@ button:disabled {
 }
 
 /* The tools stand closer to each other than to the title, so that three leave room for it. */
-.tool + .tool {
+.tool:not([hidden]) ~ .tool:not([hidden]) {
   margin-left: -8px;
 }
 
@@ -1018,3 +1018,39 @@ body:has(.sheet-layer:not([hidden])) .toast {
     animation: none;
   }
 }
+
+/* Left hand: the controls change side. Text stays aligned to the left, and a row slides as before. */
+
+[data-hand="left"] .head {
+  flex-direction: row-reverse;
+}
+
+[data-hand="left"] .tool:not([hidden]) ~ .tool:not([hidden]) {
+  margin-right: -8px;
+  margin-left: 0;
+}
+
+[data-hand="left"] .menu {
+  right: auto;
+  left: 12px;
+}
+
+[data-hand="left"] .row {
+  flex-direction: row-reverse;
+  padding: 0 8px 0 4px;
+}
+
+[data-hand="left"] .swipe .row {
+  padding-right: 8px;
+  padding-left: 12px;
+}
+
+[data-hand="left"] .row input[type="checkbox"] {
+  margin: 12px 8px 12px 4px;
+}
+
+[data-hand="left"] .fab {
+  right: auto;
+  left: 16px;
+}
+

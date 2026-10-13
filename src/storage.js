@@ -171,3 +171,26 @@ export const saveLanguage = (storage, lang) => {
     return false;
   }
 };
+
+// The hand that the user holds the phone with. It is a preference of the device, as the language is.
+export const HAND_KEY = 'shopping.hand';
+
+// The stored hand when it is `left`, else `right`.
+export const loadHand = (storage) => {
+  try {
+    return storage.getItem(HAND_KEY) === 'left' ? 'left' : 'right';
+  } catch {
+    return 'right';
+  }
+};
+
+// `right` is the hand of an app with no choice: it removes the key.
+export const saveHand = (storage, hand) => {
+  try {
+    if (hand === 'left') storage.setItem(HAND_KEY, 'left');
+    else storage.removeItem(HAND_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};

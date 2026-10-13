@@ -21,10 +21,10 @@ edge. A sheet comes up from the bottom, over a veil.
   text field. It does nothing while a sheet is open or a row is lifted.
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has three groups: **Copia de seguridad** (**Exportar copia**, **Importar
-  copia**), **Idioma** and **Versión**. Each of the two buttons of the backup has an icon before
-  its text: an arrow that goes up out of a tray for the export, an arrow that goes down into a
-  tray for the import.
+- **NAV-6** `Ajustes` has four groups: **Copia de seguridad** (**Exportar copia**, **Importar
+  copia**), **Idioma**, **Mano** and **Versión**. Each of the two buttons of the backup has an
+  icon before its text: an arrow that goes up out of a tray for the export, an arrow that goes
+  down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
   `No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.` or `No hay
   recetas. Toca + para crear una.`
@@ -92,6 +92,23 @@ edge. A sheet comes up from the bottom, over a veil.
   **Terminar compra**, with `N vuelven · N se van` below its name.
 - **NAV-10** A tap out of the trip menu or `Escape` closes it. That tap still does its own work.
 
+## Hand
+
+- **NAV-11** **Mano** of `Ajustes` has two values: `Derecha` and `Izquierda`. An app with no
+  choice uses `Derecha`.
+- **NAV-12** The choice is stored in `shopping.hand`. `Derecha` removes the key. It is a
+  preference of the device, not a part of the state: `Deshacer` and an import do not change it.
+- **NAV-13** With `Izquierda` the controls change side:
+
+  | Part | `Derecha` | `Izquierda` |
+  |---|---|---|
+  | `+` button | Bottom right | Bottom left |
+  | Header | Ring, text, buttons | Buttons, text, ring; the trip menu opens below the left end |
+  | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
+
+- **NAV-14** `Izquierda` does not change the alignment of text, the order of the bottom bar, the
+  sheets or the sides of a slide of a row (ROW-3).
+
 ## Access and display
 
 - **A11Y-1** Each icon button has an `aria-label` with the action and the name of its object, in
@@ -110,4 +127,4 @@ edge. A sheet comes up from the bottom, over a veil.
 ## Limits
 
 No move of a row with the keyboard, and no keyboard way to open a side menu of an item row. No
-setting for the hand of the user. No onboarding.
+onboarding.
