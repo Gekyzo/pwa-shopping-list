@@ -17,19 +17,19 @@
         <h1 id="title"></h1>
         <p id="subtitle"></p>
       </div>
-      <button id="arrange-button" class="tool" type="button" aria-label="Agrupar y ordenar" aria-haspopup="dialog" hidden>
+      <button id="arrange-button" class="tool" type="button" data-i18n-attr="aria-label:arrange.label" aria-haspopup="dialog" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
       </button>
     </header>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden>
       <span id="toast-text"></span>
-      <button id="toast-undo" type="button" hidden>Deshacer</button>
+      <button id="toast-undo" type="button" data-i18n="toast.undo" hidden></button>
     </div>
 
     <main>
       <div id="recipe-search" class="search" hidden>
-        <input id="recipe-query" type="search" maxlength="80" placeholder="Buscar receta o producto" aria-label="Buscar receta o producto" autocomplete="off" enterkeyhint="search">
+        <input id="recipe-query" type="search" maxlength="80" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search" autocomplete="off" enterkeyhint="search">
       </div>
 
       <ul id="items" class="items"></ul>
@@ -40,84 +40,83 @@
       </div>
 
       <section id="finish" class="banner" hidden>
-        <strong>¿Has terminado?</strong>
+        <strong data-i18n="finish.question"></strong>
         <p id="finish-text"></p>
-        <button id="finish-button" class="primary" type="button">Terminar compra</button>
+        <button id="finish-button" class="primary" type="button" data-i18n="finish.button"></button>
       </section>
 
       <section id="settings" class="settings" hidden>
-        <h2>Compra</h2>
+        <h2 data-i18n="settings.trip"></h2>
         <div class="group">
-          <button id="finish-setting" type="button"><span>Terminar compra</span><small id="finish-setting-text"></small></button>
+          <button id="finish-setting" type="button"><span data-i18n="finish.button"></span><small id="finish-setting-text"></small></button>
         </div>
-        <h2>Copia de seguridad</h2>
+        <h2 data-i18n="settings.backup"></h2>
         <div class="group">
-          <button id="export" type="button"><span>Exportar copia</span></button>
-          <button id="import" type="button"><span>Importar copia</span></button>
+          <button id="export" type="button"><span data-i18n="settings.export"></span></button>
+          <button id="import" type="button"><span data-i18n="settings.import"></span></button>
         </div>
-        <h2>Versión</h2>
+        <h2 data-i18n="settings.version"></h2>
         <div class="group">
           <p class="info"><span id="version"></span><small id="version-status" role="status"></small></p>
-          <button id="update" type="button" hidden><span>Actualizar</span></button>
+          <button id="update" type="button" hidden><span data-i18n="settings.update"></span></button>
         </div>
       </section>
     </main>
 
-    <button id="fab" class="fab" type="button" aria-label="Añadir artículo">+</button>
+    <button id="fab" class="fab" type="button">+</button>
 
-    <nav class="bnav" aria-label="Secciones">
+    <nav class="bnav" data-i18n-attr="aria-label:nav.label">
       <button type="button" data-view="active">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11L21 7H6"/></svg>
-        <span>Actual</span>
+        <span data-i18n="list.active"></span>
       </button>
       <button type="button" data-view="next">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-        <span>Próxima</span>
+        <span data-i18n="list.next"></span>
         <em id="next-count" class="badge-count"></em>
       </button>
       <button type="button" data-view="recipes">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h13a1 1 0 0 1 1 1v17H6a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1z"/><path d="M4 17h15M9 8h6"/></svg>
-        <span>Recetas</span>
+        <span data-i18n="nav.recipes"></span>
       </button>
       <button type="button" data-view="settings">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
-        <span>Ajustes</span>
+        <span data-i18n="nav.settings"></span>
       </button>
     </nav>
 
     <div id="sheet" class="sheet-layer" hidden>
       <div id="veil" class="veil"></div>
-      <form id="add" class="sheet" autocomplete="off" aria-label="Añadir artículo">
+      <form id="add" class="sheet" autocomplete="off">
         <div class="grab"></div>
         <div class="add-row">
-          <input id="add-name" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80"
-            placeholder="Añadir artículo a la lista" aria-label="Añadir artículo a la lista">
-          <button id="add-submit" class="primary" type="submit">Añadir</button>
+          <input id="add-name" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
+          <button id="add-submit" class="primary" type="submit"></button>
         </div>
         <div id="seg" class="seg">
-          <button type="button" data-target="active">Para hoy</button>
-          <button type="button" data-target="next">Para la próxima</button>
+          <button type="button" data-target="active" data-i18n="add.today"></button>
+          <button type="button" data-target="next" data-i18n="add.later"></button>
         </div>
-        <ul id="suggestions" class="suggestions" aria-label="Artículos que ya existen"></ul>
+        <ul id="suggestions" class="suggestions" data-i18n-attr="aria-label:add.existing"></ul>
       </form>
     </div>
 
     <div id="arrange" class="sheet-layer" hidden>
       <div id="arrange-veil" class="veil"></div>
-      <div class="sheet" role="dialog" aria-label="Agrupar y ordenar">
+      <div class="sheet" role="dialog" data-i18n-attr="aria-label:arrange.label">
         <div class="grab"></div>
         <div id="arrange-group">
-          <h2>Agrupar por</h2>
+          <h2 data-i18n="arrange.groupBy"></h2>
           <div class="seg">
-            <button type="button" data-grouped="true">Recetas</button>
-            <button type="button" data-grouped="false">Nada</button>
+            <button type="button" data-grouped="true" data-i18n="nav.recipes"></button>
+            <button type="button" data-grouped="false" data-i18n="arrange.none"></button>
           </div>
         </div>
         <div id="arrange-sort">
-          <h2>Ordenar por</h2>
+          <h2 data-i18n="arrange.sortBy"></h2>
           <div class="seg">
-            <button type="button" data-sort="name">Nombre</button>
-            <button type="button" data-sort="custom">Personalizado</button>
+            <button type="button" data-sort="name" data-i18n="arrange.name"></button>
+            <button type="button" data-sort="custom" data-i18n="arrange.custom"></button>
           </div>
         </div>
       </div>

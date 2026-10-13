@@ -5,6 +5,7 @@ import { direction, slideTo } from '#sections';
 import { dropIndex, moveTo, shifts } from '#reorder';
 import { load, save, exportJson, importJson } from '#storage';
 import { parseVersion, versionStatus } from '#version';
+import { resolveLanguage, translator } from '#i18n';
 
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;
@@ -24,7 +25,6 @@ const LEAVE_MS = 200;
 const REFRESH_MS = 15000;
 // The wait for the deployed version: a weak network can leave the request open.
 const CHECK_MS = 8000;
-const LIST_LABELS = { active: 'Actual', next: 'Próxima' };
 
 const $ = (id) => document.getElementById(id);
 
@@ -34,8 +34,6 @@ const el = (tag, props = {}, children = []) => {
   return node;
 };
 
-const plural = (count, one, many) => `${count} ${count === 1 ? one : many}`;
-
 const storage = (() => {
   try {
     return window.localStorage;
@@ -43,6 +41,12 @@ const storage = (() => {
     return null;
   }
 })();
+
+let lang = resolveLanguage(navigator.languages, null);
+let t = translator(lang);
+
+// `t` for a text that names a list: the `list` parameter is a list id.
+const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
 
 let state = storage ? load(storage) : store.emptyState();
 // `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
@@ -106,13 +110,13 @@ const apply = (result, { undoText = null } = {}) => {
   }
   const previous = state;
   const saved = commit(result.state);
-  if (!saved) showToast('El cambio no se ha guardado: el almacenamiento no está disponible.');
+  if (!saved) showToast(t('error.notSaved'));
   else if (undoText) showToast(undoText, { undo: previous });
   else hideToast();
   return true;
 };
 
-const finishTrip = (undoText = 'Compra terminada.') => {
+const finishTrip = (undoText = t('toast.finished')) => {
   if (!apply(store.startNewShopping(state), { undoText })) return;
   Object.assign(ui, { view: 'active', editingId: null, openId: null });
   render();
@@ -122,7 +126,7 @@ const finishTrip = (undoText = 'Compra terminada.') => {
 
 const renameInput = (entry, rename = (name) => store.renameItem(state, entry.id, name)) => {
   const input = el('input', { type: 'text', className: 'rename', value: entry.name, maxLength: 80 });
-  input.setAttribute('aria-label', `Renombrar ${entry.name}`);
+  input.setAttribute('aria-label', t('row.rename', { name: entry.name }));
   let done = false;
   const finish = (keep) => {
     if (done) return;
@@ -154,7 +158,7 @@ const moreButton = (item, groupId = null) => {
       render();
     },
   });
-  button.setAttribute('aria-label', `Más acciones: ${item.name}`);
+  button.setAttribute('aria-label', t('row.more', { name: item.name }));
   button.setAttribute('aria-expanded', String(open));
   return button;
 };
@@ -200,7 +204,7 @@ const startRename = (entry) => {
   render();
 };
 
-const renameAction = (item) => iconButton(ICONS.pencil, `Renombrar ${item.name}`, () => startRename(item));
+const renameAction = (item) => iconButton(ICONS.pencil, t('row.rename', { name: item.name }), () => startRename(item));
 
 // The recurrent mark of a row. It shows on each item and a tap changes it.
 const recurrentToggle = (item) => {
@@ -208,22 +212,22 @@ const recurrentToggle = (item) => {
     icon(ICONS.repeat),
   ]);
   button.setAttribute('aria-pressed', String(item.recurrent));
-  button.setAttribute('aria-label', `Comprar siempre: ${item.name}`);
+  button.setAttribute('aria-label', t('row.always', { name: item.name }));
   return button;
 };
 
 const moveAction = (item) => {
   const toNext = item.list === 'active';
-  const label = LIST_LABELS[toNext ? 'next' : 'active'];
-  return iconButton(toNext ? ICONS.calendar : ICONS.cart, `Mover a ${label}: ${item.name}`, () =>
-    apply(store.moveItem(state, item.id), { undoText: `"${item.name}" movido a ${label}.` }));
+  const params = { list: toNext ? 'next' : 'active', name: item.name };
+  return iconButton(toNext ? ICONS.calendar : ICONS.cart, say('row.moveTo', params), () =>
+    apply(store.moveItem(state, item.id), { undoText: say('toast.movedTo', params) }));
 };
 
 const deleteAction = (item) =>
   iconButton(
     ICONS.trash,
-    `Eliminar ${item.name}`,
-    () => apply(store.deleteItem(state, item.id), { undoText: `"${item.name}" eliminado.` }),
+    t('row.delete', { name: item.name }),
+    () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
     'danger',
   );
 
@@ -316,10 +320,10 @@ const activeRow = (item, groupId) => {
     }
     checkbox.checked = true;
     // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
-    leave(item, () => apply(store.toggleBought(state, item.id), { undoText: `"${item.name}" comprado.` }));
+    leave(item, () => apply(store.toggleBought(state, item.id), { undoText: t('toast.bought', { name: item.name }) }));
   };
   const checkbox = el('input', { type: 'checkbox', checked: item.bought, onchange: toggle });
-  checkbox.setAttribute('aria-label', `Comprado: ${item.name}`);
+  checkbox.setAttribute('aria-label', t('row.bought', { name: item.name }));
   const name = isEditing(item.id, groupId)
     ? renameInput(item)
     : el('button', { type: 'button', className: 'name', textContent: item.name, tabIndex: -1, onclick: toggle });
@@ -328,11 +332,11 @@ const activeRow = (item, groupId) => {
     const again = el('button', {
       type: 'button',
       className: item.again ? 'pill' : 'pill ghost',
-      textContent: item.again ? '✓ Próxima' : '+ Próxima',
+      textContent: `${item.again ? '✓' : '+'} ${t('list.next')}`,
       onclick: () => apply(store.toggleAgain(state, item.id)),
     });
     again.setAttribute('aria-pressed', String(item.again));
-    again.setAttribute('aria-label', `Comprar otra vez la próxima: ${item.name}`);
+    again.setAttribute('aria-label', t('row.again', { name: item.name }));
     row.push(again);
   }
   row.push(recurrentToggle(item));
@@ -344,11 +348,12 @@ const nextRow = (item) => {
   const name =
     ui.editingId === item.id ? renameInput(item) : el('span', { className: 'name', textContent: item.name });
   const row = [name];
-  if (!pending) row.push(el('span', { className: 'pill', textContent: 'comprado hoy' }));
+  if (!pending) row.push(el('span', { className: 'pill', textContent: t('row.boughtToday') }));
   row.push(recurrentToggle(item));
   if (pending) return { row, start: [renameAction(item)], end: [moveAction(item), deleteAction(item)] };
-  const remove = iconButton(ICONS.calendarOff, `Quitar de Próxima: ${item.name}`, () =>
-    apply(store.removeFromNext(state, item.id), { undoText: `"${item.name}" quitado de Próxima.` }));
+  const params = { list: 'next', name: item.name };
+  const remove = iconButton(ICONS.calendarOff, say('row.removeFrom', params), () =>
+    apply(store.removeFromNext(state, item.id), { undoText: say('toast.removedFrom', params) }));
   return { row, start: [renameAction(item)], end: [remove] };
 };
 
@@ -486,8 +491,8 @@ const endReorder = (keep) => {
   });
   if (!moved) return;
   const ids = moveTo(rows.map((row) => row.dataset.id), from, to);
-  // A move in the name order changes the order to Personalizado.
-  const undoText = state.sort === 'name' ? 'Orden cambiado a «Personalizado».' : 'Orden cambiado.';
+  // A move in the name order changes the order to the custom one.
+  const undoText = t(state.sort === 'name' ? 'toast.orderCustom' : 'toast.order');
   if (apply(store.reorderItems(state, ids), { undoText })) slide(before);
 };
 
@@ -599,7 +604,7 @@ const boughtSection = (bought) => {
       render();
     },
   }, [
-    el('span', { textContent: `${plural(bought.length, 'comprado', 'comprados')}` }),
+    el('span', { textContent: t('count.bought', { count: bought.length }) }),
     el('span', { className: 'chevron', textContent: ui.boughtOpen ? '▾' : '▸' }),
   ]);
   button.setAttribute('aria-expanded', String(ui.boughtOpen));
@@ -618,7 +623,7 @@ const pendingNodes = () => {
     groupHead(recipe.name, items.length ? `${total - items.length}/${total}` : '✓'),
     ...items.map((item) => itemNode(item, recipe.id)),
   ]);
-  const others = rest.length ? [groupHead('Otros', ''), ...rest.map((item) => itemNode(item))] : [];
+  const others = rest.length ? [groupHead(t('group.others'), ''), ...rest.map((item) => itemNode(item))] : [];
   return [...grouped, ...others];
 };
 
@@ -656,16 +661,18 @@ const renderArrange = () => {
 
 const sendText = ({ added, already }) => {
   const parts = [];
-  if (added) parts.push(plural(added, 'añadido', 'añadidos'));
-  if (already) parts.push(`${already} ya ${already === 1 ? 'estaba' : 'estaban'}`);
+  if (added) parts.push(t('send.added', { count: added }));
+  if (already) parts.push(t('send.already', { count: already }));
   return parts.join(', ');
 };
 
 const sendToList = (recipe) => {
   const result = recipes.sendRecipe(state, recipe.id);
-  if (result.error || result.state !== state) apply(result, { undoText: `«${recipe.name}»: ${sendText(result)}.` });
+  if (result.error || result.state !== state) {
+    apply(result, { undoText: t('toast.sent', { name: recipe.name, summary: sendText(result) }) });
+  }
   // A second tap changes nothing: keep the undo of the send that is still on the screen.
-  else showToast(`«${recipe.name}»: todo estaba ya en la lista.`, { undo: undoState });
+  else showToast(t('toast.sentNothing', { name: recipe.name }), { undo: undoState });
 };
 
 const productNode = (recipe, product) => {
@@ -674,9 +681,11 @@ const productNode = (recipe, product) => {
     className: 'more',
     textContent: '✕',
     onclick: () =>
-      apply(recipes.removeRecipeProduct(state, recipe.id, product), { undoText: `"${product}" quitado de «${recipe.name}».` }),
+      apply(recipes.removeRecipeProduct(state, recipe.id, product), {
+        undoText: t('toast.productRemoved', { product, name: recipe.name }),
+      }),
   });
-  remove.setAttribute('aria-label', `Quitar ${product}`);
+  remove.setAttribute('aria-label', t('recipe.removeProduct', { name: product }));
   return el('li', {}, [el('span', { textContent: product }), remove]);
 };
 
@@ -686,11 +695,11 @@ const productForm = (recipe) => {
     type: 'text',
     className: 'product-name',
     maxLength: 80,
-    placeholder: 'Añadir producto',
+    placeholder: t('recipe.addProduct'),
     enterKeyHint: 'done',
   });
   input.setAttribute('autocapitalize', 'sentences');
-  input.setAttribute('aria-label', `Añadir producto a ${recipe.name}`);
+  input.setAttribute('aria-label', t('recipe.addProductTo', { name: recipe.name }));
   const add = (name) => {
     // The render builds a new field; `focusProduct` keeps the keyboard open for the next product.
     ui.focusProduct = true;
@@ -699,7 +708,7 @@ const productForm = (recipe) => {
     input.focus();
   };
   const suggestions = el('ul', { className: 'suggestions' });
-  suggestions.setAttribute('aria-label', 'Artículos que ya existen');
+  suggestions.setAttribute('aria-label', t('add.existing'));
   const taken = new Set(recipe.products.map((product) => product.toLowerCase()));
   input.addEventListener('input', () => {
     const rows = store
@@ -711,7 +720,7 @@ const productForm = (recipe) => {
   });
   const form = el('form', { className: 'product-form', autocomplete: 'off' }, [
     input,
-    el('button', { type: 'submit', className: 'primary', textContent: 'Añadir' }),
+    el('button', { type: 'submit', className: 'primary', textContent: t('add.submit') }),
   ]);
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -721,18 +730,18 @@ const productForm = (recipe) => {
 };
 
 const editLink = (recipe) => {
-  const text = window.prompt(`Enlace de «${recipe.name}». Déjalo vacío para quitarlo.`, recipe.url);
+  const text = window.prompt(t('recipe.linkPrompt', { name: recipe.name }), recipe.url);
   if (text === null) return;
   ui.openId = null;
   if (text.trim() === recipe.url) render();
-  else apply(recipes.setRecipeUrl(state, recipe.id, text), { undoText: text.trim() ? 'Enlace guardado.' : 'Enlace quitado.' });
+  else apply(recipes.setRecipeUrl(state, recipe.id, text), { undoText: t(text.trim() ? 'toast.linkSaved' : 'toast.linkRemoved') });
 };
 
 const linkNode = (recipe) => {
   const link = el('a', { className: 'recipe-link', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
     icon(ICONS.chain),
   ]);
-  link.setAttribute('aria-label', `Abrir el enlace de ${recipe.name}`);
+  link.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
   return link;
 };
 
@@ -753,23 +762,23 @@ const recipeNode = (recipe) => {
       },
       [
         el('span', { textContent: recipe.name }),
-        el('small', { textContent: plural(recipe.products.length, 'producto', 'productos') }),
+        el('small', { textContent: t('count.products', { count: recipe.products.length }) }),
       ],
     );
     name.setAttribute('aria-expanded', String(open));
   }
   const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon(ICONS.cartPlus)]);
-  send.setAttribute('aria-label', `Enviar a la lista: ${recipe.name}`);
+  send.setAttribute('aria-label', t('recipe.send', { name: recipe.name }));
   const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
   const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);
   if (ui.openId === recipe.id) {
     const remove = actionButton(
-      'Eliminar',
-      () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: `Receta «${recipe.name}» eliminada.` }),
+      t('recipe.delete'),
+      () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
       'danger',
     );
-    const link = actionButton(recipe.url ? 'Cambiar enlace' : 'Añadir enlace', () => editLink(recipe));
-    node.append(el('div', { className: 'actions' }, [actionButton('Renombrar', () => startRename(recipe)), link, remove]));
+    const link = actionButton(t(recipe.url ? 'recipe.changeLink' : 'recipe.addLink'), () => editLink(recipe));
+    node.append(el('div', { className: 'actions' }, [actionButton(t('recipe.rename'), () => startRename(recipe)), link, remove]));
   }
   if (open) {
     node.append(
@@ -782,40 +791,37 @@ const recipeNode = (recipe) => {
 
 // Screen
 
-const finishText = ({ back, gone }) => {
-  const backText = `${plural(back, 'artículo vuelve', 'artículos vuelven')} en la próxima compra.`;
-  const goneText = `${plural(gone, 'se elimina', 'se eliminan')}.`;
-  return `${backText} ${goneText}`;
-};
+const finishText = ({ back, gone }) => `${t('finish.back', { count: back })} ${t('finish.gone', { count: gone })}`;
 
 const activeSubtitle = ({ total, left }) => {
-  if (!total) return 'La lista está vacía';
-  if (!left) return 'Todo comprado';
-  return `${left === 1 ? 'Queda' : 'Quedan'} ${plural(left, 'artículo', 'artículos')}`;
+  if (!total) return t('header.empty');
+  if (!left) return t('header.allBought');
+  return t('header.left', { count: left });
 };
 
 const headerOf = (summary, next) => {
-  if (ui.view === 'settings') return { title: 'Ajustes', subtitle: 'Lista de la compra', ring: '⚙', pct: 0 };
+  if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), ring: '⚙', pct: 0 };
   if (ui.view === 'recipes') {
     const count = state.recipes.length;
-    const subtitle = count ? plural(count, 'receta', 'recetas') : 'Sin recetas';
-    return { title: 'Recetas', subtitle, ring: String(count), pct: 0 };
+    const subtitle = count ? t('count.recipes', { count }) : t('header.noRecipes');
+    return { title: t('nav.recipes'), subtitle, ring: String(count), pct: 0 };
   }
   if (ui.view === 'next') {
     const boughtToday = next.length - summary.incoming;
-    const parts = [next.length ? plural(next.length, 'artículo', 'artículos') : 'Nada preparado'];
-    if (boughtToday) parts.push(plural(boughtToday, 'comprado hoy', 'comprados hoy'));
-    return { title: 'Próxima compra', subtitle: parts.join(' · '), ring: String(next.length), pct: 0 };
+    const parts = [next.length ? t('count.items', { count: next.length }) : t('header.nothingReady')];
+    if (boughtToday) parts.push(t('header.boughtToday', { count: boughtToday }));
+    return { title: t('header.next'), subtitle: parts.join(' · '), ring: String(next.length), pct: 0 };
   }
   const { total, left } = summary;
   const pct = total ? Math.round(((total - left) / total) * 100) : 0;
-  return { title: 'Compra de hoy', subtitle: activeSubtitle(summary), ring: `${total - left}/${total}`, pct };
+  return { title: t('header.today'), subtitle: activeSubtitle(summary), ring: `${total - left}/${total}`, pct };
 };
 
-const EMPTY_TEXT = {
-  active: 'La lista está vacía. Toca + para añadir un artículo.',
-  next: 'No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.',
-  recipes: 'No hay recetas. Toca + para crear una.',
+const EMPTY_KEYS = { active: 'empty.active', next: 'empty.next', recipes: 'empty.recipes' };
+
+const emptyText = (searchable) => {
+  if (searchable) return t('empty.noMatch', { query: ui.recipeQuery.trim() });
+  return EMPTY_KEYS[ui.view] ? t(EMPTY_KEYS[ui.view]) : '';
 };
 
 const nodesOf = (items) => {
@@ -834,31 +840,28 @@ const renderList = (summary, next) => {
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
   if (ui.view === 'next' && items.length) {
-    $('items').append(el('p', { className: 'hint', textContent: 'Un artículo con ↻ activo vuelve aquí al comprarlo.' }));
+    $('items').append(el('p', { className: 'hint', textContent: t('next.hint') }));
   }
 
   $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
-  $('empty-text').textContent = searchable ? `Ninguna receta coincide con «${ui.recipeQuery.trim()}».` : (EMPTY_TEXT[ui.view] ?? '');
+  $('empty-text').textContent = emptyText(searchable);
   $('bring').hidden = !(ui.view === 'active' && summary.incoming > 0);
-  $('bring').textContent = `Traer ${plural(summary.incoming, 'artículo', 'artículos')} de Próxima`;
+  $('bring').textContent = say('empty.bring', { count: summary.incoming, list: 'next' });
 
   $('finish').hidden = !(ui.view === 'active' && summary.total > 0 && summary.left === 0);
   $('finish-text').textContent = finishText(summary);
 };
 
-const VERSION_STATUS = {
-  current: 'Al día',
-  unknown: 'Sin conexión',
-};
+const VERSION_KEYS = { current: 'version.current', unknown: 'version.unknown' };
 
 const renderVersion = () => {
   const { running, latest, checking } = ui.version;
   const status = versionStatus(running, latest);
-  const date = running && new Date(running.date).toLocaleString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-  $('version').textContent = running ? `Versión ${running.version} · ${date}` : 'Versión desconocida';
+  const date = running && new Date(running.date).toLocaleString(lang, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  $('version').textContent = running ? t('version.running', { version: running.version, date }) : t('version.none');
   $('version-status').textContent = checking
-    ? 'Comprobando…'
-    : status === 'outdated' ? `Versión ${latest.version} disponible` : VERSION_STATUS[status];
+    ? t('version.checking')
+    : status === 'outdated' ? t('version.available', { version: latest.version }) : t(VERSION_KEYS[status]);
   $('update').hidden = checking || status !== 'outdated';
 };
 
@@ -917,10 +920,11 @@ const render = () => {
   $('settings').hidden = ui.view !== 'settings';
   renderVersion();
   $('finish-setting').disabled = !store.canStartNewShopping(state);
-  $('finish-setting-text').textContent = `${plural(summary.back, 'vuelve', 'vuelven')} · ${plural(summary.gone, 'se va', 'se van')}`;
+  const outcome = [t('settings.back', { count: summary.back }), t('settings.gone', { count: summary.gone })];
+  $('finish-setting-text').textContent = outcome.join(' · ');
 
   $('fab').hidden = ui.view === 'settings' || ui.sheetOpen || ui.arrangeOpen;
-  $('fab').setAttribute('aria-label', ui.view === 'recipes' ? 'Crear receta' : 'Añadir artículo');
+  $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
   document.querySelectorAll('.bnav button').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
@@ -937,28 +941,44 @@ const render = () => {
   renderArrange();
 };
 
+// Writes the fixed text of the page, then the text that a render builds.
+const applyLanguage = () => {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach((node) => {
+    node.textContent = t(node.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-attr]').forEach((node) => {
+    node.dataset.i18nAttr.split(',').forEach((pair) => {
+      const [name, key] = pair.split(':');
+      node.setAttribute(name, t(key));
+    });
+  });
+  render();
+};
+
 // Add sheet
 
 const whereText = (item) => {
   const inNextView = item.list === 'next' || (item.bought && (item.recurrent || item.again));
   if (ui.target === 'active') {
-    if (item.list === 'next') return 'en Próxima · traer';
-    return item.bought ? 'ya comprado · repetir' : 'ya en la lista';
+    if (item.list === 'next') return say('where.inNextBring', { list: 'next' });
+    return t(item.bought ? 'where.boughtRepeat' : 'where.inList');
   }
-  if (inNextView) return 'ya en Próxima';
-  return item.bought ? 'comprado · añadir a Próxima' : 'en Actual · mover';
+  if (inNextView) return say('where.inNext', { list: 'next' });
+  if (item.bought) return say('where.boughtAddNext', { list: 'next' });
+  return say('where.inActiveMove', { list: 'active' });
 };
 
 const renderSheet = () => {
   $('sheet').hidden = !ui.sheetOpen;
   if (!ui.sheetOpen) return;
   const forRecipe = ui.view === 'recipes';
-  const label = forRecipe ? 'Nombre de la receta' : 'Añadir artículo a la lista';
+  const label = t(forRecipe ? 'add.recipeName' : 'add.itemLabel');
   $('seg').hidden = forRecipe;
-  $('add-submit').textContent = forRecipe ? 'Crear' : 'Añadir';
+  $('add-submit').textContent = t(forRecipe ? 'add.create' : 'add.submit');
   $('add-name').placeholder = label;
   $('add-name').setAttribute('aria-label', label);
-  $('add').setAttribute('aria-label', forRecipe ? 'Crear receta' : 'Añadir artículo');
+  $('add').setAttribute('aria-label', t(forRecipe ? 'add.recipe' : 'add.item'));
   if (forRecipe) {
     $('suggestions').replaceChildren();
     return;
@@ -976,7 +996,7 @@ const renderSheet = () => {
     ]));
   if (text && !store.findByName(state, text)) {
     rows.push(
-      el('li', {}, [el('button', { type: 'button', className: 'create', textContent: `+ Crear «${text}»`, onclick: submitAdd })]),
+      el('li', {}, [el('button', { type: 'button', className: 'create', textContent: t('add.createNamed', { name: text }), onclick: submitAdd })]),
     );
   }
   $('suggestions').replaceChildren(...rows);
@@ -997,13 +1017,13 @@ const closeSheet = () => {
 // Puts an item that exists already into the target list, in place of a duplicate.
 const useExisting = (item) => {
   const result = store.bringToList(state, item.id, ui.target);
-  const label = LIST_LABELS[ui.target];
+  const params = { name: item.name, list: ui.target };
   $('add-name').value = '';
   if (ui.target === ui.view) ui.flashId = item.id;
-  if (result.changed) apply(result, { undoText: `"${item.name}" ya existe. Ahora está en ${label}.` });
+  if (result.changed) apply(result, { undoText: say('toast.existsNowIn', params) });
   else {
     render();
-    showToast(result.error ?? `"${item.name}" ya está en ${label}.`);
+    showToast(result.error ?? say('error.duplicateItem', params));
   }
   $('add-name').focus();
 };
@@ -1036,7 +1056,7 @@ const submitAdd = () => {
   if (apply(store.addItem(state, input.value, ui.target))) {
     input.value = '';
     renderSheet();
-    showToast(`"${name}" añadido a ${LIST_LABELS[ui.target]}.`);
+    showToast(say('toast.addedTo', { name, list: ui.target }));
   }
   input.focus();
 };
@@ -1213,7 +1233,7 @@ document.addEventListener('keydown', (event) => {
 
 $('finish-button').addEventListener('click', () => finishTrip());
 $('finish-setting').addEventListener('click', () => finishTrip());
-$('bring').addEventListener('click', () => finishTrip('Artículos traídos de Próxima.'));
+$('bring').addEventListener('click', () => finishTrip(say('toast.brought', { list: 'next' })));
 
 $('toast-undo').addEventListener('click', () => {
   if (!undoState) return;
@@ -1237,7 +1257,7 @@ $('update').addEventListener('click', async () => {
     return;
   }
   $('update').disabled = false;
-  showToast('No se pudo actualizar.');
+  showToast(t('error.updateFailed'));
 });
 
 $('import-file').addEventListener('change', async (event) => {
@@ -1249,15 +1269,15 @@ $('import-file').addEventListener('change', async (event) => {
     showToast(result.error);
     return;
   }
-  const found = [
-    plural(result.state.items.length, 'artículo', 'artículos'),
-    plural(result.state.recipes.length, 'receta', 'recetas'),
-  ].join(' y ');
-  if (!window.confirm(`¿Sustituir los datos actuales por los de la copia (${found})?`)) return;
-  apply(result, { undoText: 'Copia importada.' });
+  const found = {
+    items: t('count.items', { count: result.state.items.length }),
+    recipes: t('count.recipes', { count: result.state.recipes.length }),
+  };
+  if (!window.confirm(t('import.confirm', found))) return;
+  apply(result, { undoText: t('toast.imported') });
 });
 
-render();
+applyLanguage();
 // An automation of the phone opens `?arrival` at the shop. The query goes away, so a reload is silent.
 const params = new URLSearchParams(location.search);
 if (params.has('arrival')) {
@@ -1267,7 +1287,7 @@ if (params.has('arrival')) {
   const query = params.toString();
   history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
 }
-if (!storage) showToast('El almacenamiento no está disponible: los cambios no se guardan.');
+if (!storage) showToast(t('error.noStorage'));
 navigator.storage?.persist?.().catch(() => {});
 navigator.serviceWorker?.register('./sw.js').catch(() => {});
 // Read once at the start: the worker answers from the cache, then stores the file of the next deploy.
