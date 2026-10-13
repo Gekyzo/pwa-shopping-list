@@ -477,3 +477,26 @@ test('reorderItems rejects an id that is there two times', () => {
   assert.equal(result.error, 'Orden no válido.');
   assert.equal(result.state, before);
 });
+
+test('reorderItems from the name order writes the name order, then the move, and sets the custom order', () => {
+  const before = setSort(build(['c', 'active'], ['a', 'active'], ['d', 'active'], ['b', 'active']), 'name').state;
+  // The screen shows a, b, c, d. The user moves b above a.
+  const { state, error } = reorderItems(before, [find(before, 'b').id, find(before, 'a').id]);
+  assert.equal(error, undefined);
+  assert.deepEqual(names(state.items), ['b', 'a', 'c', 'd']);
+  assert.equal(state.sort, 'custom');
+});
+
+test('reorderItems from the name order does not change its input', () => {
+  const before = setSort(build(['c', 'active'], ['a', 'active']), 'name').state;
+  const copy = structuredClone(before);
+  reorderItems(before, [find(before, 'c').id, find(before, 'a').id]);
+  assert.deepEqual(before, copy);
+});
+
+test('reorderItems from the name order rejects an unknown id and keeps the name order', () => {
+  const before = setSort(build(['c', 'active'], ['a', 'active']), 'name').state;
+  const result = reorderItems(before, ['nope']);
+  assert.equal(result.error, 'Artículo no encontrado.');
+  assert.equal(result.state, before);
+});
