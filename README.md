@@ -5,7 +5,10 @@ dependencies. The data stays in the `localStorage` of the browser.
 
 ## How it works
 
-The user interface is in Spanish. A bottom menu has four screens.
+The user interface is in Catalan, English, French, German, Italian, Portuguese or Spanish. The app
+follows the language of the phone, and shows English for a language that it does not have.
+**Ajustes → Idioma** changes the language; the app stores that choice in the phone. This document
+uses the Spanish names. A bottom menu has four screens.
 
 - **Actual** is the list for the current trip. Tap an item to tick it. A ticked item moves to
   a collapsed section at the end of the list (`N comprados`); tap that row to open it. The header shows
@@ -36,8 +39,8 @@ The user interface is in Spanish. A bottom menu has four screens.
     **Terminar compra** ends the groups of the sent recipes. **Agrupar por → Nada**, in the sheet
     of the header button, shows one flat list.
   - A recipe and an item are independent. A rename of one does not change the other.
-- **Ajustes** has **Terminar compra**, **Exportar copia** and **Importar copia**. The backup holds
-  the items and the recipes.
+- **Ajustes** has **Terminar compra**, **Exportar copia**, **Importar copia** and **Idioma**. The
+  backup holds the items and the recipes, not the language.
   - **Versión** shows the version number and the date of the version that runs. With a connection, it
     also reads the deployed version and shows **Al día** or **Versión N disponible**. **Actualizar**
     then loads the new version. Without a connection it shows **Sin conexión**.
@@ -72,7 +75,7 @@ app does that, and opens the app with `?arrival` in the URL:
 https://gekyzo.github.io/shopping-list/?arrival
 ```
 
-The app then shows `N artículos por comprar en Actual.` for 10 seconds. It shows nothing when no
+The app then shows `N artículos por comprar en Actual.`, in its language, for 10 seconds. It shows nothing when no
 item of **Actual** is left to buy.
 
 Setup, for example with MacroDroid or Tasker:
@@ -105,6 +108,8 @@ npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 | `src/reorder.js` | The rules of a row move: drop place, gap and new order. No DOM |
 | `src/storage.js` | Load, save, export and import, with validation |
 | `src/version.js` | Pure version rules: validation, comparison and the next version |
+| `src/i18n.js` | The language to show, and the function `t(key, params)` that gives a text |
+| `src/locales/` | One catalog for each language: key to text, or to `{ one, other }` for a plural |
 | `version.json` | The version of the deploy, `{ version, date }`. Written by the bump script |
 | `scripts/bump-version.mjs`, `.githooks/pre-push` | The version bump before a push |
 | `src/app.js` | Render and event handling |
@@ -117,6 +122,11 @@ Modules import each other by alias: `import { addItem } from '#store'`. Node res
 
 When you add a file that the app loads, add it to `SHELL` in `sw.js`. When the file is a module of
 `src/`, also add its alias to the import map in `index.html`; `tests/aliases.test.js` fails without it.
+
+No module and no element of `index.html` holds text for the user. A new text is a key in each catalog
+of `src/locales/`, with the same placeholders; `tests/i18n.test.js` fails when a catalog differs from
+`es.js`. `src/app.js` gets the text with `t('key', { name })`, and a fixed text of the page is a
+`data-i18n="key"` attribute. A pure module returns an error as `{ key, params }`.
 
 ## Deploy
 
