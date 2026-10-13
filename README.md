@@ -21,7 +21,8 @@ uses the Spanish names. A bottom menu has four screens.
 - The button at the right of the header of **Actual** and of **Próxima** opens a sheet with
   **Ordenar por**: **Nombre** (alphabetical) or **Personalizado** (your own order; a new item goes
   to the end).
-  One choice applies to the two lists. It shows when the list has two items or more.
+  One choice applies to the two lists. The button shows when the list has two items or more, or
+  a grouping to choose.
 - Hold a row, then move it, to change its place in **Actual** or in **Próxima**. With
   **Agrupar por → Recetas** or **Tiendas** a row stays in its group. A move in the order **Nombre** changes the
   order to **Personalizado**, which then starts from the alphabetical order.
