@@ -1,7 +1,7 @@
 import * as store from './store.js';
 import * as recipes from './recipes.js';
 import { settle } from './swipe.js';
-import { slideTo } from './sections.js';
+import { direction, slideTo } from './sections.js';
 import { dropIndex, moveTo, shifts } from './reorder.js';
 import { load, save, exportJson, importJson } from './storage.js';
 import { parseVersion, versionStatus } from './version.js';
@@ -1049,9 +1049,25 @@ const download = (filename, text) => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
+// Lets the content of the new section come in from the side that it is on in the bottom bar.
+const enter = (way) => {
+  scroller.classList.remove('enter-next', 'enter-previous');
+  if (!way) return;
+  // The read of the width starts the animation again when a change follows another one.
+  void scroller.offsetWidth;
+  scroller.classList.add(way > 0 ? 'enter-next' : 'enter-previous');
+};
+
+// A child of the list area that shows later, as a banner does, must not come in from a side.
+scroller.addEventListener('animationend', (event) => {
+  if (event.animationName === 'enter') scroller.classList.remove('enter-next', 'enter-previous');
+});
+
 const showView = (view) => {
+  const way = direction(ui.view, view);
   Object.assign(ui, { view, editingId: null, openId: null, recipeQuery: '' });
   render();
+  enter(way);
   if (ui.view === 'settings') checkVersion();
 };
 

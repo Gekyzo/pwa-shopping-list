@@ -60,7 +60,8 @@ row closes it. A recipe row has a `⋯` button for its actions. `Deshacer` shows
 
 A horizontal slide that starts out of the item rows (on the header, a banner, a recipe or the free space
 of the list) changes the section, in the order of the bottom bar: to the left for the next section, to
-the right for the previous one. The slide stops at **Actual** and at **Ajustes**.
+the right for the previous one. The slide stops at **Actual** and at **Ajustes**. The content of the new section comes in from
+its side, also after a tap on the bottom bar.
 
 ## Reminder at the shop
 
@@ -100,7 +101,7 @@ npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 | `src/store.js` | Pure state functions. No DOM and no storage |
 | `src/recipes.js` | Pure recipe functions. No DOM and no storage |
 | `src/swipe.js` | The rule that settles a row swipe. No DOM |
-| `src/sections.js` | The order of the sections and the rule of the slide that changes the section. No DOM |
+| `src/sections.js` | The order of the sections, the rule of the slide that changes the section and the way between two sections. No DOM |
 | `src/reorder.js` | The rules of a row move: drop place, gap and new order. No DOM |
 | `src/storage.js` | Load, save, export and import, with validation |
 | `src/version.js` | Pure version rules: validation, comparison and the next version |

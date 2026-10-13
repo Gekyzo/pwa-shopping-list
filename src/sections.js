@@ -13,3 +13,10 @@ export const slideTo = (view, dx, dy) => {
   if (index < 0) return null;
   return SECTIONS[index + (dx < 0 ? 1 : -1)] ?? null;
 };
+
+// The way from `from` to `to` in the order of the sections: 1 towards a later section, -1 towards
+// an earlier one, 0 when there is no way.
+export const direction = (from, to) => {
+  const [a, b] = [SECTIONS.indexOf(from), SECTIONS.indexOf(to)];
+  return a < 0 || b < 0 ? 0 : Math.sign(b - a);
+};
