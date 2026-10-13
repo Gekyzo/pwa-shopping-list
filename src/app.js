@@ -438,10 +438,17 @@ const edgeScroll = () => {
 const lift = (node, rowNode, pointerId, y) => {
   const rows = [...$('items').querySelectorAll('.item')].filter((row) => row.dataset.scope === node.dataset.scope);
   if (rows.length < 2) return;
+  try {
+    rowNode.setPointerCapture(pointerId);
+  } catch {
+    // The pointer is gone: without its release the move would never end.
+    return;
+  }
   const rects = rows.map((row) => row.getBoundingClientRect());
   const from = rows.indexOf(node);
   reorder = {
     node,
+    pointerId,
     rows,
     from,
     to: from,
@@ -451,7 +458,6 @@ const lift = (node, rowNode, pointerId, y) => {
     pointerY: y,
     scrollStart: scroller.scrollTop,
   };
-  rowNode.setPointerCapture(pointerId);
   node.classList.add('lifted');
   navigator.vibrate?.(10);
   reorder.frame = requestAnimationFrame(edgeScroll);
@@ -480,17 +486,21 @@ const endReorder = (keep) => {
 // Lets a hold of a finger, or a vertical drag of the mouse, lift the row and move it in its scope.
 const bindReorder = (rowNode, node, item, groupId) => {
   let pending = null;
+  // True after a hold of the finger: the click of its release must not tick the item.
+  let held = false;
   const forget = () => {
     clearTimeout(pending?.timer);
     pending = null;
   };
   const start = (pointerId, y) => {
     if (!node.isConnected) return;
+    held = true;
     if (state.sort === 'name') showToast('Cambia el orden a «Añadido» para mover artículos.');
     else lift(node, rowNode, pointerId, y);
   };
   rowNode.addEventListener('pointerdown', (event) => {
     forget();
+    held = false;
     if (event.button !== 0 || reorder || !node.dataset.scope) return;
     if (ui.editingId === item.id || isOpen(item.id, groupId)) return;
     const mouse = event.pointerType === 'mouse';
@@ -501,9 +511,11 @@ const bindReorder = (rowNode, node, item, groupId) => {
           pending = null;
           start(pointerId, y);
         }, HOLD_MS);
-    pending = { x, y, mouse, timer };
+    pending = { x, y, mouse, timer, pointerId };
   });
   rowNode.addEventListener('pointermove', (event) => {
+    // A release out of the row gives it no pointerup: a later hover must not lift it.
+    if (pending && (event.pointerId !== pending.pointerId || !(event.buttons & 1))) forget();
     if (pending) {
       const dx = Math.abs(event.clientX - pending.x);
       const dy = Math.abs(event.clientY - pending.y);
@@ -513,13 +525,15 @@ const bindReorder = (rowNode, node, item, groupId) => {
       // A finger that moves before the hold ends scrolls or swipes. The mouse needs no hold.
       if (mouse && dy > dx && state.sort !== 'name') lift(node, rowNode, event.pointerId, y);
     }
-    if (reorder?.node !== node) return;
+    if (reorder?.node !== node || reorder.pointerId !== event.pointerId) return;
     reorder.pointerY = event.clientY;
     placeLifted();
   });
-  const finish = (keep) => () => {
+  const finish = (keep) => (event) => {
     forget();
-    if (reorder?.node === node) endReorder(keep);
+    if (held) clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+    held = false;
+    if (reorder?.node === node && reorder.pointerId === event.pointerId) endReorder(keep);
   };
   rowNode.addEventListener('pointerup', finish(true));
   rowNode.addEventListener('pointercancel', finish(false));
