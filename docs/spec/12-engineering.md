@@ -66,6 +66,7 @@
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own |
 | `tests/aliases.test.js` | The import map against `package.json` |
+| `tests/png.test.js` | The PNG encoder and decoder of `scripts/png.mjs`, which `npm run icons` uses |
 | `tests/spec.test.js` | The facts of this specification that the code can prove (ENG-12) |
 
 A unit test uses `node:test` with `node:assert/strict`, one behaviour for each test, and checks
