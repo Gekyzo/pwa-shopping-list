@@ -1277,6 +1277,9 @@ $('shops-form').addEventListener('submit', (event) => {
 document.querySelectorAll('#arrange-group button').forEach((button) => {
   button.addEventListener('click', () => {
     const { group } = button.dataset;
+    // A tap on the choice that the view shows changes nothing: the stored choice can be a
+    // grouping that only the other list shows.
+    if (group === shownGroup() && !ungrouping) return;
     // The rows that stay move to their new place.
     const set = () => {
       const before = rowTops();
