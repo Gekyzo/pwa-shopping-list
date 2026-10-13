@@ -28,6 +28,7 @@ export default {
   'row.again': 'Buy again next time: {name}',
   'row.boughtToday': 'bought today',
   'row.removeFrom': 'Remove from {list}: {name}',
+  'row.shops': 'Shops of {name}',
   'group.others': 'Others',
 
   'empty.active': 'The list is empty. Tap + to add an item.',
@@ -82,6 +83,10 @@ export default {
   'arrange.sortBy': 'Sort by',
   'arrange.name': 'Name',
   'arrange.custom': 'Custom',
+
+  'shops.add': 'Add',
+  'shops.placeholder': 'New shop',
+  'shops.empty': 'Write the first shop.',
 
   'settings.trip': 'Shopping',
   'settings.back': { one: '{count} comes back', other: '{count} come back' },

@@ -28,6 +28,7 @@ export default {
   'row.again': 'Compra una altra vegada la pròxima: {name}',
   'row.boughtToday': 'comprat avui',
   'row.removeFrom': 'Treu de {list}: {name}',
+  'row.shops': 'Botigues de {name}',
   'group.others': 'Altres',
 
   'empty.active': 'La llista és buida. Toca + per afegir un article.',
@@ -82,6 +83,10 @@ export default {
   'arrange.sortBy': 'Ordena per',
   'arrange.name': 'Nom',
   'arrange.custom': 'Personalitzat',
+
+  'shops.add': 'Afegeix',
+  'shops.placeholder': 'Botiga nova',
+  'shops.empty': 'Escriu la primera botiga.',
 
   'settings.trip': 'Compra',
   'settings.back': { one: '{count} torna', other: '{count} tornen' },
