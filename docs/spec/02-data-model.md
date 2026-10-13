@@ -1,0 +1,94 @@
+# Data model
+
+## State
+
+The app has one state object. Each operation returns a new object and never changes its input.
+
+```js
+{
+  version: 3,
+  items: [Item],      // insertion order, changed only by a manual move
+  recipes: [Recipe],  // insertion order
+  sent: [string],     // ids of the recipes sent to Actual in this trip, in send order
+  group: 'recipe',    // 'recipe' | 'shop' | 'none'
+  sort: 'custom',     // 'custom' | 'name'
+}
+```
+
+The empty state is `{ version: 3, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom' }`.
+
+## Item
+
+```js
+{
+  id: string,         // crypto.randomUUID()
+  name: string,       // trimmed, not empty
+  recurrent: boolean, // comes back at each trip
+  list: 'active' | 'next',
+  bought: boolean,    // ticked
+  again: boolean,     // a ticked one-time item that the user wants at the next trip
+  shops: [string],    // shop names
+}
+```
+
+## Recipe
+
+```js
+{
+  id: string,
+  name: string,       // trimmed, not empty
+  products: [string], // product names, trimmed, not empty
+  url: string,        // an http or https address, or ''
+}
+```
+
+## Invariants
+
+- **DATA-1** An item is one record. It is never copied between the lists; a view computes where it
+  shows.
+- **DATA-2** Item ids are unique. Recipe ids are unique.
+- **DATA-3** Item names are unique with no case distinction, across the two lists. `Leche` and
+  `leche` are one name; `Cafe` and `Café` are two.
+- **DATA-4** Recipe names are unique with no case distinction.
+- **DATA-5** The products of one recipe are unique with no case distinction.
+- **DATA-6** `bought` is true only for an item of `list: 'active'`.
+- **DATA-7** `again` is true only for an item that is ticked and not recurrent.
+- **DATA-8** The shops of one item are unique with no case distinction, trimmed and not empty.
+- **DATA-9** One shop has one spelling in the full state: the spelling of its first use.
+- **DATA-10** `sent` holds only ids of recipes that exist, each one time.
+- **DATA-11** A recipe and an item have no link. A product matches an item by name, with no case
+  distinction, at the time of use. A rename of one does not change the other.
+- **DATA-12** A shop has no record. It exists while an item has it.
+
+## Derived views
+
+No view is stored.
+
+| View | Function | Content |
+|---|---|---|
+| `Actual` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
+| `Próxima` | `nextItems` | The items of `list: 'next'`, then the ticked items of `Actual` that are recurrent or have `again` |
+| Trip figures | `tripSummary` | `total`, `left`, `back`, `gone`, `incoming` |
+| Recipe groups | `recipeGroups` | `Actual` by recipe |
+| Shop groups | `shopGroups` | `Actual` or `Próxima` by shop |
+| Shops in use | `shopNames` | Each shop of an item, in name order |
+
+`tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the ticked
+ones that are recurrent or have `again`; `gone`, the other ticked ones; `incoming`, the items of
+`list: 'next'`.
+
+## Name rules
+
+| Use | Rule |
+|---|---|
+| Identity of an item, a recipe, a product, a shop | `toLowerCase()`: no case distinction, accents count |
+| Search of items and of recipes | `fold`: trimmed, lower case, accents removed |
+| Order by name | `localeCompare(…, 'es', { sensitivity: 'base' })`: no case and no accent distinction, in each language of the screen |
+
+## Not in the state
+
+- The language that the user chose. It is a preference of the device, with its own key. See
+  [09-languages.md](09-languages.md).
+- The section that is open, an open row, the text of a search and each other state of the screen.
+  A start of the app shows `Actual` with all rows closed.
+- The state before the last change, which `Deshacer` uses. It lives only while its message shows.
