@@ -57,19 +57,19 @@ test('addItem trims the name and rejects an empty one', () => {
   const start = emptyState();
   const rejected = addItem(start, '   ', 'active', newId);
   assert.equal(rejected.state, start);
-  assert.equal(rejected.error, 'Escribe un nombre.');
+  assert.deepEqual(rejected.error, { key: 'error.nameRequired' });
 });
 
 test('addItem rejects a duplicate in either list, without case distinction', () => {
   const start = build(['Milk', 'next'], ['Bread', 'active']);
   const inNext = addItem(start, ' milk ', 'active', newId);
   assert.equal(inNext.state, start);
-  assert.equal(inNext.error, '"Milk" ya está en Próxima.');
-  assert.equal(addItem(start, 'BREAD', 'next', newId).error, '"Bread" ya está en Actual.');
+  assert.deepEqual(inNext.error, { key: 'error.duplicateItem', params: { name: 'Milk', list: 'next' } });
+  assert.deepEqual(addItem(start, 'BREAD', 'next', newId).error, { key: 'error.duplicateItem', params: { name: 'Bread', list: 'active' } });
 });
 
 test('addItem rejects an unknown list', () => {
-  assert.equal(addItem(emptyState(), 'Milk', 'other', newId).error, 'Lista desconocida.');
+  assert.deepEqual(addItem(emptyState(), 'Milk', 'other', newId).error, { key: 'error.unknownList' });
 });
 
 test('addItem does not change the input state', () => {
@@ -87,9 +87,9 @@ test('renameItem renames and trims', () => {
 test('renameItem rejects an empty name and a duplicate of another item', () => {
   const start = build(['Bread', 'active'], ['Milk', 'next']);
   const { id } = find(start, 'Bread');
-  assert.equal(renameItem(start, id, ' ').error, 'Escribe un nombre.');
+  assert.deepEqual(renameItem(start, id, ' ').error, { key: 'error.nameRequired' });
   const duplicate = renameItem(start, id, 'MILK');
-  assert.equal(duplicate.error, '"Milk" ya está en Próxima.');
+  assert.deepEqual(duplicate.error, { key: 'error.duplicateItem', params: { name: 'Milk', list: 'next' } });
   assert.equal(duplicate.state, start);
 });
 
@@ -112,7 +112,7 @@ test('operations reject an unknown id', () => {
     removeFromNext(start, 'nope'),
   ];
   calls.forEach((result) => {
-    assert.equal(result.error, 'Artículo no encontrado.');
+    assert.deepEqual(result.error, { key: 'error.itemNotFound' });
     assert.equal(result.state, start);
   });
 });
@@ -149,7 +149,7 @@ test('toggleBought off resets again', () => {
 test('toggleBought rejects an item in next', () => {
   const start = build(['Milk', 'next']);
   const result = toggleBought(start, find(start, 'Milk').id);
-  assert.equal(result.error, 'Solo se pueden marcar los artículos de Actual.');
+  assert.deepEqual(result.error, { key: 'error.onlyActiveTick', params: { list: 'active' } });
   assert.equal(result.state, start);
 });
 
@@ -164,13 +164,13 @@ test('toggleAgain flips again on a ticked one-time item', () => {
 test('toggleAgain rejects an item that is not ticked', () => {
   const start = build(['Soap', 'active']);
   const result = toggleAgain(start, find(start, 'Soap').id);
-  assert.equal(result.error, 'Marca primero el artículo.');
+  assert.deepEqual(result.error, { key: 'error.tickFirst' });
   assert.equal(result.state, start);
 });
 
 test('toggleAgain rejects a recurrent item', () => {
   const start = build(['Milk', 'active', { bought: true, recurrent: true }]);
-  assert.equal(toggleAgain(start, find(start, 'Milk').id).error, 'Un artículo recurrente ya está en Próxima.');
+  assert.deepEqual(toggleAgain(start, find(start, 'Milk').id).error, { key: 'error.recurrentInNext', params: { list: 'next' } });
 });
 
 test('deleteItem removes the item', () => {
@@ -230,7 +230,7 @@ test('removeFromNext keeps a ticked active item and clears again and recurrent',
 
 test('removeFromNext rejects an active item that is not in the next view', () => {
   const start = build(['Bread', 'active']);
-  assert.equal(removeFromNext(start, find(start, 'Bread').id).error, 'El artículo no está en Próxima.');
+  assert.deepEqual(removeFromNext(start, find(start, 'Bread').id).error, { key: 'error.notInNext', params: { list: 'next' } });
 });
 
 test('startNewShopping applies each rule', () => {
@@ -257,9 +257,9 @@ test('startNewShopping applies each rule', () => {
 test('startNewShopping rejects when nothing is ticked and next is empty', () => {
   const start = build(['Bread', 'active']);
   const result = startNewShopping(start);
-  assert.equal(result.error, 'Nada que empezar: marca un artículo o añade uno a Próxima.');
+  assert.deepEqual(result.error, { key: 'error.nothingToStart', params: { list: 'next' } });
   assert.equal(result.state, start);
-  assert.equal(startNewShopping(emptyState()).error, 'Nada que empezar: marca un artículo o añade uno a Próxima.');
+  assert.deepEqual(startNewShopping(emptyState()).error, { key: 'error.nothingToStart', params: { list: 'next' } });
 });
 
 test('startNewShopping does not change the input state', () => {
@@ -346,8 +346,8 @@ test('bringToList next: changes nothing for an item that is in the next view', (
 
 test('bringToList rejects an unknown id and an unknown list', () => {
   const start = build(['Bread', 'active']);
-  assert.equal(bringToList(start, 'nope', 'active').error, 'Artículo no encontrado.');
-  assert.equal(bringToList(start, find(start, 'Bread').id, 'other').error, 'Lista desconocida.');
+  assert.deepEqual(bringToList(start, 'nope', 'active').error, { key: 'error.itemNotFound' });
+  assert.deepEqual(bringToList(start, find(start, 'Bread').id, 'other').error, { key: 'error.unknownList' });
 });
 
 test('tripSummary counts the items of each kind', () => {
@@ -386,12 +386,12 @@ test('an item operation keeps the recipes and the sent recipes', () => {
 test('arrivalMessage counts the items of Active that are not bought', () => {
   const state = build(['Milk', 'active'], ['Bread', 'active'], ['Soap', 'active', { bought: true }], ['Water', 'next']);
   const before = structuredClone(state);
-  assert.equal(arrivalMessage(state), '2 artículos por comprar en Actual.');
+  assert.deepEqual(arrivalMessage(state), { key: 'toast.arrival', params: { count: 2, list: 'active' } });
   assert.deepEqual(state, before);
 });
 
 test('arrivalMessage uses the singular for one item', () => {
-  assert.equal(arrivalMessage(build(['Milk', 'active'])), '1 artículo por comprar en Actual.');
+  assert.deepEqual(arrivalMessage(build(['Milk', 'active'])), { key: 'toast.arrival', params: { count: 1, list: 'active' } });
 });
 
 test('arrivalMessage is null when no item of Active is left', () => {
@@ -408,7 +408,7 @@ test('setSort sets a known sort and rejects another one', () => {
   assert.equal(start.sort, 'custom');
   const rejected = setSort(state, 'price');
   assert.equal(rejected.state, state);
-  assert.equal(rejected.error, 'Orden desconocido.');
+  assert.deepEqual(rejected.error, { key: 'error.unknownSort' });
 });
 
 test('sortItems keeps the insertion order when the sort is added', () => {
@@ -466,7 +466,7 @@ test('reorderItems returns the same state for the same order', () => {
 test('reorderItems rejects an id that is not known', () => {
   const before = build(['a', 'active'], ['b', 'active']);
   const result = reorderItems(before, [find(before, 'a').id, 'nope']);
-  assert.equal(result.error, 'Artículo no encontrado.');
+  assert.deepEqual(result.error, { key: 'error.itemNotFound' });
   assert.equal(result.state, before);
 });
 
@@ -474,7 +474,7 @@ test('reorderItems rejects an id that is there two times', () => {
   const before = build(['a', 'active'], ['b', 'active']);
   const id = find(before, 'a').id;
   const result = reorderItems(before, [id, id]);
-  assert.equal(result.error, 'Orden no válido.');
+  assert.deepEqual(result.error, { key: 'error.invalidOrder' });
   assert.equal(result.state, before);
 });
 
@@ -497,6 +497,6 @@ test('reorderItems from the name order does not change its input', () => {
 test('reorderItems from the name order rejects an unknown id and keeps the name order', () => {
   const before = setSort(build(['c', 'active'], ['a', 'active']), 'name').state;
   const result = reorderItems(before, ['nope']);
-  assert.equal(result.error, 'Artículo no encontrado.');
+  assert.deepEqual(result.error, { key: 'error.itemNotFound' });
   assert.equal(result.state, before);
 });

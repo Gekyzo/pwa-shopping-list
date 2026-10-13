@@ -40,14 +40,14 @@ test('addRecipe adds an empty recipe and returns its id', () => {
 test('addRecipe rejects an empty name', () => {
   const start = emptyState();
   const result = addRecipe(start, '   ', newId);
-  assert.equal(result.error, 'Escribe un nombre.');
+  assert.deepEqual(result.error, { key: 'error.nameRequired' });
   assert.equal(result.state, start);
 });
 
 test('addRecipe rejects a duplicate name without case distinction', () => {
   const { state } = withRecipe(emptyState(), 'Omelette');
   const result = addRecipe(state, 'omelette', newId);
-  assert.equal(result.error, 'La receta "Omelette" ya existe.');
+  assert.deepEqual(result.error, { key: 'error.duplicateRecipe', params: { name: 'Omelette' } });
   assert.equal(result.state, state);
 });
 
@@ -71,9 +71,9 @@ test('renameRecipe accepts a change of case of its own name', () => {
 test('renameRecipe rejects an empty name, a duplicate and an unknown id', () => {
   const first = withRecipe(emptyState(), 'Omelette');
   const second = withRecipe(first.state, 'Soup');
-  assert.equal(renameRecipe(second.state, second.id, ' ').error, 'Escribe un nombre.');
-  assert.equal(renameRecipe(second.state, second.id, 'OMELETTE').error, 'La receta "Omelette" ya existe.');
-  assert.equal(renameRecipe(second.state, 'nope', 'Stew').error, 'Receta no encontrada.');
+  assert.deepEqual(renameRecipe(second.state, second.id, ' ').error, { key: 'error.nameRequired' });
+  assert.deepEqual(renameRecipe(second.state, second.id, 'OMELETTE').error, { key: 'error.duplicateRecipe', params: { name: 'Omelette' } });
+  assert.deepEqual(renameRecipe(second.state, 'nope', 'Stew').error, { key: 'error.recipeNotFound' });
 });
 
 test('deleteRecipe removes the recipe and leaves the items', () => {
@@ -82,7 +82,7 @@ test('deleteRecipe removes the recipe and leaves the items', () => {
   assert.deepEqual(result.state.recipes, []);
   assert.equal(result.state.items, state.items);
   assert.equal(state.recipes.length, 1);
-  assert.equal(deleteRecipe(state, 'nope').error, 'Receta no encontrada.');
+  assert.deepEqual(deleteRecipe(state, 'nope').error, { key: 'error.recipeNotFound' });
 });
 
 test('addRecipeProduct appends a trimmed product', () => {
@@ -95,14 +95,14 @@ test('addRecipeProduct appends a trimmed product', () => {
 test('addRecipeProduct rejects a name of spaces only', () => {
   const { state, id } = withRecipe(emptyState(), 'Omelette', ['Eggs']);
   const result = addRecipeProduct(state, id, '   ');
-  assert.equal(result.error, 'Escribe un producto.');
+  assert.deepEqual(result.error, { key: 'error.productRequired' });
   assert.equal(result.state, state);
 });
 
 test('addRecipeProduct rejects a duplicate without case distinction and an unknown recipe', () => {
   const { state, id } = withRecipe(emptyState(), 'Omelette', ['Eggs']);
-  assert.equal(addRecipeProduct(state, id, 'eggs').error, '"Eggs" ya está en la receta.');
-  assert.equal(addRecipeProduct(state, 'nope', 'Salt').error, 'Receta no encontrada.');
+  assert.deepEqual(addRecipeProduct(state, id, 'eggs').error, { key: 'error.duplicateProduct', params: { name: 'Eggs' } });
+  assert.deepEqual(addRecipeProduct(state, 'nope', 'Salt').error, { key: 'error.recipeNotFound' });
 });
 
 test('addRecipeProduct accepts the same product in two recipes', () => {
@@ -119,8 +119,8 @@ test('removeRecipeProduct removes one product', () => {
 
 test('removeRecipeProduct rejects an unknown product and an unknown recipe', () => {
   const { state, id } = withRecipe(emptyState(), 'Omelette', ['Eggs']);
-  assert.equal(removeRecipeProduct(state, id, 'Salt').error, 'Producto no encontrado.');
-  assert.equal(removeRecipeProduct(state, 'nope', 'Eggs').error, 'Receta no encontrada.');
+  assert.deepEqual(removeRecipeProduct(state, id, 'Salt').error, { key: 'error.productNotFound' });
+  assert.deepEqual(removeRecipeProduct(state, 'nope', 'Eggs').error, { key: 'error.recipeNotFound' });
 });
 
 test('sendRecipe creates a one-time active item for each new product', () => {
@@ -180,9 +180,9 @@ test('sendRecipe a second time changes nothing and returns the same state', () =
 test('sendRecipe rejects a recipe with no products and an unknown id', () => {
   const { state, id } = withRecipe(emptyState(), 'Omelette');
   const result = sendRecipe(state, id, newId);
-  assert.equal(result.error, 'La receta no tiene productos.');
+  assert.deepEqual(result.error, { key: 'error.recipeEmpty' });
   assert.equal(result.state, state);
-  assert.equal(sendRecipe(state, 'nope', newId).error, 'Receta no encontrada.');
+  assert.deepEqual(sendRecipe(state, 'nope', newId).error, { key: 'error.recipeNotFound' });
 });
 
 test('sendRecipe records the recipe in sent one time', () => {
@@ -334,10 +334,10 @@ test('setRecipeUrl rejects a text that is not a web address and an unknown recip
   const { state, id } = withRecipe(emptyState(), 'Chickpeas');
   ['javascript:alert(1)', 'ftp://example.com/x', 'data:text/html,x', 'two words'].forEach((text) => {
     const result = setRecipeUrl(state, id, text);
-    assert.equal(result.error, 'El enlace no es una dirección web válida.', text);
+    assert.deepEqual(result.error, { key: 'error.invalidLink' }, text);
     assert.equal(result.state, state);
   });
-  assert.equal(setRecipeUrl(state, 'nope', LINK).error, 'Receta no encontrada.');
+  assert.deepEqual(setRecipeUrl(state, 'nope', LINK).error, { key: 'error.recipeNotFound' });
 });
 
 test('setGrouped turns the grouping of Active off and on', () => {
