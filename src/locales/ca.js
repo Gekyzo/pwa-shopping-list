@@ -142,6 +142,7 @@ export default {
   'error.productRequired': 'Escriu un producte.',
   'error.duplicateProduct': '«{name}» ja és a la recepta.',
   'error.productNotFound': 'Producte no trobat.',
+  'error.shopRequired': 'Escriu el nom de la botiga.',
   'error.recipeEmpty': 'La recepta no té productes.',
   'error.invalidJson': 'El fitxer no és un JSON vàlid.',
   'error.notBackup': 'El fitxer no és una còpia de seguretat de la llista.',

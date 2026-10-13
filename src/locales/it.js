@@ -142,6 +142,7 @@ export default {
   'error.productRequired': 'Scrivi un prodotto.',
   'error.duplicateProduct': '«{name}» è già nella ricetta.',
   'error.productNotFound': 'Prodotto non trovato.',
+  'error.shopRequired': 'Scrivi il nome del negozio.',
   'error.recipeEmpty': 'La ricetta non ha prodotti.',
   'error.invalidJson': 'Il file non è un JSON valido.',
   'error.notBackup': 'Il file non è una copia di sicurezza della lista.',

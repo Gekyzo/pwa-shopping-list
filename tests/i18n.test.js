@@ -107,7 +107,7 @@ test('a plural entry has the forms one and other, and no entry is empty', () => 
 });
 
 test('the Spanish catalog has each message key of the pure modules', () => {
-  for (const file of ['store', 'recipes', 'storage']) {
+  for (const file of ['store', 'recipes', 'storage', 'shops']) {
     const source = readFileSync(new URL(`../src/${file}.js`, import.meta.url), 'utf8');
     const keys = [...source.matchAll(/'((?:error|toast)\.\w+)'/g)].map(([, key]) => key);
     assert.ok(keys.length > 0, file);
