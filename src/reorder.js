@@ -1,12 +1,13 @@
 // The place that a lifted row takes among the rows of its scope. `tops` and `heights` are those
 // of the rows before the move, `from` is the index of the lifted row and `y` its top now. The row
-// takes the place of a neighbour when its centre passes the centre of the neighbour.
+// takes the place of a neighbour when its leading edge passes the centre of the neighbour, so a
+// row that is on the first or the last place of the scope has that place.
 export const dropIndex = (tops, heights, from, y) => {
-  const centre = y + heights[from] / 2;
+  const bottom = y + heights[from];
   const centreOf = (index) => tops[index] + heights[index] / 2;
   let index = from;
-  while (index < tops.length - 1 && centre > centreOf(index + 1)) index += 1;
-  while (index > 0 && centre < centreOf(index - 1)) index -= 1;
+  while (index < tops.length - 1 && bottom > centreOf(index + 1)) index += 1;
+  while (index > 0 && y < centreOf(index - 1)) index -= 1;
   return index;
 };
 
