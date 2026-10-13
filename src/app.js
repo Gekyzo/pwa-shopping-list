@@ -12,6 +12,7 @@ const ARRIVAL_MS = 10000;
 const SIDE_BUTTON = 64;
 const DRAG_START = 10;
 const CLICK_GUARD_MS = 350;
+const LEAVE_MS = 200;
 // The wait for the service worker to load the new deploy.
 const REFRESH_MS = 15000;
 // The wait for the deployed version: a weak network can leave the request open.
@@ -44,6 +45,8 @@ const ui = {
   openId: null,
   flashId: null,
   sheetOpen: false,
+  // The sheet of the header button, with the group and the order of the list.
+  arrangeOpen: false,
   target: 'active',
   boughtOpen: false,
   openRecipeId: null,
@@ -56,10 +59,14 @@ const ui = {
   // Where the last drag left its row, so that the next render moves the row from there.
   settleFrom: null,
   focusProduct: false,
+  // The ids of the ticked items whose rows are closing. A render in that time builds them closed.
+  leaving: new Set(),
   // `running` is the version of the cached shell; `latest` is the deployed one, read when Ajustes opens.
   version: { running: null, latest: null, checking: false },
 };
 let toastTimer = null;
+// True while the groups of Actual close, before the list becomes flat.
+let ungrouping = false;
 let undoState = null;
 
 const showToast = (text, { undo = null, ms = undo ? UNDO_MS : MESSAGE_MS } = {}) => {
@@ -213,10 +220,97 @@ const deleteAction = (item) =>
     'danger',
   );
 
+// Closes rows of the list, then runs `done`.
+const collapse = (nodes, done) => {
+  if (!nodes.length || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    done();
+    return;
+  }
+  nodes.forEach((node) => {
+    node.style.height = `${node.offsetHeight}px`;
+    // Read the layout, so that the height below starts a transition.
+    node.getBoundingClientRect();
+    node.classList.add('leaving');
+    node.style.height = '0px';
+  });
+  setTimeout(done, LEAVE_MS);
+};
+
+// Opens rows that a render has just built. It is the opposite of `collapse`.
+const expand = (nodes) => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  nodes.forEach((node) => {
+    const still = { minHeight: 0, overflow: 'hidden' };
+    node.animate(
+      [
+        { height: '0px', opacity: 0, ...still },
+        { height: `${node.offsetHeight}px`, opacity: 1, ...still },
+      ],
+      { duration: LEAVE_MS, easing: 'ease-out' },
+    );
+  });
+};
+
+const pendingRows = () => [...$('items').querySelectorAll('.item:not(.bought)')].filter((node) => node.dataset.id);
+
+// The top of each row to buy. The key has the place of the row among the rows of its item,
+// so that the first row of an item of two recipes is the row of the flat list.
+const rowTops = () => {
+  const seen = new Map();
+  return new Map(
+    pendingRows().map((node) => {
+      const nth = seen.get(node.dataset.id) ?? 0;
+      seen.set(node.dataset.id, nth + 1);
+      return [`${node.dataset.id}#${nth}`, { node, top: node.getBoundingClientRect().top }];
+    }),
+  );
+};
+
+// Moves each row from its place before a render (`before`, from `rowTops`) to its new place.
+const slide = (before) => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  rowTops().forEach(({ node, top }, key) => {
+    const from = before.get(key);
+    if (!from || from.top === top) return;
+    node.animate([{ transform: `translateY(${from.top - top}px)` }, { transform: 'none' }], {
+      duration: LEAVE_MS,
+      easing: 'ease-out',
+    });
+  });
+};
+
+// Closes the rows of an item, then runs `done`. An item of two recipes has two rows.
+const leave = (item, done) => {
+  if (ui.leaving.has(item.id)) return;
+  ui.leaving.add(item.id);
+  const rows = [...$('items').querySelectorAll('.item')].filter((node) => node.dataset.id === item.id);
+  collapse(rows, () => {
+    ui.leaving.delete(item.id);
+    done();
+  });
+};
+
+// The rows that the flat list does not have: the group heads, and each row after the first of an item.
+const groupOnlyRows = () => {
+  const seen = new Set();
+  return [...$('items').querySelectorAll('.group-head, .item:not(.bought)')].filter((node) => {
+    if (node.classList.contains('group-head')) return true;
+    const again = seen.has(node.dataset.id);
+    seen.add(node.dataset.id);
+    return again;
+  });
+};
+
 const activeRow = (item, groupId) => {
-  // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
-  const toggle = () =>
-    apply(store.toggleBought(state, item.id), item.bought ? {} : { undoText: `"${item.name}" comprado.` });
+  const toggle = () => {
+    if (item.bought) {
+      apply(store.toggleBought(state, item.id));
+      return;
+    }
+    checkbox.checked = true;
+    // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
+    leave(item, () => apply(store.toggleBought(state, item.id), { undoText: `"${item.name}" comprado.` }));
+  };
   const checkbox = el('input', { type: 'checkbox', checked: item.bought, onchange: toggle });
   checkbox.setAttribute('aria-label', `Comprado: ${item.name}`);
   const name = isEditing(item.id, groupId)
@@ -322,10 +416,17 @@ const itemNode = (item, groupId = null) => {
     requestAnimationFrame(() => requestAnimationFrame(() => moveRow(rowNode, shift(open, widths))));
   } else moveRow(rowNode, shift(open, widths));
   bindSwipe(rowNode, widths, item, groupId);
-  const classes = ['item', item.bought && ui.view === 'active' && 'bought', ui.flashId === item.id && 'flash'];
-  return el('li', { className: classes.filter(Boolean).join(' ') }, [
+  const classes = [
+    'item',
+    item.bought && ui.view === 'active' && 'bought',
+    ui.flashId === item.id && 'flash',
+    ui.leaving.has(item.id) && 'gone',
+  ];
+  const node = el('li', { className: classes.filter(Boolean).join(' ') }, [
     el('div', { className: open ? 'swipe open' : 'swipe' }, [...sides, rowNode]),
   ]);
+  node.dataset.id = item.id;
+  return node;
 };
 
 // The ticked items of Actual, behind one row that opens and closes them.
@@ -348,53 +449,46 @@ const groupHead = (title, count) =>
   el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
 
 // The items of Actual still to buy, below the recipe that asks for each one.
-// The choice between Actual by recipe and Actual as one list. It keeps the toast, and so the undo.
-const groupToggle = () => {
-  const option = (text, grouped) => {
-    const button = actionButton(text, () => commit(recipes.setGrouped(state, grouped).state));
-    button.setAttribute('aria-pressed', String(state.grouped === grouped));
-    return button;
-  };
-  return el('li', { className: 'groupby' }, [
-    el('span', { textContent: 'Agrupar por' }),
-    el('div', {}, [option('Recetas', true), option('Nada', false)]),
-  ]);
-};
-
-// The choice of the order of Actual and Próxima. As the group choice, it keeps the toast.
-const sortToggle = () => {
-  const option = (text, sort) => {
-    const button = actionButton(text, () => commit(store.setSort(state, sort).state));
-    button.setAttribute('aria-pressed', String(state.sort === sort));
-    return button;
-  };
-  return el('li', { className: 'groupby' }, [
-    el('span', { textContent: 'Ordenar por' }),
-    el('div', {}, [option('Añadido', 'added'), option('Nombre', 'name')]),
-  ]);
-};
-
-// `sort` holds the sort choice row, or nothing for a list too short to sort.
-const pendingNodes = (sort) => {
+const pendingNodes = () => {
   const { groups, rest } = recipes.recipeGroups(state);
-  if (!groups.length) return [...sort, ...rest.map((item) => itemNode(item))];
-  if (!state.grouped) {
-    const pending = store.activeItems(state).filter((item) => !item.bought);
-    return [groupToggle(), ...sort, ...pending.map((item) => itemNode(item))];
-  }
+  if (!groups.length) return rest.map((item) => itemNode(item));
+  if (!state.grouped) return store.activeItems(state).filter((item) => !item.bought).map((item) => itemNode(item));
   const grouped = groups.flatMap(({ recipe, items, total }) => [
     groupHead(recipe.name, items.length ? `${total - items.length}/${total}` : '✓'),
     ...items.map((item) => itemNode(item, recipe.id)),
   ]);
   const others = rest.length ? [groupHead('Otros', ''), ...rest.map((item) => itemNode(item))] : [];
-  return [groupToggle(), ...sort, ...grouped, ...others];
+  return [...grouped, ...others];
 };
 
 const listNodes = (items) => {
-  const sort = items.length > 1 ? [sortToggle()] : [];
-  if (ui.view !== 'active') return [...sort, ...items.map((item) => itemNode(item))];
+  if (ui.view !== 'active') return items.map((item) => itemNode(item));
   const bought = items.filter((item) => item.bought);
-  return bought.length ? [...pendingNodes(sort), ...boughtSection(bought)] : pendingNodes(sort);
+  return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
+};
+
+// The choices that the arrange sheet has for the view: the group of Actual when a recipe has a group,
+// and the order of a list with two items or more.
+const arrangeChoices = () => {
+  if (ui.view !== 'active' && ui.view !== 'next') return { group: false, sort: false };
+  const items = ui.view === 'active' ? store.activeItems(state) : store.nextItems(state);
+  return { group: ui.view === 'active' && recipes.recipeGroups(state).groups.length > 0, sort: items.length > 1 };
+};
+
+const renderArrange = () => {
+  const { group, sort } = arrangeChoices();
+  if (!group && !sort) ui.arrangeOpen = false;
+  $('arrange-button').hidden = !group && !sort;
+  $('arrange-button').setAttribute('aria-expanded', String(ui.arrangeOpen));
+  $('arrange').hidden = !ui.arrangeOpen;
+  $('arrange-group').hidden = !group;
+  $('arrange-sort').hidden = !sort;
+  document.querySelectorAll('#arrange-group button').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.grouped === String(state.grouped)));
+  });
+  document.querySelectorAll('#arrange-sort button').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.sort === state.sort));
+  });
 };
 
 // Recipes
@@ -662,7 +756,7 @@ const render = () => {
   $('finish-setting').disabled = !store.canStartNewShopping(state);
   $('finish-setting-text').textContent = `${plural(summary.back, 'vuelve', 'vuelven')} · ${plural(summary.gone, 'se va', 'se van')}`;
 
-  $('fab').hidden = ui.view === 'settings' || ui.sheetOpen;
+  $('fab').hidden = ui.view === 'settings' || ui.sheetOpen || ui.arrangeOpen;
   $('fab').setAttribute('aria-label', ui.view === 'recipes' ? 'Crear receta' : 'Añadir artículo');
   $('next-count').textContent = next.length || '';
   document.querySelectorAll('.bnav button').forEach((button) => {
@@ -677,6 +771,7 @@ const render = () => {
   ui.flashId = null;
   ui.settleFrom = null;
   renderSheet();
+  renderArrange();
 };
 
 // Add sheet
@@ -705,7 +800,7 @@ const renderSheet = () => {
     $('suggestions').replaceChildren();
     return;
   }
-  document.querySelectorAll('.seg button').forEach((button) => {
+  document.querySelectorAll('#seg button').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.target === ui.target));
   });
   const text = $('add-name').value.trim();
@@ -799,7 +894,7 @@ document.querySelectorAll('.bnav button').forEach((button) => {
   });
 });
 
-document.querySelectorAll('.seg button').forEach((button) => {
+document.querySelectorAll('#seg button').forEach((button) => {
   button.addEventListener('click', () => {
     ui.target = button.dataset.target;
     renderSheet();
@@ -840,13 +935,67 @@ $('recipe-query').addEventListener('input', (event) => {
 
 $('fab').addEventListener('click', openSheet);
 $('veil').addEventListener('click', closeSheet);
+$('arrange-button').addEventListener('click', () => {
+  Object.assign(ui, { arrangeOpen: true, openId: null, editingId: null });
+  render();
+});
+$('arrange-veil').addEventListener('click', () => {
+  ui.arrangeOpen = false;
+  render();
+});
+// The sheet stays open after a choice, so that the group and the order change in one visit.
+document.querySelectorAll('#arrange-group button').forEach((button) => {
+  button.addEventListener('click', () => {
+    const grouped = button.dataset.grouped === 'true';
+    // The rows that stay move to their new place.
+    const set = () => {
+      const before = rowTops();
+      commit(recipes.setGrouped(state, grouped).state);
+      return before;
+    };
+    if (grouped || !state.grouped) {
+      const opens = grouped && !state.grouped;
+      // A tap on Recetas while the groups close keeps them.
+      ungrouping = false;
+      const before = set();
+      // `slide` reads the places after `expand` starts, so the two effects add up to one move.
+      if (opens) expand(groupOnlyRows());
+      slide(before);
+      return;
+    }
+    if (ungrouping) return;
+    ungrouping = true;
+    // Show the choice at once; the render after the effect writes the same value.
+    document.querySelectorAll('#arrange-group button').forEach((other) => {
+      other.setAttribute('aria-pressed', String(other === button));
+    });
+    // The groups close before the list becomes flat.
+    collapse(groupOnlyRows(), () => {
+      if (!ungrouping) return;
+      ungrouping = false;
+      slide(set());
+    });
+  });
+});
+document.querySelectorAll('#arrange-sort button').forEach((button) => {
+  button.addEventListener('click', () => {
+    const before = rowTops();
+    commit(store.setSort(state, button.dataset.sort).state);
+    slide(before);
+  });
+});
 $('add-name').addEventListener('input', renderSheet);
 $('add').addEventListener('submit', (event) => {
   event.preventDefault();
   submitAdd();
 });
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && ui.sheetOpen) closeSheet();
+  if (event.key !== 'Escape') return;
+  if (ui.sheetOpen) closeSheet();
+  if (ui.arrangeOpen) {
+    ui.arrangeOpen = false;
+    render();
+  }
 });
 
 $('finish-button').addEventListener('click', () => finishTrip());
@@ -855,8 +1004,11 @@ $('bring').addEventListener('click', () => finishTrip('Artículos traídos de Pr
 
 $('toast-undo').addEventListener('click', () => {
   if (!undoState) return;
+  const before = new Set(pendingRows().map((node) => node.dataset.id));
   commit(undoState);
   hideToast();
+  // The rows that the undo puts back open, as a ticked row closes.
+  expand(pendingRows().filter((node) => !before.has(node.dataset.id)));
 });
 
 $('export').addEventListener('click', () => {
