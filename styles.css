@@ -620,6 +620,17 @@ button.pill {
   text-align: left;
 }
 
+.group select {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
 .group button + button,
 .group .info + button {
   border-top: 1px solid var(--line);

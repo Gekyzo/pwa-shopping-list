@@ -3,9 +3,9 @@ import * as recipes from '#recipes';
 import { settle } from '#swipe';
 import { direction, slideTo } from '#sections';
 import { dropIndex, moveTo, shifts } from '#reorder';
-import { load, save, exportJson, importJson } from '#storage';
+import { load, save, exportJson, importJson, loadLanguage, saveLanguage } from '#storage';
 import { parseVersion, versionStatus } from '#version';
-import { resolveLanguage, translator } from '#i18n';
+import { LANGUAGES, LANGUAGE_NAMES, resolveLanguage, translator } from '#i18n';
 
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;
@@ -42,7 +42,9 @@ const storage = (() => {
   }
 })();
 
-let lang = resolveLanguage(navigator.languages, null);
+// The choice of the user, or null to follow the phone.
+let chosen = storage ? loadLanguage(storage, LANGUAGES) : null;
+let lang = resolveLanguage(navigator.languages, chosen);
 let t = translator(lang);
 
 // `t` for a text that names a list: the `list` parameter is a list id.
@@ -956,6 +958,11 @@ const applyLanguage = () => {
       node.setAttribute(name, t(key));
     });
   });
+  const option = (value, text) => el('option', { value, textContent: text, selected: value === (chosen ?? '') });
+  $('language').replaceChildren(
+    option('', t('settings.automatic')),
+    ...LANGUAGES.map((code) => option(code, LANGUAGE_NAMES[code])),
+  );
   render();
 };
 
@@ -1252,6 +1259,15 @@ $('export').addEventListener('click', () => {
 });
 
 $('import').addEventListener('click', () => $('import-file').click());
+
+$('language').addEventListener('change', (event) => {
+  chosen = event.target.value || null;
+  // With no storage the choice lasts until the app closes.
+  if (storage) saveLanguage(storage, chosen);
+  lang = resolveLanguage(navigator.languages, chosen);
+  t = translator(lang);
+  applyLanguage();
+});
 
 $('update').addEventListener('click', async () => {
   $('update').disabled = true;
