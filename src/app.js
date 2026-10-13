@@ -545,7 +545,8 @@ const bindReorder = (rowNode, node, item, groupId) => {
   rowNode.addEventListener('pointerdown', (event) => {
     forget();
     held = false;
-    if (event.button !== 0 || reorder || !node.dataset.scope) return;
+    // The rows that a search hides have no place on the screen, so a search stops the move.
+    if (event.button !== 0 || reorder || !node.dataset.scope || searching()) return;
     if (ui.editingId === item.id || isOpen(item.id, groupId)) return;
     const mouse = event.pointerType === 'mouse';
     const { pointerId, clientX: x, clientY: y } = event;

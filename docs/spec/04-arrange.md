@@ -83,7 +83,8 @@ the arrange sheet in `src/app.js`.
   | `Próxima`, by shop | Items of `list: 'next'` | The group of the row |
 
 - **MOVE-4** A ticked row and a row `comprado hoy` do not move. A row does not move while its side
-  menu is open or its name is in edit. A scope of one row does not move.
+  menu is open or its name is in edit. A scope of one row does not move. No row moves while the
+  search field of the list has a text (LIST-22): the hidden rows have no place on the screen.
 - **MOVE-5** The scope is the run of rows of the same scope that are next to the lifted row. In
   the order **Nombre**, a row `comprado hoy` can be between two rows of `Próxima`; a move does not
   pass it.
