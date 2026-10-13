@@ -20,6 +20,11 @@ export const LANGUAGE_NAMES = {
   pt: 'Português',
 };
 
+// The tag that `Intl` gets for a language. `pt` alone is Brazilian Portuguese there: zero is
+// singular and the date has another form. The catalog is European Portuguese.
+const INTL_TAGS = { pt: 'pt-PT' };
+export const intlTag = (lang) => INTL_TAGS[lang] ?? lang;
+
 const base = (tag) => String(tag ?? '').toLowerCase().split('-')[0];
 
 // The language to show: `stored` when it is supported, else the first supported base language of
@@ -35,7 +40,7 @@ const fill = (text, params) =>
 
 // `t(key, params)` for one language. An entry is a text, or `{ one, other }` selected by `params.count`.
 export const translator = (lang, catalogs = CATALOGS) => {
-  const rules = new Intl.PluralRules(lang);
+  const rules = new Intl.PluralRules(intlTag(lang));
   return (key, params = {}) => {
     const entry = catalogs[lang]?.[key] ?? catalogs[FALLBACK]?.[key];
     if (entry === undefined) return key;

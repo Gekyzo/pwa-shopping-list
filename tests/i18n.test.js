@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { CATALOGS, FALLBACK, LANGUAGES, LANGUAGE_NAMES, resolveLanguage, translator } from '#i18n';
+import { CATALOGS, FALLBACK, LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
 
 const fake = {
   en: { hello: 'Hello {name}', items: { one: '{count} item', other: '{count} items' }, onlyEn: 'English only' },
@@ -113,4 +113,14 @@ test('the Spanish catalog has each message key of the pure modules', () => {
     assert.ok(keys.length > 0, file);
     for (const key of keys) assert.ok(Object.hasOwn(CATALOGS.es, key), `${file} ${key}`);
   }
+});
+
+test('Portuguese uses the European plural rule: zero is plural', () => {
+  assert.equal(translator('pt')('count.products', { count: 0 }), '0 produtos');
+  assert.equal(translator('pt')('count.products', { count: 1 }), '1 produto');
+});
+
+test('intlTag gives the regional tag of Portuguese and the code of each other language', () => {
+  assert.equal(intlTag('pt'), 'pt-PT');
+  for (const lang of LANGUAGES.filter((code) => code !== 'pt')) assert.equal(intlTag(lang), lang);
 });
