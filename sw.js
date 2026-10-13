@@ -11,6 +11,7 @@ const SHELL = [
   './src/shops.js',
   './src/swipe.js',
   './src/sections.js',
+  './src/onboarding.js',
   './src/reorder.js',
   './src/storage.js',
   './src/version.js',

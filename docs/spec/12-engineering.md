@@ -9,6 +9,7 @@
 | `src/shops.js` | Pure shop operations and the list by shop | `store` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
 | `src/sections.js` | The order of the sections and the rule of the slide between them | nothing |
+| `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
 | `src/storage.js` | Load, save, export, import, validation, the language key | `store`, `recipes` |
 | `src/version.js` | Pure version rules | nothing |
@@ -61,6 +62,7 @@
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key |
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sections.test.js` | The slide between sections |
+| `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
 | `tests/version.test.js` | Version rules |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
