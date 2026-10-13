@@ -11,6 +11,7 @@ no change for the user has no entry.
 
 ### Changed
 
+- **Exportar copia** and **Importar copia** have an icon in `Ajustes`.
 - The icon of the app has a new drawing of the bag of vegetables, with flat colours.
 
 ## 1.0.8 - 2026-10-13
