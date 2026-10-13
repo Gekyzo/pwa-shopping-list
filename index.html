@@ -125,6 +125,20 @@
 
     <input id="import-file" type="file" accept="application/json,.json" hidden>
 
+    <script type="importmap">
+      {
+        "imports": {
+          "#app": "./src/app.js",
+          "#store": "./src/store.js",
+          "#recipes": "./src/recipes.js",
+          "#swipe": "./src/swipe.js",
+          "#sections": "./src/sections.js",
+          "#reorder": "./src/reorder.js",
+          "#storage": "./src/storage.js",
+          "#version": "./src/version.js"
+        }
+      }
+    </script>
     <script type="module" src="./src/app.js"></script>
   </body>
 </html>

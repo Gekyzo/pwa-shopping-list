@@ -1,4 +1,4 @@
-import { addItem, bringToList, findByName, fold, sortItems } from './store.js';
+import { addItem, bringToList, findByName, fold, sortItems } from '#store';
 
 const NOT_FOUND = 'Receta no encontrada.';
 

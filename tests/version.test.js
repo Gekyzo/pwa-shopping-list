@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseVersion, compareVersions, versionStatus, nextVersion } from '../src/version.js';
+import { parseVersion, compareVersions, versionStatus, nextVersion } from '#version';
 
 const DATE = '2026-10-12T21:41:00.000Z';
 const build = (version, date = DATE) => ({ version, date });

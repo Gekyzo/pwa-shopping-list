@@ -111,7 +111,12 @@ npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 | `sw.js` | Service worker: precache of the app shell, then stale-while-revalidate |
 | `manifest.webmanifest`, `icons/` | Installation data |
 
-When you add a file that the app loads, add it to `SHELL` in `sw.js`.
+Modules import each other by alias: `import { addItem } from '#store'`. Node resolves `#name` to
+`src/name.js` through `imports` in `package.json`. The browser resolves it through the import map in
+`index.html`.
+
+When you add a file that the app loads, add it to `SHELL` in `sw.js`. When the file is a module of
+`src/`, also add its alias to the import map in `index.html`; `tests/aliases.test.js` fails without it.
 
 ## Deploy
 
