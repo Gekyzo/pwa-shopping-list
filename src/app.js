@@ -495,7 +495,7 @@ const bindReorder = (rowNode, node, item, groupId) => {
   const start = (pointerId, y) => {
     if (!node.isConnected) return;
     held = true;
-    if (state.sort === 'name') showToast('Cambia el orden a «Añadido» para mover artículos.');
+    if (state.sort === 'name') showToast('Cambia el orden a «Personalizado» para mover artículos.');
     else lift(node, rowNode, pointerId, y);
   };
   rowNode.addEventListener('pointerdown', (event) => {

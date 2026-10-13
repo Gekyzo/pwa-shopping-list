@@ -35,7 +35,7 @@ const sample = () => ({
   recipes: [{ id: 'r1', name: 'Omelette', products: ['Eggs', 'Potatoes'], url: 'https://example.com/omelette' }],
   sent: ['r1'],
   grouped: true,
-  sort: 'added',
+  sort: 'custom',
 });
 
 test('save then load returns the same state', () => {
@@ -115,23 +115,23 @@ test('importJson drops unknown fields and repairs the bought and again rules', (
       recipes: [],
       sent: [],
       grouped: true,
-      sort: 'added',
+      sort: 'custom',
     },
   });
 });
 
 test('emptyState is a version 2 state with no recipes and no sent recipe', () => {
-  assert.deepEqual(emptyState(), { version: 2, items: [], recipes: [], sent: [], grouped: true, sort: 'added' });
+  assert.deepEqual(emptyState(), { version: 2, items: [], recipes: [], sent: [], grouped: true, sort: 'custom' });
 });
 
 test('load migrates a version 1 state and adds an empty recipe list', () => {
   const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(sampleV1()) });
-  assert.deepEqual(load(storage), { ...sampleV1(), version: 2, recipes: [], sent: [], grouped: true, sort: 'added' });
+  assert.deepEqual(load(storage), { ...sampleV1(), version: 2, recipes: [], sent: [], grouped: true, sort: 'custom' });
   assert.equal(storage.getItem(CORRUPT_KEY), null);
 });
 
 test('importJson migrates a version 1 backup', () => {
-  assert.deepEqual(importJson(JSON.stringify(sampleV1())), { state: { ...sampleV1(), version: 2, recipes: [], sent: [], grouped: true, sort: 'added' } });
+  assert.deepEqual(importJson(JSON.stringify(sampleV1())), { state: { ...sampleV1(), version: 2, recipes: [], sent: [], grouped: true, sort: 'custom' } });
 });
 
 test('importJson trims recipe names and products and drops unknown fields', () => {
@@ -194,10 +194,10 @@ test('importJson keeps a grouping that is off and turns any other value on', () 
   [true, undefined, null, 'no', 0].forEach((value) => assert.equal(groupedOf(value), true, String(value)));
 });
 
-test('importJson keeps the name sort and turns any other value into added', () => {
+test('importJson keeps the name sort and turns any other value into custom', () => {
   const sortOf = (sort) => importJson(JSON.stringify({ ...sample(), sort })).state.sort;
   assert.equal(sortOf('name'), 'name');
-  ['added', undefined, null, 'price', 1, true].forEach((value) => assert.equal(sortOf(value), 'added', String(value)));
+  ['custom', 'added', undefined, null, 'price', 1, true].forEach((value) => assert.equal(sortOf(value), 'custom', String(value)));
 });
 
 test('the name sort survives save and load', () => {
