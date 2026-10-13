@@ -162,7 +162,30 @@ main {
   overscroll-behavior: contain;
   /* A horizontal slide changes the section, so the browser must not take it. */
   touch-action: pan-y;
+  overflow-x: hidden;
   padding-bottom: 88px;
+}
+
+/* The content of a new section comes in from its side. `main` stays in its place, so its scroll
+   and the bottom padding do not move. */
+main.enter-next > *,
+main.enter-previous > * {
+  animation: enter 200ms ease-out;
+}
+
+main.enter-next {
+  --enter-from: 48px;
+}
+
+main.enter-previous {
+  --enter-from: -48px;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateX(var(--enter-from));
+  }
 }
 
 .items {
@@ -895,5 +918,10 @@ body:has(.sheet-layer:not([hidden])) .toast {
   .sheet,
   .items > li {
     transition: none;
+  }
+
+  main.enter-next > *,
+  main.enter-previous > * {
+    animation: none;
   }
 }
