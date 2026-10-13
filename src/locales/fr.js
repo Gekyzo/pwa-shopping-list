@@ -30,6 +30,7 @@ export default {
   'row.removeFrom': 'Retirer de {list} : {name}',
   'row.shops': 'Magasins de {name}',
   'group.others': 'Autres',
+  'group.noShop': 'Sans magasin',
 
   'empty.active': 'La liste est vide. Touchez + pour ajouter un article.',
   'empty.next': 'Il n’y a rien pour les prochaines courses. Touchez + pour ajouter ce que vous achetez toujours.',
@@ -80,6 +81,7 @@ export default {
   'arrange.label': 'Grouper et trier',
   'arrange.groupBy': 'Grouper par',
   'arrange.none': 'Rien',
+  'arrange.shops': 'Magasins',
   'arrange.sortBy': 'Trier par',
   'arrange.name': 'Nom',
   'arrange.custom': 'Personnalisé',
