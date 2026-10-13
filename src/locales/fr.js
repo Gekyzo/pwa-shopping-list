@@ -95,6 +95,23 @@ export default {
   'shops.placeholder': 'Nouveau magasin',
   'shops.empty': 'Écrivez le premier magasin.',
 
+  'onboarding.label': 'Introduction',
+  'onboarding.skip': 'Passer',
+  'onboarding.next': 'Suivant',
+  'onboarding.start': 'Commencer',
+  'onboarding.page': 'Page {page} sur {total}',
+  'onboarding.lists.title': 'Deux listes',
+  'onboarding.lists.text':
+    '{active} contient les courses d’aujourd’hui. {next} garde ce que vous achèterez la prochaine fois.',
+  'onboarding.trip.title': 'Les courses se répètent',
+  'onboarding.trip.text':
+    'Activez ↻ pour ce que vous achetez toujours. Quand vous terminez les courses, les articles achetés avec ↻ reviennent dans la liste et les autres articles achetés sont supprimés.',
+  'onboarding.row.title': 'Faites glisser une ligne',
+  'onboarding.row.text':
+    'Vers la droite : renommer et magasins. Vers la gauche : déplacer vers l’autre liste et supprimer.',
+  'onboarding.sections.title': 'Faites glisser l’écran',
+  'onboarding.sections.text': 'Faites glisser vers un côté pour changer de section. Touchez + pour ajouter un article.',
+
   'settings.back': { one: '{count} revient', other: '{count} reviennent' },
   'settings.gone': { one: '{count} s’en va', other: '{count} s’en vont' },
   'settings.backup': 'Sauvegarde',
@@ -105,6 +122,8 @@ export default {
   'settings.hand': 'Main',
   'settings.handRight': 'Droite',
   'settings.handLeft': 'Gauche',
+  'settings.help': 'Aide',
+  'settings.onboarding': 'Voir l’introduction',
   'settings.version': 'Version',
   'settings.update': 'Mettre à jour',
   'version.running': 'Version {version} · {date}',

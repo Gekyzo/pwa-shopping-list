@@ -2,9 +2,22 @@ import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
 import { settle } from '#swipe';
-import { direction, slideTo } from '#sections';
+import { direction, slideDirection, slideTo } from '#sections';
+import { PAGES, isLast, shouldShow, step } from '#onboarding';
 import { dropIndex, moveTo, shifts } from '#reorder';
-import { load, save, exportJson, importJson, loadLanguage, saveLanguage, loadHand, saveHand } from '#storage';
+import {
+  load,
+  save,
+  exportJson,
+  importJson,
+  loadLanguage,
+  saveLanguage,
+  loadHand,
+  saveHand,
+  loadOnboarded,
+  saveOnboarded,
+  hasStoredState,
+} from '#storage';
 import { parseVersion, versionStatus } from '#version';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
 
@@ -57,6 +70,9 @@ const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`lis
 // The text of a message of a pure module.
 const textOf = ({ key, params }) => say(key, params);
 
+// Read before the state. A stored state, valid or not, means that the install is not new.
+const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredState(storage) }) : false;
+
 let state = storage ? load(storage) : store.emptyState();
 // `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
 const ui = {
@@ -71,6 +87,8 @@ const ui = {
   tripMenuOpen: false,
   // The item whose shop sheet is open, or null.
   shopsId: null,
+  // The page of the walkthrough in view, or null while the walkthrough is closed.
+  onboarding: firstStart ? 0 : null,
   target: 'active',
   boughtOpen: false,
   openRecipeId: null,
@@ -1095,6 +1113,59 @@ const applyLanguage = () => {
   const handOption = (value, key) => el('option', { value, textContent: t(key), selected: value === hand });
   $('hand').replaceChildren(handOption('right', 'settings.handRight'), handOption('left', 'settings.handLeft'));
   render();
+  renderOnboarding();
+};
+
+// Onboarding
+
+const renderOnboarding = () => {
+  const open = ui.onboarding !== null;
+  $('onboarding').hidden = !open;
+  // The walkthrough covers the app: no tap, no slide and no focus goes below it.
+  document.querySelectorAll('.head, main, .fab, .bnav').forEach((node) => {
+    node.inert = open;
+  });
+  if (!open) return;
+  const page = PAGES[ui.onboarding];
+  // An SVG element has no `hidden` property, so the attribute is set.
+  document.querySelectorAll('#onboarding svg[data-page]').forEach((drawing) => {
+    drawing.toggleAttribute('hidden', drawing.dataset.page !== page);
+  });
+  $('onboarding-title').textContent = t(`onboarding.${page}.title`);
+  $('onboarding-text').textContent = t(`onboarding.${page}.text`, { active: t('list.active'), next: t('list.next') });
+  $('onboarding-dots').replaceChildren(...PAGES.map((id) => el('span', { className: id === page ? 'on' : '' })));
+  $('onboarding-dots').setAttribute('aria-label', t('onboarding.page', { page: ui.onboarding + 1, total: PAGES.length }));
+  $('onboarding-skip').hidden = isLast(ui.onboarding);
+  $('onboarding-next').textContent = t(isLast(ui.onboarding) ? 'onboarding.start' : 'onboarding.next');
+};
+
+const openOnboarding = () => {
+  ui.onboarding = 0;
+  renderOnboarding();
+  $('onboarding-next').focus();
+};
+
+// A close marks the walkthrough as seen. With no storage it shows only from Ajustes.
+const closeOnboarding = () => {
+  ui.onboarding = null;
+  if (storage) saveOnboarded(storage);
+  renderOnboarding();
+  if (ui.view === 'settings') $('show-onboarding').focus();
+};
+
+// Shows the next page for 1 and the previous one for -1. The page comes in from its side.
+const turnOnboarding = (way) => {
+  const index = step(ui.onboarding, way);
+  if (index === ui.onboarding) return;
+  ui.onboarding = index;
+  renderOnboarding();
+  // The skip button goes away on the last page, and the focus must not go with it.
+  $('onboarding-next').focus();
+  const page = $('onboarding-page');
+  page.classList.remove('enter-next', 'enter-previous');
+  // The read of the width starts the animation again when a change follows another one.
+  void page.offsetWidth;
+  page.classList.add(way > 0 ? 'enter-next' : 'enter-previous');
 };
 
 // Add sheet
@@ -1266,6 +1337,32 @@ document.addEventListener('pointercancel', () => {
   sectionSlide = null;
 });
 
+$('onboarding-next').addEventListener('click', () => {
+  if (isLast(ui.onboarding)) closeOnboarding();
+  else turnOnboarding(1);
+});
+$('onboarding-skip').addEventListener('click', closeOnboarding);
+$('show-onboarding').addEventListener('click', openOnboarding);
+
+// A horizontal slide on the walkthrough changes its page, with the measures of the section slide.
+let onboardingSlide = null;
+$('onboarding').addEventListener('pointerdown', (event) => {
+  const primary = event.isPrimary && event.button === 0;
+  onboardingSlide = primary ? { pointerId: event.pointerId, x: event.clientX, y: event.clientY } : null;
+});
+$('onboarding').addEventListener('pointerup', (event) => {
+  if (onboardingSlide?.pointerId !== event.pointerId) return;
+  const way = slideDirection(event.clientX - onboardingSlide.x, event.clientY - onboardingSlide.y);
+  onboardingSlide = null;
+  if (!way) return;
+  // The click that follows a slide must not press the button below the finger.
+  clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+  turnOnboarding(way);
+});
+$('onboarding').addEventListener('pointercancel', () => {
+  onboardingSlide = null;
+});
+
 document.querySelectorAll('#seg button').forEach((button) => {
   button.addEventListener('click', () => {
     ui.target = button.dataset.target;
@@ -1427,6 +1524,12 @@ $('add').addEventListener('submit', (event) => {
   submitAdd();
 });
 document.addEventListener('keydown', (event) => {
+  if (ui.onboarding !== null) {
+    if (event.key === 'Escape') closeOnboarding();
+    else if (event.key === 'ArrowRight') turnOnboarding(1);
+    else if (event.key === 'ArrowLeft') turnOnboarding(-1);
+    return;
+  }
   if (event.key !== 'Escape') return;
   endReorder(false);
   if (ui.sheetOpen) closeSheet();
@@ -1506,6 +1609,7 @@ $('import-file').addEventListener('change', async (event) => {
 });
 
 applyLanguage();
+if (ui.onboarding !== null) $('onboarding-next').focus();
 // An automation of the phone opens `?arrival` at the shop. The query goes away, so a reload is silent.
 const params = new URLSearchParams(location.search);
 if (params.has('arrival')) {

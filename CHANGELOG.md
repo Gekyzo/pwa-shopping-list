@@ -11,6 +11,9 @@ no change for the user has no entry.
 
 ### Added
 
+- A walkthrough of four pages at the first start of a new install: the two lists, the trip, the
+  slide of a row and the slide between sections. **Ayuda → Ver la introducción** in `Ajustes`
+  shows it again.
 - **Mano** in `Ajustes`. With `Izquierda` the `+` button, the buttons of the header and the
   controls of a row change side, for a phone held in the left hand.
 

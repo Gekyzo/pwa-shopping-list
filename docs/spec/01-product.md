@@ -40,6 +40,7 @@ connection. It separates what to buy now (`Actual`) from what to buy at the next
 | Recipes that send their products to `Actual` | [06-recipes.md](06-recipes.md) |
 | Backup to a file and from a file | [08-storage.md](08-storage.md) |
 | Seven languages | [09-languages.md](09-languages.md) |
+| Walkthrough at the first start | [07-screen.md](07-screen.md) |
 | Offline use, version and update | [10-offline-version.md](10-offline-version.md) |
 | Reminder at the shop | [11-integrations.md](11-integrations.md) |
 

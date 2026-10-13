@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { CATALOGS } from '#i18n';
+import { PAGES } from '#onboarding';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const body = html.slice(html.indexOf('<body'), html.indexOf('<script type="importmap">'));
@@ -30,4 +31,10 @@ test('the markup has no text of its own', () => {
     .replace(/[+\s]/g, '');
   assert.equal(visible, '');
   assert.doesNotMatch(body, /\s(aria-label|placeholder|title)="/);
+});
+
+test('the walkthrough has one drawing for each page, in the order of the pages', () => {
+  const [layer = ''] = body.match(/<div id="onboarding"[\s\S]*?<input id="import-file"/) ?? [];
+  const drawings = [...layer.matchAll(/<svg data-page="([^"]+)"/g)].map(([, page]) => page);
+  assert.deepEqual(drawings, PAGES);
 });

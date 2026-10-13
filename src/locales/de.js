@@ -95,6 +95,23 @@ export default {
   'shops.placeholder': 'Neues Geschäft',
   'shops.empty': 'Schreibe das erste Geschäft.',
 
+  'onboarding.label': 'Einführung',
+  'onboarding.skip': 'Überspringen',
+  'onboarding.next': 'Weiter',
+  'onboarding.start': 'Starten',
+  'onboarding.page': 'Seite {page} von {total}',
+  'onboarding.lists.title': 'Zwei Listen',
+  'onboarding.lists.text': '{active} ist der Einkauf von heute. {next} enthält, was du beim nächsten Mal kaufst.',
+  'onboarding.trip.title': 'Der Einkauf wiederholt sich',
+  'onboarding.trip.text':
+    'Aktiviere ↻ bei dem, was du immer kaufst. Wenn du den Einkauf beendest, kommen die gekauften Artikel mit ↻ zurück auf die Liste und die anderen gekauften Artikel werden gelöscht.',
+  'onboarding.row.title': 'Wische über eine Zeile',
+  'onboarding.row.text':
+    'Nach rechts: umbenennen und Geschäfte. Nach links: in die andere Liste verschieben und löschen.',
+  'onboarding.sections.title': 'Wische über den Bildschirm',
+  'onboarding.sections.text':
+    'Wische zur Seite, um den Bereich zu wechseln. Tippe auf +, um einen Artikel hinzuzufügen.',
+
   'settings.back': { one: '{count} kommt zurück', other: '{count} kommen zurück' },
   'settings.gone': { one: '{count} geht', other: '{count} gehen' },
   'settings.backup': 'Sicherung',
@@ -105,6 +122,8 @@ export default {
   'settings.hand': 'Hand',
   'settings.handRight': 'Rechts',
   'settings.handLeft': 'Links',
+  'settings.help': 'Hilfe',
+  'settings.onboarding': 'Einführung anzeigen',
   'settings.version': 'Version',
   'settings.update': 'Aktualisieren',
   'version.running': 'Version {version} · {date}',
