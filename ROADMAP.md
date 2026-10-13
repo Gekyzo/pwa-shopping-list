@@ -4,7 +4,9 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 ## Planned
 
-- **Menu planner** Based on recipes. Auto fill products basket.
+- **Menu planner**. Based on recipes. Auto fill products basket.
+- **Skip intro**. Beside the next button.
+- **Enable modules in settings**. Use feature flags to enable/disable modules.
 - **Browser database.** Store the data in the browser database instead of
   `localStorage`.
 - **Price estimation.** Estimate the price of a list.
