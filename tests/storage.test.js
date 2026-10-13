@@ -1,6 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { STORAGE_KEY, CORRUPT_KEY, load, save, exportJson, importJson } from '#storage';
+import {
+  STORAGE_KEY,
+  CORRUPT_KEY,
+  LANGUAGE_KEY,
+  load,
+  save,
+  exportJson,
+  importJson,
+  loadLanguage,
+  saveLanguage,
+} from '#storage';
 import { emptyState } from '#store';
 
 const fakeStorage = (initial = {}) => {
@@ -18,6 +28,9 @@ const brokenStorage = () => ({
   },
   setItem: () => {
     throw new Error('quota');
+  },
+  removeItem: () => {
+    throw new Error('denied');
   },
 });
 
@@ -204,4 +217,35 @@ test('the name sort survives save and load', () => {
   const storage = fakeStorage();
   save(storage, { ...sample(), sort: 'name' });
   assert.equal(load(storage).sort, 'name');
+});
+
+test('loadLanguage returns the stored language when it is supported', () => {
+  assert.equal(loadLanguage(fakeStorage({ [LANGUAGE_KEY]: 'de' }), ['de', 'en']), 'de');
+});
+
+test('loadLanguage returns null for no value and for an unsupported value', () => {
+  assert.equal(loadLanguage(fakeStorage(), ['de', 'en']), null);
+  assert.equal(loadLanguage(fakeStorage({ [LANGUAGE_KEY]: 'xx' }), ['de', 'en']), null);
+  assert.equal(loadLanguage(fakeStorage({ [LANGUAGE_KEY]: '' }), ['de', 'en']), null);
+});
+
+test('saveLanguage stores a language and null removes it', () => {
+  const storage = fakeStorage();
+  assert.equal(saveLanguage(storage, 'fr'), true);
+  assert.equal(storage.getItem(LANGUAGE_KEY), 'fr');
+  assert.equal(saveLanguage(storage, null), true);
+  assert.equal(storage.getItem(LANGUAGE_KEY), null);
+});
+
+test('the language functions do not throw when the storage does', () => {
+  assert.equal(loadLanguage(brokenStorage(), ['de']), null);
+  assert.equal(saveLanguage(brokenStorage(), 'de'), false);
+  assert.equal(saveLanguage(brokenStorage(), null), false);
+});
+
+test('the language is not part of the state', () => {
+  const storage = fakeStorage();
+  saveLanguage(storage, 'it');
+  assert.deepEqual(load(storage), emptyState());
+  assert.equal(storage.getItem(STORAGE_KEY), null);
 });

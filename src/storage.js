@@ -105,3 +105,27 @@ export const importJson = (text) => {
   const state = normalizeState(data);
   return state ? { state } : { error: { key: 'error.notBackup' } };
 };
+
+// The language that the user chose. It is a preference of the device, not a part of the state.
+export const LANGUAGE_KEY = 'shopping.lang';
+
+// The stored language when it is one of `supported`, else null: the app follows the phone.
+export const loadLanguage = (storage, supported) => {
+  try {
+    const lang = storage.getItem(LANGUAGE_KEY);
+    return supported.includes(lang) ? lang : null;
+  } catch {
+    return null;
+  }
+};
+
+// `null` removes the choice.
+export const saveLanguage = (storage, lang) => {
+  try {
+    if (lang === null) storage.removeItem(LANGUAGE_KEY);
+    else storage.setItem(LANGUAGE_KEY, lang);
+    return true;
+  } catch {
+    return false;
+  }
+};
