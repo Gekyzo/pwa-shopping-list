@@ -1,7 +1,8 @@
 #!/bin/sh
 # A push to main is a deploy. Each deploy gets a new version in version.json, which
 # Ajustes shows. A hook cannot add a commit to the push that runs, so it commits the
-# next patch version and stops: the second `git push` passes. A push that has a change
+# next patch version and stops: the second `git push` passes. The same commit gives the
+# version to the changes under `Unreleased` in CHANGELOG.md. A push that has a change
 # of version.json already (a minor or major bump by hand) passes at once.
 # Enable: npm run hooks. Skip: git push --no-verify.
 
@@ -28,11 +29,11 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     stop 'the version needs a bump, but the current branch is not main.'
   [ "$(git rev-parse HEAD)" = "$local_sha" ] ||
     stop 'the version needs a bump, but the pushed commit is not HEAD.'
-  git diff --quiet HEAD -- version.json package.json ||
-    stop 'version.json or package.json has a change that is not committed.'
+  git diff --quiet HEAD -- version.json package.json CHANGELOG.md ||
+    stop 'version.json, package.json or CHANGELOG.md has a change that is not committed.'
 
   version=$(node scripts/bump-version.mjs patch </dev/null) || stop 'the version bump failed.'
-  git commit --quiet -m "Bump version to $version" -- version.json package.json </dev/null ||
+  git commit --quiet -m "Bump version to $version" -- version.json package.json CHANGELOG.md </dev/null ||
     stop 'the commit of the version bump failed.'
   stop "Version bumped to $version. Run git push again."
 done

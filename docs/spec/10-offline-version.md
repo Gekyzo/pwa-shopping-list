@@ -38,6 +38,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   an ISO date. `package.json` has the same version.
 - **VER-2** `scripts/bump-version.mjs` is the only writer of the two files. With no valid
   `version.json` the next version is `1.0.0`. A bump of a part sets the lower parts to zero.
+  The same run releases `CHANGELOG.md` (VER-17).
 - **VER-3** A value that is not `{ version, date }` with a valid version and a valid date is "no
   version".
 - **VER-4** At the start the app reads `version.json` from the cache: the running version.
@@ -65,16 +66,22 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **VER-10** Each deploy has a new version. The hook `.githooks/pre-push`, enabled one time in
   each clone with `npm run hooks`, does this at a push to `main`:
   1. If the push has no change of `version.json`, it adds one to the patch, sets the date, and
-     makes the commit `Bump version to X.Y.Z` with `version.json` and `package.json` only.
+     makes the commit `Bump version to X.Y.Z` with `version.json`, `package.json` and
+     `CHANGELOG.md` only.
   2. It stops the push, because a hook cannot add a commit to the push that runs.
   3. The second `git push` passes.
 - **VER-11** A push that has a change of `version.json` already passes at the first try. For a
   minor or a major step: `node scripts/bump-version.mjs minor|major`, then a commit.
 - **VER-12** The hook stops with an error, and writes nothing, when the current branch is not
-  `main`, the pushed commit is not `HEAD`, or `version.json` or `package.json` has a change that
-  is not committed.
+  `main`, the pushed commit is not `HEAD`, or `version.json`, `package.json` or `CHANGELOG.md`
+  has a change that is not committed.
 - **VER-13** `git push --no-verify`, and a clone without `npm run hooks`, deploy with the old
   version. **Versión** then cannot show that deploy as new.
+- **VER-17** A bump releases `CHANGELOG.md`: the heading `## Unreleased` becomes
+  `## X.Y.Z - YYYY-MM-DD`, with the new version and the local day of the bump, and a new
+  `## Unreleased` with the text `No change.` goes above it. The file stays as it is when
+  `Unreleased` has no change or the file has no such heading. A deployed version with no change
+  for the user has no entry.
 
 ## Installation
 

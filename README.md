@@ -35,7 +35,8 @@ a commit that changes no rule.
 ## Deploy
 
 GitHub Pages serves `main` / root, so a push to `main` is a deploy. The `pre-push` hook makes the
-commit `Bump version to X.Y.Z` and stops the push; a second `git push` passes.
+commit `Bump version to X.Y.Z` and stops the push; a second `git push` passes. The commit also
+gives the version to the changes under `Unreleased` in `CHANGELOG.md`.
 
 ## Where to read
 
