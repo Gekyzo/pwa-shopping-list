@@ -36,6 +36,7 @@ export default {
   'empty.next': 'There is nothing for the next shopping. Tap + to add what you always buy.',
   'empty.recipes': 'There are no recipes. Tap + to create one.',
   'empty.noMatch': 'No recipe matches “{query}”.',
+  'empty.noItemMatch': 'No item matches “{query}”.',
   'empty.bring': { one: 'Bring {count} item from {list}', other: 'Bring {count} items from {list}' },
   'next.hint': 'An item with ↻ on comes back here when you buy it.',
 

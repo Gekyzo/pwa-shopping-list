@@ -36,6 +36,7 @@ export default {
   'empty.next': 'Il n’y a rien pour les prochaines courses. Touchez + pour ajouter ce que vous achetez toujours.',
   'empty.recipes': 'Il n’y a pas de recettes. Touchez + pour en créer une.',
   'empty.noMatch': 'Aucune recette ne correspond à « {query} ».',
+  'empty.noItemMatch': 'Aucun article ne correspond à « {query} ».',
   'empty.bring': { one: 'Apporter {count} article de {list}', other: 'Apporter {count} articles de {list}' },
   'next.hint': 'Un article avec ↻ actif revient ici après son achat.',
 

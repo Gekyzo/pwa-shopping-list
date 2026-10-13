@@ -36,6 +36,7 @@ export default {
   'empty.next': 'Für den nächsten Einkauf gibt es nichts. Tippe auf +, um hinzuzufügen, was du immer kaufst.',
   'empty.recipes': 'Es gibt keine Rezepte. Tippe auf +, um eines zu erstellen.',
   'empty.noMatch': 'Kein Rezept passt zu „{query}“.',
+  'empty.noItemMatch': 'Kein Artikel passt zu „{query}“.',
   'empty.bring': { one: '{count} Artikel aus {list} holen', other: '{count} Artikel aus {list} holen' },
   'next.hint': 'Ein Artikel mit aktivem ↻ kommt nach dem Kauf hierher zurück.',
 
