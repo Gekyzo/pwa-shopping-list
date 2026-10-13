@@ -93,6 +93,7 @@ button:disabled {
   gap: 12px;
   padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
   border-bottom: 1px solid var(--line);
+  touch-action: pan-y;
 }
 
 .ring {
@@ -159,6 +160,8 @@ main {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* A horizontal slide changes the section, so the browser must not take it. */
+  touch-action: pan-y;
   padding-bottom: 88px;
 }
 

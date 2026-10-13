@@ -1,6 +1,7 @@
 import * as store from './store.js';
 import * as recipes from './recipes.js';
 import { settle } from './swipe.js';
+import { slideTo } from './sections.js';
 import { dropIndex, moveTo, shifts } from './reorder.js';
 import { load, save, exportJson, importJson } from './storage.js';
 import { parseVersion, versionStatus } from './version.js';
@@ -1048,12 +1049,36 @@ const download = (filename, text) => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
+const showView = (view) => {
+  Object.assign(ui, { view, editingId: null, openId: null, recipeQuery: '' });
+  render();
+  if (ui.view === 'settings') checkVersion();
+};
+
 document.querySelectorAll('.bnav button').forEach((button) => {
-  button.addEventListener('click', () => {
-    Object.assign(ui, { view: button.dataset.view, editingId: null, openId: null, recipeQuery: '' });
-    render();
-    if (ui.view === 'settings') checkVersion();
-  });
+  button.addEventListener('click', () => showView(button.dataset.view));
+});
+
+// A horizontal slide that starts out of the rows changes the section. A row keeps its drag for its
+// side menus, and a text field keeps its drag for the selection.
+let sectionSlide = null;
+document.addEventListener('pointerdown', (event) => {
+  sectionSlide = null;
+  if (!event.isPrimary || event.button !== 0 || reorder || ui.sheetOpen || ui.arrangeOpen) return;
+  if (!event.target.closest('.head, main') || event.target.closest('.swipe, input, textarea')) return;
+  sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+});
+document.addEventListener('pointerup', (event) => {
+  if (sectionSlide?.pointerId !== event.pointerId) return;
+  const view = slideTo(ui.view, event.clientX - sectionSlide.x, event.clientY - sectionSlide.y);
+  sectionSlide = null;
+  if (!view) return;
+  // The click that follows a slide must not press the button below the finger.
+  clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+  showView(view);
+});
+document.addEventListener('pointercancel', () => {
+  sectionSlide = null;
 });
 
 document.querySelectorAll('#seg button').forEach((button) => {

@@ -9,6 +9,7 @@ const SHELL = [
   './src/store.js',
   './src/recipes.js',
   './src/swipe.js',
+  './src/sections.js',
   './src/reorder.js',
   './src/storage.js',
   './src/version.js',
