@@ -135,9 +135,10 @@
         <div id="shops-chips" class="chips"></div>
         <p id="shops-empty" class="hint" data-i18n="shops.empty" hidden></p>
         <div class="add-row">
-          <input id="shops-name" type="text" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
+          <input id="shops-name" type="text" list="shops-list" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
           <button class="primary" type="submit" data-i18n="shops.add"></button>
         </div>
+        <datalist id="shops-list"></datalist>
       </form>
     </div>
 
