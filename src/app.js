@@ -627,20 +627,23 @@ const itemNode = (item, groupId = null) => {
   return node;
 };
 
-// The ticked items of Actual, behind one row that opens and closes them.
+// The ticked items of Actual, behind one row that opens and closes them. A search keeps them open,
+// so that a ticked match is in view.
 const boughtSection = (bought) => {
+  const open = ui.boughtOpen || searching();
   const button = el('button', {
     type: 'button',
+    disabled: searching(),
     onclick: () => {
       ui.boughtOpen = !ui.boughtOpen;
       render();
     },
   }, [
     el('span', { textContent: t('count.bought', { count: bought.length }) }),
-    el('span', { className: 'chevron', textContent: ui.boughtOpen ? '▾' : '▸' }),
+    el('span', { className: 'chevron', textContent: open ? '▾' : '▸' }),
   ]);
-  button.setAttribute('aria-expanded', String(ui.boughtOpen));
-  return [el('li', { className: 'section' }, [button]), ...(ui.boughtOpen ? bought.map((item) => itemNode(item)) : [])];
+  button.setAttribute('aria-expanded', String(open));
+  return [el('li', { className: 'section' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
 };
 
 const groupHead = (title, count) =>
@@ -648,6 +651,8 @@ const groupHead = (title, count) =>
 
 // True for an item that the search of the list shows.
 const found = (item) => store.matchesItem(item, ui.query);
+// True while the search field has a text.
+const searching = () => ui.query.trim() !== '';
 
 // The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
 const shopNodes = (list) => {
@@ -683,7 +688,7 @@ const pendingNodes = () => {
 
 const listNodes = (items) => {
   if (ui.view !== 'active') return shownGroup() === 'shop' ? shopNodes('next') : items.filter(found).map((item) => itemNode(item));
-  const bought = items.filter((item) => item.bought);
+  const bought = items.filter((item) => item.bought && found(item));
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
@@ -912,8 +917,8 @@ const headerOf = (summary, next) => {
 
 const EMPTY_KEYS = { active: 'empty.active', next: 'empty.next', recipes: 'empty.recipes' };
 
-const emptyText = (searchable) => {
-  if (searchable) return t('empty.noMatch', { query: ui.query.trim() });
+const emptyText = () => {
+  if (searching()) return t(ui.view === 'recipes' ? 'empty.noMatch' : 'empty.noItemMatch', { query: ui.query.trim() });
   return EMPTY_KEYS[ui.view] ? t(EMPTY_KEYS[ui.view]) : '';
 };
 
@@ -947,13 +952,13 @@ const renderList = (summary, next) => {
   const nodes = nodesOf(items);
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
-  if (ui.view === 'next' && items.length) {
+  if (ui.view === 'next' && nodes.length) {
     $('items').append(el('p', { className: 'hint', textContent: t('next.hint') }));
   }
 
   $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
-  $('empty-text').textContent = emptyText(searchable);
-  $('bring').hidden = !(ui.view === 'active' && summary.incoming > 0);
+  $('empty-text').textContent = emptyText();
+  $('bring').hidden = !(ui.view === 'active' && summary.incoming > 0) || searching();
   $('bring').textContent = say('empty.bring', { count: summary.incoming, list: 'next' });
 
   $('finish').hidden = !(ui.view === 'active' && summary.total > 0 && summary.left === 0);
@@ -1131,12 +1136,16 @@ const closeSheet = () => {
   render();
 };
 
+// An add closes the search of the list, so that the row that it brings is in view.
+const endSearch = () => Object.assign(ui, { searchOpen: false, query: '' });
+
 // Puts an item that exists already into the target list, in place of a duplicate.
 const useExisting = (item) => {
   const result = store.bringToList(state, item.id, ui.target);
   const params = { name: item.name, list: ui.target };
   $('add-name').value = '';
   if (ui.target === ui.view) ui.flashId = item.id;
+  if (!result.error) endSearch();
   if (result.changed) apply(result, { undoText: say('toast.existsNowIn', params) });
   else {
     render();
@@ -1170,7 +1179,9 @@ const submitAdd = () => {
     return;
   }
   const name = input.value.trim();
-  if (apply(store.addItem(state, input.value, ui.target))) {
+  const result = store.addItem(state, input.value, ui.target);
+  if (!result.error) endSearch();
+  if (apply(result)) {
     input.value = '';
     renderSheet();
     showToast(say('toast.addedTo', { name, list: ui.target }));
@@ -1285,7 +1296,7 @@ $('query').addEventListener('input', (event) => {
 });
 
 const closeSearch = () => {
-  Object.assign(ui, { searchOpen: false, query: '' });
+  endSearch();
   render();
 };
 

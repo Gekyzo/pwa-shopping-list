@@ -36,6 +36,7 @@ export default {
   'empty.next': 'No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.',
   'empty.recipes': 'No hay recetas. Toca + para crear una.',
   'empty.noMatch': 'Ninguna receta coincide con «{query}».',
+  'empty.noItemMatch': 'Ningún artículo coincide con «{query}».',
   'empty.bring': { one: 'Traer {count} artículo de {list}', other: 'Traer {count} artículos de {list}' },
   'next.hint': 'Un artículo con ↻ activo vuelve aquí al comprarlo.',
 

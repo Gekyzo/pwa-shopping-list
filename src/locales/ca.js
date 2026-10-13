@@ -36,6 +36,7 @@ export default {
   'empty.next': 'No hi ha res per a la pròxima compra. Toca + per afegir el que compres sempre.',
   'empty.recipes': 'No hi ha receptes. Toca + per crear-ne una.',
   'empty.noMatch': 'Cap recepta coincideix amb «{query}».',
+  'empty.noItemMatch': 'Cap article coincideix amb «{query}».',
   'empty.bring': { one: 'Porta {count} article de {list}', other: 'Porta {count} articles de {list}' },
   'next.hint': 'Un article amb ↻ actiu torna aquí quan el compres.',
 

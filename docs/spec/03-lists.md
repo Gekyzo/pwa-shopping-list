@@ -124,7 +124,13 @@ sheet is open.
 - **LIST-23** The order and the grouping stay. A group with no match to buy does not show. The
   count of a group head, the header figures and the count of the bottom bar stay those of the
   full list.
-- **LIST-24** The text of the search is not stored. A change of section closes the search.
+- **LIST-24** The text of the search is not stored. A change of section closes the search. An add
+  from the add sheet closes it too, so that the row of the item is in view.
+- **LIST-25** In `Actual` the search filters the ticked items too. `N comprados` counts the ticked
+  matches and shows open while the field has a text, and its head does not close it in that time.
+  With no ticked match the head does not show.
+- **LIST-26** With no match the list shows `Ningún artículo coincide con «text».` The button
+  `Traer N artículos de Próxima` and the hint of LIST-18 do not show.
 
 ## Limits
 
