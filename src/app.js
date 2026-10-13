@@ -1,6 +1,7 @@
 import * as store from './store.js';
 import * as recipes from './recipes.js';
 import { settle } from './swipe.js';
+import { dropIndex, moveTo, shifts } from './reorder.js';
 import { load, save, exportJson, importJson } from './storage.js';
 import { parseVersion, versionStatus } from './version.js';
 
@@ -12,6 +13,11 @@ const ARRIVAL_MS = 10000;
 const SIDE_BUTTON = 64;
 const DRAG_START = 10;
 const CLICK_GUARD_MS = 350;
+// The hold of a finger that lifts a row for a manual order.
+const HOLD_MS = 400;
+// The distance from an edge of the list where a lifted row scrolls it, and the scroll of one frame.
+const EDGE = 56;
+const EDGE_STEP = 8;
 const LEAVE_MS = 200;
 // The wait for the service worker to load the new deploy.
 const REFRESH_MS = 15000;
@@ -353,6 +359,10 @@ const moveRow = (row, x) => {
 
 let clickGuardUntil = 0;
 
+const scroller = document.querySelector('main');
+// The lifted row of a manual order, or null.
+let reorder = null;
+
 // Lets a horizontal drag of the row show the side menu behind it. `settle` decides the result.
 const bindSwipe = (row, widths, item, groupId) => {
   let drag = null;
@@ -362,7 +372,7 @@ const bindSwipe = (row, widths, item, groupId) => {
     drag = { x: event.clientX, y: event.clientY, base, active: false };
   });
   row.addEventListener('pointermove', (event) => {
-    if (!drag) return;
+    if (!drag || reorder) return;
     const dx = event.clientX - drag.x;
     const dy = event.clientY - drag.y;
     if (!drag.active) {
@@ -390,6 +400,133 @@ const bindSwipe = (row, widths, item, groupId) => {
   };
   row.addEventListener('pointerup', finish);
   row.addEventListener('pointercancel', finish);
+};
+
+// The rows that a row can move among: its group of Actual, or the rows to buy of Próxima.
+// Null for a row that does not move.
+const scopeOf = (item, groupId) => {
+  if (ui.view === 'next') return item.list === 'next' ? 'next' : null;
+  return item.bought ? null : groupId ?? 'rest';
+};
+
+// Puts the lifted row below the pointer and opens the gap among the other rows of its scope.
+const placeLifted = () => {
+  const { rows, from, tops, heights } = reorder;
+  const last = rows.length - 1;
+  const raw = reorder.pointerY - reorder.startY + scroller.scrollTop - reorder.scrollStart;
+  const dy = Math.max(tops[0] - tops[from], Math.min(tops[last] + heights[last] - tops[from] - heights[from], raw));
+  reorder.to = dropIndex(tops, heights, from, tops[from] + dy);
+  const offsets = shifts(rows.length, from, reorder.to, heights[from]);
+  rows.forEach((row, index) => {
+    const y = index === from ? dy : offsets[index];
+    row.style.transform = y ? `translateY(${y}px)` : '';
+  });
+};
+
+// Scrolls the list while the pointer is near its top or its bottom edge.
+const edgeScroll = () => {
+  if (!reorder) return;
+  const { top, bottom } = scroller.getBoundingClientRect();
+  const step = reorder.pointerY < top + EDGE ? -EDGE_STEP : reorder.pointerY > bottom - EDGE ? EDGE_STEP : 0;
+  if (step) {
+    scroller.scrollTop += step;
+    placeLifted();
+  }
+  reorder.frame = requestAnimationFrame(edgeScroll);
+};
+
+const lift = (node, rowNode, pointerId, y) => {
+  const rows = [...$('items').querySelectorAll('.item')].filter((row) => row.dataset.scope === node.dataset.scope);
+  if (rows.length < 2) return;
+  const rects = rows.map((row) => row.getBoundingClientRect());
+  const from = rows.indexOf(node);
+  reorder = {
+    node,
+    rows,
+    from,
+    to: from,
+    tops: rects.map((rect) => rect.top + scroller.scrollTop),
+    heights: rects.map((rect) => rect.height),
+    startY: y,
+    pointerY: y,
+    scrollStart: scroller.scrollTop,
+  };
+  rowNode.setPointerCapture(pointerId);
+  node.classList.add('lifted');
+  navigator.vibrate?.(10);
+  reorder.frame = requestAnimationFrame(edgeScroll);
+};
+
+// Ends a move. `keep` writes the new order; without it the row goes back.
+const endReorder = (keep) => {
+  if (!reorder) return;
+  const { node, rows, from, to, frame } = reorder;
+  cancelAnimationFrame(frame);
+  reorder = null;
+  // The click that follows a drop must not tick the item.
+  clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+  // A render in the time of the move built new rows: the order of these rows is stale.
+  const moved = keep && to !== from && node.isConnected;
+  const before = moved ? rowTops() : null;
+  node.classList.remove('lifted');
+  rows.forEach((row) => {
+    row.style.transform = '';
+  });
+  if (!moved) return;
+  const ids = moveTo(rows.map((row) => row.dataset.id), from, to);
+  if (apply(store.reorderItems(state, ids), { undoText: 'Orden cambiado.' })) slide(before);
+};
+
+// Lets a hold of a finger, or a vertical drag of the mouse, lift the row and move it in its scope.
+const bindReorder = (rowNode, node, item, groupId) => {
+  let pending = null;
+  const forget = () => {
+    clearTimeout(pending?.timer);
+    pending = null;
+  };
+  const start = (pointerId, y) => {
+    if (!node.isConnected) return;
+    if (state.sort === 'name') showToast('Cambia el orden a «Añadido» para mover artículos.');
+    else lift(node, rowNode, pointerId, y);
+  };
+  rowNode.addEventListener('pointerdown', (event) => {
+    forget();
+    if (event.button !== 0 || reorder || !node.dataset.scope) return;
+    if (ui.editingId === item.id || isOpen(item.id, groupId)) return;
+    const mouse = event.pointerType === 'mouse';
+    const { pointerId, clientX: x, clientY: y } = event;
+    const timer = mouse
+      ? null
+      : setTimeout(() => {
+          pending = null;
+          start(pointerId, y);
+        }, HOLD_MS);
+    pending = { x, y, mouse, timer };
+  });
+  rowNode.addEventListener('pointermove', (event) => {
+    if (pending) {
+      const dx = Math.abs(event.clientX - pending.x);
+      const dy = Math.abs(event.clientY - pending.y);
+      if (Math.max(dx, dy) < DRAG_START) return;
+      const { mouse, y } = pending;
+      forget();
+      // A finger that moves before the hold ends scrolls or swipes. The mouse needs no hold.
+      if (mouse && dy > dx && state.sort !== 'name') lift(node, rowNode, event.pointerId, y);
+    }
+    if (reorder?.node !== node) return;
+    reorder.pointerY = event.clientY;
+    placeLifted();
+  });
+  const finish = (keep) => () => {
+    forget();
+    if (reorder?.node === node) endReorder(keep);
+  };
+  rowNode.addEventListener('pointerup', finish(true));
+  rowNode.addEventListener('pointercancel', finish(false));
+  // A long press of a finger must not open the menu of the browser.
+  rowNode.addEventListener('contextmenu', (event) => {
+    if (event.pointerType !== 'mouse') event.preventDefault();
+  });
 };
 
 // A side action closes the row, then runs.
@@ -426,6 +563,9 @@ const itemNode = (item, groupId = null) => {
     el('div', { className: open ? 'swipe open' : 'swipe' }, [...sides, rowNode]),
   ]);
   node.dataset.id = item.id;
+  const scope = scopeOf(item, groupId);
+  if (scope) node.dataset.scope = scope;
+  bindReorder(rowNode, node, item, groupId);
   return node;
 };
 
@@ -740,6 +880,8 @@ const refreshShell = () =>
   });
 
 const render = () => {
+  // A render builds new rows, so a lifted row loses its pointer and gets no release.
+  endReorder(false);
   const summary = store.tripSummary(state);
   const next = store.nextItems(state);
   const header = headerOf(summary, next);
@@ -928,6 +1070,15 @@ document.addEventListener(
   true,
 );
 
+// A lifted row follows the finger, so the list must not scroll below it.
+document.addEventListener(
+  'touchmove',
+  (event) => {
+    if (reorder) event.preventDefault();
+  },
+  { passive: false },
+);
+
 $('recipe-query').addEventListener('input', (event) => {
   Object.assign(ui, { recipeQuery: event.target.value, editingId: null, openId: null });
   render();
@@ -991,6 +1142,7 @@ $('add').addEventListener('submit', (event) => {
 });
 document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape') return;
+  endReorder(false);
   if (ui.sheetOpen) closeSheet();
   if (ui.arrangeOpen) {
     ui.arrangeOpen = false;

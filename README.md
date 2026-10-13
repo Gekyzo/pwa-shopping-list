@@ -18,6 +18,8 @@ The user interface is in Spanish. A bottom menu has four screens.
 - The button at the right of the header of **Actual** and of **Próxima** opens a sheet with
   **Ordenar por**: **Añadido** (the order in which you added the items) or **Nombre** (alphabetical).
   One choice applies to the two lists. It shows when the list has two items or more.
+- Hold a row, then move it, to change its place in **Actual** or in **Próxima**. With
+  **Agrupar por → Recetas** a row stays in its group. The order **Nombre** has no manual order.
 - **Recetas** holds recipes. A recipe is a name and a list of products.
   - The field **Buscar receta o producto** filters the recipes while you type. It finds a recipe by
     its name or by one of its products, without case or accent distinction.
@@ -92,6 +94,7 @@ npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 | `src/store.js` | Pure state functions. No DOM and no storage |
 | `src/recipes.js` | Pure recipe functions. No DOM and no storage |
 | `src/swipe.js` | The rule that settles a row swipe. No DOM |
+| `src/reorder.js` | The rules of a row move: drop place, gap and new order. No DOM |
 | `src/storage.js` | Load, save, export and import, with validation |
 | `src/version.js` | Pure version rules: validation, comparison and the next version |
 | `version.json` | The version of the deploy, `{ version, date }`. Written by the bump script |
