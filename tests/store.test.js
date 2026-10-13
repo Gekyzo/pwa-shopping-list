@@ -20,6 +20,7 @@ import {
   arrivalMessage,
   setSort,
   sortItems,
+  reorderItems,
 } from '../src/store.js';
 
 let counter = 0;
@@ -432,4 +433,47 @@ test('nextItems is one list in name order', () => {
   const start = build(['Sal', 'next'], ['Zumo', 'active', { bought: true, recurrent: true }], ['Arroz', 'next'], ['Leche', 'active', { bought: true, again: true }]);
   assert.deepEqual(names(nextItems(start)), ['Sal', 'Arroz', 'Zumo', 'Leche']);
   assert.deepEqual(names(nextItems(setSort(start, 'name').state)), ['Arroz', 'Leche', 'Sal', 'Zumo']);
+});
+
+test('reorderItems writes the new order of a full scope', () => {
+  const before = build(['a', 'active'], ['b', 'active'], ['c', 'active']);
+  const ids = ['c', 'a', 'b'].map((name) => find(before, name).id);
+  const { state, error } = reorderItems(before, ids);
+  assert.equal(error, undefined);
+  assert.deepEqual(names(state.items), ['c', 'a', 'b']);
+});
+
+test('reorderItems moves the items of a sub-scope and leaves the others in place', () => {
+  const before = build(['a', 'active'], ['b', 'active'], ['c', 'active'], ['d', 'active']);
+  const { state } = reorderItems(before, [find(before, 'd').id, find(before, 'b').id]);
+  assert.deepEqual(names(state.items), ['a', 'd', 'c', 'b']);
+});
+
+test('reorderItems does not change its input', () => {
+  const before = build(['a', 'active'], ['b', 'active']);
+  const copy = structuredClone(before);
+  reorderItems(before, [find(before, 'b').id, find(before, 'a').id]);
+  assert.deepEqual(before, copy);
+});
+
+test('reorderItems returns the same state for the same order', () => {
+  const before = build(['a', 'active'], ['b', 'active']);
+  const result = reorderItems(before, before.items.map((item) => item.id));
+  assert.equal(result.state, before);
+  assert.equal(result.error, undefined);
+});
+
+test('reorderItems rejects an id that is not known', () => {
+  const before = build(['a', 'active'], ['b', 'active']);
+  const result = reorderItems(before, [find(before, 'a').id, 'nope']);
+  assert.equal(result.error, 'Artículo no encontrado.');
+  assert.equal(result.state, before);
+});
+
+test('reorderItems rejects an id that is there two times', () => {
+  const before = build(['a', 'active'], ['b', 'active']);
+  const id = find(before, 'a').id;
+  const result = reorderItems(before, [id, id]);
+  assert.equal(result.error, 'Orden no válido.');
+  assert.equal(result.state, before);
 });
