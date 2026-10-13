@@ -1023,8 +1023,9 @@ const refreshShell = () =>
 // The trip button of the header and its menu. It touches no row, so a tap out of the menu can
 // close it without a render.
 const renderTripMenu = () => {
-  if (ui.view !== 'active' || !store.canStartNewShopping(state)) ui.tripMenuOpen = false;
-  $('trip-button').hidden = ui.view !== 'active' || !store.canStartNewShopping(state);
+  if (ui.view !== 'active') ui.tripMenuOpen = false;
+  $('trip-button').hidden = ui.view !== 'active';
+  $('finish-menu').disabled = !store.canStartNewShopping(state);
   $('trip-button').setAttribute('aria-expanded', String(ui.tripMenuOpen));
   $('trip-menu').hidden = !ui.tripMenuOpen;
 };

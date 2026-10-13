@@ -87,8 +87,8 @@ edge. A sheet comes up from the bottom, over a veil.
 
 - **NAV-8** There are three sheets: add, arrange and shops. One is open at a time. A tap on the
   veil or `Escape` closes it. The `+` button does not show while a sheet is open.
-- **NAV-9** The trip button of the header has three dots. It shows in `Actual` when TRIP-1 holds.
-  A tap opens the trip menu below it, and a second tap closes the menu. The menu has one entry,
+- **NAV-9** The trip button of the header has three dots. It shows in `Actual`. A tap
+  opens the trip menu below it, and a second tap closes the menu. The menu has one entry,
   **Terminar compra**, with `N vuelven · N se van` below its name.
 - **NAV-10** A tap out of the trip menu or `Escape` closes it. That tap still does its own work.
 

@@ -62,7 +62,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/app.js`.
 - **TRIP-4** The control shows in three places:
   1. A banner `¿Has terminado?` in `Actual`, when the list has items and all are ticked. Its text
      gives the count that comes back and the count that is deleted.
-  2. The entry of the trip menu of `Actual` (NAV-9), with `N vuelven · N se van`.
+  2. The entry of the trip menu of `Actual` (NAV-9), with `N vuelven · N se van`. It is disabled
+     when TRIP-1 does not hold.
   3. The button `Traer N artículos de Próxima`, in the empty state of `Actual`, when items wait in
      `list: 'next'`. Its message is `Artículos traídos de Próxima.`
 - **TRIP-5** After **Terminar compra** the screen shows `Actual`. `Deshacer` restores the full
