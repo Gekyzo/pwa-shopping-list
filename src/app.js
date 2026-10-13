@@ -436,7 +436,12 @@ const edgeScroll = () => {
 };
 
 const lift = (node, rowNode, pointerId, y) => {
-  const rows = [...$('items').querySelectorAll('.item')].filter((row) => row.dataset.scope === node.dataset.scope);
+  // The rows of the scope that are next to the row. In the name order a row of Próxima that was
+  // bought today can be between two rows of the scope; a move does not pass it.
+  const inScope = (row) => row?.dataset.scope === node.dataset.scope;
+  const rows = [node];
+  for (let row = node.previousElementSibling; inScope(row); row = row.previousElementSibling) rows.unshift(row);
+  for (let row = node.nextElementSibling; inScope(row); row = row.nextElementSibling) rows.push(row);
   if (rows.length < 2) return;
   try {
     rowNode.setPointerCapture(pointerId);
@@ -480,7 +485,9 @@ const endReorder = (keep) => {
   });
   if (!moved) return;
   const ids = moveTo(rows.map((row) => row.dataset.id), from, to);
-  if (apply(store.reorderItems(state, ids), { undoText: 'Orden cambiado.' })) slide(before);
+  // A move in the name order changes the order to Personalizado.
+  const undoText = state.sort === 'name' ? 'Orden cambiado a «Personalizado».' : 'Orden cambiado.';
+  if (apply(store.reorderItems(state, ids), { undoText })) slide(before);
 };
 
 // Lets a hold of a finger, or a vertical drag of the mouse, lift the row and move it in its scope.
@@ -495,8 +502,7 @@ const bindReorder = (rowNode, node, item, groupId) => {
   const start = (pointerId, y) => {
     if (!node.isConnected) return;
     held = true;
-    if (state.sort === 'name') showToast('Cambia el orden a «Personalizado» para mover artículos.');
-    else lift(node, rowNode, pointerId, y);
+    lift(node, rowNode, pointerId, y);
   };
   rowNode.addEventListener('pointerdown', (event) => {
     forget();
@@ -523,7 +529,7 @@ const bindReorder = (rowNode, node, item, groupId) => {
       const { mouse, y } = pending;
       forget();
       // A finger that moves before the hold ends scrolls or swipes. The mouse needs no hold.
-      if (mouse && dy > dx && state.sort !== 'name') lift(node, rowNode, event.pointerId, y);
+      if (mouse && dy > dx) lift(node, rowNode, event.pointerId, y);
     }
     if (reorder?.node !== node || reorder.pointerId !== event.pointerId) return;
     reorder.pointerY = event.clientY;

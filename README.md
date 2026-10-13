@@ -16,11 +16,12 @@ The user interface is in Spanish. A bottom menu has four screens.
   - A ticked one-time item goes to **Próxima** only when you tap `+ Próxima`.
   - You can also add items to **Próxima** directly. Such an item is recurrent by default.
 - The button at the right of the header of **Actual** and of **Próxima** opens a sheet with
-  **Ordenar por**: **Personalizado** (your own order; a new item goes to the end) or **Nombre**
-  (alphabetical).
+  **Ordenar por**: **Nombre** (alphabetical) or **Personalizado** (your own order; a new item goes
+  to the end).
   One choice applies to the two lists. It shows when the list has two items or more.
 - Hold a row, then move it, to change its place in **Actual** or in **Próxima**. With
-  **Agrupar por → Recetas** a row stays in its group. The order **Nombre** has no manual order.
+  **Agrupar por → Recetas** a row stays in its group. A move in the order **Nombre** changes the
+  order to **Personalizado**, which then starts from the alphabetical order.
 - **Recetas** holds recipes. A recipe is a name and a list of products.
   - The field **Buscar receta o producto** filters the recipes while you type. It finds a recipe by
     its name or by one of its products, without case or accent distinction.
