@@ -22,7 +22,9 @@ edge. A sheet comes up from the bottom, over a veil.
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
 - **NAV-6** `Ajustes` has four groups: **Compra** (**Terminar compra**), **Copia de seguridad**
-  (**Exportar copia**, **Importar copia**), **Idioma** and **Versión**.
+  (**Exportar copia**, **Importar copia**), **Idioma** and **Versión**. Each of the two buttons of
+  the backup has an icon before its text: an arrow that goes up out of a tray for the export, an
+  arrow that goes down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
   `No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.` or `No hay
   recetas. Toca + para crear una.`

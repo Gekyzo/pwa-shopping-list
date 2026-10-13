@@ -541,6 +541,7 @@ button.pill {
 }
 
 .recipe-link svg,
+.group svg,
 .send svg,
 .side svg,
 .recur svg {
@@ -635,6 +636,11 @@ button.pill {
   padding: 0 14px;
   border-radius: 0;
   text-align: left;
+}
+
+.group svg {
+  flex: none;
+  color: var(--muted);
 }
 
 .group select {
