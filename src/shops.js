@@ -20,6 +20,12 @@ const setShops = (state, id, shops) => ({
 // The shops in use, in name order. A shop exists while an item has it.
 export const shopNames = (state) => namesOf(state.items);
 
+// The shops that the field of an item offers: the shops in use that the item does not have.
+export const shopSuggestions = (state, id) => {
+  const item = state.items.find((entry) => entry.id === id);
+  return item ? shopNames(state).filter((shop) => !hasShop(item, shop)) : [];
+};
+
 // A name that is a shop in use takes the spelling of that shop. A shop that the item has
 // already returns the same state object.
 export const addItemShop = (state, id, rawName) => {

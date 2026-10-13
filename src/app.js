@@ -738,6 +738,8 @@ const renderShops = () => {
   });
   $('shops-chips').replaceChildren(...chips);
   $('shops-empty').hidden = chips.length > 0;
+  // The field completes a typed name with a shop in use.
+  $('shops-list').replaceChildren(...shops.shopSuggestions(state, item.id).map((shop) => el('option', { value: shop })));
 };
 
 // Recipes
@@ -1269,9 +1271,17 @@ $('arrange-veil').addEventListener('click', () => {
 });
 $('shops-veil').addEventListener('click', closeShops);
 // The sheet stays open after a new shop, so that an item gets two shops in one visit.
+const submitShop = () => {
+  if (apply(shops.addItemShop(state, ui.shopsId, $('shops-name').value))) $('shops-name').value = '';
+};
 $('shops-form').addEventListener('submit', (event) => {
   event.preventDefault();
-  if (apply(shops.addItemShop(state, ui.shopsId, $('shops-name').value))) $('shops-name').value = '';
+  submitShop();
+});
+// A suggestion that the user picks replaces the text of the field: it adds the shop at once.
+$('shops-name').addEventListener('input', (event) => {
+  const picked = event.inputType === 'insertReplacementText' || event.inputType === undefined;
+  if (picked && shops.shopSuggestions(state, ui.shopsId).includes(event.target.value)) submitShop();
 });
 // The sheet stays open after a choice, so that the group and the order change in one visit.
 document.querySelectorAll('#arrange-group button').forEach((button) => {

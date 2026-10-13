@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem, setSort } from '#store';
-import { shopNames, addItemShop, removeItemShop, shopGroups } from '#shops';
+import { shopNames, shopSuggestions, addItemShop, removeItemShop, shopGroups } from '#shops';
 
 let counter = 0;
 const newId = () => `id-${++counter}`;
@@ -143,4 +143,21 @@ test('shopGroups with no shops has no groups and all the items in rest', () => {
   assert.deepEqual(shape(shopGroups(state, 'active')), { groups: [], rest: ['Milk', 'Salt'] });
   assert.deepEqual(shape(shopGroups(state, 'next')), { groups: [], rest: ['Rice'] });
   assert.deepEqual(shape(shopGroups(emptyState(), 'active')), { groups: [], rest: [] });
+});
+
+test('shopSuggestions gives the shops in use that the item does not have, in name order', () => {
+  const state = build(
+    ['Milk', 'active', { shops: ['Lidl'] }],
+    ['Salt', 'next', { shops: ['Zeta', 'árbol', 'lidl'] }],
+    ['Rice', 'active'],
+  );
+  assert.deepEqual(shopSuggestions(state, find(state, 'Milk').id), ['árbol', 'Zeta']);
+  assert.deepEqual(shopSuggestions(state, find(state, 'Rice').id), ['árbol', 'Lidl', 'Zeta']);
+});
+
+test('shopSuggestions is empty for an unknown item and for no shops', () => {
+  const state = build(['Milk', 'active', { shops: ['Lidl'] }]);
+  assert.deepEqual(shopSuggestions(state, 'nope'), []);
+  assert.deepEqual(shopSuggestions(state, find(state, 'Milk').id), []);
+  assert.deepEqual(shopSuggestions(emptyState(), 'nope'), []);
 });
