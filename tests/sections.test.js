@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { SECTIONS, direction, slideTo } from '../src/sections.js';
+import { SECTIONS, direction, slideTo } from '#sections';
 
 test('SECTIONS has the order of the bottom bar', () => {
   assert.deepEqual(SECTIONS, ['active', 'next', 'recipes', 'settings']);

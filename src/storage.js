@@ -1,5 +1,5 @@
-import { emptyState, SORTS } from './store.js';
-import { isWebUrl } from './recipes.js';
+import { emptyState, SORTS } from '#store';
+import { isWebUrl } from '#recipes';
 
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;

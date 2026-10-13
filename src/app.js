@@ -1,10 +1,10 @@
-import * as store from './store.js';
-import * as recipes from './recipes.js';
-import { settle } from './swipe.js';
-import { direction, slideTo } from './sections.js';
-import { dropIndex, moveTo, shifts } from './reorder.js';
-import { load, save, exportJson, importJson } from './storage.js';
-import { parseVersion, versionStatus } from './version.js';
+import * as store from '#store';
+import * as recipes from '#recipes';
+import { settle } from '#swipe';
+import { direction, slideTo } from '#sections';
+import { dropIndex, moveTo, shifts } from '#reorder';
+import { load, save, exportJson, importJson } from '#storage';
+import { parseVersion, versionStatus } from '#version';
 
 const UNDO_MS = 5000;
 const MESSAGE_MS = 3000;

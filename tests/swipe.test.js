@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { settle } from '../src/swipe.js';
+import { settle } from '#swipe';
 
 const sides = { start: 160, end: 160 };
 

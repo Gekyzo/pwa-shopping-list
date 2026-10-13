@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { emptyState, addItem, toggleBought, setSort } from '../src/store.js';
+import { emptyState, addItem, toggleBought, setSort } from '#store';
 import {
   addRecipe,
   renameRecipe,
@@ -12,7 +12,7 @@ import {
   recipeGroups,
   setGrouped,
   searchRecipes,
-} from '../src/recipes.js';
+} from '#recipes';
 
 let counter = 0;
 const newId = () => `id-${++counter}`;

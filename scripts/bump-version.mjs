@@ -2,7 +2,7 @@
 // the same version. Run by .githooks/pre-push, which bumps the patch.
 // By hand, for a larger step: node scripts/bump-version.mjs minor|major, then commit.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { parseVersion, nextVersion, LEVELS } from '../src/version.js';
+import { parseVersion, nextVersion, LEVELS } from '#version';
 
 const file = new URL('../version.json', import.meta.url);
 const manifest = new URL('../package.json', import.meta.url);

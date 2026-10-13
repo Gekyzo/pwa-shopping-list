@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { STORAGE_KEY, CORRUPT_KEY, load, save, exportJson, importJson } from '../src/storage.js';
-import { emptyState } from '../src/store.js';
+import { STORAGE_KEY, CORRUPT_KEY, load, save, exportJson, importJson } from '#storage';
+import { emptyState } from '#store';
 
 const fakeStorage = (initial = {}) => {
   const data = new Map(Object.entries(initial));

@@ -21,7 +21,7 @@ import {
   setSort,
   sortItems,
   reorderItems,
-} from '../src/store.js';
+} from '#store';
 
 let counter = 0;
 const newId = () => `id-${++counter}`;

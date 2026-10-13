@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { dropIndex, shifts, moveTo } from '../src/reorder.js';
+import { dropIndex, shifts, moveTo } from '#reorder';
 
 // Four rows of 56 px.
 const tops = [0, 56, 112, 168];
