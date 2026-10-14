@@ -44,7 +44,7 @@ export default {
   'row.again': 'Buy again next time: {name}',
   'row.boughtToday': 'bought today',
   'row.removeFrom': 'Remove from {list}: {name}',
-  'edit.title': 'Edit {name}',
+  'edit.title': 'Edit',
   'edit.name': 'Name',
   'group.others': 'Others',
   'group.noShop': 'No shop',

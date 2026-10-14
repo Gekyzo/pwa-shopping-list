@@ -54,7 +54,7 @@ of it.
   open side closes with a drag back of the same length. If not, the row goes back to where it was.
 - **ROW-6** One row is open at a time. A tap out of the open row closes it, and that tap still
   does its own work. An action closes the row, then runs.
-- **ROW-7** The edit sheet `Editar <name>` has the field **Nombre**, 80 characters at most, then
+- **ROW-7** The edit sheet `Editar` has the field **Nombre**, 80 characters at most, then
   the shops (SHOP-9 to SHOP-15). `Enter` or a loss of focus saves the name (LIST-5); an error
   shows its message and the field shows the name again. `Escape` in the field puts the name back
   and keeps the sheet open. The sheet opens with no focus in a field.
