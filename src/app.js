@@ -77,6 +77,9 @@ document.documentElement.dataset.theme = theme;
 // The modules that the user turned off (MOD-2).
 let off = storage ? loadModules(storage) : [];
 const isOn = (id) => !off.includes(id);
+// Set by a switch of Módulos, so that the render that follows animates the bottom bar (MOD-9).
+let navMotion = false;
+const NAV_MS = 250;
 
 // `t` for a text that names a list: the `list` parameter is a list id.
 const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
@@ -1174,7 +1177,7 @@ const render = () => {
   $('next-count').textContent = next.length || '';
   const sections = visibleSections(off);
   document.querySelectorAll('.bnav button').forEach((button) => {
-    button.hidden = !sections.includes(button.dataset.view);
+    showNavButton(button, sections.includes(button.dataset.view));
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
   });
@@ -1189,6 +1192,39 @@ const render = () => {
   renderArrange();
   renderShops();
   renderMeal();
+};
+
+// Shows or hides the button of a section in the bottom bar. With `navMotion` the button fades and
+// its place opens or closes. A button that leaves stays in the bar until its animation ends.
+const showNavButton = (button, shown) => {
+  const leaving = button.dataset.leaving === '1';
+  if (shown === (!button.hidden && !leaving)) return;
+  button.getAnimations().forEach((motion) => motion.cancel());
+  delete button.dataset.leaving;
+  if (!navMotion || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    button.hidden = !shown;
+    return;
+  }
+  button.hidden = false;
+  if (!shown) button.dataset.leaving = '1';
+  button.style.overflow = 'hidden';
+  const frames = [
+    { flexGrow: 0, minWidth: 0, opacity: 0, transform: 'scale(0.5)' },
+    { flexGrow: 1, minWidth: 0, opacity: 1, transform: 'scale(1)' },
+  ];
+  const motion = button.animate(frames, { duration: NAV_MS, easing: 'ease', direction: shown ? 'normal' : 'reverse' });
+  motion.finished.then(
+    () => {
+      button.style.overflow = '';
+      if (shown) return;
+      button.hidden = true;
+      delete button.dataset.leaving;
+    },
+    // A later change cancelled the animation and set the button itself.
+    () => {
+      button.style.overflow = '';
+    },
+  );
 };
 
 // Writes the fixed text of the page, then the text that a render builds.
@@ -1715,8 +1751,10 @@ document.querySelectorAll('[data-module]').forEach((box) => {
     if (storage) saveModules(storage, off);
     // The switch-off of Próxima brings its items to Actual (MOD-6).
     const result = box.dataset.module === 'next' && !box.checked ? store.bringAllToActual(state) : { state };
+    navMotion = true;
     if (result.state !== state) apply(result, { undoText: say('toast.brought', { list: 'next' }) });
     else render();
+    navMotion = false;
   });
 });
 
