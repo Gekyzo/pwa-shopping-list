@@ -1,0 +1,215 @@
+import * as store from '#store';
+import {
+  load,
+  save,
+  loadLanguage,
+  saveLanguage,
+  loadHand,
+  saveHand,
+  loadShopLists,
+  saveShopLists,
+  loadTheme,
+  saveTheme,
+  loadModules,
+  saveModules,
+  loadOnboarded,
+  hasStoredState,
+} from '#storage';
+import { LANGUAGES, resolveLanguage, translator } from '#i18n';
+import { shouldShow } from '#onboarding';
+
+// The values that the views share. A view reads them through the import, a live binding, and
+// changes them only through the setters of this module.
+
+export const UNDO_MS = 5000;
+export const MESSAGE_MS = 3000;
+// The app opens by itself at an arrival, so its message stays longer.
+export const ARRIVAL_MS = 10000;
+// Width of one button of a side menu of a row, the same as in styles.css.
+export const SIDE_BUTTON = 64;
+export const DRAG_START = 10;
+export const CLICK_GUARD_MS = 350;
+// The hold of a finger that lifts a row for a manual order.
+export const HOLD_MS = 400;
+// The distance from an edge of the list where a lifted row scrolls it, and the scroll of one frame.
+export const EDGE = 56;
+export const EDGE_STEP = 8;
+export const LEAVE_MS = 200;
+// The wait for the service worker to load the new deploy.
+export const REFRESH_MS = 15000;
+// The wait for the deployed version: a weak network can leave the request open.
+export const CHECK_MS = 8000;
+
+export const $ = (id) => document.getElementById(id);
+
+export const el = (tag, props = {}, children = []) => {
+  const node = Object.assign(document.createElement(tag), props);
+  node.append(...children);
+  return node;
+};
+
+export const storage = (() => {
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+})();
+
+export const scroller = document.querySelector('main');
+
+// The choice of the user, or null to follow the phone.
+export let chosen = storage ? loadLanguage(storage, LANGUAGES) : null;
+export let lang = resolveLanguage(navigator.languages, chosen);
+export let t = translator(lang);
+// The hand that holds the phone: `left` mirrors the controls, in styles.css.
+export let hand = storage ? loadHand(storage) : 'right';
+document.documentElement.dataset.hand = hand;
+
+// The colours: `light` or `dark` override the phone, in styles.css; `system` follows it.
+export let theme = storage ? loadTheme(storage) : 'system';
+// `hide` takes the row of shop lists away from Actual and Próxima.
+export let shopLists = storage ? loadShopLists(storage) : 'show';
+document.documentElement.dataset.theme = theme;
+
+// The modules that the user turned off (MOD-2).
+export let off = storage ? loadModules(storage) : [];
+export const isOn = (id) => !off.includes(id);
+export let navMotion = false;
+
+// `t` for a text that names a list: the `list` parameter is a list id.
+export const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
+
+// The text of a message of a pure module.
+export const textOf = ({ key, params }) => say(key, params);
+
+// Read before the state. A stored state, valid or not, means that the install is not new.
+const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredState(storage) }) : false;
+
+export let state = storage ? load(storage) : store.emptyState();
+// `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
+export const ui = {
+  view: 'active',
+  editingId: null,
+  openId: null,
+  flashId: null,
+  sheetOpen: false,
+  // The sheet of the header button, with the group and the order of the list.
+  arrangeOpen: false,
+  // True while the sheet of the trip button of Actual is open.
+  tripOpen: false,
+  // The item whose edit sheet is open, or null.
+  editId: null,
+  // The meal whose sheet is open, as { day, meal }, or null.
+  mealOpen: null,
+  mealQuery: '',
+  // The page of the walkthrough in view, or null while the walkthrough is closed.
+  onboarding: firstStart ? 0 : null,
+  target: 'active',
+  boughtOpen: false,
+  openRecipeId: null,
+  // The text of the search field, which Recetas shows always and a list shows on demand. It is
+  // not stored.
+  query: '',
+  // True while the search field of Actual or of Próxima is open.
+  searchOpen: false,
+  // The shop list of each section: null for Todas, '' for Sin tienda, or a shop. Not stored.
+  shop: { active: null, next: null },
+  // The group where the row actions are open: a recipe id, `shop:<name>`, or null out of a group.
+  openGroup: null,
+  // The side menu of the open item row: 'end' (slide left) or null.
+  openSide: null,
+  // Where the last drag left its row, so that the next render moves the row from there.
+  settleFrom: null,
+  focusProduct: false,
+  // The ids of the ticked items whose rows are closing. A render in that time builds them closed.
+  leaving: new Set(),
+  // `running` is the version of the cached shell; `latest` is the deployed one, read when Ajustes opens.
+  version: { running: null, latest: null, checking: false },
+};
+let toastTimer = null;
+export let undoState = null;
+
+export const showToast = (text, { undo = null, ms = undo ? UNDO_MS : MESSAGE_MS } = {}) => {
+  clearTimeout(toastTimer);
+  undoState = undo;
+  $('toast-text').textContent = text;
+  $('toast-undo').hidden = !undo;
+  $('toast').hidden = false;
+  toastTimer = setTimeout(hideToast, ms);
+};
+
+export const hideToast = () => {
+  clearTimeout(toastTimer);
+  undoState = null;
+  $('toast').hidden = true;
+};
+
+// The render of the whole screen. app.js registers it, so that a view renders without importing app.js.
+let renderer = () => {};
+export const setRender = (fn) => {
+  renderer = fn;
+};
+export const render = () => renderer();
+
+export const commit = (next) => {
+  state = next;
+  const saved = storage !== null && save(storage, state);
+  render();
+  return saved;
+};
+
+// Applies a store operation. `undoText` makes the change reversible for a few seconds.
+export const apply = (result, { undoText = null } = {}) => {
+  if (result.error) {
+    showToast(textOf(result.error));
+    return false;
+  }
+  const previous = state;
+  const saved = commit(result.state);
+  if (!saved) showToast(t('error.notSaved'));
+  else if (undoText) showToast(undoText, { undo: previous });
+  else hideToast();
+  return true;
+};
+
+// The click that follows a drag, a drop or a slide must not press the button below the finger.
+export let clickGuardUntil = 0;
+export const guardClick = () => {
+  clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+};
+
+// With no storage a choice lasts until the app closes.
+export const setLanguage = (code) => {
+  chosen = code;
+  if (storage) saveLanguage(storage, chosen);
+  lang = resolveLanguage(navigator.languages, chosen);
+  t = translator(lang);
+};
+
+export const setHand = (value) => {
+  hand = value === 'left' ? 'left' : 'right';
+  if (storage) saveHand(storage, hand);
+  document.documentElement.dataset.hand = hand;
+};
+
+export const setTheme = (value) => {
+  theme = ['light', 'dark'].includes(value) ? value : 'system';
+  if (storage) saveTheme(storage, theme);
+  document.documentElement.dataset.theme = theme;
+};
+
+export const setShopLists = (choice) => {
+  shopLists = choice;
+  if (storage) saveShopLists(storage, shopLists);
+};
+
+export const setModules = (next) => {
+  off = next;
+  if (storage) saveModules(storage, off);
+};
+
+// Set by a switch of Módulos, so that the render that follows animates the bottom bar (MOD-9).
+export const setNavMotion = (on) => {
+  navMotion = on;
+};

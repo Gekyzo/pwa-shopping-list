@@ -18,6 +18,7 @@
 | `src/version.js` | Pure version rules | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
+| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
 | `src/app.js` | Render and event handling. The only module that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
 
@@ -39,6 +40,10 @@
   the import map of `index.html`. `tests/aliases.test.js` checks that the two agree.
 - **ENG-8** A new id comes from `crypto.randomUUID()`. An operation that creates a record takes
   the id function as a parameter, for the tests.
+- **ENG-16** The screen code is `src/app.js` and the views of `src/ui/`. A view never imports
+  `src/app.js`, a pure module never imports a view, and the imports among the views have no
+  cycle. `src/ui/context.js` owns the values that the views share; another module reads them
+  through its import and changes them only through a setter. `tests/layers.test.js` checks this.
 
 ## Change guide
 
@@ -74,6 +79,7 @@
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own |
 | `tests/aliases.test.js` | The import map against `package.json` |
+| `tests/layers.test.js` | The layer rules: no import of `src/app.js`, no view in a pure module, no cycle among `src/ui/`, one owner for each shared value, `SHELL` (ENG-16) |
 | `tests/png.test.js` | The PNG encoder and decoder of `scripts/png.mjs`, which `npm run icons` uses |
 | `tests/release.test.js` | The release of `scripts/release.mjs`: the bump commit, the tag and the refusals (VER-10 to VER-12) |
 | `tests/changelog.test.js` | The release of `CHANGELOG.md` by `scripts/changelog.mjs`, which the version bump uses (VER-17) |

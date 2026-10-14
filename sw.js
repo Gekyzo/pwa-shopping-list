@@ -1,4 +1,4 @@
-const CACHE = 'shopping-shell-v10';
+const CACHE = 'shopping-shell-v11';
 
 const SHELL = [
   './',
@@ -6,6 +6,7 @@ const SHELL = [
   './styles.css',
   './manifest.webmanifest',
   './src/app.js',
+  './src/ui/context.js',
   './src/store.js',
   './src/recipes.js',
   './src/menu.js',
