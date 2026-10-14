@@ -4,10 +4,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 ## Planned
 
-- **Price estimation.** Estimate the price of a list.
-- **Send a copy.** Send a list to a contact as a link, through the Android
-  share sheet. The list travels in the link fragment, with no server and no
-  login. The contact gets a copy; later changes do not sync.
 - **Store sections.** Add the category or section of the store to each product.
   The sections are configurable in the settings.
 - **Quantities.** Add a quantity to each item.
@@ -20,6 +16,12 @@ Not needed yet. Each item names what makes it needed.
   `localStorage`. Unnecessary until the state nears the 5 MB limit of
   `localStorage`, or until a feature requires it: purchase or price history,
   photos, or sync.
+- **Price estimation.** Estimate the price of a list. Unnecessary until the
+  products have prices, from a price field or from **Purchase history**.
+- **Send a copy.** Send a list to a contact as a link, through the Android
+  share sheet. The list travels in the link fragment, with no server and no
+  login. The contact gets a copy; later changes do not sync. Unnecessary until a
+  second person shops from the lists.
 
 ## Pro
 
