@@ -12,6 +12,7 @@ no change for the user has no entry.
 ### Changed
 
 - A new app icon: a bag of groceries with bread, greens, a tomato and milk.
+- The version in `Ajustes` is plain text at the foot, with no heading and no group.
 
 ## 1.0.15 - 2026-10-14
 

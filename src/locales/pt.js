@@ -148,7 +148,6 @@ export default {
   'settings.moduleRecipes': 'Receitas e menu',
   'settings.help': 'Ajuda',
   'settings.onboarding': 'Ver a introdução',
-  'settings.version': 'Versão',
   'settings.update': 'Atualizar',
   'version.running': 'Versão {version} · {date}',
   'version.none': 'Versão desconhecida',
