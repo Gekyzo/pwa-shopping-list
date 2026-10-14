@@ -28,7 +28,7 @@ const normalizeShops = (shops) => {
 
 const normalizeItem = (item) => {
   if (typeof item !== 'object' || item === null) return null;
-  const { id, name, recurrent, list, bought, again, shops } = item;
+  const { id, name, recurrent, list, bought, again, shops, quantity } = item;
   const valid =
     typeof id === 'string' &&
     id !== '' &&
@@ -46,6 +46,7 @@ const normalizeItem = (item) => {
     bought: isBought,
     again: isBought && !recurrent && again,
     shops: normalizeShops(shops),
+    quantity: typeof quantity === 'string' ? quantity.trim() : '',
   };
 };
 
@@ -98,9 +99,9 @@ const normalizeMenu = (rawMenu, known) => {
     .sort((a, b) => a.day - b.day || MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
 };
 
-const VERSIONS = [1, 2, 3, 4];
+const VERSIONS = [1, 2, 3, 4, 5];
 
-// Returns a clean version 4 state, or null when the data is not a known state.
+// Returns a clean version 5 state, or null when the data is not a known state.
 const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
@@ -120,7 +121,7 @@ const normalizeState = (data) => {
   const rawSent = Array.isArray(data.sent) ? data.sent : [];
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
   return {
-    version: 4,
+    version: 5,
     items: oneSpelling(items),
     recipes,
     sent,

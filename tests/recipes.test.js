@@ -130,8 +130,8 @@ test('sendRecipe creates a one-time active item for each new product', () => {
   assert.deepEqual(
     result.state.items.map(({ id: itemId, ...rest }) => rest),
     [
-      { name: 'Eggs', recurrent: false, list: 'active', bought: false, again: false, shops: [] },
-      { name: 'Potatoes', recurrent: false, list: 'active', bought: false, again: false, shops: [] },
+      { name: 'Eggs', recurrent: false, list: 'active', bought: false, again: false, shops: [], quantity: '' },
+      { name: 'Potatoes', recurrent: false, list: 'active', bought: false, again: false, shops: [], quantity: '' },
     ],
   );
   assert.deepEqual(state.items, []);

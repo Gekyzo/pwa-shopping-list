@@ -6,7 +6,7 @@ The app has one state object. Each operation returns a new object and never chan
 
 ```js
 {
-  version: 4,
+  version: 5,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
   sent: [string],     // ids of the recipes sent to Actual in this trip, in send order
@@ -16,7 +16,7 @@ The app has one state object. Each operation returns a new object and never chan
 }
 ```
 
-The empty state is `{ version: 4, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] }`.
+The empty state is `{ version: 5, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] }`.
 
 ## Item
 
@@ -29,6 +29,7 @@ The empty state is `{ version: 4, items: [], recipes: [], sent: [], group: 'reci
   bought: boolean,    // ticked
   again: boolean,     // a ticked one-time item that the user wants at the next trip
   shops: [string],    // shop names
+  quantity: string,   // free text, such as '2' or '1 kg'; trimmed; '' for none
 }
 ```
 

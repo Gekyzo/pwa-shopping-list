@@ -8,7 +8,7 @@ export const GROUPS = ['recipe', 'shop', 'none'];
 
 // `sent` holds the ids of the recipes sent to Active in this trip. `group` is the choice of the
 // user to show a list in groups, and `sort` the order of the two lists.
-export const emptyState = () => ({ version: 4, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] });
+export const emptyState = () => ({ version: 5, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] });
 
 // An error is a message: the key of its text, with the parameters of the text. A `list`
 // parameter holds a list id. The screen turns the message into text.
@@ -34,7 +34,7 @@ export const addItem = (state, rawName, list, newId = () => crypto.randomUUID())
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name);
   if (error) return reject(state, ...error);
-  const item = { id: newId(), name, recurrent: list === 'next', list, bought: false, again: false, shops: [] };
+  const item = { id: newId(), name, recurrent: list === 'next', list, bought: false, again: false, shops: [], quantity: '' };
   return { state: { ...state, items: [...state.items, item] } };
 };
 
@@ -43,6 +43,14 @@ export const renameItem = (state, id, rawName) => {
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name, id);
   return error ? reject(state, ...error) : patchItem(state, id, { name });
+};
+
+// The quantity is free text, such as `2` or `1 kg`. An empty text clears it.
+export const setQuantity = (state, id, rawQuantity) => {
+  const item = findItem(state, id);
+  if (!item) return reject(state, 'error.itemNotFound');
+  const quantity = String(rawQuantity ?? '').trim();
+  return quantity === item.quantity ? { state } : patchItem(state, id, { quantity });
 };
 
 export const toggleRecurrent = (state, id) => {

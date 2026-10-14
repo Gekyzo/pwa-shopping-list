@@ -9,7 +9,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/app.js`.
 - **LIST-2** A name that an item has already, in either list, gives `error.duplicateItem` with the
   name and the list of that item (DATA-3).
 - **LIST-3** An item created in `Actual` is one-time. An item created in `Próxima` is recurrent.
-- **LIST-4** A new item goes to the end of `items`, with no shop, not ticked.
+- **LIST-4** A new item goes to the end of `items`, with no shop, no quantity, not ticked.
 - **LIST-5** A rename has the rules LIST-1 and LIST-2. The item keeps its own name without an
   error. A rename to the same text changes nothing.
 - **LIST-6** A name field of the screen takes 80 characters at most. The store has no limit.
@@ -18,6 +18,14 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/app.js`.
 - **LIST-8** A delete removes the item. Its shops go with it.
 - **LIST-9** A move puts the item in the other list, not ticked, with `again` cleared. `recurrent`
   does not change.
+
+## Quantity
+
+- **LIST-27** An item has a quantity: free text, such as `2`, `1 kg` or `3 latas`, or none. The
+  quantity is trimmed; an empty text clears it. The same text changes nothing.
+- **LIST-28** A move, a tick and **Terminar compra** keep the quantity. A delete removes it with the
+  item.
+- **LIST-29** The search of a list does not match the quantity (LIST-22).
 
 ## Tick
 
@@ -134,5 +142,5 @@ sheet is open.
 
 ## Limits
 
-No quantity, no unit, no note. No add of several items from one text. No ranking of the results of
+No unit and no arithmetic of quantities, no quantity on the products of a recipe, no note. No add of several items from one text. No ranking of the results of
 a list search, and no match by the recipe of an item.
