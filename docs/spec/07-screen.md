@@ -73,6 +73,7 @@ of it.
   shorter slide puts the row back. The row slides over a backdrop with the icon of the action,
   which fills with the accent colour once the slide is long enough. A `comprado hoy` row does not
   slide to the right, and a row with its left side open closes it.
+- **ROW-12** A recipe row of `Recetas` slides with the same rules (REC-5).
 
 ## Messages and undo
 

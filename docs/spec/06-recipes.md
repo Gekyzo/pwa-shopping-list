@@ -10,13 +10,13 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 - **REC-2** The name is trimmed and not empty (`error.nameRequired`), and unique among the recipes
   with no case distinction (`error.duplicateRecipe`).
 - **REC-3** The `+` button in `Recetas` opens the add sheet with the field `Nombre de la receta`
-  and the button **Crear**, with no target choice. The new recipe shows open, with the cursor in
-  its product field, and the search is cleared.
-- **REC-4** A recipe row shows the name and `N productos`. A tap opens and closes the recipe. One
-  recipe is open at a time. Its products slide open and closed; a tap on another recipe closes the
-  open one first (A11Y-5).
-- **REC-5** The `⋯` button of a row shows **Nombre** (a rename), **Enlace** (add or change the
-  link) and **Eliminar**, on one line below the row, each a third of its width.
+  and the button **Crear**, with no target choice. The new recipe opens its sheet (REC-33), with
+  the cursor in its product field, and the search is cleared.
+- **REC-4** A recipe row shows the name and `N productos`, the link (REC-15) and the send button
+  (REC-17). A tap on the name opens the sheet of the recipe (REC-33).
+- **REC-5** A recipe row slides as an item row (ROW-4 to ROW-6, ROW-8, ROW-10). A slide to the
+  left shows **Eliminar**, an icon button 64 px wide. A slide to the right sends the recipe at the
+  release (REC-17), with the rule and the backdrop of ROW-11 and the icon of the send button.
 - **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
   `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation.
@@ -25,8 +25,8 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 
 - **REC-8** A product is a name, trimmed and not empty (`error.productRequired`), unique in its
   recipe with no case distinction (`error.duplicateProduct`).
-- **REC-9** An open recipe lists its products, each with a `✕` button, and the field **Añadir
-  producto**. The removal of a product has `Deshacer`; the add does not.
+- **REC-9** The sheet of a recipe lists its products under **Productos**, each with a `✕` button,
+  and the field **Añadir producto**. The removal of a product has `Deshacer`; the add does not.
 - **REC-10** While the user types a product, the recipe lists up to 5 items whose name contains
   the text and that the recipe does not have. A tap adds the name of that item.
 - **REC-11** After an add the product field is empty and keeps the focus, for the next product.
@@ -35,8 +35,9 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 
 ## Link
 
-- **REC-13** The link is edited in a dialog of the browser, `Enlace de «name». Déjalo vacío para
-  quitarlo.` An empty text removes the link. A cancel changes nothing.
+- **REC-13** The link is edited in the field **Enlace** of the sheet of the recipe. It saves as the
+  field **Nombre** (REC-33). An empty text removes the link. A text that gives the same address
+  changes nothing.
 - **REC-14** A text with no scheme gets `https://`. Only an `http` or `https` address is valid;
   another text gives `error.invalidLink`.
 - **REC-15** A recipe with a link shows a chain symbol in its row. It opens the address in a new
@@ -82,11 +83,21 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 
 ## Effects
 
-- **REC-29** A new recipe row opens, flashes and scrolls into view.
+- **REC-29** A new recipe row opens, flashes and scrolls into view, below its sheet.
 - **REC-30** A delete closes the recipe row before the recipe goes. A second tap in that time does
   nothing.
-- **REC-31** A new product row opens and flashes. A removed product row closes before it goes.
+- **REC-31** A new product row of the sheet opens and flashes. A removed product row closes before it goes.
 - **REC-32** A recipe or a product that `Deshacer` puts back opens and flashes.
+
+## Sheet
+
+- **REC-33** The sheet `Receta` comes up from the bottom over a veil, as the edit sheet (ROW-7).
+  It has the field **Nombre**, 80 characters at most, the field **Enlace** (REC-13), then the
+  products (REC-9 to REC-11). `Enter` or a loss of focus saves a field; an error shows its message
+  and the field shows the old value again. `Escape` in a field puts the value back and keeps the
+  sheet open. A rename has no `Deshacer`.
+- **REC-34** A tap on the veil or `Escape` closes the sheet. It closes when its recipe goes, by a
+  `Deshacer` or an import, and when the section changes.
 
 ## Limits
 

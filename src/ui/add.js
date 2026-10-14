@@ -49,7 +49,7 @@ export const renderSheet = () => {
 };
 
 const openSheet = () => {
-  Object.assign(ui, { sheetOpen: true, target: ui.view === 'next' && isOn('next') ? 'next' : 'active', openId: null, editingId: null });
+  Object.assign(ui, { sheetOpen: true, target: ui.view === 'next' && isOn('next') ? 'next' : 'active', openId: null });
   $('add-name').value = '';
   render();
   $('add-name').focus();
@@ -89,8 +89,8 @@ const submitRecipe = () => {
     input.focus();
     return;
   }
-  // The new recipe shows expanded, with the cursor in its product field.
-  Object.assign(ui, { sheetOpen: false, openRecipeId: result.id, focusProduct: true, query: '' });
+  // The new recipe opens its sheet, with the cursor in its product field.
+  Object.assign(ui, { sheetOpen: false, recipeId: result.id, focusProduct: true, query: '' });
   ui.bringKeys.add(`recipe:${result.id}`);
   apply(result);
 };

@@ -11,8 +11,10 @@ no change for the user has no entry.
 
 ### Changed
 
-- The products of a recipe slide open and closed at a tap on its row. A tap on another recipe
-  closes the open one first.
+- A tap on a recipe opens its sheet from the bottom: the name, the link and the products. The
+  link is a field of the sheet, no longer a dialog of the browser.
+- A recipe row slides as an item row: to the left for **Eliminar**, to the right to send it to
+  `Actual`. The `⋯` button goes.
 
 ## 1.0.25 - 2026-10-14
 

@@ -1,44 +1,4 @@
-import * as store from '#store';
-import { el, state, ui, t, apply, render } from '#ui/context';
-import { isOpen } from '#ui/view';
-
-export const renameInput = (entry, rename = (name) => store.renameItem(state, entry.id, name)) => {
-  const input = el('input', { type: 'text', className: 'input rename', value: entry.name, maxLength: 80 });
-  input.setAttribute('aria-label', t('row.rename', { name: entry.name }));
-  let done = false;
-  const finish = (keep) => {
-    if (done) return;
-    done = true;
-    ui.editingId = null;
-    const changed = keep && input.value.trim() !== entry.name;
-    if (!changed || !apply(rename(input.value))) render();
-  };
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') finish(true);
-    if (event.key === 'Escape') finish(false);
-  });
-  input.addEventListener('blur', () => finish(true));
-  return input;
-};
-
-export const moreButton = (item, groupId = null) => {
-  const open = isOpen(item.id, groupId);
-  const button = el('button', {
-    type: 'button',
-    className: 'button icon',
-    textContent: '⋯',
-    onclick: () => {
-      Object.assign(ui, { openId: open ? null : item.id, openGroup: groupId, openSide: null });
-      render();
-    },
-  });
-  button.setAttribute('aria-label', t('row.more', { name: item.name }));
-  button.setAttribute('aria-expanded', String(open));
-  return button;
-};
-
-export const actionButton = (text, onClick, { variant = 'outline' } = {}) =>
-  el('button', { type: 'button', textContent: text, className: ['button', variant].join(' '), onclick: onClick });
+import { el } from '#ui/context';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -69,11 +29,6 @@ export const iconButton = (name, label, onClick, { variant = '' } = {}) => {
   const button = el('button', { type: 'button', className: ['swipe-action', variant].join(' '), title: label, onclick: onClick }, [icon(name)]);
   button.setAttribute('aria-label', label);
   return button;
-};
-
-export const startRename = (entry) => {
-  Object.assign(ui, { editingId: entry.id, openId: null });
-  render();
 };
 
 // A field of a sheet saves when it loses the focus. `current` gives the stored value, or undefined

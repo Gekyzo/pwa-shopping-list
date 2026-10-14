@@ -413,7 +413,6 @@
      @summary A one-line text box. Height --tap, on --bg.
      @variant raised  On a --bg page: the box takes --surface.
      @variant strong  The main box of a sheet, with an accent border.
-     @variant rename  The name of a row while it is renamed in place.
      @example <input class="input" type="text" placeholder="Nueva tienda">
      @example <input class="input raised" type="search" placeholder="Buscar">
      @example <input class="input strong" type="text" placeholder="Añadir artículo a la lista"> */
@@ -433,12 +432,6 @@
 
   .input.strong {
     border: 2px solid var(--accent);
-  }
-
-  .input.rename {
-    flex: 1;
-    margin: 0 var(--space-1);
-    border-color: var(--accent);
   }
 
   /* @component field
@@ -832,7 +825,7 @@
 
   /* @component item-row
      @summary One item, or one recipe, as a row. Its body slides over its actions.
-     @variant recipe              A recipe: its name and product count, then its buttons.
+     @variant recipe              A recipe: its name and product count, then its link and send buttons.
      @part item-row-swipe         The box that clips the sliding body.
      @part item-row-body          The row itself: check, name, then buttons.
      @part item-row-check         The round checkbox of an item of Actual.
@@ -1267,11 +1260,11 @@
 
   /* @component product-form
      @scope recipes
-     @summary The row that adds a product to an open recipe.
+     @summary The row that adds a product to a recipe, in the recipe sheet.
      @part product-name  Its input, which takes the focus after an add.
      @example <form class="input-row product-form"><input class="input product-name" type="text" placeholder="Añadir producto"><button class="button primary" type="submit">Añadir</button></form> */
   .product-form {
-    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
+    padding: var(--space-3) 0 var(--space-2);
   }
 
   /* @component hint
@@ -1286,27 +1279,12 @@
   }
 
 
-  /* @component row-actions
-     @scope recipes
-     @summary The actions of an open recipe: three outline buttons, a third of the line each.
-     @example <div class="row-actions" style="width: 100%"><button class="button outline" type="button">Nombre</button><button class="button outline" type="button">Enlace</button><button class="button outline danger" type="button">Eliminar</button></div> */
-  .row-actions {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-2);
-    padding: var(--space-half) var(--space-3) var(--space-3);
-  }
-
-  .row-actions .button {
-    padding: 0 var(--space-2);
-  }
-
   /* @component product-add
      @scope recipes
      @summary The add row of a recipe with the suggestions below it.
      @example <div class="product-add" style="width: 100%"><ul class="list-group plain"><li><button class="list-row" type="button">Huevos</button></li></ul></div> */
   .product-add > .list-group {
-    padding: 0 var(--space-3) var(--space-2) var(--space-5);
+    padding-bottom: var(--space-2);
   }
 
   /* @component version-status
@@ -1445,29 +1423,17 @@
     margin: var(--space-4) var(--space-3);
   }
 
-  /* @component recipe-body
-     @scope recipes
-     @summary The products and the product field of an open recipe. It slides open and closed.
-     @state leaving  A body that closes before the recipe closes.
-     @example <div class="recipe-body" style="width: 100%"><ul class="products"><li class="product"><span class="product-text">Patatas</span><button class="button icon" type="button" aria-label="Quitar">✕</button></li></ul></div> */
-  .recipe-body.leaving {
-    overflow: hidden;
-    min-height: 0;
-    opacity: 0;
-    transition: height var(--motion) ease-out, opacity var(--motion) ease-out;
-  }
-
   /* @component products
      @scope recipes
-     @summary The products of an open recipe, each with its remove button.
+     @summary The products of a recipe in the recipe sheet, each with its remove button.
      @part product       One product.
      @part product-text  Its name.
      @state leaving  On product: a row that closes before it leaves.
      @state flash    On product: a row that has just come: it flashes.
      @example <ul class="products" style="width: 100%"><li class="product"><span class="product-text">Patatas</span><button class="button icon" type="button" aria-label="Quitar">✕</button></li></ul> */
   .products {
-    margin: 0;
-    padding: 0 var(--space-1) 0 var(--space-5);
+    margin: var(--space-2) 0 0;
+    padding: 0;
     list-style: none;
   }
 

@@ -70,7 +70,7 @@ const changeShopLists = (choice) => {
 
 export const bind = () => {
   $('arrange-button').addEventListener('click', () => {
-    Object.assign(ui, { arrangeOpen: true, openId: null, editingId: null });
+    Object.assign(ui, { arrangeOpen: true, openId: null });
     render();
   });
   $('arrange-veil').addEventListener('click', () => {

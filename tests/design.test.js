@@ -135,7 +135,7 @@ test('sheets, toasts, banners and empty states are components (DS-3)', family(
 ));
 
 test('rows, list groups and section heads are components (DS-3)', family(
-  ['item-row', 'swipe-action', 'section-head', 'group-head', 'list-group', 'item-list', 'row-actions', 'version-status'],
+  ['item-row', 'swipe-action', 'section-head', 'group-head', 'list-group', 'item-list', 'version-status'],
   ['items', 'item', 'row', 'swipe', 'side', 'backdrop', 'name', 'qty', 'section', 'actions', 'suggestions', 'group', 'suggestion-name', 'suggestion-where', 'create'],
   ['#version-status', 'input[type="checkbox"]', '.item-row-name small'],
 ));

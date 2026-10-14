@@ -90,7 +90,6 @@ export let state = storage ? load(storage) : store.emptyState();
 // `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
 export const ui = {
   view: 'active',
-  editingId: null,
   openId: null,
   flashId: null,
   sheetOpen: false,
@@ -107,7 +106,8 @@ export const ui = {
   onboarding: firstStart ? 0 : null,
   target: 'active',
   boughtOpen: false,
-  openRecipeId: null,
+  // The recipe whose sheet is open, or null.
+  recipeId: null,
   // The text of the search field, which Recetas shows always and a list shows on demand. It is
   // not stored.
   query: '',

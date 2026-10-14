@@ -24,6 +24,7 @@ import { expand, pendingRows, rowKeys, bringIn } from '#ui/motion';
 import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { endReorder, bind as bindDrag } from '#ui/drag';
 import { moveRow } from '#ui/rows';
+import { renderRecipe, closeRecipe, bind as bindRecipe } from '#ui/recipes';
 import { renderMeal, closeMeal, bind as bindMenu } from '#ui/menu';
 import { renderArrange, bind as bindArrange } from '#ui/arrange';
 import {
@@ -48,6 +49,7 @@ const renderAll = () => {
   endReorder(false);
   // The item of the edit sheet can go while the sheet is open: an undo, or an import.
   if (!state.items.some((item) => item.id === ui.editId)) ui.editId = null;
+  if (!state.recipes.some((recipe) => recipe.id === ui.recipeId)) ui.recipeId = null;
   // A shop list whose chip went shows Todas.
   // A hidden row leaves no list filtered.
   for (const list of ['active', 'next']) {
@@ -66,6 +68,8 @@ const renderAll = () => {
   $('ring').style.setProperty('--pct', `${header.pct}%`);
 
   renderList(summary);
+  // Before the focus and the effects below: they also reach the rows of the recipe sheet.
+  renderRecipe();
 
   $('settings').hidden = ui.view !== 'settings';
   renderVersion();
@@ -75,7 +79,7 @@ const renderAll = () => {
   renderTrip();
 
   $('fab').hidden =
-    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null;
+    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
   const sections = visibleSections(off);
@@ -85,8 +89,7 @@ const renderAll = () => {
     else button.removeAttribute('aria-current');
   });
 
-  $('items').querySelector('.rename')?.focus();
-  if (ui.focusProduct) $('items').querySelector('.product-name')?.focus();
+  if (ui.focusProduct) $('recipe-products').querySelector('.product-name')?.focus();
   ui.focusProduct = false;
   bringIn(ui.bringKeys);
   ui.bringKeys.clear();
@@ -136,6 +139,7 @@ bindDrag();
 bindList();
 bindArrange();
 bindEdit();
+bindRecipe();
 
 document.addEventListener('keydown', (event) => {
   if (ui.onboarding !== null) {
@@ -152,6 +156,7 @@ document.addEventListener('keydown', (event) => {
     render();
   }
   if (ui.editId !== null) closeEdit();
+  if (ui.recipeId !== null) closeRecipe();
   if (ui.mealOpen !== null) closeMeal();
   if (ui.searchOpen) closeSearch();
   if (ui.tripOpen) closeTrip();
