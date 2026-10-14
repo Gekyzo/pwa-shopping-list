@@ -1566,7 +1566,13 @@
     --enter-from: -48px;
   }
 
+  /* A title can take two lines in some catalogs. It keeps the room of two, with its last line
+     next to the text, so the drawing does not move. */
   .onboarding-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 2lh;
     margin: 0 0 var(--space-2);
     font-size: var(--text-l);
   }
