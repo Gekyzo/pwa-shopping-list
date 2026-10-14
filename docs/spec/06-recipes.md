@@ -12,11 +12,11 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 - **REC-3** The `+` button in `Recetas` opens the add sheet with the field `Nombre de la receta`
   and the button **Crear**, with no target choice. The new recipe opens its sheet (REC-33), with
   the cursor in its product field, and the search is cleared.
-- **REC-4** A recipe row shows the name and `N productos`, the link (REC-15) and the send button
-  (REC-17). A tap on the name opens the sheet of the recipe (REC-33).
+- **REC-4** A recipe row shows the name and `N productos`, and the link (REC-15). A tap on the
+  name opens the sheet of the recipe (REC-33).
 - **REC-5** A recipe row slides as an item row (ROW-4 to ROW-6, ROW-8, ROW-10). A slide to the
   left shows **Eliminar**, an icon button 64 px wide. A slide to the right sends the recipe at the
-  release (REC-17), with the rule and the backdrop of ROW-11 and the icon of the send button.
+  release (REC-17), with the rule and the backdrop of ROW-11 and the icon `cart-add`.
 - **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
   `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation.
@@ -47,8 +47,8 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 
 ## Send to `Actual`
 
-- **REC-17** The cart button with a plus sends the recipe. It is a primary button, as **Llenar
-  la cesta** (MENU-12). A recipe with no product gives `error.recipeEmpty`.
+- **REC-17** A slide of the recipe row to the right sends the recipe (REC-5). The row has no
+  send button. A recipe with no product gives `error.recipeEmpty`.
 - **REC-18** For each product, in order:
   - an item with that name exists, with no case distinction: the item becomes "to buy" in `Actual`
     (it moves from `Próxima`, or it loses its tick, or it stays as it is);
