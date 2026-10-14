@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.25 - 2026-10-14
+
 ### Added
 
 - The walkthrough has two new pages: `¿Qué comemos esta semana?`, and `Una receta para
