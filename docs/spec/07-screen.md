@@ -154,7 +154,9 @@ of it.
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
   Above the pages, the art of the app icon shows centred in the band between the top of the
   walkthrough and the drawing, 96 px wide, with no background (`icons/logo.png`, VER-15). It
-  is decorative (`alt=""`) and does not change or move with the page.
+  is decorative (`alt=""`) and does not change or move with the page. The text keeps the room
+  of five lines, the longest text of a page in any language, so the drawing and the logo are at
+  the same place on each page.
 - **ONB-3** The bar at the bottom has **Saltar** at the left and **Siguiente** at the right, each
   half of the bar wide; **Mano** `Izquierda` swaps them (NAV-13). **Saltar** has a thin border. On the last page **Saltar** does not show
   and **Empezar** takes the full bar. One dot for each page shows the place of the page in view;
