@@ -131,7 +131,7 @@ export default {
     'Activez ↻ pour ce que vous achetez toujours. Quand vous terminez les courses, les articles achetés avec ↻ reviennent dans la liste et les autres articles achetés sont supprimés.',
   'onboarding.row.title': 'Faites glisser une ligne',
   'onboarding.row.text':
-    'Touchez un article pour le modifier. Vers la droite : acheté. Vers la gauche : déplacer vers l’autre liste et supprimer.',
+    'Touchez un article pour le modifier. Vers la droite : acheté, ou vers {active} depuis {next}. Vers la gauche : déplacer vers l’autre liste et supprimer.',
   'onboarding.sections.title': 'Faites glisser l’écran',
   'onboarding.sections.text': 'Faites glisser vers un côté pour changer de section. Touchez + pour ajouter un article.',
 

@@ -9,7 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The page **Desliza una fila** of the walkthrough says that a slide to the right in `Próxima`
+  moves the item to `Actual`.
 
 ## 1.0.21 - 2026-10-14
 
