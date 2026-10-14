@@ -121,3 +121,9 @@ test('inputs, fields and selects are components (DS-3)', family(
   ['add-row', 'edit-name', 'edit-quantity'],
   ['.sheet .field', '.search input', '.product-form input', '.group select', '#meal-query'],
 ));
+
+test('the header and the bottom bar are components (DS-3)', family(
+  ['app-header', 'nav-bar', 'badge', 'ring'],
+  ['head', 'head-text', 'bnav', 'badge-count'],
+  ['.ring span', '.bnav button', '.head h1', '.head p'],
+));

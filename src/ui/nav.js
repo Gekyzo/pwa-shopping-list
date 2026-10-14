@@ -175,7 +175,7 @@ export const bind = () => {
   scroller.addEventListener('animationend', (event) => {
     if (event.animationName === 'enter') scroller.classList.remove('enter-next', 'enter-previous');
   });
-  document.querySelectorAll('.bnav button').forEach((button) => {
+  document.querySelectorAll('.nav-item').forEach((button) => {
     button.addEventListener('click', () => showView(button.dataset.view));
   });
   // A horizontal slide that starts out of the rows changes the section. A row keeps its drag for its
@@ -185,7 +185,7 @@ export const bind = () => {
     sectionSlide = null;
     const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null;
     if (!event.isPrimary || event.button !== 0 || reorder || sheet) return;
-    if (!event.target.closest('.head, main') || event.target.closest('.swipe, .shop-lists, input, textarea')) return;
+    if (!event.target.closest('.app-header, main') || event.target.closest('.swipe, .shop-lists, input, textarea')) return;
     sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
   });
   document.addEventListener('pointerup', (event) => {

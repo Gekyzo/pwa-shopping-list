@@ -78,7 +78,7 @@ const renderAll = () => {
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
   const sections = visibleSections(off);
-  document.querySelectorAll('.bnav button').forEach((button) => {
+  document.querySelectorAll('.nav-item').forEach((button) => {
     showNavButton(button, sections.includes(button.dataset.view));
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
