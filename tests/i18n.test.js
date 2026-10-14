@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { CATALOGS, FALLBACK, LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
+import { CATALOGS, FALLBACK, LANGUAGES, LANGUAGE_FLAGS, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
 
 const fake = {
   en: { hello: 'Hello {name}', items: { one: '{count} item', other: '{count} items' }, onlyEn: 'English only' },
@@ -77,6 +77,15 @@ test('each language has a catalog and a name', () => {
   assert.deepEqual(Object.keys(CATALOGS).sort(), [...LANGUAGES].sort());
   assert.deepEqual(Object.keys(LANGUAGE_NAMES).sort(), [...LANGUAGES].sort());
   assert.ok(LANGUAGES.includes(FALLBACK));
+});
+
+test('each language has one flag emoji, and only English has the flag of the United Kingdom', () => {
+  assert.deepEqual(Object.keys(LANGUAGE_FLAGS).sort(), [...LANGUAGES].sort());
+  const graphemes = new Intl.Segmenter();
+  for (const flag of Object.values(LANGUAGE_FLAGS)) assert.equal([...graphemes.segment(flag)].length, 1, flag);
+  assert.equal(new Set(Object.values(LANGUAGE_FLAGS)).size, LANGUAGES.length);
+  assert.equal(LANGUAGE_FLAGS.en, '🇬🇧');
+  assert.equal(LANGUAGE_FLAGS.pt, '🇵🇹');
 });
 
 const placeholders = (text) => [...text.matchAll(/\{(\w+)\}/g)].map(([, name]) => name).sort();
