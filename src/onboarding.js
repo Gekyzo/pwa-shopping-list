@@ -9,6 +9,12 @@ export const step = (index, direction) => Math.min(Math.max(index + direction, 0
 
 export const isLast = (index) => index === PAGES.length - 1;
 
+// A key that starts with `#name` shows the icon `name` of the sprite, then the rest of its text.
+const keyPart = (text) => {
+  const match = text.match(/^#([a-z][\w-]*)(?: (.*))?$/s);
+  return match ? { text: match[2] ?? '', key: true, icon: match[1] } : { text, key: true };
+};
+
 // The parts of a page text. A text between two backticks is a key, such as `↻` or `+`; a
 // backtick with no pair stays in the text.
 export const textParts = (text) => {
@@ -22,7 +28,7 @@ export const textParts = (text) => {
     .reduce((joined, part) => {
       const last = joined.at(-1);
       if (last && !last.key && !part.key) last.text += part.text;
-      else joined.push({ ...part });
+      else joined.push(part.key ? keyPart(part.text) : { ...part });
       return joined;
     }, []);
 };

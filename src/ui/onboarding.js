@@ -3,6 +3,19 @@ import { hasSample, addSample } from '#recipes';
 import { slideDirection } from '#sections';
 import { saveOnboarded } from '#storage';
 import { $, el, storage, state, ui, t, apply, guardClick } from '#ui/context';
+import { icon } from '#ui/controls';
+
+// A part of a page text: plain text, or a key with an optional icon. A key with an icon and no
+// text gets the name of its control (`onboarding.icon.<name>`).
+const keyNode = ({ text, key, icon: name }) => {
+  if (!key) return text;
+  const node = el('span', { className: 'onboarding-key' }, name ? [icon(name, 'small'), text] : [text]);
+  if (name && !text) {
+    node.setAttribute('role', 'img');
+    node.setAttribute('aria-label', t(`onboarding.icon.${name}`));
+  }
+  return node;
+};
 
 const SAMPLE_PRODUCTS = ['tomatoSauce', 'pasta', 'garlic', 'oliveOil', 'salt'];
 
@@ -31,9 +44,7 @@ export const renderOnboarding = () => {
   $('onboarding-title').textContent = t(`onboarding.${page}.title`);
   const names = { active: t('list.active'), next: t('list.next'), name: t('sample.name') };
   const parts = textParts(t(`onboarding.${page}.text`, names));
-  $('onboarding-text').replaceChildren(
-    ...parts.map(({ text, key }) => (key ? el('span', { className: 'onboarding-key', textContent: text }) : text)),
-  );
+  $('onboarding-text').replaceChildren(...parts.map(keyNode));
   $('onboarding-dots').replaceChildren(...PAGES.map((id) => el('span', { className: id === page ? 'onboarding-dot on' : 'onboarding-dot' })));
   $('onboarding-dots').setAttribute('aria-label', t('onboarding.page', { page: ui.onboarding + 1, total: PAGES.length }));
   $('onboarding-skip').hidden = isLast(ui.onboarding);

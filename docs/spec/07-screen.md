@@ -156,6 +156,8 @@ of it.
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
   A line break in the text of a catalog starts a new line. A text between two backticks, such as
   `↻` or `+`, names a control and shows as a key: a border and a monospace font, as inline code.
+  A key that starts with `#name` shows the icon `name` of `icons.svg`, then the rest of its text.
+  A key with an icon and no text has the label `onboarding.icon.<name>`.
   Above the pages, the art of the app icon shows centred in the band between the top of the
   walkthrough and the drawing, 96 px wide, with no background (`icons/logo.png`, VER-15). It
   is decorative (`alt=""`) and does not change or move with the page. The title keeps the room

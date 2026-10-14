@@ -69,3 +69,21 @@ test('textParts keeps a backtick with no pair as text', () => {
     { text: ' y `fin', key: false },
   ]);
 });
+
+test('textParts reads an icon of the sprite at the start of a key, with or without text', () => {
+  assert.deepEqual(textParts('Con `#cart-add`. En `#menu Menú` planificas.'), [
+    { text: 'Con ', key: false },
+    { text: '', key: true, icon: 'cart-add' },
+    { text: '. En ', key: false },
+    { text: 'Menú', key: true, icon: 'menu' },
+    { text: ' planificas.', key: false },
+  ]);
+});
+
+test('textParts reads a # that is not at the start of a key, or a lone #, as text', () => {
+  assert.deepEqual(textParts('`a #menu` y `#`'), [
+    { text: 'a #menu', key: true },
+    { text: ' y ', key: false },
+    { text: '#', key: true },
+  ]);
+});

@@ -1610,6 +1610,19 @@
     white-space: nowrap;
   }
 
+  /* The icon of a key sits on the line of the text, with a small gap before its text. */
+  .onboarding-key > .icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-right: var(--space-1);
+    vertical-align: -0.2em;
+  }
+
+  .onboarding-key > .icon:only-child {
+    margin-right: 0;
+  }
+
   .onboarding-dots {
     display: flex;
     flex: none;
