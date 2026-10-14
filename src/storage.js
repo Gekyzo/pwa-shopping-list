@@ -216,6 +216,29 @@ export const saveHand = (storage, hand) => {
   }
 };
 
+// Whether Actual and Próxima show the row of shop lists. A preference of the device, as the hand is.
+export const SHOP_LISTS_KEY = 'shopping.shopLists';
+
+// `hide` when stored, else `show`.
+export const loadShopLists = (storage) => {
+  try {
+    return storage.getItem(SHOP_LISTS_KEY) === 'hide' ? 'hide' : 'show';
+  } catch {
+    return 'show';
+  }
+};
+
+// `show` is the choice of an app with no choice: it removes the key.
+export const saveShopLists = (storage, choice) => {
+  try {
+    if (choice === 'hide') storage.setItem(SHOP_LISTS_KEY, 'hide');
+    else storage.removeItem(SHOP_LISTS_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // The colours of the app: `light`, `dark`, or `system` to follow the phone. A preference of the
 // device, as the hand is.
 export const THEME_KEY = 'shopping.theme';

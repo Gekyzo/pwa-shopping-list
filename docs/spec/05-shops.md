@@ -65,6 +65,10 @@ apply in it.
   brings (SHOP-4), so the row shows in the list. An item that the sheet finds in its list already
   gets the shop too, with the message and `Deshacer` of ADD-6. From **Todas** and **Sin tienda**
   the add puts no shop.
+- **SHOP-25** The arrange sheet has the choice **Listas por tienda**, **Mostrar** or **Ocultar**,
+  when the view has the row of SHOP-17. **Ocultar** hides the row in `Actual` and in `Próxima`
+  and shows **Todas**. The choice is a preference of the device, stored in `shopping.shopLists`;
+  **Mostrar** removes the key. `Deshacer` and an import do not change it.
 
 ## Limits
 

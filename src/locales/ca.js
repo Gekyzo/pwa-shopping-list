@@ -105,6 +105,8 @@ export default {
   'arrange.sortBy': 'Ordena per',
   'arrange.name': 'Nom',
   'arrange.custom': 'Personalitzat',
+  'arrange.show': 'Mostra',
+  'arrange.hide': 'Amaga',
 
   'shops.add': 'Afegeix',
   'shops.placeholder': 'Botiga nova',

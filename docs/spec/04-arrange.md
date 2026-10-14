@@ -35,6 +35,9 @@ the arrange sheet in `src/app.js`.
   - **Recetas**: in `Actual`, when one recipe group exists at least (GROUP-5).
   - **Tiendas**: when an item of the view has a shop, and not in a shop list (SHOP-19).
   - **Nada**: each time that one of the two shows.
+
+  The sheet also has the choice of the row of shop lists (SHOP-25). The arrange button shows when
+  the sheet has one choice at least.
 - **GROUP-3** A view that cannot show the stored choice shows a flat list, and the sheet marks
   **Nada**. The stored choice does not change. Example: with `group: 'recipe'`, `Próxima` is flat.
 - **GROUP-4** A tap on the choice that the view shows already changes nothing. Thus a tap on
