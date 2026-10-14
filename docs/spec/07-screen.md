@@ -148,12 +148,12 @@ of it.
   |---|---|---|
   | 1 | `Dos listas` | `Actual` is the trip of today, `Próxima` holds the next one |
   | 2 | `La compra se repite` | The recurrent mark and the result of **Terminar compra** |
-  | 3 | `Desliza una fila` | The tap on the name (ROW-7) and the two slides of a row (ROW-3, ROW-11) |
+  | 3 | `Desliza una fila` | The tap on the name (ROW-7) and the two slides of a row (ROW-3, ROW-11), with the move to `Actual` of the slide to the right in `Próxima` |
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3) and the `+` button |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
 - **ONB-3** The bar at the bottom has **Saltar** at the left and **Siguiente** at the right, each
-  half of the bar wide. **Saltar** has a thin border. On the last page **Saltar** does not show
+  half of the bar wide; **Mano** `Izquierda` swaps them (NAV-13). **Saltar** has a thin border. On the last page **Saltar** does not show
   and **Empezar** takes the full bar. One dot for each page shows the place of the page in view;
   a dot is not a button.
 - **ONB-4** A horizontal slide with the measures of NAV-3 changes the page: to the left for the
@@ -176,7 +176,7 @@ of it.
   The focus goes to the button at the bottom when it opens and at each change of page. The dots
   have the label `Página N de 4`. The title and the text are a live region.
 - **ONB-12** With `prefers-reduced-motion: reduce` a page changes with no animation. The
-  walkthrough keeps out of the safe-area insets. **Mano** does not change it.
+  walkthrough keeps out of the safe-area insets. **Mano** changes only the order of its bar (ONB-3).
 
 ## Access and display
 
@@ -197,4 +197,5 @@ of it.
 ## Limits
 
 No move of a row with the keyboard, and no keyboard way to open a side menu of an item row. The
-walkthrough has no tour of recipes, shops or backup, and no marks on the real controls.
+walkthrough has no tour of recipes, `Menú`, shops, shop lists, quantities, backup or the settings
+of `Ajustes`, and no marks on the real controls.

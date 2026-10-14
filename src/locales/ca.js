@@ -129,7 +129,7 @@ export default {
   'onboarding.trip.text':
     'Activa ↻ en el que compres sempre. Quan acabes la compra, el que has comprat amb ↻ torna a la llista i la resta del que has comprat s’elimina.',
   'onboarding.row.title': 'Llisca una fila',
-  'onboarding.row.text': 'Toca un article per editar-lo. Cap a la dreta: comprat. Cap a l’esquerra: mou a l’altra llista i elimina.',
+  'onboarding.row.text': 'Toca un article per editar-lo. Cap a la dreta: comprat, o a {active} des de {next}. Cap a l’esquerra: mou a l’altra llista i elimina.',
   'onboarding.sections.title': 'Llisca la pantalla',
   'onboarding.sections.text': 'Llisca cap a un costat per canviar de secció. Toca + per afegir un article.',
 

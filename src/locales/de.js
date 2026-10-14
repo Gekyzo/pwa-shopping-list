@@ -130,7 +130,7 @@ export default {
     'Aktiviere ↻ bei dem, was du immer kaufst. Wenn du den Einkauf beendest, kommen die gekauften Artikel mit ↻ zurück auf die Liste und die anderen gekauften Artikel werden gelöscht.',
   'onboarding.row.title': 'Wische über eine Zeile',
   'onboarding.row.text':
-    'Tippe auf einen Artikel, um ihn zu bearbeiten. Nach rechts: gekauft. Nach links: in die andere Liste verschieben und löschen.',
+    'Tippe auf einen Artikel, um ihn zu bearbeiten. Nach rechts: gekauft, oder aus {next} nach {active}. Nach links: in die andere Liste verschieben und löschen.',
   'onboarding.sections.title': 'Wische über den Bildschirm',
   'onboarding.sections.text':
     'Wische zur Seite, um den Bereich zu wechseln. Tippe auf +, um einen Artikel hinzuzufügen.',
