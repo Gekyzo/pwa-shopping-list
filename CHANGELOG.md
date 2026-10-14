@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.26 - 2026-10-15
+
 ### Fixed
 
 - A link with spaces, or with no domain such as `example.com`, is not valid any more.
