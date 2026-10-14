@@ -1,7 +1,7 @@
 {
   "name": "shopping",
   "version": "1.0.20",
-  "description": "Offline shopping list PWA with an active list and a next list",
+  "description": "Shopping list app with an active list and a next list, recipes, a weekly menu, synced and shared lists, AI item entry, purchase history and a pantry",
   "private": true,
   "type": "module",
   "imports": {
