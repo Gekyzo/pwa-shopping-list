@@ -9,7 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The products of a recipe slide open and closed at a tap on its row. A tap on another recipe
+  closes the open one first.
 
 ## 1.0.25 - 2026-10-14
 

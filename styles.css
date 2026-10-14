@@ -1445,6 +1445,18 @@
     margin: var(--space-4) var(--space-3);
   }
 
+  /* @component recipe-body
+     @scope recipes
+     @summary The products and the product field of an open recipe. It slides open and closed.
+     @state leaving  A body that closes before the recipe closes.
+     @example <div class="recipe-body" style="width: 100%"><ul class="products"><li class="product"><span class="product-text">Patatas</span><button class="button icon" type="button" aria-label="Quitar">✕</button></li></ul></div> */
+  .recipe-body.leaving {
+    overflow: hidden;
+    min-height: 0;
+    opacity: 0;
+    transition: height var(--motion) ease-out, opacity var(--motion) ease-out;
+  }
+
   /* @component products
      @scope recipes
      @summary The products of an open recipe, each with its remove button.

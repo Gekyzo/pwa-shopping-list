@@ -13,7 +13,8 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
   and the button **Crear**, with no target choice. The new recipe shows open, with the cursor in
   its product field, and the search is cleared.
 - **REC-4** A recipe row shows the name and `N productos`. A tap opens and closes the recipe. One
-  recipe is open at a time.
+  recipe is open at a time. Its products slide open and closed; a tap on another recipe closes the
+  open one first (A11Y-5).
 - **REC-5** The `⋯` button of a row shows **Nombre** (a rename), **Enlace** (add or change the
   link) and **Eliminar**, on one line below the row, each a third of its width.
 - **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
