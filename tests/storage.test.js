@@ -9,6 +9,7 @@ import {
   load,
   save,
   exportJson,
+  exportFilename,
   importJson,
   loadLanguage,
   saveLanguage,
@@ -114,6 +115,17 @@ test('load treats valid JSON with an invalid shape as corrupt', () => {
 test('load and save survive a storage that throws', () => {
   assert.deepEqual(load(brokenStorage()), emptyState());
   assert.equal(save(brokenStorage(), sample()), false);
+});
+
+test('exportFilename names the file with the local date and time', () => {
+  assert.equal(exportFilename(new Date(2026, 9, 14, 9, 5, 7)), 'compra-2026-10-14-090507.json');
+});
+
+test('exportFilename gives two exports of one day different names', () => {
+  const morning = exportFilename(new Date(2026, 0, 2, 8, 0, 0));
+  const evening = exportFilename(new Date(2026, 0, 2, 23, 59, 59));
+  assert.equal(morning, 'compra-2026-01-02-080000.json');
+  assert.equal(evening, 'compra-2026-01-02-235959.json');
 });
 
 test('exportJson then importJson returns the same state', () => {

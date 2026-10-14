@@ -162,6 +162,14 @@ export const save = (storage, state) => {
 
 export const exportJson = (state) => JSON.stringify(state, null, 2);
 
+// Local time, to the second, so two exports of one day get two names.
+export const exportFilename = (date) => {
+  const pad = (n) => String(n).padStart(2, '0');
+  const day = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  const time = `${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`;
+  return `compra-${day}-${time}.json`;
+};
+
 export const importJson = (text) => {
   const { data, invalidJson } = parse(text);
   if (invalidJson) return { error: { key: 'error.invalidJson' } };

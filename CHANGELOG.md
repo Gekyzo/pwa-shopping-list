@@ -9,7 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The file of **Exportar copia** has the time in its name, as `compra-2026-10-14-090507.json`. Two
+  exports of one day no longer get the same name.
 
 ## 1.0.12 - 2026-10-14
 
