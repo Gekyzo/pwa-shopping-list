@@ -199,6 +199,14 @@ export const bringToList = (state, id, list) => {
   return { state, changed: false };
 };
 
+// Moves each item of Next to Actual, as a move does (LIST-9). The same state when Next is empty.
+export const bringAllToActual = (state) => {
+  if (!state.items.some((item) => item.list === 'next')) return { state };
+  const items = state.items.map((item) =>
+    item.list === 'next' ? { ...item, list: 'active', bought: false, again: false } : item);
+  return { state: { ...state, items } };
+};
+
 // Figures for the header and for the preview of `startNewShopping`:
 // `back` items stay for the next trip, `gone` items are deleted, `incoming` items wait in Next.
 export const tripSummary = (state) => {

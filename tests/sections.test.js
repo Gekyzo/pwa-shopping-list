@@ -76,3 +76,17 @@ test('direction is 0 for the same section and for a view that is not a section',
   assert.equal(direction('other', 'next'), 0);
   assert.equal(direction('next', 'other'), 0);
 });
+
+test('slideTo skips the sections that are not in the given list', () => {
+  const sections = ['active', 'recipes', 'menu', 'settings'];
+  assert.equal(slideTo('active', -80, 0, sections), 'recipes');
+  assert.equal(slideTo('recipes', 80, 0, sections), 'active');
+  assert.equal(slideTo('active', -80, 0, ['active', 'settings']), 'settings');
+});
+
+test('direction uses the given list of sections', () => {
+  const sections = ['active', 'next', 'settings'];
+  assert.equal(direction('next', 'settings', sections), 1);
+  assert.equal(direction('settings', 'active', sections), -1);
+  assert.equal(direction('recipes', 'settings', sections), 0);
+});
