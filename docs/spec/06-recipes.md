@@ -16,8 +16,8 @@ Rules of `src/recipes.js` and of the section `Recetas` in `src/app.js`. The grou
   recipe is open at a time.
 - **REC-5** The `⋯` button of a row shows **Renombrar**, **Añadir enlace** or **Cambiar enlace**,
   and **Eliminar**.
-- **REC-6** A delete removes the recipe and its id from `sent`. It has `Deshacer`. The items that
-  the recipe sent stay in the lists.
+- **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
+  `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation.
 
 ## Products

@@ -31,8 +31,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   to `shopping.v1.corrupt` and starts with the empty state. The first change then replaces
   `shopping.v1`.
 - **STORE-6** A state is not valid when one of these is true:
-  - it is not an object, its `version` is not 1, 2 or 3, or `items` is not a list;
-  - `recipes` is not a list, in version 2 or 3;
+  - it is not an object, its `version` is not 1, 2, 3 or 4, or `items` is not a list;
+  - `recipes` is not a list, in version 2, 3 or 4;
   - an item has no string `id`, no name, a `list` that is not `active` or `next`, or a flag
     (`recurrent`, `bought`, `again`) that is not a boolean;
   - a recipe has no string `id`, no name, an empty product, a product that is not text, or two
@@ -49,17 +49,19 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Shop spellings | Each shop gets the spelling of its first use |
   | `url` of a recipe | Not an `http` or `https` address: `''` |
   | `sent` | An id that is not text, is unknown or is a duplicate: dropped |
+  | `menu` | Not a list: empty. A meal with an unknown day, meal or recipe, or a second record of one meal: dropped. The rest in day and meal order |
   | `group` | Unknown: from `grouped` (STORE-8) |
   | `sort` | Unknown: `custom` |
   | Unknown fields | Dropped |
 
-- **STORE-8** An older state is migrated when it is read, and saved as version 3 at the next
+- **STORE-8** An older state is migrated when it is read, and saved as version 4 at the next
   change:
 
   | From | Change |
   |---|---|
   | Version 1 | `recipes: []`, `sent: []` |
   | Version 1 or 2 | `group` is `none` when `grouped` is `false`, and `recipe` if not. Each item gets `shops: []`. `sort` is `custom` when absent |
+  | Version 1, 2 or 3 | `menu: []` |
 
 ## Failures
 
@@ -76,12 +78,12 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 
 - **BACKUP-1** **Exportar copia** downloads the file `compra-YYYY-MM-DD.json`, with the UTC date.
   Its content is the state, as JSON with an indent of 2 spaces.
-- **BACKUP-2** The backup holds the items with their shops, the recipes, `sent`, `group` and
-  `sort`. It does not hold the language, the hand or the flag of the walkthrough.
+- **BACKUP-2** The backup holds the items with their shops, the recipes, `sent`, `group`,
+  `sort` and the menu. It does not hold the language, the hand or the flag of the walkthrough.
 - **BACKUP-3** **Importar copia** opens a file choice for a JSON file. A file that is not JSON
   gives `error.invalidJson`. A JSON that is not a valid state (STORE-6) gives `error.notBackup`.
 - **BACKUP-4** A valid file is cleaned and migrated as a stored state is (STORE-7, STORE-8). A
-  backup of version 1 or 2 is thus accepted.
+  backup of version 1, 2 or 3 is thus accepted.
 - **BACKUP-5** Before the import the app asks: `¿Sustituir los datos actuales por los de la copia
   (N artículos y N recetas)?` A yes replaces the full state. It does not merge.
 - **BACKUP-6** The import has `Deshacer`, with the message `Copia importada.`

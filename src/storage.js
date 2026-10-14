@@ -1,5 +1,6 @@
 import { emptyState, GROUPS, SORTS } from '#store';
 import { isWebUrl } from '#recipes';
+import { DAYS, MEALS } from '#menu';
 
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
@@ -78,9 +79,27 @@ const normalizeRecipe = (recipe) => {
   return { id, name: name.trim(), products: trimmed, url: link };
 };
 
-const VERSIONS = [1, 2, 3];
+// The menu only plans a fill, so a bad entry is dropped and the state stays valid: an entry with
+// no known day, meal or recipe, and the second entry of one meal. Versions 1 to 3 have no menu.
+const normalizeMenu = (rawMenu, known) => {
+  if (!Array.isArray(rawMenu)) return [];
+  const seen = new Set();
+  return rawMenu
+    .filter((entry) => typeof entry === 'object' && entry !== null)
+    .map(({ day, meal, recipe }) => ({ day, meal, recipe }))
+    .filter(({ day, meal, recipe }) => {
+      const valid = Number.isInteger(day) && day >= 0 && day < DAYS && MEALS.includes(meal) && known.has(recipe);
+      const key = `${day}-${meal}`;
+      if (!valid || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .sort((a, b) => a.day - b.day || MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
+};
 
-// Returns a clean version 3 state, or null when the data is not a known state.
+const VERSIONS = [1, 2, 3, 4];
+
+// Returns a clean version 4 state, or null when the data is not a known state.
 const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
@@ -100,12 +119,13 @@ const normalizeState = (data) => {
   const rawSent = Array.isArray(data.sent) ? data.sent : [];
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
   return {
-    version: 3,
+    version: 4,
     items: oneSpelling(items),
     recipes,
     sent,
     group: groupOf(data),
     sort: SORTS.includes(data.sort) ? data.sort : 'custom',
+    menu: normalizeMenu(data.menu, known),
   };
 };
 
