@@ -42,34 +42,31 @@ export const actionButton = (text, onClick, className = '') =>
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-// A line icon, drawn as the icons of the bottom menu are.
-export const icon = (d) => {
+// A line icon of icons.svg.
+export const icon = (name, variant = '') => {
   const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('class', variant ? `icon ${variant}` : 'icon');
   svg.setAttribute('aria-hidden', 'true');
-  const path = document.createElementNS(SVG_NS, 'path');
-  path.setAttribute('d', d);
-  svg.append(path);
+  const use = document.createElementNS(SVG_NS, 'use');
+  use.setAttribute('href', `icons.svg#${name}`);
+  svg.append(use);
   return svg;
 };
 
-export const ICONS = {
-  check: 'M4 12l5 5L20 6',
-  chain:
-    'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
-  cart: 'M2 3h3l2.5 12h11L21 7H6M9 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M18 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3',
-  calendar: 'M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 10h18M8 3v4M16 3v4',
-  repeat: 'M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3',
-  undo: 'M9 14L4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3',
-  trash: 'M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6',
+let sprite = null;
+
+// The shapes of a symbol, for a copy of an icon that must stand alone, such as a data: image.
+export const symbolNodes = async (name) => {
+  sprite ??= fetch('icons.svg')
+    .then((response) => response.text())
+    .then((text) => new DOMParser().parseFromString(text, 'image/svg+xml'));
+  const symbol = (await sprite).getElementById(name);
+  return symbol ? [...symbol.childNodes].map((node) => node.cloneNode(true)) : [];
 };
-// The cart with a plus in its basket and a calendar with a cross.
-ICONS.cartPlus = `${ICONS.cart}M13 8.5v4M11 10.5h4`;
-ICONS.calendarOff = `${ICONS.calendar}M10 13.5l4 4M14 13.5l-4 4`;
 
 // A button of a side menu: an icon, with the name of the action for a screen reader.
-export const iconButton = (d, label, onClick, className = '') => {
-  const button = el('button', { type: 'button', className, title: label, onclick: onClick }, [icon(d)]);
+export const iconButton = (name, label, onClick, { variant = '' } = {}) => {
+  const button = el('button', { type: 'button', className: variant, title: label, onclick: onClick }, [icon(name)]);
   button.setAttribute('aria-label', label);
   return button;
 };

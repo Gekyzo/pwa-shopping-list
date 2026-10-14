@@ -3,7 +3,7 @@ import { reached, settle } from '#swipe';
 import { SIDE_BUTTON, DRAG_START, el, state, ui, t, say, isOn, apply, render, guardClick } from '#ui/context';
 import { isOpen, searching, shownGroup } from '#ui/view';
 import { leave } from '#ui/motion';
-import { icon, ICONS, iconButton } from '#ui/controls';
+import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
 import { reorder, bindReorder } from '#ui/drag';
 
@@ -19,7 +19,7 @@ const nameParts = (item) => {
 // The recurrent mark of a row. It shows on each item and a tap changes it.
 const recurrentToggle = (item) => {
   const button = el('button', { type: 'button', className: 'recur', onclick: () => apply(store.toggleRecurrent(state, item.id)) }, [
-    icon(ICONS.repeat),
+    icon('repeat'),
   ]);
   button.setAttribute('aria-pressed', String(item.recurrent));
   button.setAttribute('aria-label', t('row.always', { name: item.name }));
@@ -29,16 +29,16 @@ const recurrentToggle = (item) => {
 const moveAction = (item) => {
   const toNext = item.list === 'active';
   const params = { list: toNext ? 'next' : 'active', name: item.name };
-  return iconButton(toNext ? ICONS.calendar : ICONS.cart, say('row.moveTo', params), () =>
+  return iconButton(toNext ? 'calendar' : 'cart', say('row.moveTo', params), () =>
     apply(store.moveItem(state, item.id), { undoText: say('toast.movedTo', params) }));
 };
 
 const deleteAction = (item) =>
   iconButton(
-    ICONS.trash,
+    'trash',
     t('row.delete', { name: item.name }),
     () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
-    'danger',
+    { variant: 'danger' },
   );
 
 const activeRow = (item, groupId) => {
@@ -68,7 +68,7 @@ const activeRow = (item, groupId) => {
   }
   row.push(recurrentToggle(item));
   const end = isOn('next') ? [moveAction(item), deleteAction(item)] : [deleteAction(item)];
-  return { row, end, right: { run: toggle, icon: item.bought ? ICONS.undo : ICONS.check } };
+  return { row, end, right: { run: toggle, icon: item.bought ? 'undo' : 'check' } };
 };
 
 const nextRow = (item, groupId) => {
@@ -78,11 +78,11 @@ const nextRow = (item, groupId) => {
   if (!pending) row.push(el('span', { className: 'pill', textContent: t('row.boughtToday') }));
   row.push(recurrentToggle(item));
   if (pending) {
-    const right = { run: () => moveAction(item).onclick(), icon: ICONS.cart };
+    const right = { run: () => moveAction(item).onclick(), icon: 'cart' };
     return { row, end: [moveAction(item), deleteAction(item)], right };
   }
   const params = { list: 'next', name: item.name };
-  const remove = iconButton(ICONS.calendarOff, say('row.removeFrom', params), () =>
+  const remove = iconButton('calendar-off', say('row.removeFrom', params), () =>
     apply(store.removeFromNext(state, item.id), { undoText: say('toast.removedFrom', params) }));
   return { row, end: [remove], right: null };
 };

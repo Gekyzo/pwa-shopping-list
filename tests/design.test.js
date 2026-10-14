@@ -1,13 +1,18 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { LAYERS, rulesOf } from '../designs/catalog.js';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { LAYERS, rulesOf, iconsOf } from '../designs/catalog.js';
 
 // The rules of docs/spec/15-design-system.md over the real files.
 const root = new URL('../', import.meta.url);
 const read = (path) => readFileSync(new URL(path, root), 'utf8');
 const css = read('styles.css');
 const rules = rulesOf(css);
+const html = read('index.html');
+const sprite = existsSync(new URL('icons.svg', root)) ? read('icons.svg') : '';
+const scripts = readdirSync(new URL('src/ui/', root)).map((file) => [file, read(`src/ui/${file}`)]);
+const symbols = [...sprite.matchAll(/<symbol\b[^>]*\bid="([^"]+)"/g)].map(([, id]) => id);
+const art = html.match(/<div class="onboarding-art">[\s\S]*?<\/div>/)[0];
 
 test('styles.css declares the five layers first, and each rule is in one of them (DS-1)', () => {
   assert.match(css, /^@layer tokens, base, components, layouts, screens;/);
@@ -54,4 +59,26 @@ test('reduced motion sets the motion tokens to 0ms in one place (DS-2)', () => {
   assert.equal((css.match(/prefers-reduced-motion/g) ?? []).length, 1);
   const motion = rules.filter((rule) => rule.layer === 'tokens' && rule.declarations.some((d) => d.property === '--motion' && d.value === '0ms'));
   assert.equal(motion.length, 1);
+});
+
+test('each svg of the page uses a symbol, except the drawings of the walkthrough (DS-5)', () => {
+  const svgs = html.replace(art, '').match(/<svg\b[\s\S]*?<\/svg>/g) ?? [];
+  const icon = /^<svg (data-for="\w+" )?class="icon[^"]*" aria-hidden="true"><use href="icons\.svg#[\w-]+"\/><\/svg>$/;
+  assert.deepEqual(svgs.filter((svg) => !icon.test(svg)), []);
+});
+
+test('each icon that the page or the code names is a symbol of icons.svg (DS-5)', () => {
+  const named = [...iconsOf(html), ...scripts.flatMap(([, js]) => [...js.matchAll(/\bicon(?:Button)?\('([\w-]+)'/g)].map(([, id]) => id))];
+  assert.ok(named.length > 0);
+  assert.deepEqual(named.filter((id) => !symbols.includes(id)), []);
+});
+
+test('each symbol of icons.svg is used (DS-5)', () => {
+  const text = [html, ...scripts.map(([, js]) => js)].join('\n');
+  assert.ok(symbols.length > 0);
+  assert.deepEqual(symbols.filter((id) => !text.includes(`#${id}"`) && !text.includes(`'${id}'`)), []);
+});
+
+test('only icon() of controls.js builds an svg (DS-5)', () => {
+  assert.deepEqual(scripts.filter(([file, js]) => file !== 'controls.js' && /createElementNS|'svg'/.test(js)).map(([file]) => file), []);
 });

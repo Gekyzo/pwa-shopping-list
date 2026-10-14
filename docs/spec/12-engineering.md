@@ -32,7 +32,7 @@
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough | `onboarding`, `sections`, `storage`, `ui/context` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, modules, export and import | `store`, `storage`, `version`, `i18n`, `modules`, `ui/context`, `ui/onboarding` |
-| `src/ui/nav.js` | The bottom bar, its dust effect and the change of section | `sections`, `modules`, `particles`, `ui/context`, `ui/drag`, `ui/settings` |
+| `src/ui/nav.js` | The bottom bar, its dust effect and the change of section | `sections`, `modules`, `particles`, `ui/context`, `ui/controls`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
 

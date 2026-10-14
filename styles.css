@@ -126,6 +126,27 @@
 }
 
 @layer components {
+  /* @component icon
+     @summary A line icon of icons.svg. It takes the colour of the text around it.
+     @variant small  The size --icon-s, for an icon beside a label.
+     @example <svg class="icon" aria-hidden="true"><use href="icons.svg#cart"/></svg>
+     @example <svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg> */
+  .icon {
+    flex: none;
+    width: var(--icon);
+    height: var(--icon);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .icon.small {
+    width: var(--icon-s);
+    height: var(--icon-s);
+  }
+
   .primary {
     padding: 0 var(--space-4);
     background: var(--accent);
@@ -188,16 +209,6 @@
 
   #search-button[aria-expanded="true"] {
     color: var(--accent);
-  }
-
-  .tool svg {
-    width: 22px;
-    height: 22px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
 
   /* The menu of the trip button, below the right end of the header. */
@@ -667,18 +678,6 @@
     gap: var(--space-2);
   }
 
-  /* The cart with a plus, as on the send button of a recipe. */
-  .menu-actions svg {
-    flex: none;
-    width: 20px;
-    height: 20px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
   #menu-clear,
   #meal-remove {
     border: 1px solid var(--line);
@@ -764,21 +763,6 @@
     height: 44px;
     border-radius: var(--radius-m);
     color: var(--accent);
-  }
-
-  .recipe-link svg,
-  .group svg,
-  .send svg,
-  .side svg,
-  .backdrop svg,
-  .recur svg {
-    width: 22px;
-    height: 22px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
 
   .products {
@@ -971,13 +955,6 @@
 
   #version-status svg {
     display: none;
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
 
   #version-status[data-status='checking'] [data-for='checking'],
@@ -1065,16 +1042,6 @@
     border-radius: 0;
     color: var(--muted);
     font-size: var(--text-xs);
-  }
-
-  .bnav svg {
-    width: 24px;
-    height: 24px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
 
   .bnav button[aria-current="page"] {

@@ -60,3 +60,8 @@ test('SHELL of sw.js has each module of src', () => {
   const shell = [...read('sw.js').matchAll(/'\.\/src\/([\w/]+)\.js'/g)].map(([, name]) => name);
   assert.deepEqual(modules.filter((name) => !shell.includes(name)), []);
 });
+
+test('SHELL of sw.js has the style sheet and the icons', () => {
+  const shell = read('sw.js');
+  for (const file of ['./styles.css', './icons.svg']) assert.ok(shell.includes(`'${file}'`), file);
+});
