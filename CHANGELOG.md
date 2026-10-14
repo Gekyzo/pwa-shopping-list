@@ -11,7 +11,8 @@ no change for the user has no entry.
 
 ### Changed
 
-- The app icon of the walkthrough is larger and has no white square behind it.
+- The app icon of the walkthrough is larger, has no white square behind it, and sits in the
+  middle of the space above the drawing.
 
 ## 1.0.23 - 2026-10-14
 

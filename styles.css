@@ -1503,7 +1503,7 @@
   /* @component onboarding
      @scope onboarding
      @summary The walkthrough of the first start, over the full app: a page, the dots, the buttons.
-     @part onboarding-logo     The app icon at the top. It stays while the pages change.
+     @part onboarding-logo     The app icon, in the middle of the band above the page. It stays while the pages change.
      @part onboarding-page     The page in view: its drawing, its title and its text.
      @part onboarding-title    The title of a page.
      @part onboarding-text     The text of a page.
@@ -1530,16 +1530,20 @@
     overflow: hidden auto;
   }
 
+  /* The free space of the layer is three equal margins: above the logo, below it and below the
+     page. The logo thus sits in the middle of the band above the drawing. */
   .onboarding-logo {
     flex: none;
     align-self: center;
+    margin-block: auto;
     width: var(--logo);
     height: var(--logo);
   }
 
   .onboarding-page {
     display: flex;
-    flex: 1;
+    flex: none;
+    margin-bottom: auto;
     flex-direction: column;
     align-items: center;
     justify-content: center;
