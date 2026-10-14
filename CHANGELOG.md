@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.20 - 2026-10-14
+
 ### Added
 
 - Each item has a quantity, such as `2` or `1 kg`. Set it in the field **Cantidad** of `Editar`;
