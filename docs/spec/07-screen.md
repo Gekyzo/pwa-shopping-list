@@ -142,7 +142,7 @@ of it.
 
 ## Onboarding
 
-- **ONB-1** The walkthrough is a layer over the full app, with four pages in this order:
+- **ONB-1** The walkthrough is a layer over the full app, with six pages in this order:
 
   | Page | Title | Teaches |
   |---|---|---|
@@ -150,6 +150,8 @@ of it.
   | 2 | `La compra se repite` | The recurrent mark and the result of **Terminar compra** |
   | 3 | `Desliza una fila` | The tap on the name (ROW-7) and the two slides of a row (ROW-3, ROW-11), with the move to `Actual` of the slide to the right in `Próxima` |
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3) and the `+` button |
+  | 5 | `Recetas y menú` | A recipe and its products, the send to `Actual` (REC-18) and the plan of the week in `Menú` |
+  | 6 | `Datos de ejemplo` | The switch that loads the sample recipe (ONB-13) |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
   Above the pages, the art of the app icon shows centred in the band between the top of the
@@ -179,9 +181,18 @@ of it.
   below it.
 - **ONB-11** The walkthrough is a `role="dialog"` with `aria-modal` and the label `Introducción`.
   The focus goes to the button at the bottom when it opens and at each change of page. The dots
-  have the label `Página N de 4`. The title and the text are a live region.
+  have the label `Página N de 6`. The title and the text are a live region.
 - **ONB-12** With `prefers-reduced-motion: reduce` a page changes with no animation. The
   walkthrough keeps out of the safe-area insets. **Mano** changes only the order of its bar (ONB-3).
+- **ONB-13** The last page has the switch **Cargar datos de ejemplo**, on at each open of the
+  walkthrough. It shows only while the state has no sample recipe (REC-27); on another page, or
+  with the sample there, its room stays empty, so the page does not move. **Empezar** with the
+  switch on adds the sample recipe, with no message. **Saltar**, `Escape` and **Empezar** with the
+  switch off add nothing.
+- **ONB-14** `Ajustes` has **Borrar datos de ejemplo** in the group **Ayuda**, below **Ver la
+  introducción**, while the sample recipe exists. It deletes the recipe as REC-6 does, with the
+  message `toast.sampleDeleted` `Datos de ejemplo borrados.` and `Deshacer`. The focus goes to
+  **Ver la introducción**.
 
 ## Access and display
 
@@ -202,5 +213,5 @@ of it.
 ## Limits
 
 No move of a row with the keyboard, and no keyboard way to open a side menu of an item row. The
-walkthrough has no tour of recipes, `Menú`, shops, shop lists, quantities, backup or the settings
-of `Ajustes`, and no marks on the real controls.
+walkthrough has no tour of shops, shop lists, quantities, backup or the settings of `Ajustes`,
+and no marks on the real controls. The sample data is one recipe only: no item and no meal.

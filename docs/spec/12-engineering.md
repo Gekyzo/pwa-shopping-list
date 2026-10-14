@@ -30,8 +30,8 @@
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `menu`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu` |
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
-| `src/ui/onboarding.js` | The walkthrough | `onboarding`, `sections`, `storage`, `ui/context` |
-| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, modules, export and import | `store`, `storage`, `version`, `i18n`, `modules`, `ui/context`, `ui/onboarding` |
+| `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context` |
+| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, modules, export and import, the delete of the sample recipe | `store`, `recipes`, `storage`, `version`, `i18n`, `modules`, `ui/context`, `ui/onboarding` |
 | `src/ui/nav.js` | The bottom bar, its dust effect and the change of section | `sections`, `modules`, `particles`, `ui/context`, `ui/controls`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
@@ -81,7 +81,7 @@
 | Test file | Covers |
 |---|---|
 | `tests/store.test.js` | Items, the trip, the order, the search, the figures, the bring of all of Próxima |
-| `tests/recipes.test.js` | Recipes, the send, the groups, the search |
+| `tests/recipes.test.js` | Recipes, the send, the groups, the search, the sample recipe |
 | `tests/shops.test.js` | Shops and the list by shop |
 | `tests/menu.test.js` | The meals of the week and the fill |
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key and the device preferences |

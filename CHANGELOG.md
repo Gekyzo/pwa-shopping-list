@@ -9,7 +9,12 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Added
+
+- The walkthrough has two new pages: `Recetas y menú`, and `Datos de ejemplo` with the switch
+  **Cargar datos de ejemplo**, on by default. **Empezar** then adds the recipe `Pasta con salsa
+  de tomate`.
+- `Ajustes` has **Borrar datos de ejemplo** while the sample recipe exists.
 
 ## 1.0.24 - 2026-10-14
 

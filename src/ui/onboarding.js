@@ -1,7 +1,16 @@
 import { PAGES, isLast, step } from '#onboarding';
+import { hasSample, addSample } from '#recipes';
 import { slideDirection } from '#sections';
 import { saveOnboarded } from '#storage';
-import { $, el, storage, ui, t, guardClick } from '#ui/context';
+import { $, el, storage, state, ui, t, apply, guardClick } from '#ui/context';
+
+const SAMPLE_PRODUCTS = ['tomatoSauce', 'pasta', 'garlic', 'oliveOil', 'salt'];
+
+// The sample recipe in the language of the screen.
+const sampleText = () => ({ name: t('sample.name'), products: SAMPLE_PRODUCTS.map((key) => t(`sample.${key}`)) });
+
+// The switch shows on the last page while the state has no sample recipe (ONB-13).
+const offersSample = () => PAGES[ui.onboarding] === 'sample' && !hasSample(state);
 
 export const renderOnboarding = () => {
   const open = ui.onboarding !== null;
@@ -12,6 +21,9 @@ export const renderOnboarding = () => {
   });
   if (!open) return;
   const page = PAGES[ui.onboarding];
+  const away = !offersSample();
+  $('onboarding-sample').classList.toggle('away', away);
+  $('onboarding-sample').inert = away;
   // An SVG element has no `hidden` property, so the attribute is set.
   document.querySelectorAll('#onboarding svg[data-page]').forEach((drawing) => {
     drawing.toggleAttribute('hidden', drawing.dataset.page !== page);
@@ -26,6 +38,7 @@ export const renderOnboarding = () => {
 
 const openOnboarding = () => {
   ui.onboarding = 0;
+  $('sample-switch').checked = true;
   renderOnboarding();
   $('onboarding-next').focus();
 };
@@ -55,8 +68,13 @@ export const turnOnboarding = (way) => {
 
 export const bind = () => {
   $('onboarding-next').addEventListener('click', () => {
-    if (isLast(ui.onboarding)) closeOnboarding();
-    else turnOnboarding(1);
+    if (!isLast(ui.onboarding)) {
+      turnOnboarding(1);
+      return;
+    }
+    // Only Empezar loads the sample; Saltar and Escape do not (ONB-13).
+    if (offersSample() && $('sample-switch').checked) apply(addSample(state, sampleText()));
+    closeOnboarding();
   });
   $('onboarding-skip').addEventListener('click', closeOnboarding);
   $('show-onboarding').addEventListener('click', openOnboarding);

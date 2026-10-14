@@ -1,5 +1,5 @@
 // The pages of the walkthrough of the first start, in their order.
-export const PAGES = ['lists', 'trip', 'row', 'sections'];
+export const PAGES = ['lists', 'trip', 'row', 'sections', 'recipes', 'sample'];
 
 // The walkthrough shows at the start of a new install only: no seen flag and no stored state.
 export const shouldShow = ({ seen, hasState }) => !seen && !hasState;
