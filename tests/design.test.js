@@ -197,3 +197,11 @@ test('the design test reads the classes of the item rows, states included', () =
   const rows = classesInScript(read('src/ui/rows.js'));
   for (const name of ['item-row', 'bought', 'flash', 'gone', 'item-row-swipe', 'open']) assert.ok(rows.includes(name), name);
 });
+
+test('the frame of the catalogue page does not reach into the examples (DS-7)', () => {
+  const frame = rulesOf(read('designs/index.html').match(/<style>([\s\S]*?)<\/style>/)[1]);
+  // An unlayered frame rule beats every layer of styles.css, so a frame rule that ends in a bare
+  // element must reach only a direct child of a frame box.
+  const reaching = frame.filter((rule) => /(^|\s)(h[1-6]|p|span|div|code|pre)$/.test(rule.selector) && !/>\s*(h[1-6]|p|span|div|code|pre)$/.test(rule.selector));
+  assert.deepEqual(reaching.map((rule) => rule.selector), []);
+});

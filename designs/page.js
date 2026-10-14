@@ -82,7 +82,7 @@ const card = (part, page, scripts) =>
     el('p', { className: 'ds-meta', textContent: `Used in: ${usesOf(part.name, page, scripts).join(', ') || 'nothing yet'}` }),
   ]);
 
-const section = (title, children) => el('section', {}, [el('h2', { textContent: title }), ...children]);
+const section = (title, children) => el('section', { className: 'ds-section' }, [el('h2', { textContent: title }), ...children]);
 
 const render = ({ catalog, page, scripts }) => {
   const of = (layer) => catalog.components.filter((part) => part.layer === layer);
