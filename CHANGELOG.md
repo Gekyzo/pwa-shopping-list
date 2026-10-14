@@ -19,7 +19,8 @@ no change for the user has no entry.
   and a section that comes back forms from dust.
 - **Listas por tienda** in `Actual` and `Próxima`: a row of chips below the header, `Todas`, each
   shop and `Sin tienda`, shows the list of one shop. An item of two shops is in the two lists,
-  and a tick in one is a tick in the other.
+  and a tick in one is a tick in the other. A shop list with nothing left points to the next
+  shop, and an add from a shop list puts that shop on the item.
 
 ### Changed
 

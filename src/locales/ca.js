@@ -111,6 +111,7 @@ export default {
   'shops.empty': 'Escriu la primera botiga.',
   'shops.all': 'Totes',
   'shops.lists': 'Llistes per botiga',
+  'shops.nothingLeft': 'Res més a {shop}.',
 
   'onboarding.label': 'Introducció',
   'onboarding.skip': 'Omet',

@@ -111,6 +111,7 @@ export default {
   'shops.empty': 'Write the first shop.',
   'shops.all': 'All',
   'shops.lists': 'Lists by shop',
+  'shops.nothingLeft': 'Nothing more at {shop}.',
 
   'onboarding.label': 'Introduction',
   'onboarding.skip': 'Skip',
