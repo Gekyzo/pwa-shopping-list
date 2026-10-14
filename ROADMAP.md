@@ -4,6 +4,7 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 ## Planned
 
+- **Reset setting**. Reset app data, with confirmation.
 - **Responsive**. Adapt screens to different phones sizes, models, viewport,foldable phones, tablets.
 - **Optional reagents**. Make reagents optional.
 - **Store sections.** Add the category or section of the store to each product.
