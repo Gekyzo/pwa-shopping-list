@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { PAGES, isLast, shouldShow, step } from '#onboarding';
+import { PAGES, isLast, shouldShow, step, textParts } from '#onboarding';
 
 test('PAGES has the six pages in their order, each one time', () => {
   assert.deepEqual(PAGES, ['lists', 'trip', 'row', 'sections', 'recipes', 'sample']);
@@ -40,4 +40,32 @@ test('isLast is true for the last page only', () => {
   assert.equal(isLast(PAGES.length - 1), true);
   assert.equal(isLast(0), false);
   assert.equal(isLast(PAGES.length - 2), false);
+});
+
+test('textParts marks the text between backticks as a key', () => {
+  assert.deepEqual(textParts('Toca `↻` en lo de siempre.'), [
+    { text: 'Toca ', key: false },
+    { text: '↻', key: true },
+    { text: ' en lo de siempre.', key: false },
+  ]);
+});
+
+test('textParts gives one plain part for a text with no backtick', () => {
+  assert.deepEqual(textParts('Desliza la pantalla.'), [{ text: 'Desliza la pantalla.', key: false }]);
+});
+
+test('textParts reads keys at the start and at the end, and leaves out empty parts', () => {
+  assert.deepEqual(textParts('`+` y `↻`'), [
+    { text: '+', key: true },
+    { text: ' y ', key: false },
+    { text: '↻', key: true },
+  ]);
+});
+
+test('textParts keeps a backtick with no pair as text', () => {
+  assert.deepEqual(textParts('Abre `menú'), [{ text: 'Abre `menú', key: false }]);
+  assert.deepEqual(textParts('`+` y `fin'), [
+    { text: '+', key: true },
+    { text: ' y `fin', key: false },
+  ]);
 });

@@ -148,13 +148,14 @@ of it.
   |---|---|---|
   | 1 | `Tu próxima compra, casi hecha` | `Actual` is the trip of today; `Próxima` gets the recurrent items by itself (LIST-15) and the items you add |
   | 2 | `Marca lo de siempre` | The recurrent mark and the result of **Terminar compra** |
-  | 3 | `Desliza una fila` | The tap on the name (ROW-7) and the two slides of a row (ROW-3, ROW-11), with the move to `Actual` of the slide to the right in `Próxima` |
+  | 3 | `Desliza una fila` | The two slides of a row (ROW-3, ROW-11) and the tap on the name (ROW-7) |
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3), the bottom bar and the `+` button |
   | 5 | `¿Qué comemos esta semana?` | A recipe and its products, the send to `Actual` (REC-18) and the plan of the week in `Menú` |
   | 6 | `Una receta para empezar` | The switch that adds the sample recipe (ONB-13) |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
-  A line break in the text of a catalog starts a new line.
+  A line break in the text of a catalog starts a new line. A text between two backticks, such as
+  `↻` or `+`, names a control and shows as a key: a border and a monospace font, as inline code.
   Above the pages, the art of the app icon shows centred in the band between the top of the
   walkthrough and the drawing, 96 px wide, with no background (`icons/logo.png`, VER-15). It
   is decorative (`alt=""`) and does not change or move with the page. The title keeps the room
