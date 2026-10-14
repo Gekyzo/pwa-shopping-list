@@ -139,3 +139,50 @@ test('rows, list groups and section heads are components (DS-3)', family(
   ['items', 'item', 'row', 'swipe', 'side', 'backdrop', 'name', 'qty', 'section', 'actions', 'suggestions', 'group', 'suggestion-name', 'suggestion-where', 'create'],
   ['#version-status', 'input[type="checkbox"]', '.item-row-name small'],
 ));
+
+const names = (part) => [part.name, ...part.parts.map((p) => p.name), ...part.variants.map((v) => v.name), ...part.states.map((s) => s.name)];
+const known = new Set(catalog.components.flatMap(names));
+
+test('the catalogue has no error (DS-6)', () => {
+  assert.deepEqual(catalog.errors, []);
+});
+
+test('each class that the page or the code uses is documented (DS-6)', () => {
+  assert.deepEqual([...used].filter((name) => !known.has(name)).sort(), []);
+});
+
+test('each class of a selector is documented (DS-6)', () => {
+  const inSelectors = rules.filter((rule) => !rule.keyframe).flatMap((rule) => [...rule.selector.matchAll(/\.([a-z][\w-]*)/g)].map(([, name]) => name));
+  assert.deepEqual([...new Set(inSelectors)].filter((name) => !known.has(name)).sort(), []);
+});
+
+test('each example of the catalogue uses known classes and icons (DS-6)', () => {
+  const examples = catalog.components.flatMap((part) => part.examples);
+  assert.deepEqual(examples.flatMap(classesOf).filter((name) => !known.has(name)), []);
+  assert.deepEqual(examples.flatMap(iconsOf).filter((id) => !symbols.includes(id)), []);
+});
+
+// The drawings of the walkthrough are art: their shapes are bare svg elements.
+const ART = /^\.onboarding-art > svg/;
+
+test('no selector styles a bare element inside a class, and none has an id (DS-4)', () => {
+  const selectors = rules.filter((rule) => !rule.keyframe && rule.layer !== 'tokens' && rule.layer !== 'base').map((rule) => rule.selector);
+  assert.deepEqual(selectors.filter((selector) => selector.includes('#')), []);
+  const bare = /\.[\w-]+[^,]*?(\s+|\s*>\s*)(button|input|span|small|p|h[1-6]|li|ul|svg|select|em|strong|label|form|a)\b(?![\w-])/;
+  assert.deepEqual(selectors.filter((selector) => !ART.test(selector) && bare.test(selector)), []);
+});
+
+test('a variant is used with its block in the page (DS-3)', () => {
+  const owners = new Map();
+  for (const part of catalog.components) {
+    for (const variant of part.variants) owners.set(variant.name, [...(owners.get(variant.name) ?? []), part.name, ...part.parts.map((p) => p.name)]);
+  }
+  const alone = new Set(catalog.components.flatMap((part) => [part.name, ...part.parts.map((p) => p.name), ...part.states.map((s) => s.name)]));
+  const lists = [...html.matchAll(/\bclass="([^"]*)"/g)].map(([, value]) => value.split(/\s+/));
+  const stray = lists.flatMap((list) => list.filter((name) => owners.has(name) && !alone.has(name) && !owners.get(name).some((owner) => list.includes(owner))).map((name) => `${name} in "${list.join(' ')}"`));
+  assert.deepEqual(stray, []);
+});
+
+test('a className of the code is a literal, so that the test can read it', () => {
+  assert.deepEqual(scripts.filter(([, js]) => /className:\s*`|\.className\s*=/.test(js)).map(([file]) => file), []);
+});

@@ -23,7 +23,7 @@ const mealNode = (day, { meal, recipe }) => {
   const button = el(
     'button',
     { type: 'button', className: recipe ? 'meal' : 'meal free', onclick: () => openMeal(day, meal) },
-    [el('small', { textContent: t(`meal.${meal}`) }), el('span', { textContent: recipe ? recipe.name : t('menu.choose') })],
+    [el('small', { className: 'meal-label', textContent: t(`meal.${meal}`) }), el('span', { className: 'meal-name', textContent: recipe ? recipe.name : t('menu.choose') })],
   );
   button.setAttribute('aria-label', `${mealTitle(day, meal)}: ${recipe ? recipe.name : t('menu.choose')}`);
   button.setAttribute('aria-haspopup', 'dialog');
@@ -32,7 +32,7 @@ const mealNode = (day, { meal, recipe }) => {
 
 export const dayNode = ({ day, meals }) =>
   el('li', { className: 'day' }, [
-    el('h3', { textContent: dayName(day) }),
+    el('h3', { className: 'day-title', textContent: dayName(day) }),
     el('div', { className: 'meals' }, meals.map((entry) => mealNode(day, entry))),
   ]);
 

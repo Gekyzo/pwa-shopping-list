@@ -49,6 +49,7 @@
     --icon-s: 20px;
     --arrow: 6px; /* the arrow of a select */
     --nav-height: 60px;
+    --art-width: 240px; /* the drawings of the walkthrough */
 
     --shadow-s: 0 1px 3px rgb(0 0 0 / 0.3);
     --shadow-l: 0 6px 18px rgb(0 0 0 / 0.25);
@@ -122,6 +123,43 @@
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+
+  /* @component main
+     @summary The scrolling area of a section, between the header and the bottom bar.
+     @state enter-next      The content comes in from the right, after a change of section.
+     @state enter-previous  The content comes in from the left.
+     @example <p class="hint">The main element holds the sections; it has no example of its own.</p> */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* A horizontal slide changes the section, so the browser must not take it. */
+    touch-action: pan-y;
+    overflow-x: hidden;
+    padding-bottom: calc(var(--tap-l) + var(--space-4) * 2);
+  }
+
+  /* The content of a new section comes in from its side. `main` stays in its place, so its scroll
+     and the bottom padding do not move. */
+  main.enter-next > *,
+  main.enter-previous > * {
+    animation: enter var(--motion) ease-out;
+  }
+
+  main.enter-next {
+    --enter-from: 48px;
+  }
+
+  main.enter-previous {
+    --enter-from: -48px;
+  }
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateX(var(--enter-from));
+    }
   }
 }
 
@@ -469,145 +507,6 @@
   }
 
   /* List */
-
-  main {
-    flex: 1;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    /* A horizontal slide changes the section, so the browser must not take it. */
-    touch-action: pan-y;
-    overflow-x: hidden;
-    padding-bottom: calc(var(--tap-l) + var(--space-4) * 2);
-  }
-
-  /* The content of a new section comes in from its side. `main` stays in its place, so its scroll
-     and the bottom padding do not move. */
-  main.enter-next > *,
-  main.enter-previous > * {
-    animation: enter var(--motion) ease-out;
-  }
-
-  main.enter-next {
-    --enter-from: 48px;
-  }
-
-  main.enter-previous {
-    --enter-from: -48px;
-  }
-
-  @keyframes enter {
-    from {
-      opacity: 0;
-      transform: translateX(var(--enter-from));
-    }
-  }
-
-  /* The menu: one row for each day, with its two meals side by side. */
-  .day {
-    padding: var(--space-2) var(--space-3) var(--space-3);
-    border-bottom: 1px solid var(--line);
-    background: var(--surface);
-  }
-
-  .day h3 {
-    margin: 0 0 var(--space-2);
-    color: var(--muted);
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .meals {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-2);
-  }
-
-  .meal {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    min-width: 0;
-    padding: var(--space-2) var(--space-3);
-    background: var(--bg);
-    text-align: left;
-  }
-
-  .meal small {
-    color: var(--muted);
-    font-size: var(--text-xs);
-  }
-
-  .meal span {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .meal.free span {
-    color: var(--muted);
-  }
-
-  /* Each button takes half of the line; a long text wraps inside its button. Llenar la cesta is at
-     the side of the hand. */
-  .menu-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-2);
-    margin: var(--space-4) var(--space-3);
-  }
-
-  #menu-fill {
-    grid-row: 1;
-    grid-column: 2;
-  }
-
-  .products {
-    margin: 0;
-    padding: 0 var(--space-1) 0 var(--space-5);
-    list-style: none;
-  }
-
-  .products li {
-    display: flex;
-    align-items: center;
-    min-height: 44px;
-    border-top: 1px solid var(--line);
-  }
-
-  .products span {
-    flex: 1;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  .settings h2 {
-    margin: var(--space-5) var(--space-4) var(--space-2);
-    color: var(--muted);
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .about {
-    margin: var(--space-6) var(--space-3) 0;
-    color: var(--muted);
-    font-size: var(--text-xs);
-    text-align: center;
-  }
-
-  .about p {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-1) var(--space-2);
-    margin: 0;
-  }
-
-  /* Add button and bottom menu */
 
   /* @component app-header
      @summary The top of each section: the ring, the title and its summary, and up to three tool buttons.
@@ -1257,125 +1156,6 @@
     box-shadow: var(--shadow-l);
   }
 
-  .dust {
-    position: fixed;
-    z-index: 40;
-    pointer-events: none;
-  }
-
-  /* Onboarding: the pages of the first start, over the full app. */
-
-  .onboarding {
-    position: fixed;
-    inset: 0;
-    z-index: 30;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    padding: calc(var(--space-5) + env(safe-area-inset-top)) calc(var(--space-5) + env(safe-area-inset-right))
-      calc(var(--space-5) + env(safe-area-inset-bottom)) calc(var(--space-5) + env(safe-area-inset-left));
-    background: var(--bg);
-    /* A horizontal slide changes the page, so the browser must not take it. */
-    touch-action: pan-y;
-    overflow: hidden auto;
-  }
-
-  .onboarding-page {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-6);
-    text-align: center;
-  }
-
-  .onboarding-page.enter-next,
-  .onboarding-page.enter-previous {
-    animation: enter var(--motion) ease-out;
-  }
-
-  .onboarding-page.enter-next {
-    --enter-from: 48px;
-  }
-
-  .onboarding-page.enter-previous {
-    --enter-from: -48px;
-  }
-
-  .onboarding-art svg {
-    display: block;
-    width: min(240px, 70vw);
-    height: auto;
-    fill: none;
-    stroke: var(--muted);
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .onboarding-art .card {
-    fill: var(--surface);
-  }
-
-  .onboarding-art .accent {
-    stroke: var(--accent);
-  }
-
-  .onboarding-art .soft {
-    fill: var(--accent-soft);
-    stroke: var(--accent);
-  }
-
-  .onboarding-art .solid {
-    fill: var(--accent);
-    stroke: none;
-  }
-
-  .onboarding-art .on-solid {
-    stroke: var(--accent-text);
-  }
-
-  .onboarding h2 {
-    margin: 0 0 var(--space-2);
-    font-size: var(--text-l);
-  }
-
-  .onboarding p {
-    max-width: 32ch;
-    margin: 0;
-    color: var(--muted);
-  }
-
-  .onboarding-dots {
-    display: flex;
-    flex: none;
-    justify-content: center;
-    gap: var(--space-2);
-  }
-
-  .onboarding-dots span {
-    width: 8px;
-    height: 8px;
-    border-radius: var(--radius-round);
-    background: var(--line);
-  }
-
-  .onboarding-dots .on {
-    background: var(--accent);
-  }
-
-  /* Saltar sits beside Siguiente, on the side away from the thumb. On the last page Empezar fills the bar. */
-  .onboarding-actions {
-    display: flex;
-    flex: none;
-    gap: var(--space-2);
-  }
-
-  .onboarding-actions .button {
-    flex: 1 1 50%;
-  }
-
   /* Left hand: the controls change side. Text stays aligned to the left, and a row slides as before. */
 
   [data-hand="left"] .app-header {
@@ -1399,14 +1179,6 @@
 
   [data-hand="left"] .item-row-check {
     margin: var(--space-3) var(--space-2) var(--space-3) var(--space-1);
-  }
-
-  [data-hand="left"] .onboarding-actions {
-    flex-direction: row-reverse;
-  }
-
-  [data-hand="left"] #menu-fill {
-    grid-column: 1;
   }
 
   [data-hand="left"] .fab {
@@ -1446,6 +1218,28 @@
 
   .input-row > .input {
     flex: 1;
+  }
+  /* @component split
+     @summary Two equal columns. Each child takes the full width of its column.
+     @part hand-side  The child that stands at the side of the hand: right, or left with the left hand.
+     @example <div class="split" style="width: 100%"><button class="button primary hand-side" type="button">Llenar la cesta</button><button class="button outline" type="button">Vaciar menú</button></div> */
+  .split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .split > * {
+    width: 100%;
+  }
+
+  .split > .hand-side {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  [data-hand="left"] .split > .hand-side {
+    grid-column: 1;
   }
 }
 
@@ -1566,5 +1360,280 @@
     to {
       transform: rotate(1turn);
     }
+  }
+
+  /* @component day
+     @scope menu
+     @summary One day of the menu: its name, then its two meals side by side.
+     @part day-title  The name of the day.
+     @part meals      The two meals.
+     @example <ul class="item-list" style="width: 100%"><li class="day"><h3 class="day-title">Lunes</h3><div class="meals"><button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button><button class="meal free" type="button"><small class="meal-label">Cena</small><span class="meal-name">Elegir receta</span></button></div></li></ul> */
+  .day {
+    padding: var(--space-2) var(--space-3) var(--space-3);
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .day-title {
+    margin: 0 0 var(--space-2);
+    color: var(--muted);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .meals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+
+  /* @component meal
+     @scope menu
+     @summary One meal of a day: its label, then its recipe or the call to choose one.
+     @variant free   A meal with no recipe.
+     @part meal-label  Comida or Cena.
+     @part meal-name   The recipe, cut with an ellipsis.
+     @example <button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button> */
+  .meal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg);
+    text-align: left;
+  }
+
+  .meal-label {
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  .meal-name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .meal.free .meal-name {
+    color: var(--muted);
+  }
+
+  /* @component menu-actions
+     @scope menu
+     @summary The two buttons below the menu. Llenar la cesta is at the side of the hand.
+     @example <div class="split menu-actions" style="width: 100%"><button class="button primary hand-side" type="button">Llenar la cesta</button><button class="button outline" type="button">Vaciar menú</button></div> */
+  .menu-actions {
+    margin: var(--space-4) var(--space-3);
+  }
+
+  /* @component products
+     @scope recipes
+     @summary The products of an open recipe, each with its remove button.
+     @part product       One product.
+     @part product-text  Its name.
+     @example <ul class="products" style="width: 100%"><li class="product"><span class="product-text">Patatas</span><button class="button icon" type="button" aria-label="Quitar">✕</button></li></ul> */
+  .products {
+    margin: 0;
+    padding: 0 var(--space-1) 0 var(--space-5);
+    list-style: none;
+  }
+
+  .product {
+    display: flex;
+    align-items: center;
+    min-height: var(--tap);
+    border-top: 1px solid var(--line);
+  }
+
+  .product-text {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* @component settings
+     @scope settings
+     @summary The Ajustes section: titled list groups, then the about lines.
+     @part settings-title  The title above a list group.
+     @example <section class="settings" style="width: 100%"><h2 class="settings-title">Idioma</h2><div class="list-group"><select class="select" aria-label="Idioma"><option>Español</option></select></div></section> */
+  .settings-title {
+    margin: var(--space-5) var(--space-4) var(--space-2);
+    color: var(--muted);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* @component about
+     @scope settings
+     @summary The version lines at the end of Ajustes.
+     @part about-line  One line: the version and its state.
+     @example <footer class="about"><p class="about-line"><span>Versión 1.0.20</span></p></footer> */
+  .about {
+    margin: var(--space-6) var(--space-3) 0;
+    color: var(--muted);
+    font-size: var(--text-xs);
+    text-align: center;
+  }
+
+  .about-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-1) var(--space-2);
+    margin: 0;
+  }
+
+  /* @component dust
+     @scope nav
+     @summary The canvas of the dust effect of a nav item that goes away or comes back.
+     @example <p class="hint">The dust canvas is drawn by nav.js; it has no example of its own.</p> */
+  .dust {
+    position: fixed;
+    z-index: 40;
+    pointer-events: none;
+  }
+
+  /* @component onboarding
+     @scope onboarding
+     @summary The walkthrough of the first start, over the full app: a page, the dots, the buttons.
+     @part onboarding-page     The page in view: its drawing, its title and its text.
+     @part onboarding-title    The title of a page.
+     @part onboarding-text     The text of a page.
+     @part onboarding-dots     One dot for each page.
+     @part onboarding-dot      One dot.
+     @part onboarding-actions  Saltar and the next button, side by side. On the last page the next button fills the bar.
+     @state on                 On onboarding-dot: the page in view.
+     @state enter-next         On onboarding-page: it comes in from the right.
+     @state enter-previous     On onboarding-page: it comes in from the left.
+     @example <div class="onboarding-actions" style="width: 100%"><button class="button outline quiet" type="button">Saltar</button><button class="button primary" type="button">Siguiente</button></div>
+     @example <div class="onboarding-dots"><span class="onboarding-dot on"></span><span class="onboarding-dot"></span><span class="onboarding-dot"></span></div> */
+  .onboarding {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: calc(var(--space-5) + env(safe-area-inset-top)) calc(var(--space-5) + env(safe-area-inset-right))
+      calc(var(--space-5) + env(safe-area-inset-bottom)) calc(var(--space-5) + env(safe-area-inset-left));
+    background: var(--bg);
+    /* A horizontal slide changes the page, so the browser must not take it. */
+    touch-action: pan-y;
+    overflow: hidden auto;
+  }
+
+  .onboarding-page {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .onboarding-page.enter-next,
+  .onboarding-page.enter-previous {
+    animation: enter var(--motion) ease-out;
+  }
+
+  .onboarding-page.enter-next {
+    --enter-from: 48px;
+  }
+
+  .onboarding-page.enter-previous {
+    --enter-from: -48px;
+  }
+
+  .onboarding-title {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-l);
+  }
+
+  .onboarding-text {
+    max-width: 32ch;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .onboarding-dots {
+    display: flex;
+    flex: none;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .onboarding-dot {
+    width: var(--space-2);
+    height: var(--space-2);
+    border-radius: var(--radius-round);
+    background: var(--line);
+  }
+
+  .onboarding-dot.on {
+    background: var(--accent);
+  }
+
+  /* Saltar sits beside the next button, on the side away from the thumb. */
+  .onboarding-actions {
+    display: flex;
+    flex: none;
+    gap: var(--space-2);
+  }
+
+  .onboarding-actions > .button {
+    flex: 1 1 50%;
+  }
+
+  [data-hand="left"] .onboarding-actions {
+    flex-direction: row-reverse;
+  }
+
+  /* @component onboarding-art
+     @scope onboarding
+     @summary The line drawing of a walkthrough page, inline in the page. Its shapes take these parts.
+     @part art-card     A card shape, filled with --surface.
+     @part art-accent   An accent stroke.
+     @part art-soft     A soft accent fill.
+     @part art-solid    A solid accent fill.
+     @part art-on-solid A stroke on a solid fill.
+     @example <div class="onboarding-art"><svg viewBox="0 0 240 160" aria-hidden="true"><rect class="art-card art-accent" x="20" y="20" width="90" height="120" rx="10"/><circle class="art-solid" cx="160" cy="80" r="13"/><path class="art-on-solid" d="M160 74v12M154 80h12"/></svg></div> */
+  .onboarding-art > svg {
+    display: block;
+    width: min(var(--art-width), 70vw);
+    height: auto;
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .art-card {
+    fill: var(--surface);
+  }
+
+  .art-accent {
+    stroke: var(--accent);
+  }
+
+  .art-soft {
+    fill: var(--accent-soft);
+    stroke: var(--accent);
+  }
+
+  .art-solid {
+    fill: var(--accent);
+    stroke: none;
+  }
+
+  .art-on-solid {
+    stroke: var(--accent-text);
   }
 }

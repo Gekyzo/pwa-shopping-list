@@ -52,8 +52,8 @@
         <button id="bring" class="button primary" type="button" hidden></button>
       </div>
 
-      <div id="menu-actions" class="menu-actions" hidden>
-        <button id="menu-fill" class="button primary" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg><span data-i18n="menu.fill"></span></button>
+      <div id="menu-actions" class="split menu-actions" hidden>
+        <button id="menu-fill" class="button primary hand-side" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg><span data-i18n="menu.fill"></span></button>
         <button id="menu-clear" class="button outline" type="button" data-i18n="menu.clear"></button>
       </div>
 
@@ -64,29 +64,29 @@
       </section>
 
       <section id="settings" class="settings" hidden>
-        <h2 data-i18n="settings.backup"></h2>
+        <h2 class="settings-title" data-i18n="settings.backup"></h2>
         <div class="list-group pair">
           <button id="export" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#export"/></svg><span data-i18n="settings.export"></span></button>
           <button id="import" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#import"/></svg><span data-i18n="settings.import"></span></button>
         </div>
-        <h2 data-i18n="settings.language"></h2>
+        <h2 class="settings-title" data-i18n="settings.language"></h2>
         <div class="list-group">
           <select id="language" class="select" data-i18n-attr="aria-label:settings.language"></select>
         </div>
-        <h2 data-i18n="settings.hand"></h2>
+        <h2 class="settings-title" data-i18n="settings.hand"></h2>
         <div class="list-group">
           <select id="hand" class="select" data-i18n-attr="aria-label:settings.hand"></select>
         </div>
-        <h2 data-i18n="settings.theme"></h2>
+        <h2 class="settings-title" data-i18n="settings.theme"></h2>
         <div class="list-group">
           <select id="theme" class="select" data-i18n-attr="aria-label:settings.theme"></select>
         </div>
-        <h2 data-i18n="settings.modules"></h2>
+        <h2 class="settings-title" data-i18n="settings.modules"></h2>
         <div class="list-group">
           <label class="switch"><span data-i18n="list.next"></span><input class="switch-input" type="checkbox" role="switch" data-module="next"></label>
           <label class="switch"><span data-i18n="settings.moduleRecipes"></span><input class="switch-input" type="checkbox" role="switch" data-module="recipes"></label>
         </div>
-        <h2 data-i18n="settings.help"></h2>
+        <h2 class="settings-title" data-i18n="settings.help"></h2>
         <div class="list-group">
           <button id="show-onboarding" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#help"/></svg><span data-i18n="settings.onboarding"></span></button>
         </div>
@@ -211,47 +211,47 @@
       <div id="onboarding-page" class="onboarding-page">
         <div class="onboarding-art">
           <svg data-page="lists" viewBox="0 0 240 160" aria-hidden="true">
-            <rect class="card accent" x="20" y="20" width="90" height="120" rx="10"/>
-            <rect class="accent" x="32" y="40" width="12" height="12" rx="3"/>
-            <path class="accent" d="M35 46l2.5 2.5 4-5"/>
-            <rect class="accent" x="32" y="70" width="12" height="12" rx="3"/>
-            <rect class="accent" x="32" y="100" width="12" height="12" rx="3"/>
+            <rect class="art-card art-accent" x="20" y="20" width="90" height="120" rx="10"/>
+            <rect class="art-accent" x="32" y="40" width="12" height="12" rx="3"/>
+            <path class="art-accent" d="M35 46l2.5 2.5 4-5"/>
+            <rect class="art-accent" x="32" y="70" width="12" height="12" rx="3"/>
+            <rect class="art-accent" x="32" y="100" width="12" height="12" rx="3"/>
             <path d="M52 46h44M52 76h36M52 106h40"/>
-            <rect class="card" x="130" y="20" width="90" height="120" rx="10"/>
+            <rect class="art-card" x="130" y="20" width="90" height="120" rx="10"/>
             <path d="M144 46h62M144 76h50M144 106h56"/>
           </svg>
           <svg data-page="trip" viewBox="0 0 240 160" aria-hidden="true">
-            <path class="accent" d="M200 62c-20-34-140-34-160 0M40 62l-2-11M40 62l11-3"/>
-            <rect class="card" x="30" y="74" width="180" height="40" rx="10"/>
-            <rect class="accent" x="42" y="88" width="12" height="12" rx="3"/>
-            <path class="accent" d="M45 94l2.5 2.5 4-5"/>
+            <path class="art-accent" d="M200 62c-20-34-140-34-160 0M40 62l-2-11M40 62l11-3"/>
+            <rect class="art-card" x="30" y="74" width="180" height="40" rx="10"/>
+            <rect class="art-accent" x="42" y="88" width="12" height="12" rx="3"/>
+            <path class="art-accent" d="M45 94l2.5 2.5 4-5"/>
             <path d="M64 94h80"/>
-            <path class="accent" d="M196 94a8 8 0 1 1-2.3-5.7M194 84v5h-5"/>
+            <path class="art-accent" d="M196 94a8 8 0 1 1-2.3-5.7M194 84v5h-5"/>
           </svg>
           <svg data-page="row" viewBox="0 0 240 160" aria-hidden="true">
-            <rect class="card" x="20" y="50" width="132" height="40" rx="10"/>
-            <rect class="accent" x="32" y="64" width="12" height="12" rx="3"/>
+            <rect class="art-card" x="20" y="50" width="132" height="40" rx="10"/>
+            <rect class="art-accent" x="32" y="64" width="12" height="12" rx="3"/>
             <path d="M54 70h70"/>
-            <rect class="soft" x="158" y="52" width="28" height="36" rx="6"/>
-            <rect class="soft" x="190" y="52" width="28" height="36" rx="6"/>
-            <path class="accent" d="M40 122h56M88 114l8 8-8 8"/>
-            <path class="accent" d="M200 122h-56M152 114l-8 8 8 8"/>
+            <rect class="art-soft" x="158" y="52" width="28" height="36" rx="6"/>
+            <rect class="art-soft" x="190" y="52" width="28" height="36" rx="6"/>
+            <path class="art-accent" d="M40 122h56M88 114l8 8-8 8"/>
+            <path class="art-accent" d="M200 122h-56M152 114l-8 8 8 8"/>
           </svg>
           <svg data-page="sections" viewBox="0 0 240 160" aria-hidden="true">
-            <path class="accent" d="M66 48h88M74 40l-8 8 8 8M146 40l8 8-8 8"/>
-            <circle class="solid" cx="194" cy="82" r="13"/>
-            <path class="on-solid" d="M194 76v12M188 82h12"/>
-            <rect class="card" x="30" y="108" width="180" height="32" rx="10"/>
+            <path class="art-accent" d="M66 48h88M74 40l-8 8 8 8M146 40l8 8-8 8"/>
+            <circle class="art-solid" cx="194" cy="82" r="13"/>
+            <path class="art-on-solid" d="M194 76v12M188 82h12"/>
+            <rect class="art-card" x="30" y="108" width="180" height="32" rx="10"/>
             <circle cx="54" cy="124" r="5"/>
-            <circle class="solid" cx="87" cy="124" r="5"/>
+            <circle class="art-solid" cx="87" cy="124" r="5"/>
             <circle cx="120" cy="124" r="5"/>
             <circle cx="153" cy="124" r="5"/>
             <circle cx="186" cy="124" r="5"/>
           </svg>
         </div>
         <div aria-live="polite">
-          <h2 id="onboarding-title"></h2>
-          <p id="onboarding-text"></p>
+          <h2 id="onboarding-title" class="onboarding-title"></h2>
+          <p id="onboarding-text" class="onboarding-text"></p>
         </div>
       </div>
       <div id="onboarding-dots" class="onboarding-dots" role="img"></div>
