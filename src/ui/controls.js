@@ -75,3 +75,28 @@ export const startRename = (entry) => {
   Object.assign(ui, { editingId: entry.id, openId: null });
   render();
 };
+
+// A field of a sheet saves when it loses the focus. `current` gives the stored value, or undefined
+// when the sheet has no entry; `save` applies a new value and returns false on an error, which
+// keeps the old value in the field.
+export const bindField = (input, current, save) => {
+  input.addEventListener('blur', () => {
+    const value = current();
+    if (value === undefined) return;
+    if (input.value.trim() !== value && save(input.value)) return;
+    input.value = current() ?? value;
+  });
+  input.addEventListener('keydown', (event) => {
+    // Enter saves the field; it does not submit a form.
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      input.blur();
+    }
+    // Escape puts the value back and keeps the sheet open.
+    if (event.key === 'Escape') {
+      event.stopPropagation();
+      input.value = current() ?? input.value;
+      input.blur();
+    }
+  });
+};

@@ -21,8 +21,8 @@
 | `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
-| `src/ui/controls.js` | The controls that several views use: icons, the rename field, the more button | `store`, `ui/context`, `ui/view` |
-| `src/ui/edit.js` | The edit sheet `Editar` | `store`, `shops`, `ui/context` |
+| `src/ui/controls.js` | The controls that several views use: icons, the rename field, the more button, the save of a sheet field | `store`, `ui/context`, `ui/view` |
+| `src/ui/edit.js` | The edit sheet `Editar` | `store`, `shops`, `ui/context`, `ui/controls` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `store`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/rows.js` | The item rows, their side menus and their swipe | `store`, `swipe`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
 | `src/ui/recipes.js` | The section `Recetas` | `store`, `recipes`, `ui/context`, `ui/controls`, `ui/motion` |

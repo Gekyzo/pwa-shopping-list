@@ -1,6 +1,7 @@
 import * as store from '#store';
 import * as shops from '#shops';
 import { $, el, state, ui, t, apply, render } from '#ui/context';
+import { bindField } from '#ui/controls';
 
 export const openEdit = (item) => {
   Object.assign(ui, { editId: item.id, openId: null, editingId: null });
@@ -50,32 +51,7 @@ export const renderEdit = () => {
 const submitShop = () => {
   if (apply(shops.addItemShop(state, ui.editId, $('edit-shop').value))) $('edit-shop').value = '';
 };
-// A field of the edit sheet saves when it loses the focus. An error keeps the old value in the field.
-const bindEditField = (input, field, operation) => {
-  const save = () => {
-    const item = state.items.find((entry) => entry.id === ui.editId);
-    if (!item || input.value.trim() === item[field]) {
-      if (item) input.value = item[field];
-      return;
-    }
-    if (!apply(operation(state, item.id, input.value))) input.value = item[field];
-  };
-  input.addEventListener('blur', save);
-  input.addEventListener('keydown', (event) => {
-    // Enter saves the field; it does not submit the form, which adds a shop.
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      input.blur();
-    }
-    // Escape puts the value back and keeps the sheet open.
-    if (event.key === 'Escape') {
-      event.stopPropagation();
-      const item = state.items.find((entry) => entry.id === ui.editId);
-      if (item) input.value = item[field];
-      input.blur();
-    }
-  });
-};
+const editItem = () => state.items.find((entry) => entry.id === ui.editId);
 
 export const bind = () => {
   $('edit-veil').addEventListener('click', closeEdit);
@@ -88,6 +64,6 @@ export const bind = () => {
     const picked = event.inputType === 'insertReplacementText' || event.inputType === undefined;
     if (picked && shops.shopSuggestions(state, ui.editId).includes(event.target.value)) submitShop();
   });
-  bindEditField($('edit-name'), 'name', store.renameItem);
-  bindEditField($('edit-quantity'), 'quantity', store.setQuantity);
+  bindField($('edit-name'), () => editItem()?.name, (value) => apply(store.renameItem(state, ui.editId, value)));
+  bindField($('edit-quantity'), () => editItem()?.quantity, (value) => apply(store.setQuantity(state, ui.editId, value)));
 };
