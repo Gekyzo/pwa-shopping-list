@@ -1,0 +1,199 @@
+import { direction, slideTo } from '#sections';
+import { visibleSections } from '#modules';
+import { PARTICLE_SIZE, makeParticles, particleAt } from '#particles';
+import { $, el, scroller, ui, off, navMotion, render, guardClick } from '#ui/context';
+import { reorder } from '#ui/drag';
+import { checkVersion } from '#ui/settings';
+
+// The time of the dust of a button, and of the close or the open of its place in the bar.
+const DUST_MS = 900;
+const PLACE_MS = 300;
+
+// The pixels of a button of the bottom bar: its icon, then its label, in their colours.
+const drawButton = async (button) => {
+  const box = button.getBoundingClientRect();
+  const canvas = el('canvas', { width: Math.ceil(box.width), height: Math.ceil(box.height) });
+  const context = canvas.getContext('2d', { willReadFrequently: true });
+  const icon = button.querySelector('svg');
+  const place = icon.getBoundingClientRect();
+  const look = getComputedStyle(icon);
+  const copy = icon.cloneNode(true);
+  Object.entries({
+    xmlns: 'http://www.w3.org/2000/svg',
+    width: place.width,
+    height: place.height,
+    fill: 'none',
+    stroke: look.color,
+    'stroke-width': look.strokeWidth,
+    'stroke-linecap': look.strokeLinecap,
+    'stroke-linejoin': look.strokeLinejoin,
+  }).forEach(([name, value]) => copy.setAttribute(name, value));
+  const image = new Image();
+  image.src = `data:image/svg+xml,${encodeURIComponent(new XMLSerializer().serializeToString(copy))}`;
+  await image.decode();
+  context.drawImage(image, place.left - box.left, place.top - box.top, place.width, place.height);
+  const label = button.querySelector('span');
+  const text = label.getBoundingClientRect();
+  const font = getComputedStyle(label);
+  context.font = `${font.fontWeight} ${font.fontSize} ${font.fontFamily}`;
+  context.fillStyle = font.color;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(label.textContent, text.left - box.left + text.width / 2, text.top - box.top + text.height / 2);
+  return { box, image: context.getImageData(0, 0, canvas.width, canvas.height) };
+};
+
+// Plays the dust of a picture at `box` on a canvas over the page: the particles leave, or with
+// `back` they come in and settle. Resolves at the end, or at once when `run` is cancelled.
+const playDust = ({ box, image }, back, run) =>
+  new Promise((resolve) => {
+    const particles = makeParticles(image);
+    const pad = 80;
+    const canvas = el('canvas', { className: 'dust', width: box.width + 2 * pad, height: box.height + 2 * pad });
+    Object.assign(canvas.style, { left: `${box.left - pad}px`, top: `${box.top - pad}px` });
+    document.body.append(canvas);
+    const context = canvas.getContext('2d');
+    run.stops.push(() => {
+      canvas.remove();
+      resolve();
+    });
+    const start = performance.now();
+    const frame = (now) => {
+      if (run.cancelled) return;
+      const t = Math.min(1, (now - start) / DUST_MS);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((particle) => {
+        const { x, y, alpha } = particleAt(particle, back ? 1 - t : t);
+        if (alpha <= 0) return;
+        context.globalAlpha = alpha;
+        context.fillStyle = particle.color;
+        context.fillRect(pad + x, pad + y, PARTICLE_SIZE, PARTICLE_SIZE);
+      });
+      if (t < 1) requestAnimationFrame(frame);
+      else {
+        canvas.remove();
+        resolve();
+      }
+    };
+    requestAnimationFrame(frame);
+  });
+
+// The open or the close of the place of a button in the bar.
+const movePlace = (button, open, run, delay = 0) => {
+  const frames = [{ flexGrow: 0, minWidth: 0 }, { flexGrow: 1, minWidth: 0 }];
+  const motion = button.animate(frames, {
+    duration: PLACE_MS,
+    delay,
+    easing: 'ease',
+    direction: open ? 'normal' : 'reverse',
+    fill: 'both',
+  });
+  run.stops.push(() => motion.cancel());
+  return motion.finished.catch(() => {});
+};
+
+// The effects of the bar that run, by button. Each entry is the run that a later change cancels.
+const navRuns = new Map();
+
+const endRun = (button) => {
+  const run = navRuns.get(button);
+  if (!run) return;
+  run.cancelled = true;
+  run.stops.forEach((stop) => stop());
+  button.style.opacity = '';
+  button.style.overflow = '';
+  navRuns.delete(button);
+};
+
+// A button that goes breaks into dust, then its place closes. A button that comes back opens its
+// place, then its dust comes in and settles (MOD-9).
+const runNavEffect = async (button, shown) => {
+  const run = { shown, cancelled: false, stops: [] };
+  navRuns.set(button, run);
+  button.hidden = false;
+  button.style.overflow = 'hidden';
+  try {
+    if (shown) {
+      button.style.opacity = '0';
+      await movePlace(button, true, run);
+      if (run.cancelled) return;
+      const picture = await drawButton(button);
+      if (run.cancelled) return;
+      await playDust(picture, true, run);
+    } else {
+      const picture = await drawButton(button);
+      if (run.cancelled) return;
+      button.style.opacity = '0';
+      await Promise.all([playDust(picture, false, run), movePlace(button, false, run, DUST_MS * 0.35)]);
+    }
+  } catch {
+    // A picture that cannot be drawn ends the effect: the button takes its place at once.
+  }
+  if (run.cancelled) return;
+  endRun(button);
+  button.hidden = !shown;
+};
+
+// Shows or hides the button of a section in the bottom bar. With `navMotion` the change is the
+// effect of runNavEffect; a button keeps its effect until the effect ends or a change cancels it.
+export const showNavButton = (button, shown) => {
+  const run = navRuns.get(button);
+  if (run ? run.shown === shown : shown === !button.hidden) return;
+  endRun(button);
+  if (!navMotion || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    button.hidden = !shown;
+    return;
+  }
+  runNavEffect(button, shown);
+};
+
+// Lets the content of the new section come in from the side that it is on in the bottom bar.
+const enter = (way) => {
+  scroller.classList.remove('enter-next', 'enter-previous');
+  if (!way) return;
+  // The read of the width starts the animation again when a change follows another one.
+  void scroller.offsetWidth;
+  scroller.classList.add(way > 0 ? 'enter-next' : 'enter-previous');
+};
+
+const showView = (view) => {
+  const way = direction(ui.view, view, visibleSections(off));
+  // The field is shared: the focus of a list search must not go with it to Recetas.
+  $('query').blur();
+  Object.assign(ui, { view, editingId: null, openId: null, query: '', searchOpen: false, mealOpen: null });
+  render();
+  enter(way);
+  if (ui.view === 'settings') checkVersion();
+};
+
+export const bind = () => {
+  // A child of the list area that shows later, as a banner does, must not come in from a side.
+  scroller.addEventListener('animationend', (event) => {
+    if (event.animationName === 'enter') scroller.classList.remove('enter-next', 'enter-previous');
+  });
+  document.querySelectorAll('.bnav button').forEach((button) => {
+    button.addEventListener('click', () => showView(button.dataset.view));
+  });
+  // A horizontal slide that starts out of the rows changes the section. A row keeps its drag for its
+  // side menus, and a text field keeps its drag for the selection.
+  let sectionSlide = null;
+  document.addEventListener('pointerdown', (event) => {
+    sectionSlide = null;
+    const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null;
+    if (!event.isPrimary || event.button !== 0 || reorder || sheet) return;
+    if (!event.target.closest('.head, main') || event.target.closest('.swipe, .shop-chips, input, textarea')) return;
+    sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+  });
+  document.addEventListener('pointerup', (event) => {
+    if (sectionSlide?.pointerId !== event.pointerId) return;
+    const view = slideTo(ui.view, event.clientX - sectionSlide.x, event.clientY - sectionSlide.y, visibleSections(off));
+    sectionSlide = null;
+    if (!view) return;
+    // The click that follows a slide must not press the button below the finger.
+    guardClick();
+    showView(view);
+  });
+  document.addEventListener('pointercancel', () => {
+    sectionSlide = null;
+  });
+};

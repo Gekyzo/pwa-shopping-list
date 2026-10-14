@@ -29,6 +29,10 @@
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `menu`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu` |
+| `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
+| `src/ui/onboarding.js` | The walkthrough | `onboarding`, `sections`, `storage`, `ui/context` |
+| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, modules, export and import | `store`, `storage`, `version`, `i18n`, `modules`, `ui/context`, `ui/onboarding` |
+| `src/ui/nav.js` | The bottom bar, its dust effect and the change of section | `sections`, `modules`, `particles`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | Render and event handling. The only module that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
 
