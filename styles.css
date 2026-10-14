@@ -578,6 +578,20 @@ button.pill {
   border: 1px solid var(--line);
 }
 
+#meal-query {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.meal-empty {
+  margin: 10px 0;
+  color: var(--muted);
+}
+
 #meal-remove {
   width: 100%;
   color: var(--danger);

@@ -111,6 +111,7 @@ const ui = {
   editId: null,
   // The meal whose sheet is open, as { day, meal }, or null.
   mealOpen: null,
+  mealQuery: '',
   // The page of the walkthrough in view, or null while the walkthrough is closed.
   onboarding: firstStart ? 0 : null,
   target: 'active',
@@ -976,7 +977,7 @@ const dayName = (day) => new Intl.DateTimeFormat(intlTag(lang), { weekday: 'long
 const mealTitle = (day, meal) => t('menu.title', { meal: t(`meal.${meal}`), day: dayName(day) });
 
 const openMeal = (day, meal) => {
-  ui.mealOpen = { day, meal };
+  Object.assign(ui, { mealOpen: { day, meal }, mealQuery: '' });
   render();
 };
 
@@ -1020,7 +1021,11 @@ const renderMeal = () => {
   $('meal-title').textContent = title;
   $('meal-sheet').setAttribute('aria-label', title);
   const current = menu.menuWeek(state)[day].meals.find((entry) => entry.meal === meal).recipe;
-  const chips = state.recipes.map((recipe) => {
+  if ($('meal-query').value !== ui.mealQuery) $('meal-query').value = ui.mealQuery;
+  const matches = recipes.searchRecipes(state, ui.mealQuery);
+  $('meal-empty').hidden = matches.length > 0;
+  $('meal-empty').textContent = matches.length ? '' : t('empty.noMatch', { query: ui.mealQuery.trim() });
+  const chips = matches.map((recipe) => {
     const chip = el('button', {
       type: 'button',
       textContent: recipe.name,
@@ -1963,6 +1968,10 @@ $('toast-undo').addEventListener('click', () => {
 $('menu-fill').addEventListener('click', fillBasket);
 $('menu-clear').addEventListener('click', () => apply(menu.clearMenu(state), { undoText: t('toast.menuCleared') }));
 $('meal-veil').addEventListener('click', closeMeal);
+$('meal-query').addEventListener('input', (event) => {
+  ui.mealQuery = event.target.value;
+  renderMeal();
+});
 $('meal-remove').addEventListener('click', () => {
   const { day, meal } = ui.mealOpen;
   const name = menu.menuWeek(state)[day].meals.find((entry) => entry.meal === meal).recipe?.name ?? '';

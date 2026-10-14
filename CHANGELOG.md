@@ -9,6 +9,11 @@ no change for the user has no entry.
 
 ## Unreleased
 
+### Added
+
+- **Buscar receta o producto** in the sheet of a meal in `Menú`. It filters the recipes while you
+  type.
+
 ### Changed
 
 - The file of **Exportar copia** has the time in its name, as `compra-2026-10-14-090507.json`. Two
