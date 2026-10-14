@@ -415,8 +415,48 @@ main.enter-previous {
   font-size: 0.9rem;
 }
 
-.sheet .edit-quantity {
-  margin-top: 8px;
+/* A field of the edit sheet with its name as a label: inside the field while it is empty, on its
+   top border once it has a value or the focus. The placeholder only marks the empty field. */
+.sheet .field {
+  position: relative;
+  display: block;
+  margin-top: 16px;
+}
+
+.sheet .field input::placeholder {
+  color: transparent;
+}
+
+.sheet .field span {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: top 150ms ease-out, font-size 150ms ease-out, color 150ms ease-out;
+}
+
+.sheet .field input:focus + span,
+.sheet .field input:not(:placeholder-shown) + span {
+  top: 0;
+  background: linear-gradient(var(--surface) 50%, var(--bg) 50%);
+  font-size: 0.75rem;
+}
+
+.sheet .field input:focus + span {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet .field span {
+    transition: none;
+  }
 }
 
 .rename {
