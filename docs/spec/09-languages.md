@@ -41,9 +41,11 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
 - **LANG-15** The order by name uses the Spanish collation in each language (SORT-6).
 - **LANG-16** The name of the app is `Grocely` in each language: the short name of
   `manifest.webmanifest` and the subtitle of `Ajustes`. The title of the page is `Grocely - Lista
-  de la compra`, with the second part in the language of the screen (`app.title`). The name and
-  the description of the manifest are in Spanish, and so is the title before the script runs. A
-  static manifest cannot follow the choice of the user.
+  de la compra`, with the second part in the language of the screen (`app.title`). The title
+  before the script runs is in Spanish. The name and the description of the manifest follow the
+  language of the screen (`app.title`, `app.description`) through the worker (SW-13); before the
+  page first sends them, and with no worker, they are in Spanish. An installed app shows a new
+  name only after the next update check of Chrome, and Android can ask the user to confirm it.
 - **LANG-17** The name of the backup file starts with `compra-` in each language.
 
 ## Add a language

@@ -13,8 +13,8 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   first start.
 - **SW-3** At its install the worker downloads the full shell past the HTTP cache, so the shell is
   never a mix of two deploys. It then takes control at once (`skipWaiting`, `clients.claim`).
-- **SW-4** At its activation the worker deletes each cache that is not the current one. The cache
-  name is `shopping-shell-v12`.
+- **SW-4** At its activation the worker deletes each cache that is not the current one or
+  `shopping-manifest` (SW-13). The cache name is `shopping-shell-v12`.
 - **SW-5** The worker answers only `GET` requests of its own origin.
 - **SW-6** A request is answered stale-while-revalidate: the cached copy at once, and a fresh copy
   goes into the cache in the background for the next start. The query of the URL is ignored for
@@ -26,6 +26,13 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   on the message port.
 - **SW-10** A change of the stored state that an old module cannot read needs a new cache name, so
   that the worker loads the full shell again.
+- **SW-13** At each start and change of language, `applyLanguage` of `src/ui/settings.js` sends
+  `{ type: 'manifest', lang, name, description }` to the active worker, with `app.title` and
+  `app.description` of the language of the screen. The worker stores `{ lang, name, description }`
+  in the cache `shopping-manifest`, and answers `manifest.webmanifest` as SW-6 and SW-7 with these
+  three members in place of the ones of the file (`localizeManifest`). A member that is not a
+  non-empty string keeps the value of the file. With no stored text, or a manifest that is not
+  JSON, the file is answered as it is.
 
 ### Result for the user
 

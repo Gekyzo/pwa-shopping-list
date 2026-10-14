@@ -86,6 +86,7 @@
 | `tests/menu.test.js` | The meals of the week and the fill |
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key and the device preferences |
 | `tests/swipe.test.js` | The settle rule of a row slide |
+| `tests/sw.test.js` | The manifest text that the worker puts in place (SW-13) |
 | `tests/sections.test.js` | The slide between sections |
 | `tests/modules.test.js` | The visible sections and the switch of a module |
 | `tests/particles.test.js` | The particles of a picture and their place in time |

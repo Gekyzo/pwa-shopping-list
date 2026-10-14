@@ -24,6 +24,7 @@ export default {
   'header.next': 'Prochaines courses',
   'header.settingsSubtitle': 'Grocely',
   'app.title': 'Grocely - Liste de courses',
+  'app.description': 'Liste de courses avec une liste actuelle et une prochaine liste',
   'header.empty': 'La liste est vide',
   'header.allBought': 'Tout est acheté',
   'header.left': { one: 'Il reste {count} article', other: 'Il reste {count} articles' },

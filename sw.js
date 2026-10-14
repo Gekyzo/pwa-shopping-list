@@ -48,6 +48,20 @@ const SHELL = [
   './icons/icon-maskable-512.png',
 ];
 
+// The text of the manifest in the language of the screen, which the page sends (`manifest`
+// message). A cache of its own, so it outlives a deploy.
+const MANIFEST = 'shopping-manifest';
+const MANIFEST_TEXT = './manifest-text.json';
+const LOCALIZED = ['lang', 'name', 'description'];
+
+// The manifest with each member of LOCALIZED that `text` holds as a non-empty string.
+const localizeManifest = (manifest, text) => ({
+  ...manifest,
+  ...Object.fromEntries(
+    LOCALIZED.filter((key) => typeof text?.[key] === 'string' && text[key]).map((key) => [key, text[key]]),
+  ),
+});
+
 // `reload` goes past the HTTP cache, so the shell is never a mix of two deploys.
 const fill = async () => {
   const cache = await caches.open(CACHE);
@@ -62,7 +76,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE && key !== MANIFEST).map((key) => caches.delete(key))))
       .then(() => self.clients.claim()),
   );
 });
@@ -95,17 +109,48 @@ const respond = async (event) => {
   }
 };
 
+const readManifestText = async () => {
+  const stored = await (await caches.open(MANIFEST)).match(MANIFEST_TEXT);
+  return stored ? stored.json() : null;
+};
+
+// The shell copy of the manifest, in the language that the page sent last.
+const respondManifest = async (event) => {
+  const response = await respond(event);
+  try {
+    const text = await readManifestText();
+    if (!text) return response;
+    const manifest = localizeManifest(await response.clone().json(), text);
+    return new Response(JSON.stringify(manifest), { headers: { 'Content-Type': 'application/manifest+json' } });
+  } catch {
+    return response;
+  }
+};
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
   if (request.method !== 'GET' || url.origin !== self.location.origin) return;
   // The page reads the deployed version: the cache must not answer.
   if (url.searchParams.has('latest')) return;
-  event.respondWith(respond(event));
+  const manifest = url.pathname === new URL('./manifest.webmanifest', self.location).pathname;
+  event.respondWith(manifest ? respondManifest(event) : respond(event));
 });
 
 // `Actualizar` of Ajustes: load the full shell of the new deploy, then answer on the port.
+// The page sends the text of the manifest in the language of the screen at each start and
+// change of language.
+const storeManifestText = async ({ lang, name, description }) => {
+  const cache = await caches.open(MANIFEST);
+  const body = JSON.stringify({ lang, name, description });
+  await cache.put(MANIFEST_TEXT, new Response(body, { headers: { 'Content-Type': 'application/json' } }));
+};
+
 self.addEventListener('message', (event) => {
+  if (event.data?.type === 'manifest') {
+    event.waitUntil(storeManifestText(event.data).catch(() => {}));
+    return;
+  }
   if (event.data?.type !== 'refresh') return;
   const [port] = event.ports;
   event.waitUntil(
