@@ -12,6 +12,7 @@ import {
   load,
   save,
   exportJson,
+  exportFilename,
   importJson,
   loadLanguage,
   saveLanguage,
@@ -1970,7 +1971,7 @@ $('meal-remove').addEventListener('click', () => {
 });
 
 $('export').addEventListener('click', () => {
-  download(`compra-${new Date().toISOString().slice(0, 10)}.json`, exportJson(state));
+  download(exportFilename(new Date()), exportJson(state));
 });
 
 $('import').addEventListener('click', () => $('import-file').click());

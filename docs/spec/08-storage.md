@@ -79,7 +79,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 
 ## Backup
 
-- **BACKUP-1** **Exportar copia** downloads the file `compra-YYYY-MM-DD.json`, with the UTC date.
+- **BACKUP-1** **Exportar copia** downloads the file `compra-YYYY-MM-DD-HHMMSS.json`, with the
+  local date and time. Two exports of one day get two names.
   Its content is the state, as JSON with an indent of 2 spaces.
 - **BACKUP-2** The backup holds the items with their shops, the recipes, `sent`, `group`,
   `sort` and the menu. It does not hold the language, the hand, the theme or the flag of the
