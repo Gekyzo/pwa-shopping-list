@@ -1,6 +1,6 @@
 # Storage and backup
 
-Rules of `src/storage.js`, and of its use in `src/app.js`.
+Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/settings.js`.
 
 ## Keys
 

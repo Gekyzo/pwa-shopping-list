@@ -1,7 +1,7 @@
 # Recipes
 
-Rules of `src/recipes.js` and of the section `Recetas` in `src/app.js`. The groups by recipe in
-`Actual` are in [04-arrange.md](04-arrange.md).
+Rules of `src/recipes.js` and of the section `Recetas` in `src/ui/recipes.js`. The groups by recipe
+in `Actual` are in [04-arrange.md](04-arrange.md).
 
 ## Recipe
 

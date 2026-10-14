@@ -1,6 +1,6 @@
 # Languages
 
-Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/app.js`.
+Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/settings.js`.
 
 ## Languages
 
@@ -31,8 +31,8 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/app.j
 - **LANG-12** No module of `src/` apart from the catalogs, and no element of `index.html`, holds
   text for the user. A fixed text of the page is a `data-i18n="key"` attribute; an attribute is
   `data-i18n-attr="attribute:key"`. `tests/markup.test.js` checks this.
-- **LANG-13** A pure module returns an error as a message `{ key, params }`. Only `src/app.js`
-  turns a message into text. A `list` parameter holds a list id, which the screen replaces with
+- **LANG-13** A pure module returns an error as a message `{ key, params }`. Only the screen code,
+  `src/app.js` and `src/ui/`, turns a message into text. A `list` parameter holds a list id, which the screen replaces with
   the name of the list in the language.
 
 ## Not translated

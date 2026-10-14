@@ -1,6 +1,6 @@
 # Modules
 
-Rules of `src/modules.js`, and of its use in `src/app.js`.
+Rules of `src/modules.js`, and of its use in `src/ui/settings.js` and `src/ui/nav.js`.
 
 - **MOD-1** `Ajustes` has the group **Módulos**, with a switch for `Próxima` and a switch for
   **Recetas y menú**. A switch is a toggle with a knob that slides to the right when it is on. A new install has the two modules on. `Actual` and `Ajustes` are always on.

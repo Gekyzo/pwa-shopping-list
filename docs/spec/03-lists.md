@@ -1,6 +1,6 @@
 # Lists
 
-Rules of `src/store.js`, and of the rows and the add sheet in `src/app.js`.
+Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` and `src/ui/add.js`.
 
 ## Items
 
