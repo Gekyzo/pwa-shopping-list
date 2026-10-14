@@ -138,6 +138,8 @@ export default {
   'settings.theme': 'Tema',
   'settings.themeLight': 'Clar',
   'settings.themeDark': 'Fosc',
+  'settings.modules': 'Mòduls',
+  'settings.moduleRecipes': 'Receptes i menú',
   'settings.help': 'Ajuda',
   'settings.onboarding': 'Mostra la introducció',
   'settings.version': 'Versió',

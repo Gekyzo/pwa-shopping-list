@@ -12,19 +12,20 @@ of it.
 ## Sections
 
 - **NAV-1** The bottom bar has five sections, in this order: `Actual`, `Próxima`, `Recetas`,
-  `Menú`, `Ajustes`. The app starts in `Actual`.
+  `Menú`, `Ajustes`. The app starts in `Actual`. A module that is off hides its sections (MOD-4,
+  MOD-5).
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
   edit, clears the recipe search and closes the search of a list (LIST-24).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
-  vertical part at least. It stops at `Actual` and at `Ajustes`.
+  vertical part at least. It stops at `Actual` and at `Ajustes`, and it skips a section that is hidden.
 - **NAV-4** The slide starts on the header or on the content, but not on an item row and not on a
   text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has six groups: **Copia de seguridad** (**Exportar copia**, **Importar
-  copia**), **Idioma**, **Mano**, **Tema**, **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
+- **NAV-6** `Ajustes` has seven groups: **Copia de seguridad** (**Exportar copia**, **Importar
+  copia**), **Idioma**, **Mano**, **Tema**, **Módulos** (MOD-1), **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
   two buttons of the backup has an icon before its text: an arrow that goes up out of a tray for
   the export, an arrow that goes down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
@@ -75,7 +76,7 @@ of it.
   | Area | Changes |
   |---|---|
   | Items | Tick, move to the other list, delete, **Quitar de Próxima**, an existing item brought by the add sheet, a manual move |
-  | Trip | **Terminar compra**, `Traer N artículos de Próxima` |
+  | Trip | **Terminar compra**, `Traer N artículos de Próxima`, the switch-off of `Próxima` (MOD-6) |
   | Recipes | Send, delete, removal of a product, save and removal of a link |
   | Menu | **Llenar la cesta**, **Quitar** of a meal, **Vaciar menú** |
   | Backup | Import |

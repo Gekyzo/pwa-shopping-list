@@ -140,6 +140,8 @@ export default {
   'settings.theme': 'Thème',
   'settings.themeLight': 'Clair',
   'settings.themeDark': 'Sombre',
+  'settings.modules': 'Modules',
+  'settings.moduleRecipes': 'Recettes et menu',
   'settings.help': 'Aide',
   'settings.onboarding': 'Voir l’introduction',
   'settings.version': 'Version',
