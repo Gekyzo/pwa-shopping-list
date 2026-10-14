@@ -1,7 +1,7 @@
 // Writes the PNG icons of the PWA from the art of icons/source.png. No dependencies.
 // Run: npm run icons
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { encodePng, decodePng } from './png.mjs';
+import { encodePng, decodePng, clearWhite, resizeRgba } from './png.mjs';
 
 const WHITE = [255, 255, 255];
 const SAMPLES = 4;
@@ -71,3 +71,9 @@ ICONS.forEach(([name, size, options]) => {
   writeFileSync(new URL(name, outDir), drawIcon(size, options));
   console.log(`icons/${name}`);
 });
+
+// The logo of the walkthrough: the art with no background, three times its 96 px on screen.
+const LOGO_SIZE = 288;
+const logo = resizeRgba({ ...art, rgba: clearWhite(art) }, LOGO_SIZE);
+writeFileSync(new URL('logo.png', outDir), encodePng(LOGO_SIZE, logo));
+console.log('icons/logo.png');
