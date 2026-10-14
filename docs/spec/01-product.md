@@ -37,6 +37,7 @@ connection. It separates what to buy now (`Actual`) from what to buy at the next
 | Order by name or custom, with a manual move | [04-arrange.md](04-arrange.md) |
 | Groups by recipe or by shop | [04-arrange.md](04-arrange.md) |
 | Shops of an item | [05-shops.md](05-shops.md) |
+| A list for each shop, in `Actual` and `Próxima` | [05-shops.md](05-shops.md) |
 | Recipes that send their products to `Actual` | [06-recipes.md](06-recipes.md) |
 | A menu of the week that fills `Actual` | [13-menu.md](13-menu.md) |
 | Modules that `Ajustes` turns off | [14-modules.md](14-modules.md) |
@@ -55,7 +56,7 @@ These are decisions, not gaps.
 - A sync between devices, an account, a shared list. Google Tasks as a shared list was rejected.
 - Geolocation in the app and system notifications.
 - Steps, quantities and photos of a recipe.
-- A screen of shops, a rename of a shop for all its items, a filter by one shop.
+- A screen of shops, a rename of a shop for all its items.
 - Right-to-left languages.
 
 Each feature document lists the limits of its own area.

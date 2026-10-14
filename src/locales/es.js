@@ -109,6 +109,8 @@ export default {
   'shops.add': 'Añadir',
   'shops.placeholder': 'Nueva tienda',
   'shops.empty': 'Escribe la primera tienda.',
+  'shops.all': 'Todas',
+  'shops.lists': 'Listas por tienda',
 
   'onboarding.label': 'Introducción',
   'onboarding.skip': 'Saltar',
