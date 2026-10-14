@@ -1830,12 +1830,42 @@ document.querySelectorAll('#arrange-sort button').forEach((button) => {
     slide(before);
   });
 });
-document.querySelectorAll('#arrange-lists button').forEach((button) => {
-  button.addEventListener('click', () => {
-    shopLists = button.dataset.lists === 'hide' ? 'hide' : 'show';
-    if (storage) saveShopLists(storage, shopLists);
+// The row of shop lists from open to closed. Its padding and its line close with it.
+const chipFrames = (row) => {
+  const { paddingTop, paddingBottom, borderBottomWidth } = getComputedStyle(row);
+  const still = { overflow: 'hidden' };
+  return [
+    { height: `${row.offsetHeight}px`, paddingTop, paddingBottom, borderBottomWidth, opacity: 1, ...still },
+    { height: '0px', paddingTop: '0px', paddingBottom: '0px', borderBottomWidth: '0px', opacity: 0, ...still },
+  ];
+};
+
+// Ocultar closes the row before the render takes it away, so that the list moves up with it;
+// Mostrar opens the row that the render brings back.
+const changeShopLists = (choice) => {
+  if (choice === shopLists) return;
+  shopLists = choice;
+  if (storage) saveShopLists(storage, shopLists);
+  const row = $('shop-chips');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (choice === 'show' || row.hidden || still) {
     render();
+    if (choice === 'show' && !row.hidden && !still) {
+      row.animate(chipFrames(row).reverse(), { duration: LEAVE_MS, easing: 'ease-out' });
+    }
+    return;
+  }
+  renderArrange();
+  const closing = row.animate(chipFrames(row), { duration: LEAVE_MS, easing: 'ease-in', fill: 'forwards' });
+  closing.finished.then(() => {
+    const before = rowTops();
+    render();
+    closing.cancel();
+    slide(before);
   });
+};
+document.querySelectorAll('#arrange-lists button').forEach((button) => {
+  button.addEventListener('click', () => changeShopLists(button.dataset.lists === 'hide' ? 'hide' : 'show'));
 });
 $('add-name').addEventListener('input', renderSheet);
 $('trip-button').addEventListener('click', () => {

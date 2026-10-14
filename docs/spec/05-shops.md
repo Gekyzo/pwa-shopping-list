@@ -68,7 +68,8 @@ apply in it.
 - **SHOP-25** The arrange sheet has the choice **Listas por tienda**, **Mostrar** or **Ocultar**,
   when the view has the row of SHOP-17. **Ocultar** hides the row in `Actual` and in `Próxima`
   and shows **Todas**. The choice is a preference of the device, stored in `shopping.shopLists`;
-  **Mostrar** removes the key. `Deshacer` and an import do not change it.
+  **Mostrar** removes the key. `Deshacer` and an import do not change it. The row closes and opens
+  as a head of GROUP-15 does, and the rows below move with it.
 
 ## Limits
 
