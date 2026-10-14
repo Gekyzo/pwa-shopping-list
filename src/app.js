@@ -268,6 +268,7 @@ const startRename = (entry) => {
 const openEdit = (item) => {
   Object.assign(ui, { editId: item.id, openId: null, editingId: null });
   $('edit-name').value = item.name;
+  $('edit-quantity').value = item.quantity;
   $('edit-shop').value = '';
   render();
 };
@@ -277,9 +278,11 @@ const closeEdit = () => {
   render();
 };
 
-// The name of a row, with the shops of the item below it when the list is not by shop.
+// The name of a row, with its quantity after it and the shops of the item below it when the list
+// is not by shop.
 const nameParts = (item) => {
-  const parts = [el('span', { textContent: item.name })];
+  const quantity = item.quantity ? [' ', el('span', { className: 'qty', textContent: item.quantity })] : [];
+  const parts = [el('span', {}, [item.name, ...quantity])];
   if (item.shops.length && shownGroup() !== 'shop') parts.push(el('small', { textContent: item.shops.join(' · ') }));
   return parts;
 };
@@ -823,6 +826,7 @@ const renderEdit = () => {
   $('edit-title').textContent = t('edit.title');
   $('edit-form').setAttribute('aria-label', t('edit.title'));
   if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
+  if (document.activeElement !== $('edit-quantity')) $('edit-quantity').value = item.quantity;
   const own = new Set(item.shops.map((shop) => shop.toLowerCase()));
   const names = shops.shopNames(state);
   // The chips stay when the shops in use do not change: the blur of the name field renders
@@ -1811,31 +1815,34 @@ $('edit-shop').addEventListener('input', (event) => {
   const picked = event.inputType === 'insertReplacementText' || event.inputType === undefined;
   if (picked && shops.shopSuggestions(state, ui.editId).includes(event.target.value)) submitShop();
 });
-// The name saves when the field loses the focus. An error keeps the old name in the field.
-const saveName = () => {
-  const item = state.items.find((entry) => entry.id === ui.editId);
-  const input = $('edit-name');
-  if (!item || input.value.trim() === item.name) {
-    if (item) input.value = item.name;
-    return;
-  }
-  if (!apply(store.renameItem(state, item.id, input.value))) input.value = item.name;
-};
-$('edit-name').addEventListener('blur', saveName);
-$('edit-name').addEventListener('keydown', (event) => {
-  // Enter saves the name; it does not submit the form, which adds a shop.
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    event.target.blur();
-  }
-  // Escape puts the name back and keeps the sheet open.
-  if (event.key === 'Escape') {
-    event.stopPropagation();
+// A field of the edit sheet saves when it loses the focus. An error keeps the old value in the field.
+const bindEditField = (input, field, operation) => {
+  const save = () => {
     const item = state.items.find((entry) => entry.id === ui.editId);
-    if (item) event.target.value = item.name;
-    event.target.blur();
-  }
-});
+    if (!item || input.value.trim() === item[field]) {
+      if (item) input.value = item[field];
+      return;
+    }
+    if (!apply(operation(state, item.id, input.value))) input.value = item[field];
+  };
+  input.addEventListener('blur', save);
+  input.addEventListener('keydown', (event) => {
+    // Enter saves the field; it does not submit the form, which adds a shop.
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      input.blur();
+    }
+    // Escape puts the value back and keeps the sheet open.
+    if (event.key === 'Escape') {
+      event.stopPropagation();
+      const item = state.items.find((entry) => entry.id === ui.editId);
+      if (item) input.value = item[field];
+      input.blur();
+    }
+  });
+};
+bindEditField($('edit-name'), 'name', store.renameItem);
+bindEditField($('edit-quantity'), 'quantity', store.setQuantity);
 // The sheet stays open after a choice, so that the group and the order change in one visit.
 document.querySelectorAll('#arrange-group button').forEach((button) => {
   button.addEventListener('click', () => {

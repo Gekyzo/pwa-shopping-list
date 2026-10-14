@@ -9,6 +9,11 @@ no change for the user has no entry.
 
 ## Unreleased
 
+### Added
+
+- Each item has a quantity, such as `2` or `1 kg`. Set it in the field **Cantidad** of `Editar`;
+  the row shows it after the name.
+
 ### Changed
 
 - In `Menú`, **Llenar la cesta** is at the side of the hand: at the right with `Derecha`, at

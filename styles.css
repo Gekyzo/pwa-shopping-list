@@ -409,6 +409,16 @@ main.enter-previous {
   font-size: 0.8rem;
 }
 
+/* The quantity of an item, after its name. */
+.item .name .qty {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.sheet .edit-quantity {
+  margin-top: 8px;
+}
+
 .rename {
   flex: 1;
   min-width: 0;
