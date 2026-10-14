@@ -4,7 +4,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 ## Planned
 
-- **Skip intro**. Beside the next button.
 - **Browser database.** Store the data in the browser database instead of
   `localStorage`.
 - **Price estimation.** Estimate the price of a list.

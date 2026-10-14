@@ -1146,25 +1146,12 @@ body:has(.sheet-layer:not([hidden])) .toast {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: calc(8px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+  padding: calc(20px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
     calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
   background: var(--bg);
   /* A horizontal slide changes the page, so the browser must not take it. */
   touch-action: pan-y;
   overflow: hidden auto;
-}
-
-/* The bar keeps its height on the last page, where its button does not show. */
-.onboarding-top {
-  display: flex;
-  flex: none;
-  justify-content: flex-end;
-  min-height: 44px;
-}
-
-.onboarding-top button {
-  padding: 0 12px;
-  color: var(--muted);
 }
 
 .onboarding-page {
@@ -1252,9 +1239,24 @@ body:has(.sheet-layer:not([hidden])) .toast {
   background: var(--accent);
 }
 
-.onboarding > .primary {
+/* Saltar sits beside Siguiente, on the side away from the thumb. On the last page Empezar fills the bar. */
+.onboarding-actions {
+  display: flex;
   flex: none;
+  gap: 8px;
+}
+
+.onboarding-actions button {
   min-height: 52px;
+}
+
+#onboarding-skip {
+  padding: 0 16px;
+  color: var(--muted);
+}
+
+#onboarding-next {
+  flex: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1304,6 +1306,10 @@ body:has(.sheet-layer:not([hidden])) .toast {
 
 [data-hand="left"] .row input[type="checkbox"] {
   margin: 12px 8px 12px 4px;
+}
+
+[data-hand="left"] .onboarding-actions {
+  flex-direction: row-reverse;
 }
 
 [data-hand="left"] .fab {
