@@ -758,12 +758,15 @@ button.pill {
 }
 
 .group select {
+  appearance: none;
   display: block;
   width: 100%;
   min-height: 52px;
-  padding: 0 10px;
+  padding: 0 44px 0 14px;
   border: 0;
-  background: transparent;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%) right 24px center / 6px 6px no-repeat,
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%) right 18px center / 6px 6px no-repeat;
   color: inherit;
   font: inherit;
 }

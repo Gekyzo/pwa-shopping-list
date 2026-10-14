@@ -9,7 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Fixed
+
+- The arrow of the dropdowns in `Ajustes` has a margin from the right edge.
 
 ## 1.0.13 - 2026-10-14
 
