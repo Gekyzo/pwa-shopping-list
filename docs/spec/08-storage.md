@@ -82,13 +82,13 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 
 ## Backup
 
-- **BACKUP-1** **Exportar copia** downloads the file `compra-YYYY-MM-DD-HHMMSS.json`, with the
+- **BACKUP-1** **Exportar** downloads the file `compra-YYYY-MM-DD-HHMMSS.json`, with the
   local date and time. Two exports of one day get two names.
   Its content is the state, as JSON with an indent of 2 spaces.
 - **BACKUP-2** The backup holds the items with their shops, the recipes, `sent`, `group`,
   `sort` and the menu. It does not hold the language, the hand, the theme or the flag of the
   walkthrough.
-- **BACKUP-3** **Importar copia** opens a file choice for a JSON file. A file that is not JSON
+- **BACKUP-3** **Importar** opens a file choice for a JSON file. A file that is not JSON
   gives `error.invalidJson`. A JSON that is not a valid state (STORE-6) gives `error.notBackup`.
 - **BACKUP-4** A valid file is cleaned and migrated as a stored state is (STORE-7, STORE-8). A
   backup of version 1, 2 or 3 is thus accepted.
