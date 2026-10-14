@@ -8,7 +8,7 @@
     <style>
       /* The frame of the catalogue only. The parts inside each example are drawn by ../styles.css. */
       body { display: block; height: auto; }
-      .ds-page { max-width: 960px; margin: 0 auto; padding: 16px 16px 64px; }
+      .ds-page { max-width: 1200px; margin: 0 auto; padding: 16px 16px 64px; }
       .ds-page > h1 { margin: 0 0 4px; }
       .ds-section > h2 { margin: 32px 0 8px; font-size: 1.25rem; }
       .ds-bar { position: sticky; top: 0; z-index: 2; display: flex; gap: 8px; align-items: center; padding: 12px 0; background: var(--bg); }
@@ -31,6 +31,23 @@
       .ds-icons > div { display: grid; justify-items: center; gap: 4px; padding: 12px 4px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
       .ds-icons > div > code { font-size: 0.75rem; }
       .ds-error { color: var(--danger); }
+      .ds-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: start; }
+      .ds-section, .ds-card { scroll-margin-top: 76px; }
+      .ds-menu { position: sticky; top: 72px; max-height: calc(100dvh - 88px); overflow-y: auto; padding: 8px 0; font-size: 0.875rem; }
+      .ds-menu-list { margin: 0; padding: 0; list-style: none; }
+      .ds-link { display: block; padding: 4px 8px; border-radius: 8px; color: var(--text); text-decoration: none; }
+      .ds-link:hover { background: var(--accent-soft); }
+      .ds-link.ds-section-link { margin-top: 8px; font-weight: 700; }
+      .ds-link.ds-item-link { padding-left: 20px; color: var(--muted); font-family: ui-monospace, monospace; font-size: 0.8125rem; }
+      .ds-link[aria-current="true"] { background: var(--accent-soft); color: var(--accent); }
+      .ds-menu-button { display: none; }
+      .ds-veil { position: fixed; inset: 0; z-index: 19; background: var(--scrim); }
+      @media (max-width: 899px) {
+        .ds-layout { display: block; }
+        .ds-menu-button { display: inline-flex; }
+        .ds-menu { position: fixed; top: 0; bottom: 0; left: 0; z-index: 20; width: min(300px, 85vw); max-height: none; padding: 16px; background: var(--surface); box-shadow: var(--shadow-l); transform: translateX(-105%); transition: transform var(--motion) ease-out; }
+        .ds-menu.ds-open { transform: none; }
+      }
     </style>
   </head>
   <body>
@@ -39,6 +56,7 @@
       <p class="ds-meta">Built at load from ../styles.css and ../icons.svg. Ask for a screen with these names, such as
         "in Menú, put a list-group above a split with a button primary and a button outline".</p>
       <div class="ds-bar">
+        <button id="ds-menu-button" class="button outline ds-menu-button" type="button" aria-controls="ds-menu" aria-expanded="false">Menu</button>
         <input id="filter" class="input raised" type="search" placeholder="Filter by name" aria-label="Filter by name">
         <select id="theme" class="select" aria-label="Theme">
           <option value="">System</option>
@@ -46,7 +64,11 @@
           <option value="dark">Dark</option>
         </select>
       </div>
-      <div id="out"><p class="ds-meta">Loading… The page reads the files of the app, so it needs a server: npm run serve, then http://localhost:8080/designs/.</p></div>
+      <div class="ds-layout">
+        <nav id="ds-menu" class="ds-menu" aria-label="Catalogue"></nav>
+        <div id="out"><p class="ds-meta">Loading… The page reads the files of the app, so it needs a server: npm run serve, then http://localhost:8080/designs/.</p></div>
+      </div>
+      <div id="ds-veil" class="ds-veil" hidden></div>
     </div>
     <script type="module" src="./page.js"></script>
   </body>

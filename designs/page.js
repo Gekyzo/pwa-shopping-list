@@ -1,4 +1,4 @@
-import { parseCatalog, classesInScript } from './catalog.js';
+import { parseCatalog, classesInScript, menuOf } from './catalog.js';
 
 // A browser cannot list a directory, so the views are named here. tests/design.test.js keeps the
 // list equal to src/ui/.
@@ -72,7 +72,7 @@ const list = (title, items) =>
   items.length ? [el('p', { className: 'ds-meta', textContent: `${title}: ${items.map((item) => `${item.name} — ${item.text}`).join(' · ')}` })] : [];
 
 const card = (part, page, scripts) =>
-  el('section', { className: 'ds-card', dataset: { name: [part.name, ...part.parts.map((p) => p.name), ...part.variants.map((v) => v.name)].join(' ') } }, [
+  el('section', { className: 'ds-card', id: part.name, dataset: { name: [part.name, ...part.parts.map((p) => p.name), ...part.variants.map((v) => v.name)].join(' ') } }, [
     el('h3', { textContent: part.name }),
     el('p', { textContent: part.summary }),
     ...list('Variants', part.variants),
@@ -82,7 +82,26 @@ const card = (part, page, scripts) =>
     el('p', { className: 'ds-meta', textContent: `Used in: ${usesOf(part.name, page, scripts).join(', ') || 'nothing yet'}` }),
   ]);
 
-const section = (title, children) => el('section', { className: 'ds-section' }, [el('h2', { textContent: title }), ...children]);
+const section = (id, title, children) => el('section', { className: 'ds-section', id }, [el('h2', { textContent: title }), ...children]);
+
+const link = (id, text, kind) => {
+  const anchor = el('a', { className: `ds-link ${kind}`, href: `#${id}`, textContent: text });
+  anchor.dataset.target = id;
+  return anchor;
+};
+
+// The menu: each section, then the parts of the section, each a link to its anchor.
+const renderMenu = (catalog) => {
+  $('ds-menu').replaceChildren(
+    el('ul', { className: 'ds-menu-list' }, menuOf(catalog).map((entry) =>
+      el('li', { dataset: { section: entry.id } }, [
+        link(entry.id, entry.title, 'ds-section-link'),
+        ...(entry.items.length
+          ? [el('ul', { className: 'ds-menu-list' }, entry.items.map((name) => el('li', { dataset: { name } }, [link(name, name, 'ds-item-link')])))]
+          : []),
+      ]))),
+  );
+};
 
 const render = ({ catalog, page, scripts }) => {
   const of = (layer) => catalog.components.filter((part) => part.layer === layer);
@@ -91,28 +110,64 @@ const render = ({ catalog, page, scripts }) => {
   const scopes = [...new Set(of('screens').map((part) => part.scope))];
   $('out').replaceChildren(
     ...(catalog.errors.length ? [el('p', { className: 'ds-error', textContent: catalog.errors.join(' · ') })] : []),
-    section('Colours · light | dark', [el('div', { className: 'ds-swatches' }, colours.map(swatch))]),
-    section('Scales', [el('div', { className: 'ds-card' }, scales.map(scaleRow))]),
-    section('Icons', [
+    section('colours', 'Colours · light | dark', [el('div', { className: 'ds-swatches' }, colours.map(swatch))]),
+    section('scales', 'Scales', [el('div', { className: 'ds-card' }, scales.map(scaleRow))]),
+    section('icons', 'Icons', [
       el('div', { className: 'ds-icons' }, catalog.icons.map((id) => {
         const tile = el('div', { dataset: { name: id } }, [el('code', { textContent: id })]);
         tile.insertAdjacentHTML('afterbegin', `<svg class="icon" aria-hidden="true"><use href="../icons.svg#${id}"/></svg>`);
         return tile;
       })),
     ]),
-    section('Components', of('components').map((part) => card(part, page, scripts))),
-    section('Layouts', of('layouts').map((part) => card(part, page, scripts))),
-    section('Base', of('base').map((part) => card(part, page, scripts))),
-    ...scopes.map((scope) => section(`Screen parts · ${scope}`, of('screens').filter((part) => part.scope === scope).map((part) => card(part, page, scripts)))),
+    section('components', 'Components', of('components').map((part) => card(part, page, scripts))),
+    section('layouts', 'Layouts', of('layouts').map((part) => card(part, page, scripts))),
+    section('base', 'Base', of('base').map((part) => card(part, page, scripts))),
+    ...scopes.map((scope) => section(`screens-${scope}`, `Screen parts · ${scope}`, of('screens').filter((part) => part.scope === scope).map((part) => card(part, page, scripts)))),
   );
 };
 
 const filter = () => {
   const query = $('filter').value.trim().toLowerCase();
-  document.querySelectorAll('#out [data-name]').forEach((node) => {
+  document.querySelectorAll('#out [data-name], #ds-menu [data-name]').forEach((node) => {
     node.hidden = query !== '' && !node.dataset.name.toLowerCase().includes(query);
   });
 };
+
+// The drawer of a narrow screen. On a wide screen the menu is a sidebar and these do nothing visible.
+const openMenu = (open) => {
+  $('ds-menu').classList.toggle('ds-open', open);
+  $('ds-veil').hidden = !open;
+  $('ds-menu-button').setAttribute('aria-expanded', String(open));
+};
+
+$('ds-menu-button').addEventListener('click', () => openMenu(!$('ds-menu').classList.contains('ds-open')));
+$('ds-veil').addEventListener('click', () => openMenu(false));
+$('ds-menu').addEventListener('click', (event) => {
+  if (event.target.closest('a')) openMenu(false);
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') openMenu(false);
+});
+
+// Marks the section and the part at the top of the view in the menu.
+const markCurrent = () => {
+  const top = 96;
+  const last = (selector) => [...document.querySelectorAll(selector)].filter((node) => !node.hidden && node.getBoundingClientRect().top <= top).at(-1);
+  const current = new Set([last('#out .ds-section')?.id, last('#out .ds-card[id]')?.id]);
+  document.querySelectorAll('#ds-menu .ds-link').forEach((anchor) => {
+    anchor.setAttribute('aria-current', String(current.has(anchor.dataset.target)));
+  });
+};
+
+let marking = false;
+document.addEventListener('scroll', () => {
+  if (marking) return;
+  marking = true;
+  requestAnimationFrame(() => {
+    marking = false;
+    markCurrent();
+  });
+}, { passive: true });
 
 $('filter').addEventListener('input', filter);
 $('theme').addEventListener('change', (event) => {
@@ -130,9 +185,14 @@ try {
 }
 if (sources) {
   const [css, sprite, html, ...views] = sources;
+  const catalog = parseCatalog({ css, sprite });
   render({
-    catalog: parseCatalog({ css, sprite }),
+    catalog,
     page: new DOMParser().parseFromString(html, 'text/html'),
     scripts: UI.map((name, index) => [name, classesInScript(views[index])]),
   });
+  renderMenu(catalog);
+  // The anchor of the address was not on the page before the render.
+  if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+  markCurrent();
 }

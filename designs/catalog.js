@@ -175,3 +175,22 @@ export const classesInScript = (js) => [...new Set([
   }),
   ...[...js.matchAll(/classList\.(?:add|remove|toggle)\(([^)]*)\)/g)].flatMap(([, args]) => literals(args.split(',')[0])),
 ])];
+
+// The menu of the catalogue page: its fixed sections, then one section for each layer and each
+// screen scope that has a part, with the names of the parts in catalogue order.
+export const menuOf = ({ components }) => {
+  const of = (test) => components.filter(test).map((part) => part.name);
+  const layers = [
+    ['components', 'Components'],
+    ['layouts', 'Layouts'],
+    ['base', 'Base'],
+  ].map(([id, title]) => ({ id, title, items: of((part) => part.layer === id) }));
+  const scopes = [...new Set(components.filter((part) => part.layer === 'screens').map((part) => part.scope))];
+  return [
+    { id: 'colours', title: 'Colours', items: [] },
+    { id: 'scales', title: 'Scales', items: [] },
+    { id: 'icons', title: 'Icons', items: [] },
+    ...layers.filter((section) => section.items.length),
+    ...scopes.map((scope) => ({ id: `screens-${scope}`, title: `Screen parts · ${scope}`, items: of((part) => part.layer === 'screens' && part.scope === scope) })),
+  ];
+};
