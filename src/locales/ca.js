@@ -109,6 +109,8 @@ export default {
   'shops.add': 'Afegeix',
   'shops.placeholder': 'Botiga nova',
   'shops.empty': 'Escriu la primera botiga.',
+  'shops.all': 'Totes',
+  'shops.lists': 'Llistes per botiga',
 
   'onboarding.label': 'Introducció',
   'onboarding.skip': 'Omet',

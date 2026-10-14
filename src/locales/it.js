@@ -109,6 +109,8 @@ export default {
   'shops.add': 'Aggiungi',
   'shops.placeholder': 'Nuovo negozio',
   'shops.empty': 'Scrivi il primo negozio.',
+  'shops.all': 'Tutte',
+  'shops.lists': 'Liste per negozio',
 
   'onboarding.label': 'Introduzione',
   'onboarding.skip': 'Salta',

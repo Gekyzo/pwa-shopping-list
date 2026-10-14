@@ -33,7 +33,7 @@ the arrange sheet in `src/app.js`.
   applies to the two lists. The default is `recipe`.
 - **GROUP-2** A choice shows only when the view can show it:
   - **Recetas**: in `Actual`, when one recipe group exists at least (GROUP-5).
-  - **Tiendas**: when an item of the view has a shop.
+  - **Tiendas**: when an item of the view has a shop, and not in a shop list (SHOP-19).
   - **Nada**: each time that one of the two shows.
 - **GROUP-3** A view that cannot show the stored choice shows a flat list, and the sheet marks
   **Nada**. The stored choice does not change. Example: with `group: 'recipe'`, `Próxima` is flat.

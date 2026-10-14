@@ -1052,6 +1052,27 @@ button.pill {
   font-weight: 700;
 }
 
+/* The shop lists of Actual and Próxima: one line that scrolls on its own. */
+.shop-chips {
+  flex-wrap: nowrap;
+  margin: 0;
+  padding: 8px 12px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  scrollbar-width: none;
+}
+
+.shop-chips button {
+  flex: none;
+  background: var(--surface);
+}
+
+.shop-chips .chip-count {
+  margin-left: 6px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
 .suggestions {
   margin: 0;
   padding: 0;

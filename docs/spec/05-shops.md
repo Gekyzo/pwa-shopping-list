@@ -32,8 +32,34 @@ Rules of `src/shops.js` and of the shop sheet in `src/app.js`. The list by shop 
 - **SHOP-14** A change of shops is saved at once and has no message and no `Deshacer`.
 - **SHOP-15** The sheet closes when its item goes away, for example by `Deshacer` or by an import.
 
+## Shop lists
+
+A shop list is a view of `Actual` or of `Próxima`, not a list in the data. The rules of the list
+apply in it.
+
+- **SHOP-16** `Actual` and `Próxima` have a row of chips below the header: **Todas**, then each
+  shop of the view in name order (SHOP-6), then **Sin tienda**. A tap on a chip shows that list.
+  The chip of the list in view is pressed.
+- **SHOP-17** The row shows when an item of the view has a shop. **Sin tienda** shows when an item
+  of the view has no shop. The row scrolls horizontally, and a slide on it does not change the
+  section (NAV-4). `Izquierda` does not change the row.
+- **SHOP-18** A chip of `Actual` shows the count of its items to buy, or `✓` for none. A chip of
+  `Próxima` shows the count of its items in the view.
+- **SHOP-19** A shop list shows the items that have the shop. **Sin tienda** shows the items with
+  no shop. An item of two shops shows in the two lists, and one tick is a tick in each. The search,
+  the order and the groups by recipe apply in the list. **Tiendas** is not a choice there
+  (GROUP-2).
+- **SHOP-20** The header shows the name of the list as its title. Its subtitle and its ring are
+  those of the items of the list. The count of the bottom bar is that of the full view (LIST-19).
+- **SHOP-21** **Terminar compra** stays one operation on the full state (TRIP-2). The banner
+  `¿Has terminado?` shows only in **Todas**.
+- **SHOP-22** The choice is a state of the screen and is not stored. A start shows **Todas**. Each
+  of `Actual` and `Próxima` keeps its own choice while the app runs. A choice whose chip goes, for
+  example by a removal of a shop, `Deshacer`, **Terminar compra** or an import, goes back to
+  **Todas**.
+
 ## Limits
 
 No screen of shops. No rename and no delete of a shop for all its items at one time. No custom
-order of the shops. No filter that shows one shop. No memory of the shops of a deleted item. No
-shop on the products of a recipe, and no shop field in the add sheet.
+order of the shops. No memory of the shops of a deleted item. No shop on the products of a
+recipe, and no shop field in the add sheet.

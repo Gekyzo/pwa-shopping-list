@@ -17,6 +17,9 @@ no change for the user has no entry.
   `Menú`. A module that is off keeps its data. The switch-off of `Próxima` brings its items to
   `Actual`, with `Deshacer`. A section that goes breaks into dust in the bottom bar,
   and a section that comes back forms from dust.
+- **Listas por tienda** in `Actual` and `Próxima`: a row of chips below the header, `Todas`, each
+  shop and `Sin tienda`, shows the list of one shop. An item of two shops is in the two lists,
+  and a tick in one is a tick in the other.
 
 ### Changed
 

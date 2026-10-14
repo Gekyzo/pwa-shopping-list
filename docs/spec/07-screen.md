@@ -19,8 +19,8 @@ of it.
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
   vertical part at least. It stops at `Actual` and at `Ajustes`, and it skips a section that is hidden.
-- **NAV-4** The slide starts on the header or on the content, but not on an item row and not on a
-  text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
+- **NAV-4** The slide starts on the header or on the content, but not on an item row, not on the
+  row of shop lists (SHOP-17) and not on a text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
