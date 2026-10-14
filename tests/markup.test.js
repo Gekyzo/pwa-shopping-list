@@ -64,3 +64,11 @@ test('the edit sheet has a veil, a dialog, the name field and the shops', () => 
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);
 });
+
+test('the meal sheet has a recipe search between the title and the chips, and a no-match text', () => {
+  const [layer = ''] = body.match(/<div id="meal" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>/) ?? [];
+  const ids = [...layer.matchAll(/ id="([^"]+)"/g)].map(([, id]) => id);
+  assert.deepEqual(ids, ['meal', 'meal-veil', 'meal-sheet', 'meal-title', 'meal-query', 'meal-empty', 'meal-chips', 'meal-remove']);
+  assert.match(layer, /<input id="meal-query" type="search"[^>]*data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search"/);
+  assert.match(layer, /<p id="meal-empty"[^>]*hidden><\/p>/);
+});

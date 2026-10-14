@@ -44,6 +44,9 @@ their products in one action.
 - **MENU-14** With no recipe, `Menú` shows its empty text (NAV-7) and no week. The `+` button
   does not show in `Menú`.
 - **MENU-15** **Terminar compra** does not change the menu.
+- **MENU-16** The meal sheet has the field **Buscar receta o producto** above the chips. It
+  filters the chips while the user types, with the match of REC-24. With no match the sheet
+  shows `Ninguna receta coincide con «text».` The text is empty each time the sheet opens.
 
 ## Limits
 
