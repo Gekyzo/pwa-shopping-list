@@ -19,17 +19,6 @@ export const LANGUAGE_NAMES = {
   it: 'Italiano',
   pt: 'Português',
 };
-// The flag before each name. Unicode has no flag of Catalonia that Android draws, so Catalan
-// takes the white flag. Portuguese is European and English takes the flag of the United Kingdom.
-export const LANGUAGE_FLAGS = {
-  ca: '🏳️',
-  de: '🇩🇪',
-  en: '🇬🇧',
-  es: '🇪🇸',
-  fr: '🇫🇷',
-  it: '🇮🇹',
-  pt: '🇵🇹',
-};
 
 // The tag that `Intl` gets for a language. `pt` alone is Brazilian Portuguese there: zero is
 // singular and the date has another form. The catalog is European Portuguese.
