@@ -1,7 +1,6 @@
 // Writes the version of the next deploy to version.json and prints it. package.json gets
 // the same version, and the changes under `Unreleased` in CHANGELOG.md get the version and
-// the date. Run by .githooks/pre-push, which bumps the patch.
-// By hand, for a larger step: node scripts/bump-version.mjs minor|major, then commit.
+// the date. Run by scripts/release.mjs, which commits the bump and tags it.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { parseVersion, nextVersion, LEVELS } from '#version';
 import { releaseChangelog, localDate } from './changelog.mjs';

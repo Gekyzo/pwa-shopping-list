@@ -27,6 +27,7 @@ npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 npm test         # unit tests (node:test)
 npm run serve    # http://localhost:8080
 npm run icons    # write the PNG icons again after a change in icons/source.png or scripts/make-icons.mjs
+npm run release  # bump the version, commit it and tag it vX.Y.Z
 ```
 
 A change of behaviour changes its rule in `docs/spec/` in the same commit. The `pre-commit` hook
@@ -35,9 +36,17 @@ a commit that changes no rule.
 
 ## Deploy
 
-GitHub Pages serves `main` / root, so a push to `main` is a deploy. The `pre-push` hook makes the
-commit `Bump version to X.Y.Z` and stops the push; a second `git push` passes. The commit also
-gives the version to the changes under `Unreleased` in `CHANGELOG.md`.
+A release tag is a deploy; a push to `main` deploys nothing.
+
+```sh
+npm run release              # or: npm run release -- minor|major
+git push --follow-tags
+```
+
+`npm run release` makes the commit `Bump version to X.Y.Z`, which also gives the version to the
+changes under `Unreleased` in `CHANGELOG.md`, and tags it `vX.Y.Z`. The push of the tag runs
+`.github/workflows/pages.yml`, which publishes the tagged commit to GitHub Pages. The `pre-push`
+hook stops a tag whose `version.json` has another version.
 
 ## Where to read
 

@@ -61,22 +61,26 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 
 ## Deploy
 
-- **VER-9** The app is a static site: the repository root, served over HTTPS. GitHub Pages serves
-  `main` / root at `https://gekyzo.github.io/shopping-list/`. A push to `main` is a deploy.
-- **VER-10** Each deploy has a new version. The hook `.githooks/pre-push`, enabled one time in
-  each clone with `npm run hooks`, does this at a push to `main`:
-  1. If the push has no change of `version.json`, it adds one to the patch, sets the date, and
-     makes the commit `Bump version to X.Y.Z` with `version.json`, `package.json` and
-     `CHANGELOG.md` only.
-  2. It stops the push, because a hook cannot add a commit to the push that runs.
-  3. The second `git push` passes.
-- **VER-11** A push that has a change of `version.json` already passes at the first try. For a
-  minor or a major step: `node scripts/bump-version.mjs minor|major`, then a commit.
-- **VER-12** The hook stops with an error, and writes nothing, when the current branch is not
-  `main`, the pushed commit is not `HEAD`, or `version.json`, `package.json` or `CHANGELOG.md`
-  has a change that is not committed.
-- **VER-13** `git push --no-verify`, and a clone without `npm run hooks`, deploy with the old
-  version. **Versión** then cannot show that deploy as new.
+- **VER-9** The app is a static site: the repository root, served over HTTPS at
+  `https://gekyzo.github.io/shopping-list/`. A release tag `vX.Y.Z` is a deploy: its push runs
+  `.github/workflows/pages.yml`, which publishes the tagged commit to GitHub Pages. A push to
+  `main` deploys nothing. The Pages source of the repository is GitHub Actions, and its
+  `github-pages` environment allows the tags `v*`.
+- **VER-10** Each deploy has a new version. `npm run release` makes a release on `main`:
+  1. it adds one to the patch of `version.json`, sets the date, and gives the version to
+     `package.json` and to `CHANGELOG.md` (VER-17);
+  2. it makes the commit `Bump version to X.Y.Z` with `version.json`, `package.json` and
+     `CHANGELOG.md` only;
+  3. it tags that commit with the annotated tag `vX.Y.Z`.
+
+  `git push --follow-tags` then sends the commit and the tag, and the tag deploys.
+- **VER-11** For a minor or a major step: `npm run release -- minor|major`.
+- **VER-12** `npm run release` stops with an error, and writes nothing, when the current branch is
+  not `main`, the working tree has a change, the level is unknown, or the tag of the next
+  version exists.
+- **VER-13** The hook `.githooks/pre-push`, enabled one time in each clone with `npm run hooks`,
+  stops the push of a tag `vX.Y.Z` whose commit does not have the version `X.Y.Z` in
+  `version.json`. Without it, such a tag deploys a version that **Versión** cannot show.
 - **VER-17** A bump releases `CHANGELOG.md`: the heading `## Unreleased` becomes
   `## X.Y.Z - YYYY-MM-DD`, with the new version and the local day of the bump, and a new
   `## Unreleased` with the text `No change.` goes above it. The file stays as it is when

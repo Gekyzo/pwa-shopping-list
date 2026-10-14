@@ -1,41 +1,23 @@
 #!/bin/sh
-# A push to main is a deploy. Each deploy gets a new version in version.json, which
-# Ajustes shows. A hook cannot add a commit to the push that runs, so it commits the
-# next patch version and stops: the second `git push` passes. The same commit gives the
-# version to the changes under `Unreleased` in CHANGELOG.md. A push that has a change
-# of version.json already (a minor or major bump by hand) passes at once.
+# A pushed release tag is a deploy (.github/workflows/pages.yml). The tag vX.Y.Z must point
+# at a commit whose version.json has the version X.Y.Z, so that Ajustes shows the version
+# that is deployed. npm run release makes such a tag; this hook stops a tag made by hand
+# that does not match. A push of main deploys nothing and passes.
 # Enable: npm run hooks. Skip: git push --no-verify.
 
 ZERO=0000000000000000000000000000000000000000
 
-stop() {
-  echo "pre-push: $1" >&2
-  exit 1
-}
-
 while read -r local_ref local_sha remote_ref remote_sha; do
-  [ "$remote_ref" = refs/heads/main ] || continue
+  case "$remote_ref" in refs/tags/v*) ;; *) continue ;; esac
   [ "$local_sha" = "$ZERO" ] && continue
-  # A new remote branch has no deploy to compare with.
-  [ "$remote_sha" = "$ZERO" ] && continue
-  # The remote is ahead of this clone: git rejects the push itself.
-  git cat-file -e "$remote_sha^{commit}" 2>/dev/null || continue
-  # The push has a new version already.
-  git diff --quiet "$remote_sha" "$local_sha" -- version.json || continue
-  # No commit to deploy.
-  [ "$remote_sha" = "$local_sha" ] && continue
-
-  [ "$(git symbolic-ref --quiet --short HEAD)" = main ] ||
-    stop 'the version needs a bump, but the current branch is not main.'
-  [ "$(git rev-parse HEAD)" = "$local_sha" ] ||
-    stop 'the version needs a bump, but the pushed commit is not HEAD.'
-  git diff --quiet HEAD -- version.json package.json CHANGELOG.md ||
-    stop 'version.json, package.json or CHANGELOG.md has a change that is not committed.'
-
-  version=$(node scripts/bump-version.mjs patch </dev/null) || stop 'the version bump failed.'
-  git commit --quiet -m "Bump version to $version" -- version.json package.json CHANGELOG.md </dev/null ||
-    stop 'the commit of the version bump failed.'
-  stop "Version bumped to $version. Run git push again."
+  tag=${remote_ref#refs/tags/}
+  version=$(git show "$local_sha^{commit}:version.json" 2>/dev/null |
+    node -e 'let s = ""; process.stdin.on("data", (c) => (s += c)).on("end", () => console.log(JSON.parse(s).version))' 2>/dev/null)
+  if [ "v$version" != "$tag" ]; then
+    echo "pre-push: the tag $tag points at a commit with version.json ${version:-missing}." >&2
+    echo 'Make a release with npm run release.' >&2
+    exit 1
+  fi
 done
 
 exit 0
