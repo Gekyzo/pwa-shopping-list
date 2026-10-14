@@ -8,6 +8,7 @@ import {
   addRecipeProduct,
   removeRecipeProduct,
   setRecipeUrl,
+  isWebUrl,
   sendRecipe,
   recipeGroups,
   searchRecipes,
@@ -353,6 +354,22 @@ test('setRecipeUrl rejects a text that is not a web address and an unknown recip
     assert.equal(result.state, state);
   });
   assert.deepEqual(setRecipeUrl(state, 'nope', LINK).error, { key: 'error.recipeNotFound' });
+});
+
+// A browser parses some of these texts with no error: the check does not rest on `URL` alone.
+test('isWebUrl needs a host name with a dot and no space', () => {
+  ['https://not a link', 'not a link', 'https://exa mple.com', 'https://example.com/a b', 'https://', 'https://example',
+    'https://.com', 'https://example..com', 'https://-example.com', 'https://example.c', 'https://exa_mple.com',
+    'https://%20.com'].forEach((text) => assert.equal(isWebUrl(text), false, text));
+  ['https://example.com', 'http://www.bonviveur.com/es/recetas?x=1#y', 'https://sub-domain.example.co.uk/a',
+    'https://cocina.es:8080/receta', 'https://ñam.es/receta'].forEach((text) => assert.equal(isWebUrl(text), true, text));
+});
+
+test('setRecipeUrl rejects a text with spaces, with or without a scheme', () => {
+  const { state, id } = withRecipe(emptyState(), 'Chickpeas');
+  ['not a link', 'https://not a link', 'example'].forEach((text) => {
+    assert.deepEqual(setRecipeUrl(state, id, text).error, { key: 'error.invalidLink' }, text);
+  });
 });
 
 test('recipeGroups sorts the members of a group and the rest by name', () => {
