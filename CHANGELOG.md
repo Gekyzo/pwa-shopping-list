@@ -24,6 +24,8 @@ no change for the user has no entry.
 
 ### Changed
 
+- The button `⋮` of `Actual` opens its options as a sheet from the bottom, as the arrange
+  button does, in place of a menu below the button.
 - **Saltar** of the walkthrough moves from the top to the bottom bar, at the left of
   **Siguiente**, each half of the bar wide. With **Mano** `Izquierda` it is at the right.
 

@@ -23,12 +23,9 @@
       <button id="arrange-button" class="tool" type="button" data-i18n-attr="aria-label:arrange.label" aria-haspopup="dialog" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
       </button>
-      <button id="trip-button" class="tool" type="button" data-i18n-attr="aria-label:trip.menu" aria-haspopup="menu" aria-controls="trip-menu" hidden>
+      <button id="trip-button" class="tool" type="button" data-i18n-attr="aria-label:trip.menu" aria-haspopup="dialog" aria-controls="trip" hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
       </button>
-      <div id="trip-menu" class="menu" role="menu" hidden>
-        <button id="finish-menu" type="button" role="menuitem"><span data-i18n="finish.button"></span><small id="finish-menu-text"></small></button>
-      </div>
     </header>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden>
@@ -162,6 +159,15 @@
             <button type="button" data-sort="custom" data-i18n="arrange.custom"></button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div id="trip" class="sheet-layer" hidden>
+      <div id="trip-veil" class="veil"></div>
+      <div class="sheet" role="dialog" data-i18n-attr="aria-label:trip.menu">
+        <div class="grab"></div>
+        <h2 data-i18n="trip.menu"></h2>
+        <button id="finish-menu" class="entry" type="button"><span data-i18n="finish.button"></span><small id="finish-menu-text"></small></button>
       </div>
     </div>
 
