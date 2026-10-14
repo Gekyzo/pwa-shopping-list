@@ -217,7 +217,7 @@
     font-size: var(--text-l);
   }
 
-  .button.icon:not(.primary, .accent) {
+  .button.icon:where(:not(.primary, .accent)) {
     color: var(--muted);
   }
 
