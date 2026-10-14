@@ -27,7 +27,8 @@ their products in one action.
 
 - **MENU-9** `Menú` shows one row for each day, with the name of the day in the language of the
   screen, and its two meals side by side. A meal shows `Comida` or `Cena` and the name of its
-  recipe, or `Elegir receta`.
+  recipe, or `Elegir receta`. A meal with a recipe has a solid `--accent` border; a meal with no
+  recipe has a dashed `--muted` border.
 - **MENU-10** The header shows `Menú` and `N comidas planificadas`, or `Sin comidas
   planificadas`. The ring shows the number of planned meals.
 - **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each

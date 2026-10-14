@@ -1404,8 +1404,13 @@
     justify-content: center;
     min-width: 0;
     padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--accent);
     background: var(--bg);
     text-align: left;
+  }
+
+  .meal.free {
+    border: 1px dashed var(--muted);
   }
 
   .meal-label {
