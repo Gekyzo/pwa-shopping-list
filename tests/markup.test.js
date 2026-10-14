@@ -62,10 +62,10 @@ test('the edit sheet has a veil, a dialog, the name and quantity fields and the 
   assert.match(layer, /<input id="edit-name"[^>]*maxlength="80"/);
   assert.match(layer, /<input id="edit-quantity"[^>]*maxlength="20"/);
   // Each field keeps its name in sight: a label that floats onto the border once the field has a value.
-  assert.match(layer, /<label class="field"><input id="edit-name"[^>]*><span data-i18n="edit.name"><\/span><\/label>/);
-  assert.match(layer, /<label class="field"><input id="edit-quantity"[^>]*><span data-i18n="edit.quantity"><\/span><\/label>/);
+  assert.match(layer, /<label class="field"><input id="edit-name"[^>]*><span class="field-label" data-i18n="edit.name"><\/span><\/label>/);
+  assert.match(layer, /<label class="field"><input id="edit-quantity"[^>]*><span class="field-label" data-i18n="edit.quantity"><\/span><\/label>/);
   // A titled part after the fields holds the shops of the item.
-  assert.match(layer, /<span data-i18n="edit.quantity"><\/span><\/label>\s*<h2 class="part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster">/);
+  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<h2 class="part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster">/);
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);
 });
@@ -74,6 +74,6 @@ test('the meal sheet has a recipe search between the title and the chips, and a 
   const [layer = ''] = body.match(/<div id="meal" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>/) ?? [];
   const ids = [...layer.matchAll(/ id="([^"]+)"/g)].map(([, id]) => id);
   assert.deepEqual(ids, ['meal', 'meal-veil', 'meal-sheet', 'meal-title', 'meal-query', 'meal-empty', 'meal-chips', 'meal-remove']);
-  assert.match(layer, /<input id="meal-query" type="search"[^>]*data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search"/);
+  assert.match(layer, /<input id="meal-query" class="input" type="search"[^>]*data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search"/);
   assert.match(layer, /<p id="meal-empty"[^>]*hidden><\/p>/);
 });

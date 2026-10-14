@@ -42,7 +42,7 @@
       </div>
 
       <div id="search" class="search" hidden>
-        <input id="query" type="search" maxlength="80" autocomplete="off" enterkeyhint="search">
+        <input id="query" class="input raised" type="search" maxlength="80" autocomplete="off" enterkeyhint="search">
       </div>
 
       <ul id="items" class="items"></ul>
@@ -71,15 +71,15 @@
         </div>
         <h2 data-i18n="settings.language"></h2>
         <div class="group">
-          <select id="language" data-i18n-attr="aria-label:settings.language"></select>
+          <select id="language" class="select" data-i18n-attr="aria-label:settings.language"></select>
         </div>
         <h2 data-i18n="settings.hand"></h2>
         <div class="group">
-          <select id="hand" data-i18n-attr="aria-label:settings.hand"></select>
+          <select id="hand" class="select" data-i18n-attr="aria-label:settings.hand"></select>
         </div>
         <h2 data-i18n="settings.theme"></h2>
         <div class="group">
-          <select id="theme" data-i18n-attr="aria-label:settings.theme"></select>
+          <select id="theme" class="select" data-i18n-attr="aria-label:settings.theme"></select>
         </div>
         <h2 data-i18n="settings.modules"></h2>
         <div class="group">
@@ -127,8 +127,8 @@
       <div id="veil" class="veil"></div>
       <form id="add" class="sheet" autocomplete="off">
         <div class="grab"></div>
-        <div class="add-row">
-          <input id="add-name" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
+        <div class="input-row">
+          <input id="add-name" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
           <button id="add-submit" class="button primary" type="submit"></button>
         </div>
         <div id="seg" class="segmented">
@@ -182,7 +182,7 @@
       <div id="meal-sheet" class="sheet" role="dialog">
         <div class="grab"></div>
         <h2 id="meal-title"></h2>
-        <input id="meal-query" type="search" maxlength="80" autocomplete="off" enterkeyhint="search" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search">
+        <input id="meal-query" class="input" type="search" maxlength="80" autocomplete="off" enterkeyhint="search" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search">
         <p id="meal-empty" class="meal-empty" hidden></p>
         <div id="meal-chips" class="cluster"></div>
         <button id="meal-remove" class="button outline danger wide" type="button" data-i18n="menu.remove" hidden></button>
@@ -194,13 +194,13 @@
       <form id="edit-form" class="sheet" role="dialog" autocomplete="off">
         <div class="grab"></div>
         <h2 id="edit-title"></h2>
-        <label class="field"><input id="edit-name" class="edit-name" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span data-i18n="edit.name"></span></label>
-        <label class="field"><input id="edit-quantity" class="edit-name edit-quantity" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span data-i18n="edit.quantity"></span></label>
+        <label class="field"><input id="edit-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
+        <label class="field"><input id="edit-quantity" class="input field-input" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span class="field-label" data-i18n="edit.quantity"></span></label>
         <h2 class="part" data-i18n="edit.shops"></h2>
         <div id="edit-chips" class="cluster"></div>
         <p id="edit-empty" class="hint" data-i18n="shops.empty" hidden></p>
-        <div class="add-row">
-          <input id="edit-shop" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
+        <div class="input-row">
+          <input id="edit-shop" class="input strong" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
           <button class="button primary" type="submit" data-i18n="shops.add"></button>
         </div>
         <datalist id="edit-shops"></datalist>

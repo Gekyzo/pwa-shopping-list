@@ -369,6 +369,105 @@
     transform: translateX(16px);
   }
 
+  /* @component input
+     @summary A one-line text box. Height --tap, on --bg.
+     @variant raised  On a --bg page: the box takes --surface.
+     @variant strong  The main box of a sheet, with an accent border.
+     @variant rename  The name of a row while it is renamed in place.
+     @example <input class="input" type="text" placeholder="Nueva tienda">
+     @example <input class="input raised" type="search" placeholder="Buscar">
+     @example <input class="input strong" type="text" placeholder="Añadir artículo a la lista"> */
+  .input {
+    width: 100%;
+    min-width: 0;
+    height: var(--tap);
+    padding: 0 var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--bg);
+  }
+
+  .input.raised {
+    background: var(--surface);
+  }
+
+  .input.strong {
+    border: 2px solid var(--accent);
+  }
+
+  .input.rename {
+    flex: 1;
+    margin: 0 var(--space-1);
+    border-color: var(--accent);
+  }
+
+  /* @component field
+     @summary An input with its name as a label: inside the box while it is empty, on its top border
+       once it has a value or the focus. The placeholder only marks the empty box.
+     @part field-input  The input, with the classes input field-input and a placeholder.
+     @part field-label  The name, after the input.
+     @example <label class="field"><input class="input field-input" type="text" placeholder="Nombre" value="Leche"><span class="field-label">Nombre</span></label>
+     @example <label class="field"><input class="input field-input" type="text" placeholder="Cantidad"><span class="field-label">Cantidad</span></label> */
+  .field {
+    position: relative;
+    display: block;
+    margin-top: var(--space-4);
+  }
+
+  .field-input {
+    border: 2px solid var(--line);
+  }
+
+  .field-input:focus {
+    border-color: var(--accent);
+  }
+
+  .field-input::placeholder {
+    color: transparent;
+  }
+
+  .field-label {
+    position: absolute;
+    top: 50%;
+    left: var(--space-3);
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-s);
+    background: var(--bg);
+    color: var(--muted);
+    line-height: 1;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: top var(--motion-fast) ease-out, font-size var(--motion-fast) ease-out, color var(--motion-fast) ease-out;
+  }
+
+  .field-input:focus + .field-label,
+  .field-input:not(:placeholder-shown) + .field-label {
+    top: 0;
+    background: linear-gradient(var(--surface) 50%, var(--bg) 50%);
+    font-size: var(--text-xs);
+  }
+
+  .field-input:focus + .field-label {
+    color: var(--accent);
+  }
+
+  /* @component select
+     @summary A choice from a list, full width, with its own arrow.
+     @example <select class="select" aria-label="Idioma"><option>Español</option></select> */
+  .select {
+    appearance: none;
+    display: block;
+    width: 100%;
+    min-height: var(--tap-l);
+    padding: 0 var(--tap) 0 var(--space-4);
+    border: 0;
+    background:
+      linear-gradient(45deg, transparent 50%, var(--muted) 50%) right calc(var(--space-4) + var(--space-half) + var(--arrow)) center / var(--arrow) var(--arrow) no-repeat,
+      linear-gradient(135deg, var(--muted) 50%, transparent 50%) right calc(var(--space-4) + var(--space-half)) center / var(--arrow) var(--arrow) no-repeat;
+    color: inherit;
+    font: inherit;
+  }
+
   /* Header summary */
 
   .head {
@@ -686,56 +785,6 @@
     font-size: var(--text-s);
   }
 
-  /* A field of the edit sheet with its name as a label: inside the field while it is empty, on its
-     top border once it has a value or the focus. The placeholder only marks the empty field. */
-  .sheet .field {
-    position: relative;
-    display: block;
-    margin-top: var(--space-4);
-  }
-
-  .sheet .field input::placeholder {
-    color: transparent;
-  }
-
-  .sheet .field span {
-    position: absolute;
-    top: 50%;
-    left: var(--space-3);
-    padding: 0 var(--space-1);
-    border-radius: var(--radius-s);
-    background: var(--bg);
-    color: var(--muted);
-    font-size: var(--text-m);
-    line-height: 1;
-    pointer-events: none;
-    transform: translateY(-50%);
-    transition: top var(--motion-fast) ease-out, font-size var(--motion-fast) ease-out, color var(--motion-fast) ease-out;
-  }
-
-  .sheet .field input:focus + span,
-  .sheet .field input:not(:placeholder-shown) + span {
-    top: 0;
-    background: linear-gradient(var(--surface) 50%, var(--bg) 50%);
-    font-size: var(--text-xs);
-  }
-
-  .sheet .field input:focus + span {
-    color: var(--accent);
-  }
-
-
-  .rename {
-    flex: 1;
-    min-width: 0;
-    height: 40px;
-    margin: 0 var(--space-1);
-    padding: 0 var(--space-2);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-m);
-    background: var(--bg);
-  }
-
   .actions {
     display: flex;
     flex-wrap: wrap;
@@ -822,15 +871,6 @@
     grid-column: 2;
   }
 
-  #meal-query {
-    width: 100%;
-    height: 44px;
-    padding: 0 var(--space-3);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
-    background: var(--surface);
-  }
-
   .meal-empty {
     margin: var(--space-3) 0;
     color: var(--muted);
@@ -893,40 +933,8 @@
     overflow-wrap: anywhere;
   }
 
-  .product-form {
-    display: flex;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
-  }
-
   .product-add .suggestions {
     padding: 0 var(--space-3) var(--space-2) var(--space-5);
-  }
-
-  .product-form input {
-    flex: 1;
-    min-width: 0;
-    height: 44px;
-    padding: 0 var(--space-3);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
-    background: var(--bg);
-  }
-
-  /* Recipe search */
-
-  .search {
-    padding: var(--space-2) var(--space-3);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .search input {
-    width: 100%;
-    height: 44px;
-    padding: 0 var(--space-3);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-m);
-    background: var(--surface);
   }
 
   /* Settings */
@@ -971,20 +979,6 @@
   .group svg {
     flex: none;
     color: var(--muted);
-  }
-
-  .group select {
-    appearance: none;
-    display: block;
-    width: 100%;
-    min-height: 52px;
-    padding: 0 var(--tap) 0 var(--space-4);
-    border: 0;
-    background:
-      linear-gradient(45deg, transparent 50%, var(--muted) 50%) right calc(var(--space-4) + var(--space-half) + var(--arrow)) center / var(--arrow) var(--arrow) no-repeat,
-      linear-gradient(135deg, var(--muted) 50%, transparent 50%) right calc(var(--space-4) + var(--space-half)) center / var(--arrow) var(--arrow) no-repeat;
-    color: inherit;
-    font: inherit;
   }
 
   .group button + button {
@@ -1188,21 +1182,6 @@
     background: var(--line);
   }
 
-  .add-row {
-    display: flex;
-    gap: var(--space-2);
-  }
-
-  .add-row input {
-    flex: 1;
-    min-width: 0;
-    height: 48px;
-    padding: 0 var(--space-3);
-    border: 2px solid var(--accent);
-    border-radius: var(--radius-m);
-    background: var(--bg);
-  }
-
   /* An entry of a sheet: a name, with its effect below it. */
   .sheet .entry {
     display: flex;
@@ -1244,20 +1223,6 @@
 
   #edit-empty {
     padding: var(--space-3) 0;
-  }
-
-  .sheet .edit-name {
-    width: 100%;
-    height: 48px;
-    padding: 0 var(--space-3);
-    border: 2px solid var(--line);
-    border-radius: var(--radius-m);
-    background: var(--bg);
-    font-size: var(--text-m);
-  }
-
-  .sheet .edit-name:focus {
-    border-color: var(--accent);
   }
 
   .suggestions {
@@ -1508,6 +1473,17 @@
     overflow-x: auto;
     scrollbar-width: none;
   }
+  /* @component input-row
+     @summary An input that grows, and the button that submits it.
+     @example <div class="input-row"><input class="input" type="text" placeholder="Nueva tienda"><button class="button primary" type="button">Añadir</button></div> */
+  .input-row {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .input-row > .input {
+    flex: 1;
+  }
 }
 
 @layer screens {
@@ -1519,5 +1495,23 @@
     margin: 0;
     padding: var(--space-2) var(--space-3);
     border-bottom: 1px solid var(--line);
+  }
+
+  /* @component search
+     @scope list
+     @summary The search box of Actual, Próxima and Recetas, below the header.
+     @example <div class="search"><input class="input raised" type="search" placeholder="Buscar"></div> */
+  .search {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* @component product-form
+     @scope recipes
+     @summary The row that adds a product to an open recipe.
+     @part product-name  Its input, which takes the focus after an add.
+     @example <form class="input-row product-form"><input class="input product-name" type="text" placeholder="Añadir producto"><button class="button primary" type="submit">Añadir</button></form> */
+  .product-form {
+    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
   }
 }
