@@ -7,6 +7,8 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 - **Store sections.** Add the category or section of the store to each product.
   The sections are configurable in the settings.
 - **Quantities.** Add a quantity to each item.
+- **Recipe categories.** Give each recipe one or more categories, such as
+  lunch, dinner or healthy, and filter the recipes by category.
 
 ### Deferred
 
