@@ -1425,6 +1425,10 @@
     white-space: nowrap;
   }
 
+  .meal:not(.free) .meal-label {
+    color: var(--accent);
+  }
+
   .meal.free .meal-name {
     color: var(--muted);
   }
