@@ -9,7 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The version symbols in `Ajustes` have colours: green when up to date, amber for an update,
+  red with no connection, grey while it checks.
 
 ## 1.0.17 - 2026-10-14
 

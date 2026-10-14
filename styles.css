@@ -10,6 +10,7 @@
   --accent-text: light-dark(#ffffff, #0c1a12);
   --accent-soft: light-dark(#e2f2ea, #1d3327);
   --danger: light-dark(#b3261e, #f2b8b5);
+  --warning: light-dark(#9a5b00, #f2b65c);
   --toast-bg: light-dark(#17201b, #e8ede9);
   --toast-text: light-dark(#ffffff, #17201b);
   --nav-height: 60px;
@@ -873,11 +874,19 @@ button.pill {
   animation: spin 1s linear infinite;
 }
 
+#version-status[data-status='current'] {
+  color: var(--accent);
+}
+
 #version-status[data-status='outdated'] {
   display: flex;
   justify-content: center;
   margin: 4px 0 0;
-  color: var(--accent);
+  color: var(--warning);
+}
+
+#version-status[data-status='unknown'] {
+  color: var(--danger);
 }
 
 /* The text of a state with a symbol stays for screen readers only. */

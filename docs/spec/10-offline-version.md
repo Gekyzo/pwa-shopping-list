@@ -47,15 +47,15 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   shows `Versión desconocida`.
 - **VER-5** When `Ajustes` opens, the app reads `version.json?latest=<time>` from the host: the
   deployed version. The request ends after 8 seconds at most. `Comprobando…` shows in that time.
-- **VER-6** The status is a line symbol after the version. Its text is the tooltip and is read by a
-  screen reader; only the text of an update shows, in the accent colour:
+- **VER-6** The status is a line symbol after the version, in the colour of its case. Its text is
+  the tooltip and is read by a screen reader; only the text of an update shows:
 
-  | Case | Symbol | Text | **Actualizar** |
-  |---|---|---|---|
-  | The check runs (VER-5) | Turning arrow, spins | `Comprobando…` | Hidden |
-  | The deployed version is newer than the running one | Down arrow in a circle | `Versión X.Y.Z disponible` | Shows |
-  | It is the same or older | Check in a circle | `Al día` | Hidden |
-  | One of the two is not known | Struck-out cloud | `Sin conexión` | Hidden |
+  | Case | Symbol | Colour | Text | **Actualizar** |
+  |---|---|---|---|---|
+  | The check runs (VER-5) | Turning arrow, spins | Muted | `Comprobando…` | Hidden |
+  | The deployed version is newer than the running one | Down arrow in a circle | Amber | `Versión X.Y.Z disponible` | Shows |
+  | It is the same or older | Check in a circle | Green (accent) | `Al día` | Hidden |
+  | One of the two is not known | Struck-out cloud | Red (danger) | `Sin conexión` | Hidden |
 
 - **VER-7** Two versions compare by number, part by part: `1.10.0` is newer than `1.9.0`.
 - **VER-8** **Actualizar** sends `refresh` to the worker and waits 15 seconds at most. On success
