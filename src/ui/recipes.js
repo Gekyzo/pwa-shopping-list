@@ -37,7 +37,7 @@ const productNode = (recipe, product) => {
 const productForm = (recipe) => {
   const input = el('input', {
     type: 'text',
-    className: 'product-name',
+    className: 'input product-name',
     maxLength: 80,
     placeholder: t('recipe.addProduct'),
     enterKeyHint: 'done',
@@ -62,7 +62,7 @@ const productForm = (recipe) => {
       .map((item) => el('li', {}, [el('button', { type: 'button', textContent: item.name, onclick: () => add(item.name) })]));
     suggestions.replaceChildren(...rows);
   });
-  const form = el('form', { className: 'product-form', autocomplete: 'off' }, [
+  const form = el('form', { className: 'input-row product-form', autocomplete: 'off' }, [
     input,
     el('button', { type: 'submit', className: 'button primary', textContent: t('add.submit') }),
   ]);

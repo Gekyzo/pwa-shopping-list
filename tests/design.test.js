@@ -115,3 +115,9 @@ test('the muted colour of an icon button does not outrank its variants', () => {
   const icon = rules.find((rule) => rule.selector.startsWith('.button.icon') && rule.declarations.some((d) => d.property === 'color'));
   assert.match(icon.selector, /^\.button\.icon:where\(/);
 });
+
+test('inputs, fields and selects are components (DS-3)', family(
+  ['input', 'field', 'select', 'input-row', 'search', 'product-form'],
+  ['add-row', 'edit-name', 'edit-quantity'],
+  ['.sheet .field', '.search input', '.product-form input', '.group select', '#meal-query'],
+));

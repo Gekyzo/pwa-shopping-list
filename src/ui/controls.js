@@ -3,7 +3,7 @@ import { el, state, ui, t, apply, render } from '#ui/context';
 import { isOpen } from '#ui/view';
 
 export const renameInput = (entry, rename = (name) => store.renameItem(state, entry.id, name)) => {
-  const input = el('input', { type: 'text', className: 'rename', value: entry.name, maxLength: 80 });
+  const input = el('input', { type: 'text', className: 'input rename', value: entry.name, maxLength: 80 });
   input.setAttribute('aria-label', t('row.rename', { name: entry.name }));
   let done = false;
   const finish = (keep) => {
