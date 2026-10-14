@@ -828,34 +828,30 @@ button.pill {
   transform: translateX(18px);
 }
 
-.group button + button,
-.group .info + button {
+.group button + button {
   border-top: 1px solid var(--line);
 }
 
-.group .info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 52px;
-  margin: 0;
-  padding: 0 14px;
+.about {
+  margin: 24px 12px 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
 }
 
-#version {
-  white-space: nowrap;
+.about p {
+  margin: 0;
+}
+
+#version-status::before {
+  content: ' · ';
 }
 
 #update {
+  min-height: 44px;
+  padding: 0 14px;
   color: var(--accent);
   font-weight: 600;
-}
-
-.group small {
-  margin-left: auto;
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-align: right;
 }
 
 /* Add button and bottom menu */

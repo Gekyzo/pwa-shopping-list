@@ -42,7 +42,8 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **VER-3** A value that is not `{ version, date }` with a valid version and a valid date is "no
   version".
 - **VER-4** At the start the app reads `version.json` from the cache: the running version.
-  **Ajustes → Versión** shows `Versión X.Y.Z · date`, the date in the form of the language, or
+  The foot of **Ajustes** shows `Versión X.Y.Z · date · status` as plain text, outside a group
+  and with no heading, the date in the form of the language. With no version it shows
   `Versión desconocida`.
 - **VER-5** When `Ajustes` opens, the app reads `version.json?latest=<time>` from the host: the
   deployed version. The request ends after 8 seconds at most. `Comprobando…` shows in that time.
