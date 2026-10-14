@@ -9,7 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- In `Ajustes`, the buttons of **Copia de seguridad** are **Exportar** and **Importar**, so their
+  text stays on one line.
 
 ## 1.0.22 - 2026-10-14
 
