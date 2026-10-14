@@ -61,6 +61,7 @@ export const renderMeal = () => {
   const chips = matches.map((recipe) => {
     const chip = el('button', {
       type: 'button',
+      className: 'chip',
       textContent: recipe.name,
       onclick: () => {
         ui.mealOpen = null;

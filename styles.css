@@ -233,6 +233,142 @@
     width: 100%;
   }
 
+  /* @component chip
+     @summary A choice among several, such as a shop or a recipe. Selected with aria-pressed="true".
+     @variant surface  On a --bg background: the chip takes --surface.
+     @part count  A number after the label, in muted text.
+     @example <button class="chip" type="button">Lidl</button>
+     @example <button class="chip" type="button" aria-pressed="true">Mercadona</button>
+     @example <button class="chip surface" type="button" aria-pressed="true"><span>Todas</span><span class="count">4</span></button> */
+  .chip {
+    min-height: var(--tap);
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+    font-size: var(--text-s);
+  }
+
+  .chip.surface {
+    flex: none;
+    background: var(--surface);
+  }
+
+  .chip[aria-pressed="true"] {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: var(--weight-strong);
+  }
+
+  .chip .count {
+    margin-left: var(--space-2);
+    color: var(--muted);
+    font-weight: var(--weight-normal);
+  }
+
+  /* @component pill
+     @summary A small tag beside a name. It is below the tap size: a button pill is a second way to an action.
+     @variant ghost  A dashed outline, for a state that is off.
+     @example <span class="pill">Comprado hoy</span>
+     @example <button class="pill ghost" type="button">+ Próxima</button> */
+  .pill {
+    flex: none;
+    min-height: 0;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+  }
+
+  .pill:is(button) {
+    min-height: calc(var(--tap) - var(--space-3));
+  }
+
+  .pill.ghost {
+    border: 1px dashed var(--muted);
+    background: none;
+    color: var(--muted);
+  }
+
+  /* @component segmented
+     @summary One choice of two or three, side by side. The chosen segment has aria-pressed="true".
+     @part segment  One choice.
+     @example <div class="segmented"><button class="segment" type="button" aria-pressed="true">Para hoy</button><button class="segment" type="button" aria-pressed="false">Para la próxima</button></div> */
+  .segmented {
+    display: flex;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 var(--space-1);
+  }
+
+  .segmented .segment {
+    flex: 1;
+    min-height: var(--tap);
+    border-radius: var(--radius-m);
+    background: var(--bg);
+    font-size: var(--text-s);
+  }
+
+  .segmented .segment[aria-pressed="true"] {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: var(--weight-strong);
+  }
+
+  /* @component switch
+     @summary A setting that is on or off: its name, then the switch.
+     @part switch-input  The checkbox with role="switch".
+     @example <label class="switch"><span>Próxima</span><input class="switch-input" type="checkbox" role="switch" checked></label> */
+  .switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: var(--tap-l);
+    padding: 0 var(--space-4);
+  }
+
+  .switch + .switch {
+    border-top: 1px solid var(--line);
+  }
+
+  .switch-input {
+    appearance: none;
+    position: relative;
+    flex: none;
+    width: 44px;
+    height: 26px;
+    margin: 0;
+    border-radius: var(--radius-l);
+    background: var(--line);
+    cursor: pointer;
+    transition: background var(--motion);
+  }
+
+  .switch-input::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--space-1);
+    margin: auto 0;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-round);
+    background: var(--knob);
+    box-shadow: var(--shadow-s);
+    transition: transform var(--motion);
+  }
+
+  .switch-input:checked {
+    background: var(--accent);
+  }
+
+  .switch-input:checked::after {
+    transform: translateX(16px);
+  }
+
   /* Header summary */
 
   .head {
@@ -600,28 +736,6 @@
     background: var(--bg);
   }
 
-  .pill {
-    flex: none;
-    min-height: 0;
-    padding: var(--space-1) var(--space-3);
-    border: 1px solid transparent;
-    border-radius: var(--radius-pill);
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: var(--text-xs);
-    white-space: nowrap;
-  }
-
-  button.pill {
-    min-height: 32px;
-  }
-
-  .pill.ghost {
-    border: 1px dashed var(--muted);
-    background: none;
-    color: var(--muted);
-  }
-
   .actions {
     display: flex;
     flex-wrap: wrap;
@@ -873,55 +987,6 @@
     font: inherit;
   }
 
-  .group .switch {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    min-height: 52px;
-    padding: 0 var(--space-4);
-  }
-
-  .group .switch + .switch {
-    border-top: 1px solid var(--line);
-  }
-
-  .group .switch input {
-    appearance: none;
-    position: relative;
-    flex: none;
-    width: 44px;
-    height: 26px;
-    margin: 0;
-    border-radius: var(--radius-l);
-    background: var(--line);
-    cursor: pointer;
-    transition: background var(--motion);
-  }
-
-  .group .switch input::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: var(--space-1);
-    margin: auto 0;
-    width: 20px;
-    height: 20px;
-    border-radius: var(--radius-round);
-    background: var(--knob);
-    box-shadow: var(--shadow-s);
-    transition: transform var(--motion);
-  }
-
-  .group .switch input:checked {
-    background: var(--accent);
-  }
-
-  .group .switch input:checked::after {
-    transform: translateX(16px);
-  }
-
   .group button + button {
     border-top: 1px solid var(--line);
   }
@@ -1138,19 +1203,6 @@
     background: var(--bg);
   }
 
-  .seg {
-    display: flex;
-    gap: var(--space-2);
-    margin: var(--space-3) 0 var(--space-1);
-  }
-
-  .seg button {
-    flex: 1;
-    min-height: 40px;
-    background: var(--bg);
-    font-size: var(--text-s);
-  }
-
   /* An entry of a sheet: a name, with its effect below it. */
   .sheet .entry {
     display: flex;
@@ -1206,54 +1258,6 @@
 
   .sheet .edit-name:focus {
     border-color: var(--accent);
-  }
-
-  .seg button[aria-pressed="true"] {
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-weight: var(--weight-strong);
-  }
-
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin: var(--space-3) 0;
-  }
-
-  .chips button {
-    min-height: 40px;
-    padding: 0 var(--space-4);
-    border-radius: var(--radius-xl);
-    background: var(--bg);
-    font-size: var(--text-s);
-  }
-
-  .chips button[aria-pressed="true"] {
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-weight: var(--weight-strong);
-  }
-
-  /* The shop lists of Actual and Próxima: one line that scrolls on its own. */
-  .shop-chips {
-    flex-wrap: nowrap;
-    margin: 0;
-    padding: var(--space-2) var(--space-3);
-    overflow-x: auto;
-    border-bottom: 1px solid var(--line);
-    scrollbar-width: none;
-  }
-
-  .shop-chips button {
-    flex: none;
-    background: var(--surface);
-  }
-
-  .shop-chips .chip-count {
-    margin-left: var(--space-2);
-    color: var(--muted);
-    font-weight: var(--weight-normal);
   }
 
   .suggestions {
@@ -1484,5 +1488,36 @@
   [data-hand="left"] .fab {
     right: auto;
     left: var(--space-4);
+  }
+}
+
+@layer layouts {
+  /* @component cluster
+     @summary A row of parts that wraps, with a --space-2 gap.
+     @variant scroll  One line that scrolls on its own, with no scroll bar.
+     @example <div class="cluster"><button class="chip" type="button">Lidl</button><button class="chip" type="button" aria-pressed="true">Mercadona</button></div> */
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-3) 0;
+  }
+
+  .cluster.scroll {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+}
+
+@layer screens {
+  /* @component shop-lists
+     @scope list
+     @summary The shop lists of Actual and Próxima, below the header.
+     @example <div class="cluster scroll shop-lists"><button class="chip surface" type="button" aria-pressed="true"><span>Todas</span><span class="count">4</span></button></div> */
+  .shop-lists {
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--line);
   }
 }

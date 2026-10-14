@@ -104,3 +104,9 @@ test('primary is a variant of button only (DS-3)', () => {
   assert.deepEqual(rules.filter((rule) => /\.primary\b/.test(rule.selector) && !rule.selector.includes('.button')).map((rule) => rule.selector), []);
   assert.deepEqual([...html.matchAll(/class="([^"]*\bprimary\b[^"]*)"/g)].map(([, value]) => value).filter((value) => !value.split(' ').includes('button')), []);
 });
+
+test('chips, pills, segments and switches are components (DS-3)', family(
+  ['chip', 'pill', 'segmented', 'switch', 'cluster', 'shop-lists'],
+  ['chips', 'shop-chips', 'chip-count', 'seg'],
+  ['.chips button', '.seg button', 'button.pill', '.group .switch'],
+));
