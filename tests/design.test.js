@@ -127,3 +127,9 @@ test('the header and the bottom bar are components (DS-3)', family(
   ['head', 'head-text', 'bnav', 'badge-count'],
   ['.ring span', '.bnav button', '.head h1', '.head p'],
 ));
+
+test('sheets, toasts, banners and empty states are components (DS-3)', family(
+  ['sheet', 'toast', 'banner', 'empty-state', 'hint'],
+  ['veil', 'grab', 'empty', 'meal-empty'],
+  ['.sheet h2', '.sheet .entry', '.toast span', '.banner p', '#edit-chips', '#edit-empty'],
+));
