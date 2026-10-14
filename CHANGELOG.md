@@ -12,6 +12,8 @@ no change for the user has no entry.
 ### Changed
 
 - A recipe row has no send button. A slide of the row to the right sends the recipe.
+- The link icon of a recipe row is smaller.
+- The title **Productos** of the recipe sheet has no line above it.
 
 ## 1.0.26 - 2026-10-15
 
