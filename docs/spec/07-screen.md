@@ -90,12 +90,14 @@ of it.
 
 ## Sheets
 
-- **NAV-8** There are four sheets: add, arrange, shops and meal. One is open at a time. A tap on the
+- **NAV-8** There are five sheets: add, arrange, trip, shops and meal. One is open at a time. A tap on the
   veil or `Escape` closes it. The `+` button does not show while a sheet is open.
 - **NAV-9** The trip button of the header has three dots. It shows in `Actual`. A tap
-  opens the trip menu below it, and a second tap closes the menu. The menu has one entry,
-  **Terminar compra**, with `N vuelven · N se van` below its name.
-- **NAV-10** A tap out of the trip menu or `Escape` closes it. That tap still does its own work.
+  opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet has the
+  title `Opciones de la compra` and one entry, **Terminar compra**, with `N vuelven · N se van`
+  below its name.
+- **NAV-10** The trip sheet closes as each sheet does (NAV-8). The open puts the focus on
+  **Terminar compra**, and the close puts it back on the trip button.
 
 ## Hand
 
@@ -108,7 +110,7 @@ of it.
   | Part | `Derecha` | `Izquierda` |
   |---|---|---|
   | `+` button | Bottom right | Bottom left |
-  | Header | Ring, text, buttons | Buttons, text, ring; the trip menu opens below the left end |
+  | Header | Ring, text, buttons | Buttons, text, ring |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
 

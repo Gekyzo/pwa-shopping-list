@@ -146,37 +146,6 @@ button:disabled {
 }
 
 /* The menu of the trip button, below the right end of the header. */
-.menu {
-  position: absolute;
-  top: calc(100% - 4px);
-  right: 12px;
-  z-index: 4;
-  min-width: 220px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
-  overflow: hidden;
-}
-
-.menu button {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 2px;
-  width: 100%;
-  min-height: 56px;
-  padding: 8px 16px;
-  border-radius: 0;
-  text-align: left;
-}
-
-.menu small {
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-
 .head h1 {
   margin: 0;
   font-size: 1.25rem;
@@ -1018,6 +987,26 @@ button.pill {
   font-size: 0.9rem;
 }
 
+/* An entry of a sheet: a name, with its effect below it. */
+.sheet .entry {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  min-height: 56px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: var(--bg);
+  text-align: left;
+}
+
+.sheet .entry small {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 .sheet h2 {
   margin: 8px 0 0;
   color: var(--muted);
@@ -1305,11 +1294,6 @@ body:has(.sheet-layer:not([hidden])) .toast {
 [data-hand="left"] .tool:not([hidden]) ~ .tool:not([hidden]) {
   margin-right: -8px;
   margin-left: 0;
-}
-
-[data-hand="left"] .menu {
-  right: auto;
-  left: 12px;
 }
 
 [data-hand="left"] .row {

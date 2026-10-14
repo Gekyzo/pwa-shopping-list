@@ -100,8 +100,8 @@ const ui = {
   sheetOpen: false,
   // The sheet of the header button, with the group and the order of the list.
   arrangeOpen: false,
-  // True while the menu of the trip button of Actual is open.
-  tripMenuOpen: false,
+  // True while the sheet of the trip button of Actual is open.
+  tripOpen: false,
   // The item whose shop sheet is open, or null.
   shopsId: null,
   // The meal whose sheet is open, as { day, meal }, or null.
@@ -173,7 +173,7 @@ const apply = (result, { undoText = null } = {}) => {
 
 const finishTrip = (undoText = t('toast.finished')) => {
   if (!apply(store.startNewShopping(state), { undoText })) return;
-  Object.assign(ui, { view: 'active', editingId: null, openId: null, tripMenuOpen: false });
+  Object.assign(ui, { view: 'active', editingId: null, openId: null, tripOpen: false });
   render();
 };
 
@@ -1165,14 +1165,13 @@ const refreshShell = () =>
     worker.postMessage({ type: 'refresh' }, [channel.port2]);
   });
 
-// The trip button of the header and its menu. It touches no row, so a tap out of the menu can
-// close it without a render.
-const renderTripMenu = () => {
-  if (ui.view !== 'active') ui.tripMenuOpen = false;
+// The trip button of the header and its sheet.
+const renderTrip = () => {
+  if (ui.view !== 'active') ui.tripOpen = false;
   $('trip-button').hidden = ui.view !== 'active';
   $('finish-menu').disabled = !store.canStartNewShopping(state);
-  $('trip-button').setAttribute('aria-expanded', String(ui.tripMenuOpen));
-  $('trip-menu').hidden = !ui.tripMenuOpen;
+  $('trip-button').setAttribute('aria-expanded', String(ui.tripOpen));
+  $('trip').hidden = !ui.tripOpen;
 };
 
 const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
@@ -1223,10 +1222,10 @@ const render = () => {
   renderVersion();
   const outcome = [t('settings.back', { count: summary.back }), t('settings.gone', { count: summary.gone })];
   $('finish-menu-text').textContent = outcome.join(' · ');
-  renderTripMenu();
+  renderTrip();
 
   $('fab').hidden =
-    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null || ui.mealOpen !== null;
+    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.shopsId !== null || ui.mealOpen !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
   const sections = visibleSections(off);
@@ -1634,7 +1633,7 @@ document.querySelectorAll('.bnav button').forEach((button) => {
 let sectionSlide = null;
 document.addEventListener('pointerdown', (event) => {
   sectionSlide = null;
-  const sheet = ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null || ui.mealOpen !== null;
+  const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.shopsId !== null || ui.mealOpen !== null;
   if (!event.isPrimary || event.button !== 0 || reorder || sheet) return;
   if (!event.target.closest('.head, main') || event.target.closest('.swipe, .shop-chips, input, textarea')) return;
   sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
@@ -1820,20 +1819,16 @@ document.querySelectorAll('#arrange-sort button').forEach((button) => {
 });
 $('add-name').addEventListener('input', renderSheet);
 $('trip-button').addEventListener('click', () => {
-  Object.assign(ui, { tripMenuOpen: !ui.tripMenuOpen, openId: null, editingId: null });
+  Object.assign(ui, { tripOpen: true, openId: null, editingId: null });
   render();
-  if (ui.tripMenuOpen) $('finish-menu').focus();
+  $('finish-menu').focus();
 });
-// A tap out of the trip menu closes it, without a render, so that the tap still does its work.
-document.addEventListener(
-  'pointerdown',
-  (event) => {
-    if (!ui.tripMenuOpen || event.target.closest('#trip-menu, #trip-button')) return;
-    ui.tripMenuOpen = false;
-    renderTripMenu();
-  },
-  true,
-);
+const closeTrip = () => {
+  ui.tripOpen = false;
+  render();
+  $('trip-button').focus();
+};
+$('trip-veil').addEventListener('click', closeTrip);
 $('add').addEventListener('submit', (event) => {
   event.preventDefault();
   submitAdd();
@@ -1855,11 +1850,7 @@ document.addEventListener('keydown', (event) => {
   if (ui.shopsId !== null) closeShops();
   if (ui.mealOpen !== null) closeMeal();
   if (ui.searchOpen) closeSearch();
-  if (ui.tripMenuOpen) {
-    ui.tripMenuOpen = false;
-    renderTripMenu();
-    $('trip-button').focus();
-  }
+  if (ui.tripOpen) closeTrip();
 });
 
 $('finish-button').addEventListener('click', () => finishTrip());

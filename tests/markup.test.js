@@ -45,3 +45,12 @@ test('the walkthrough has Saltar and the next button in one bar at the bottom, S
   assert.deepEqual(buttons, ['onboarding-skip', 'onboarding-next']);
   assert.doesNotMatch(body, /onboarding-top/);
 });
+
+test('the trip button opens a sheet from the bottom, with a veil, and the header has no dropdown', () => {
+  const [layer = ''] = body.match(/<div id="trip" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>/) ?? [];
+  assert.match(layer, /<div id="trip-veil" class="veil">/);
+  assert.match(layer, /<div class="sheet" role="dialog"/);
+  assert.match(layer, /<button id="finish-menu"/);
+  assert.match(body, /<button id="trip-button"[^>]*aria-haspopup="dialog"[^>]*aria-controls="trip"/);
+  assert.doesNotMatch(body, /trip-menu|role="menu"/);
+});
