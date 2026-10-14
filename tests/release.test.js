@@ -22,6 +22,9 @@ const repo = (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'release-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
   for (const file of FILES) cpSync(join(root, file), join(dir, file));
+  // The version of the copy, not of the app, so that the test does not change at each release.
+  const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
+  writeFileSync(join(dir, 'package.json'), `${JSON.stringify({ ...pkg, version: '1.0.9' }, null, 2)}\n`);
   writeFileSync(join(dir, 'version.json'), '{\n  "version": "1.0.9",\n  "date": "2026-10-13T21:36:06.766Z"\n}\n');
   writeFileSync(join(dir, 'CHANGELOG.md'), '# Changelog\n\n## Unreleased\n\n### Added\n\n- A menu.\n\n## 1.0.9 - 2026-10-13\n\nOld.\n');
   const git = (...args) => execFileSync('git', args, { cwd: dir, env: ENV, encoding: 'utf8' }).trim();
