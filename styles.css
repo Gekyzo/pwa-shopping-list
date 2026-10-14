@@ -1384,6 +1384,10 @@
     text-transform: uppercase;
   }
 
+  .day:not(:has(.meal.free)) .day-title {
+    color: var(--accent);
+  }
+
   .meals {
     display: grid;
     grid-template-columns: 1fr 1fr;
