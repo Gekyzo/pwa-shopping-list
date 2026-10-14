@@ -18,7 +18,8 @@ no change for the user has no entry.
 
 ### Changed
 
-- A recipe or a product that you delete closes its row before it goes.
+- A recipe or a product that you add, or that `Deshacer` puts back, opens and flashes. One that
+  you delete closes its row before it goes.
 - The texts of the walkthrough are new and more friendly. The first page says that `Próxima`
   fills itself with what you always buy.
 - The button **Comprar siempre** of a row shows the circular arrow of the walkthrough.

@@ -1438,6 +1438,7 @@
      @part product       One product.
      @part product-text  Its name.
      @state leaving  On product: a row that closes before it leaves.
+     @state flash    On product: a row that has just come: it flashes.
      @example <ul class="products" style="width: 100%"><li class="product"><span class="product-text">Patatas</span><button class="button icon" type="button" aria-label="Quitar">✕</button></li></ul> */
   .products {
     margin: 0;
@@ -1463,6 +1464,10 @@
     min-height: 0;
     opacity: 0;
     transition: height var(--motion) ease-out, opacity var(--motion) ease-out;
+  }
+
+  .product.flash {
+    animation: flash var(--motion-slow) ease-out;
   }
 
   /* @component settings

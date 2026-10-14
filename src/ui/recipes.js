@@ -53,7 +53,9 @@ const productForm = (recipe) => {
   const add = (name) => {
     // The render builds a new field; `focusProduct` keeps the keyboard open for the next product.
     ui.focusProduct = true;
+    ui.bringKeys.add(`product:${recipe.id}:${name.trim().toLowerCase()}`);
     if (apply(recipes.addRecipeProduct(state, recipe.id, name))) return;
+    ui.bringKeys.clear();
     ui.focusProduct = false;
     input.focus();
   };
