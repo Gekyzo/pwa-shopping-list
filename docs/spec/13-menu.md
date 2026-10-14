@@ -36,8 +36,8 @@ their products in one action.
   with `Deshacer` and the message `Quitada del menú: «name».`
 - **MENU-12** Below the week, **Llenar la cesta** fills `Actual` (MENU-5). It has the cart with a
   plus of the send of a recipe (REC-17) before its text. It is at the side of the hand: at the
-  right of **Vaciar menú** with `Derecha`, at the left with `Izquierda` (NAV-13). When the two
-  buttons do not fit on one line, **Vaciar menú** goes below. Its message is
+  right of **Vaciar menú** with `Derecha`, at the left with `Izquierda` (NAV-13). The two
+  buttons are on one line, each half of its width; a long text wraps in its button. Its message is
   `Menú: N añadidos, N ya estaban.` with `Deshacer`. A fill that changes nothing shows `Menú:
   todo estaba ya en la lista.` and keeps the `Deshacer` that is still on the screen.
 - **MENU-13** **Vaciar menú** empties the menu, with `Deshacer` and the message `Menú vaciado.`

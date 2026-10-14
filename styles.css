@@ -595,19 +595,24 @@ button.pill {
   color: var(--muted);
 }
 
+/* Each button takes half of the line; a long text wraps inside its button. Llenar la cesta is at
+   the side of the hand. */
 .menu-actions {
-  display: flex;
-  flex-direction: row-reverse;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin: 16px 12px;
 }
 
+#menu-fill {
+  grid-row: 1;
+  grid-column: 2;
+}
+
 .menu-actions button {
-  flex: 1 1 auto;
   display: flex;
   padding: 0 12px;
-  white-space: nowrap;
+  text-align: center;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -1492,8 +1497,8 @@ body:has(.sheet-layer:not([hidden])) .toast {
   flex-direction: row-reverse;
 }
 
-[data-hand="left"] .menu-actions {
-  flex-direction: row;
+[data-hand="left"] #menu-fill {
+  grid-column: 1;
 }
 
 [data-hand="left"] .fab {
