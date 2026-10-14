@@ -9,7 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Added
+
+- **Tema** in `Ajustes`: `Automático` follows the phone, `Claro` and `Oscuro` keep the light or
+  the dark colours.
 
 ## 1.0.10 - 2026-10-14
 

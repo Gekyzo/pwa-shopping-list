@@ -215,6 +215,32 @@ export const saveHand = (storage, hand) => {
   }
 };
 
+// The colours of the app: `light`, `dark`, or `system` to follow the phone. A preference of the
+// device, as the hand is.
+export const THEME_KEY = 'shopping.theme';
+const THEMES = ['light', 'dark'];
+
+// The stored theme when it is `light` or `dark`, else `system`.
+export const loadTheme = (storage) => {
+  try {
+    const theme = storage.getItem(THEME_KEY);
+    return THEMES.includes(theme) ? theme : 'system';
+  } catch {
+    return 'system';
+  }
+};
+
+// `system` is the theme of an app with no choice: it removes the key.
+export const saveTheme = (storage, theme) => {
+  try {
+    if (THEMES.includes(theme)) storage.setItem(THEME_KEY, theme);
+    else storage.removeItem(THEME_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // Set after the walkthrough of the first start closed. It is a preference of the device, as the
 // hand is.
 export const ONBOARDED_KEY = 'shopping.onboarded';

@@ -1,33 +1,26 @@
 :root {
+  /* `light-dark()` takes its value from `color-scheme`: the phone, or Tema in Ajustes. */
   color-scheme: light dark;
-  --bg: #f6f7f5;
-  --surface: #ffffff;
-  --text: #17201b;
-  --muted: #667069;
-  --line: #dfe4e0;
-  --accent: #1f7a4d;
-  --accent-text: #ffffff;
-  --accent-soft: #e2f2ea;
-  --danger: #b3261e;
-  --toast-bg: #17201b;
-  --toast-text: #ffffff;
+  --bg: light-dark(#f6f7f5, #111613);
+  --surface: light-dark(#ffffff, #1a211d);
+  --text: light-dark(#17201b, #e8ede9);
+  --muted: light-dark(#667069, #98a39c);
+  --line: light-dark(#dfe4e0, #2c3530);
+  --accent: light-dark(#1f7a4d, #5fc491);
+  --accent-text: light-dark(#ffffff, #0c1a12);
+  --accent-soft: light-dark(#e2f2ea, #1d3327);
+  --danger: light-dark(#b3261e, #f2b8b5);
+  --toast-bg: light-dark(#17201b, #e8ede9);
+  --toast-text: light-dark(#ffffff, #17201b);
   --nav-height: 60px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111613;
-    --surface: #1a211d;
-    --text: #e8ede9;
-    --muted: #98a39c;
-    --line: #2c3530;
-    --accent: #5fc491;
-    --accent-text: #0c1a12;
-    --accent-soft: #1d3327;
-    --danger: #f2b8b5;
-    --toast-bg: #e8ede9;
-    --toast-text: #17201b;
-  }
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 * {

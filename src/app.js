@@ -15,6 +15,8 @@ import {
   saveLanguage,
   loadHand,
   saveHand,
+  loadTheme,
+  saveTheme,
   loadOnboarded,
   saveOnboarded,
   hasStoredState,
@@ -64,6 +66,10 @@ let t = translator(lang);
 // The hand that holds the phone: `left` mirrors the controls, in styles.css.
 let hand = storage ? loadHand(storage) : 'right';
 document.documentElement.dataset.hand = hand;
+
+// The colours: `light` or `dark` override the phone, in styles.css; `system` follows it.
+let theme = storage ? loadTheme(storage) : 'system';
+document.documentElement.dataset.theme = theme;
 
 // `t` for a text that names a list: the `list` parameter is a list id.
 const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
@@ -1195,6 +1201,12 @@ const applyLanguage = () => {
   );
   const handOption = (value, key) => el('option', { value, textContent: t(key), selected: value === hand });
   $('hand').replaceChildren(handOption('right', 'settings.handRight'), handOption('left', 'settings.handLeft'));
+  const themeOption = (value, key) => el('option', { value, textContent: t(key), selected: value === theme });
+  $('theme').replaceChildren(
+    themeOption('system', 'settings.automatic'),
+    themeOption('light', 'settings.themeLight'),
+    themeOption('dark', 'settings.themeDark'),
+  );
   render();
   renderOnboarding();
 };
@@ -1674,6 +1686,13 @@ $('hand').addEventListener('change', (event) => {
   // With no storage the choice lasts until the app closes.
   if (storage) saveHand(storage, hand);
   document.documentElement.dataset.hand = hand;
+});
+
+$('theme').addEventListener('change', (event) => {
+  theme = ['light', 'dark'].includes(event.target.value) ? event.target.value : 'system';
+  // With no storage the choice lasts until the app closes.
+  if (storage) saveTheme(storage, theme);
+  document.documentElement.dataset.theme = theme;
 });
 
 $('update').addEventListener('click', async () => {

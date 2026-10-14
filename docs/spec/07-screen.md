@@ -23,8 +23,8 @@ of it.
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has five groups: **Copia de seguridad** (**Exportar copia**, **Importar
-  copia**), **Idioma**, **Mano**, **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
+- **NAV-6** `Ajustes` has six groups: **Copia de seguridad** (**Exportar copia**, **Importar
+  copia**), **Idioma**, **Mano**, **Tema**, **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
   two buttons of the backup has an icon before its text: an arrow that goes up out of a tray for
   the export, an arrow that goes down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
@@ -113,6 +113,15 @@ of it.
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3).
 
+## Theme
+
+- **NAV-15** **Tema** of `Ajustes` has three values: `Automático`, `Claro` and `Oscuro`. An app
+  with no choice uses `Automático`.
+- **NAV-16** `Automático` follows the phone (A11Y-6). `Claro` shows the light colours and `Oscuro`
+  the dark colours, whatever the phone uses. A change shows at once, with no restart.
+- **NAV-17** The choice is stored in `shopping.theme`. `Automático` removes the key. It is a
+  preference of the device, not a part of the state: `Deshacer` and an import do not change it.
+
 ## Onboarding
 
 - **ONB-1** The walkthrough is a layer over the full app, with four pages in this order:
@@ -160,7 +169,8 @@ of it.
 - **A11Y-4** The side menu that is closed is `inert`.
 - **A11Y-5** With `prefers-reduced-motion: reduce`, the rows and the groups change with no
   animation.
-- **A11Y-6** With `prefers-color-scheme: dark`, the app shows dark colours.
+- **A11Y-6** With `prefers-color-scheme: dark` and **Tema** at `Automático`, the app shows dark
+  colours (NAV-16).
 - **A11Y-7** The header, the bottom bar, the `+` button and the sheets keep out of the safe-area
   insets of the phone. The view resizes when the keyboard opens.
 - **A11Y-8** User text goes into the page as `textContent`, never as markup.
