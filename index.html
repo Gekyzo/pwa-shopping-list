@@ -17,20 +17,20 @@
         <h1 id="title"></h1>
         <p id="subtitle"></p>
       </div>
-      <button id="search-button" class="tool" type="button" data-i18n-attr="aria-label:search.label" aria-controls="search" hidden>
+      <button id="search-button" class="button icon" type="button" data-i18n-attr="aria-label:search.label" aria-controls="search" hidden>
         <svg class="icon" aria-hidden="true"><use href="icons.svg#search"/></svg>
       </button>
-      <button id="arrange-button" class="tool" type="button" data-i18n-attr="aria-label:arrange.label" aria-haspopup="dialog" hidden>
+      <button id="arrange-button" class="button icon" type="button" data-i18n-attr="aria-label:arrange.label" aria-haspopup="dialog" hidden>
         <svg class="icon" aria-hidden="true"><use href="icons.svg#filter"/></svg>
       </button>
-      <button id="trip-button" class="tool" type="button" data-i18n-attr="aria-label:trip.menu" aria-haspopup="dialog" aria-controls="trip" hidden>
+      <button id="trip-button" class="button icon" type="button" data-i18n-attr="aria-label:trip.menu" aria-haspopup="dialog" aria-controls="trip" hidden>
         <svg class="icon" aria-hidden="true"><use href="icons.svg#more"/></svg>
       </button>
     </header>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden>
       <span id="toast-text"></span>
-      <button id="toast-undo" type="button" data-i18n="toast.undo" hidden></button>
+      <button id="toast-undo" class="button strong" type="button" data-i18n="toast.undo" hidden></button>
     </div>
 
     <main>
@@ -38,7 +38,7 @@
 
       <div id="shop-done" class="empty" hidden>
         <p id="shop-done-text"></p>
-        <button id="shop-done-next" class="primary" type="button"></button>
+        <button id="shop-done-next" class="button primary" type="button"></button>
       </div>
 
       <div id="search" class="search" hidden>
@@ -49,18 +49,18 @@
 
       <div id="empty" class="empty" hidden>
         <p id="empty-text"></p>
-        <button id="bring" class="primary" type="button" hidden></button>
+        <button id="bring" class="button primary" type="button" hidden></button>
       </div>
 
       <div id="menu-actions" class="menu-actions" hidden>
-        <button id="menu-fill" class="primary" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg><span data-i18n="menu.fill"></span></button>
-        <button id="menu-clear" type="button" data-i18n="menu.clear"></button>
+        <button id="menu-fill" class="button primary" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg><span data-i18n="menu.fill"></span></button>
+        <button id="menu-clear" class="button outline" type="button" data-i18n="menu.clear"></button>
       </div>
 
       <section id="finish" class="banner" hidden>
         <strong data-i18n="finish.question"></strong>
         <p id="finish-text"></p>
-        <button id="finish-button" class="primary" type="button" data-i18n="finish.button"></button>
+        <button id="finish-button" class="button primary wide" type="button" data-i18n="finish.button"></button>
       </section>
 
       <section id="settings" class="settings" hidden>
@@ -92,7 +92,7 @@
         </div>
         <footer class="about">
           <p><span id="version"></span><span id="version-status" role="status" data-status="checking"><svg data-for="checking" class="icon small" aria-hidden="true"><use href="icons.svg#refresh"/></svg><svg data-for="current" class="icon small" aria-hidden="true"><use href="icons.svg#check-circle"/></svg><svg data-for="outdated" class="icon small" aria-hidden="true"><use href="icons.svg#download"/></svg><svg data-for="unknown" class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span id="version-status-text"></span></span></p>
-          <button id="update" type="button" hidden><span data-i18n="settings.update"></span></button>
+          <button id="update" class="button accent" type="button" hidden><span data-i18n="settings.update"></span></button>
         </footer>
       </section>
     </main>
@@ -129,7 +129,7 @@
         <div class="grab"></div>
         <div class="add-row">
           <input id="add-name" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
-          <button id="add-submit" class="primary" type="submit"></button>
+          <button id="add-submit" class="button primary" type="submit"></button>
         </div>
         <div id="seg" class="seg">
           <button type="button" data-target="active" data-i18n="add.today"></button>
@@ -185,7 +185,7 @@
         <input id="meal-query" type="search" maxlength="80" autocomplete="off" enterkeyhint="search" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search">
         <p id="meal-empty" class="meal-empty" hidden></p>
         <div id="meal-chips" class="chips"></div>
-        <button id="meal-remove" class="danger" type="button" data-i18n="menu.remove" hidden></button>
+        <button id="meal-remove" class="button outline danger wide" type="button" data-i18n="menu.remove" hidden></button>
       </div>
     </div>
 
@@ -201,7 +201,7 @@
         <p id="edit-empty" class="hint" data-i18n="shops.empty" hidden></p>
         <div class="add-row">
           <input id="edit-shop" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
-          <button class="primary" type="submit" data-i18n="shops.add"></button>
+          <button class="button primary" type="submit" data-i18n="shops.add"></button>
         </div>
         <datalist id="edit-shops"></datalist>
       </form>
@@ -256,8 +256,8 @@
       </div>
       <div id="onboarding-dots" class="onboarding-dots" role="img"></div>
       <div class="onboarding-actions">
-        <button id="onboarding-skip" type="button" data-i18n="onboarding.skip"></button>
-        <button id="onboarding-next" class="primary" type="button"></button>
+        <button id="onboarding-skip" class="button outline quiet" type="button" data-i18n="onboarding.skip"></button>
+        <button id="onboarding-next" class="button primary" type="button"></button>
       </div>
     </div>
 

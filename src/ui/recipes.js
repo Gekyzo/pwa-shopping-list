@@ -22,7 +22,7 @@ const sendToList = (recipe) => {
 const productNode = (recipe, product) => {
   const remove = el('button', {
     type: 'button',
-    className: 'more',
+    className: 'button icon',
     textContent: '✕',
     onclick: () =>
       apply(recipes.removeRecipeProduct(state, recipe.id, product), {
@@ -64,7 +64,7 @@ const productForm = (recipe) => {
   });
   const form = el('form', { className: 'product-form', autocomplete: 'off' }, [
     input,
-    el('button', { type: 'submit', className: 'primary', textContent: t('add.submit') }),
+    el('button', { type: 'submit', className: 'button primary', textContent: t('add.submit') }),
   ]);
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -82,7 +82,7 @@ const editLink = (recipe) => {
 };
 
 const linkNode = (recipe) => {
-  const link = el('a', { className: 'recipe-link', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
+  const link = el('a', { className: 'button icon accent', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
     icon('link'),
   ]);
   link.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
@@ -111,7 +111,7 @@ export const recipeNode = (recipe) => {
     );
     name.setAttribute('aria-expanded', String(open));
   }
-  const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon('cart-add')]);
+  const send = el('button', { type: 'button', className: 'button primary icon', onclick: () => sendToList(recipe) }, [icon('cart-add')]);
   send.setAttribute('aria-label', t('recipe.send', { name: recipe.name }));
   const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
   const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);
@@ -119,7 +119,7 @@ export const recipeNode = (recipe) => {
     const remove = actionButton(
       t('recipe.delete'),
       () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
-      'danger',
+      { variant: 'outline danger' },
     );
     const link = actionButton(t('recipe.link'), () => editLink(recipe));
     node.append(el('div', { className: 'actions' }, [actionButton(t('recipe.rename'), () => startRename(recipe)), link, remove]));

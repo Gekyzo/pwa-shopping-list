@@ -18,7 +18,7 @@ const nameParts = (item) => {
 
 // The recurrent mark of a row. It shows on each item and a tap changes it.
 const recurrentToggle = (item) => {
-  const button = el('button', { type: 'button', className: 'recur', onclick: () => apply(store.toggleRecurrent(state, item.id)) }, [
+  const button = el('button', { type: 'button', className: 'button icon toggle', onclick: () => apply(store.toggleRecurrent(state, item.id)) }, [
     icon('repeat'),
   ]);
   button.setAttribute('aria-pressed', String(item.recurrent));
