@@ -2,22 +2,15 @@ import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
 import * as menu from '#menu';
-import { reached, settle } from '#swipe';
 import { direction, slideDirection, slideTo } from '#sections';
 import { switchModule, visibleSections } from '#modules';
 import { PARTICLE_SIZE, makeParticles, particleAt } from '#particles';
 import { PAGES, isLast, step } from '#onboarding';
-import { dropIndex, moveTo, shifts } from '#reorder';
 import { exportJson, exportFilename, importJson, saveOnboarded } from '#storage';
 import { parseVersion, versionStatus } from '#version';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
 import {
   ARRIVAL_MS,
-  SIDE_BUTTON,
-  DRAG_START,
-  HOLD_MS,
-  EDGE,
-  EDGE_STEP,
   LEAVE_MS,
   REFRESH_MS,
   CHECK_MS,
@@ -54,9 +47,12 @@ import {
   setModules,
   setNavMotion,
 } from '#ui/context';
-import { inList, viewState, found, searching, isOpen, arrangeChoices, shownGroup, endSearch } from '#ui/view';
-import { collapse, expand, pendingRows, rowTops, slide, leave, groupOnlyRows } from '#ui/motion';
-import { renameInput, moreButton, actionButton, icon, ICONS, iconButton, startRename } from '#ui/controls';
+import { inList, viewState, found, searching, arrangeChoices, shownGroup, endSearch } from '#ui/view';
+import { collapse, expand, pendingRows, rowTops, slide, groupOnlyRows } from '#ui/motion';
+import { renameInput, moreButton, actionButton, icon, ICONS, startRename } from '#ui/controls';
+import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
+import { reorder, endReorder, bind as bindDrag } from '#ui/drag';
+import { itemNode, boughtSection, groupHead, moveRow } from '#ui/rows';
 
 // True while the groups of Actual close, before the list becomes flat.
 let ungrouping = false;
@@ -68,371 +64,6 @@ const finishTrip = (undoText = t('toast.finished')) => {
 };
 
 // Rows
-
-const openEdit = (item) => {
-  Object.assign(ui, { editId: item.id, openId: null, editingId: null });
-  $('edit-name').value = item.name;
-  $('edit-quantity').value = item.quantity;
-  $('edit-shop').value = '';
-  render();
-};
-
-const closeEdit = () => {
-  ui.editId = null;
-  render();
-};
-
-// The name of a row, with its quantity after it and the shops of the item below it when the list
-// is not by shop.
-const nameParts = (item) => {
-  const quantity = item.quantity ? [' ', el('span', { className: 'qty', textContent: item.quantity })] : [];
-  const parts = [el('span', {}, [item.name, ...quantity])];
-  if (item.shops.length && shownGroup() !== 'shop') parts.push(el('small', { textContent: item.shops.join(' · ') }));
-  return parts;
-};
-
-// The recurrent mark of a row. It shows on each item and a tap changes it.
-const recurrentToggle = (item) => {
-  const button = el('button', { type: 'button', className: 'recur', onclick: () => apply(store.toggleRecurrent(state, item.id)) }, [
-    icon(ICONS.repeat),
-  ]);
-  button.setAttribute('aria-pressed', String(item.recurrent));
-  button.setAttribute('aria-label', t('row.always', { name: item.name }));
-  return button;
-};
-
-const moveAction = (item) => {
-  const toNext = item.list === 'active';
-  const params = { list: toNext ? 'next' : 'active', name: item.name };
-  return iconButton(toNext ? ICONS.calendar : ICONS.cart, say('row.moveTo', params), () =>
-    apply(store.moveItem(state, item.id), { undoText: say('toast.movedTo', params) }));
-};
-
-const deleteAction = (item) =>
-  iconButton(
-    ICONS.trash,
-    t('row.delete', { name: item.name }),
-    () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
-    'danger',
-  );
-
-const activeRow = (item, groupId) => {
-  const toggle = () => {
-    if (item.bought) {
-      apply(store.toggleBought(state, item.id));
-      return;
-    }
-    checkbox.checked = true;
-    // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
-    leave(item, () => apply(store.toggleBought(state, item.id), { undoText: t('toast.bought', { name: item.name }) }));
-  };
-  const checkbox = el('input', { type: 'checkbox', checked: item.bought, onchange: toggle });
-  checkbox.setAttribute('aria-label', t('row.bought', { name: item.name }));
-  const name = el('button', { type: 'button', className: 'name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
-  const row = [checkbox, name];
-  if (item.bought && !item.recurrent && isOn('next')) {
-    const again = el('button', {
-      type: 'button',
-      className: item.again ? 'pill' : 'pill ghost',
-      textContent: `${item.again ? '✓' : '+'} ${t('list.next')}`,
-      onclick: () => apply(store.toggleAgain(state, item.id)),
-    });
-    again.setAttribute('aria-pressed', String(item.again));
-    again.setAttribute('aria-label', t('row.again', { name: item.name }));
-    row.push(again);
-  }
-  row.push(recurrentToggle(item));
-  const end = isOn('next') ? [moveAction(item), deleteAction(item)] : [deleteAction(item)];
-  return { row, end, right: { run: toggle, icon: item.bought ? ICONS.undo : ICONS.check } };
-};
-
-const nextRow = (item, groupId) => {
-  const pending = item.list === 'next';
-  const name = el('button', { type: 'button', className: 'name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
-  const row = [name];
-  if (!pending) row.push(el('span', { className: 'pill', textContent: t('row.boughtToday') }));
-  row.push(recurrentToggle(item));
-  if (pending) {
-    const right = { run: () => moveAction(item).onclick(), icon: ICONS.cart };
-    return { row, end: [moveAction(item), deleteAction(item)], right };
-  }
-  const params = { list: 'next', name: item.name };
-  const remove = iconButton(ICONS.calendarOff, say('row.removeFrom', params), () =>
-    apply(store.removeFromNext(state, item.id), { undoText: say('toast.removedFrom', params) }));
-  return { row, end: [remove], right: null };
-};
-
-const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
-
-const moveRow = (row, x) => {
-  row.style.transform = x ? `translateX(${x}px)` : '';
-};
-
-// The lifted row of a manual order, or null.
-let reorder = null;
-
-// Lets a horizontal drag of the row show the side menu behind it, or run the action of the slide
-// to the right. `settle` and `reached` decide the result.
-const bindSwipe = (row, widths, item, groupId, right) => {
-  let drag = null;
-  row.addEventListener('pointerdown', (event) => {
-    if (event.button !== 0 || ui.editingId === item.id) return;
-    const base = shift(isOpen(item.id, groupId) ? ui.openSide : null, widths);
-    drag = { x: event.clientX, y: event.clientY, base, active: false };
-  });
-  row.addEventListener('pointermove', (event) => {
-    if (!drag || reorder) return;
-    const dx = event.clientX - drag.x;
-    const dy = event.clientY - drag.y;
-    if (!drag.active) {
-      if (Math.abs(dy) > DRAG_START && Math.abs(dy) >= Math.abs(dx)) drag = null;
-      if (!drag || Math.abs(dx) < DRAG_START) return;
-      drag.active = true;
-      row.setPointerCapture(event.pointerId);
-      row.classList.add('dragging');
-    }
-    // From a closed row, a row with an action follows the finger to the right up to its width.
-    const max = right && drag.base === 0 ? row.offsetWidth : 0;
-    drag.at = Math.max(-widths.end, Math.min(max, drag.base + dx));
-    moveRow(row, drag.at);
-    row.parentNode.classList.toggle('armed', drag.at > 0 && reached(drag.at, row.offsetWidth));
-  });
-  const finish = (event) => {
-    if (!drag) return;
-    const { active, x, at, base } = drag;
-    drag = null;
-    if (!active) return;
-    // The click that follows a drag must not tick the item.
-    guardClick();
-    row.parentNode.classList.remove('armed');
-    if (right && base === 0 && reached(at, row.offsetWidth)) {
-      Object.assign(ui, { openId: null, openSide: null, editingId: null });
-      // The row slides back while the tick closes it (ROW-9), or before the render of a move.
-      row.classList.remove('dragging');
-      moveRow(row, 0);
-      right.run();
-      return;
-    }
-    const open = isOpen(item.id, groupId) ? ui.openSide : null;
-    const side = settle(event.clientX - x, widths, open);
-    Object.assign(ui, { openId: side ? item.id : null, openSide: side, openGroup: groupId, editingId: null });
-    ui.settleFrom = { id: item.id, groupId, x: at };
-    render();
-  };
-  row.addEventListener('pointerup', finish);
-  row.addEventListener('pointercancel', finish);
-};
-
-// The rows that a row can move among: its group, or the rows to buy of a flat list.
-// Null for a row that does not move.
-const scopeOf = (item, groupId) => {
-  if (ui.view === 'next') return item.list === 'next' ? groupId ?? 'next' : null;
-  return item.bought ? null : groupId ?? 'rest';
-};
-
-// Puts the lifted row below the pointer and opens the gap among the other rows of its scope.
-const placeLifted = () => {
-  const { rows, from, tops, heights } = reorder;
-  const last = rows.length - 1;
-  const raw = reorder.pointerY - reorder.startY + scroller.scrollTop - reorder.scrollStart;
-  const dy = Math.max(tops[0] - tops[from], Math.min(tops[last] + heights[last] - tops[from] - heights[from], raw));
-  reorder.to = dropIndex(tops, heights, from, tops[from] + dy);
-  const offsets = shifts(rows.length, from, reorder.to, heights[from]);
-  rows.forEach((row, index) => {
-    const y = index === from ? dy : offsets[index];
-    row.style.transform = y ? `translateY(${y}px)` : '';
-  });
-};
-
-// Scrolls the list while the pointer is near its top or its bottom edge.
-const edgeScroll = () => {
-  if (!reorder) return;
-  const { top, bottom } = scroller.getBoundingClientRect();
-  const step = reorder.pointerY < top + EDGE ? -EDGE_STEP : reorder.pointerY > bottom - EDGE ? EDGE_STEP : 0;
-  if (step) {
-    scroller.scrollTop += step;
-    placeLifted();
-  }
-  reorder.frame = requestAnimationFrame(edgeScroll);
-};
-
-const lift = (node, rowNode, pointerId, y) => {
-  // The rows of the scope that are next to the row. In the name order a row of Próxima that was
-  // bought today can be between two rows of the scope; a move does not pass it.
-  const inScope = (row) => row?.dataset.scope === node.dataset.scope;
-  const rows = [node];
-  for (let row = node.previousElementSibling; inScope(row); row = row.previousElementSibling) rows.unshift(row);
-  for (let row = node.nextElementSibling; inScope(row); row = row.nextElementSibling) rows.push(row);
-  if (rows.length < 2) return;
-  try {
-    rowNode.setPointerCapture(pointerId);
-  } catch {
-    // The pointer is gone: without its release the move would never end.
-    return;
-  }
-  const rects = rows.map((row) => row.getBoundingClientRect());
-  const from = rows.indexOf(node);
-  reorder = {
-    node,
-    pointerId,
-    rows,
-    from,
-    to: from,
-    tops: rects.map((rect) => rect.top + scroller.scrollTop),
-    heights: rects.map((rect) => rect.height),
-    startY: y,
-    pointerY: y,
-    scrollStart: scroller.scrollTop,
-  };
-  node.classList.add('lifted');
-  navigator.vibrate?.(10);
-  reorder.frame = requestAnimationFrame(edgeScroll);
-};
-
-// Ends a move. `keep` writes the new order; without it the row goes back.
-const endReorder = (keep) => {
-  if (!reorder) return;
-  const { node, rows, from, to, frame } = reorder;
-  cancelAnimationFrame(frame);
-  reorder = null;
-  // The click that follows a drop must not tick the item.
-  guardClick();
-  // A render in the time of the move built new rows: the order of these rows is stale.
-  const moved = keep && to !== from && node.isConnected;
-  const before = moved ? rowTops() : null;
-  node.classList.remove('lifted');
-  rows.forEach((row) => {
-    row.style.transform = '';
-  });
-  if (!moved) return;
-  const ids = moveTo(rows.map((row) => row.dataset.id), from, to);
-  // A move in the name order changes the order to the custom one.
-  const undoText = t(state.sort === 'name' ? 'toast.orderCustom' : 'toast.order');
-  if (apply(store.reorderItems(state, ids), { undoText })) slide(before);
-};
-
-// Lets a hold of a finger, or a vertical drag of the mouse, lift the row and move it in its scope.
-const bindReorder = (rowNode, node, item, groupId) => {
-  let pending = null;
-  // True after a hold of the finger: the click of its release must not tick the item.
-  let held = false;
-  const forget = () => {
-    clearTimeout(pending?.timer);
-    pending = null;
-  };
-  const start = (pointerId, y) => {
-    if (!node.isConnected) return;
-    held = true;
-    lift(node, rowNode, pointerId, y);
-  };
-  rowNode.addEventListener('pointerdown', (event) => {
-    forget();
-    held = false;
-    // The rows that a search hides have no place on the screen, so a search stops the move.
-    if (event.button !== 0 || reorder || !node.dataset.scope || searching()) return;
-    if (ui.editingId === item.id || isOpen(item.id, groupId)) return;
-    const mouse = event.pointerType === 'mouse';
-    const { pointerId, clientX: x, clientY: y } = event;
-    const timer = mouse
-      ? null
-      : setTimeout(() => {
-          pending = null;
-          start(pointerId, y);
-        }, HOLD_MS);
-    pending = { x, y, mouse, timer, pointerId };
-  });
-  rowNode.addEventListener('pointermove', (event) => {
-    // A release out of the row gives it no pointerup: a later hover must not lift it.
-    if (pending && (event.pointerId !== pending.pointerId || !(event.buttons & 1))) forget();
-    if (pending) {
-      const dx = Math.abs(event.clientX - pending.x);
-      const dy = Math.abs(event.clientY - pending.y);
-      if (Math.max(dx, dy) < DRAG_START) return;
-      const { mouse, y } = pending;
-      forget();
-      // A finger that moves before the hold ends scrolls or swipes. The mouse needs no hold.
-      if (mouse && dy > dx) lift(node, rowNode, event.pointerId, y);
-    }
-    if (reorder?.node !== node || reorder.pointerId !== event.pointerId) return;
-    reorder.pointerY = event.clientY;
-    placeLifted();
-  });
-  const finish = (keep) => (event) => {
-    forget();
-    if (held) guardClick();
-    held = false;
-    if (reorder?.node === node && reorder.pointerId === event.pointerId) endReorder(keep);
-  };
-  rowNode.addEventListener('pointerup', finish(true));
-  rowNode.addEventListener('pointercancel', finish(false));
-  // A long press of a finger must not open the menu of the browser.
-  rowNode.addEventListener('contextmenu', (event) => {
-    if (event.pointerType !== 'mouse') event.preventDefault();
-  });
-};
-
-// A side action closes the row, then runs.
-const closing = (button) => {
-  const run = button.onclick;
-  button.onclick = () => {
-    ui.openId = null;
-    run();
-  };
-  return button;
-};
-
-const itemNode = (item, groupId = null) => {
-  const { row, end, right } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item, groupId);
-  const open = isOpen(item.id, groupId) ? ui.openSide : null;
-  const widths = { start: 0, end: end.length * SIDE_BUTTON };
-  const rowNode = el('div', { className: 'row' }, row);
-  const layers = [el('div', { className: 'side end', inert: open !== 'end' }, end.map(closing))];
-  // The slide to the right shows its action below the row.
-  if (right) layers.unshift(el('div', { className: 'backdrop' }, [icon(right.icon)]));
-  const from = ui.settleFrom;
-  if (from && from.id === item.id && from.groupId === groupId) {
-    // Start where the drag ended, then move to the settled place with the CSS transition.
-    moveRow(rowNode, from.x);
-    requestAnimationFrame(() => requestAnimationFrame(() => moveRow(rowNode, shift(open, widths))));
-  } else moveRow(rowNode, shift(open, widths));
-  bindSwipe(rowNode, widths, item, groupId, right);
-  const classes = [
-    'item',
-    item.bought && ui.view === 'active' && 'bought',
-    ui.flashId === item.id && 'flash',
-    ui.leaving.has(item.id) && 'gone',
-  ];
-  const node = el('li', { className: classes.filter(Boolean).join(' ') }, [
-    el('div', { className: open ? 'swipe open' : 'swipe' }, [...layers, rowNode]),
-  ]);
-  node.dataset.id = item.id;
-  const scope = scopeOf(item, groupId);
-  if (scope) node.dataset.scope = scope;
-  bindReorder(rowNode, node, item, groupId);
-  return node;
-};
-
-// The ticked items of Actual, behind one row that opens and closes them. A search keeps them open,
-// so that a ticked match is in view.
-const boughtSection = (bought) => {
-  const open = ui.boughtOpen || searching();
-  const button = el('button', {
-    type: 'button',
-    disabled: searching(),
-    onclick: () => {
-      ui.boughtOpen = !ui.boughtOpen;
-      render();
-    },
-  }, [
-    el('span', { textContent: t('count.bought', { count: bought.length }) }),
-    el('span', { className: 'chevron', textContent: open ? '▾' : '▸' }),
-  ]);
-  button.setAttribute('aria-expanded', String(open));
-  return [el('li', { className: 'section' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
-};
-
-const groupHead = (title, count) =>
-  el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
 
 // The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
 const shopNodes = (list) => {
@@ -497,37 +128,6 @@ const renderArrange = () => {
   document.querySelectorAll('#arrange-sort button').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.sort === state.sort));
   });
-};
-
-// A tap on a chip of the edit sheet adds or removes that shop for the item of the sheet.
-const toggleShop = (shop) => {
-  const item = state.items.find((entry) => entry.id === ui.editId);
-  if (!item) return;
-  const has = item.shops.some((own) => own.toLowerCase() === shop.toLowerCase());
-  apply((has ? shops.removeItemShop : shops.addItemShop)(state, item.id, shop));
-};
-
-// The edit sheet of one item: its name, and each shop in use as a chip, pressed when the item has it.
-const renderEdit = () => {
-  const item = state.items.find((entry) => entry.id === ui.editId);
-  $('edit').hidden = !item;
-  if (!item) return;
-  $('edit-title').textContent = t('edit.title');
-  $('edit-form').setAttribute('aria-label', t('edit.title'));
-  if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
-  if (document.activeElement !== $('edit-quantity')) $('edit-quantity').value = item.quantity;
-  const own = new Set(item.shops.map((shop) => shop.toLowerCase()));
-  const names = shops.shopNames(state);
-  // The chips stay when the shops in use do not change: the blur of the name field renders
-  // between the press and the click of a chip, and a new chip would lose that click.
-  const box = $('edit-chips');
-  if ([...box.children].map((chip) => chip.textContent).join('\n') !== names.join('\n')) {
-    box.replaceChildren(...names.map((shop) => el('button', { type: 'button', textContent: shop, onclick: () => toggleShop(shop) })));
-  }
-  for (const chip of box.children) chip.setAttribute('aria-pressed', String(own.has(chip.textContent.toLowerCase())));
-  $('edit-empty').hidden = names.length > 0;
-  // The field completes a typed name with a shop in use.
-  $('edit-shops').replaceChildren(...shops.shopSuggestions(state, item.id).map((shop) => el('option', { value: shop })));
 };
 
 // Recipes
@@ -1442,14 +1042,7 @@ document.addEventListener(
   true,
 );
 
-// A lifted row follows the finger, so the list must not scroll below it.
-document.addEventListener(
-  'touchmove',
-  (event) => {
-    if (reorder) event.preventDefault();
-  },
-  { passive: false },
-);
+bindDrag();
 
 $('query').addEventListener('input', (event) => {
   Object.assign(ui, { query: event.target.value, editingId: null, openId: null });
@@ -1488,48 +1081,7 @@ $('arrange-veil').addEventListener('click', () => {
   ui.arrangeOpen = false;
   render();
 });
-$('edit-veil').addEventListener('click', closeEdit);
-// The sheet stays open after a new shop, so that an item gets two shops in one visit.
-const submitShop = () => {
-  if (apply(shops.addItemShop(state, ui.editId, $('edit-shop').value))) $('edit-shop').value = '';
-};
-$('edit-form').addEventListener('submit', (event) => {
-  event.preventDefault();
-  submitShop();
-});
-// A suggestion that the user picks replaces the text of the field: it adds the shop at once.
-$('edit-shop').addEventListener('input', (event) => {
-  const picked = event.inputType === 'insertReplacementText' || event.inputType === undefined;
-  if (picked && shops.shopSuggestions(state, ui.editId).includes(event.target.value)) submitShop();
-});
-// A field of the edit sheet saves when it loses the focus. An error keeps the old value in the field.
-const bindEditField = (input, field, operation) => {
-  const save = () => {
-    const item = state.items.find((entry) => entry.id === ui.editId);
-    if (!item || input.value.trim() === item[field]) {
-      if (item) input.value = item[field];
-      return;
-    }
-    if (!apply(operation(state, item.id, input.value))) input.value = item[field];
-  };
-  input.addEventListener('blur', save);
-  input.addEventListener('keydown', (event) => {
-    // Enter saves the field; it does not submit the form, which adds a shop.
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      input.blur();
-    }
-    // Escape puts the value back and keeps the sheet open.
-    if (event.key === 'Escape') {
-      event.stopPropagation();
-      const item = state.items.find((entry) => entry.id === ui.editId);
-      if (item) input.value = item[field];
-      input.blur();
-    }
-  });
-};
-bindEditField($('edit-name'), 'name', store.renameItem);
-bindEditField($('edit-quantity'), 'quantity', store.setQuantity);
+bindEdit();
 // The sheet stays open after a choice, so that the group and the order change in one visit.
 document.querySelectorAll('#arrange-group button').forEach((button) => {
   button.addEventListener('click', () => {
