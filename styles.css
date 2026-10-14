@@ -1161,6 +1161,22 @@ button.pill {
   font-weight: 600;
 }
 
+/* The title of a part of a sheet, below a line that separates it from the part above. */
+.sheet h2.part {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+/* With no shop in use, the hint takes the place of the chips, aligned with the title. */
+#edit-chips:empty {
+  display: none;
+}
+
+#edit-empty {
+  padding: 10px 0;
+}
+
 .sheet .edit-name {
   width: 100%;
   height: 48px;
