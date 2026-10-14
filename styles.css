@@ -903,6 +903,12 @@ button.pill {
   font-weight: 700;
 }
 
+.dust {
+  position: fixed;
+  z-index: 40;
+  pointer-events: none;
+}
+
 .badge-count {
   position: absolute;
   top: 6px;

@@ -24,6 +24,8 @@ Rules of `src/modules.js`, and of its use in `src/app.js`.
 - **MOD-7** With `Próxima` off, the recurrent mark and **Terminar compra** keep their rules
   (TRIP-2): a ticked recurrent item comes back to `Actual`.
 - **MOD-8** The walkthrough does not change with the modules.
-- **MOD-9** A switch animates the bottom bar in 250 ms. The button of a section that goes fades
-  out and its place closes; the button of a section that comes back opens its place and fades in.
-  The start of the app and `prefers-reduced-motion: reduce` show the bar with no animation.
+- **MOD-9** A switch animates the bottom bar. The button of a section that goes breaks into dust
+  in 900 ms: particles of 2 px leave from its left edge to its right edge, go up and to the right
+  and fade out, and its place closes in 300 ms from the first third of the dust. The button of a
+  section that comes back opens its place in 300 ms, then its particles come in and settle. The
+  start of the app and `prefers-reduced-motion: reduce` show the bar with no animation.
