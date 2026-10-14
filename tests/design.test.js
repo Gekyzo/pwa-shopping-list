@@ -186,3 +186,14 @@ test('a variant is used with its block in the page (DS-3)', () => {
 test('a className of the code is a literal, so that the test can read it', () => {
   assert.deepEqual(scripts.filter(([, js]) => /className:\s*`|\.className\s*=/.test(js)).map(([file]) => file), []);
 });
+
+test('the catalogue page reads each view of src/ui/ (DS-7)', () => {
+  const page = existsSync(new URL('designs/page.js', root)) ? read('designs/page.js') : '';
+  const listed = (page.match(/const UI = \[([^\]]*)\]/)?.[1] ?? '').match(/'([\w-]+)'/g)?.map((name) => name.slice(1, -1)) ?? [];
+  assert.deepEqual(listed.sort(), scripts.map(([file]) => file.replace(/\.js$/, '')).sort());
+});
+
+test('the design test reads the classes of the item rows, states included', () => {
+  const rows = classesInScript(read('src/ui/rows.js'));
+  for (const name of ['item-row', 'bought', 'flash', 'gone', 'item-row-swipe', 'open']) assert.ok(rows.includes(name), name);
+});
