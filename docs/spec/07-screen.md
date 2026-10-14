@@ -122,6 +122,7 @@ of it.
   | Header | Ring, text, buttons | Buttons, text, ring |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
+  | Buttons of `Menú` | **Vaciar menú**, **Llenar la cesta** | **Llenar la cesta**, **Vaciar menú** |
 
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).

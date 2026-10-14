@@ -9,7 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- In `Menú`, **Llenar la cesta** is at the side of the hand: at the right with `Derecha`, at
+  the left with `Izquierda`.
 
 ## 1.0.19 - 2026-10-14
 
