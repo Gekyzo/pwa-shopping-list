@@ -34,7 +34,9 @@ their products in one action.
   recipe, in the order of the recipes; the chip of the recipe of the meal is on. A tap on a chip
   puts that recipe in the meal and closes the sheet. A meal with a recipe also has **Quitar**,
   with `Deshacer` and the message `Quitada del menú: «name».`
-- **MENU-12** Below the week, **Llenar la cesta** fills `Actual` (MENU-5). Its message is
+- **MENU-12** Below the week, **Llenar la cesta** fills `Actual` (MENU-5). It has the cart with a
+  plus of the send of a recipe (REC-17) before its text. When the two buttons do not fit on one
+  line, **Vaciar menú** goes below. Its message is
   `Menú: N añadidos, N ya estaban.` with `Deshacer`. A fill that changes nothing shows `Menú:
   todo estaba ya en la lista.` and keeps the `Deshacer` that is still on the screen.
 - **MENU-13** **Vaciar menú** empties the menu, with `Deshacer` and the message `Menú vaciado.`
