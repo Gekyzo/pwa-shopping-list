@@ -752,6 +752,16 @@ button.pill {
   text-align: left;
 }
 
+.group:has(> #export) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.group:has(> #export) button + button {
+  border-top: 0;
+  border-left: 1px solid var(--line);
+}
+
 .group svg {
   flex: none;
   color: var(--muted);

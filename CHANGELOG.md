@@ -9,7 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- `Exportar copia` and `Importar copia` in `Ajustes` are side by side.
 
 ## 1.0.14 - 2026-10-14
 
