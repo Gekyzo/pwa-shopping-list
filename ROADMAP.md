@@ -4,6 +4,7 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 ## Planned
 
+- **Screens BG**. Add subtle-corner/ghost illustrations to the screens.
 - **Reset setting**. Reset app data, with confirmation.
 - **Responsive**. Adapt screens to different phones sizes, models, viewport,foldable phones, tablets.
 - **Optional reagents**. Make reagents optional.
