@@ -13,8 +13,6 @@ no change for the user has no entry.
 
 - In `Ajustes`, the buttons of **Copia de seguridad** are **Exportar** and **Importar**, so their
   text stays on one line.
-- In `Ajustes`, each language of **Idioma** has its flag before its name. Català has a white
-  flag, as Android has no flag of Catalonia.
 - The walkthrough shows the app icon at the top of its pages.
 
 ## 1.0.22 - 2026-10-14
