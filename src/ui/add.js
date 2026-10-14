@@ -35,14 +35,14 @@ export const renderSheet = () => {
   const text = $('add-name').value.trim();
   const rows = store.searchItems(state, text).map((item) =>
     el('li', {}, [
-      el('button', { type: 'button', onclick: () => useExisting(item) }, [
-        el('span', { className: 'suggestion-name', textContent: item.name }),
-        el('span', { className: 'suggestion-where', textContent: whereText(item) }),
+      el('button', { type: 'button', className: 'list-row', onclick: () => useExisting(item) }, [
+        el('span', { className: 'list-row-text', textContent: item.name }),
+        el('span', { className: 'list-row-meta', textContent: whereText(item) }),
       ]),
     ]));
   if (text && !store.findByName(state, text)) {
     rows.push(
-      el('li', {}, [el('button', { type: 'button', className: 'create', textContent: t('add.createNamed', { name: text }), onclick: submitAdd })]),
+      el('li', {}, [el('button', { type: 'button', className: 'list-row accent', textContent: t('add.createNamed', { name: text }), onclick: submitAdd })]),
     );
   }
   $('suggestions').replaceChildren(...rows);

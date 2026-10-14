@@ -31,7 +31,7 @@ export const expand = (nodes) => {
   });
 };
 
-export const pendingRows = () => [...$('items').querySelectorAll('.item:not(.bought)')].filter((node) => node.dataset.id);
+export const pendingRows = () => [...$('items').querySelectorAll('.item-row:not(.bought)')].filter((node) => node.dataset.id);
 
 // The top of each row to buy. The key has the place of the row among the rows of its item,
 // so that the first row of an item of two recipes is the row of the flat list.
@@ -63,7 +63,7 @@ export const slide = (before) => {
 export const leave = (item, done) => {
   if (ui.leaving.has(item.id)) return;
   ui.leaving.add(item.id);
-  const rows = [...$('items').querySelectorAll('.item')].filter((node) => node.dataset.id === item.id);
+  const rows = [...$('items').querySelectorAll('.item-row')].filter((node) => node.dataset.id === item.id);
   collapse(rows, () => {
     ui.leaving.delete(item.id);
     done();
@@ -73,7 +73,7 @@ export const leave = (item, done) => {
 // The rows that the flat list does not have: the group heads, and each row after the first of an item.
 export const groupOnlyRows = () => {
   const seen = new Set();
-  return [...$('items').querySelectorAll('.group-head, .item:not(.bought)')].filter((node) => {
+  return [...$('items').querySelectorAll('.group-head, .item-row:not(.bought)')].filter((node) => {
     if (node.classList.contains('group-head')) return true;
     const again = seen.has(node.dataset.id);
     seen.add(node.dataset.id);

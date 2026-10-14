@@ -45,7 +45,7 @@
         <input id="query" class="input raised" type="search" maxlength="80" autocomplete="off" enterkeyhint="search">
       </div>
 
-      <ul id="items" class="items"></ul>
+      <ul id="items" class="item-list"></ul>
 
       <div id="empty" class="empty-state" hidden>
         <p id="empty-text"></p>
@@ -65,33 +65,33 @@
 
       <section id="settings" class="settings" hidden>
         <h2 data-i18n="settings.backup"></h2>
-        <div class="group">
-          <button id="export" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#export"/></svg><span data-i18n="settings.export"></span></button>
-          <button id="import" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#import"/></svg><span data-i18n="settings.import"></span></button>
+        <div class="list-group pair">
+          <button id="export" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#export"/></svg><span data-i18n="settings.export"></span></button>
+          <button id="import" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#import"/></svg><span data-i18n="settings.import"></span></button>
         </div>
         <h2 data-i18n="settings.language"></h2>
-        <div class="group">
+        <div class="list-group">
           <select id="language" class="select" data-i18n-attr="aria-label:settings.language"></select>
         </div>
         <h2 data-i18n="settings.hand"></h2>
-        <div class="group">
+        <div class="list-group">
           <select id="hand" class="select" data-i18n-attr="aria-label:settings.hand"></select>
         </div>
         <h2 data-i18n="settings.theme"></h2>
-        <div class="group">
+        <div class="list-group">
           <select id="theme" class="select" data-i18n-attr="aria-label:settings.theme"></select>
         </div>
         <h2 data-i18n="settings.modules"></h2>
-        <div class="group">
+        <div class="list-group">
           <label class="switch"><span data-i18n="list.next"></span><input class="switch-input" type="checkbox" role="switch" data-module="next"></label>
           <label class="switch"><span data-i18n="settings.moduleRecipes"></span><input class="switch-input" type="checkbox" role="switch" data-module="recipes"></label>
         </div>
         <h2 data-i18n="settings.help"></h2>
-        <div class="group">
-          <button id="show-onboarding" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#help"/></svg><span data-i18n="settings.onboarding"></span></button>
+        <div class="list-group">
+          <button id="show-onboarding" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#help"/></svg><span data-i18n="settings.onboarding"></span></button>
         </div>
         <footer class="about">
-          <p><span id="version"></span><span id="version-status" role="status" data-status="checking"><svg data-for="checking" class="icon small" aria-hidden="true"><use href="icons.svg#refresh"/></svg><svg data-for="current" class="icon small" aria-hidden="true"><use href="icons.svg#check-circle"/></svg><svg data-for="outdated" class="icon small" aria-hidden="true"><use href="icons.svg#download"/></svg><svg data-for="unknown" class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span id="version-status-text"></span></span></p>
+          <p class="about-line"><span id="version"></span><span id="version-status" class="version-status" role="status" data-status="checking"><svg data-for="checking" class="icon small" aria-hidden="true"><use href="icons.svg#refresh"/></svg><svg data-for="current" class="icon small" aria-hidden="true"><use href="icons.svg#check-circle"/></svg><svg data-for="outdated" class="icon small" aria-hidden="true"><use href="icons.svg#download"/></svg><svg data-for="unknown" class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span id="version-status-text" class="version-status-text"></span></span></p>
           <button id="update" class="button accent" type="button" hidden><span data-i18n="settings.update"></span></button>
         </footer>
       </section>
@@ -135,7 +135,7 @@
           <button class="segment" type="button" data-target="active" data-i18n="add.today"></button>
           <button class="segment" type="button" data-target="next" data-i18n="add.later"></button>
         </div>
-        <ul id="suggestions" class="suggestions" data-i18n-attr="aria-label:add.existing"></ul>
+        <ul id="suggestions" class="list-group plain" data-i18n-attr="aria-label:add.existing"></ul>
       </form>
     </div>
 
