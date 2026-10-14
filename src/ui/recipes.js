@@ -84,7 +84,7 @@ const productForm = (recipe) => {
 
 const linkNode = (recipe) => {
   const link = el('a', { className: 'button icon accent', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
-    icon('link'),
+    icon('link', 'small'),
   ]);
   link.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
   return link;
