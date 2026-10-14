@@ -87,12 +87,15 @@ test('each message key that the specification names is in the Spanish catalog', 
 // The rows of the module table: `src/name.js`, its duty, the modules that it may import.
 const moduleRows = section('12-engineering.md', 'Modules')
   .split('\n')
-  .map((row) => row.match(/^\| `src\/([\w-]+)\.js` \|[^|]*\| ([^|]*) \|$/))
+  .map((row) => row.match(/^\| `src\/([\w/-]+)\.js` \|[^|]*\| ([^|]*) \|$/))
   .filter(Boolean)
   .map(([, name, allowed]) => ({ name, allowed }));
 
 test('the module table has each module of src', () => {
-  const modules = list('src/', '.js').map((file) => file.slice(0, -'.js'.length));
+  const modules = readdirSync(new URL('src/', root), { recursive: true })
+    .filter((file) => file.endsWith('.js') && !file.startsWith('locales'))
+    .map((file) => file.slice(0, -'.js'.length).replaceAll('\\', '/'))
+    .sort();
   assert.deepEqual(moduleRows.map(({ name }) => name).sort(), modules);
 });
 

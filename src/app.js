@@ -6,176 +6,57 @@ import { reached, settle } from '#swipe';
 import { direction, slideDirection, slideTo } from '#sections';
 import { switchModule, visibleSections } from '#modules';
 import { PARTICLE_SIZE, makeParticles, particleAt } from '#particles';
-import { PAGES, isLast, shouldShow, step } from '#onboarding';
+import { PAGES, isLast, step } from '#onboarding';
 import { dropIndex, moveTo, shifts } from '#reorder';
-import {
-  load,
-  save,
-  exportJson,
-  exportFilename,
-  importJson,
-  loadLanguage,
-  saveLanguage,
-  loadHand,
-  saveHand,
-  loadShopLists,
-  saveShopLists,
-  loadTheme,
-  saveTheme,
-  loadModules,
-  saveModules,
-  loadOnboarded,
-  saveOnboarded,
-  hasStoredState,
-} from '#storage';
+import { exportJson, exportFilename, importJson, saveOnboarded } from '#storage';
 import { parseVersion, versionStatus } from '#version';
-import { LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
+import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
+import {
+  ARRIVAL_MS,
+  SIDE_BUTTON,
+  DRAG_START,
+  HOLD_MS,
+  EDGE,
+  EDGE_STEP,
+  LEAVE_MS,
+  REFRESH_MS,
+  CHECK_MS,
+  $,
+  el,
+  storage,
+  scroller,
+  chosen,
+  lang,
+  t,
+  hand,
+  theme,
+  shopLists,
+  off,
+  navMotion,
+  state,
+  ui,
+  undoState,
+  clickGuardUntil,
+  isOn,
+  say,
+  textOf,
+  showToast,
+  hideToast,
+  setRender,
+  render,
+  commit,
+  apply,
+  guardClick,
+  setLanguage,
+  setHand,
+  setTheme,
+  setShopLists,
+  setModules,
+  setNavMotion,
+} from '#ui/context';
 
-const UNDO_MS = 5000;
-const MESSAGE_MS = 3000;
-// The app opens by itself at an arrival, so its message stays longer.
-const ARRIVAL_MS = 10000;
-// Width of one button of a side menu of a row, the same as in styles.css.
-const SIDE_BUTTON = 64;
-const DRAG_START = 10;
-const CLICK_GUARD_MS = 350;
-// The hold of a finger that lifts a row for a manual order.
-const HOLD_MS = 400;
-// The distance from an edge of the list where a lifted row scrolls it, and the scroll of one frame.
-const EDGE = 56;
-const EDGE_STEP = 8;
-const LEAVE_MS = 200;
-// The wait for the service worker to load the new deploy.
-const REFRESH_MS = 15000;
-// The wait for the deployed version: a weak network can leave the request open.
-const CHECK_MS = 8000;
-
-const $ = (id) => document.getElementById(id);
-
-const el = (tag, props = {}, children = []) => {
-  const node = Object.assign(document.createElement(tag), props);
-  node.append(...children);
-  return node;
-};
-
-const storage = (() => {
-  try {
-    return window.localStorage;
-  } catch {
-    return null;
-  }
-})();
-
-// The choice of the user, or null to follow the phone.
-let chosen = storage ? loadLanguage(storage, LANGUAGES) : null;
-let lang = resolveLanguage(navigator.languages, chosen);
-let t = translator(lang);
-// The hand that holds the phone: `left` mirrors the controls, in styles.css.
-let hand = storage ? loadHand(storage) : 'right';
-document.documentElement.dataset.hand = hand;
-
-// The colours: `light` or `dark` override the phone, in styles.css; `system` follows it.
-let theme = storage ? loadTheme(storage) : 'system';
-// `hide` takes the row of shop lists away from Actual and Próxima.
-let shopLists = storage ? loadShopLists(storage) : 'show';
-document.documentElement.dataset.theme = theme;
-
-// The modules that the user turned off (MOD-2).
-let off = storage ? loadModules(storage) : [];
-const isOn = (id) => !off.includes(id);
-// Set by a switch of Módulos, so that the render that follows animates the bottom bar (MOD-9).
-let navMotion = false;
-
-// `t` for a text that names a list: the `list` parameter is a list id.
-const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
-
-// The text of a message of a pure module.
-const textOf = ({ key, params }) => say(key, params);
-
-// Read before the state. A stored state, valid or not, means that the install is not new.
-const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredState(storage) }) : false;
-
-let state = storage ? load(storage) : store.emptyState();
-// `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
-const ui = {
-  view: 'active',
-  editingId: null,
-  openId: null,
-  flashId: null,
-  sheetOpen: false,
-  // The sheet of the header button, with the group and the order of the list.
-  arrangeOpen: false,
-  // True while the sheet of the trip button of Actual is open.
-  tripOpen: false,
-  // The item whose edit sheet is open, or null.
-  editId: null,
-  // The meal whose sheet is open, as { day, meal }, or null.
-  mealOpen: null,
-  mealQuery: '',
-  // The page of the walkthrough in view, or null while the walkthrough is closed.
-  onboarding: firstStart ? 0 : null,
-  target: 'active',
-  boughtOpen: false,
-  openRecipeId: null,
-  // The text of the search field, which Recetas shows always and a list shows on demand. It is
-  // not stored.
-  query: '',
-  // True while the search field of Actual or of Próxima is open.
-  searchOpen: false,
-  // The shop list of each section: null for Todas, '' for Sin tienda, or a shop. Not stored.
-  shop: { active: null, next: null },
-  // The group where the row actions are open: a recipe id, `shop:<name>`, or null out of a group.
-  openGroup: null,
-  // The side menu of the open item row: 'end' (slide left) or null.
-  openSide: null,
-  // Where the last drag left its row, so that the next render moves the row from there.
-  settleFrom: null,
-  focusProduct: false,
-  // The ids of the ticked items whose rows are closing. A render in that time builds them closed.
-  leaving: new Set(),
-  // `running` is the version of the cached shell; `latest` is the deployed one, read when Ajustes opens.
-  version: { running: null, latest: null, checking: false },
-};
-let toastTimer = null;
 // True while the groups of Actual close, before the list becomes flat.
 let ungrouping = false;
-let undoState = null;
-
-const showToast = (text, { undo = null, ms = undo ? UNDO_MS : MESSAGE_MS } = {}) => {
-  clearTimeout(toastTimer);
-  undoState = undo;
-  $('toast-text').textContent = text;
-  $('toast-undo').hidden = !undo;
-  $('toast').hidden = false;
-  toastTimer = setTimeout(hideToast, ms);
-};
-
-const hideToast = () => {
-  clearTimeout(toastTimer);
-  undoState = null;
-  $('toast').hidden = true;
-};
-
-const commit = (next) => {
-  state = next;
-  const saved = storage !== null && save(storage, state);
-  render();
-  return saved;
-};
-
-// Applies a store operation. `undoText` makes the change reversible for a few seconds.
-const apply = (result, { undoText = null } = {}) => {
-  if (result.error) {
-    showToast(textOf(result.error));
-    return false;
-  }
-  const previous = state;
-  const saved = commit(result.state);
-  if (!saved) showToast(t('error.notSaved'));
-  else if (undoText) showToast(undoText, { undo: previous });
-  else hideToast();
-  return true;
-};
 
 const finishTrip = (undoText = t('toast.finished')) => {
   if (!apply(store.startNewShopping(state), { undoText })) return;
@@ -445,9 +326,6 @@ const moveRow = (row, x) => {
   row.style.transform = x ? `translateX(${x}px)` : '';
 };
 
-let clickGuardUntil = 0;
-
-const scroller = document.querySelector('main');
 // The lifted row of a manual order, or null.
 let reorder = null;
 
@@ -483,7 +361,7 @@ const bindSwipe = (row, widths, item, groupId, right) => {
     drag = null;
     if (!active) return;
     // The click that follows a drag must not tick the item.
-    clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+    guardClick();
     row.parentNode.classList.remove('armed');
     if (right && base === 0 && reached(at, row.offsetWidth)) {
       Object.assign(ui, { openId: null, openSide: null, editingId: null });
@@ -576,7 +454,7 @@ const endReorder = (keep) => {
   cancelAnimationFrame(frame);
   reorder = null;
   // The click that follows a drop must not tick the item.
-  clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+  guardClick();
   // A render in the time of the move built new rows: the order of these rows is stale.
   const moved = keep && to !== from && node.isConnected;
   const before = moved ? rowTops() : null;
@@ -639,7 +517,7 @@ const bindReorder = (rowNode, node, item, groupId) => {
   });
   const finish = (keep) => (event) => {
     forget();
-    if (held) clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+    if (held) guardClick();
     held = false;
     if (reorder?.node === node && reorder.pointerId === event.pointerId) endReorder(keep);
   };
@@ -1238,7 +1116,7 @@ const renderShopChips = () => {
   $('shop-chips').replaceChildren(...buttons);
 };
 
-const render = () => {
+const renderAll = () => {
   // A render builds new rows, so a lifted row loses its pointer and gets no release.
   endReorder(false);
   // The item of the edit sheet can go while the sheet is open: an undo, or an import.
@@ -1290,6 +1168,7 @@ const render = () => {
   renderEdit();
   renderMeal();
 };
+setRender(renderAll);
 
 // The time of the dust of a button, and of the close or the open of its place in the bar.
 const DUST_MS = 900;
@@ -1688,7 +1567,7 @@ document.addEventListener('pointerup', (event) => {
   sectionSlide = null;
   if (!view) return;
   // The click that follows a slide must not press the button below the finger.
-  clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+  guardClick();
   showView(view);
 });
 document.addEventListener('pointercancel', () => {
@@ -1714,7 +1593,7 @@ $('onboarding').addEventListener('pointerup', (event) => {
   onboardingSlide = null;
   if (!way) return;
   // The click that follows a slide must not press the button below the finger.
-  clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+  guardClick();
   turnOnboarding(way);
 });
 $('onboarding').addEventListener('pointercancel', () => {
@@ -1903,8 +1782,7 @@ const chipFrames = (row) => {
 // Mostrar opens the row that the render brings back.
 const changeShopLists = (choice) => {
   if (choice === shopLists) return;
-  shopLists = choice;
-  if (storage) saveShopLists(storage, shopLists);
+  setShopLists(choice);
   const row = $('shop-chips');
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (choice === 'show' || row.hidden || still) {
@@ -1996,39 +1874,23 @@ $('export').addEventListener('click', () => {
 $('import').addEventListener('click', () => $('import-file').click());
 
 $('language').addEventListener('change', (event) => {
-  chosen = event.target.value || null;
-  // With no storage the choice lasts until the app closes.
-  if (storage) saveLanguage(storage, chosen);
-  lang = resolveLanguage(navigator.languages, chosen);
-  t = translator(lang);
+  setLanguage(event.target.value || null);
   applyLanguage();
 });
 
-$('hand').addEventListener('change', (event) => {
-  hand = event.target.value === 'left' ? 'left' : 'right';
-  // With no storage the choice lasts until the app closes.
-  if (storage) saveHand(storage, hand);
-  document.documentElement.dataset.hand = hand;
-});
+$('hand').addEventListener('change', (event) => setHand(event.target.value));
 
-$('theme').addEventListener('change', (event) => {
-  theme = ['light', 'dark'].includes(event.target.value) ? event.target.value : 'system';
-  // With no storage the choice lasts until the app closes.
-  if (storage) saveTheme(storage, theme);
-  document.documentElement.dataset.theme = theme;
-});
+$('theme').addEventListener('change', (event) => setTheme(event.target.value));
 
 document.querySelectorAll('[data-module]').forEach((box) => {
   box.addEventListener('change', () => {
-    off = switchModule(off, box.dataset.module, box.checked);
-    // With no storage the choice lasts until the app closes.
-    if (storage) saveModules(storage, off);
+    setModules(switchModule(off, box.dataset.module, box.checked));
     // The switch-off of Próxima brings its items to Actual (MOD-6).
     const result = box.dataset.module === 'next' && !box.checked ? store.bringAllToActual(state) : { state };
-    navMotion = true;
+    setNavMotion(true);
     if (result.state !== state) apply(result, { undoText: say('toast.brought', { list: 'next' }) });
     else render();
-    navMotion = false;
+    setNavMotion(false);
   });
 });
 

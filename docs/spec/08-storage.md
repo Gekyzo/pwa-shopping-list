@@ -14,7 +14,7 @@ Rules of `src/storage.js`, and of its use in `src/app.js`.
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.modules` | The ids of the modules that the user turned off, as JSON ([14-modules.md](14-modules.md), MOD-2) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
-| Cache API | `shopping-shell-v10` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-shell-v11` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
 
