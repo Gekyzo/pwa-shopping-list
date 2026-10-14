@@ -805,6 +805,14 @@ const renderArrange = () => {
   });
 };
 
+// A tap on a chip of the edit sheet adds or removes that shop for the item of the sheet.
+const toggleShop = (shop) => {
+  const item = state.items.find((entry) => entry.id === ui.editId);
+  if (!item) return;
+  const has = item.shops.some((own) => own.toLowerCase() === shop.toLowerCase());
+  apply((has ? shops.removeItemShop : shops.addItemShop)(state, item.id, shop));
+};
+
 // The edit sheet of one item: its name, and each shop in use as a chip, pressed when the item has it.
 const renderEdit = () => {
   const item = state.items.find((entry) => entry.id === ui.editId);
@@ -815,15 +823,15 @@ const renderEdit = () => {
   $('edit-form').setAttribute('aria-label', title);
   if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
   const own = new Set(item.shops.map((shop) => shop.toLowerCase()));
-  const chips = shops.shopNames(state).map((shop) => {
-    const has = own.has(shop.toLowerCase());
-    const change = has ? shops.removeItemShop : shops.addItemShop;
-    const chip = el('button', { type: 'button', textContent: shop, onclick: () => apply(change(state, item.id, shop)) });
-    chip.setAttribute('aria-pressed', String(has));
-    return chip;
-  });
-  $('edit-chips').replaceChildren(...chips);
-  $('edit-empty').hidden = chips.length > 0;
+  const names = shops.shopNames(state);
+  // The chips stay when the shops in use do not change: the blur of the name field renders
+  // between the press and the click of a chip, and a new chip would lose that click.
+  const box = $('edit-chips');
+  if ([...box.children].map((chip) => chip.textContent).join('\n') !== names.join('\n')) {
+    box.replaceChildren(...names.map((shop) => el('button', { type: 'button', textContent: shop, onclick: () => toggleShop(shop) })));
+  }
+  for (const chip of box.children) chip.setAttribute('aria-pressed', String(own.has(chip.textContent.toLowerCase())));
+  $('edit-empty').hidden = names.length > 0;
   // The field completes a typed name with a shop in use.
   $('edit-shops').replaceChildren(...shops.shopSuggestions(state, item.id).map((shop) => el('option', { value: shop })));
 };
