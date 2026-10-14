@@ -39,6 +39,11 @@ test('the walkthrough has one drawing for each page, in the order of the pages',
   assert.deepEqual(drawings, PAGES);
 });
 
+test('the walkthrough shows the app icon first, out of the page that changes, with no text', () => {
+  const [, layer = ''] = body.match(/<div id="onboarding"[^>]*>\s*([\s\S]*?)<div id="onboarding-page"/) ?? [];
+  assert.match(layer, /^<img class="onboarding-logo" src="\.\/icons\/icon-192\.png" alt="">\s*$/);
+});
+
 test('the walkthrough has Saltar and the next button in one bar at the bottom, Saltar first', () => {
   const [bar = ''] = body.match(/<div class="onboarding-actions">[\s\S]*?<\/div>/) ?? [];
   const buttons = [...bar.matchAll(/<button id="([^"]+)"/g)].map(([, id]) => id);

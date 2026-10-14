@@ -50,6 +50,7 @@
     --arrow: 6px; /* the arrow of a select */
     --nav-height: 60px;
     --art-width: 240px; /* the drawings of the walkthrough */
+    --logo: 56px; /* the app icon at the top of the walkthrough */
 
     --shadow-s: 0 1px 3px rgb(0 0 0 / 0.3);
     --shadow-l: 0 6px 18px rgb(0 0 0 / 0.25);
@@ -1502,6 +1503,7 @@
   /* @component onboarding
      @scope onboarding
      @summary The walkthrough of the first start, over the full app: a page, the dots, the buttons.
+     @part onboarding-logo     The app icon at the top. It stays while the pages change.
      @part onboarding-page     The page in view: its drawing, its title and its text.
      @part onboarding-title    The title of a page.
      @part onboarding-text     The text of a page.
@@ -1526,6 +1528,13 @@
     /* A horizontal slide changes the page, so the browser must not take it. */
     touch-action: pan-y;
     overflow: hidden auto;
+  }
+
+  .onboarding-logo {
+    flex: none;
+    align-self: center;
+    width: var(--logo);
+    height: var(--logo);
   }
 
   .onboarding-page {
