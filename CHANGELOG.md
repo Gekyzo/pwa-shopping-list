@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.23 - 2026-10-14
+
 ### Changed
 
 - In `Ajustes`, the buttons of **Copia de seguridad** are **Exportar** and **Importar**, so their
