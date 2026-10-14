@@ -48,7 +48,7 @@ test('the walkthrough has Saltar and the next button in one bar at the bottom, S
 
 test('the trip button opens a sheet from the bottom, with a veil, and the header has no dropdown', () => {
   const [layer = ''] = body.match(/<div id="trip" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>/) ?? [];
-  assert.match(layer, /<div id="trip-veil" class="veil">/);
+  assert.match(layer, /<div id="trip-veil" class="sheet-veil">/);
   assert.match(layer, /<div class="sheet" role="dialog"/);
   assert.match(layer, /<button id="finish-menu"/);
   assert.match(body, /<button id="trip-button"[^>]*aria-haspopup="dialog"[^>]*aria-controls="trip"/);
@@ -57,7 +57,7 @@ test('the trip button opens a sheet from the bottom, with a veil, and the header
 
 test('the edit sheet has a veil, a dialog, the name and quantity fields and the shops', () => {
   const [layer = ''] = body.match(/<div id="edit" class="sheet-layer"[\s\S]*?<\/form>\s*<\/div>/) ?? [];
-  assert.match(layer, /<div id="edit-veil" class="veil">/);
+  assert.match(layer, /<div id="edit-veil" class="sheet-veil">/);
   assert.match(layer, /<form id="edit-form" class="sheet" role="dialog"/);
   assert.match(layer, /<input id="edit-name"[^>]*maxlength="80"/);
   assert.match(layer, /<input id="edit-quantity"[^>]*maxlength="20"/);
@@ -65,7 +65,7 @@ test('the edit sheet has a veil, a dialog, the name and quantity fields and the 
   assert.match(layer, /<label class="field"><input id="edit-name"[^>]*><span class="field-label" data-i18n="edit.name"><\/span><\/label>/);
   assert.match(layer, /<label class="field"><input id="edit-quantity"[^>]*><span class="field-label" data-i18n="edit.quantity"><\/span><\/label>/);
   // A titled part after the fields holds the shops of the item.
-  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<h2 class="part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster">/);
+  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<h2 class="sheet-title part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster">/);
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);
 });

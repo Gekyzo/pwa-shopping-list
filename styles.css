@@ -731,23 +731,6 @@
     padding: var(--space-half) var(--space-3) var(--space-3) calc(var(--tap) + var(--space-2));
   }
 
-  .hint {
-    margin: 0;
-    padding: var(--space-3) var(--space-4);
-    color: var(--muted);
-    font-size: var(--text-s);
-  }
-
-  .empty {
-    margin: calc(var(--space-6) * 2) var(--space-6);
-    color: var(--muted);
-    text-align: center;
-  }
-
-  .empty .button {
-    margin-top: var(--space-2);
-  }
-
   /* The menu: one row for each day, with its two meals side by side. */
   .day {
     padding: var(--space-2) var(--space-3) var(--space-3);
@@ -808,23 +791,6 @@
   #menu-fill {
     grid-row: 1;
     grid-column: 2;
-  }
-
-  .meal-empty {
-    margin: var(--space-3) 0;
-    color: var(--muted);
-  }
-
-  .banner {
-    margin: var(--space-4) var(--space-3);
-    padding: var(--space-4) var(--space-4);
-    border-radius: var(--radius-l);
-    background: var(--accent-soft);
-  }
-
-  .banner p {
-    margin: var(--space-1) 0 var(--space-3);
-    font-size: var(--text-s);
   }
 
   /* Recipes */
@@ -1112,32 +1078,16 @@
     display: none;
   }
 
-  /* @component fab
-     @summary The add button, fixed above the bottom bar at the side of the hand.
-     @example <button class="fab" type="button" style="position: static">+</button> */
-  .fab {
-    position: fixed;
-    right: var(--space-4);
-    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--space-4));
-    z-index: 5;
-    width: 56px;
-    height: 56px;
-    border-radius: var(--radius-l);
-    background: var(--accent);
-    color: var(--accent-text);
-    font-size: var(--text-xl);
-    line-height: 1;
-    box-shadow: var(--shadow-l);
-  }
-
-  .dust {
-    position: fixed;
-    z-index: 40;
-    pointer-events: none;
-  }
-
-  /* Add sheet */
-
+  /* @component sheet
+     @summary A panel that comes up from the bottom over a veil. The layer is hidden to close it.
+     @part sheet-layer  The fixed layer that holds the veil and the sheet.
+     @part sheet-veil   The dark veil; a tap on it closes the sheet.
+     @part sheet-grab   The handle at the top.
+     @part sheet-title  A title of the sheet or of one of its parts.
+     @variant part      On sheet-title: a title below a line that separates it from the part above.
+     @part entry        A choice of the sheet: a name, with its effect below it.
+     @part entry-note   The effect of an entry.
+     @example <div class="sheet" style="border-radius: var(--radius-xl)"><div class="sheet-grab"></div><h2 class="sheet-title">Agrupar por</h2><button class="entry" type="button"><span>Terminar compra</span><small class="entry-note">Lo comprado sale de la lista</small></button><h2 class="sheet-title part">Tiendas</h2></div> */
   .sheet-layer {
     position: fixed;
     inset: 0;
@@ -1153,14 +1103,14 @@
     pointer-events: none;
   }
 
-  .veil {
+  .sheet-veil {
     position: absolute;
     inset: 0;
     background: var(--scrim);
     transition: opacity var(--motion) ease-out;
   }
 
-  .sheet-layer[hidden] .veil {
+  .sheet-layer[hidden] .sheet-veil {
     opacity: 0;
   }
 
@@ -1169,7 +1119,7 @@
   }
 
   @starting-style {
-    .veil {
+    .sheet-veil {
       opacity: 0;
     }
 
@@ -1188,7 +1138,7 @@
     transition: transform var(--motion) ease-out;
   }
 
-  .grab {
+  .sheet-grab {
     width: 40px;
     height: 4px;
     margin: 0 auto var(--space-3);
@@ -1196,8 +1146,21 @@
     background: var(--line);
   }
 
-  /* An entry of a sheet: a name, with its effect below it. */
-  .sheet .entry {
+  .sheet-title {
+    margin: var(--space-2) 0 0;
+    color: var(--muted);
+    font-size: var(--text-s);
+    font-weight: var(--weight-strong);
+  }
+
+  /* A title below a line that separates its part from the part above. */
+  .sheet-title.part {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+
+  .entry {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -1211,71 +1174,15 @@
     text-align: left;
   }
 
-  .sheet .entry small {
+  .entry-note {
     color: var(--muted);
     font-size: var(--text-xs);
   }
 
-  .sheet h2 {
-    margin: var(--space-2) 0 0;
-    color: var(--muted);
-    font-size: var(--text-s);
-    font-weight: var(--weight-strong);
-  }
-
-  /* The title of a part of a sheet, below a line that separates it from the part above. */
-  .sheet h2.part {
-    margin-top: var(--space-5);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--line);
-  }
-
-  /* With no shop in use, the hint takes the place of the chips, aligned with the title. */
-  #edit-chips:empty {
-    display: none;
-  }
-
-  #edit-empty {
-    padding: var(--space-3) 0;
-  }
-
-  .suggestions {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .suggestions button {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    width: 100%;
-    min-height: 48px;
-    padding: 0 var(--space-half);
-    border-top: 1px solid var(--line);
-    border-radius: 0;
-    text-align: left;
-  }
-
-  .suggestion-name {
-    flex: 1;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  .suggestion-where {
-    flex: none;
-    color: var(--muted);
-    font-size: var(--text-xs);
-  }
-
-  .suggestions .create {
-    color: var(--accent);
-    font-weight: var(--weight-strong);
-  }
-
-  /* Messages */
-
+  /* @component toast
+     @summary A short message at the bottom, with an optional action. With a sheet open it goes to the top.
+     @part toast-text  The message.
+     @example <div class="toast" role="status" style="position: static"><span class="toast-text">Leche comprado</span><button class="button strong" type="button">Deshacer</button></div> */
   .toast {
     position: fixed;
     /* Above the add button, in reach of the thumb. */
@@ -1314,8 +1221,103 @@
     bottom: auto;
   }
 
-  .toast span {
+  .toast-text {
     flex: 1;
+  }
+
+  /* @component banner
+     @summary A message in the flow of a list, with its action below it.
+     @part banner-text  The text below the title.
+     @example <section class="banner"><strong>¿Has terminado?</strong><p class="banner-text">Todo está comprado.</p><button class="button primary wide" type="button">Terminar compra</button></section> */
+  .banner {
+    margin: var(--space-4) var(--space-3);
+    padding: var(--space-4) var(--space-4);
+    border-radius: var(--radius-l);
+    background: var(--accent-soft);
+  }
+
+  .banner-text {
+    margin: var(--space-1) 0 var(--space-3);
+    font-size: var(--text-s);
+  }
+
+  /* @component empty-state
+     @summary The text of a list or a part with nothing in it, with an optional action.
+     @variant inline  In a sheet: aligned with the content, with less space.
+     @example <div class="empty-state"><p>La lista está vacía.</p><button class="button primary" type="button">Traer de Próxima</button></div>
+     @example <p class="empty-state inline">Ninguna receta coincide.</p> */
+  .empty-state {
+    margin: calc(var(--space-6) * 2) var(--space-6);
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .empty-state .button {
+    margin-top: var(--space-2);
+  }
+
+  .empty-state.inline {
+    margin: var(--space-3) 0;
+    text-align: left;
+  }
+
+  /* @component fab
+     @summary The add button, fixed above the bottom bar at the side of the hand.
+     @example <button class="fab" type="button" style="position: static">+</button> */
+  .fab {
+    position: fixed;
+    right: var(--space-4);
+    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--space-4));
+    z-index: 5;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-l);
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: var(--text-xl);
+    line-height: 1;
+    box-shadow: var(--shadow-l);
+  }
+
+  .dust {
+    position: fixed;
+    z-index: 40;
+    pointer-events: none;
+  }
+
+  .suggestions {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .suggestions button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    min-height: 48px;
+    padding: 0 var(--space-half);
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    text-align: left;
+  }
+
+  .suggestion-name {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .suggestion-where {
+    flex: none;
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  .suggestions .create {
+    color: var(--accent);
+    font-weight: var(--weight-strong);
   }
 
   /* Onboarding: the pages of the first start, over the full app. */
@@ -1482,6 +1484,10 @@
     margin: var(--space-3) 0;
   }
 
+  .cluster:empty {
+    display: none;
+  }
+
   .cluster.scroll {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -1528,4 +1534,16 @@
   .product-form {
     padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
   }
+
+  /* @component hint
+     @scope list
+     @summary A line of help below a list.
+     @example <p class="hint">Un artículo con ↻ activo vuelve aquí al comprarlo.</p> */
+  .hint {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
 }

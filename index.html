@@ -29,14 +29,14 @@
     </header>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden>
-      <span id="toast-text"></span>
+      <span id="toast-text" class="toast-text"></span>
       <button id="toast-undo" class="button strong" type="button" data-i18n="toast.undo" hidden></button>
     </div>
 
     <main>
       <div id="shop-chips" class="cluster scroll shop-lists" role="group" data-i18n-attr="aria-label:shops.lists" hidden></div>
 
-      <div id="shop-done" class="empty" hidden>
+      <div id="shop-done" class="empty-state" hidden>
         <p id="shop-done-text"></p>
         <button id="shop-done-next" class="button primary" type="button"></button>
       </div>
@@ -47,7 +47,7 @@
 
       <ul id="items" class="items"></ul>
 
-      <div id="empty" class="empty" hidden>
+      <div id="empty" class="empty-state" hidden>
         <p id="empty-text"></p>
         <button id="bring" class="button primary" type="button" hidden></button>
       </div>
@@ -59,7 +59,7 @@
 
       <section id="finish" class="banner" hidden>
         <strong data-i18n="finish.question"></strong>
-        <p id="finish-text"></p>
+        <p id="finish-text" class="banner-text"></p>
         <button id="finish-button" class="button primary wide" type="button" data-i18n="finish.button"></button>
       </section>
 
@@ -124,9 +124,9 @@
     </nav>
 
     <div id="sheet" class="sheet-layer" hidden>
-      <div id="veil" class="veil"></div>
+      <div id="veil" class="sheet-veil"></div>
       <form id="add" class="sheet" autocomplete="off">
-        <div class="grab"></div>
+        <div class="sheet-grab"></div>
         <div class="input-row">
           <input id="add-name" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
           <button id="add-submit" class="button primary" type="submit"></button>
@@ -140,11 +140,11 @@
     </div>
 
     <div id="arrange" class="sheet-layer" hidden>
-      <div id="arrange-veil" class="veil"></div>
+      <div id="arrange-veil" class="sheet-veil"></div>
       <div class="sheet" role="dialog" data-i18n-attr="aria-label:arrange.label">
-        <div class="grab"></div>
+        <div class="sheet-grab"></div>
         <div id="arrange-group">
-          <h2 data-i18n="arrange.groupBy"></h2>
+          <h2 class="sheet-title" data-i18n="arrange.groupBy"></h2>
           <div class="segmented">
             <button class="segment" type="button" data-group="recipe" data-i18n="nav.recipes"></button>
             <button class="segment" type="button" data-group="shop" data-i18n="arrange.shops"></button>
@@ -152,14 +152,14 @@
           </div>
         </div>
         <div id="arrange-sort">
-          <h2 data-i18n="arrange.sortBy"></h2>
+          <h2 class="sheet-title" data-i18n="arrange.sortBy"></h2>
           <div class="segmented">
             <button class="segment" type="button" data-sort="name" data-i18n="arrange.name"></button>
             <button class="segment" type="button" data-sort="custom" data-i18n="arrange.custom"></button>
           </div>
         </div>
         <div id="arrange-lists">
-          <h2 data-i18n="shops.lists"></h2>
+          <h2 class="sheet-title" data-i18n="shops.lists"></h2>
           <div class="segmented">
             <button class="segment" type="button" data-lists="show" data-i18n="arrange.show"></button>
             <button class="segment" type="button" data-lists="hide" data-i18n="arrange.hide"></button>
@@ -169,36 +169,36 @@
     </div>
 
     <div id="trip" class="sheet-layer" hidden>
-      <div id="trip-veil" class="veil"></div>
+      <div id="trip-veil" class="sheet-veil"></div>
       <div class="sheet" role="dialog" data-i18n-attr="aria-label:trip.menu">
-        <div class="grab"></div>
-        <h2 data-i18n="trip.menu"></h2>
-        <button id="finish-menu" class="entry" type="button"><span data-i18n="finish.button"></span><small id="finish-menu-text"></small></button>
+        <div class="sheet-grab"></div>
+        <h2 class="sheet-title" data-i18n="trip.menu"></h2>
+        <button id="finish-menu" class="entry" type="button"><span data-i18n="finish.button"></span><small id="finish-menu-text" class="entry-note"></small></button>
       </div>
     </div>
 
     <div id="meal" class="sheet-layer" hidden>
-      <div id="meal-veil" class="veil"></div>
+      <div id="meal-veil" class="sheet-veil"></div>
       <div id="meal-sheet" class="sheet" role="dialog">
-        <div class="grab"></div>
-        <h2 id="meal-title"></h2>
+        <div class="sheet-grab"></div>
+        <h2 id="meal-title" class="sheet-title"></h2>
         <input id="meal-query" class="input" type="search" maxlength="80" autocomplete="off" enterkeyhint="search" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search">
-        <p id="meal-empty" class="meal-empty" hidden></p>
+        <p id="meal-empty" class="empty-state inline" hidden></p>
         <div id="meal-chips" class="cluster"></div>
         <button id="meal-remove" class="button outline danger wide" type="button" data-i18n="menu.remove" hidden></button>
       </div>
     </div>
 
     <div id="edit" class="sheet-layer" hidden>
-      <div id="edit-veil" class="veil"></div>
+      <div id="edit-veil" class="sheet-veil"></div>
       <form id="edit-form" class="sheet" role="dialog" autocomplete="off">
-        <div class="grab"></div>
-        <h2 id="edit-title"></h2>
+        <div class="sheet-grab"></div>
+        <h2 id="edit-title" class="sheet-title"></h2>
         <label class="field"><input id="edit-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
         <label class="field"><input id="edit-quantity" class="input field-input" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span class="field-label" data-i18n="edit.quantity"></span></label>
-        <h2 class="part" data-i18n="edit.shops"></h2>
+        <h2 class="sheet-title part" data-i18n="edit.shops"></h2>
         <div id="edit-chips" class="cluster"></div>
-        <p id="edit-empty" class="hint" data-i18n="shops.empty" hidden></p>
+        <p id="edit-empty" class="empty-state inline" data-i18n="shops.empty" hidden></p>
         <div class="input-row">
           <input id="edit-shop" class="input strong" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
           <button class="button primary" type="submit" data-i18n="shops.add"></button>
