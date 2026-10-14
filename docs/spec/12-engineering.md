@@ -13,7 +13,7 @@
 | `src/modules.js` | The modules that the user turns off and the sections that they hide | `sections` |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
-| `src/storage.js` | Load, save, export, import, validation, the language key | `store`, `recipes`, `menu` |
+| `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu`, `modules` |
 | `src/version.js` | Pure version rules | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
@@ -62,7 +62,7 @@
 | `tests/recipes.test.js` | Recipes, the send, the groups, the search |
 | `tests/shops.test.js` | Shops and the list by shop |
 | `tests/menu.test.js` | The meals of the week and the fill |
-| `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key |
+| `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key and the device preferences |
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sections.test.js` | The slide between sections |
 | `tests/modules.test.js` | The visible sections and the switch of a module |

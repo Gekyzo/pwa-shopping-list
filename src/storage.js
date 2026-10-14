@@ -1,6 +1,7 @@
 import { emptyState, GROUPS, SORTS } from '#store';
 import { isWebUrl } from '#recipes';
 import { DAYS, MEALS } from '#menu';
+import { MODULES } from '#modules';
 
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
@@ -235,6 +236,33 @@ export const saveTheme = (storage, theme) => {
   try {
     if (THEMES.includes(theme)) storage.setItem(THEME_KEY, theme);
     else storage.removeItem(THEME_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// The modules that the user turned off (MOD-2). A preference of the device, as the theme is.
+export const MODULES_KEY = 'shopping.modules';
+
+const knownModules = (ids) => MODULES.filter((id) => ids.includes(id));
+
+// The stored ids that are modules, in the order of MODULES. Anything else reads as all on.
+export const loadModules = (storage) => {
+  try {
+    const ids = JSON.parse(storage.getItem(MODULES_KEY));
+    return Array.isArray(ids) ? knownModules(ids) : [];
+  } catch {
+    return [];
+  }
+};
+
+// No module off is the app with no choice: it removes the key.
+export const saveModules = (storage, off) => {
+  try {
+    const ids = knownModules(off);
+    if (ids.length) storage.setItem(MODULES_KEY, JSON.stringify(ids));
+    else storage.removeItem(MODULES_KEY);
     return true;
   } catch {
     return false;
