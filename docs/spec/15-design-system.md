@@ -38,7 +38,9 @@ The parts that the screen is built from, and the rules that keep them the same o
   with the tags `@component`, `@summary`, `@scope`, `@part`, `@variant`, `@state` and
   `@example`. `@state` names a class that the code sets for a passing state.
 - **DS-7** `designs/index.html`, served by `npm run serve`, shows the tokens, the icons and each
-  documented part with its live examples, its snippet and the files that use it.
+  documented part with its live examples, its snippet and the files that use it. A menu lists
+  each section and part and links to its anchor (`#button`): a sidebar on a wide screen, a drawer
+  on a phone.
 
 ## Parts
 

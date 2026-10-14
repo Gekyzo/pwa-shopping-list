@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { rulesOf, blocksOf, parseCatalog, classesOf, iconsOf, classesInScript } from '../designs/catalog.js';
+import { rulesOf, blocksOf, parseCatalog, classesOf, iconsOf, classesInScript, menuOf } from '../designs/catalog.js';
 
 const CSS = `@layer tokens, base, components;
 
@@ -105,3 +105,26 @@ test('classesInScript skips a literal that a comparison uses', () => {
   const js = "el('li', { className: [view === 'active' && 'bought', mode !== 'next' ? 'wide' : ''].join(' ') });";
   assert.deepEqual(classesInScript(js).sort(), ['bought', 'wide']);
 });
+
+test('menuOf gives the sections of the catalogue, each with the names of its parts', () => {
+  const part = (name, layer, scope = null) => ({ name, layer, scope });
+  const catalog = {
+    components: [part('button', 'components'), part('split', 'layouts'), part('main', 'base'), part('day', 'screens', 'menu'), part('search', 'screens', 'list'), part('meal', 'screens', 'menu')],
+  };
+  assert.deepEqual(menuOf(catalog), [
+    { id: 'colours', title: 'Colours', items: [] },
+    { id: 'scales', title: 'Scales', items: [] },
+    { id: 'icons', title: 'Icons', items: [] },
+    { id: 'components', title: 'Components', items: ['button'] },
+    { id: 'layouts', title: 'Layouts', items: ['split'] },
+    { id: 'base', title: 'Base', items: ['main'] },
+    { id: 'screens-menu', title: 'Screen parts · menu', items: ['day', 'meal'] },
+    { id: 'screens-list', title: 'Screen parts · list', items: ['search'] },
+  ]);
+});
+
+test('menuOf leaves out a layer with no part', () => {
+  assert.deepEqual(menuOf({ components: [part2('button')] }).map((section) => section.id), ['colours', 'scales', 'icons', 'components']);
+});
+
+const part2 = (name) => ({ name, layer: 'components', scope: null });
