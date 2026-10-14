@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.24 - 2026-10-14
+
 ### Changed
 
 - The app icon of the walkthrough is larger, has no white square behind it, and sits in the
