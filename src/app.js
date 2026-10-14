@@ -54,6 +54,9 @@ import {
   setModules,
   setNavMotion,
 } from '#ui/context';
+import { inList, viewState, found, searching, isOpen, arrangeChoices, shownGroup, endSearch } from '#ui/view';
+import { collapse, expand, pendingRows, rowTops, slide, leave, groupOnlyRows } from '#ui/motion';
+import { renameInput, moreButton, actionButton, icon, ICONS, iconButton, startRename } from '#ui/controls';
 
 // True while the groups of Actual close, before the list becomes flat.
 let ungrouping = false;
@@ -65,86 +68,6 @@ const finishTrip = (undoText = t('toast.finished')) => {
 };
 
 // Rows
-
-const renameInput = (entry, rename = (name) => store.renameItem(state, entry.id, name)) => {
-  const input = el('input', { type: 'text', className: 'rename', value: entry.name, maxLength: 80 });
-  input.setAttribute('aria-label', t('row.rename', { name: entry.name }));
-  let done = false;
-  const finish = (keep) => {
-    if (done) return;
-    done = true;
-    ui.editingId = null;
-    const changed = keep && input.value.trim() !== entry.name;
-    if (!changed || !apply(rename(input.value))) render();
-  };
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') finish(true);
-    if (event.key === 'Escape') finish(false);
-  });
-  input.addEventListener('blur', () => finish(true));
-  return input;
-};
-
-// An item of two recipes, or of two shops, shows in two groups: `groupId` tells its rows apart.
-const isOpen = (id, groupId) => ui.openId === id && ui.openGroup === groupId;
-
-const moreButton = (item, groupId = null) => {
-  const open = isOpen(item.id, groupId);
-  const button = el('button', {
-    type: 'button',
-    className: 'more',
-    textContent: '⋯',
-    onclick: () => {
-      Object.assign(ui, { openId: open ? null : item.id, openGroup: groupId, openSide: null });
-      render();
-    },
-  });
-  button.setAttribute('aria-label', t('row.more', { name: item.name }));
-  button.setAttribute('aria-expanded', String(open));
-  return button;
-};
-
-const actionButton = (text, onClick, className = '') =>
-  el('button', { type: 'button', textContent: text, className, onclick: onClick });
-
-const SVG_NS = 'http://www.w3.org/2000/svg';
-
-// A line icon, drawn as the icons of the bottom menu are.
-const icon = (d) => {
-  const svg = document.createElementNS(SVG_NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('aria-hidden', 'true');
-  const path = document.createElementNS(SVG_NS, 'path');
-  path.setAttribute('d', d);
-  svg.append(path);
-  return svg;
-};
-
-const ICONS = {
-  check: 'M4 12l5 5L20 6',
-  chain:
-    'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
-  cart: 'M2 3h3l2.5 12h11L21 7H6M9 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M18 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3',
-  calendar: 'M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 10h18M8 3v4M16 3v4',
-  repeat: 'M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3',
-  undo: 'M9 14L4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3',
-  trash: 'M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6',
-};
-// The cart with a plus in its basket and a calendar with a cross.
-ICONS.cartPlus = `${ICONS.cart}M13 8.5v4M11 10.5h4`;
-ICONS.calendarOff = `${ICONS.calendar}M10 13.5l4 4M14 13.5l-4 4`;
-
-// A button of a side menu: an icon, with the name of the action for a screen reader.
-const iconButton = (d, label, onClick, className = '') => {
-  const button = el('button', { type: 'button', className, title: label, onclick: onClick }, [icon(d)]);
-  button.setAttribute('aria-label', label);
-  return button;
-};
-
-const startRename = (entry) => {
-  Object.assign(ui, { editingId: entry.id, openId: null });
-  render();
-};
 
 const openEdit = (item) => {
   Object.assign(ui, { editId: item.id, openId: null, editingId: null });
@@ -192,87 +115,6 @@ const deleteAction = (item) =>
     () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
     'danger',
   );
-
-// Closes rows of the list, then runs `done`.
-const collapse = (nodes, done) => {
-  if (!nodes.length || matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    done();
-    return;
-  }
-  nodes.forEach((node) => {
-    node.style.height = `${node.offsetHeight}px`;
-    // Read the layout, so that the height below starts a transition.
-    node.getBoundingClientRect();
-    node.classList.add('leaving');
-    node.style.height = '0px';
-  });
-  setTimeout(done, LEAVE_MS);
-};
-
-// Opens rows that a render has just built. It is the opposite of `collapse`.
-const expand = (nodes) => {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  nodes.forEach((node) => {
-    const still = { minHeight: 0, overflow: 'hidden' };
-    node.animate(
-      [
-        { height: '0px', opacity: 0, ...still },
-        { height: `${node.offsetHeight}px`, opacity: 1, ...still },
-      ],
-      { duration: LEAVE_MS, easing: 'ease-out' },
-    );
-  });
-};
-
-const pendingRows = () => [...$('items').querySelectorAll('.item:not(.bought)')].filter((node) => node.dataset.id);
-
-// The top of each row to buy. The key has the place of the row among the rows of its item,
-// so that the first row of an item of two recipes is the row of the flat list.
-const rowTops = () => {
-  const seen = new Map();
-  return new Map(
-    pendingRows().map((node) => {
-      const nth = seen.get(node.dataset.id) ?? 0;
-      seen.set(node.dataset.id, nth + 1);
-      return [`${node.dataset.id}#${nth}`, { node, top: node.getBoundingClientRect().top }];
-    }),
-  );
-};
-
-// Moves each row from its place before a render (`before`, from `rowTops`) to its new place.
-const slide = (before) => {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  rowTops().forEach(({ node, top }, key) => {
-    const from = before.get(key);
-    if (!from || from.top === top) return;
-    node.animate([{ transform: `translateY(${from.top - top}px)` }, { transform: 'none' }], {
-      duration: LEAVE_MS,
-      easing: 'ease-out',
-    });
-  });
-};
-
-// Closes the rows of an item, then runs `done`. An item of two recipes has two rows.
-const leave = (item, done) => {
-  if (ui.leaving.has(item.id)) return;
-  ui.leaving.add(item.id);
-  const rows = [...$('items').querySelectorAll('.item')].filter((node) => node.dataset.id === item.id);
-  collapse(rows, () => {
-    ui.leaving.delete(item.id);
-    done();
-  });
-};
-
-// The rows that the flat list does not have: the group heads, and each row after the first of an item.
-const groupOnlyRows = () => {
-  const seen = new Set();
-  return [...$('items').querySelectorAll('.group-head, .item:not(.bought)')].filter((node) => {
-    if (node.classList.contains('group-head')) return true;
-    const again = seen.has(node.dataset.id);
-    seen.add(node.dataset.id);
-    return again;
-  });
-};
 
 const activeRow = (item, groupId) => {
   const toggle = () => {
@@ -592,16 +434,6 @@ const boughtSection = (bought) => {
 const groupHead = (title, count) =>
   el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
 
-const inList = () => ui.view === 'active' || ui.view === 'next';
-
-// The state of the shop list on the screen. The operations still run on the full state.
-const viewState = () => (inList() ? shops.shopState(state, ui.shop[ui.view]) : state);
-
-// True for an item that the search of the list shows.
-const found = (item) => store.matchesItem(item, ui.query);
-// True while the search field has a text.
-const searching = () => ui.query.trim() !== '';
-
 // The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
 const shopNodes = (list) => {
   const { groups, rest } = store.filterGroups(shops.shopGroups(viewState(), list), ui.query);
@@ -638,27 +470,6 @@ const listNodes = (items) => {
   if (ui.view !== 'active') return shownGroup() === 'shop' ? shopNodes('next') : items.filter(found).map((item) => itemNode(item));
   const bought = items.filter((item) => item.bought && found(item));
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
-};
-
-// The choices that the arrange sheet has for the view: the recipe groups of Actual when a recipe
-// has a group, the shop groups when an item of the view has a shop, and the order of a list with
-// two items or more. A shop list has no shop groups.
-const arrangeChoices = () => {
-  if (!inList()) return { recipe: false, shop: false, sort: false };
-  const scoped = viewState();
-  const items = ui.view === 'active' ? store.activeItems(scoped) : store.nextItems(scoped);
-  return {
-    recipe: isOn('recipes') && ui.view === 'active' && recipes.recipeGroups(scoped).groups.length > 0,
-    shop: ui.shop[ui.view] === null && items.some((item) => item.shops.length > 0),
-    sort: items.length > 1,
-  };
-};
-
-// The grouping that the view shows: the choice of the user, when the view can show it.
-const shownGroup = () => {
-  const { recipe, shop } = arrangeChoices();
-  if (state.group === 'recipe' && recipe) return 'recipe';
-  return state.group === 'shop' && shop ? 'shop' : 'none';
 };
 
 const renderArrange = () => {
@@ -1454,9 +1265,6 @@ const closeSheet = () => {
   ui.sheetOpen = false;
   render();
 };
-
-// An add closes the search of the list, so that the row that it brings is in view.
-const endSearch = () => Object.assign(ui, { searchOpen: false, query: '' });
 
 // The shop that an add from the sheet puts on its item: the shop list in view, if any.
 const pickedShop = () => (inList() ? ui.shop[ui.view] : null);

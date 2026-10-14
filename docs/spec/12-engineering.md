@@ -19,6 +19,9 @@
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
 | `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
+| `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
+| `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
+| `src/ui/controls.js` | The controls that several views use: icons, the rename field, the more button | `store`, `ui/context`, `ui/view` |
 | `src/app.js` | Render and event handling. The only module that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
 
