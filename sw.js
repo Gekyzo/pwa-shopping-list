@@ -15,6 +15,8 @@ const SHELL = [
   './src/ui/rows.js',
   './src/ui/recipes.js',
   './src/ui/menu.js',
+  './src/ui/arrange.js',
+  './src/ui/list.js',
   './src/store.js',
   './src/recipes.js',
   './src/menu.js',
