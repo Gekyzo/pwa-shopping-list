@@ -22,6 +22,7 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 | [10-offline-version.md](10-offline-version.md) | Service worker, version, deploy, installation |
 | [11-integrations.md](11-integrations.md) | The reminder at the shop and the voice commands |
 | [12-engineering.md](12-engineering.md) | Modules, code rules, tests and checks |
+| [13-menu.md](13-menu.md) | The menu of the week and the fill of `Actual` |
 
 ## Rule identifiers
 
@@ -43,6 +44,7 @@ the identifier in a commit body or in a test name to point at a rule.
 | `SW`, `VER` | 10-offline-version |
 | `ARR`, `VOICE` | 11-integrations |
 | `ENG` | 12-engineering |
+| `MENU` | 13-menu |
 
 ## Words
 

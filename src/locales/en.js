@@ -175,6 +175,8 @@ export default {
   'error.productNotFound': 'Product not found.',
   'error.shopRequired': 'Write the name of the shop.',
   'error.recipeEmpty': 'The recipe has no products.',
+  'error.menuEmpty': 'The menu is empty. Put a recipe in a meal.',
+  'error.unknownMeal': 'Unknown meal.',
   'error.invalidJson': 'The file is not valid JSON.',
   'error.notBackup': 'The file is not a backup of the list.',
 };
