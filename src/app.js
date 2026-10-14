@@ -106,8 +106,8 @@ const ui = {
   arrangeOpen: false,
   // True while the sheet of the trip button of Actual is open.
   tripOpen: false,
-  // The item whose shop sheet is open, or null.
-  shopsId: null,
+  // The item whose edit sheet is open, or null.
+  editId: null,
   // The meal whose sheet is open, as { day, meal }, or null.
   mealOpen: null,
   // The page of the walkthrough in view, or null while the walkthrough is closed.
@@ -204,7 +204,6 @@ const renameInput = (entry, rename = (name) => store.renameItem(state, entry.id,
 
 // An item of two recipes, or of two shops, shows in two groups: `groupId` tells its rows apart.
 const isOpen = (id, groupId) => ui.openId === id && ui.openGroup === groupId;
-const isEditing = (id, groupId) => ui.editingId === id && ui.openGroup === groupId;
 
 const moreButton = (item, groupId = null) => {
   const open = isOpen(item.id, groupId);
@@ -243,9 +242,7 @@ const ICONS = {
     'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
   cart: 'M2 3h3l2.5 12h11L21 7H6M9 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M18 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3',
   calendar: 'M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 10h18M8 3v4M16 3v4',
-  pencil: 'M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z',
   repeat: 'M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3',
-  shop: 'M3 9l1.5-5h15L21 9M3 9h18M4 9v11h16V9M9 20v-6h6v6',
   trash: 'M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6',
 };
 // The cart with a plus in its basket and a calendar with a cross.
@@ -264,20 +261,17 @@ const startRename = (entry) => {
   render();
 };
 
-const renameAction = (item) => iconButton(ICONS.pencil, t('row.rename', { name: item.name }), () => startRename(item));
-
-const openShops = (item) => {
-  Object.assign(ui, { shopsId: item.id, openId: null, editingId: null });
-  $('shops-name').value = '';
+const openEdit = (item) => {
+  Object.assign(ui, { editId: item.id, openId: null, editingId: null });
+  $('edit-name').value = item.name;
+  $('edit-shop').value = '';
   render();
 };
 
-const closeShops = () => {
-  ui.shopsId = null;
+const closeEdit = () => {
+  ui.editId = null;
   render();
 };
-
-const shopsAction = (item) => iconButton(ICONS.shop, t('row.shops', { name: item.name }), () => openShops(item));
 
 // The name of a row, with the shops of the item below it when the list is not by shop.
 const nameParts = (item) => {
@@ -404,9 +398,7 @@ const activeRow = (item, groupId) => {
   };
   const checkbox = el('input', { type: 'checkbox', checked: item.bought, onchange: toggle });
   checkbox.setAttribute('aria-label', t('row.bought', { name: item.name }));
-  const name = isEditing(item.id, groupId)
-    ? renameInput(item)
-    : el('button', { type: 'button', className: 'name', tabIndex: -1, onclick: toggle }, nameParts(item));
+  const name = el('button', { type: 'button', className: 'name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
   const row = [checkbox, name];
   if (item.bought && !item.recurrent && isOn('next')) {
     const again = el('button', {
@@ -421,21 +413,20 @@ const activeRow = (item, groupId) => {
   }
   row.push(recurrentToggle(item));
   const end = isOn('next') ? [moveAction(item), deleteAction(item)] : [deleteAction(item)];
-  return { row, start: [renameAction(item), shopsAction(item)], end };
+  return { row, start: [], end };
 };
 
 const nextRow = (item, groupId) => {
   const pending = item.list === 'next';
-  const name =
-    isEditing(item.id, groupId) ? renameInput(item) : el('span', { className: 'name' }, nameParts(item));
+  const name = el('button', { type: 'button', className: 'name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
   const row = [name];
   if (!pending) row.push(el('span', { className: 'pill', textContent: t('row.boughtToday') }));
   row.push(recurrentToggle(item));
-  if (pending) return { row, start: [renameAction(item), shopsAction(item)], end: [moveAction(item), deleteAction(item)] };
+  if (pending) return { row, start: [], end: [moveAction(item), deleteAction(item)] };
   const params = { list: 'next', name: item.name };
   const remove = iconButton(ICONS.calendarOff, say('row.removeFrom', params), () =>
     apply(store.removeFromNext(state, item.id), { undoText: say('toast.removedFrom', params) }));
-  return { row, start: [renameAction(item), shopsAction(item)], end: [remove] };
+  return { row, start: [], end: [remove] };
 };
 
 const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
@@ -795,14 +786,15 @@ const renderArrange = () => {
   });
 };
 
-// The shop sheet of one item: each shop in use is a chip, pressed when the item has the shop.
-const renderShops = () => {
-  const item = state.items.find((entry) => entry.id === ui.shopsId);
-  $('shops').hidden = !item;
+// The edit sheet of one item: its name, and each shop in use as a chip, pressed when the item has it.
+const renderEdit = () => {
+  const item = state.items.find((entry) => entry.id === ui.editId);
+  $('edit').hidden = !item;
   if (!item) return;
-  const title = t('row.shops', { name: item.name });
-  $('shops-title').textContent = title;
-  $('shops-form').setAttribute('aria-label', title);
+  const title = t('edit.title', { name: item.name });
+  $('edit-title').textContent = title;
+  $('edit-form').setAttribute('aria-label', title);
+  if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
   const own = new Set(item.shops.map((shop) => shop.toLowerCase()));
   const chips = shops.shopNames(state).map((shop) => {
     const has = own.has(shop.toLowerCase());
@@ -811,10 +803,10 @@ const renderShops = () => {
     chip.setAttribute('aria-pressed', String(has));
     return chip;
   });
-  $('shops-chips').replaceChildren(...chips);
-  $('shops-empty').hidden = chips.length > 0;
+  $('edit-chips').replaceChildren(...chips);
+  $('edit-empty').hidden = chips.length > 0;
   // The field completes a typed name with a shop in use.
-  $('shops-list').replaceChildren(...shops.shopSuggestions(state, item.id).map((shop) => el('option', { value: shop })));
+  $('edit-shops').replaceChildren(...shops.shopSuggestions(state, item.id).map((shop) => el('option', { value: shop })));
 };
 
 // Recipes
@@ -1210,8 +1202,8 @@ const renderShopChips = () => {
 const render = () => {
   // A render builds new rows, so a lifted row loses its pointer and gets no release.
   endReorder(false);
-  // The item of the shop sheet can go while the sheet is open: an undo, or an import.
-  if (!state.items.some((item) => item.id === ui.shopsId)) ui.shopsId = null;
+  // The item of the edit sheet can go while the sheet is open: an undo, or an import.
+  if (!state.items.some((item) => item.id === ui.editId)) ui.editId = null;
   // A shop list whose chip went shows Todas.
   // A hidden row leaves no list filtered.
   for (const list of ['active', 'next']) {
@@ -1238,7 +1230,7 @@ const render = () => {
   renderTrip();
 
   $('fab').hidden =
-    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.shopsId !== null || ui.mealOpen !== null;
+    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
   const sections = visibleSections(off);
@@ -1256,7 +1248,7 @@ const render = () => {
   ui.settleFrom = null;
   renderSheet();
   renderArrange();
-  renderShops();
+  renderEdit();
   renderMeal();
 };
 
@@ -1646,7 +1638,7 @@ document.querySelectorAll('.bnav button').forEach((button) => {
 let sectionSlide = null;
 document.addEventListener('pointerdown', (event) => {
   sectionSlide = null;
-  const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.shopsId !== null || ui.mealOpen !== null;
+  const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null;
   if (!event.isPrimary || event.button !== 0 || reorder || sheet) return;
   if (!event.target.closest('.head, main') || event.target.closest('.swipe, .shop-chips, input, textarea')) return;
   sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
@@ -1770,19 +1762,44 @@ $('arrange-veil').addEventListener('click', () => {
   ui.arrangeOpen = false;
   render();
 });
-$('shops-veil').addEventListener('click', closeShops);
+$('edit-veil').addEventListener('click', closeEdit);
 // The sheet stays open after a new shop, so that an item gets two shops in one visit.
 const submitShop = () => {
-  if (apply(shops.addItemShop(state, ui.shopsId, $('shops-name').value))) $('shops-name').value = '';
+  if (apply(shops.addItemShop(state, ui.editId, $('edit-shop').value))) $('edit-shop').value = '';
 };
-$('shops-form').addEventListener('submit', (event) => {
+$('edit-form').addEventListener('submit', (event) => {
   event.preventDefault();
   submitShop();
 });
 // A suggestion that the user picks replaces the text of the field: it adds the shop at once.
-$('shops-name').addEventListener('input', (event) => {
+$('edit-shop').addEventListener('input', (event) => {
   const picked = event.inputType === 'insertReplacementText' || event.inputType === undefined;
-  if (picked && shops.shopSuggestions(state, ui.shopsId).includes(event.target.value)) submitShop();
+  if (picked && shops.shopSuggestions(state, ui.editId).includes(event.target.value)) submitShop();
+});
+// The name saves when the field loses the focus. An error keeps the old name in the field.
+const saveName = () => {
+  const item = state.items.find((entry) => entry.id === ui.editId);
+  const input = $('edit-name');
+  if (!item || input.value.trim() === item.name) {
+    if (item) input.value = item.name;
+    return;
+  }
+  if (!apply(store.renameItem(state, item.id, input.value))) input.value = item.name;
+};
+$('edit-name').addEventListener('blur', saveName);
+$('edit-name').addEventListener('keydown', (event) => {
+  // Enter saves the name; it does not submit the form, which adds a shop.
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    event.target.blur();
+  }
+  // Escape puts the name back and keeps the sheet open.
+  if (event.key === 'Escape') {
+    event.stopPropagation();
+    const item = state.items.find((entry) => entry.id === ui.editId);
+    if (item) event.target.value = item.name;
+    event.target.blur();
+  }
 });
 // The sheet stays open after a choice, so that the group and the order change in one visit.
 document.querySelectorAll('#arrange-group button').forEach((button) => {
@@ -1897,7 +1914,7 @@ document.addEventListener('keydown', (event) => {
     ui.arrangeOpen = false;
     render();
   }
-  if (ui.shopsId !== null) closeShops();
+  if (ui.editId !== null) closeEdit();
   if (ui.mealOpen !== null) closeMeal();
   if (ui.searchOpen) closeSearch();
   if (ui.tripOpen) closeTrip();

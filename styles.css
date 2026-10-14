@@ -1014,6 +1014,19 @@ button.pill {
   font-weight: 600;
 }
 
+.sheet .edit-name {
+  height: 48px;
+  padding: 0 12px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  font-size: 1.05rem;
+}
+
+.sheet .edit-name:focus {
+  border-color: var(--accent);
+}
+
 .seg button[aria-pressed="true"] {
   background: var(--accent-soft);
   color: var(--accent);

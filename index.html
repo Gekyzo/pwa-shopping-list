@@ -188,18 +188,19 @@
       </div>
     </div>
 
-    <div id="shops" class="sheet-layer" hidden>
-      <div id="shops-veil" class="veil"></div>
-      <form id="shops-form" class="sheet" role="dialog" autocomplete="off">
+    <div id="edit" class="sheet-layer" hidden>
+      <div id="edit-veil" class="veil"></div>
+      <form id="edit-form" class="sheet" role="dialog" autocomplete="off">
         <div class="grab"></div>
-        <h2 id="shops-title"></h2>
-        <div id="shops-chips" class="chips"></div>
-        <p id="shops-empty" class="hint" data-i18n="shops.empty" hidden></p>
+        <h2 id="edit-title"></h2>
+        <input id="edit-name" class="edit-name" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name">
+        <div id="edit-chips" class="chips"></div>
+        <p id="edit-empty" class="hint" data-i18n="shops.empty" hidden></p>
         <div class="add-row">
-          <input id="shops-name" type="text" list="shops-list" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
+          <input id="edit-shop" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
           <button class="primary" type="submit" data-i18n="shops.add"></button>
         </div>
-        <datalist id="shops-list"></datalist>
+        <datalist id="edit-shops"></datalist>
       </form>
     </div>
 

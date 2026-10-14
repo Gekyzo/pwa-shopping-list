@@ -44,7 +44,8 @@ export default {
   'row.again': 'Comprar outra vez na próxima: {name}',
   'row.boughtToday': 'comprado hoje',
   'row.removeFrom': 'Tirar de {list}: {name}',
-  'row.shops': 'Lojas de {name}',
+  'edit.title': 'Editar {name}',
+  'edit.name': 'Nome',
   'group.others': 'Outros',
   'group.noShop': 'Sem loja',
 

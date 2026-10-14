@@ -44,7 +44,8 @@ export default {
   'row.again': 'Compra una altra vegada la pròxima: {name}',
   'row.boughtToday': 'comprat avui',
   'row.removeFrom': 'Treu de {list}: {name}',
-  'row.shops': 'Botigues de {name}',
+  'edit.title': 'Edita {name}',
+  'edit.name': 'Nom',
   'group.others': 'Altres',
   'group.noShop': 'Sense botiga',
 

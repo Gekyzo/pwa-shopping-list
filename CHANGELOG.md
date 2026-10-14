@@ -9,7 +9,11 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- A tap on the name of an item opens `Editar <name>`, with the name and the shops. The slide to
+  the right no longer shows **Renombrar** and the shops. A tap on the name no longer ticks; the
+  checkbox ticks.
 
 ## 1.0.11 - 2026-10-14
 
