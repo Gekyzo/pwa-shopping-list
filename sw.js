@@ -46,6 +46,7 @@ const SHELL = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
+  './icons/logo.png',
 ];
 
 // The text of the manifest in the language of the screen, which the page sends (`manifest`

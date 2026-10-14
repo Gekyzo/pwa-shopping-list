@@ -87,3 +87,74 @@ export const decodePng = (png) => {
   const height = header.readUInt32BE(4);
   return { width, height, rgba: unfilter(inflateSync(Buffer.concat(data)), width, height) };
 };
+
+// The least channel of a pixel that counts as the white of the background.
+const LIGHT = 240;
+
+// The art with its white background made transparent. The background is the light pixels that
+// connect to the edge, so a white inside the art stays. The background and the pixels that touch
+// it take back the white they were blended with: alpha is the distance from white.
+export const clearWhite = ({ width, height, rgba }) => {
+  const out = Buffer.from(rgba);
+  const light = (n) => Math.min(rgba[n * 4], rgba[n * 4 + 1], rgba[n * 4 + 2]) >= LIGHT;
+  const neighbours = (n) => {
+    const x = n % width;
+    const y = Math.floor(n / width);
+    return [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]]
+      .filter(([nx, ny]) => nx >= 0 && nx < width && ny >= 0 && ny < height)
+      .map(([nx, ny]) => ny * width + nx);
+  };
+  const background = new Uint8Array(width * height);
+  const queue = [];
+  for (let n = 0; n < width * height; n++) {
+    const x = n % width;
+    const y = Math.floor(n / width);
+    const edge = x === 0 || y === 0 || x === width - 1 || y === height - 1;
+    if (edge && light(n)) {
+      background[n] = 1;
+      queue.push(n);
+    }
+  }
+  while (queue.length) {
+    for (const next of neighbours(queue.pop())) {
+      if (background[next] || !light(next)) continue;
+      background[next] = 1;
+      queue.push(next);
+    }
+  }
+  for (let n = 0; n < width * height; n++) {
+    if (!background[n] && !neighbours(n).some((next) => background[next])) continue;
+    const colour = [0, 1, 2].map((c) => rgba[n * 4 + c]);
+    const alpha = Math.max(...colour.map((value) => 255 - value)) / 255;
+    colour.forEach((value, c) => {
+      out[n * 4 + c] = alpha ? Math.round((value - 255 * (1 - alpha)) / alpha) : 0;
+    });
+    out[n * 4 + 3] = Math.round(alpha * rgba[n * 4 + 3]);
+  }
+  return out;
+};
+
+// A square RGBA image of side `size`, each pixel the average of the pixels it covers. The colour
+// is weighed by alpha, so a transparent pixel adds no colour to its neighbours.
+export const resizeRgba = ({ width, height, rgba }, size, samples = 4) => {
+  const out = Buffer.alloc(size * size * 4);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const sum = [0, 0, 0, 0];
+      for (let sy = 0; sy < samples; sy++) {
+        for (let sx = 0; sx < samples; sx++) {
+          const px = Math.floor(((x + (sx + 0.5) / samples) / size) * width);
+          const py = Math.floor(((y + (sy + 0.5) / samples) / size) * height);
+          const at = (py * width + px) * 4;
+          const alpha = rgba[at + 3];
+          for (let c = 0; c < 3; c++) sum[c] += rgba[at + c] * alpha;
+          sum[3] += alpha;
+        }
+      }
+      const at = (y * size + x) * 4;
+      for (let c = 0; c < 3; c++) out[at + c] = sum[3] ? Math.round(sum[c] / sum[3]) : 0;
+      out[at + 3] = Math.round(sum[3] / samples ** 2);
+    }
+  }
+  return out;
+};

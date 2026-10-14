@@ -152,8 +152,9 @@ of it.
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3) and the `+` button |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
-  Above the pages, the app icon shows at the top centre, 56 px wide; it is decorative (`alt=""`)
-  and does not change or move with the page.
+  Above the pages, the art of the app icon shows at the top centre, 96 px wide, with no
+  background (`icons/logo.png`, VER-15); it is decorative (`alt=""`) and does not change or
+  move with the page.
 - **ONB-3** The bar at the bottom has **Saltar** at the left and **Siguiente** at the right, each
   half of the bar wide; **Mano** `Izquierda` swaps them (NAV-13). **Saltar** has a thin border. On the last page **Saltar** does not show
   and **Empezar** takes the full bar. One dot for each page shows the place of the page in view;

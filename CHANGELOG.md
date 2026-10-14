@@ -9,7 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The app icon of the walkthrough is larger and has no white square behind it.
 
 ## 1.0.23 - 2026-10-14
 

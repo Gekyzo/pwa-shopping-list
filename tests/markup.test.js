@@ -41,7 +41,7 @@ test('the walkthrough has one drawing for each page, in the order of the pages',
 
 test('the walkthrough shows the app icon first, out of the page that changes, with no text', () => {
   const [, layer = ''] = body.match(/<div id="onboarding"[^>]*>\s*([\s\S]*?)<div id="onboarding-page"/) ?? [];
-  assert.match(layer, /^<img class="onboarding-logo" src="\.\/icons\/icon-192\.png" alt="">\s*$/);
+  assert.match(layer, /^<img class="onboarding-logo" src="\.\/icons\/logo\.png" alt="">\s*$/);
 });
 
 test('the walkthrough has Saltar and the next button in one bar at the bottom, Saltar first', () => {
