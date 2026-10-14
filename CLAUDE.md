@@ -10,6 +10,7 @@ build step and no dependencies.
 npm test         # unit tests (node --test)
 npm run serve    # http://localhost:8080
 npm run icons    # write the PNG icons again
+npm run release  # bump, commit and tag vX.Y.Z; git push --follow-tags deploys
 ```
 
 ## Conventions
