@@ -14,7 +14,7 @@ Rules of `src/storage.js`, and of its use in `src/app.js`.
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.modules` | The ids of the modules that the user turned off, as JSON ([14-modules.md](14-modules.md), MOD-2) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
-| Cache API | `shopping-shell-v9` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-shell-v10` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
 
@@ -34,8 +34,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   to `shopping.v1.corrupt` and starts with the empty state. The first change then replaces
   `shopping.v1`.
 - **STORE-6** A state is not valid when one of these is true:
-  - it is not an object, its `version` is not 1, 2, 3 or 4, or `items` is not a list;
-  - `recipes` is not a list, in version 2, 3 or 4;
+  - it is not an object, its `version` is not 1, 2, 3, 4 or 5, or `items` is not a list;
+  - `recipes` is not a list, in version 2, 3, 4 or 5;
   - an item has no string `id`, no name, a `list` that is not `active` or `next`, or a flag
     (`recurrent`, `bought`, `again`) that is not a boolean;
   - a recipe has no string `id`, no name, an empty product, a product that is not text, or two
@@ -48,6 +48,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Names of items, recipes, products, shops | Trimmed |
   | `bought` of an item of `list: 'next'` | `false` |
   | `again` of an item not ticked, or recurrent | `false` |
+  | `quantity` | Not text: `''`. Text: trimmed |
   | `shops` | Not a list: empty. An entry that is not text, is empty or is a duplicate: dropped |
   | Shop spellings | Each shop gets the spelling of its first use |
   | `url` of a recipe | Not an `http` or `https` address: `''` |
@@ -57,7 +58,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | `sort` | Unknown: `custom` |
   | Unknown fields | Dropped |
 
-- **STORE-8** An older state is migrated when it is read, and saved as version 4 at the next
+- **STORE-8** An older state is migrated when it is read, and saved as version 5 at the next
   change:
 
   | From | Change |
@@ -65,6 +66,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Version 1 | `recipes: []`, `sent: []` |
   | Version 1 or 2 | `group` is `none` when `grouped` is `false`, and `recipe` if not. Each item gets `shops: []`. `sort` is `custom` when absent |
   | Version 1, 2 or 3 | `menu: []` |
+  | Version 1 to 4 | Each item gets `quantity: ''` |
 
 ## Failures
 

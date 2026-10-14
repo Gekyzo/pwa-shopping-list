@@ -27,6 +27,7 @@ import {
   setGroup,
   GROUPS,
   compareNames,
+  setQuantity,
 } from '#store';
 
 let counter = 0;
@@ -48,7 +49,7 @@ test('addItem adds a one-time item to active', () => {
   assert.equal(state.items.length, 1);
   const { id, ...rest } = state.items[0];
   assert.ok(id);
-  assert.deepEqual(rest, { name: 'Bread', recurrent: false, list: 'active', bought: false, again: false, shops: [] });
+  assert.deepEqual(rest, { name: 'Bread', recurrent: false, list: 'active', bought: false, again: false, shops: [], quantity: '' });
 });
 
 test('addItem adds a recurrent item to next', () => {
@@ -190,7 +191,7 @@ test('moveItem moves to the other list and resets bought and again', () => {
   const moved = moveItem(start, find(start, 'Soap').id).state;
   assert.deepEqual(
     { ...find(moved, 'Soap'), id: undefined },
-    { id: undefined, name: 'Soap', recurrent: false, list: 'next', bought: false, again: false, shops: [] },
+    { id: undefined, name: 'Soap', recurrent: false, list: 'next', bought: false, again: false, shops: [], quantity: '' },
   );
   const back = moveItem(moved, find(moved, 'Milk').id).state;
   assert.equal(find(back, 'Milk').list, 'active');
@@ -229,7 +230,7 @@ test('removeFromNext keeps a ticked active item and clears again and recurrent',
   const { state } = removeFromNext(start, find(start, 'Milk').id);
   assert.deepEqual(
     { ...state.items[0], id: undefined },
-    { id: undefined, name: 'Milk', recurrent: false, list: 'active', bought: true, again: false, shops: [] },
+    { id: undefined, name: 'Milk', recurrent: false, list: 'active', bought: true, again: false, shops: [], quantity: '' },
   );
   assert.deepEqual(nextItems(state), []);
 });
@@ -586,4 +587,41 @@ test('bringAllToActual moves each item of next to active, not ticked, again clea
 test('bringAllToActual returns the same state when next has no item', () => {
   const state = build(['Leche', 'active']);
   assert.equal(bringAllToActual(state).state, state);
+});
+
+test('addItem creates an item with no quantity', () => {
+  assert.equal(build(['Milk', 'active']).items[0].quantity, '');
+});
+
+test('setQuantity sets the trimmed text and does not change the input state', () => {
+  const state = build(['Milk', 'active']);
+  const before = structuredClone(state);
+  const { state: next, error } = setQuantity(state, state.items[0].id, '  2 l ');
+  assert.equal(error, undefined);
+  assert.equal(next.items[0].quantity, '2 l');
+  assert.deepEqual(state, before);
+});
+
+test('setQuantity with the same text returns the same state object', () => {
+  const state = build(['Milk', 'active', { quantity: '2 l' }]);
+  assert.equal(setQuantity(state, state.items[0].id, ' 2 l').state, state);
+});
+
+test('setQuantity with an empty text clears the quantity', () => {
+  const state = build(['Milk', 'active', { quantity: '2 l' }]);
+  assert.equal(setQuantity(state, state.items[0].id, '  ').state.items[0].quantity, '');
+});
+
+test('setQuantity rejects an unknown item with the same state', () => {
+  const state = build(['Milk', 'active']);
+  assert.deepEqual(setQuantity(state, 'nope', '2'), { state, error: { key: 'error.itemNotFound' } });
+});
+
+test('a move and the end of a trip keep the quantity', () => {
+  const state = build(['Milk', 'active', { quantity: '2 l', recurrent: true, bought: true }], ['Eggs', 'next', { quantity: '12' }]);
+  const [milk, eggs] = state.items;
+  assert.equal(moveItem(state, eggs.id).state.items[1].quantity, '12');
+  const after = startNewShopping(state).state;
+  assert.deepEqual(after.items.map((item) => item.quantity), ['2 l', '12']);
+  assert.equal(after.items[0].id, milk.id);
 });

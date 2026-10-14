@@ -73,8 +73,8 @@ const sample = () => {
   const [bread, milk] = items;
   return {
     ...rest,
-    version: 4,
-    items: [{ ...bread, shops: ['Lidl', 'Market'] }, { ...milk, shops: [] }],
+    version: 5,
+    items: [{ ...bread, shops: ['Lidl', 'Market'], quantity: '2' }, { ...milk, shops: [], quantity: '' }],
     group: 'shop',
     menu: [{ day: 0, meal: 'lunch', recipe: 'r1' }],
   };
@@ -86,8 +86,8 @@ const sampleV3 = () => {
   return { ...rest, version: 3 };
 };
 
-// The items of an old state, as a version 4 state has them.
-const withNoShops = (items) => items.map((item) => ({ ...item, shops: [] }));
+// The items of an old state, as a version 5 state has them.
+const withNoShops = (items) => items.map((item) => ({ ...item, shops: [], quantity: '' }));
 
 test('save then load returns the same state', () => {
   const storage = fakeStorage();
@@ -137,7 +137,7 @@ test('importJson rejects text that is not JSON', () => {
 });
 
 test('importJson rejects an unknown version', () => {
-  const text = JSON.stringify({ ...sample(), version: 5 });
+  const text = JSON.stringify({ ...sample(), version: 6 });
   assert.deepEqual(importJson(text), { error: { key: 'error.notBackup' } });
 });
 
@@ -169,10 +169,10 @@ test('importJson drops unknown fields and repairs the bought and again rules', (
   };
   assert.deepEqual(importJson(JSON.stringify(data)), {
     state: {
-      version: 4,
+      version: 5,
       items: [
-        { id: 'a', name: 'Milk', recurrent: true, list: 'next', bought: false, again: false, shops: [] },
-        { id: 'b', name: 'Soap', recurrent: false, list: 'active', bought: false, again: false, shops: [] },
+        { id: 'a', name: 'Milk', recurrent: true, list: 'next', bought: false, again: false, shops: [], quantity: '' },
+        { id: 'b', name: 'Soap', recurrent: false, list: 'active', bought: false, again: false, shops: [], quantity: '' },
       ],
       recipes: [],
       sent: [],
@@ -184,7 +184,7 @@ test('importJson drops unknown fields and repairs the bought and again rules', (
 });
 
 const migratedV1 = () => ({
-  version: 4,
+  version: 5,
   items: withNoShops(sampleV1().items),
   recipes: [],
   sent: [],
@@ -193,8 +193,8 @@ const migratedV1 = () => ({
   menu: [],
 });
 
-test('emptyState is a version 4 state with no items, no recipes, no menu and the recipe grouping', () => {
-  assert.deepEqual(emptyState(), { version: 4, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] });
+test('emptyState is a version 5 state with no items, no recipes, no menu and the recipe grouping', () => {
+  assert.deepEqual(emptyState(), { version: 5, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] });
 });
 
 test('load migrates a version 1 state', () => {
@@ -210,7 +210,7 @@ test('importJson migrates a version 1 backup', () => {
 test('load migrates a version 2 state', () => {
   const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(sampleV2()) });
   const { grouped, ...rest } = sampleV2();
-  assert.deepEqual(load(storage), { ...rest, version: 4, items: withNoShops(sampleV2().items), group: 'recipe', menu: [] });
+  assert.deepEqual(load(storage), { ...rest, version: 5, items: withNoShops(sampleV2().items), group: 'recipe', menu: [] });
   assert.equal(storage.getItem(CORRUPT_KEY), null);
 });
 
@@ -555,4 +555,19 @@ test('the module functions do not throw when the storage does', () => {
   assert.deepEqual(loadModules(brokenStorage()), []);
   assert.equal(saveModules(brokenStorage(), ['next']), false);
   assert.equal(saveModules(brokenStorage(), []), false);
+});
+
+test('load migrates a version 4 state with no quantity on each item', () => {
+  const { items, ...rest } = sample();
+  const v4 = { ...rest, version: 4, items: items.map(({ quantity, ...item }) => item) };
+  assert.deepEqual(load(fakeStorage({ [STORAGE_KEY]: JSON.stringify(v4) })), {
+    ...sample(),
+    items: sample().items.map((item) => ({ ...item, quantity: '' })),
+  });
+});
+
+test('importJson trims a quantity and reads a quantity that is not text as none', () => {
+  const quantityOf = (quantity) => importJson(JSON.stringify({ ...sample(), items: [{ ...sample().items[0], quantity }] })).state.items[0].quantity;
+  assert.equal(quantityOf(' 2 kg '), '2 kg');
+  [2, null, undefined, ['2'], {}].forEach((value) => assert.equal(quantityOf(value), '', String(value)));
 });
