@@ -1,6 +1,6 @@
 {
   "name": "shopping",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Offline shopping list PWA with an active list and a next list",
   "private": true,
   "type": "module",
