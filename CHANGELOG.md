@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.27 - 2026-10-15
+
 ### Changed
 
 - A recipe row has no send button. A slide of the row to the right sends the recipe.
