@@ -98,7 +98,7 @@ export const moveRow = (row, x) => {
 const bindSwipe = (row, widths, id, groupId, right) => {
   let drag = null;
   row.addEventListener('pointerdown', (event) => {
-    if (event.button !== 0 || ui.editingId === id) return;
+    if (event.button !== 0) return;
     const base = shift(isOpen(id, groupId) ? ui.openSide : null, widths);
     drag = { x: event.clientX, y: event.clientY, base, active: false };
   });
@@ -128,7 +128,7 @@ const bindSwipe = (row, widths, id, groupId, right) => {
     guardClick();
     row.parentNode.classList.remove('armed');
     if (right && base === 0 && reached(at, row.offsetWidth)) {
-      Object.assign(ui, { openId: null, openSide: null, editingId: null });
+      Object.assign(ui, { openId: null, openSide: null });
       // The row slides back while the tick closes it (ROW-9), or before the render of a move.
       row.classList.remove('dragging');
       moveRow(row, 0);
@@ -137,7 +137,7 @@ const bindSwipe = (row, widths, id, groupId, right) => {
     }
     const open = isOpen(id, groupId) ? ui.openSide : null;
     const side = settle(event.clientX - x, widths, open);
-    Object.assign(ui, { openId: side ? id : null, openSide: side, openGroup: groupId, editingId: null });
+    Object.assign(ui, { openId: side ? id : null, openSide: side, openGroup: groupId });
     ui.settleFrom = { id, groupId, x: at };
     render();
   };

@@ -4,7 +4,7 @@ import { $, el, state, ui, t, apply, render } from '#ui/context';
 import { bindField } from '#ui/controls';
 
 export const openEdit = (item) => {
-  Object.assign(ui, { editId: item.id, openId: null, editingId: null });
+  Object.assign(ui, { editId: item.id, openId: null });
   $('edit-name').value = item.name;
   $('edit-quantity').value = item.quantity;
   $('edit-shop').value = '';

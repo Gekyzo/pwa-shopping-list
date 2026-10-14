@@ -10,7 +10,7 @@ import { dayNode } from '#ui/menu';
 
 const finishTrip = (undoText = t('toast.finished')) => {
   if (!apply(store.startNewShopping(state), { undoText })) return;
-  Object.assign(ui, { view: 'active', editingId: null, openId: null, tripOpen: false });
+  Object.assign(ui, { view: 'active', openId: null, tripOpen: false });
   render();
 };
 
@@ -174,7 +174,7 @@ export const renderShopChips = () => {
   const count = (value) => (ui.view === 'active' && value === 0 ? '✓' : String(value));
   const buttons = chips.map(({ shop, count: value }) => {
     const pick = () => {
-      Object.assign(ui, { openId: null, openSide: null, editingId: null });
+      Object.assign(ui, { openId: null, openSide: null });
       ui.shop[ui.view] = shop;
       render();
     };
@@ -201,7 +201,7 @@ export const closeTrip = () => {
 
 export const bind = () => {
   $('query').addEventListener('input', (event) => {
-    Object.assign(ui, { query: event.target.value, editingId: null, openId: null });
+    Object.assign(ui, { query: event.target.value, openId: null });
     render();
   });
   // The press must not take the focus out of the field: the blur would close the search, and the
@@ -212,7 +212,7 @@ export const bind = () => {
       closeSearch();
       return;
     }
-    Object.assign(ui, { searchOpen: true, openId: null, editingId: null });
+    Object.assign(ui, { searchOpen: true, openId: null });
     render();
     $('query').focus();
   });
@@ -221,7 +221,7 @@ export const bind = () => {
     if (ui.searchOpen && !ui.query.trim()) closeSearch();
   });
   $('trip-button').addEventListener('click', () => {
-    Object.assign(ui, { tripOpen: true, openId: null, editingId: null });
+    Object.assign(ui, { tripOpen: true, openId: null });
     render();
     $('finish-menu').focus();
   });

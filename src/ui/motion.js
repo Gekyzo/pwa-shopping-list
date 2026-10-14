@@ -87,13 +87,13 @@ export const groupOnlyRows = () => {
   });
 };
 
-// The keys of the recipe and product rows on the screen.
-export const rowKeys = () => new Set([...$('items').querySelectorAll('[data-key]')].map((node) => node.dataset.key));
+// The keys of the recipe and product rows on the screen, in the list and in the recipe sheet.
+export const rowKeys = () => new Set([...document.querySelectorAll('[data-key]')].map((node) => node.dataset.key));
 
 // Flashes the rows of `keys` and opens them. A row inside another row of `keys` only flashes: it
 // opens with the row around it.
 export const bringIn = (keys) => {
-  const nodes = [...$('items').querySelectorAll('[data-key]')].filter((node) => keys.has(node.dataset.key));
+  const nodes = [...document.querySelectorAll('[data-key]')].filter((node) => keys.has(node.dataset.key));
   nodes.forEach((node) => node.classList.add('flash'));
   expand(nodes.filter((node) => !nodes.some((other) => other !== node && other.contains(node))));
 };
