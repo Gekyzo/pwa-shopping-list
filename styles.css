@@ -547,6 +547,7 @@ button.pill {
 
 .menu-actions {
   display: flex;
+  flex-direction: row-reverse;
   flex-wrap: wrap;
   gap: 8px;
   margin: 16px 12px;
@@ -1423,6 +1424,10 @@ body:has(.sheet-layer:not([hidden])) .toast {
 
 [data-hand="left"] .onboarding-actions {
   flex-direction: row-reverse;
+}
+
+[data-hand="left"] .menu-actions {
+  flex-direction: row;
 }
 
 [data-hand="left"] .fab {
