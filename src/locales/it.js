@@ -151,7 +151,7 @@ export default {
   'onboarding.recipes.title': 'Ricette e menù',
   'onboarding.recipes.text': 'Una ricetta è un nome e i suoi prodotti. Un tocco li invia a {active}. In Menù pianifichi i pasti della settimana.',
   'onboarding.sample.title': 'Dati di esempio',
-  'onboarding.sample.text': 'Inizia con una ricetta di esempio per provare l\'app. Puoi eliminarla in Impostazioni.',
+  'onboarding.sample.text': 'Inizia con una ricetta di esempio per provare l\'app.\nPuoi eliminarla in Impostazioni.',
   'onboarding.sample.switch': 'Carica dati di esempio',
   'sample.name': 'Pasta al sugo di pomodoro',
   'sample.tomatoSauce': 'Sugo di pomodoro',

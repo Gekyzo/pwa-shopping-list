@@ -151,7 +151,7 @@ export default {
   'onboarding.recipes.title': 'Receptes i menú',
   'onboarding.recipes.text': 'Una recepta és un nom i els seus productes. Un toc els envia a {active}. A Menú planifiques els àpats de la setmana.',
   'onboarding.sample.title': 'Dades d\'exemple',
-  'onboarding.sample.text': 'Comença amb una recepta d\'exemple per provar l\'app. La pots esborrar a Configuració.',
+  'onboarding.sample.text': 'Comença amb una recepta d\'exemple per provar l\'app.\nLa pots esborrar a Configuració.',
   'onboarding.sample.switch': 'Carregar dades d\'exemple',
   'sample.name': 'Pasta amb salsa de tomàquet',
   'sample.tomatoSauce': 'Salsa de tomàquet',
