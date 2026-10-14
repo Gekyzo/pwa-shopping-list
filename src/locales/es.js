@@ -72,6 +72,7 @@ export default {
   'search.items': 'Buscar artículo o tienda',
   'recipe.openLink': 'Abrir el enlace de {name}',
   'recipe.title': 'Receta',
+  'recipe.products': 'Productos',
   'recipe.link': 'Enlace',
   'recipe.addProduct': 'Añadir producto',
   'recipe.addProductTo': 'Añadir producto a {name}',
