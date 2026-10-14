@@ -70,7 +70,6 @@ export default {
   'recipes.search': 'Search recipe or product',
   'search.label': 'Search the list',
   'search.items': 'Search item or shop',
-  'recipe.send': 'Send to the list: {name}',
   'recipe.openLink': 'Open the link of {name}',
   'recipe.title': 'Recipe',
   'recipe.link': 'Link',

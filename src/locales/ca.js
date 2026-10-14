@@ -70,7 +70,6 @@ export default {
   'recipes.search': 'Cerca recepta o producte',
   'search.label': 'Cerca a la llista',
   'search.items': 'Cerca article o botiga',
-  'recipe.send': 'Envia a la llista: {name}',
   'recipe.openLink': 'Obre l’enllaç de {name}',
   'recipe.title': 'Recepta',
   'recipe.link': 'Enllaç',

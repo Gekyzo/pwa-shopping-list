@@ -17,7 +17,7 @@ const sendToList = (recipe) => {
   if (result.error || result.state !== state) {
     apply(result, { undoText: t('toast.sent', { name: recipe.name, summary: sendText(result) }) });
   }
-  // A second tap changes nothing: keep the undo of the send that is still on the screen.
+  // A second send changes nothing: keep the undo of the send that is still on the screen.
   else showToast(t('toast.sentNothing', { name: recipe.name }), { undo: undoState });
 };
 
@@ -108,9 +108,7 @@ export const recipeNode = (recipe) => {
     el('small', { className: 'item-row-meta', textContent: t('count.products', { count: recipe.products.length }) }),
   ]);
   name.setAttribute('aria-haspopup', 'dialog');
-  const send = el('button', { type: 'button', className: 'button primary icon', onclick: () => sendToList(recipe) }, [icon('cart-add')]);
-  send.setAttribute('aria-label', t('recipe.send', { name: recipe.name }));
-  const row = recipe.url ? [name, linkNode(recipe), send] : [name, send];
+  const row = recipe.url ? [name, linkNode(recipe)] : [name];
   const node = el('li', { className: 'item-row recipe' });
   node.dataset.key = `recipe:${recipe.id}`;
   const right = { run: () => sendToList(recipe), icon: 'cart-add' };
