@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { settle } from '#swipe';
+import { reached, settle } from '#swipe';
 
 const sides = { start: 160, end: 160 };
 
@@ -45,4 +45,20 @@ test('settle opens the other side on a drag across the row', () => {
   assert.equal(settle(-260, sides, 'start'), 'end');
   assert.equal(settle(260, sides, 'end'), 'start');
   assert.equal(settle(-260, { start: 160, end: 0 }, 'start'), null);
+});
+
+test('reached needs 35 % of a wide row', () => {
+  assert.equal(reached(139, 400), false);
+  assert.equal(reached(140, 400), true);
+  assert.equal(reached(300, 400), true);
+});
+
+test('reached needs 80 px at least on a narrow row', () => {
+  assert.equal(reached(79, 120), false);
+  assert.equal(reached(80, 120), true);
+});
+
+test('reached is false with no drag or a drag to the left', () => {
+  assert.equal(reached(0, 400), false);
+  assert.equal(reached(-200, 400), false);
 });
