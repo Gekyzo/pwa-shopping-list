@@ -961,7 +961,7 @@ const recipeNode = (recipe) => {
       () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
       'danger',
     );
-    const link = actionButton(t(recipe.url ? 'recipe.changeLink' : 'recipe.addLink'), () => editLink(recipe));
+    const link = actionButton(t('recipe.link'), () => editLink(recipe));
     node.append(el('div', { className: 'actions' }, [actionButton(t('recipe.rename'), () => startRename(recipe)), link, remove]));
   }
   if (open) {
