@@ -52,7 +52,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | `quantity` | Not text: `''`. Text: trimmed |
   | `shops` | Not a list: empty. An entry that is not text, is empty or is a duplicate: dropped |
   | Shop spellings | Each shop gets the spelling of its first use |
-  | `url` of a recipe | Not an `http` or `https` address: `''` |
+  | `url` of a recipe | Not a valid link (REC-14): `''` |
   | `sent` | An id that is not text, is unknown or is a duplicate: dropped |
   | `menu` | Not a list: empty. A meal with an unknown day, meal or recipe, or a second record of one meal: dropped. The rest in day and meal order |
   | `group` | Unknown: from `grouped` (STORE-8) |

@@ -38,8 +38,9 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 - **REC-13** The link is edited in the field **Enlace** of the sheet of the recipe. It saves as the
   field **Nombre** (REC-33). An empty text removes the link. A text that gives the same address
   changes nothing.
-- **REC-14** A text with no scheme gets `https://`. Only an `http` or `https` address is valid;
-  another text gives `error.invalidLink`.
+- **REC-14** A text with no scheme gets `https://`. Only an `http` or `https` address is valid,
+  with no space and a host name of two parts at least, such as `example.com`; another text gives
+  `error.invalidLink`. A stored link that is not valid becomes empty (STORE-7).
 - **REC-15** A recipe with a link shows a chain symbol in its row. It opens the address in a new
   browser context, with `noopener noreferrer`.
 - **REC-16** A save and a removal of a link have `Deshacer`.

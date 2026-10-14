@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+### Fixed
+
+- A link with spaces, or with no domain such as `example.com`, is not valid any more.
+
 ### Changed
 
 - A tap on a recipe opens its sheet from the bottom: the name, the link and the products. The

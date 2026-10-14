@@ -42,10 +42,18 @@ export const deleteRecipe = (state, id) => {
   return { state: { ...state, recipes, sent, menu } };
 };
 
-// True for an http or https address. No other scheme goes into a link of the screen.
+// Labels of letters, digits and inner hyphens, two at least, with a last label of two letters at
+// least. `URL` gives an international name in its ASCII form, so `xn--` labels pass.
+const HOST = /^(?:[a-z\d](?:[a-z\d-]*[a-z\d])?\.)+(?:[a-z]{2,}|xn--[a-z\d-]+)$/i;
+
+// True for an http or https address with a host name. No other scheme goes into a link of the
+// screen. A browser parses a host with spaces with no error, so the text and the host are checked
+// too.
 export const isWebUrl = (text) => {
+  if (/\s/.test(text)) return false;
   try {
-    return ['http:', 'https:'].includes(new URL(text).protocol);
+    const url = new URL(text);
+    return ['http:', 'https:'].includes(url.protocol) && HOST.test(url.hostname);
   } catch {
     return false;
   }
