@@ -1,8 +1,8 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
-import { el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
+import { $, el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
 import { renameInput, moreButton, actionButton, icon, startRename } from '#ui/controls';
-import { leaveNode } from '#ui/motion';
+import { expand, leaveNode } from '#ui/motion';
 
 export const sendText = ({ added, already }) => {
   const parts = [];
@@ -97,6 +97,22 @@ const linkNode = (recipe) => {
   return link;
 };
 
+const bodyKey = (id) => `recipe-body:${id}`;
+const bodyNode = (id) => $('items').querySelector(`[data-key="${bodyKey(id)}"]`);
+
+// A tap closes the open recipe, then opens the tapped one. Each change slides.
+const toggleRecipe = (recipe) => {
+  const before = ui.openRecipeId;
+  const show = () => {
+    Object.assign(ui, { openRecipeId: before === recipe.id ? null : recipe.id, openId: null });
+    render();
+    if (ui.openRecipeId) expand([bodyNode(ui.openRecipeId)].filter(Boolean));
+  };
+  const open = before && bodyNode(before);
+  if (open) leaveNode(bodyKey(before), [open], show);
+  else show();
+};
+
 export const recipeNode = (recipe) => {
   const open = ui.openRecipeId === recipe.id;
   let name;
@@ -107,10 +123,7 @@ export const recipeNode = (recipe) => {
       {
         type: 'button',
         className: 'item-row-name',
-        onclick: () => {
-          Object.assign(ui, { openRecipeId: open ? null : recipe.id, openId: null });
-          render();
-        },
+        onclick: () => toggleRecipe(recipe),
       },
       [
         el('span', { textContent: recipe.name }),
@@ -137,10 +150,12 @@ export const recipeNode = (recipe) => {
     node.append(el('div', { className: 'row-actions' }, [actionButton(t('recipe.rename'), () => startRename(recipe)), link, remove]));
   }
   if (open) {
-    node.append(
+    const body = el('div', { className: 'recipe-body' }, [
       el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product))),
       productForm(recipe),
-    );
+    ]);
+    body.dataset.key = bodyKey(recipe.id);
+    node.append(body);
   }
   return node;
 };
