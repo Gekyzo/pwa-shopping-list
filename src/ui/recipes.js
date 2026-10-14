@@ -30,7 +30,7 @@ const productNode = (recipe, product) => {
       }),
   });
   remove.setAttribute('aria-label', t('recipe.removeProduct', { name: product }));
-  return el('li', {}, [el('span', { textContent: product }), remove]);
+  return el('li', { className: 'product' }, [el('span', { className: 'product-text', textContent: product }), remove]);
 };
 
 // The product field with the items that match the text below it. A tap on one adds it.
