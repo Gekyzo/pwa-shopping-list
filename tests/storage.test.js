@@ -13,6 +13,9 @@ import {
   saveLanguage,
   loadHand,
   saveHand,
+  THEME_KEY,
+  loadTheme,
+  saveTheme,
   ONBOARDED_KEY,
   loadOnboarded,
   saveOnboarded,
@@ -351,6 +354,46 @@ test('the hand functions do not throw when the storage does', () => {
 test('the hand is not part of the state', () => {
   const storage = fakeStorage();
   saveHand(storage, 'left');
+  assert.deepEqual(load(storage), emptyState());
+  assert.equal(storage.getItem(STORAGE_KEY), null);
+});
+
+test('loadTheme returns the stored theme', () => {
+  assert.equal(loadTheme(fakeStorage({ [THEME_KEY]: 'light' })), 'light');
+  assert.equal(loadTheme(fakeStorage({ [THEME_KEY]: 'dark' })), 'dark');
+});
+
+test('loadTheme returns system for no value and for an unknown value', () => {
+  assert.equal(loadTheme(fakeStorage()), 'system');
+  assert.equal(loadTheme(fakeStorage({ [THEME_KEY]: 'blue' })), 'system');
+  assert.equal(loadTheme(fakeStorage({ [THEME_KEY]: '' })), 'system');
+});
+
+test('saveTheme stores light and dark and system removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveTheme(storage, 'dark'), true);
+  assert.equal(storage.getItem(THEME_KEY), 'dark');
+  assert.equal(saveTheme(storage, 'light'), true);
+  assert.equal(storage.getItem(THEME_KEY), 'light');
+  assert.equal(saveTheme(storage, 'system'), true);
+  assert.equal(storage.getItem(THEME_KEY), null);
+});
+
+test('saveTheme removes the key for an unknown theme', () => {
+  const storage = fakeStorage({ [THEME_KEY]: 'dark' });
+  assert.equal(saveTheme(storage, 'blue'), true);
+  assert.equal(storage.getItem(THEME_KEY), null);
+});
+
+test('the theme functions do not throw when the storage does', () => {
+  assert.equal(loadTheme(brokenStorage()), 'system');
+  assert.equal(saveTheme(brokenStorage(), 'dark'), false);
+  assert.equal(saveTheme(brokenStorage(), 'system'), false);
+});
+
+test('the theme is not part of the state', () => {
+  const storage = fakeStorage();
+  saveTheme(storage, 'dark');
   assert.deepEqual(load(storage), emptyState());
   assert.equal(storage.getItem(STORAGE_KEY), null);
 });

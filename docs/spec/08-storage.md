@@ -10,6 +10,7 @@ Rules of `src/storage.js`, and of its use in `src/app.js`.
 | `localStorage` | `shopping.v1.corrupt` | The last stored text that was not a valid state |
 | `localStorage` | `shopping.lang` | The language that the user chose ([09-languages.md](09-languages.md)) |
 | `localStorage` | `shopping.hand` | `left` when the user chose **Izquierda** ([07-screen.md](07-screen.md), NAV-12) |
+| `localStorage` | `shopping.theme` | `light` or `dark` when the user chose **Claro** or **Oscuro** ([07-screen.md](07-screen.md), NAV-17) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
 | Cache API | `shopping-shell-v8` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 
@@ -68,8 +69,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 - **STORE-9** When a write fails, the change stays in memory and on the screen, and a message says
   that it was not saved (MSG-8).
 - **STORE-10** When `localStorage` is not available, the app works in memory and says so at the
-  start: `El almacenamiento no está disponible: los cambios no se guardan.` A choice of language
-  or of hand then lasts until the app closes, and the walkthrough shows only from `Ajustes`
+  start: `El almacenamiento no está disponible: los cambios no se guardan.` A choice of language,
+  of hand or of theme then lasts until the app closes, and the walkthrough shows only from `Ajustes`
   (ONB-8).
 - **STORE-11** The app does not read a change that another tab makes. The last tab that writes
   wins.
@@ -79,7 +80,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 - **BACKUP-1** **Exportar copia** downloads the file `compra-YYYY-MM-DD.json`, with the UTC date.
   Its content is the state, as JSON with an indent of 2 spaces.
 - **BACKUP-2** The backup holds the items with their shops, the recipes, `sent`, `group`,
-  `sort` and the menu. It does not hold the language, the hand or the flag of the walkthrough.
+  `sort` and the menu. It does not hold the language, the hand, the theme or the flag of the
+  walkthrough.
 - **BACKUP-3** **Importar copia** opens a file choice for a JSON file. A file that is not JSON
   gives `error.invalidJson`. A JSON that is not a valid state (STORE-6) gives `error.notBackup`.
 - **BACKUP-4** A valid file is cleaned and migrated as a stored state is (STORE-7, STORE-8). A
