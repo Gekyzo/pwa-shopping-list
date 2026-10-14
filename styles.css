@@ -277,7 +277,7 @@
      @part count  A number after the label, in muted text.
      @example <button class="chip" type="button">Lidl</button>
      @example <button class="chip" type="button" aria-pressed="true">Mercadona</button>
-     @example <button class="chip surface" type="button" aria-pressed="true"><span>Todas</span><span class="count">4</span></button> */
+     @example <div class="cluster shop-lists" style="background: var(--bg)"><button class="chip surface" type="button" aria-pressed="true"><span>Todas</span><span class="count">4</span></button><button class="chip surface" type="button"><span>Lidl</span><span class="count">1</span></button></div> */
   .chip {
     min-height: var(--tap);
     padding: 0 var(--space-4);
