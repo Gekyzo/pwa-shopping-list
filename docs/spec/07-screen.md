@@ -11,8 +11,8 @@ of it.
 
 ## Sections
 
-- **NAV-1** The bottom bar has four sections, in this order: `Actual`, `Próxima`, `Recetas`,
-  `Ajustes`. The app starts in `Actual`.
+- **NAV-1** The bottom bar has five sections, in this order: `Actual`, `Próxima`, `Recetas`,
+  `Menú`, `Ajustes`. The app starts in `Actual`.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
   edit, clears the recipe search and closes the search of a list (LIST-24).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
@@ -28,8 +28,9 @@ of it.
   two buttons of the backup has an icon before its text: an arrow that goes up out of a tray for
   the export, an arrow that goes down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
-  `No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.` or `No hay
-  recetas. Toca + para crear una.`
+  `No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.`, `No hay
+  recetas. Toca + para crear una.` or, in `Menú`, `No hay recetas. Crea una en Recetas para
+  planificar el menú.`
 
 ## Item rows
 
@@ -76,18 +77,19 @@ of it.
   | Items | Tick, move to the other list, delete, **Quitar de Próxima**, an existing item brought by the add sheet, a manual move |
   | Trip | **Terminar compra**, `Traer N artículos de Próxima` |
   | Recipes | Send, delete, removal of a product, save and removal of a link |
+  | Menu | **Llenar la cesta**, **Quitar** of a meal, **Vaciar menú** |
   | Backup | Import |
 
 - **MSG-6** These changes have no `Deshacer`: a new item, a rename, the recurrent mark,
-  `+ Próxima`, the removal of a tick, a new recipe, a new product, the shops, the order and the
-  grouping.
+  `+ Próxima`, the removal of a tick, a new recipe, a new product, the shops, the order, the
+  grouping and a recipe put in a meal.
 - **MSG-7** A rejected operation shows the text of its error and changes nothing.
 - **MSG-8** When a save fails, the change stays on the screen and the message is `El cambio no se
   ha guardado: el almacenamiento no está disponible.` (STORE-9).
 
 ## Sheets
 
-- **NAV-8** There are three sheets: add, arrange and shops. One is open at a time. A tap on the
+- **NAV-8** There are four sheets: add, arrange, shops and meal. One is open at a time. A tap on the
   veil or `Escape` closes it. The `+` button does not show while a sheet is open.
 - **NAV-9** The trip button of the header has three dots. It shows in `Actual`. A tap
   opens the trip menu below it, and a second tap closes the menu. The menu has one entry,

@@ -48,6 +48,11 @@
         <button id="bring" class="primary" type="button" hidden></button>
       </div>
 
+      <div id="menu-actions" class="menu-actions" hidden>
+        <button id="menu-fill" class="primary" type="button" data-i18n="menu.fill"></button>
+        <button id="menu-clear" type="button" data-i18n="menu.clear"></button>
+      </div>
+
       <section id="finish" class="banner" hidden>
         <strong data-i18n="finish.question"></strong>
         <p id="finish-text"></p>
@@ -96,6 +101,10 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h13a1 1 0 0 1 1 1v17H6a2 2 0 0 1-2-2V4a1 1 0 0 1 1-1z"/><path d="M4 17h15M9 8h6"/></svg>
         <span data-i18n="nav.recipes"></span>
       </button>
+      <button type="button" data-view="menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v18M4 3v5a3 3 0 0 0 6 0V3M17 21V3c-2.5 1-4 3.5-4 7v3h4"/></svg>
+        <span data-i18n="nav.menu"></span>
+      </button>
       <button type="button" data-view="settings">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
         <span data-i18n="nav.settings"></span>
@@ -137,6 +146,16 @@
             <button type="button" data-sort="custom" data-i18n="arrange.custom"></button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div id="meal" class="sheet-layer" hidden>
+      <div id="meal-veil" class="veil"></div>
+      <div id="meal-sheet" class="sheet" role="dialog">
+        <div class="grab"></div>
+        <h2 id="meal-title"></h2>
+        <div id="meal-chips" class="chips"></div>
+        <button id="meal-remove" class="danger" type="button" data-i18n="menu.remove" hidden></button>
       </div>
     </div>
 
@@ -192,10 +211,11 @@
             <circle class="solid" cx="194" cy="82" r="13"/>
             <path class="on-solid" d="M194 76v12M188 82h12"/>
             <rect class="card" x="30" y="108" width="180" height="32" rx="10"/>
-            <circle cx="57" cy="124" r="5"/>
-            <circle class="solid" cx="99" cy="124" r="5"/>
-            <circle cx="141" cy="124" r="5"/>
-            <circle cx="183" cy="124" r="5"/>
+            <circle cx="54" cy="124" r="5"/>
+            <circle class="solid" cx="87" cy="124" r="5"/>
+            <circle cx="120" cy="124" r="5"/>
+            <circle cx="153" cy="124" r="5"/>
+            <circle cx="186" cy="124" r="5"/>
           </svg>
         </div>
         <div aria-live="polite">

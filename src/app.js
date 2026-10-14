@@ -1,6 +1,7 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
+import * as menu from '#menu';
 import { settle } from '#swipe';
 import { direction, slideDirection, slideTo } from '#sections';
 import { PAGES, isLast, shouldShow, step } from '#onboarding';
@@ -87,6 +88,8 @@ const ui = {
   tripMenuOpen: false,
   // The item whose shop sheet is open, or null.
   shopsId: null,
+  // The meal whose sheet is open, as { day, meal }, or null.
+  mealOpen: null,
   // The page of the walkthrough in view, or null while the walkthrough is closed.
   onboarding: firstStart ? 0 : null,
   target: 'active',
@@ -911,6 +914,74 @@ const recipeNode = (recipe) => {
   return node;
 };
 
+// Menu
+
+// The name of a day of the week in the language of the screen. 1 January 2024 is a Monday.
+const dayName = (day) => new Intl.DateTimeFormat(intlTag(lang), { weekday: 'long' }).format(new Date(2024, 0, 1 + day));
+
+const mealTitle = (day, meal) => t('menu.title', { meal: t(`meal.${meal}`), day: dayName(day) });
+
+const openMeal = (day, meal) => {
+  ui.mealOpen = { day, meal };
+  render();
+};
+
+const closeMeal = () => {
+  ui.mealOpen = null;
+  render();
+};
+
+const mealNode = (day, { meal, recipe }) => {
+  const button = el(
+    'button',
+    { type: 'button', className: recipe ? 'meal' : 'meal free', onclick: () => openMeal(day, meal) },
+    [el('small', { textContent: t(`meal.${meal}`) }), el('span', { textContent: recipe ? recipe.name : t('menu.choose') })],
+  );
+  button.setAttribute('aria-label', `${mealTitle(day, meal)}: ${recipe ? recipe.name : t('menu.choose')}`);
+  button.setAttribute('aria-haspopup', 'dialog');
+  return button;
+};
+
+const dayNode = ({ day, meals }) =>
+  el('li', { className: 'day' }, [
+    el('h3', { textContent: dayName(day) }),
+    el('div', { className: 'meals' }, meals.map((entry) => mealNode(day, entry))),
+  ]);
+
+const fillBasket = () => {
+  const result = menu.fillMenu(state);
+  if (result.error || result.state !== state) {
+    apply(result, { undoText: t('toast.menuFilled', { summary: sendText(result) }) });
+  }
+  // A second tap changes nothing: keep the undo of the fill that is still on the screen.
+  else showToast(t('toast.menuNothing'), { undo: undoState });
+};
+
+const renderMeal = () => {
+  const open = ui.mealOpen;
+  $('meal').hidden = !open;
+  if (!open) return;
+  const { day, meal } = open;
+  const title = mealTitle(day, meal);
+  $('meal-title').textContent = title;
+  $('meal-sheet').setAttribute('aria-label', title);
+  const current = menu.menuWeek(state)[day].meals.find((entry) => entry.meal === meal).recipe;
+  const chips = state.recipes.map((recipe) => {
+    const chip = el('button', {
+      type: 'button',
+      textContent: recipe.name,
+      onclick: () => {
+        ui.mealOpen = null;
+        apply(menu.setMeal(state, day, meal, recipe.id));
+      },
+    });
+    chip.setAttribute('aria-pressed', String(recipe.id === current?.id));
+    return chip;
+  });
+  $('meal-chips').replaceChildren(...chips);
+  $('meal-remove').hidden = !current;
+};
+
 // Screen
 
 const finishText = ({ back, gone }) => `${t('finish.back', { count: back })} ${t('finish.gone', { count: gone })}`;
@@ -923,6 +994,11 @@ const activeSubtitle = ({ total, left }) => {
 
 const headerOf = (summary, next) => {
   if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), ring: '⚙', pct: 0 };
+  if (ui.view === 'menu') {
+    const count = menu.mealCount(state);
+    const subtitle = count ? t('header.menuMeals', { count }) : t('header.noMeals');
+    return { title: t('nav.menu'), subtitle, ring: String(count), pct: 0 };
+  }
   if (ui.view === 'recipes') {
     const count = state.recipes.length;
     const subtitle = count ? t('count.recipes', { count }) : t('header.noRecipes');
@@ -939,7 +1015,7 @@ const headerOf = (summary, next) => {
   return { title: t('header.today'), subtitle: activeSubtitle(summary), ring: `${total - left}/${total}`, pct };
 };
 
-const EMPTY_KEYS = { active: 'empty.active', next: 'empty.next', recipes: 'empty.recipes' };
+const EMPTY_KEYS = { active: 'empty.active', next: 'empty.next', recipes: 'empty.recipes', menu: 'empty.menu' };
 
 const emptyText = () => {
   if (searching()) return t(ui.view === 'recipes' ? 'empty.noMatch' : 'empty.noItemMatch', { query: ui.query.trim() });
@@ -966,6 +1042,8 @@ const renderSearch = (items, searchable) => {
 
 const nodesOf = (items) => {
   if (ui.view === 'settings') return [];
+  // With no recipe there is nothing to plan: the empty text says where to create one.
+  if (ui.view === 'menu') return state.recipes.length ? menu.menuWeek(state).map(dayNode) : [];
   return ui.view === 'recipes' ? recipes.searchRecipes(state, ui.query).map(recipeNode) : listNodes(items);
 };
 
@@ -984,6 +1062,9 @@ const renderList = (summary, next) => {
   $('empty-text').textContent = emptyText();
   $('bring').hidden = !(ui.view === 'active' && summary.incoming > 0) || searching();
   $('bring').textContent = say('empty.bring', { count: summary.incoming, list: 'next' });
+
+  $('menu-actions').hidden = !(ui.view === 'menu' && state.recipes.length > 0);
+  $('menu-clear').disabled = menu.mealCount(state) === 0;
 
   $('finish').hidden = !(ui.view === 'active' && summary.total > 0 && summary.left === 0);
   $('finish-text').textContent = finishText(summary);
@@ -1073,7 +1154,8 @@ const render = () => {
   $('finish-menu-text').textContent = outcome.join(' · ');
   renderTripMenu();
 
-  $('fab').hidden = ui.view === 'settings' || ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null;
+  $('fab').hidden =
+    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null || ui.mealOpen !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
   document.querySelectorAll('.bnav button').forEach((button) => {
@@ -1090,6 +1172,7 @@ const render = () => {
   renderSheet();
   renderArrange();
   renderShops();
+  renderMeal();
 };
 
 // Writes the fixed text of the page, then the text that a render builds.
@@ -1305,7 +1388,7 @@ const showView = (view) => {
   const way = direction(ui.view, view);
   // The field is shared: the focus of a list search must not go with it to Recetas.
   $('query').blur();
-  Object.assign(ui, { view, editingId: null, openId: null, query: '', searchOpen: false });
+  Object.assign(ui, { view, editingId: null, openId: null, query: '', searchOpen: false, mealOpen: null });
   render();
   enter(way);
   if (ui.view === 'settings') checkVersion();
@@ -1320,7 +1403,8 @@ document.querySelectorAll('.bnav button').forEach((button) => {
 let sectionSlide = null;
 document.addEventListener('pointerdown', (event) => {
   sectionSlide = null;
-  if (!event.isPrimary || event.button !== 0 || reorder || ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null) return;
+  const sheet = ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null || ui.mealOpen !== null;
+  if (!event.isPrimary || event.button !== 0 || reorder || sheet) return;
   if (!event.target.closest('.head, main') || event.target.closest('.swipe, input, textarea')) return;
   sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
 });
@@ -1538,6 +1622,7 @@ document.addEventListener('keydown', (event) => {
     render();
   }
   if (ui.shopsId !== null) closeShops();
+  if (ui.mealOpen !== null) closeMeal();
   if (ui.searchOpen) closeSearch();
   if (ui.tripMenuOpen) {
     ui.tripMenuOpen = false;
@@ -1557,6 +1642,16 @@ $('toast-undo').addEventListener('click', () => {
   hideToast();
   // The rows that the undo puts back open, as a ticked row closes.
   expand(pendingRows().filter((node) => !before.has(node.dataset.id)));
+});
+
+$('menu-fill').addEventListener('click', fillBasket);
+$('menu-clear').addEventListener('click', () => apply(menu.clearMenu(state), { undoText: t('toast.menuCleared') }));
+$('meal-veil').addEventListener('click', closeMeal);
+$('meal-remove').addEventListener('click', () => {
+  const { day, meal } = ui.mealOpen;
+  const name = menu.menuWeek(state)[day].meals.find((entry) => entry.meal === meal).recipe?.name ?? '';
+  ui.mealOpen = null;
+  apply(menu.clearMeal(state, day, meal), { undoText: t('toast.mealCleared', { name }) });
 });
 
 $('export').addEventListener('click', () => {

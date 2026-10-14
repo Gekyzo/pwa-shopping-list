@@ -23,6 +23,26 @@ their products in one action.
   recipes counts as added at the first send and as there already at the second.
 - **MENU-8** The menu does not change at a fill.
 
+## Screen
+
+- **MENU-9** `Menú` shows one row for each day, with the name of the day in the language of the
+  screen, and its two meals side by side. A meal shows `Comida` or `Cena` and the name of its
+  recipe, or `Elegir receta`.
+- **MENU-10** The header shows `Menú` and `N comidas planificadas`, or `Sin comidas
+  planificadas`. The ring shows the number of planned meals.
+- **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each
+  recipe, in the order of the recipes; the chip of the recipe of the meal is on. A tap on a chip
+  puts that recipe in the meal and closes the sheet. A meal with a recipe also has **Quitar**,
+  with `Deshacer` and the message `Quitada del menú: «name».`
+- **MENU-12** Below the week, **Llenar la cesta** fills `Actual` (MENU-5). Its message is
+  `Menú: N añadidos, N ya estaban.` with `Deshacer`. A fill that changes nothing shows `Menú:
+  todo estaba ya en la lista.` and keeps the `Deshacer` that is still on the screen.
+- **MENU-13** **Vaciar menú** empties the menu, with `Deshacer` and the message `Menú vaciado.`
+  It is disabled while the menu is empty.
+- **MENU-14** With no recipe, `Menú` shows its empty text (NAV-7) and no week. The `+` button
+  does not show in `Menú`.
+- **MENU-15** **Terminar compra** does not change the menu.
+
 ## Limits
 
 No date, no week after this one, no third meal. No fill to `Próxima`. No quantity.

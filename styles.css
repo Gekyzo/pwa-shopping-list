@@ -522,6 +522,74 @@ button.pill {
   margin-top: 8px;
 }
 
+/* The menu: one row for each day, with its two meals side by side. */
+.day {
+  padding: 8px 12px 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.day h3 {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.meals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.meal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  padding: 6px 10px;
+  background: var(--bg);
+  text-align: left;
+}
+
+.meal small {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.meal span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meal.free span {
+  color: var(--muted);
+}
+
+.menu-actions {
+  display: flex;
+  gap: 8px;
+  margin: 16px 12px;
+}
+
+.menu-actions button {
+  flex: 1;
+}
+
+#menu-clear,
+#meal-remove {
+  border: 1px solid var(--line);
+}
+
+#meal-remove {
+  width: 100%;
+  color: var(--danger);
+}
+
 .banner {
   margin: 16px 12px;
   padding: 14px 16px;
