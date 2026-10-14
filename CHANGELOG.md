@@ -22,6 +22,7 @@ no change for the user has no entry.
 - In `Menú`, **Llenar la cesta** is at the side of the hand: at the right with `Derecha`, at
   the left with `Izquierda`.
 - In `Menú`, **Vaciar menú** and **Llenar la cesta** each take half of the line.
+- In `Recetas`, the cart button that sends a recipe has the colour of **Llenar la cesta**.
 
 ## 1.0.19 - 2026-10-14
 
