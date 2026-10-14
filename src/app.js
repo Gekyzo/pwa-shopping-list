@@ -17,6 +17,8 @@ import {
   saveLanguage,
   loadHand,
   saveHand,
+  loadShopLists,
+  saveShopLists,
   loadTheme,
   saveTheme,
   loadModules,
@@ -73,6 +75,8 @@ document.documentElement.dataset.hand = hand;
 
 // The colours: `light` or `dark` override the phone, in styles.css; `system` follows it.
 let theme = storage ? loadTheme(storage) : 'system';
+// `hide` takes the row of shop lists away from Actual and Próxima.
+let shopLists = storage ? loadShopLists(storage) : 'show';
 document.documentElement.dataset.theme = theme;
 
 // The modules that the user turned off (MOD-2).
@@ -767,12 +771,18 @@ const shownGroup = () => {
 const renderArrange = () => {
   const { recipe, shop, sort } = arrangeChoices();
   const group = recipe || shop;
-  if (!group && !sort) ui.arrangeOpen = false;
-  $('arrange-button').hidden = !group && !sort;
+  // The choice of the row of shop lists shows when the view has the row to show.
+  const lists = inList() && shops.shopChips(state, ui.view).length > 0;
+  if (!group && !sort && !lists) ui.arrangeOpen = false;
+  $('arrange-button').hidden = !group && !sort && !lists;
   $('arrange-button').setAttribute('aria-expanded', String(ui.arrangeOpen));
   $('arrange').hidden = !ui.arrangeOpen;
   $('arrange-group').hidden = !group;
   $('arrange-sort').hidden = !sort;
+  $('arrange-lists').hidden = !lists;
+  document.querySelectorAll('#arrange-lists button').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.lists === shopLists));
+  });
   const shows = { recipe, shop, none: true };
   // The view shows no group for a choice that it cannot show.
   const pressed = shownGroup();
@@ -1178,7 +1188,7 @@ const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('g
 
 // The row of the shop lists of Actual and Próxima. A count of Actual is the items to buy.
 const renderShopChips = () => {
-  const chips = inList() ? shops.shopChips(state, ui.view) : [];
+  const chips = inList() && shopLists === 'show' ? shops.shopChips(state, ui.view) : [];
   $('shop-chips').hidden = chips.length === 0;
   const count = (value) => (ui.view === 'active' && value === 0 ? '✓' : String(value));
   const buttons = chips.map(({ shop, count: value }) => {
@@ -1203,7 +1213,10 @@ const render = () => {
   // The item of the shop sheet can go while the sheet is open: an undo, or an import.
   if (!state.items.some((item) => item.id === ui.shopsId)) ui.shopsId = null;
   // A shop list whose chip went shows Todas.
-  for (const list of ['active', 'next']) ui.shop[list] = shops.validShop(state, list, ui.shop[list]);
+  // A hidden row leaves no list filtered.
+  for (const list of ['active', 'next']) {
+    ui.shop[list] = shopLists === 'show' ? shops.validShop(state, list, ui.shop[list]) : null;
+  }
   const summary = store.tripSummary(state);
   const next = store.nextItems(state);
   const scoped = viewState();
@@ -1815,6 +1828,13 @@ document.querySelectorAll('#arrange-sort button').forEach((button) => {
     const before = rowTops();
     commit(store.setSort(state, button.dataset.sort).state);
     slide(before);
+  });
+});
+document.querySelectorAll('#arrange-lists button').forEach((button) => {
+  button.addEventListener('click', () => {
+    shopLists = button.dataset.lists === 'hide' ? 'hide' : 'show';
+    if (storage) saveShopLists(storage, shopLists);
+    render();
   });
 });
 $('add-name').addEventListener('input', renderSheet);

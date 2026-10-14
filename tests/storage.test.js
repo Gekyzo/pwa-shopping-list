@@ -5,6 +5,7 @@ import {
   CORRUPT_KEY,
   LANGUAGE_KEY,
   HAND_KEY,
+  SHOP_LISTS_KEY,
   load,
   save,
   exportJson,
@@ -13,6 +14,8 @@ import {
   saveLanguage,
   loadHand,
   saveHand,
+  loadShopLists,
+  saveShopLists,
   THEME_KEY,
   loadTheme,
   saveTheme,
@@ -359,6 +362,28 @@ test('the hand is not part of the state', () => {
   saveHand(storage, 'left');
   assert.deepEqual(load(storage), emptyState());
   assert.equal(storage.getItem(STORAGE_KEY), null);
+});
+
+test('loadShopLists returns hide when stored and show for no value and an unknown value', () => {
+  assert.equal(loadShopLists(fakeStorage({ [SHOP_LISTS_KEY]: 'hide' })), 'hide');
+  assert.equal(loadShopLists(fakeStorage()), 'show');
+  assert.equal(loadShopLists(fakeStorage({ [SHOP_LISTS_KEY]: 'off' })), 'show');
+});
+
+test('saveShopLists stores hide and show removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveShopLists(storage, 'hide'), true);
+  assert.equal(storage.getItem(SHOP_LISTS_KEY), 'hide');
+  assert.equal(saveShopLists(storage, 'show'), true);
+  assert.equal(storage.getItem(SHOP_LISTS_KEY), null);
+});
+
+test('the shop list functions do not throw when the storage does, and are not part of the state', () => {
+  assert.equal(loadShopLists(brokenStorage()), 'show');
+  assert.equal(saveShopLists(brokenStorage(), 'hide'), false);
+  const storage = fakeStorage();
+  saveShopLists(storage, 'hide');
+  assert.deepEqual(load(storage), emptyState());
 });
 
 test('loadTheme returns the stored theme', () => {

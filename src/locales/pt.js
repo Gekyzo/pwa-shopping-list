@@ -105,6 +105,8 @@ export default {
   'arrange.sortBy': 'Ordenar por',
   'arrange.name': 'Nome',
   'arrange.custom': 'Personalizado',
+  'arrange.show': 'Mostrar',
+  'arrange.hide': 'Ocultar',
 
   'shops.add': 'Adicionar',
   'shops.placeholder': 'Nova loja',
