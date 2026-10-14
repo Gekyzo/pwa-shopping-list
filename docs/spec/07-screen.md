@@ -143,7 +143,7 @@ of it.
   |---|---|---|
   | 1 | `Dos listas` | `Actual` is the trip of today, `Próxima` holds the next one |
   | 2 | `La compra se repite` | The recurrent mark and the result of **Terminar compra** |
-  | 3 | `Desliza una fila` | The actions of a row (ROW-3) |
+  | 3 | `Desliza una fila` | The tap on the name (ROW-7) and the two slides of a row (ROW-3, ROW-11) |
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3) and the `+` button |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.

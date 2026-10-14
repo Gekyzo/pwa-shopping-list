@@ -127,7 +127,7 @@ export default {
   'onboarding.trip.text':
     'Attiva ↻ per quello che compri sempre. Quando termini la spesa, gli articoli comprati con ↻ tornano nella lista e gli altri articoli comprati vengono eliminati.',
   'onboarding.row.title': 'Fai scorrere una riga',
-  'onboarding.row.text': 'Verso destra: rinomina e negozi. Verso sinistra: sposta nell’altra lista ed elimina.',
+  'onboarding.row.text': 'Tocca un articolo per modificarlo. Verso destra: comprato. Verso sinistra: sposta nell’altra lista ed elimina.',
   'onboarding.sections.title': 'Fai scorrere lo schermo',
   'onboarding.sections.text': 'Fai scorrere verso un lato per cambiare sezione. Tocca + per aggiungere un articolo.',
 

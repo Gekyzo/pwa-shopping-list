@@ -127,7 +127,7 @@ export default {
   'onboarding.trip.text':
     'Turn ↻ on for what you always buy. When you finish shopping, the bought items with ↻ come back to the list and the other bought items are deleted.',
   'onboarding.row.title': 'Slide a row',
-  'onboarding.row.text': 'To the right: rename and shops. To the left: move to the other list and delete.',
+  'onboarding.row.text': 'Tap an item to edit it. To the right: bought. To the left: move to the other list and delete.',
   'onboarding.sections.title': 'Slide the screen',
   'onboarding.sections.text': 'Slide to one side to change section. Tap + to add an item.',
 

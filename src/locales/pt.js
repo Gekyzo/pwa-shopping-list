@@ -127,7 +127,7 @@ export default {
   'onboarding.trip.text':
     'Ative ↻ no que compra sempre. Ao terminar as compras, os artigos comprados com ↻ voltam à lista e os outros artigos comprados são eliminados.',
   'onboarding.row.title': 'Deslize uma linha',
-  'onboarding.row.text': 'Para a direita: mudar o nome e lojas. Para a esquerda: mover para a outra lista e eliminar.',
+  'onboarding.row.text': 'Toque num artigo para o editar. Para a direita: comprado. Para a esquerda: mover para a outra lista e eliminar.',
   'onboarding.sections.title': 'Deslize o ecrã',
   'onboarding.sections.text': 'Deslize para um lado para mudar de secção. Toque em + para adicionar um artigo.',
 
