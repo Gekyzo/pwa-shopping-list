@@ -8,3 +8,21 @@ export const shouldShow = ({ seen, hasState }) => !seen && !hasState;
 export const step = (index, direction) => Math.min(Math.max(index + direction, 0), PAGES.length - 1);
 
 export const isLast = (index) => index === PAGES.length - 1;
+
+// The parts of a page text. A text between two backticks is a key, such as `↻` or `+`; a
+// backtick with no pair stays in the text.
+export const textParts = (text) => {
+  const pieces = text.split('`');
+  // An even count of pieces means that the last backtick has no pair.
+  const open = pieces.length % 2 === 0 ? pieces.splice(-2).join('`') : null;
+  const parts = pieces.map((piece, index) => ({ text: piece, key: index % 2 === 1 }));
+  if (open !== null) parts.push({ text: open, key: false });
+  return parts
+    .filter((part) => part.text)
+    .reduce((joined, part) => {
+      const last = joined.at(-1);
+      if (last && !last.key && !part.key) last.text += part.text;
+      else joined.push({ ...part });
+      return joined;
+    }, []);
+};

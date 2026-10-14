@@ -1,4 +1,4 @@
-import { PAGES, isLast, step } from '#onboarding';
+import { PAGES, isLast, step, textParts } from '#onboarding';
 import { hasSample, addSample } from '#recipes';
 import { slideDirection } from '#sections';
 import { saveOnboarded } from '#storage';
@@ -30,7 +30,10 @@ export const renderOnboarding = () => {
   });
   $('onboarding-title').textContent = t(`onboarding.${page}.title`);
   const names = { active: t('list.active'), next: t('list.next'), name: t('sample.name') };
-  $('onboarding-text').textContent = t(`onboarding.${page}.text`, names);
+  const parts = textParts(t(`onboarding.${page}.text`, names));
+  $('onboarding-text').replaceChildren(
+    ...parts.map(({ text, key }) => (key ? el('span', { className: 'onboarding-key', textContent: text }) : text)),
+  );
   $('onboarding-dots').replaceChildren(...PAGES.map((id) => el('span', { className: id === page ? 'onboarding-dot on' : 'onboarding-dot' })));
   $('onboarding-dots').setAttribute('aria-label', t('onboarding.page', { page: ui.onboarding + 1, total: PAGES.length }));
   $('onboarding-skip').hidden = isLast(ui.onboarding);

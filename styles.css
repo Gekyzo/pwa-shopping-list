@@ -20,6 +20,7 @@
     --scrim: rgb(0 0 0 / 0.45); /* veil behind a sheet */
 
     --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; /* keys of the walkthrough */
     --text-xs: 0.75rem; /* labels, badges, captions */
     --text-s: 0.875rem; /* second text, chips */
     --text-m: 1rem; /* body */
@@ -1507,6 +1508,7 @@
      @part onboarding-page     The page in view: its drawing, its title and its text.
      @part onboarding-title    The title of a page.
      @part onboarding-text     The text of a page.
+     @part onboarding-key      A control named in a text, such as ↻ or +: a key with a border, as inline code.
      @part onboarding-dots     One dot for each page.
      @part onboarding-dot      One dot.
      @part onboarding-actions  Saltar and the next button, side by side. On the last page the next button fills the bar.
@@ -1596,6 +1598,16 @@
 
   .onboarding-switch.away {
     visibility: hidden;
+  }
+
+  .onboarding-key {
+    padding: 0 var(--space-1);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-mono);
+    white-space: nowrap;
   }
 
   .onboarding-dots {
