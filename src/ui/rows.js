@@ -94,12 +94,12 @@ export const moveRow = (row, x) => {
 };
 
 // Lets a horizontal drag of the row show the side menu behind it, or run the action of the slide
-// to the right. `settle` and `reached` decide the result.
-const bindSwipe = (row, widths, item, groupId, right) => {
+// to the right. `settle` and `reached` decide the result. `id` is the id of an item or a recipe.
+const bindSwipe = (row, widths, id, groupId, right) => {
   let drag = null;
   row.addEventListener('pointerdown', (event) => {
-    if (event.button !== 0 || ui.editingId === item.id) return;
-    const base = shift(isOpen(item.id, groupId) ? ui.openSide : null, widths);
+    if (event.button !== 0 || ui.editingId === id) return;
+    const base = shift(isOpen(id, groupId) ? ui.openSide : null, widths);
     drag = { x: event.clientX, y: event.clientY, base, active: false };
   });
   row.addEventListener('pointermove', (event) => {
@@ -135,10 +135,10 @@ const bindSwipe = (row, widths, item, groupId, right) => {
       right.run();
       return;
     }
-    const open = isOpen(item.id, groupId) ? ui.openSide : null;
+    const open = isOpen(id, groupId) ? ui.openSide : null;
     const side = settle(event.clientX - x, widths, open);
-    Object.assign(ui, { openId: side ? item.id : null, openSide: side, openGroup: groupId, editingId: null });
-    ui.settleFrom = { id: item.id, groupId, x: at };
+    Object.assign(ui, { openId: side ? id : null, openSide: side, openGroup: groupId, editingId: null });
+    ui.settleFrom = { id, groupId, x: at };
     render();
   };
   row.addEventListener('pointerup', finish);
@@ -162,21 +162,29 @@ const closing = (button) => {
   return button;
 };
 
-export const itemNode = (item, groupId = null) => {
-  const { row, end, right } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item, groupId);
-  const open = isOpen(item.id, groupId) ? ui.openSide : null;
+// The box of a row that slides: the action of the slide to the right below it, the side actions
+// (`end`) behind its right end, and the body with `row`. `right` is { run, icon } or null.
+export const swipeBox = ({ id, groupId = null, row, end, right }) => {
+  const open = isOpen(id, groupId) ? ui.openSide : null;
   const widths = { start: 0, end: end.length * SIDE_BUTTON };
-  const rowNode = el('div', { className: 'item-row-body' }, row);
+  const body = el('div', { className: 'item-row-body' }, row);
   const layers = [el('div', { className: 'item-row-actions', inert: open !== 'end' }, end.map(closing))];
   // The slide to the right shows its action below the row.
   if (right) layers.unshift(el('div', { className: 'item-row-backdrop' }, [icon(right.icon)]));
   const from = ui.settleFrom;
-  if (from && from.id === item.id && from.groupId === groupId) {
+  if (from && from.id === id && from.groupId === groupId) {
     // Start where the drag ended, then move to the settled place with the CSS transition.
-    moveRow(rowNode, from.x);
-    requestAnimationFrame(() => requestAnimationFrame(() => moveRow(rowNode, shift(open, widths))));
-  } else moveRow(rowNode, shift(open, widths));
-  bindSwipe(rowNode, widths, item, groupId, right);
+    moveRow(body, from.x);
+    requestAnimationFrame(() => requestAnimationFrame(() => moveRow(body, shift(open, widths))));
+  } else moveRow(body, shift(open, widths));
+  bindSwipe(body, widths, id, groupId, right);
+  const box = el('div', { className: open ? 'item-row-swipe open' : 'item-row-swipe' }, [...layers, body]);
+  return { box, body };
+};
+
+export const itemNode = (item, groupId = null) => {
+  const { row, end, right } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item, groupId);
+  const { box, body } = swipeBox({ id: item.id, groupId, row, end, right });
   const node = el('li', {
     className: [
       'item-row',
@@ -184,13 +192,11 @@ export const itemNode = (item, groupId = null) => {
       ui.flashId === item.id && 'flash',
       ui.leaving.has(item.id) && 'gone',
     ].filter(Boolean).join(' '),
-  }, [
-    el('div', { className: open ? 'item-row-swipe open' : 'item-row-swipe' }, [...layers, rowNode]),
-  ]);
+  }, [box]);
   node.dataset.id = item.id;
   const scope = scopeOf(item, groupId);
   if (scope) node.dataset.scope = scope;
-  bindReorder(rowNode, node, item, groupId);
+  bindReorder(body, node, item, groupId);
   return node;
 };
 
