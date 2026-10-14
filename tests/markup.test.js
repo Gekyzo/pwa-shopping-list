@@ -61,6 +61,9 @@ test('the edit sheet has a veil, a dialog, the name and quantity fields and the 
   assert.match(layer, /<form id="edit-form" class="sheet" role="dialog"/);
   assert.match(layer, /<input id="edit-name"[^>]*maxlength="80"/);
   assert.match(layer, /<input id="edit-quantity"[^>]*maxlength="20"/);
+  // Each field keeps its name in sight: a label that floats onto the border once the field has a value.
+  assert.match(layer, /<label class="field"><input id="edit-name"[^>]*><span data-i18n="edit.name"><\/span><\/label>/);
+  assert.match(layer, /<label class="field"><input id="edit-quantity"[^>]*><span data-i18n="edit.quantity"><\/span><\/label>/);
   assert.match(layer, /<div id="edit-chips" class="chips">/);
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);

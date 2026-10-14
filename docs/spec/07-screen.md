@@ -56,7 +56,9 @@ of it.
 - **ROW-6** One row is open at a time. A tap out of the open row closes it, and that tap still
   does its own work. An action closes the row, then runs.
 - **ROW-7** The edit sheet `Editar` has the field **Nombre**, 80 characters at most, the field
-  **Cantidad**, 20 characters at most (LIST-27), then the shops (SHOP-9 to SHOP-15). `Enter` or a
+  **Cantidad**, 20 characters at most (LIST-27), then the shops (SHOP-9 to SHOP-15). The name of
+  a field shows inside it while it is empty, and moves onto its top border when it has a value or
+  the focus. `Enter` or a
   loss of focus saves a field (LIST-5); an error shows its message and the field shows the old
   value again. `Escape` in a field puts the value back and keeps the sheet open. A change of
   quantity has no message and no `Deshacer`. The sheet opens with no focus in a field.
