@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.13 - 2026-10-14
+
 ### Added
 
 - **Buscar receta o producto** in the sheet of a meal in `Menú`. It filters the recipes while you
