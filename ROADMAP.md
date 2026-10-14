@@ -4,7 +4,8 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 ## Planned
 
-- **Optional reagens**. Make reagents optional.
+- **Responsive**. Adapt screens to different phones sizes, models, viewport,foldable phones, tablets.
+- **Optional reagents**. Make reagents optional.
 - **Recipes**. Add effects on recipes crud.
 - **Store sections.** Add the category or section of the store to each product.
   The sections are configurable in the settings.
