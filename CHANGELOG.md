@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.16 - 2026-10-14
+
 ### Changed
 
 - A new app icon: a bag of groceries with bread, greens, a tomato and milk.
