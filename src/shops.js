@@ -57,3 +57,48 @@ export const shopGroups = (state, list) => {
   });
   return { groups, rest: source.filter((item) => shown(item) && item.shops.length === 0) };
 };
+
+// The shop lists: `null` is `Todas`, `''` is `Sin tienda`, a name is a shop.
+export const inShop = (item, shop) => (shop === null ? true : shop === '' ? item.shops.length === 0 : hasShop(item, shop));
+
+// The state with only the items of one shop list. Operations still run on the full state.
+export const shopState = (state, shop) =>
+  shop === null ? state : { ...state, items: state.items.filter((item) => inShop(item, shop)) };
+
+// The chips of the shop lists of a view: Todas, each shop in name order, then Sin tienda when an
+// item has no shop. `count` is the items to buy for Active and the items of the view for Next.
+// No chip when no item of the view has a shop.
+export const shopChips = (state, list) => {
+  const active = list === 'active';
+  const source = active ? activeItems(state) : nextItems(state);
+  const names = namesOf(source);
+  if (!names.length) return [];
+  const chip = (shop) => {
+    const members = source.filter((item) => inShop(item, shop));
+    return { shop, count: (active ? members.filter((item) => !item.bought) : members).length };
+  };
+  const none = source.some((item) => item.shops.length === 0) ? [chip('')] : [];
+  return [chip(null), ...names.map(chip), ...none];
+};
+
+// The choice when its chip still exists, in the spelling of the chip; Todas if not.
+export const validShop = (state, list, shop) => {
+  if (shop === null) return null;
+  const chip = shopChips(state, list).find((entry) => entry.shop !== null && keyOf(entry.shop) === keyOf(shop));
+  return chip ? chip.shop : null;
+};
+
+// The shop list of Active after `shop`, in chip order and from the start after the end, that has an
+// item to buy. Null when there is none.
+export const nextShop = (state, shop) => {
+  const chips = shopChips(state, 'active').filter((chip) => chip.shop !== null);
+  const at = chips.findIndex((chip) => chip.shop === shop);
+  const order = [...chips.slice(at + 1), ...chips.slice(0, at + 1)];
+  return order.find((chip) => chip.shop !== shop && chip.count > 0)?.shop ?? null;
+};
+
+// An add from a shop list puts its shop on the item. Todas, Sin tienda and an error change nothing.
+export const withShop = (result, id, shop) => {
+  if (result.error || !shop) return result;
+  return { ...result, state: addItemShop(result.state, id, shop).state };
+};

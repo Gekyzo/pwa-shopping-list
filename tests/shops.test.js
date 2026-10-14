@@ -1,7 +1,19 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem, setSort } from '#store';
-import { shopNames, shopSuggestions, addItemShop, removeItemShop, shopGroups } from '#shops';
+import {
+  shopNames,
+  shopSuggestions,
+  addItemShop,
+  removeItemShop,
+  shopGroups,
+  shopChips,
+  inShop,
+  shopState,
+  validShop,
+  nextShop,
+  withShop,
+} from '#shops';
 
 let counter = 0;
 const newId = () => `id-${++counter}`;
@@ -160,4 +172,78 @@ test('shopSuggestions is empty for an unknown item and for no shops', () => {
   assert.deepEqual(shopSuggestions(state, 'nope'), []);
   assert.deepEqual(shopSuggestions(state, find(state, 'Milk').id), []);
   assert.deepEqual(shopSuggestions(emptyState(), 'nope'), []);
+});
+
+test('shopChips is empty when no item of the view has a shop', () => {
+  assert.deepEqual(shopChips(build(['Milk', 'active']), 'active'), []);
+});
+
+test('shopChips of active has Todas, the shops in name order and Sin tienda, with the items to buy', () => {
+  const state = build(
+    ['Milk', 'active', { shops: ['Lidl', 'aldi'] }],
+    ['Salt', 'active', { shops: ['Lidl'], bought: true }],
+    ['Bread', 'active'],
+    ['Rice', 'next', { shops: ['Market'] }],
+  );
+  assert.deepEqual(shopChips(state, 'active'), [
+    { shop: null, count: 2 },
+    { shop: 'aldi', count: 1 },
+    { shop: 'Lidl', count: 1 },
+    { shop: '', count: 1 },
+  ]);
+});
+
+test('shopChips of next counts the items of the view and has no Sin tienda when each has a shop', () => {
+  const state = build(['Rice', 'next', { shops: ['Market'] }], ['Milk', 'active', { shops: ['Lidl'] }]);
+  assert.deepEqual(shopChips(state, 'next'), [{ shop: null, count: 1 }, { shop: 'Market', count: 1 }]);
+});
+
+test('inShop takes each item for null, the items of a shop with no case distinction, and the items with no shop for an empty name', () => {
+  const lidl = { shops: ['Lidl'] };
+  const none = { shops: [] };
+  assert.equal(inShop(lidl, null), true);
+  assert.equal(inShop(lidl, 'lidl'), true);
+  assert.equal(inShop(none, 'Lidl'), false);
+  assert.equal(inShop(none, ''), true);
+  assert.equal(inShop(lidl, ''), false);
+});
+
+test('shopState keeps only the items of the shop and returns the same state for null', () => {
+  const start = build(['Milk', 'active', { shops: ['Lidl'] }], ['Bread', 'active']);
+  assert.deepEqual(names(shopState(start, 'Lidl').items), ['Milk']);
+  assert.deepEqual(names(shopState(start, '').items), ['Bread']);
+  assert.equal(shopState(start, null), start);
+});
+
+test('validShop keeps a shop of the view in its current spelling and gives null for a shop that went', () => {
+  const state = build(['Milk', 'active', { shops: ['Lidl'] }], ['Bread', 'active']);
+  assert.equal(validShop(state, 'active', 'LIDL'), 'Lidl');
+  assert.equal(validShop(state, 'active', 'Aldi'), null);
+  assert.equal(validShop(state, 'active', ''), '');
+  assert.equal(validShop(state, 'active', null), null);
+  assert.equal(validShop(build(['Milk', 'active', { shops: ['Lidl'] }]), 'active', ''), null);
+  assert.equal(validShop(build(['Milk', 'active']), 'active', 'Lidl'), null);
+});
+
+test('nextShop gives the next shop with an item to buy, in chip order, from the start after the end', () => {
+  const state = build(
+    ['Milk', 'active', { shops: ['Aldi'] }],
+    ['Salt', 'active', { shops: ['Lidl'], bought: true }],
+    ['Rice', 'active', { shops: ['Market'] }],
+    ['Bread', 'active'],
+  );
+  assert.equal(nextShop(state, 'Lidl'), 'Market');
+  assert.equal(nextShop(state, 'Market'), '');
+  assert.equal(nextShop(state, ''), 'Aldi');
+  assert.equal(nextShop(build(['Salt', 'active', { shops: ['Lidl'], bought: true }]), 'Lidl'), null);
+});
+
+test('withShop adds the shop to the item of the result and leaves Todas, Sin tienda and errors alone', () => {
+  const start = build(['Milk', 'active']);
+  const id = find(start, 'Milk').id;
+  assert.deepEqual(find(withShop({ state: start }, id, 'Lidl').state, 'Milk').shops, ['Lidl']);
+  for (const shop of [null, '']) assert.equal(withShop({ state: start }, id, shop).state, start);
+  const failed = { state: start, error: { key: 'error.nameRequired' } };
+  assert.equal(withShop(failed, id, 'Lidl'), failed);
+  assert.equal(withShop({ state: start, changed: false }, id, 'Lidl').changed, false);
 });
