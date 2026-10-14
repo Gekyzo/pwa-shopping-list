@@ -11,6 +11,7 @@
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
 | `src/sections.js` | The order of the sections and the rule of the slide between them | nothing |
 | `src/modules.js` | The modules that the user turns off and the sections that they hide | `sections` |
+| `src/particles.js` | The particles of a picture that breaks into dust, and their place in time | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
 | `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu`, `modules` |
@@ -66,6 +67,7 @@
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sections.test.js` | The slide between sections |
 | `tests/modules.test.js` | The visible sections and the switch of a module |
+| `tests/particles.test.js` | The particles of a picture and their place in time |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
 | `tests/version.test.js` | Version rules |

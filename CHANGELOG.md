@@ -15,8 +15,8 @@ no change for the user has no entry.
   the dark colours.
 - **Módulos** in `Ajustes`: a switch turns off `Próxima`, and a switch turns off `Recetas` with
   `Menú`. A module that is off keeps its data. The switch-off of `Próxima` brings its items to
-  `Actual`, with `Deshacer`. The sections leave the bottom bar and come back to it with an
-  animation.
+  `Actual`, with `Deshacer`. A section that goes breaks into dust in the bottom bar,
+  and a section that comes back forms from dust.
 
 ## 1.0.10 - 2026-10-14
 
