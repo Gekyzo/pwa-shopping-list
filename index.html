@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
-    <header class="head">
-      <div id="ring" class="ring"><span id="ring-text"></span></div>
-      <div class="head-text">
-        <h1 id="title"></h1>
-        <p id="subtitle"></p>
+    <header class="app-header">
+      <div id="ring" class="ring"><span id="ring-text" class="ring-text"></span></div>
+      <div class="app-header-text">
+        <h1 id="title" class="app-header-title"></h1>
+        <p id="subtitle" class="app-header-subtitle"></p>
       </div>
       <button id="search-button" class="button icon" type="button" data-i18n-attr="aria-label:search.label" aria-controls="search" hidden>
         <svg class="icon" aria-hidden="true"><use href="icons.svg#search"/></svg>
@@ -99,25 +99,25 @@
 
     <button id="fab" class="fab" type="button">+</button>
 
-    <nav class="bnav" data-i18n-attr="aria-label:nav.label">
-      <button type="button" data-view="active">
+    <nav class="nav-bar" data-i18n-attr="aria-label:nav.label">
+      <button class="nav-item" type="button" data-view="active">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#cart"/></svg>
         <span data-i18n="list.active"></span>
       </button>
-      <button type="button" data-view="next">
+      <button class="nav-item" type="button" data-view="next">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#calendar"/></svg>
         <span data-i18n="list.next"></span>
-        <em id="next-count" class="badge-count"></em>
+        <em id="next-count" class="badge"></em>
       </button>
-      <button type="button" data-view="recipes">
+      <button class="nav-item" type="button" data-view="recipes">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#book"/></svg>
         <span data-i18n="nav.recipes"></span>
       </button>
-      <button type="button" data-view="menu">
+      <button class="nav-item" type="button" data-view="menu">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#menu"/></svg>
         <span data-i18n="nav.menu"></span>
       </button>
-      <button type="button" data-view="settings">
+      <button class="nav-item" type="button" data-view="settings">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg>
         <span data-i18n="nav.settings"></span>
       </button>

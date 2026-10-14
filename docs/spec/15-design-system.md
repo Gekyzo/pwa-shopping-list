@@ -46,6 +46,6 @@ The parts of the catalogue, by layer. A request for a screen names them.
 
 | Layer | Parts |
 |---|---|
-| components | `icon`, `button`, `fab`, `chip`, `pill`, `segmented`, `switch`, `input`, `field`, `select` |
+| components | `icon`, `button`, `fab`, `chip`, `pill`, `segmented`, `switch`, `input`, `field`, `select`, `app-header`, `ring`, `nav-bar`, `badge` |
 | layouts | `cluster`, `input-row` |
 | screens | `shop-lists`, `search` (list) · `product-form` (recipes) |
