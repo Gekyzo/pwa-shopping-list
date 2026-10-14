@@ -1247,16 +1247,13 @@ body:has(.sheet-layer:not([hidden])) .toast {
 }
 
 .onboarding-actions button {
+  flex: 1 1 50%;
   min-height: 52px;
 }
 
 #onboarding-skip {
-  padding: 0 16px;
+  border: 1px solid var(--line);
   color: var(--muted);
-}
-
-#onboarding-next {
-  flex: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {

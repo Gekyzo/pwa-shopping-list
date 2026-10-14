@@ -21,7 +21,7 @@ no change for the user has no entry.
 ### Changed
 
 - **Saltar** of the walkthrough moves from the top to the bottom bar, at the left of
-  **Siguiente**. With **Mano** `Izquierda` it is at the right.
+  **Siguiente**, each half of the bar wide. With **Mano** `Izquierda` it is at the right.
 
 ## 1.0.10 - 2026-10-14
 
