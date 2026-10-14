@@ -21,6 +21,7 @@ no change for the user has no entry.
   the field has a value.
 - In `Menú`, **Llenar la cesta** is at the side of the hand: at the right with `Derecha`, at
   the left with `Izquierda`.
+- In `Menú`, **Vaciar menú** and **Llenar la cesta** each take half of the line.
 
 ## 1.0.19 - 2026-10-14
 
