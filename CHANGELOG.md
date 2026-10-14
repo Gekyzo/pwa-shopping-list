@@ -9,7 +9,11 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The status of the version in `Ajustes` is a symbol: a turning arrow while it checks, a check
+  when up to date, a struck-out cloud with no connection. An update keeps its text, with a down
+  arrow, in the accent colour.
 
 ## 1.0.16 - 2026-10-14
 

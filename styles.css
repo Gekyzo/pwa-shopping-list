@@ -843,8 +843,57 @@ button.pill {
   margin: 0;
 }
 
-#version-status::before {
-  content: ' · ';
+#version-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+#version-status svg {
+  display: none;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#version-status[data-status='checking'] [data-for='checking'],
+#version-status[data-status='current'] [data-for='current'],
+#version-status[data-status='outdated'] [data-for='outdated'],
+#version-status[data-status='unknown'] [data-for='unknown'] {
+  display: block;
+}
+
+#version-status[data-status='checking'] svg {
+  animation: spin 1s linear infinite;
+}
+
+#version-status[data-status='outdated'] {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 0;
+  color: var(--accent);
+}
+
+/* The text of a state with a symbol stays for screen readers only. */
+#version-status:not([data-status='outdated']) #version-status-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 #update {
@@ -1330,7 +1379,8 @@ body:has(.sheet-layer:not([hidden])) .toast {
   main.enter-next > *,
   main.enter-previous > *,
   .onboarding-page.enter-next,
-  .onboarding-page.enter-previous {
+  .onboarding-page.enter-previous,
+  #version-status svg {
     animation: none;
   }
 }
