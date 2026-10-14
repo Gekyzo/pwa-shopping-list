@@ -44,8 +44,8 @@ Rules of `src/recipes.js` and of the section `Recetas` in `src/app.js`. The grou
 
 ## Send to `Actual`
 
-- **REC-17** The cart button with a plus sends the recipe. A recipe with no product gives
-  `error.recipeEmpty`.
+- **REC-17** The cart button with a plus sends the recipe. It is a primary button, as **Llenar
+  la cesta** (MENU-12). A recipe with no product gives `error.recipeEmpty`.
 - **REC-18** For each product, in order:
   - an item with that name exists, with no case distinction: the item becomes "to buy" in `Actual`
     (it moves from `Próxima`, or it loses its tick, or it stays as it is);
