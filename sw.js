@@ -13,6 +13,8 @@ const SHELL = [
   './src/ui/edit.js',
   './src/ui/drag.js',
   './src/ui/rows.js',
+  './src/ui/recipes.js',
+  './src/ui/menu.js',
   './src/store.js',
   './src/recipes.js',
   './src/menu.js',
