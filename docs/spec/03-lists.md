@@ -22,12 +22,12 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/app.js`.
 ## Tick
 
 - **LIST-10** Only an item of `Actual` can be ticked. `Próxima` has no checkbox.
-- **LIST-11** A tap on the checkbox or on the name of a row of `Actual` changes `bought`. Each
-  change clears `again`.
+- **LIST-11** A tap on the checkbox of a row of `Actual` changes `bought`. Each change clears
+  `again`.
 - **LIST-12** A tick does not delete the item. The item goes to the section `N comprados` at the
   end of `Actual`, which is closed at first. A tap on that row opens and closes it.
 - **LIST-13** A tick has `Deshacer`, because the row leaves the place where the finger is. A tap
-  on a ticked item removes the tick with no `Deshacer`.
+  on the checkbox of a ticked item removes the tick with no `Deshacer`.
 - **LIST-14** A ticked one-time item has the button `+ Próxima`. A tap sets `again`, and the button
   shows `✓ Próxima`. A second tap clears it. A ticked recurrent item has no such button.
 

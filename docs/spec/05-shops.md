@@ -1,6 +1,6 @@
 # Shops
 
-Rules of `src/shops.js` and of the shop sheet in `src/app.js`. The list by shop is in
+Rules of `src/shops.js` and of the shops of the edit sheet in `src/app.js`. The list by shop is in
 [04-arrange.md](04-arrange.md).
 
 ## Rules
@@ -16,10 +16,10 @@ Rules of `src/shops.js` and of the shop sheet in `src/app.js`. The list by shop 
 - **SHOP-7** A row shows the shops of its item below the name, as `A · B`, in the order of their
   add. A list by shop does not show them (GROUP-14).
 
-## Shop sheet
+## Shops of an item
 
-- **SHOP-8** A slide of a row to the right shows the shop button, beside **Renombrar**. It opens
-  the sheet `Tiendas de <name>`.
+- **SHOP-8** The shops of an item are in the edit sheet `Editar <name>` (ROW-7), below the
+  name. A tap on the name of a row opens it.
 - **SHOP-9** The sheet shows each shop in use as a chip. A chip is pressed when the item has the
   shop. A tap on a chip adds or removes the shop for this item.
 - **SHOP-10** The field **Nueva tienda** with **Añadir** adds a shop. The field takes 40
@@ -30,7 +30,8 @@ Rules of `src/shops.js` and of the shop sheet in `src/app.js`. The list by shop 
   visit. A tap out of the sheet or `Escape` closes it.
 - **SHOP-13** With no shop in use, the sheet shows `Escribe la primera tienda.`
 - **SHOP-14** A change of shops is saved at once and has no message and no `Deshacer`.
-- **SHOP-15** The sheet closes when its item goes away, for example by `Deshacer` or by an import.
+- **SHOP-15** The edit sheet closes when its item goes away, for example by `Deshacer` or by an
+  import.
 
 ## Shop lists
 
