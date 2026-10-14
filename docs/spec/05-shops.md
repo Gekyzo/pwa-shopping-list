@@ -1,7 +1,7 @@
 # Shops
 
-Rules of `src/shops.js` and of the shops of the edit sheet in `src/app.js`. The list by shop is in
-[04-arrange.md](04-arrange.md).
+Rules of `src/shops.js` and of the shops of the edit sheet in `src/ui/edit.js`. The list by shop is
+in [04-arrange.md](04-arrange.md).
 
 ## Rules
 

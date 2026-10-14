@@ -2,7 +2,7 @@
 
 Rules of `setSort`, `setGroup`, `reorderItems` and `sortItems` in `src/store.js`, of
 `recipeGroups` in `src/recipes.js`, of `shopGroups` in `src/shops.js`, of `src/reorder.js`, and of
-the arrange sheet in `src/app.js`.
+the arrange sheet in `src/ui/arrange.js`.
 
 ## Arrange sheet
 

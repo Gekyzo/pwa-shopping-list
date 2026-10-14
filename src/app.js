@@ -100,11 +100,7 @@ setRender(renderAll);
 // Events
 
 bindNav();
-
-
-
 bindOnboarding();
-
 bindAdd();
 
 // A tap out of the open row closes it, without a render, so that the tap still does its work.
@@ -134,11 +130,10 @@ document.addEventListener(
 );
 
 bindDrag();
-
 bindList();
-
 bindArrange();
 bindEdit();
+
 document.addEventListener('keydown', (event) => {
   if (ui.onboarding !== null) {
     if (event.key === 'Escape') closeOnboarding();
@@ -159,7 +154,6 @@ document.addEventListener('keydown', (event) => {
   if (ui.tripOpen) closeTrip();
 });
 
-
 $('toast-undo').addEventListener('click', () => {
   if (!undoState) return;
   const before = new Set(pendingRows().map((node) => node.dataset.id));
@@ -170,7 +164,6 @@ $('toast-undo').addEventListener('click', () => {
 });
 
 bindMenu();
-
 bindSettings();
 
 applyLanguage();

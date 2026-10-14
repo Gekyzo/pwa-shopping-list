@@ -1,6 +1,6 @@
 # Screen
 
-Rules of `index.html`, `styles.css`, `src/app.js`, `src/swipe.js` and `src/sections.js`.
+Rules of `index.html`, `styles.css`, `src/app.js`, `src/ui/`, `src/swipe.js` and `src/sections.js`.
 
 ## Layout
 

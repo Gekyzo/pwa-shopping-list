@@ -33,7 +33,7 @@
 | `src/ui/onboarding.js` | The walkthrough | `onboarding`, `sections`, `storage`, `ui/context` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, modules, export and import | `store`, `storage`, `version`, `i18n`, `modules`, `ui/context`, `ui/onboarding` |
 | `src/ui/nav.js` | The bottom bar, its dust effect and the change of section | `sections`, `modules`, `particles`, `ui/context`, `ui/drag`, `ui/settings` |
-| `src/app.js` | Render and event handling. The only module that touches the page | all of the above |
+| `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
 
 ## Code rules
@@ -48,7 +48,8 @@
 - **ENG-4** The screen applies an operation, saves, then builds the page again from the state.
 - **ENG-5** A module with a side effect takes the object of that effect as a parameter (the
   storage object), so that a test passes a fake.
-- **ENG-6** `src/app.js` is not imported by another module.
+- **ENG-6** No module imports `src/app.js`. A view of `src/ui/` renders the screen through
+  `render` of `src/ui/context.js`.
 - **ENG-7** A module of `src/` is imported by its alias, `from '#store'`, never by a relative
   path. Node resolves `#name` through `imports` of `package.json`; the browser resolves it through
   the import map of `index.html`. `tests/aliases.test.js` checks that the two agree.
@@ -63,7 +64,8 @@
 
 | Change | Do |
 |---|---|
-| A new list rule | An operation in `src/store.js` with its tests, then a control in `src/app.js` |
+| A new list rule | An operation in `src/store.js` with its tests, then a control in its view of `src/ui/` |
+| A new view | A module of `src/ui/` with a `bind()` that `src/app.js` calls, its alias, its file in `SHELL` and its row in the module table |
 | A new recipe or shop rule | The same, in `src/recipes.js` or `src/shops.js` |
 | A change of the shape of an item | `normalizeItem` in `src/storage.js`, a new `version` and its migration |
 | A new text | A key in each of the seven catalogs, with the same placeholders |
@@ -104,7 +106,7 @@ that the input state does not change.
 
 ## Checks with no test
 
-- **ENG-9** `src/app.js`, `styles.css` and `sw.js` have no unit test. A change to one of them is
+- **ENG-9** `src/app.js`, the views of `src/ui/`, `styles.css` and `sw.js` have no unit test. A change to one of them is
   checked in a browser at a phone viewport, with `npm run serve`. The offline check runs with the
   server stopped.
 - **ENG-10** `.githooks/pre-push` and `.githooks/pre-commit` have no test. They are checked in a
