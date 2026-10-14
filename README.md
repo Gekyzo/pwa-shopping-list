@@ -34,6 +34,14 @@ A change of behaviour changes its rule in `docs/spec/` in the same commit. The `
 stops a commit of the app that has no change of the specification; `git commit --no-verify` passes
 a commit that changes no rule.
 
+## Design system
+
+The screens are built from the tokens, components, layouts and icons of `styles.css` and
+`icons.svg` ([`docs/spec/15-design-system.md`](docs/spec/15-design-system.md)). The catalogue shows
+each part with its name, its variants, a live example and its markup: run `npm run serve`, then
+open http://localhost:8080/designs/. Ask for a screen with those names. `tests/design.test.js`
+fails when a class, a raw value or an icon is not part of the system.
+
 ## Deploy
 
 A release tag is a deploy; a push to `main` deploys nothing.
