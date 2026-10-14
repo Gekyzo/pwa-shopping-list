@@ -270,7 +270,7 @@ main.enter-previous {
   font-size: 1rem;
 }
 
-/* An item row slides over the two side menus behind it. */
+/* An item row slides over the side menu and the backdrop behind it. */
 
 .swipe {
   position: relative;
@@ -284,12 +284,28 @@ main.enter-previous {
   display: flex;
 }
 
-.side.start {
-  left: 0;
-}
-
 .side.end {
   right: 0;
+}
+
+/* The slide to the right shows its action on the left half, below the row. */
+.backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 50%;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  transition: background 120ms, color 120ms;
+}
+
+.swipe.armed .backdrop {
+  background: var(--accent);
+  color: var(--accent-text);
 }
 
 .side button {
@@ -631,6 +647,7 @@ button.pill {
 .group svg,
 .send svg,
 .side svg,
+.backdrop svg,
 .recur svg {
   width: 22px;
   height: 22px;

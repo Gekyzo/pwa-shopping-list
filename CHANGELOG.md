@@ -14,6 +14,8 @@ no change for the user has no entry.
 - A tap on the name of an item opens `Editar <name>`, with the name and the shops. The slide to
   the right no longer shows **Renombrar** and the shops. A tap on the name no longer ticks; the
   checkbox ticks.
+- A slide of an item to the right ticks it in `Actual`, with `Deshacer`, and moves it to `Actual`
+  from `Próxima`. A short slide puts the row back.
 
 ## 1.0.11 - 2026-10-14
 

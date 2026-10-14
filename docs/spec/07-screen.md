@@ -40,17 +40,17 @@ of it.
   sheet (ROW-7).
 - **ROW-2** A row of `Próxima` has the name with the shops, the mark `comprado hoy` when LIST-16
   applies, and the recurrent mark. A tap on the name opens the edit sheet (ROW-7).
-- **ROW-3** A slide of a row shows its actions, as icon buttons 64 px wide:
+- **ROW-3** A slide of a row to the left shows its actions, as icon buttons 64 px wide:
 
-  | Row | Slide to the right | Slide to the left |
-  |---|---|---|
-  | `Actual` | – | **Mover a Próxima**, **Eliminar** |
-  | `Próxima`, `list: 'next'` | – | **Mover a Actual**, **Eliminar** |
-  | `Próxima`, `comprado hoy` | – | **Quitar de Próxima** |
+  | Row | Slide to the left |
+  |---|---|
+  | `Actual` | **Mover a Próxima**, **Eliminar** |
+  | `Próxima`, `list: 'next'` | **Mover a Actual**, **Eliminar** |
+  | `Próxima`, `comprado hoy` | **Quitar de Próxima** |
 
 - **ROW-4** A drag becomes a slide after 10 px of horizontal move. A drag that is first vertical
   scrolls the list.
-- **ROW-5** A side opens when the drag passes 40 % of the width of that side, 40 px at least. An
+- **ROW-5** The left side opens when the drag passes 40 % of the width of that side, 40 px at least. An
   open side closes with a drag back of the same length. If not, the row goes back to where it was.
 - **ROW-6** One row is open at a time. A tap out of the open row closes it, and that tap still
   does its own work. An action closes the row, then runs.
@@ -63,6 +63,12 @@ of it.
 - **ROW-9** A ticked row closes in 200 ms before it goes to `N comprados`. A row that `Deshacer`
   puts back opens the same way.
 - **ROW-10** A long press of a finger on a row does not open the menu of the browser.
+- **ROW-11** A slide of a row to the right runs an action at the release: in `Actual` it ticks or
+  unticks the item (LIST-11), in `Próxima` it moves a `list: 'next'` item to `Actual`, with
+  `Deshacer`. It runs when the slide passed 35 % of the width of the row, 80 px at least; a
+  shorter slide puts the row back. The row slides over a backdrop with the icon of the action,
+  which fills with the accent colour once the slide is long enough. A `comprado hoy` row does not
+  slide to the right, and a row with its left side open closes it.
 
 ## Messages and undo
 
@@ -78,7 +84,7 @@ of it.
 
   | Area | Changes |
   |---|---|
-  | Items | Tick, move to the other list, delete, **Quitar de Próxima**, an existing item brought by the add sheet, a manual move |
+  | Items | Tick, by the checkbox or by a slide (ROW-11), move to the other list, by a button or by a slide, delete, **Quitar de Próxima**, an existing item brought by the add sheet, a manual move |
   | Trip | **Terminar compra**, `Traer N artículos de Próxima`, the switch-off of `Próxima` (MOD-6) |
   | Recipes | Send, delete, removal of a product, save and removal of a link |
   | Menu | **Llenar la cesta**, **Quitar** of a meal, **Vaciar menú** |
@@ -118,7 +124,7 @@ of it.
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
 
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the bottom bar, the
-  sheets or the sides of a slide of a row (ROW-3).
+  sheets or the sides of a slide of a row (ROW-3, ROW-11).
 
 ## Theme
 

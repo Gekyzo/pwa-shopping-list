@@ -2,7 +2,7 @@ import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
 import * as menu from '#menu';
-import { settle } from '#swipe';
+import { reached, settle } from '#swipe';
 import { direction, slideDirection, slideTo } from '#sections';
 import { switchModule, visibleSections } from '#modules';
 import { PARTICLE_SIZE, makeParticles, particleAt } from '#particles';
@@ -124,7 +124,7 @@ const ui = {
   shop: { active: null, next: null },
   // The group where the row actions are open: a recipe id, `shop:<name>`, or null out of a group.
   openGroup: null,
-  // The side menu of the open item row: 'start' (slide right), 'end' (slide left) or null.
+  // The side menu of the open item row: 'end' (slide left) or null.
   openSide: null,
   // Where the last drag left its row, so that the next render moves the row from there.
   settleFrom: null,
@@ -238,11 +238,13 @@ const icon = (d) => {
 };
 
 const ICONS = {
+  check: 'M4 12l5 5L20 6',
   chain:
     'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71',
   cart: 'M2 3h3l2.5 12h11L21 7H6M9 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3M18 18.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3',
   calendar: 'M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 10h18M8 3v4M16 3v4',
   repeat: 'M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3',
+  undo: 'M9 14L4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3',
   trash: 'M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6',
 };
 // The cart with a plus in its basket and a calendar with a cross.
@@ -413,7 +415,7 @@ const activeRow = (item, groupId) => {
   }
   row.push(recurrentToggle(item));
   const end = isOn('next') ? [moveAction(item), deleteAction(item)] : [deleteAction(item)];
-  return { row, start: [], end };
+  return { row, end, right: { run: toggle, icon: item.bought ? ICONS.undo : ICONS.check } };
 };
 
 const nextRow = (item, groupId) => {
@@ -422,11 +424,14 @@ const nextRow = (item, groupId) => {
   const row = [name];
   if (!pending) row.push(el('span', { className: 'pill', textContent: t('row.boughtToday') }));
   row.push(recurrentToggle(item));
-  if (pending) return { row, start: [], end: [moveAction(item), deleteAction(item)] };
+  if (pending) {
+    const right = { run: () => moveAction(item).onclick(), icon: ICONS.cart };
+    return { row, end: [moveAction(item), deleteAction(item)], right };
+  }
   const params = { list: 'next', name: item.name };
   const remove = iconButton(ICONS.calendarOff, say('row.removeFrom', params), () =>
     apply(store.removeFromNext(state, item.id), { undoText: say('toast.removedFrom', params) }));
-  return { row, start: [], end: [remove] };
+  return { row, end: [remove], right: null };
 };
 
 const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
@@ -441,8 +446,9 @@ const scroller = document.querySelector('main');
 // The lifted row of a manual order, or null.
 let reorder = null;
 
-// Lets a horizontal drag of the row show the side menu behind it. `settle` decides the result.
-const bindSwipe = (row, widths, item, groupId) => {
+// Lets a horizontal drag of the row show the side menu behind it, or run the action of the slide
+// to the right. `settle` and `reached` decide the result.
+const bindSwipe = (row, widths, item, groupId, right) => {
   let drag = null;
   row.addEventListener('pointerdown', (event) => {
     if (event.button !== 0 || ui.editingId === item.id) return;
@@ -460,16 +466,28 @@ const bindSwipe = (row, widths, item, groupId) => {
       row.setPointerCapture(event.pointerId);
       row.classList.add('dragging');
     }
-    drag.at = Math.max(-widths.end, Math.min(widths.start, drag.base + dx));
+    // From a closed row, a row with an action follows the finger to the right up to its width.
+    const max = right && drag.base === 0 ? row.offsetWidth : 0;
+    drag.at = Math.max(-widths.end, Math.min(max, drag.base + dx));
     moveRow(row, drag.at);
+    row.parentNode.classList.toggle('armed', drag.at > 0 && reached(drag.at, row.offsetWidth));
   });
   const finish = (event) => {
     if (!drag) return;
-    const { active, x, at } = drag;
+    const { active, x, at, base } = drag;
     drag = null;
     if (!active) return;
     // The click that follows a drag must not tick the item.
     clickGuardUntil = Date.now() + CLICK_GUARD_MS;
+    row.parentNode.classList.remove('armed');
+    if (right && base === 0 && reached(at, row.offsetWidth)) {
+      Object.assign(ui, { openId: null, openSide: null, editingId: null });
+      // The row slides back while the tick closes it (ROW-9), or before the render of a move.
+      row.classList.remove('dragging');
+      moveRow(row, 0);
+      right.run();
+      return;
+    }
     const open = isOpen(item.id, groupId) ? ui.openSide : null;
     const side = settle(event.clientX - x, widths, open);
     Object.assign(ui, { openId: side ? item.id : null, openSide: side, openGroup: groupId, editingId: null });
@@ -639,19 +657,20 @@ const closing = (button) => {
 };
 
 const itemNode = (item, groupId = null) => {
-  const { row, start, end } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item, groupId);
+  const { row, end, right } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item, groupId);
   const open = isOpen(item.id, groupId) ? ui.openSide : null;
-  const widths = { start: start.length * SIDE_BUTTON, end: end.length * SIDE_BUTTON };
+  const widths = { start: 0, end: end.length * SIDE_BUTTON };
   const rowNode = el('div', { className: 'row' }, row);
-  const sides = ['start', 'end'].map((side) =>
-    el('div', { className: `side ${side}`, inert: open !== side }, (side === 'start' ? start : end).map(closing)));
+  const layers = [el('div', { className: 'side end', inert: open !== 'end' }, end.map(closing))];
+  // The slide to the right shows its action below the row.
+  if (right) layers.unshift(el('div', { className: 'backdrop' }, [icon(right.icon)]));
   const from = ui.settleFrom;
   if (from && from.id === item.id && from.groupId === groupId) {
     // Start where the drag ended, then move to the settled place with the CSS transition.
     moveRow(rowNode, from.x);
     requestAnimationFrame(() => requestAnimationFrame(() => moveRow(rowNode, shift(open, widths))));
   } else moveRow(rowNode, shift(open, widths));
-  bindSwipe(rowNode, widths, item, groupId);
+  bindSwipe(rowNode, widths, item, groupId, right);
   const classes = [
     'item',
     item.bought && ui.view === 'active' && 'bought',
@@ -659,7 +678,7 @@ const itemNode = (item, groupId = null) => {
     ui.leaving.has(item.id) && 'gone',
   ];
   const node = el('li', { className: classes.filter(Boolean).join(' ') }, [
-    el('div', { className: open ? 'swipe open' : 'swipe' }, [...sides, rowNode]),
+    el('div', { className: open ? 'swipe open' : 'swipe' }, [...layers, rowNode]),
   ]);
   node.dataset.id = item.id;
   const scope = scopeOf(item, groupId);
