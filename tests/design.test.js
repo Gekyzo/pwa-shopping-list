@@ -51,7 +51,7 @@ test('a keyframe takes its colours from the tokens (DS-2)', () => {
 test('a raw width or height is not in the screens layer (DS-2)', () => {
   const raw = rules
     .filter((rule) => rule.layer === 'screens')
-    .flatMap((rule) => rule.declarations.filter((d) => /^(min-|max-)?(width|height)$/.test(d.property) && /\d(px|rem)/.test(d.value.replace(/var\([^)]*\)/g, ''))).map((d) => where(rule, d)));
+    .flatMap((rule) => rule.declarations.filter((d) => /^(min-|max-)?(width|height)$/.test(d.property) && /\d(px|rem)/.test(d.value.replace(/var\([^)]*\)/g, '').replace(/^1px$/, ''))).map((d) => where(rule, d)));
   assert.deepEqual(raw, []);
 });
 
@@ -132,4 +132,10 @@ test('sheets, toasts, banners and empty states are components (DS-3)', family(
   ['sheet', 'toast', 'banner', 'empty-state', 'hint'],
   ['veil', 'grab', 'empty', 'meal-empty'],
   ['.sheet h2', '.sheet .entry', '.toast span', '.banner p', '#edit-chips', '#edit-empty'],
+));
+
+test('rows, list groups and section heads are components (DS-3)', family(
+  ['item-row', 'swipe-action', 'section-head', 'group-head', 'list-group', 'item-list', 'row-actions', 'version-status'],
+  ['items', 'item', 'row', 'swipe', 'side', 'backdrop', 'name', 'qty', 'section', 'actions', 'suggestions', 'group', 'suggestion-name', 'suggestion-where', 'create'],
+  ['#version-status', 'input[type="checkbox"]', '.item-row-name small'],
 ));

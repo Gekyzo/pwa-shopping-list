@@ -25,7 +25,7 @@ export const UNDO_MS = 5000;
 export const MESSAGE_MS = 3000;
 // The app opens by itself at an arrival, so its message stays longer.
 export const ARRIVAL_MS = 10000;
-// Width of one button of a side menu of a row, the same as in styles.css.
+// Width of one swipe-action of a row, the same as in styles.css.
 export const SIDE_BUTTON = 64;
 export const DRAG_START = 10;
 export const CLICK_GUARD_MS = 350;

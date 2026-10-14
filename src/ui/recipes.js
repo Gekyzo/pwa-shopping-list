@@ -51,7 +51,7 @@ const productForm = (recipe) => {
     ui.focusProduct = false;
     input.focus();
   };
-  const suggestions = el('ul', { className: 'suggestions' });
+  const suggestions = el('ul', { className: 'list-group plain' });
   suggestions.setAttribute('aria-label', t('add.existing'));
   const taken = new Set(recipe.products.map((product) => product.toLowerCase()));
   input.addEventListener('input', () => {
@@ -59,7 +59,7 @@ const productForm = (recipe) => {
       .searchItems(state, input.value, Infinity)
       .filter((item) => !taken.has(item.name.toLowerCase()))
       .slice(0, 5)
-      .map((item) => el('li', {}, [el('button', { type: 'button', textContent: item.name, onclick: () => add(item.name) })]));
+      .map((item) => el('li', {}, [el('button', { type: 'button', className: 'list-row', textContent: item.name, onclick: () => add(item.name) })]));
     suggestions.replaceChildren(...rows);
   });
   const form = el('form', { className: 'input-row product-form', autocomplete: 'off' }, [
@@ -98,7 +98,7 @@ export const recipeNode = (recipe) => {
       'button',
       {
         type: 'button',
-        className: 'name',
+        className: 'item-row-name',
         onclick: () => {
           Object.assign(ui, { openRecipeId: open ? null : recipe.id, openId: null });
           render();
@@ -106,7 +106,7 @@ export const recipeNode = (recipe) => {
       },
       [
         el('span', { textContent: recipe.name }),
-        el('small', { textContent: t('count.products', { count: recipe.products.length }) }),
+        el('small', { className: 'item-row-meta', textContent: t('count.products', { count: recipe.products.length }) }),
       ],
     );
     name.setAttribute('aria-expanded', String(open));
@@ -114,7 +114,7 @@ export const recipeNode = (recipe) => {
   const send = el('button', { type: 'button', className: 'button primary icon', onclick: () => sendToList(recipe) }, [icon('cart-add')]);
   send.setAttribute('aria-label', t('recipe.send', { name: recipe.name }));
   const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
-  const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);
+  const node = el('li', { className: 'item-row recipe' }, [el('div', { className: 'item-row-body' }, row)]);
   if (ui.openId === recipe.id) {
     const remove = actionButton(
       t('recipe.delete'),
@@ -122,7 +122,7 @@ export const recipeNode = (recipe) => {
       { variant: 'outline danger' },
     );
     const link = actionButton(t('recipe.link'), () => editLink(recipe));
-    node.append(el('div', { className: 'actions' }, [actionButton(t('recipe.rename'), () => startRename(recipe)), link, remove]));
+    node.append(el('div', { className: 'row-actions' }, [actionButton(t('recipe.rename'), () => startRename(recipe)), link, remove]));
   }
   if (open) {
     node.append(

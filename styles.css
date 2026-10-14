@@ -502,235 +502,6 @@
     }
   }
 
-  .items {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .item {
-    border-bottom: 1px solid var(--line);
-    background: var(--surface);
-    /* The rows of a scope open a gap for a lifted row. `placeLifted` in app.js sets the transform. */
-    transition: transform var(--motion-fast) ease-out;
-  }
-
-  .item.lifted {
-    position: relative;
-    z-index: 2;
-    box-shadow: var(--shadow-l);
-    transition: none;
-  }
-
-  .item.flash .row {
-    animation: flash var(--motion-slow) ease-out;
-  }
-
-  /* A ticked row closes before it goes to the bought section, and a group head before the list
-     becomes flat. `collapse` in app.js sets the height. */
-  .items > .leaving {
-    overflow: hidden;
-    min-height: 0;
-    opacity: 0;
-    transition: height var(--motion) ease-out, opacity var(--motion) ease-out;
-  }
-
-  .item.gone {
-    display: none;
-  }
-
-  @keyframes flash {
-    from {
-      background: var(--accent-soft);
-    }
-  }
-
-  .section button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-height: 48px;
-    padding: 0 var(--space-4);
-    border-radius: 0;
-    border-bottom: 1px solid var(--line);
-    color: var(--muted);
-    font-size: var(--text-s);
-    font-weight: var(--weight-strong);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .group-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2);
-    min-height: 40px;
-    padding: 0 var(--space-4);
-    border-bottom: 1px solid var(--line);
-    color: var(--accent);
-    font-size: var(--text-s);
-    font-weight: var(--weight-strong);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .chevron {
-    font-size: var(--text-m);
-  }
-
-  /* An item row slides over the side menu and the backdrop behind it. */
-
-  .swipe {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .side {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    display: flex;
-  }
-
-  .side.end {
-    right: 0;
-  }
-
-  /* The slide to the right shows its action below the row. The left side covers it. */
-  .backdrop {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    padding-left: var(--space-5);
-    background: var(--accent-soft);
-    color: var(--accent);
-    transition: background var(--motion-fast), color var(--motion-fast);
-  }
-
-  .swipe.armed .backdrop {
-    background: var(--accent);
-    color: var(--accent-text);
-  }
-
-  .side button {
-    display: grid;
-    place-items: center;
-    width: 64px;
-    height: 100%;
-    border-radius: 0;
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
-
-  .side button + button {
-    border-left: 1px solid var(--surface);
-  }
-
-  .side .danger {
-    background: var(--danger);
-    color: var(--surface);
-  }
-
-  .row {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    min-height: 56px;
-    padding: 0 var(--space-1) 0 var(--space-2);
-    background: var(--surface);
-  }
-
-  .swipe .row {
-    padding-right: var(--space-3);
-    touch-action: pan-y;
-    user-select: none;
-    transition: transform var(--motion-fast) ease-out;
-  }
-
-  .swipe .row.dragging {
-    transition: none;
-  }
-
-  .row input[type="checkbox"] {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    margin: var(--space-3) var(--space-1) var(--space-3) var(--space-2);
-    border: 2px solid var(--muted);
-    border-radius: var(--radius-round);
-    background: none;
-    appearance: none;
-    cursor: pointer;
-  }
-
-  .row input[type="checkbox"]:checked {
-    border-color: var(--accent);
-    background: var(--accent);
-  }
-
-  /* The tick: two sides of a small box, turned. */
-  .row input[type="checkbox"]:checked::after {
-    content: "";
-    width: 10px;
-    height: 5px;
-    margin-top: calc(var(--space-half) * -1);
-    border: solid var(--accent-text);
-    border-width: 0 0 2px 2px;
-    transform: rotate(-45deg);
-  }
-
-  .name {
-    flex: 1;
-    min-width: 0;
-    min-height: 56px;
-    padding: 0 var(--space-1);
-    border-radius: 0;
-    overflow-wrap: anywhere;
-    text-align: left;
-  }
-
-  /* A row of Próxima has no checkbox: its name keeps the place of one. */
-  .row > .name:first-child {
-    padding-left: var(--space-3);
-  }
-
-  .item.bought .name {
-    color: var(--muted);
-    text-decoration: line-through;
-  }
-
-  /* The shops of an item, below its name. */
-  .item .name {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-  }
-
-  .item .name small {
-    color: var(--muted);
-    font-size: var(--text-xs);
-  }
-
-  /* The quantity of an item, after its name. */
-  .item .name .qty {
-    color: var(--muted);
-    font-size: var(--text-s);
-  }
-
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    padding: var(--space-half) var(--space-3) var(--space-3) calc(var(--tap) + var(--space-2));
-  }
-
   /* The menu: one row for each day, with its two meals side by side. */
   .day {
     padding: var(--space-2) var(--space-3) var(--space-3);
@@ -793,32 +564,6 @@
     grid-column: 2;
   }
 
-  /* Recipes */
-
-  .recipe .name {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    padding-left: var(--space-2);
-  }
-
-  .recipe .name small {
-    color: var(--muted);
-    font-size: var(--text-xs);
-  }
-
-  /* The three buttons of a recipe take a third of the line each. */
-  .recipe .actions {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    padding-left: var(--space-3);
-  }
-
-  .recipe .actions .button {
-    padding: 0 var(--space-2);
-  }
-
   .products {
     margin: 0;
     padding: 0 var(--space-1) 0 var(--space-5);
@@ -838,56 +583,12 @@
     overflow-wrap: anywhere;
   }
 
-  .product-add .suggestions {
-    padding: 0 var(--space-3) var(--space-2) var(--space-5);
-  }
-
-  /* Settings */
-
   .settings h2 {
     margin: var(--space-5) var(--space-4) var(--space-2);
     color: var(--muted);
     font-size: var(--text-xs);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-  }
-
-  .group {
-    margin: 0 var(--space-3);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-l);
-    background: var(--surface);
-    overflow: hidden;
-  }
-
-  .group button {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    width: 100%;
-    min-height: 52px;
-    padding: 0 var(--space-4);
-    border-radius: 0;
-    text-align: left;
-  }
-
-  .group:has(> #export) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .group:has(> #export) button + button {
-    border-top: 0;
-    border-left: 1px solid var(--line);
-  }
-
-  .group svg {
-    flex: none;
-    color: var(--muted);
-  }
-
-  .group button + button {
-    border-top: 1px solid var(--line);
   }
 
   .about {
@@ -904,57 +605,6 @@
     align-items: center;
     gap: var(--space-1) var(--space-2);
     margin: 0;
-  }
-
-  #version-status {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-  }
-
-  #version-status svg {
-    display: none;
-  }
-
-  #version-status[data-status='checking'] [data-for='checking'],
-  #version-status[data-status='current'] [data-for='current'],
-  #version-status[data-status='outdated'] [data-for='outdated'],
-  #version-status[data-status='unknown'] [data-for='unknown'] {
-    display: block;
-  }
-
-  #version-status[data-status='checking'] svg {
-    animation: spin var(--motion-slow) linear infinite;
-  }
-
-  #version-status[data-status='current'] {
-    color: var(--accent);
-  }
-
-  #version-status[data-status='outdated'] {
-    flex-basis: 100%;
-    justify-content: center;
-    color: var(--warning);
-  }
-
-  #version-status[data-status='unknown'] {
-    color: var(--danger);
-  }
-
-  /* The text of a state with a symbol stays for screen readers only. */
-  #version-status:not([data-status='outdated']) #version-status-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(1turn);
-    }
   }
 
   /* Add button and bottom menu */
@@ -1261,6 +911,334 @@
     text-align: left;
   }
 
+  /* @component item-list
+     @summary The list of a section: item rows, section heads, group heads and hints.
+     @example <ul class="item-list"><li class="item-row"><div class="item-row-body"><button class="item-row-name" type="button"><span>Pan</span></button></div></li></ul> */
+  .item-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* A ticked row closes before it goes to the bought section, and a group head before the list
+     becomes flat. `collapse` in motion.js sets the height. */
+  .item-list > .leaving {
+    overflow: hidden;
+    min-height: 0;
+    opacity: 0;
+    transition: height var(--motion) ease-out, opacity var(--motion) ease-out;
+  }
+
+  /* @component item-row
+     @summary One item, or one recipe, as a row. Its body slides over its actions.
+     @variant recipe              A recipe: its name and product count, then its buttons.
+     @part item-row-swipe         The box that clips the sliding body.
+     @part item-row-body          The row itself: check, name, then buttons.
+     @part item-row-check         The round checkbox of an item of Actual.
+     @part item-row-name          The name button, with its quantity and its meta line.
+     @part item-row-qty           The quantity after the name.
+     @part item-row-meta          A muted line below the name: the shops, or the product count.
+     @part item-row-actions       The swipe actions behind the right end.
+     @part item-row-backdrop      The action under a slide to the right.
+     @state bought    A ticked item of Actual.
+     @state flash     A row that has just come back: its body flashes.
+     @state gone      A row that the motion code hides at once.
+     @state lifted    A row that the drag code lifts.
+     @state leaving   A row that closes before it leaves.
+     @state open      On item-row-swipe: the actions show.
+     @state armed     On item-row-swipe: a slide far enough to run its action.
+     @state dragging  On item-row-body: the body follows the finger, with no transition.
+     @example <ul class="item-list" style="width: 100%"><li class="item-row"><div class="item-row-swipe"><div class="item-row-body"><input class="item-row-check" type="checkbox" aria-label="Leche"><button class="item-row-name" type="button"><span>Tomates <span class="item-row-qty">1 kg</span></span><small class="item-row-meta">Mercadona</small></button><button class="button icon toggle" type="button" aria-pressed="false" aria-label="Siempre"><svg class="icon" aria-hidden="true"><use href="icons.svg#repeat"/></svg></button></div></div></li><li class="item-row bought"><div class="item-row-body"><input class="item-row-check" type="checkbox" checked aria-label="Café"><button class="item-row-name" type="button"><span>Café</span></button><button class="pill ghost" type="button">+ Próxima</button></div></li></ul>
+     @example <ul class="item-list" style="width: 100%"><li class="item-row"><div class="item-row-swipe open"><div class="item-row-actions"><button class="swipe-action" type="button" aria-label="A Próxima"><svg class="icon" aria-hidden="true"><use href="icons.svg#calendar"/></svg></button><button class="swipe-action danger" type="button" aria-label="Borrar"><svg class="icon" aria-hidden="true"><use href="icons.svg#trash"/></svg></button></div><div class="item-row-body" style="transform: translateX(-128px)"><button class="item-row-name" type="button"><span>Pan</span></button></div></div></li></ul> */
+  .item-row {
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    /* The rows of a scope open a gap for a lifted row. `placeLifted` in drag.js sets the transform. */
+    transition: transform var(--motion-fast) ease-out;
+  }
+
+  .item-row.lifted {
+    position: relative;
+    z-index: 2;
+    box-shadow: var(--shadow-l);
+    transition: none;
+  }
+
+  .item-row.flash .item-row-body {
+    animation: flash var(--motion-slow) ease-out;
+  }
+
+  .item-row.gone {
+    display: none;
+  }
+
+  @keyframes flash {
+    from {
+      background: var(--accent-soft);
+    }
+  }
+
+  .item-row-swipe {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .item-row-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+  }
+
+  /* The slide to the right shows its action below the row. The actions cover it. */
+  .item-row-backdrop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding-left: var(--space-5);
+    background: var(--accent-soft);
+    color: var(--accent);
+    transition: background var(--motion-fast), color var(--motion-fast);
+  }
+
+  .item-row-swipe.armed .item-row-backdrop {
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .item-row-body {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: var(--tap-l);
+    padding: 0 var(--space-1) 0 var(--space-2);
+    background: var(--surface);
+  }
+
+  .item-row-swipe .item-row-body {
+    padding-right: var(--space-3);
+    touch-action: pan-y;
+    user-select: none;
+    transition: transform var(--motion-fast) ease-out;
+  }
+
+  .item-row-swipe .item-row-body.dragging {
+    transition: none;
+  }
+
+  .item-row-check {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: var(--icon);
+    height: var(--icon);
+    margin: var(--space-3) var(--space-1) var(--space-3) var(--space-2);
+    border: 2px solid var(--muted);
+    border-radius: var(--radius-round);
+    background: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .item-row-check:checked {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  /* The tick: two sides of a small box, turned. */
+  .item-row-check:checked::after {
+    content: "";
+    width: 10px;
+    height: 5px;
+    margin-top: calc(var(--space-half) * -1);
+    border: solid var(--accent-text);
+    border-width: 0 0 2px 2px;
+    transform: rotate(-45deg);
+  }
+
+  .item-row-name {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
+    min-height: var(--tap-l);
+    padding: 0 var(--space-1);
+    border-radius: 0;
+    overflow-wrap: anywhere;
+    text-align: left;
+  }
+
+  /* A row of Próxima has no checkbox: its name keeps the place of one. */
+  .item-row-body > .item-row-name:first-child {
+    padding-left: var(--space-3);
+  }
+
+  .item-row.bought .item-row-name {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .item-row-meta {
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  .item-row-qty {
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
+  /* @component swipe-action
+     @summary An action behind the right end of a row, shown by a slide to the left.
+     @variant danger  Removes the item.
+     @example <div style="display: flex; height: 56px"><button class="swipe-action" type="button" aria-label="A Próxima"><svg class="icon" aria-hidden="true"><use href="icons.svg#calendar"/></svg></button><button class="swipe-action danger" type="button" aria-label="Borrar"><svg class="icon" aria-hidden="true"><use href="icons.svg#trash"/></svg></button></div> */
+  .swipe-action {
+    display: grid;
+    place-items: center;
+    width: calc(var(--tap) + var(--space-5));
+    height: 100%;
+    border-radius: 0;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .swipe-action + .swipe-action {
+    border-left: 1px solid var(--surface);
+  }
+
+  .swipe-action.danger {
+    background: var(--danger);
+    color: var(--surface);
+  }
+
+  /* @component section-head
+     @summary The row that opens and closes a part of a list, such as the bought items.
+     @part section-head-button  The full-width button, with aria-expanded.
+     @part chevron              The open or closed sign at its end.
+     @example <ul class="item-list" style="width: 100%"><li class="section-head"><button class="section-head-button" type="button" aria-expanded="false"><span>2 comprados</span><span class="chevron">▸</span></button></li></ul> */
+  .section-head-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: var(--tap);
+    padding: 0 var(--space-4);
+    border-radius: 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: var(--text-s);
+    font-weight: var(--weight-strong);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .chevron {
+    font-size: var(--text-m);
+  }
+
+  /* @component group-head
+     @summary The title of a group of a list, by recipe or by shop, with its count.
+     @example <ul class="item-list" style="width: 100%"><li class="group-head"><span>Mercadona</span><span>2</span></li></ul> */
+  .group-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    min-height: var(--tap);
+    padding: 0 var(--space-4);
+    border-bottom: 1px solid var(--line);
+    color: var(--accent);
+    font-size: var(--text-s);
+    font-weight: var(--weight-strong);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* @component list-group
+     @summary A box of rows on a --bg page, as in Ajustes.
+     @variant pair   Two rows side by side.
+     @variant plain  No box: rows split by lines, as the suggestions of a search.
+     @part list-row       A row: an icon and a text, or a control.
+     @part list-row-text  The main text of a row that has two.
+     @part list-row-meta  A muted text at the end of a row.
+     @variant accent      On list-row: the row that makes a new thing.
+     @example <div class="list-group" style="width: 100%"><button class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#help"/></svg><span>Ver la introducción</span></button><select class="select" aria-label="Idioma"><option>Español</option></select></div>
+     @example <div class="list-group pair" style="width: 100%"><button class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#export"/></svg><span>Exportar</span></button><button class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#import"/></svg><span>Importar</span></button></div>
+     @example <ul class="list-group plain" style="width: 100%"><li><button class="list-row" type="button"><span class="list-row-text">Leche</span><span class="list-row-meta">En Actual</span></button></li><li><button class="list-row accent" type="button">Crear «Lech»</button></li></ul> */
+  .list-group {
+    margin: 0 var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .list-group.pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .list-group.plain {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    list-style: none;
+  }
+
+  .list-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    min-height: var(--tap-l);
+    padding: 0 var(--space-4);
+    border-radius: 0;
+    text-align: left;
+  }
+
+  .list-row + .list-row {
+    border-top: 1px solid var(--line);
+  }
+
+  .list-group.pair > .list-row + .list-row {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
+
+  .list-group.plain .list-row {
+    min-height: var(--tap);
+    padding: 0 var(--space-half);
+    border-top: 1px solid var(--line);
+  }
+
+  .list-row .icon {
+    color: var(--muted);
+  }
+
+  .list-row.accent {
+    color: var(--accent);
+    font-weight: var(--weight-strong);
+  }
+
+  .list-row-text {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .list-row-meta {
+    flex: none;
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
   /* @component fab
      @summary The add button, fixed above the bottom bar at the side of the hand.
      @example <button class="fab" type="button" style="position: static">+</button> */
@@ -1283,41 +1261,6 @@
     position: fixed;
     z-index: 40;
     pointer-events: none;
-  }
-
-  .suggestions {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .suggestions button {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    width: 100%;
-    min-height: 48px;
-    padding: 0 var(--space-half);
-    border-top: 1px solid var(--line);
-    border-radius: 0;
-    text-align: left;
-  }
-
-  .suggestion-name {
-    flex: 1;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  .suggestion-where {
-    flex: none;
-    color: var(--muted);
-    font-size: var(--text-xs);
-  }
-
-  .suggestions .create {
-    color: var(--accent);
-    font-weight: var(--weight-strong);
   }
 
   /* Onboarding: the pages of the first start, over the full app. */
@@ -1444,17 +1387,17 @@
     margin-left: 0;
   }
 
-  [data-hand="left"] .row {
+  [data-hand="left"] .item-row-body {
     flex-direction: row-reverse;
     padding: 0 var(--space-2) 0 var(--space-1);
   }
 
-  [data-hand="left"] .swipe .row {
+  [data-hand="left"] .item-row-swipe .item-row-body {
     padding-right: var(--space-2);
     padding-left: var(--space-3);
   }
 
-  [data-hand="left"] .row input[type="checkbox"] {
+  [data-hand="left"] .item-row-check {
     margin: var(--space-3) var(--space-2) var(--space-3) var(--space-1);
   }
 
@@ -1546,4 +1489,82 @@
     font-size: var(--text-s);
   }
 
+
+  /* @component row-actions
+     @scope recipes
+     @summary The actions of an open recipe: three outline buttons, a third of the line each.
+     @example <div class="row-actions" style="width: 100%"><button class="button outline" type="button">Nombre</button><button class="button outline" type="button">Enlace</button><button class="button outline danger" type="button">Eliminar</button></div> */
+  .row-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+    padding: var(--space-half) var(--space-3) var(--space-3);
+  }
+
+  .row-actions .button {
+    padding: 0 var(--space-2);
+  }
+
+  /* @component product-add
+     @scope recipes
+     @summary The add row of a recipe with the suggestions below it.
+     @example <div class="product-add" style="width: 100%"><ul class="list-group plain"><li><button class="list-row" type="button">Huevos</button></li></ul></div> */
+  .product-add > .list-group {
+    padding: 0 var(--space-3) var(--space-2) var(--space-5);
+  }
+
+  /* @component version-status
+     @scope settings
+     @summary The state of the installed version: a sign, and a text for the outdated state only.
+     @part version-status-text  The text of the state. With a sign it stays for screen readers only.
+     @example <span class="version-status" data-status="current" role="status"><svg data-for="current" class="icon small" aria-hidden="true"><use href="icons.svg#check-circle"/></svg><span class="version-status-text">Al día</span></span> */
+  .version-status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .version-status [data-for] {
+    display: none;
+  }
+
+  .version-status[data-status='checking'] [data-for='checking'],
+  .version-status[data-status='current'] [data-for='current'],
+  .version-status[data-status='outdated'] [data-for='outdated'],
+  .version-status[data-status='unknown'] [data-for='unknown'] {
+    display: block;
+  }
+
+  .version-status[data-status='checking'] .icon {
+    animation: spin var(--motion-slow) linear infinite;
+  }
+
+  .version-status[data-status='current'] {
+    color: var(--accent);
+  }
+
+  .version-status[data-status='outdated'] {
+    flex-basis: 100%;
+    justify-content: center;
+    color: var(--warning);
+  }
+
+  .version-status[data-status='unknown'] {
+    color: var(--danger);
+  }
+
+  .version-status:not([data-status='outdated']) .version-status-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
 }

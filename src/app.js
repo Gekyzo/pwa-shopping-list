@@ -107,12 +107,12 @@ bindAdd();
 document.addEventListener(
   'pointerdown',
   (event) => {
-    const box = document.querySelector('.swipe.open');
+    const box = document.querySelector('.item-row-swipe.open');
     if (!box || box.contains(event.target)) return;
     Object.assign(ui, { openId: null, openSide: null });
     box.classList.remove('open');
-    moveRow(box.querySelector('.row'), 0);
-    box.querySelectorAll('.side').forEach((side) => {
+    moveRow(box.querySelector('.item-row-body'), 0);
+    box.querySelectorAll('.item-row-actions').forEach((side) => {
       side.inert = true;
     });
   },
