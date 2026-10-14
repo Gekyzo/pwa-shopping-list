@@ -13,6 +13,8 @@ no change for the user has no entry.
 
 - The spaces, text sizes and corners of all screens follow one scale, so the same kind of part
   looks the same on each screen.
+- The icons come from one set: the cart of **Llenar la cesta** and of a recipe is the cart of the
+  bottom bar with a `+`, and the icons of the rows and of `Ajustes` are a little larger.
 
 ## 1.0.20 - 2026-10-14
 

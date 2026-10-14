@@ -4,6 +4,7 @@ import { PARTICLE_SIZE, makeParticles, particleAt } from '#particles';
 import { $, el, scroller, ui, off, navMotion, render, guardClick } from '#ui/context';
 import { reorder } from '#ui/drag';
 import { checkVersion } from '#ui/settings';
+import { symbolNodes } from '#ui/controls';
 
 // The time of the dust of a button, and of the close or the open of its place in the bar.
 const DUST_MS = 900;
@@ -14,10 +15,13 @@ const drawButton = async (button) => {
   const box = button.getBoundingClientRect();
   const canvas = el('canvas', { width: Math.ceil(box.width), height: Math.ceil(box.height) });
   const context = canvas.getContext('2d', { willReadFrequently: true });
-  const icon = button.querySelector('svg');
-  const place = icon.getBoundingClientRect();
-  const look = getComputedStyle(icon);
-  const copy = icon.cloneNode(true);
+  const glyph = button.querySelector('.icon');
+  const place = glyph.getBoundingClientRect();
+  const look = getComputedStyle(glyph);
+  const copy = glyph.cloneNode(true);
+  // A data: image loads no other file, so the copy carries the shapes of its symbol.
+  const use = copy.querySelector('use');
+  if (use) use.replaceWith(...(await symbolNodes(use.getAttribute('href').split('#')[1])));
   Object.entries({
     xmlns: 'http://www.w3.org/2000/svg',
     width: place.width,

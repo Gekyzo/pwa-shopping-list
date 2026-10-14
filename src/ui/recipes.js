@@ -1,7 +1,7 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import { el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
-import { renameInput, moreButton, actionButton, icon, ICONS, startRename } from '#ui/controls';
+import { renameInput, moreButton, actionButton, icon, startRename } from '#ui/controls';
 
 export const sendText = ({ added, already }) => {
   const parts = [];
@@ -83,7 +83,7 @@ const editLink = (recipe) => {
 
 const linkNode = (recipe) => {
   const link = el('a', { className: 'recipe-link', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
-    icon(ICONS.chain),
+    icon('link'),
   ]);
   link.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
   return link;
@@ -111,7 +111,7 @@ export const recipeNode = (recipe) => {
     );
     name.setAttribute('aria-expanded', String(open));
   }
-  const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon(ICONS.cartPlus)]);
+  const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon('cart-add')]);
   send.setAttribute('aria-label', t('recipe.send', { name: recipe.name }));
   const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
   const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);
