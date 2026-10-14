@@ -9,7 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Changed
+
+- The spaces, text sizes and corners of all screens follow one scale, so the same kind of part
+  looks the same on each screen.
 
 ## 1.0.20 - 2026-10-14
 
