@@ -18,6 +18,7 @@ import {
   filterGroups,
   findByName,
   bringToList,
+  bringAllToActual,
   tripSummary,
   arrivalMessage,
   setSort,
@@ -565,4 +566,24 @@ test('filterGroups gives `left` the count of the full group, not of the matches'
 test('filterGroups keeps each group and each item for an empty query', () => {
   const view = { groups: [{ shop: 'Lidl', items: [], total: 2 }], rest: [coffee] };
   assert.deepEqual(filterGroups(view, ' '), { groups: [{ shop: 'Lidl', items: [], total: 2, left: 0 }], rest: [coffee] });
+});
+
+test('bringAllToActual moves each item of next to active, not ticked, again cleared', () => {
+  const state = build(['Pan', 'next', { again: true }], ['Leche', 'active', { bought: true }]);
+  const before = structuredClone(state);
+  const result = bringAllToActual(state);
+  assert.equal(result.error, undefined);
+  assert.deepEqual(
+    result.state.items.map(({ name, list, bought, again }) => ({ name, list, bought, again })),
+    [
+      { name: 'Pan', list: 'active', bought: false, again: false },
+      { name: 'Leche', list: 'active', bought: true, again: false },
+    ],
+  );
+  assert.deepEqual(state, before);
+});
+
+test('bringAllToActual returns the same state when next has no item', () => {
+  const state = build(['Leche', 'active']);
+  assert.equal(bringAllToActual(state).state, state);
 });

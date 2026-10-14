@@ -11,19 +11,19 @@ export const slideDirection = (dx, dy) => {
   return dx < 0 ? 1 : -1;
 };
 
-// The section that a slide of `dx`, `dy` px goes to from `view`: the next one on a slide to the
-// left, the previous one on a slide to the right. Null for no slide, and at the first and the
-// last section.
-export const slideTo = (view, dx, dy) => {
+// The section that a slide of `dx`, `dy` px goes to from `view`, in the order of `sections`: the
+// next one on a slide to the left, the previous one on a slide to the right. Null for no slide,
+// and at the first and the last section.
+export const slideTo = (view, dx, dy, sections = SECTIONS) => {
   const way = slideDirection(dx, dy);
-  const index = SECTIONS.indexOf(view);
+  const index = sections.indexOf(view);
   if (!way || index < 0) return null;
-  return SECTIONS[index + way] ?? null;
+  return sections[index + way] ?? null;
 };
 
-// The way from `from` to `to` in the order of the sections: 1 towards a later section, -1 towards
+// The way from `from` to `to` in the order of `sections`: 1 towards a later section, -1 towards
 // an earlier one, 0 when there is no way.
-export const direction = (from, to) => {
-  const [a, b] = [SECTIONS.indexOf(from), SECTIONS.indexOf(to)];
+export const direction = (from, to, sections = SECTIONS) => {
+  const [a, b] = [sections.indexOf(from), sections.indexOf(to)];
   return a < 0 || b < 0 ? 0 : Math.sign(b - a);
 };

@@ -10,6 +10,7 @@
 | `src/menu.js` | Pure menu operations and the fill of `Actual` | `recipes` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
 | `src/sections.js` | The order of the sections and the rule of the slide between them | nothing |
+| `src/modules.js` | The modules that the user turns off and the sections that they hide | `sections` |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
 | `src/storage.js` | Load, save, export, import, validation, the language key | `store`, `recipes`, `menu` |
@@ -57,13 +58,14 @@
 
 | Test file | Covers |
 |---|---|
-| `tests/store.test.js` | Items, the trip, the order, the search, the figures |
+| `tests/store.test.js` | Items, the trip, the order, the search, the figures, the bring of all of Próxima |
 | `tests/recipes.test.js` | Recipes, the send, the groups, the search |
 | `tests/shops.test.js` | Shops and the list by shop |
 | `tests/menu.test.js` | The meals of the week and the fill |
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key |
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sections.test.js` | The slide between sections |
+| `tests/modules.test.js` | The visible sections and the switch of a module |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
 | `tests/version.test.js` | Version rules |
