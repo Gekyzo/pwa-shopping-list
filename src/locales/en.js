@@ -72,6 +72,7 @@ export default {
   'search.items': 'Search item or shop',
   'recipe.openLink': 'Open the link of {name}',
   'recipe.title': 'Recipe',
+  'recipe.products': 'Products',
   'recipe.link': 'Link',
   'recipe.addProduct': 'Add product',
   'recipe.addProductTo': 'Add product to {name}',
