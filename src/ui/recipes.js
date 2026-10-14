@@ -1,0 +1,134 @@
+import * as store from '#store';
+import * as recipes from '#recipes';
+import { el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
+import { renameInput, moreButton, actionButton, icon, ICONS, startRename } from '#ui/controls';
+
+export const sendText = ({ added, already }) => {
+  const parts = [];
+  if (added) parts.push(t('send.added', { count: added }));
+  if (already) parts.push(t('send.already', { count: already }));
+  return parts.join(', ');
+};
+
+const sendToList = (recipe) => {
+  const result = recipes.sendRecipe(state, recipe.id);
+  if (result.error || result.state !== state) {
+    apply(result, { undoText: t('toast.sent', { name: recipe.name, summary: sendText(result) }) });
+  }
+  // A second tap changes nothing: keep the undo of the send that is still on the screen.
+  else showToast(t('toast.sentNothing', { name: recipe.name }), { undo: undoState });
+};
+
+const productNode = (recipe, product) => {
+  const remove = el('button', {
+    type: 'button',
+    className: 'more',
+    textContent: '✕',
+    onclick: () =>
+      apply(recipes.removeRecipeProduct(state, recipe.id, product), {
+        undoText: t('toast.productRemoved', { product, name: recipe.name }),
+      }),
+  });
+  remove.setAttribute('aria-label', t('recipe.removeProduct', { name: product }));
+  return el('li', {}, [el('span', { textContent: product }), remove]);
+};
+
+// The product field with the items that match the text below it. A tap on one adds it.
+const productForm = (recipe) => {
+  const input = el('input', {
+    type: 'text',
+    className: 'product-name',
+    maxLength: 80,
+    placeholder: t('recipe.addProduct'),
+    enterKeyHint: 'done',
+  });
+  input.setAttribute('autocapitalize', 'sentences');
+  input.setAttribute('aria-label', t('recipe.addProductTo', { name: recipe.name }));
+  const add = (name) => {
+    // The render builds a new field; `focusProduct` keeps the keyboard open for the next product.
+    ui.focusProduct = true;
+    if (apply(recipes.addRecipeProduct(state, recipe.id, name))) return;
+    ui.focusProduct = false;
+    input.focus();
+  };
+  const suggestions = el('ul', { className: 'suggestions' });
+  suggestions.setAttribute('aria-label', t('add.existing'));
+  const taken = new Set(recipe.products.map((product) => product.toLowerCase()));
+  input.addEventListener('input', () => {
+    const rows = store
+      .searchItems(state, input.value, Infinity)
+      .filter((item) => !taken.has(item.name.toLowerCase()))
+      .slice(0, 5)
+      .map((item) => el('li', {}, [el('button', { type: 'button', textContent: item.name, onclick: () => add(item.name) })]));
+    suggestions.replaceChildren(...rows);
+  });
+  const form = el('form', { className: 'product-form', autocomplete: 'off' }, [
+    input,
+    el('button', { type: 'submit', className: 'primary', textContent: t('add.submit') }),
+  ]);
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    add(input.value);
+  });
+  return el('div', { className: 'product-add' }, [form, suggestions]);
+};
+
+const editLink = (recipe) => {
+  const text = window.prompt(t('recipe.linkPrompt', { name: recipe.name }), recipe.url);
+  if (text === null) return;
+  ui.openId = null;
+  if (text.trim() === recipe.url) render();
+  else apply(recipes.setRecipeUrl(state, recipe.id, text), { undoText: t(text.trim() ? 'toast.linkSaved' : 'toast.linkRemoved') });
+};
+
+const linkNode = (recipe) => {
+  const link = el('a', { className: 'recipe-link', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
+    icon(ICONS.chain),
+  ]);
+  link.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
+  return link;
+};
+
+export const recipeNode = (recipe) => {
+  const open = ui.openRecipeId === recipe.id;
+  let name;
+  if (ui.editingId === recipe.id) name = renameInput(recipe, (value) => recipes.renameRecipe(state, recipe.id, value));
+  else {
+    name = el(
+      'button',
+      {
+        type: 'button',
+        className: 'name',
+        onclick: () => {
+          Object.assign(ui, { openRecipeId: open ? null : recipe.id, openId: null });
+          render();
+        },
+      },
+      [
+        el('span', { textContent: recipe.name }),
+        el('small', { textContent: t('count.products', { count: recipe.products.length }) }),
+      ],
+    );
+    name.setAttribute('aria-expanded', String(open));
+  }
+  const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon(ICONS.cartPlus)]);
+  send.setAttribute('aria-label', t('recipe.send', { name: recipe.name }));
+  const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
+  const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);
+  if (ui.openId === recipe.id) {
+    const remove = actionButton(
+      t('recipe.delete'),
+      () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
+      'danger',
+    );
+    const link = actionButton(t('recipe.link'), () => editLink(recipe));
+    node.append(el('div', { className: 'actions' }, [actionButton(t('recipe.rename'), () => startRename(recipe)), link, remove]));
+  }
+  if (open) {
+    node.append(
+      el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product))),
+      productForm(recipe),
+    );
+  }
+  return node;
+};

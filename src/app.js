@@ -49,10 +49,12 @@ import {
 } from '#ui/context';
 import { inList, viewState, found, searching, arrangeChoices, shownGroup, endSearch } from '#ui/view';
 import { collapse, expand, pendingRows, rowTops, slide, groupOnlyRows } from '#ui/motion';
-import { renameInput, moreButton, actionButton, icon, ICONS, startRename } from '#ui/controls';
+import { icon } from '#ui/controls';
 import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { reorder, endReorder, bind as bindDrag } from '#ui/drag';
 import { itemNode, boughtSection, groupHead, moveRow } from '#ui/rows';
+import { recipeNode } from '#ui/recipes';
+import { dayNode, renderMeal, closeMeal, bind as bindMenu } from '#ui/menu';
 
 // True while the groups of Actual close, before the list becomes flat.
 let ungrouping = false;
@@ -128,210 +130,6 @@ const renderArrange = () => {
   document.querySelectorAll('#arrange-sort button').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.sort === state.sort));
   });
-};
-
-// Recipes
-
-const sendText = ({ added, already }) => {
-  const parts = [];
-  if (added) parts.push(t('send.added', { count: added }));
-  if (already) parts.push(t('send.already', { count: already }));
-  return parts.join(', ');
-};
-
-const sendToList = (recipe) => {
-  const result = recipes.sendRecipe(state, recipe.id);
-  if (result.error || result.state !== state) {
-    apply(result, { undoText: t('toast.sent', { name: recipe.name, summary: sendText(result) }) });
-  }
-  // A second tap changes nothing: keep the undo of the send that is still on the screen.
-  else showToast(t('toast.sentNothing', { name: recipe.name }), { undo: undoState });
-};
-
-const productNode = (recipe, product) => {
-  const remove = el('button', {
-    type: 'button',
-    className: 'more',
-    textContent: '✕',
-    onclick: () =>
-      apply(recipes.removeRecipeProduct(state, recipe.id, product), {
-        undoText: t('toast.productRemoved', { product, name: recipe.name }),
-      }),
-  });
-  remove.setAttribute('aria-label', t('recipe.removeProduct', { name: product }));
-  return el('li', {}, [el('span', { textContent: product }), remove]);
-};
-
-// The product field with the items that match the text below it. A tap on one adds it.
-const productForm = (recipe) => {
-  const input = el('input', {
-    type: 'text',
-    className: 'product-name',
-    maxLength: 80,
-    placeholder: t('recipe.addProduct'),
-    enterKeyHint: 'done',
-  });
-  input.setAttribute('autocapitalize', 'sentences');
-  input.setAttribute('aria-label', t('recipe.addProductTo', { name: recipe.name }));
-  const add = (name) => {
-    // The render builds a new field; `focusProduct` keeps the keyboard open for the next product.
-    ui.focusProduct = true;
-    if (apply(recipes.addRecipeProduct(state, recipe.id, name))) return;
-    ui.focusProduct = false;
-    input.focus();
-  };
-  const suggestions = el('ul', { className: 'suggestions' });
-  suggestions.setAttribute('aria-label', t('add.existing'));
-  const taken = new Set(recipe.products.map((product) => product.toLowerCase()));
-  input.addEventListener('input', () => {
-    const rows = store
-      .searchItems(state, input.value, Infinity)
-      .filter((item) => !taken.has(item.name.toLowerCase()))
-      .slice(0, 5)
-      .map((item) => el('li', {}, [el('button', { type: 'button', textContent: item.name, onclick: () => add(item.name) })]));
-    suggestions.replaceChildren(...rows);
-  });
-  const form = el('form', { className: 'product-form', autocomplete: 'off' }, [
-    input,
-    el('button', { type: 'submit', className: 'primary', textContent: t('add.submit') }),
-  ]);
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    add(input.value);
-  });
-  return el('div', { className: 'product-add' }, [form, suggestions]);
-};
-
-const editLink = (recipe) => {
-  const text = window.prompt(t('recipe.linkPrompt', { name: recipe.name }), recipe.url);
-  if (text === null) return;
-  ui.openId = null;
-  if (text.trim() === recipe.url) render();
-  else apply(recipes.setRecipeUrl(state, recipe.id, text), { undoText: t(text.trim() ? 'toast.linkSaved' : 'toast.linkRemoved') });
-};
-
-const linkNode = (recipe) => {
-  const link = el('a', { className: 'recipe-link', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
-    icon(ICONS.chain),
-  ]);
-  link.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
-  return link;
-};
-
-const recipeNode = (recipe) => {
-  const open = ui.openRecipeId === recipe.id;
-  let name;
-  if (ui.editingId === recipe.id) name = renameInput(recipe, (value) => recipes.renameRecipe(state, recipe.id, value));
-  else {
-    name = el(
-      'button',
-      {
-        type: 'button',
-        className: 'name',
-        onclick: () => {
-          Object.assign(ui, { openRecipeId: open ? null : recipe.id, openId: null });
-          render();
-        },
-      },
-      [
-        el('span', { textContent: recipe.name }),
-        el('small', { textContent: t('count.products', { count: recipe.products.length }) }),
-      ],
-    );
-    name.setAttribute('aria-expanded', String(open));
-  }
-  const send = el('button', { type: 'button', className: 'send', onclick: () => sendToList(recipe) }, [icon(ICONS.cartPlus)]);
-  send.setAttribute('aria-label', t('recipe.send', { name: recipe.name }));
-  const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
-  const node = el('li', { className: 'item recipe' }, [el('div', { className: 'row' }, row)]);
-  if (ui.openId === recipe.id) {
-    const remove = actionButton(
-      t('recipe.delete'),
-      () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
-      'danger',
-    );
-    const link = actionButton(t('recipe.link'), () => editLink(recipe));
-    node.append(el('div', { className: 'actions' }, [actionButton(t('recipe.rename'), () => startRename(recipe)), link, remove]));
-  }
-  if (open) {
-    node.append(
-      el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product))),
-      productForm(recipe),
-    );
-  }
-  return node;
-};
-
-// Menu
-
-// The name of a day of the week in the language of the screen. 1 January 2024 is a Monday.
-const dayName = (day) => new Intl.DateTimeFormat(intlTag(lang), { weekday: 'long' }).format(new Date(2024, 0, 1 + day));
-
-const mealTitle = (day, meal) => t('menu.title', { meal: t(`meal.${meal}`), day: dayName(day) });
-
-const openMeal = (day, meal) => {
-  Object.assign(ui, { mealOpen: { day, meal }, mealQuery: '' });
-  render();
-};
-
-const closeMeal = () => {
-  ui.mealOpen = null;
-  render();
-};
-
-const mealNode = (day, { meal, recipe }) => {
-  const button = el(
-    'button',
-    { type: 'button', className: recipe ? 'meal' : 'meal free', onclick: () => openMeal(day, meal) },
-    [el('small', { textContent: t(`meal.${meal}`) }), el('span', { textContent: recipe ? recipe.name : t('menu.choose') })],
-  );
-  button.setAttribute('aria-label', `${mealTitle(day, meal)}: ${recipe ? recipe.name : t('menu.choose')}`);
-  button.setAttribute('aria-haspopup', 'dialog');
-  return button;
-};
-
-const dayNode = ({ day, meals }) =>
-  el('li', { className: 'day' }, [
-    el('h3', { textContent: dayName(day) }),
-    el('div', { className: 'meals' }, meals.map((entry) => mealNode(day, entry))),
-  ]);
-
-const fillBasket = () => {
-  const result = menu.fillMenu(state);
-  if (result.error || result.state !== state) {
-    apply(result, { undoText: t('toast.menuFilled', { summary: sendText(result) }) });
-  }
-  // A second tap changes nothing: keep the undo of the fill that is still on the screen.
-  else showToast(t('toast.menuNothing'), { undo: undoState });
-};
-
-const renderMeal = () => {
-  const open = ui.mealOpen;
-  $('meal').hidden = !open;
-  if (!open) return;
-  const { day, meal } = open;
-  const title = mealTitle(day, meal);
-  $('meal-title').textContent = title;
-  $('meal-sheet').setAttribute('aria-label', title);
-  const current = menu.menuWeek(state)[day].meals.find((entry) => entry.meal === meal).recipe;
-  if ($('meal-query').value !== ui.mealQuery) $('meal-query').value = ui.mealQuery;
-  const matches = recipes.searchRecipes(state, ui.mealQuery);
-  $('meal-empty').hidden = matches.length > 0;
-  $('meal-empty').textContent = matches.length ? '' : t('empty.noMatch', { query: ui.mealQuery.trim() });
-  const chips = matches.map((recipe) => {
-    const chip = el('button', {
-      type: 'button',
-      textContent: recipe.name,
-      onclick: () => {
-        ui.mealOpen = null;
-        apply(menu.setMeal(state, day, meal, recipe.id));
-      },
-    });
-    chip.setAttribute('aria-pressed', String(recipe.id === current?.id));
-    return chip;
-  });
-  $('meal-chips').replaceChildren(...chips);
-  $('meal-remove').hidden = !current;
 };
 
 // Screen
@@ -1213,19 +1011,7 @@ $('toast-undo').addEventListener('click', () => {
   expand(pendingRows().filter((node) => !before.has(node.dataset.id)));
 });
 
-$('menu-fill').addEventListener('click', fillBasket);
-$('menu-clear').addEventListener('click', () => apply(menu.clearMenu(state), { undoText: t('toast.menuCleared') }));
-$('meal-veil').addEventListener('click', closeMeal);
-$('meal-query').addEventListener('input', (event) => {
-  ui.mealQuery = event.target.value;
-  renderMeal();
-});
-$('meal-remove').addEventListener('click', () => {
-  const { day, meal } = ui.mealOpen;
-  const name = menu.menuWeek(state)[day].meals.find((entry) => entry.meal === meal).recipe?.name ?? '';
-  ui.mealOpen = null;
-  apply(menu.clearMeal(state, day, meal), { undoText: t('toast.mealCleared', { name }) });
-});
+bindMenu();
 
 $('export').addEventListener('click', () => {
   download(exportFilename(new Date()), exportJson(state));
