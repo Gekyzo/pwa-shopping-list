@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.19 - 2026-10-14
+
 ### Fixed
 
 - The version symbol in `Ajustes` is centred on the line of the version.
