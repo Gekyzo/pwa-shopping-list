@@ -46,4 +46,4 @@ The parts of the catalogue, by layer. A request for a screen names them.
 
 | Layer | Parts |
 |---|---|
-| components | `icon` |
+| components | `icon`, `button`, `fab` |

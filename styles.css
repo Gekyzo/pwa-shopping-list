@@ -147,11 +147,90 @@
     height: var(--icon-s);
   }
 
-  .primary {
+  /* @component button
+     @summary Tap target for one action. Min height --tap. The base look has no fill.
+     @variant primary  Main action of a view or a sheet. One for each view.
+     @variant outline  Second action beside a primary, or an action of a row.
+     @variant quiet    Muted text, for an action that steps back, such as Saltar.
+     @variant accent   Accent text and no fill, for an action that is not the main one.
+     @variant danger   Removes data. Combine with outline.
+     @variant strong   Strong text, for the action of a toast.
+     @variant icon     Square, icon or one sign only. Needs an aria-label.
+     @variant toggle   An icon button that is on with aria-pressed="true".
+     @variant wide     Takes the full width of its box.
+     @example <button class="button primary" type="button">Add</button>
+     @example <button class="button outline" type="button">Clear menu</button>
+     @example <button class="button outline danger" type="button">Delete</button>
+     @example <button class="button outline quiet" type="button">Skip</button>
+     @example <button class="button accent" type="button">Update</button>
+     @example <button class="button primary icon" type="button" aria-label="Send"><svg class="icon" aria-hidden="true"><use href="icons.svg#cart-add"/></svg></button>
+     @example <button class="button icon toggle" type="button" aria-pressed="true" aria-label="Always"><svg class="icon" aria-hidden="true"><use href="icons.svg#repeat"/></svg></button>
+     @example <button class="button icon" type="button" aria-label="More">⋯</button>
+     @example <button class="button primary wide" type="button">Finish the trip</button> */
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--tap);
     padding: 0 var(--space-4);
+    border: 1px solid transparent;
+    border-radius: var(--radius-m);
+    background: none;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .button.primary {
     background: var(--accent);
     color: var(--accent-text);
     font-weight: var(--weight-strong);
+  }
+
+  .button.outline {
+    border-color: var(--line);
+  }
+
+  .button.quiet {
+    color: var(--muted);
+  }
+
+  .button.accent {
+    color: var(--accent);
+    font-weight: var(--weight-strong);
+  }
+
+  .button.danger {
+    color: var(--danger);
+  }
+
+  .button.strong {
+    font-weight: var(--weight-strong);
+  }
+
+  .button.icon {
+    flex: none;
+    width: var(--tap);
+    height: var(--tap);
+    padding: 0;
+    font-size: var(--text-l);
+  }
+
+  .button.icon:not(.primary, .accent) {
+    color: var(--muted);
+  }
+
+  .button.toggle {
+    color: var(--line);
+  }
+
+  .button.toggle[aria-pressed="true"] {
+    color: var(--accent);
+  }
+
+  .button.wide {
+    width: 100%;
   }
 
   /* Header summary */
@@ -193,21 +272,12 @@
     min-width: 0;
   }
 
-  .tool {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 40px;
-    background: var(--surface);
-    color: var(--muted);
-  }
-
   /* The tools stand closer to each other than to the title, so that three leave room for it. */
-  .tool:not([hidden]) ~ .tool:not([hidden]) {
+  .head .button.icon:not([hidden]) ~ .button.icon:not([hidden]) {
     margin-left: calc(var(--space-2) * -1);
   }
 
-  #search-button[aria-expanded="true"] {
+  .head .button.icon[aria-expanded="true"] {
     color: var(--accent);
   }
 
@@ -552,42 +622,11 @@
     color: var(--muted);
   }
 
-  .recur {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    color: var(--line);
-  }
-
-  .recur[aria-pressed="true"] {
-    color: var(--accent);
-  }
-
-  .more {
-    flex: none;
-    width: 44px;
-    color: var(--muted);
-    font-size: var(--text-l);
-  }
-
   .actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
     padding: var(--space-half) var(--space-3) var(--space-3) calc(var(--tap) + var(--space-2));
-  }
-
-  .actions button {
-    min-height: 40px;
-    padding: 0 var(--space-4);
-    border: 1px solid var(--line);
-    font-size: var(--text-s);
-  }
-
-  .actions .danger {
-    color: var(--danger);
   }
 
   .hint {
@@ -603,7 +642,7 @@
     text-align: center;
   }
 
-  .empty button {
+  .empty .button {
     margin-top: var(--space-2);
   }
 
@@ -669,20 +708,6 @@
     grid-column: 2;
   }
 
-  .menu-actions button {
-    display: flex;
-    padding: 0 var(--space-3);
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-  }
-
-  #menu-clear,
-  #meal-remove {
-    border: 1px solid var(--line);
-  }
-
   #meal-query {
     width: 100%;
     height: 44px;
@@ -697,11 +722,6 @@
     color: var(--muted);
   }
 
-  #meal-remove {
-    width: 100%;
-    color: var(--danger);
-  }
-
   .banner {
     margin: var(--space-4) var(--space-3);
     padding: var(--space-4) var(--space-4);
@@ -712,10 +732,6 @@
   .banner p {
     margin: var(--space-1) 0 var(--space-3);
     font-size: var(--text-s);
-  }
-
-  .banner button {
-    width: 100%;
   }
 
   /* Recipes */
@@ -740,29 +756,8 @@
     padding-left: var(--space-3);
   }
 
-  .recipe .actions button {
+  .recipe .actions .button {
     padding: 0 var(--space-2);
-  }
-
-  .send {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-m);
-    background: var(--accent);
-    color: var(--accent-text);
-  }
-
-  .recipe-link {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-m);
-    color: var(--accent);
   }
 
   .products {
@@ -998,15 +993,11 @@
     }
   }
 
-  #update {
-    min-height: 44px;
-    padding: 0 var(--space-4);
-    color: var(--accent);
-    font-weight: var(--weight-strong);
-  }
-
   /* Add button and bottom menu */
 
+  /* @component fab
+     @summary The add button, fixed above the bottom bar at the side of the hand.
+     @example <button class="fab" type="button" style="position: static">+</button> */
   .fab {
     position: fixed;
     right: var(--space-4);
@@ -1145,10 +1136,6 @@
     border: 2px solid var(--accent);
     border-radius: var(--radius-m);
     background: var(--bg);
-  }
-
-  .add-row button {
-    min-height: 48px;
   }
 
   .seg {
@@ -1348,12 +1335,6 @@
     flex: 1;
   }
 
-  .toast button {
-    min-height: 40px;
-    padding: 0 var(--space-4);
-    font-weight: var(--weight-strong);
-  }
-
   /* Onboarding: the pages of the first start, over the full app. */
 
   .onboarding {
@@ -1463,14 +1444,8 @@
     gap: var(--space-2);
   }
 
-  .onboarding-actions button {
+  .onboarding-actions .button {
     flex: 1 1 50%;
-    min-height: 52px;
-  }
-
-  #onboarding-skip {
-    border: 1px solid var(--line);
-    color: var(--muted);
   }
 
   /* Left hand: the controls change side. Text stays aligned to the left, and a row slides as before. */
@@ -1479,7 +1454,7 @@
     flex-direction: row-reverse;
   }
 
-  [data-hand="left"] .tool:not([hidden]) ~ .tool:not([hidden]) {
+  [data-hand="left"] .head .button.icon:not([hidden]) ~ .button.icon:not([hidden]) {
     margin-right: calc(var(--space-2) * -1);
     margin-left: 0;
   }

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { LAYERS, rulesOf, iconsOf } from '../designs/catalog.js';
+import { LAYERS, rulesOf, iconsOf, parseCatalog, classesOf, classesInScript } from '../designs/catalog.js';
 
 // The rules of docs/spec/15-design-system.md over the real files.
 const root = new URL('../', import.meta.url);
@@ -81,4 +81,26 @@ test('each symbol of icons.svg is used (DS-5)', () => {
 
 test('only icon() of controls.js builds an svg (DS-5)', () => {
   assert.deepEqual(scripts.filter(([file, js]) => file !== 'controls.js' && /createElementNS|'svg'/.test(js)).map(([file]) => file), []);
+});
+
+const catalog = parseCatalog({ css, sprite });
+const used = new Set([...classesOf(html), ...scripts.flatMap(([, js]) => classesInScript(js))]);
+
+// A family of components: each name is documented, no old class is used, and no rule styles one.
+const family = (names, retired, gone = []) => () => {
+  for (const name of names) assert.ok(catalog.components.some((part) => part.name === name), `${name} has an @component block`);
+  assert.deepEqual(retired.filter((name) => used.has(name)), [], 'an old class is still used');
+  const old = new RegExp(`\\.(${retired.join('|')})(?![\\w-])`);
+  assert.deepEqual(rules.filter((rule) => old.test(rule.selector) || gone.some((selector) => rule.selector.includes(selector))).map((rule) => rule.selector), [], 'a rule styles an old class');
+};
+
+test('every action is a button of the design system (DS-3)', family(
+  ['button', 'fab'],
+  ['tool', 'send', 'recur', 'more', 'recipe-link'],
+  ['#search-button', '#menu-clear', '#meal-remove', '#update', '#onboarding-skip', '.actions button', '.actions .danger', '.empty button', '.banner button', '.menu-actions button', '.add-row button', '.toast button', '.onboarding-actions button'],
+));
+
+test('primary is a variant of button only (DS-3)', () => {
+  assert.deepEqual(rules.filter((rule) => /\.primary\b/.test(rule.selector) && !rule.selector.includes('.button')).map((rule) => rule.selector), []);
+  assert.deepEqual([...html.matchAll(/class="([^"]*\bprimary\b[^"]*)"/g)].map(([, value]) => value).filter((value) => !value.split(' ').includes('button')), []);
 });

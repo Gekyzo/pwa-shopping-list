@@ -25,7 +25,7 @@ export const moreButton = (item, groupId = null) => {
   const open = isOpen(item.id, groupId);
   const button = el('button', {
     type: 'button',
-    className: 'more',
+    className: 'button icon',
     textContent: '⋯',
     onclick: () => {
       Object.assign(ui, { openId: open ? null : item.id, openGroup: groupId, openSide: null });
@@ -37,8 +37,8 @@ export const moreButton = (item, groupId = null) => {
   return button;
 };
 
-export const actionButton = (text, onClick, className = '') =>
-  el('button', { type: 'button', textContent: text, className, onclick: onClick });
+export const actionButton = (text, onClick, { variant = 'outline' } = {}) =>
+  el('button', { type: 'button', textContent: text, className: ['button', variant].join(' '), onclick: onClick });
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
