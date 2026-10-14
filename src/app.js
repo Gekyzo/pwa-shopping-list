@@ -4,6 +4,7 @@ import * as shops from '#shops';
 import * as menu from '#menu';
 import { settle } from '#swipe';
 import { direction, slideDirection, slideTo } from '#sections';
+import { switchModule, visibleSections } from '#modules';
 import { PAGES, isLast, shouldShow, step } from '#onboarding';
 import { dropIndex, moveTo, shifts } from '#reorder';
 import {
@@ -17,6 +18,8 @@ import {
   saveHand,
   loadTheme,
   saveTheme,
+  loadModules,
+  saveModules,
   loadOnboarded,
   saveOnboarded,
   hasStoredState,
@@ -70,6 +73,10 @@ document.documentElement.dataset.hand = hand;
 // The colours: `light` or `dark` override the phone, in styles.css; `system` follows it.
 let theme = storage ? loadTheme(storage) : 'system';
 document.documentElement.dataset.theme = theme;
+
+// The modules that the user turned off (MOD-2).
+let off = storage ? loadModules(storage) : [];
+const isOn = (id) => !off.includes(id);
 
 // `t` for a text that names a list: the `list` parameter is a list id.
 const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
@@ -392,7 +399,7 @@ const activeRow = (item, groupId) => {
     ? renameInput(item)
     : el('button', { type: 'button', className: 'name', tabIndex: -1, onclick: toggle }, nameParts(item));
   const row = [checkbox, name];
-  if (item.bought && !item.recurrent) {
+  if (item.bought && !item.recurrent && isOn('next')) {
     const again = el('button', {
       type: 'button',
       className: item.again ? 'pill' : 'pill ghost',
@@ -404,7 +411,8 @@ const activeRow = (item, groupId) => {
     row.push(again);
   }
   row.push(recurrentToggle(item));
-  return { row, start: [renameAction(item), shopsAction(item)], end: [moveAction(item), deleteAction(item)] };
+  const end = isOn('next') ? [moveAction(item), deleteAction(item)] : [deleteAction(item)];
+  return { row, start: [renameAction(item), shopsAction(item)], end };
 };
 
 const nextRow = (item, groupId) => {
@@ -732,7 +740,7 @@ const arrangeChoices = () => {
   if (ui.view !== 'active' && ui.view !== 'next') return { recipe: false, shop: false, sort: false };
   const items = ui.view === 'active' ? store.activeItems(state) : store.nextItems(state);
   return {
-    recipe: ui.view === 'active' && recipes.recipeGroups(state).groups.length > 0,
+    recipe: isOn('recipes') && ui.view === 'active' && recipes.recipeGroups(state).groups.length > 0,
     shop: items.some((item) => item.shops.length > 0),
     sort: items.length > 1,
   };
@@ -1066,7 +1074,7 @@ const renderList = (summary, next) => {
 
   $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
   $('empty-text').textContent = emptyText();
-  $('bring').hidden = !(ui.view === 'active' && summary.incoming > 0) || searching();
+  $('bring').hidden = !(isOn('next') && ui.view === 'active' && summary.incoming > 0) || searching();
   $('bring').textContent = say('empty.bring', { count: summary.incoming, list: 'next' });
 
   $('menu-actions').hidden = !(ui.view === 'menu' && state.recipes.length > 0);
@@ -1164,7 +1172,9 @@ const render = () => {
     ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.shopsId !== null || ui.mealOpen !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
+  const sections = visibleSections(off);
   document.querySelectorAll('.bnav button').forEach((button) => {
+    button.hidden = !sections.includes(button.dataset.view);
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
   });
@@ -1207,6 +1217,9 @@ const applyLanguage = () => {
     themeOption('light', 'settings.themeLight'),
     themeOption('dark', 'settings.themeDark'),
   );
+  document.querySelectorAll('[data-module]').forEach((box) => {
+    box.checked = isOn(box.dataset.module);
+  });
   render();
   renderOnboarding();
 };
@@ -1281,7 +1294,7 @@ const renderSheet = () => {
   if (!ui.sheetOpen) return;
   const forRecipe = ui.view === 'recipes';
   const label = t(forRecipe ? 'add.recipeName' : 'add.itemLabel');
-  $('seg').hidden = forRecipe;
+  $('seg').hidden = forRecipe || !isOn('next');
   $('add-submit').textContent = t(forRecipe ? 'add.create' : 'add.submit');
   $('add-name').placeholder = label;
   $('add-name').setAttribute('aria-label', label);
@@ -1310,7 +1323,7 @@ const renderSheet = () => {
 };
 
 const openSheet = () => {
-  Object.assign(ui, { sheetOpen: true, target: ui.view === 'next' ? 'next' : 'active', openId: null, editingId: null });
+  Object.assign(ui, { sheetOpen: true, target: ui.view === 'next' && isOn('next') ? 'next' : 'active', openId: null, editingId: null });
   $('add-name').value = '';
   render();
   $('add-name').focus();
@@ -1397,7 +1410,7 @@ scroller.addEventListener('animationend', (event) => {
 });
 
 const showView = (view) => {
-  const way = direction(ui.view, view);
+  const way = direction(ui.view, view, visibleSections(off));
   // The field is shared: the focus of a list search must not go with it to Recetas.
   $('query').blur();
   Object.assign(ui, { view, editingId: null, openId: null, query: '', searchOpen: false, mealOpen: null });
@@ -1422,7 +1435,7 @@ document.addEventListener('pointerdown', (event) => {
 });
 document.addEventListener('pointerup', (event) => {
   if (sectionSlide?.pointerId !== event.pointerId) return;
-  const view = slideTo(ui.view, event.clientX - sectionSlide.x, event.clientY - sectionSlide.y);
+  const view = slideTo(ui.view, event.clientX - sectionSlide.x, event.clientY - sectionSlide.y, visibleSections(off));
   sectionSlide = null;
   if (!view) return;
   // The click that follows a slide must not press the button below the finger.
@@ -1693,6 +1706,18 @@ $('theme').addEventListener('change', (event) => {
   // With no storage the choice lasts until the app closes.
   if (storage) saveTheme(storage, theme);
   document.documentElement.dataset.theme = theme;
+});
+
+document.querySelectorAll('[data-module]').forEach((box) => {
+  box.addEventListener('change', () => {
+    off = switchModule(off, box.dataset.module, box.checked);
+    // With no storage the choice lasts until the app closes.
+    if (storage) saveModules(storage, off);
+    // The switch-off of Próxima brings its items to Actual (MOD-6).
+    const result = box.dataset.module === 'next' && !box.checked ? store.bringAllToActual(state) : { state };
+    if (result.state !== state) apply(result, { undoText: say('toast.brought', { list: 'next' }) });
+    else render();
+  });
 });
 
 $('update').addEventListener('click', async () => {

@@ -13,6 +13,9 @@ no change for the user has no entry.
 
 - **Tema** in `Ajustes`: `Automático` follows the phone, `Claro` and `Oscuro` keep the light or
   the dark colours.
+- **Módulos** in `Ajustes`: a switch turns off `Próxima`, and a switch turns off `Recetas` with
+  `Menú`. A module that is off keeps its data. The switch-off of `Próxima` brings its items to
+  `Actual`, with `Deshacer`.
 
 ## 1.0.10 - 2026-10-14
 

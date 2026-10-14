@@ -138,6 +138,8 @@ export default {
   'settings.theme': 'Tema',
   'settings.themeLight': 'Claro',
   'settings.themeDark': 'Oscuro',
+  'settings.modules': 'Módulos',
+  'settings.moduleRecipes': 'Recetas y menú',
   'settings.help': 'Ayuda',
   'settings.onboarding': 'Ver la introducción',
   'settings.version': 'Versión',
