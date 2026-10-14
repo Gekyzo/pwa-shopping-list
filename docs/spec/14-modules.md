@@ -3,7 +3,7 @@
 Rules of `src/modules.js`, and of its use in `src/app.js`.
 
 - **MOD-1** `Ajustes` has the group **Módulos**, with a switch for `Próxima` and a switch for
-  **Recetas y menú**. A new install has the two modules on. `Actual` and `Ajustes` are always on.
+  **Recetas y menú**. A switch is a toggle with a knob that slides to the right when it is on. A new install has the two modules on. `Actual` and `Ajustes` are always on.
 - **MOD-2** The modules that are off are stored in `shopping.modules`, as a JSON list of their
   ids, `next` and `recipes`. All modules on removes the key. A missing key, a text that is not a
   JSON list and an unknown id read as on. It is a preference of the device, not a part of the
