@@ -1155,9 +1155,12 @@ const renderVersion = () => {
   const dateForm = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
   const date = running && new Date(running.date).toLocaleString(intlTag(lang), dateForm);
   $('version').textContent = running ? t('version.running', { version: running.version, date }) : t('version.none');
-  $('version-status').textContent = checking
+  const text = checking
     ? t('version.checking')
     : status === 'outdated' ? t('version.available', { version: latest.version }) : t(VERSION_KEYS[status]);
+  $('version-status').dataset.status = checking ? 'checking' : status;
+  $('version-status').title = text;
+  $('version-status-text').textContent = text;
   $('update').hidden = checking || status !== 'outdated';
 };
 
