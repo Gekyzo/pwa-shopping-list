@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.12 - 2026-10-14
+
 ### Changed
 
 - A tap on the name of an item opens the sheet `Editar`, with the name and the shops. The slide to
