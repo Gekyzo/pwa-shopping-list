@@ -6,16 +6,17 @@ The app has one state object. Each operation returns a new object and never chan
 
 ```js
 {
-  version: 3,
+  version: 4,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
   sent: [string],     // ids of the recipes sent to Actual in this trip, in send order
   group: 'recipe',    // 'recipe' | 'shop' | 'none'
   sort: 'custom',     // 'custom' | 'name'
+  menu: [Meal],       // the planned meals of the week, in day and meal order
 }
 ```
 
-The empty state is `{ version: 3, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom' }`.
+The empty state is `{ version: 4, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] }`.
 
 ## Item
 
@@ -42,6 +43,18 @@ The empty state is `{ version: 3, items: [], recipes: [], sent: [], group: 'reci
 }
 ```
 
+## Meal
+
+```js
+{
+  day: number,        // 0 (Monday) to 6
+  meal: 'lunch' | 'dinner',
+  recipe: string,     // the id of a recipe
+}
+```
+
+A meal with no recipe has no record. See [13-menu.md](13-menu.md).
+
 ## Invariants
 
 - **DATA-1** An item is one record. It is never copied between the lists; a view computes where it
@@ -59,6 +72,8 @@ The empty state is `{ version: 3, items: [], recipes: [], sent: [], group: 'reci
 - **DATA-11** A recipe and an item have no link. A product matches an item by name, with no case
   distinction, at the time of use. A rename of one does not change the other.
 - **DATA-12** A shop has no record. It exists while an item has it.
+- **DATA-13** `menu` has one record for each meal at most, in day and meal order. Its `recipe` is
+  the id of a recipe that exists.
 
 ## Derived views
 

@@ -7,8 +7,6 @@ import { DAYS, MEALS, setMeal, clearMeal, clearMenu, mealCount, menuWeek, fillMe
 let counter = 0;
 const newId = () => `id-${++counter}`;
 
-const blank = () => ({ ...emptyState(), menu: [] });
-
 const withRecipe = (state, name, products = []) => {
   const { state: created, id } = addRecipe(state, name, newId);
   return { id, state: products.reduce((current, product) => addRecipeProduct(current, id, product).state, created) };
@@ -16,7 +14,7 @@ const withRecipe = (state, name, products = []) => {
 
 // A state with the recipes Lentils (lentils, onion) and Omelette (eggs, onion) and Empty (no product).
 const kitchen = () => {
-  const lentils = withRecipe(blank(), 'Lentils', ['Lentils', 'Onion']);
+  const lentils = withRecipe(emptyState(), 'Lentils', ['Lentils', 'Onion']);
   const omelette = withRecipe(lentils.state, 'Omelette', ['Eggs', 'Onion']);
   const empty = withRecipe(omelette.state, 'Empty');
   return { state: empty.state, lentils: lentils.id, omelette: omelette.id, empty: empty.id };

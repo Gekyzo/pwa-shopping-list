@@ -208,6 +208,19 @@ test('deleteRecipe removes the recipe from sent', () => {
   assert.deepEqual(sent.sent, [first.id, second.id]);
 });
 
+test('deleteRecipe empties the meals of the recipe in the menu', () => {
+  const first = withRecipe(emptyState(), 'Omelette', ['Eggs']);
+  const second = withRecipe(first.state, 'Flan', ['Milk']);
+  const menu = [
+    { day: 0, meal: 'lunch', recipe: first.id },
+    { day: 0, meal: 'dinner', recipe: second.id },
+    { day: 4, meal: 'lunch', recipe: first.id },
+  ];
+  const planned = { ...second.state, menu };
+  assert.deepEqual(deleteRecipe(planned, first.id).state.menu, [{ day: 0, meal: 'dinner', recipe: second.id }]);
+  assert.equal(planned.menu.length, 3);
+});
+
 const names = (items) => items.map((item) => item.name);
 
 // Omelette (Eggs, Potatoes) and Flan (Eggs, Milk) sent in that order, with Bread added by hand.

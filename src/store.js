@@ -8,7 +8,7 @@ export const GROUPS = ['recipe', 'shop', 'none'];
 
 // `sent` holds the ids of the recipes sent to Active in this trip. `group` is the choice of the
 // user to show a list in groups, and `sort` the order of the two lists.
-export const emptyState = () => ({ version: 3, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom' });
+export const emptyState = () => ({ version: 4, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] });
 
 // An error is a message: the key of its text, with the parameters of the text. A `list`
 // parameter holds a list id. The screen turns the message into text.

@@ -36,7 +36,10 @@ export const renameRecipe = (state, id, rawName) => {
 export const deleteRecipe = (state, id) => {
   if (!findRecipe(state, id)) return reject(state, NOT_FOUND);
   const recipes = state.recipes.filter((recipe) => recipe.id !== id);
-  return { state: { ...state, recipes, sent: state.sent.filter((sentId) => sentId !== id) } };
+  const sent = state.sent.filter((sentId) => sentId !== id);
+  // The meals of the recipe become empty.
+  const menu = state.menu.filter((entry) => entry.recipe !== id);
+  return { state: { ...state, recipes, sent, menu } };
 };
 
 // True for an http or https address. No other scheme goes into a link of the screen.
