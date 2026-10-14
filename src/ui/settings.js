@@ -1,7 +1,7 @@
 import * as store from '#store';
 import { exportJson, exportFilename, importJson } from '#storage';
 import { parseVersion, versionStatus } from '#version';
-import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
+import { LANGUAGES, LANGUAGE_FLAGS, LANGUAGE_NAMES, intlTag } from '#i18n';
 import { switchModule } from '#modules';
 import {
   REFRESH_MS,
@@ -104,7 +104,7 @@ export const applyLanguage = () => {
   const option = (value, text) => el('option', { value, textContent: text, selected: value === (chosen ?? '') });
   $('language').replaceChildren(
     option('', t('settings.automatic')),
-    ...LANGUAGES.map((code) => option(code, LANGUAGE_NAMES[code])),
+    ...LANGUAGES.map((code) => option(code, `${LANGUAGE_FLAGS[code]} ${LANGUAGE_NAMES[code]}`)),
   );
   const handOption = (value, key) => el('option', { value, textContent: t(key), selected: value === hand });
   $('hand').replaceChildren(handOption('right', 'settings.handRight'), handOption('left', 'settings.handLeft'));

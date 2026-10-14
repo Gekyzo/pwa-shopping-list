@@ -9,7 +9,9 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
 - **LANG-2** With no stored choice, the app takes the first language of `navigator.languages`
   whose base language it has. `es-MX` gives `es`. With no match it shows English.
 - **LANG-3** **Ajustes → Idioma** lists **Automático** and the seven languages, each name in its
-  own language. A choice applies at once, with no reload.
+  own language after its flag emoji: 🏳️ Català, 🇩🇪 Deutsch, 🇬🇧 English, 🇪🇸 Español,
+  🇫🇷 Français, 🇮🇹 Italiano, 🇵🇹 Português. Catalan has the white flag because Android draws no flag
+  of Catalonia. A choice applies at once, with no reload.
 - **LANG-4** The choice is stored in `shopping.lang`. **Automático** removes the key. A stored
   value that is not one of the seven is ignored.
 - **LANG-5** The choice is a preference of the device. It is not part of the state and not part of
