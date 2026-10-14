@@ -1071,6 +1071,23 @@ const nodesOf = (items) => {
   return ui.view === 'recipes' ? recipes.searchRecipes(state, ui.query).map(recipeNode) : listNodes(items);
 };
 
+// A shop list of Actual with nothing to buy, while other items are still to buy, points to the
+// next shop list that has some.
+const renderShopDone = (summary) => {
+  const shop = ui.shop.active;
+  const done = ui.view === 'active' && shop !== null && !searching() && summary.left > 0 &&
+    store.tripSummary(viewState()).left === 0;
+  $('shop-done').hidden = !done;
+  if (!done) return;
+  const next = shops.nextShop(state, shop);
+  $('shop-done-text').textContent = t('shops.nothingLeft', { shop: shopLabel(shop) });
+  $('shop-done-next').textContent = shopLabel(next);
+  $('shop-done-next').onclick = () => {
+    ui.shop.active = next;
+    render();
+  };
+};
+
 const renderList = (summary) => {
   const scoped = viewState();
   const items = ui.view === 'active' ? store.activeItems(scoped) : store.nextItems(scoped);
@@ -1092,6 +1109,7 @@ const renderList = (summary) => {
   $('menu-clear').disabled = menu.mealCount(state) === 0;
 
   $('finish').hidden = !(ui.view === 'active' && ui.shop.active === null && summary.total > 0 && summary.left === 0);
+  renderShopDone(summary);
   $('finish-text').textContent = finishText(summary);
 };
 
@@ -1518,9 +1536,15 @@ const closeSheet = () => {
 // An add closes the search of the list, so that the row that it brings is in view.
 const endSearch = () => Object.assign(ui, { searchOpen: false, query: '' });
 
-// Puts an item that exists already into the target list, in place of a duplicate.
+// The shop that an add from the sheet puts on its item: the shop list in view, if any.
+const pickedShop = () => (inList() ? ui.shop[ui.view] : null);
+
+// Puts an item that exists already into the target list, in place of a duplicate. From a shop
+// list the item also gets the shop, which is a change too.
 const useExisting = (item) => {
-  const result = store.bringToList(state, item.id, ui.target);
+  const brought = store.bringToList(state, item.id, ui.target);
+  const result = shops.withShop(brought, item.id, pickedShop());
+  if (result.state !== brought.state) result.changed = true;
   const params = { name: item.name, list: ui.target };
   $('add-name').value = '';
   if (ui.target === ui.view) ui.flashId = item.id;
@@ -1558,7 +1582,8 @@ const submitAdd = () => {
     return;
   }
   const name = input.value.trim();
-  const result = store.addItem(state, input.value, ui.target);
+  const added = store.addItem(state, input.value, ui.target);
+  const result = added.error ? added : shops.withShop(added, added.state.items.at(-1).id, pickedShop());
   if (!result.error) endSearch();
   if (apply(result)) {
     input.value = '';

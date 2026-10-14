@@ -57,6 +57,14 @@ apply in it.
   of `Actual` and `Próxima` keeps its own choice while the app runs. A choice whose chip goes, for
   example by a removal of a shop, `Deshacer`, **Terminar compra** or an import, goes back to
   **Todas**.
+- **SHOP-23** A shop list of `Actual` with no item to buy, while items of `Actual` are still to
+  buy, shows `Nada más en <shop>.` and a button with the name of the next list, in chip order
+  and from the start after the end, that has an item to buy. A tap shows that list. A search
+  hides the message.
+- **SHOP-24** The add sheet opened from a shop list puts that shop on the item that it creates or
+  brings (SHOP-4), so the row shows in the list. An item that the sheet finds in its list already
+  gets the shop too, with the message and `Deshacer` of ADD-6. From **Todas** and **Sin tienda**
+  the add puts no shop.
 
 ## Limits
 

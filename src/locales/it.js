@@ -111,6 +111,7 @@ export default {
   'shops.empty': 'Scrivi il primo negozio.',
   'shops.all': 'Tutte',
   'shops.lists': 'Liste per negozio',
+  'shops.nothingLeft': 'Nient’altro da {shop}.',
 
   'onboarding.label': 'Introduzione',
   'onboarding.skip': 'Salta',
