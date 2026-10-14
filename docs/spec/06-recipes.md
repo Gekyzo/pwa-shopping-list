@@ -69,6 +69,16 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 - **REC-25** With no match the list shows `Ninguna receta coincide con «text».`
 - **REC-26** The text of the search is not stored. A change of section clears it.
 
+## Sample recipe
+
+- **REC-27** The sample recipe has the fixed id `sample-pasta`, so it stays the sample after a
+  rename or an edit. Its name and products are in the language of the screen at the time it is
+  added: `Pasta con salsa de tomate`, with `Salsa de tomate`, `Pasta`, `Ajo`, `Aceite de oliva`
+  and `Sal`. It has no link, goes last in `recipes`, and is not sent to `Actual` or put in the
+  menu.
+- **REC-28** The add of the sample changes nothing when the sample exists, or when a recipe has
+  its name with no case distinction (DATA-4).
+
 ## Limits
 
 No quantity, unit, step, photo or category. No choice of products at send time. No send to

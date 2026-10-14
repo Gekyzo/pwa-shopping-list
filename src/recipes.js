@@ -129,3 +129,19 @@ export const searchRecipes = (state, query) => {
   if (!key) return state.recipes;
   return state.recipes.filter((recipe) => [recipe.name, ...recipe.products].some((text) => fold(text).includes(key)));
 };
+
+// The sample recipe of the walkthrough. Its fixed id lets `Ajustes` find it after a rename.
+export const SAMPLE_ID = 'sample-pasta';
+
+export const hasSample = (state) => Boolean(findRecipe(state, SAMPLE_ID));
+
+// Adds the sample recipe with the name and products of the screen language. It returns the same
+// state when the sample exists or when its name is taken.
+export const addSample = (state, { name: rawName, products: rawProducts }) => {
+  const name = String(rawName ?? '').trim();
+  if (hasSample(state) || nameError(state, name)) return { state };
+  const products = rawProducts
+    .map((product) => String(product ?? '').trim())
+    .filter((product, index, all) => product && all.findIndex((other) => other.toLowerCase() === product.toLowerCase()) === index);
+  return { state: { ...state, recipes: [...state.recipes, { id: SAMPLE_ID, name, products, url: '' }] } };
+};

@@ -11,6 +11,9 @@ import {
   sendRecipe,
   recipeGroups,
   searchRecipes,
+  SAMPLE_ID,
+  hasSample,
+  addSample,
 } from '#recipes';
 
 let counter = 0;
@@ -403,4 +406,54 @@ test('searchRecipes returns an empty list for no match and does not change the s
   const before = structuredClone(state);
   assert.deepEqual(searchRecipes(state, 'sushi'), []);
   assert.deepEqual(state, before);
+});
+
+const SAMPLE = { name: 'Pasta con salsa de tomate', products: ['Salsa de tomate', 'Pasta', 'Ajo', 'Aceite de oliva', 'Sal'] };
+
+test('addSample adds the sample recipe with its fixed id, products and no link', () => {
+  const start = emptyState();
+  const { state } = addSample(start, SAMPLE);
+  assert.deepEqual(state.recipes, [{ id: SAMPLE_ID, name: SAMPLE.name, products: SAMPLE.products, url: '' }]);
+  assert.deepEqual(state.items, []);
+  assert.deepEqual(state.menu, []);
+  assert.deepEqual(start, emptyState());
+});
+
+test('addSample keeps the recipes that exist and adds the sample last', () => {
+  const { state: start } = withRecipe(emptyState(), 'Tortilla', ['Huevos']);
+  const { state } = addSample(start, SAMPLE);
+  assert.deepEqual(state.recipes.map((recipe) => recipe.name), ['Tortilla', SAMPLE.name]);
+});
+
+test('addSample returns the same state when the sample exists', () => {
+  const { state: start } = addSample(emptyState(), SAMPLE);
+  assert.equal(addSample(start, SAMPLE).state, start);
+});
+
+test('addSample returns the same state when a recipe has its name, with no case distinction', () => {
+  const { state: start } = withRecipe(emptyState(), 'pasta CON salsa de tomate');
+  assert.equal(addSample(start, SAMPLE).state, start);
+});
+
+test('addSample drops empty and duplicate products', () => {
+  const { state } = addSample(emptyState(), { name: ' Pasta ', products: [' Sal ', '', 'sal', 'Ajo'] });
+  assert.deepEqual(state.recipes[0], { id: SAMPLE_ID, name: 'Pasta', products: ['Sal', 'Ajo'], url: '' });
+});
+
+test('addSample returns the same state for an empty name', () => {
+  const start = emptyState();
+  assert.equal(addSample(start, { name: ' ', products: ['Sal'] }).state, start);
+});
+
+test('hasSample is true only while the sample recipe exists', () => {
+  const start = emptyState();
+  assert.equal(hasSample(start), false);
+  const { state } = addSample(start, SAMPLE);
+  assert.equal(hasSample(state), true);
+  assert.equal(hasSample(deleteRecipe(state, SAMPLE_ID).state), false);
+});
+
+test('hasSample is true for the renamed sample recipe', () => {
+  const { state } = addSample(emptyState(), SAMPLE);
+  assert.equal(hasSample(renameRecipe(state, SAMPLE_ID, 'Macarrones').state), true);
 });

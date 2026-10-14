@@ -3,6 +3,7 @@ import { exportJson, exportFilename, importJson } from '#storage';
 import { parseVersion, versionStatus } from '#version';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
 import { switchModule } from '#modules';
+import { SAMPLE_ID, hasSample, deleteRecipe } from '#recipes';
 import {
   REFRESH_MS,
   CHECK_MS,
@@ -29,6 +30,11 @@ import {
   setNavMotion,
 } from '#ui/context';
 import { renderOnboarding } from '#ui/onboarding';
+
+// Borrar datos de ejemplo shows while the sample recipe exists (ONB-14).
+export const renderSample = () => {
+  $('delete-sample').hidden = !hasSample(state);
+};
 
 const VERSION_KEYS = { current: 'version.current', unknown: 'version.unknown' };
 
@@ -133,6 +139,11 @@ export const bind = () => {
   });
 
   $('import').addEventListener('click', () => $('import-file').click());
+  $('delete-sample').addEventListener('click', () => {
+    // The button goes with the recipe, so the focus goes to the button above it.
+    $('show-onboarding').focus();
+    apply(deleteRecipe(state, SAMPLE_ID), { undoText: t('toast.sampleDeleted') });
+  });
   $('language').addEventListener('change', (event) => {
     setLanguage(event.target.value || null);
     applyLanguage();

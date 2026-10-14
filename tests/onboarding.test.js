@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { PAGES, isLast, shouldShow, step } from '#onboarding';
 
-test('PAGES has the four pages in their order, each one time', () => {
-  assert.deepEqual(PAGES, ['lists', 'trip', 'row', 'sections']);
+test('PAGES has the six pages in their order, each one time', () => {
+  assert.deepEqual(PAGES, ['lists', 'trip', 'row', 'sections', 'recipes', 'sample']);
   assert.equal(new Set(PAGES).size, PAGES.length);
 });
 
