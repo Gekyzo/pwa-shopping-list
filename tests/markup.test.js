@@ -55,11 +55,12 @@ test('the trip button opens a sheet from the bottom, with a veil, and the header
   assert.doesNotMatch(body, /trip-menu|role="menu"/);
 });
 
-test('the edit sheet has a veil, a dialog, the name field and the shops', () => {
+test('the edit sheet has a veil, a dialog, the name and quantity fields and the shops', () => {
   const [layer = ''] = body.match(/<div id="edit" class="sheet-layer"[\s\S]*?<\/form>\s*<\/div>/) ?? [];
   assert.match(layer, /<div id="edit-veil" class="veil">/);
   assert.match(layer, /<form id="edit-form" class="sheet" role="dialog"/);
   assert.match(layer, /<input id="edit-name"[^>]*maxlength="80"/);
+  assert.match(layer, /<input id="edit-quantity"[^>]*maxlength="20"/);
   assert.match(layer, /<div id="edit-chips" class="chips">/);
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);

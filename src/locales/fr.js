@@ -46,6 +46,7 @@ export default {
   'row.removeFrom': 'Retirer de {list} : {name}',
   'edit.title': 'Modifier',
   'edit.name': 'Nom',
+  'edit.quantity': 'Quantité',
   'group.others': 'Autres',
   'group.noShop': 'Sans magasin',
 

@@ -46,6 +46,7 @@ export default {
   'row.removeFrom': 'Treu de {list}: {name}',
   'edit.title': 'Edita',
   'edit.name': 'Nom',
+  'edit.quantity': 'Quantitat',
   'group.others': 'Altres',
   'group.noShop': 'Sense botiga',
 
