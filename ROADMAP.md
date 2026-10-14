@@ -4,8 +4,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 ## Planned
 
-- **Browser database.** Store the data in the browser database instead of
-  `localStorage`. Not before a feature needs it: history, photos or sync.
 - **Price estimation.** Estimate the price of a list.
 - **Send a copy.** Send a list to a contact as a link, through the Android
   share sheet. The list travels in the link fragment, with no server and no
@@ -13,6 +11,15 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 - **Store sections.** Add the category or section of the store to each product.
   The sections are configurable in the settings.
 - **Quantities.** Add a quantity to each item.
+
+### Deferred
+
+Not needed yet. Each item names what makes it needed.
+
+- **Browser database.** Store the data in the browser database instead of
+  `localStorage`. Unnecessary until the state nears the 5 MB limit of
+  `localStorage`, or until a feature requires it: purchase or price history,
+  photos, or sync.
 
 ## Pro
 
