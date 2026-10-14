@@ -685,8 +685,15 @@ button.pill {
   font-size: 0.8rem;
 }
 
+/* The three buttons of a recipe take a third of the line each. */
 .recipe .actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   padding-left: 12px;
+}
+
+.recipe .actions button {
+  padding: 0 8px;
 }
 
 .send {

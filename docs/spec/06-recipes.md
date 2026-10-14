@@ -14,8 +14,8 @@ Rules of `src/recipes.js` and of the section `Recetas` in `src/app.js`. The grou
   its product field, and the search is cleared.
 - **REC-4** A recipe row shows the name and `N productos`. A tap opens and closes the recipe. One
   recipe is open at a time.
-- **REC-5** The `⋯` button of a row shows **Renombrar**, **Añadir enlace** or **Cambiar enlace**,
-  and **Eliminar**.
+- **REC-5** The `⋯` button of a row shows **Nombre** (a rename), **Enlace** (add or change the
+  link) and **Eliminar**, on one line below the row, each a third of its width.
 - **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
   `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation.

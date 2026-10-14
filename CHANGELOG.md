@@ -23,6 +23,8 @@ no change for the user has no entry.
   the left with `Izquierda`.
 - In `Menú`, **Vaciar menú** and **Llenar la cesta** each take half of the line.
 - In `Recetas`, the cart button that sends a recipe has the colour of **Llenar la cesta**.
+- In `Recetas`, the `⋯` buttons are **Nombre**, **Enlace** and **Eliminar**, each a third of the
+  line.
 
 ## 1.0.19 - 2026-10-14
 
