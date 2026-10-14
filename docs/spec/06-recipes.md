@@ -25,8 +25,8 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 
 - **REC-8** A product is a name, trimmed and not empty (`error.productRequired`), unique in its
   recipe with no case distinction (`error.duplicateProduct`).
-- **REC-9** The sheet of a recipe lists its products under **Productos**, each with a `✕` button,
-  and the field **Añadir producto**. The removal of a product has `Deshacer`; the add does not.
+- **REC-9** The sheet of a recipe lists its products below the field **Enlace**, each with a `✕`
+  button, and the field **Añadir producto**. The removal of a product has `Deshacer`; the add does not.
 - **REC-10** While the user types a product, the recipe lists up to 5 items whose name contains
   the text and that the recipe does not have. A tap adds the name of that item.
 - **REC-11** After an add the product field is empty and keeps the focus, for the next product.

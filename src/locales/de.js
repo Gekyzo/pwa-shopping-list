@@ -73,7 +73,6 @@ export default {
   'recipe.send': 'An die Liste senden: {name}',
   'recipe.openLink': 'Link von {name} öffnen',
   'recipe.title': 'Rezept',
-  'recipe.products': 'Produkte',
   'recipe.link': 'Link',
   'recipe.addProduct': 'Produkt hinzufügen',
   'recipe.addProductTo': 'Produkt zu {name} hinzufügen',
