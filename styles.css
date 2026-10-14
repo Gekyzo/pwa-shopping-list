@@ -1569,8 +1569,11 @@
     font-size: var(--text-l);
   }
 
+  /* The longest text of a page, in any catalog, is five lines at 32ch. The text keeps room for
+     five, so each page has the same height and the drawing and the logo do not move. */
   .onboarding-text {
     max-width: 32ch;
+    min-height: 5lh;
     margin: 0;
     color: var(--muted);
   }
