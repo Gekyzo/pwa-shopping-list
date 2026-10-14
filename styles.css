@@ -841,15 +841,18 @@ button.pill {
 }
 
 .about p {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 6px;
   margin: 0;
 }
 
 #version-status {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 4px;
-  margin-left: 6px;
-  vertical-align: middle;
 }
 
 #version-status svg {
@@ -879,9 +882,8 @@ button.pill {
 }
 
 #version-status[data-status='outdated'] {
-  display: flex;
+  flex-basis: 100%;
   justify-content: center;
-  margin: 4px 0 0;
   color: var(--warning);
 }
 
