@@ -18,7 +18,7 @@ Rules of `src/shops.js` and of the shops of the edit sheet in `src/app.js`. The 
 
 ## Shops of an item
 
-- **SHOP-8** The shops of an item are in the edit sheet `Editar <name>` (ROW-7), below the
+- **SHOP-8** The shops of an item are in the edit sheet `Editar` (ROW-7), below the
   name. A tap on the name of a row opens it.
 - **SHOP-9** The sheet shows each shop in use as a chip. A chip is pressed when the item has the
   shop. A tap on a chip adds or removes the shop for this item.

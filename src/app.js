@@ -818,9 +818,8 @@ const renderEdit = () => {
   const item = state.items.find((entry) => entry.id === ui.editId);
   $('edit').hidden = !item;
   if (!item) return;
-  const title = t('edit.title', { name: item.name });
-  $('edit-title').textContent = title;
-  $('edit-form').setAttribute('aria-label', title);
+  $('edit-title').textContent = t('edit.title');
+  $('edit-form').setAttribute('aria-label', t('edit.title'));
   if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
   const own = new Set(item.shops.map((shop) => shop.toLowerCase()));
   const names = shops.shopNames(state);
