@@ -9,7 +9,11 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+### Added
+
+- The section `Menú`, between `Recetas` and `Ajustes`: a week with a lunch and a dinner for each
+  day. A tap on a meal chooses its recipe. **Llenar la cesta** puts the products of all the
+  recipes of the menu in `Actual`, with `Deshacer`. **Vaciar menú** empties the week.
 
 ## 1.0.9 - 2026-10-13
 

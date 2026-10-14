@@ -61,7 +61,8 @@ the identifier in a commit body or in a test name to point at a rule.
 | Recipe | A name and a list of product names |
 | Product | A name in a recipe. It is text, not an item |
 | Shop | A name that one item or more have. It has no record of its own |
-| Section | One of the four screens of the bottom bar |
+| Section | One of the five screens of the bottom bar |
+| Meal | The lunch or the dinner of one day of the menu |
 | Sheet | A panel that comes up from the bottom of the screen |
 | Message | An error or a notice as `{ key, params }`, which the screen turns into text |
 

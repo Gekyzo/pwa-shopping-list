@@ -11,7 +11,7 @@ Rules of `src/storage.js`, and of its use in `src/app.js`.
 | `localStorage` | `shopping.lang` | The language that the user chose ([09-languages.md](09-languages.md)) |
 | `localStorage` | `shopping.hand` | `left` when the user chose **Izquierda** ([07-screen.md](07-screen.md), NAV-12) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
-| Cache API | `shopping-shell-v7` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-shell-v8` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
 

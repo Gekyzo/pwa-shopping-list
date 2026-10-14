@@ -38,6 +38,7 @@ connection. It separates what to buy now (`Actual`) from what to buy at the next
 | Groups by recipe or by shop | [04-arrange.md](04-arrange.md) |
 | Shops of an item | [05-shops.md](05-shops.md) |
 | Recipes that send their products to `Actual` | [06-recipes.md](06-recipes.md) |
+| A menu of the week that fills `Actual` | [13-menu.md](13-menu.md) |
 | Backup to a file and from a file | [08-storage.md](08-storage.md) |
 | Seven languages | [09-languages.md](09-languages.md) |
 | Walkthrough at the first start | [07-screen.md](07-screen.md) |
