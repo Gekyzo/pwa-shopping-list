@@ -79,6 +79,12 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 - **REC-28** The add of the sample changes nothing when the sample exists, or when a recipe has
   its name with no case distinction (DATA-4).
 
+## Effects
+
+- **REC-30** A delete closes the recipe row before the recipe goes. A second tap in that time does
+  nothing.
+- **REC-31** A removed product row closes before it goes.
+
 ## Limits
 
 No quantity, unit, step, photo or category. No choice of products at send time. No send to

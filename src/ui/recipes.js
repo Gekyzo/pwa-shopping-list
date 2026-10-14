@@ -2,6 +2,7 @@ import * as store from '#store';
 import * as recipes from '#recipes';
 import { el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
 import { renameInput, moreButton, actionButton, icon, startRename } from '#ui/controls';
+import { leaveNode } from '#ui/motion';
 
 export const sendText = ({ added, already }) => {
   const parts = [];
@@ -20,17 +21,22 @@ const sendToList = (recipe) => {
 };
 
 const productNode = (recipe, product) => {
+  const key = `product:${recipe.id}:${product.toLowerCase()}`;
   const remove = el('button', {
     type: 'button',
     className: 'button icon',
     textContent: '✕',
     onclick: () =>
-      apply(recipes.removeRecipeProduct(state, recipe.id, product), {
-        undoText: t('toast.productRemoved', { product, name: recipe.name }),
-      }),
+      leaveNode(key, [node], () =>
+        apply(recipes.removeRecipeProduct(state, recipe.id, product), {
+          undoText: t('toast.productRemoved', { product, name: recipe.name }),
+        }),
+      ),
   });
   remove.setAttribute('aria-label', t('recipe.removeProduct', { name: product }));
-  return el('li', { className: 'product' }, [el('span', { className: 'product-text', textContent: product }), remove]);
+  const node = el('li', { className: 'product' }, [el('span', { className: 'product-text', textContent: product }), remove]);
+  node.dataset.key = key;
+  return node;
 };
 
 // The product field with the items that match the text below it. A tap on one adds it.
@@ -115,10 +121,14 @@ export const recipeNode = (recipe) => {
   send.setAttribute('aria-label', t('recipe.send', { name: recipe.name }));
   const row = recipe.url ? [name, linkNode(recipe), send, moreButton(recipe)] : [name, send, moreButton(recipe)];
   const node = el('li', { className: 'item-row recipe' }, [el('div', { className: 'item-row-body' }, row)]);
+  node.dataset.key = `recipe:${recipe.id}`;
   if (ui.openId === recipe.id) {
     const remove = actionButton(
       t('recipe.delete'),
-      () => apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
+      () =>
+        leaveNode(node.dataset.key, [node], () =>
+          apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
+        ),
       { variant: 'outline danger' },
     );
     const link = actionButton(t('recipe.link'), () => editLink(recipe));
