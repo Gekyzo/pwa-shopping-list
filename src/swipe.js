@@ -12,3 +12,7 @@ export const settle = (dx, sides, open = null) => {
   if (open === 'end' && dx < limit(sides.end)) return 'end';
   return null;
 };
+
+// The slide to the right of a row runs its action at the release when it passed 35 % of the
+// width of the row, 80 px at least.
+export const reached = (dx, width) => dx >= Math.max(80, width * 0.35);
