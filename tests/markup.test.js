@@ -65,7 +65,7 @@ test('the edit sheet has a veil, a dialog, the name and quantity fields and the 
   assert.match(layer, /<label class="field"><input id="edit-name"[^>]*><span data-i18n="edit.name"><\/span><\/label>/);
   assert.match(layer, /<label class="field"><input id="edit-quantity"[^>]*><span data-i18n="edit.quantity"><\/span><\/label>/);
   // A titled part after the fields holds the shops of the item.
-  assert.match(layer, /<span data-i18n="edit.quantity"><\/span><\/label>\s*<h2 class="part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="chips">/);
+  assert.match(layer, /<span data-i18n="edit.quantity"><\/span><\/label>\s*<h2 class="part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster">/);
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);
 });

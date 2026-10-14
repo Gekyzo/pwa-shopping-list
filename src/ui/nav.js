@@ -185,7 +185,7 @@ export const bind = () => {
     sectionSlide = null;
     const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null;
     if (!event.isPrimary || event.button !== 0 || reorder || sheet) return;
-    if (!event.target.closest('.head, main') || event.target.closest('.swipe, .shop-chips, input, textarea')) return;
+    if (!event.target.closest('.head, main') || event.target.closest('.swipe, .shop-lists, input, textarea')) return;
     sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
   });
   document.addEventListener('pointerup', (event) => {

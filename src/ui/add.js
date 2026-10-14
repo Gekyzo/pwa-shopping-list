@@ -29,7 +29,7 @@ export const renderSheet = () => {
     $('suggestions').replaceChildren();
     return;
   }
-  document.querySelectorAll('#seg button').forEach((button) => {
+  document.querySelectorAll('#seg .segment').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.target === ui.target));
   });
   const text = $('add-name').value.trim();
@@ -118,7 +118,7 @@ const submitAdd = () => {
 };
 
 export const bind = () => {
-  document.querySelectorAll('#seg button').forEach((button) => {
+  document.querySelectorAll('#seg .segment').forEach((button) => {
     button.addEventListener('click', () => {
       ui.target = button.dataset.target;
       renderSheet();

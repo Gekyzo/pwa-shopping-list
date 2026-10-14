@@ -178,9 +178,9 @@ export const renderShopChips = () => {
       ui.shop[ui.view] = shop;
       render();
     };
-    const button = el('button', { type: 'button', onclick: pick }, [
+    const button = el('button', { type: 'button', className: 'chip surface', onclick: pick }, [
       el('span', { textContent: shopLabel(shop) }),
-      el('span', { className: 'chip-count', textContent: count(value) }),
+      el('span', { className: 'count', textContent: count(value) }),
     ]);
     button.setAttribute('aria-pressed', String(shop === ui.shop[ui.view]));
     return button;

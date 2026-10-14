@@ -38,7 +38,7 @@ export const renderEdit = () => {
   // between the press and the click of a chip, and a new chip would lose that click.
   const box = $('edit-chips');
   if ([...box.children].map((chip) => chip.textContent).join('\n') !== names.join('\n')) {
-    box.replaceChildren(...names.map((shop) => el('button', { type: 'button', textContent: shop, onclick: () => toggleShop(shop) })));
+    box.replaceChildren(...names.map((shop) => el('button', { type: 'button', className: 'chip', textContent: shop, onclick: () => toggleShop(shop) })));
   }
   for (const chip of box.children) chip.setAttribute('aria-pressed', String(own.has(chip.textContent.toLowerCase())));
   $('edit-empty').hidden = names.length > 0;

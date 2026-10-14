@@ -34,7 +34,7 @@
     </div>
 
     <main>
-      <div id="shop-chips" class="chips shop-chips" role="group" data-i18n-attr="aria-label:shops.lists" hidden></div>
+      <div id="shop-chips" class="cluster scroll shop-lists" role="group" data-i18n-attr="aria-label:shops.lists" hidden></div>
 
       <div id="shop-done" class="empty" hidden>
         <p id="shop-done-text"></p>
@@ -83,8 +83,8 @@
         </div>
         <h2 data-i18n="settings.modules"></h2>
         <div class="group">
-          <label class="switch"><span data-i18n="list.next"></span><input type="checkbox" role="switch" data-module="next"></label>
-          <label class="switch"><span data-i18n="settings.moduleRecipes"></span><input type="checkbox" role="switch" data-module="recipes"></label>
+          <label class="switch"><span data-i18n="list.next"></span><input class="switch-input" type="checkbox" role="switch" data-module="next"></label>
+          <label class="switch"><span data-i18n="settings.moduleRecipes"></span><input class="switch-input" type="checkbox" role="switch" data-module="recipes"></label>
         </div>
         <h2 data-i18n="settings.help"></h2>
         <div class="group">
@@ -131,9 +131,9 @@
           <input id="add-name" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
           <button id="add-submit" class="button primary" type="submit"></button>
         </div>
-        <div id="seg" class="seg">
-          <button type="button" data-target="active" data-i18n="add.today"></button>
-          <button type="button" data-target="next" data-i18n="add.later"></button>
+        <div id="seg" class="segmented">
+          <button class="segment" type="button" data-target="active" data-i18n="add.today"></button>
+          <button class="segment" type="button" data-target="next" data-i18n="add.later"></button>
         </div>
         <ul id="suggestions" class="suggestions" data-i18n-attr="aria-label:add.existing"></ul>
       </form>
@@ -145,24 +145,24 @@
         <div class="grab"></div>
         <div id="arrange-group">
           <h2 data-i18n="arrange.groupBy"></h2>
-          <div class="seg">
-            <button type="button" data-group="recipe" data-i18n="nav.recipes"></button>
-            <button type="button" data-group="shop" data-i18n="arrange.shops"></button>
-            <button type="button" data-group="none" data-i18n="arrange.none"></button>
+          <div class="segmented">
+            <button class="segment" type="button" data-group="recipe" data-i18n="nav.recipes"></button>
+            <button class="segment" type="button" data-group="shop" data-i18n="arrange.shops"></button>
+            <button class="segment" type="button" data-group="none" data-i18n="arrange.none"></button>
           </div>
         </div>
         <div id="arrange-sort">
           <h2 data-i18n="arrange.sortBy"></h2>
-          <div class="seg">
-            <button type="button" data-sort="name" data-i18n="arrange.name"></button>
-            <button type="button" data-sort="custom" data-i18n="arrange.custom"></button>
+          <div class="segmented">
+            <button class="segment" type="button" data-sort="name" data-i18n="arrange.name"></button>
+            <button class="segment" type="button" data-sort="custom" data-i18n="arrange.custom"></button>
           </div>
         </div>
         <div id="arrange-lists">
           <h2 data-i18n="shops.lists"></h2>
-          <div class="seg">
-            <button type="button" data-lists="show" data-i18n="arrange.show"></button>
-            <button type="button" data-lists="hide" data-i18n="arrange.hide"></button>
+          <div class="segmented">
+            <button class="segment" type="button" data-lists="show" data-i18n="arrange.show"></button>
+            <button class="segment" type="button" data-lists="hide" data-i18n="arrange.hide"></button>
           </div>
         </div>
       </div>
@@ -184,7 +184,7 @@
         <h2 id="meal-title"></h2>
         <input id="meal-query" type="search" maxlength="80" autocomplete="off" enterkeyhint="search" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search">
         <p id="meal-empty" class="meal-empty" hidden></p>
-        <div id="meal-chips" class="chips"></div>
+        <div id="meal-chips" class="cluster"></div>
         <button id="meal-remove" class="button outline danger wide" type="button" data-i18n="menu.remove" hidden></button>
       </div>
     </div>
@@ -197,7 +197,7 @@
         <label class="field"><input id="edit-name" class="edit-name" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span data-i18n="edit.name"></span></label>
         <label class="field"><input id="edit-quantity" class="edit-name edit-quantity" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span data-i18n="edit.quantity"></span></label>
         <h2 class="part" data-i18n="edit.shops"></h2>
-        <div id="edit-chips" class="chips"></div>
+        <div id="edit-chips" class="cluster"></div>
         <p id="edit-empty" class="hint" data-i18n="shops.empty" hidden></p>
         <div class="add-row">
           <input id="edit-shop" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
