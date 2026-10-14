@@ -96,6 +96,7 @@
 | `tests/markup.test.js` | `index.html` holds no text of its own |
 | `tests/aliases.test.js` | The import map against `package.json` |
 | `tests/layers.test.js` | The layer rules: no import of `src/app.js`, no view in a pure module, no cycle among `src/ui/`, one owner for each shared value, `SHELL` (ENG-16) |
+| `tests/catalog.test.js` | The parser of the design system catalogue, `designs/catalog.js` |
 | `tests/png.test.js` | The PNG encoder and decoder of `scripts/png.mjs`, which `npm run icons` uses |
 | `tests/release.test.js` | The release of `scripts/release.mjs`: the bump commit, the tag and the refusals (VER-10 to VER-12) |
 | `tests/changelog.test.js` | The release of `CHANGELOG.md` by `scripts/changelog.mjs`, which the version bump uses (VER-17) |
