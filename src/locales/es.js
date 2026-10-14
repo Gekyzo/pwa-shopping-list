@@ -24,6 +24,7 @@ export default {
   'header.next': 'Próxima compra',
   'header.settingsSubtitle': 'Grocely',
   'app.title': 'Grocely - Lista de la compra',
+  'app.description': 'Lista de la compra con una lista actual y una lista próxima',
   'header.empty': 'La lista está vacía',
   'header.allBought': 'Todo comprado',
   'header.left': { one: 'Queda {count} artículo', other: 'Quedan {count} artículos' },

@@ -66,8 +66,9 @@ test('the data model has the state version, the groups and the orders of the sto
 test('the storage document has the keys of the storage and the name of the cache', () => {
   const storage = docs['08-storage.md'];
   const [, cache] = read('sw.js').match(/const CACHE = '([^']+)'/);
-  for (const key of [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, MODULES_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY, cache]) assert.ok(storage.includes(`\`${key}\``), key);
-  assert.ok(docs['10-offline-version.md'].includes(`\`${cache}\``), cache);
+  const [, manifest] = read('sw.js').match(/const MANIFEST = '([^']+)'/);
+  for (const key of [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, MODULES_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY, cache, manifest]) assert.ok(storage.includes(`\`${key}\``), key);
+  for (const name of [cache, manifest]) assert.ok(docs['10-offline-version.md'].includes(`\`${name}\``), name);
 });
 
 test('the language document has each language and the fallback', () => {

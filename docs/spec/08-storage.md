@@ -15,6 +15,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.modules` | The ids of the modules that the user turned off, as JSON ([14-modules.md](14-modules.md), MOD-2) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
 | Cache API | `shopping-shell-v12` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-manifest` | The name and the description of the manifest in the language of the screen (SW-13) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
 

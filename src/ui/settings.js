@@ -89,6 +89,9 @@ const refreshShell = () =>
 export const applyLanguage = () => {
   document.documentElement.lang = lang;
   document.title = t('app.title');
+  // The worker answers the manifest in this language (SW-13).
+  const text = { type: 'manifest', lang, name: t('app.title'), description: t('app.description') };
+  navigator.serviceWorker?.ready.then((registration) => registration.active?.postMessage(text)).catch(() => {});
   document.querySelectorAll('[data-i18n]').forEach((node) => {
     node.textContent = t(node.dataset.i18n);
   });

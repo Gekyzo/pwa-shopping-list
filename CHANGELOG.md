@@ -11,6 +11,8 @@ no change for the user has no entry.
 
 ### Changed
 
+- The name of the installed app and its description follow the language of `Ajustes`. Android
+  shows the new name after the next update of the app, and can ask to confirm it.
 - The spaces, text sizes and corners of all screens follow one scale, so the same kind of part
   looks the same on each screen.
 - The icons come from one set: the cart of **Llenar la cesta** and of a recipe is the cart of the
