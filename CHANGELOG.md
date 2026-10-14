@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.21 - 2026-10-14
+
 ### Changed
 
 - The name of the installed app and its description follow the language of `Ajustes`. Android
