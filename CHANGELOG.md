@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.10 - 2026-10-14
+
 ### Added
 
 - The section `Menú`, between `Recetas` and `Ajustes`: a week with a lunch and a dinner for each
