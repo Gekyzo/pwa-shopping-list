@@ -385,9 +385,8 @@ main.enter-previous {
   text-align: left;
 }
 
-span.name {
-  display: flex;
-  align-items: center;
+/* A row of Próxima has no checkbox: its name keeps the place of one. */
+.row > .name:first-child {
   padding-left: 12px;
 }
 
