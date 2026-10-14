@@ -59,15 +59,21 @@ export const slide = (before) => {
   });
 };
 
-// Closes the rows of an item, then runs `done`. An item of two recipes has two rows.
-export const leave = (item, done) => {
-  if (ui.leaving.has(item.id)) return;
-  ui.leaving.add(item.id);
-  const rows = [...$('items').querySelectorAll('.item-row')].filter((node) => node.dataset.id === item.id);
-  collapse(rows, () => {
-    ui.leaving.delete(item.id);
+// Closes `nodes`, then runs `done`. `key` names the row in `ui.leaving`, so that a second tap in
+// that time does nothing.
+export const leaveNode = (key, nodes, done) => {
+  if (ui.leaving.has(key)) return;
+  ui.leaving.add(key);
+  collapse(nodes, () => {
+    ui.leaving.delete(key);
     done();
   });
+};
+
+// Closes the rows of an item, then runs `done`. An item of two recipes has two rows.
+export const leave = (item, done) => {
+  const rows = [...$('items').querySelectorAll('.item-row')].filter((node) => node.dataset.id === item.id);
+  leaveNode(item.id, rows, done);
 };
 
 // The rows that the flat list does not have: the group heads, and each row after the first of an item.
