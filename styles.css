@@ -1575,6 +1575,8 @@
      five, so each page has the same height and the drawing and the logo do not move. */
   .onboarding-text {
     max-width: 32ch;
+    /* A line break of a catalog text starts a new line. */
+    white-space: pre-line;
     min-height: 5lh;
     margin: 0;
     color: var(--muted);

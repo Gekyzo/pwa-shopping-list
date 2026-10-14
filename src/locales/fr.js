@@ -153,7 +153,7 @@ export default {
   'onboarding.recipes.title': 'Recettes et menu',
   'onboarding.recipes.text': 'Une recette est un nom et ses produits. Une touche les envoie à {active}. Dans Menu, vous planifiez les repas de la semaine.',
   'onboarding.sample.title': 'Données d\'exemple',
-  'onboarding.sample.text': 'Commencez avec une recette d\'exemple pour essayer l\'app. Vous pouvez la supprimer dans Réglages.',
+  'onboarding.sample.text': 'Commencez avec une recette d\'exemple pour essayer l\'app.\nVous pouvez la supprimer dans Réglages.',
   'onboarding.sample.switch': 'Charger les données d\'exemple',
   'sample.name': 'Pâtes à la sauce tomate',
   'sample.tomatoSauce': 'Sauce tomate',

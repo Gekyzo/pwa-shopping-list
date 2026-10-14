@@ -154,6 +154,7 @@ of it.
   | 6 | `Datos de ejemplo` | The switch that loads the sample recipe (ONB-13) |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
+  A line break in the text of a catalog starts a new line.
   Above the pages, the art of the app icon shows centred in the band between the top of the
   walkthrough and the drawing, 96 px wide, with no background (`icons/logo.png`, VER-15). It
   is decorative (`alt=""`) and does not change or move with the page. The text keeps the room

@@ -153,7 +153,7 @@ export default {
   'onboarding.recipes.title': 'Rezepte und Menü',
   'onboarding.recipes.text': 'Ein Rezept ist ein Name mit seinen Produkten. Ein Tippen schickt sie zu {active}. Im Menü planst du die Mahlzeiten der Woche.',
   'onboarding.sample.title': 'Beispieldaten',
-  'onboarding.sample.text': 'Starte mit einem Beispielrezept, um die App auszuprobieren. Du kannst es in den Optionen löschen.',
+  'onboarding.sample.text': 'Starte mit einem Beispielrezept, um die App auszuprobieren.\nDu kannst es in den Optionen löschen.',
   'onboarding.sample.switch': 'Beispieldaten laden',
   'sample.name': 'Pasta mit Tomatensoße',
   'sample.tomatoSauce': 'Tomatensoße',

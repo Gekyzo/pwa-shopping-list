@@ -151,7 +151,7 @@ export default {
   'onboarding.recipes.title': 'Recipes and menu',
   'onboarding.recipes.text': 'A recipe is a name and its products. One tap sends them to {active}. In Menu you plan the meals of the week.',
   'onboarding.sample.title': 'Sample data',
-  'onboarding.sample.text': 'Start with a sample recipe to try the app. You can delete it in Settings.',
+  'onboarding.sample.text': 'Start with a sample recipe to try the app.\nYou can delete it in Settings.',
   'onboarding.sample.switch': 'Load sample data',
   'sample.name': 'Pasta with tomato sauce',
   'sample.tomatoSauce': 'Tomato sauce',
