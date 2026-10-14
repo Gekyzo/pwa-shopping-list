@@ -1,1515 +1,1522 @@
-:root {
-  /* `light-dark()` takes its value from `color-scheme`: the phone, or Tema in Ajustes. */
-  color-scheme: light dark;
-  --bg: light-dark(#f6f7f5, #111613);
-  --surface: light-dark(#ffffff, #1a211d);
-  --text: light-dark(#17201b, #e8ede9);
-  --muted: light-dark(#667069, #98a39c);
-  --line: light-dark(#dfe4e0, #2c3530);
-  --accent: light-dark(#1f7a4d, #5fc491);
-  --accent-text: light-dark(#ffffff, #0c1a12);
-  --accent-soft: light-dark(#e2f2ea, #1d3327);
-  --danger: light-dark(#b3261e, #f2b8b5);
-  --warning: light-dark(#9a5b00, #f2b65c);
-  --toast-bg: light-dark(#17201b, #e8ede9);
-  --toast-text: light-dark(#ffffff, #17201b);
-  --nav-height: 60px;
-}
+@layer tokens, base, components, layouts, screens;
 
-:root[data-theme="light"] {
-  color-scheme: light;
-}
+@layer tokens {
+  :root {
+    /* `light-dark()` takes its value from `color-scheme`: the phone, or Tema in Ajustes. */
+    color-scheme: light dark;
+    --bg: light-dark(#f6f7f5, #111613);
+    --surface: light-dark(#ffffff, #1a211d);
+    --text: light-dark(#17201b, #e8ede9);
+    --muted: light-dark(#667069, #98a39c);
+    --line: light-dark(#dfe4e0, #2c3530);
+    --accent: light-dark(#1f7a4d, #5fc491);
+    --accent-text: light-dark(#ffffff, #0c1a12);
+    --accent-soft: light-dark(#e2f2ea, #1d3327);
+    --danger: light-dark(#b3261e, #f2b8b5);
+    --warning: light-dark(#9a5b00, #f2b65c);
+    --toast-bg: light-dark(#17201b, #e8ede9);
+    --toast-text: light-dark(#ffffff, #17201b);
+    --nav-height: 60px;
+  }
 
-:root[data-theme="dark"] {
-  color-scheme: dark;
-}
+  :root[data-theme="light"] {
+    color-scheme: light;
+  }
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  background: var(--bg);
-  color: var(--text);
-  font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  -webkit-tap-highlight-color: transparent;
-}
-
-button,
-input {
-  font: inherit;
-  color: inherit;
-}
-
-button {
-  min-height: 44px;
-  border: 0;
-  border-radius: 10px;
-  background: none;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-[hidden] {
-  display: none !important;
-}
-
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.primary {
-  padding: 0 16px;
-  background: var(--accent);
-  color: var(--accent-text);
-  font-weight: 600;
-}
-
-/* Header summary */
-
-.head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
-  position: relative;
-  border-bottom: 1px solid var(--line);
-  touch-action: pan-y;
-}
-
-.ring {
-  --pct: 0%;
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: conic-gradient(var(--accent) var(--pct), var(--line) 0);
-}
-
-.ring span {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--bg);
-  font-size: 0.78rem;
-  font-weight: 700;
-}
-
-.head-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.tool {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  background: var(--surface);
-  color: var(--muted);
-}
-
-/* The tools stand closer to each other than to the title, so that three leave room for it. */
-.tool:not([hidden]) ~ .tool:not([hidden]) {
-  margin-left: -8px;
-}
-
-#search-button[aria-expanded="true"] {
-  color: var(--accent);
-}
-
-.tool svg {
-  width: 22px;
-  height: 22px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* The menu of the trip button, below the right end of the header. */
-.head h1 {
-  margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.2;
-}
-
-.head p {
-  margin: 2px 0 0;
-  color: var(--muted);
-  font-size: 0.88rem;
-}
-
-/* List */
-
-main {
-  flex: 1;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  /* A horizontal slide changes the section, so the browser must not take it. */
-  touch-action: pan-y;
-  overflow-x: hidden;
-  padding-bottom: 88px;
-}
-
-/* The content of a new section comes in from its side. `main` stays in its place, so its scroll
-   and the bottom padding do not move. */
-main.enter-next > *,
-main.enter-previous > * {
-  animation: enter 200ms ease-out;
-}
-
-main.enter-next {
-  --enter-from: 48px;
-}
-
-main.enter-previous {
-  --enter-from: -48px;
-}
-
-@keyframes enter {
-  from {
-    opacity: 0;
-    transform: translateX(var(--enter-from));
+  :root[data-theme="dark"] {
+    color-scheme: dark;
   }
 }
 
-.items {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
 
-.item {
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
-  /* The rows of a scope open a gap for a lifted row. `placeLifted` in app.js sets the transform. */
-  transition: transform 160ms ease-out;
-}
+  html,
+  body {
+    height: 100%;
+  }
 
-.item.lifted {
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
-  transition: none;
-}
+  body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-.item.flash .row {
-  animation: flash 1.2s ease-out;
-}
+  button,
+  input {
+    font: inherit;
+    color: inherit;
+  }
 
-/* A ticked row closes before it goes to the bought section, and a group head before the list
-   becomes flat. `collapse` in app.js sets the height. */
-.items > .leaving {
-  overflow: hidden;
-  min-height: 0;
-  opacity: 0;
-  transition: height 200ms ease-out, opacity 200ms ease-out;
-}
+  button {
+    min-height: 44px;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    cursor: pointer;
+  }
 
-.item.gone {
-  display: none;
-}
+  button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
 
-@keyframes flash {
-  from {
-    background: var(--accent-soft);
+  [hidden] {
+    display: none !important;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 }
 
-.section button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 48px;
-  padding: 0 16px;
-  border-radius: 0;
-  border-bottom: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
+@layer components {
+  .primary {
+    padding: 0 16px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-weight: 600;
+  }
 
-.group-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-height: 40px;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--line);
-  color: var(--accent);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
+  /* Header summary */
 
-.chevron {
-  font-size: 1rem;
-}
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
+    position: relative;
+    border-bottom: 1px solid var(--line);
+    touch-action: pan-y;
+  }
 
-/* An item row slides over the side menu and the backdrop behind it. */
+  .ring {
+    --pct: 0%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) var(--pct), var(--line) 0);
+  }
 
-.swipe {
-  position: relative;
-  overflow: hidden;
-}
+  .ring span {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
 
-.side {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  display: flex;
-}
+  .head-text {
+    flex: 1;
+    min-width: 0;
+  }
 
-.side.end {
-  right: 0;
-}
+  .tool {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    background: var(--surface);
+    color: var(--muted);
+  }
 
-/* The slide to the right shows its action below the row. The left side covers it. */
-.backdrop {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  padding-left: 20px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  transition: background 120ms, color 120ms;
-}
+  /* The tools stand closer to each other than to the title, so that three leave room for it. */
+  .tool:not([hidden]) ~ .tool:not([hidden]) {
+    margin-left: -8px;
+  }
 
-.swipe.armed .backdrop {
-  background: var(--accent);
-  color: var(--accent-text);
-}
+  #search-button[aria-expanded="true"] {
+    color: var(--accent);
+  }
 
-.side button {
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 100%;
-  border-radius: 0;
-  background: var(--accent-soft);
-  color: var(--accent);
-}
+  .tool svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
 
-.side button + button {
-  border-left: 1px solid var(--surface);
-}
+  /* The menu of the trip button, below the right end of the header. */
+  .head h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
 
-.side .danger {
-  background: var(--danger);
-  color: var(--surface);
-}
+  .head p {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
 
-.row {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 56px;
-  padding: 0 4px 0 8px;
-  background: var(--surface);
-}
+  /* List */
 
-.swipe .row {
-  padding-right: 12px;
-  touch-action: pan-y;
-  user-select: none;
-  transition: transform 160ms ease-out;
-}
+  main {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* A horizontal slide changes the section, so the browser must not take it. */
+    touch-action: pan-y;
+    overflow-x: hidden;
+    padding-bottom: 88px;
+  }
 
-.swipe .row.dragging {
-  transition: none;
-}
+  /* The content of a new section comes in from its side. `main` stays in its place, so its scroll
+     and the bottom padding do not move. */
+  main.enter-next > *,
+  main.enter-previous > * {
+    animation: enter 200ms ease-out;
+  }
 
-.row input[type="checkbox"] {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  margin: 12px 4px 12px 8px;
-  border: 2px solid var(--muted);
-  border-radius: 50%;
-  background: none;
-  appearance: none;
-  cursor: pointer;
-}
+  main.enter-next {
+    --enter-from: 48px;
+  }
 
-.row input[type="checkbox"]:checked {
-  border-color: var(--accent);
-  background: var(--accent);
-}
+  main.enter-previous {
+    --enter-from: -48px;
+  }
 
-/* The tick: two sides of a small box, turned. */
-.row input[type="checkbox"]:checked::after {
-  content: "";
-  width: 10px;
-  height: 5px;
-  margin-top: -2px;
-  border: solid var(--accent-text);
-  border-width: 0 0 2px 2px;
-  transform: rotate(-45deg);
-}
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateX(var(--enter-from));
+    }
+  }
 
-.name {
-  flex: 1;
-  min-width: 0;
-  min-height: 56px;
-  padding: 0 4px;
-  border-radius: 0;
-  overflow-wrap: anywhere;
-  text-align: left;
-}
+  .items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
-/* A row of Próxima has no checkbox: its name keeps the place of one. */
-.row > .name:first-child {
-  padding-left: 12px;
-}
+  .item {
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    /* The rows of a scope open a gap for a lifted row. `placeLifted` in app.js sets the transform. */
+    transition: transform 160ms ease-out;
+  }
 
-.item.bought .name {
-  color: var(--muted);
-  text-decoration: line-through;
-}
-
-/* The shops of an item, below its name. */
-.item .name {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.item .name small {
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-
-/* The quantity of an item, after its name. */
-.item .name .qty {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-/* A field of the edit sheet with its name as a label: inside the field while it is empty, on its
-   top border once it has a value or the focus. The placeholder only marks the empty field. */
-.sheet .field {
-  position: relative;
-  display: block;
-  margin-top: 16px;
-}
-
-.sheet .field input::placeholder {
-  color: transparent;
-}
-
-.sheet .field span {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  padding: 0 4px;
-  border-radius: 4px;
-  background: var(--bg);
-  color: var(--muted);
-  font-size: 1.05rem;
-  line-height: 1;
-  pointer-events: none;
-  transform: translateY(-50%);
-  transition: top 150ms ease-out, font-size 150ms ease-out, color 150ms ease-out;
-}
-
-.sheet .field input:focus + span,
-.sheet .field input:not(:placeholder-shown) + span {
-  top: 0;
-  background: linear-gradient(var(--surface) 50%, var(--bg) 50%);
-  font-size: 0.75rem;
-}
-
-.sheet .field input:focus + span {
-  color: var(--accent);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sheet .field span {
+  .item.lifted {
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
     transition: none;
   }
-}
 
-.rename {
-  flex: 1;
-  min-width: 0;
-  height: 40px;
-  margin: 0 4px;
-  padding: 0 8px;
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  background: var(--bg);
-}
-
-.pill {
-  flex: none;
-  min-height: 0;
-  padding: 3px 10px;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 0.78rem;
-  white-space: nowrap;
-}
-
-button.pill {
-  min-height: 32px;
-}
-
-.pill.ghost {
-  border: 1px dashed var(--muted);
-  background: none;
-  color: var(--muted);
-}
-
-.recur {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  color: var(--line);
-}
-
-.recur[aria-pressed="true"] {
-  color: var(--accent);
-}
-
-.more {
-  flex: none;
-  width: 44px;
-  color: var(--muted);
-  font-size: 1.25rem;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 2px 12px 12px 52px;
-}
-
-.actions button {
-  min-height: 40px;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  font-size: 0.92rem;
-}
-
-.actions .danger {
-  color: var(--danger);
-}
-
-.hint {
-  margin: 0;
-  padding: 12px 16px;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.empty {
-  margin: 48px 24px;
-  color: var(--muted);
-  text-align: center;
-}
-
-.empty button {
-  margin-top: 8px;
-}
-
-/* The menu: one row for each day, with its two meals side by side. */
-.day {
-  padding: 8px 12px 10px;
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
-}
-
-.day h3 {
-  margin: 0 0 6px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.meals {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-}
-
-.meal {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  min-width: 0;
-  padding: 6px 10px;
-  background: var(--bg);
-  text-align: left;
-}
-
-.meal small {
-  color: var(--muted);
-  font-size: 0.75rem;
-}
-
-.meal span {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.meal.free span {
-  color: var(--muted);
-}
-
-/* Each button takes half of the line; a long text wraps inside its button. Llenar la cesta is at
-   the side of the hand. */
-.menu-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin: 16px 12px;
-}
-
-#menu-fill {
-  grid-row: 1;
-  grid-column: 2;
-}
-
-.menu-actions button {
-  display: flex;
-  padding: 0 12px;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* The cart with a plus, as on the send button of a recipe. */
-.menu-actions svg {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-#menu-clear,
-#meal-remove {
-  border: 1px solid var(--line);
-}
-
-#meal-query {
-  width: 100%;
-  height: 44px;
-  padding: 0 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface);
-}
-
-.meal-empty {
-  margin: 10px 0;
-  color: var(--muted);
-}
-
-#meal-remove {
-  width: 100%;
-  color: var(--danger);
-}
-
-.banner {
-  margin: 16px 12px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: var(--accent-soft);
-}
-
-.banner p {
-  margin: 4px 0 12px;
-  font-size: 0.9rem;
-}
-
-.banner button {
-  width: 100%;
-}
-
-/* Recipes */
-
-.recipe .name {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding-left: 8px;
-}
-
-.recipe .name small {
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-
-/* The three buttons of a recipe take a third of the line each. */
-.recipe .actions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  padding-left: 12px;
-}
-
-.recipe .actions button {
-  padding: 0 8px;
-}
-
-.send {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: var(--accent);
-  color: var(--accent-text);
-}
-
-.recipe-link {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  color: var(--accent);
-}
-
-.recipe-link svg,
-.group svg,
-.send svg,
-.side svg,
-.backdrop svg,
-.recur svg {
-  width: 22px;
-  height: 22px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.products {
-  margin: 0;
-  padding: 0 4px 0 20px;
-  list-style: none;
-}
-
-.products li {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
-  border-top: 1px solid var(--line);
-}
-
-.products span {
-  flex: 1;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.product-form {
-  display: flex;
-  gap: 8px;
-  padding: 8px 12px 8px 20px;
-}
-
-.product-add .suggestions {
-  padding: 0 12px 8px 20px;
-}
-
-.product-form input {
-  flex: 1;
-  min-width: 0;
-  height: 44px;
-  padding: 0 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--bg);
-}
-
-/* Recipe search */
-
-.search {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--line);
-}
-
-.search input {
-  width: 100%;
-  height: 44px;
-  padding: 0 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface);
-}
-
-/* Settings */
-
-.settings h2 {
-  margin: 20px 16px 8px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.group {
-  margin: 0 12px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface);
-  overflow: hidden;
-}
-
-.group button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  min-height: 52px;
-  padding: 0 14px;
-  border-radius: 0;
-  text-align: left;
-}
-
-.group:has(> #export) {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.group:has(> #export) button + button {
-  border-top: 0;
-  border-left: 1px solid var(--line);
-}
-
-.group svg {
-  flex: none;
-  color: var(--muted);
-}
-
-.group select {
-  appearance: none;
-  display: block;
-  width: 100%;
-  min-height: 52px;
-  padding: 0 44px 0 14px;
-  border: 0;
-  background:
-    linear-gradient(45deg, transparent 50%, var(--muted) 50%) right 24px center / 6px 6px no-repeat,
-    linear-gradient(135deg, var(--muted) 50%, transparent 50%) right 18px center / 6px 6px no-repeat;
-  color: inherit;
-  font: inherit;
-}
-
-.group .switch {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 52px;
-  padding: 0 14px;
-}
-
-.group .switch + .switch {
-  border-top: 1px solid var(--line);
-}
-
-.group .switch input {
-  appearance: none;
-  position: relative;
-  flex: none;
-  width: 44px;
-  height: 26px;
-  margin: 0;
-  border-radius: 13px;
-  background: var(--line);
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.group .switch input::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
-  transition: transform 0.2s;
-}
-
-.group .switch input:checked {
-  background: var(--accent);
-}
-
-.group .switch input:checked::after {
-  transform: translateX(18px);
-}
-
-.group button + button {
-  border-top: 1px solid var(--line);
-}
-
-.about {
-  margin: 24px 12px 0;
-  color: var(--muted);
-  font-size: 0.8rem;
-  text-align: center;
-}
-
-.about p {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 4px 6px;
-  margin: 0;
-}
-
-#version-status {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-#version-status svg {
-  display: none;
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-#version-status[data-status='checking'] [data-for='checking'],
-#version-status[data-status='current'] [data-for='current'],
-#version-status[data-status='outdated'] [data-for='outdated'],
-#version-status[data-status='unknown'] [data-for='unknown'] {
-  display: block;
-}
-
-#version-status[data-status='checking'] svg {
-  animation: spin 1s linear infinite;
-}
-
-#version-status[data-status='current'] {
-  color: var(--accent);
-}
-
-#version-status[data-status='outdated'] {
-  flex-basis: 100%;
-  justify-content: center;
-  color: var(--warning);
-}
-
-#version-status[data-status='unknown'] {
-  color: var(--danger);
-}
-
-/* The text of a state with a symbol stays for screen readers only. */
-#version-status:not([data-status='outdated']) #version-status-text {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(1turn);
+  .item.flash .row {
+    animation: flash 1.2s ease-out;
   }
-}
 
-#update {
-  min-height: 44px;
-  padding: 0 14px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
-/* Add button and bottom menu */
-
-.fab {
-  position: fixed;
-  right: 16px;
-  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 16px);
-  z-index: 5;
-  width: 56px;
-  height: 56px;
-  border-radius: 18px;
-  background: var(--accent);
-  color: var(--accent-text);
-  font-size: 2rem;
-  line-height: 1;
-  box-shadow: 0 6px 14px rgb(0 0 0 / 0.28);
-}
-
-.bnav {
-  display: flex;
-  flex: none;
-  padding-bottom: env(safe-area-inset-bottom);
-  border-top: 1px solid var(--line);
-  background: var(--surface);
-}
-
-.bnav button {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  height: var(--nav-height);
-  border-radius: 0;
-  color: var(--muted);
-  font-size: 0.72rem;
-}
-
-.bnav svg {
-  width: 24px;
-  height: 24px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.bnav button[aria-current="page"] {
-  color: var(--accent);
-  font-weight: 700;
-}
-
-.dust {
-  position: fixed;
-  z-index: 40;
-  pointer-events: none;
-}
-
-.badge-count {
-  position: absolute;
-  top: 6px;
-  left: calc(50% + 6px);
-  padding: 0 6px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--accent-text);
-  font-size: 0.68rem;
-  font-style: normal;
-  font-weight: 700;
-}
-
-.badge-count:empty {
-  display: none;
-}
-
-/* Add sheet */
-
-.sheet-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  transition: display 220ms allow-discrete;
-}
-
-/* A sheet that leaves stays on the screen for the transition, and takes no tap. */
-.sheet-layer[hidden] {
-  pointer-events: none;
-}
-
-.veil {
-  position: absolute;
-  inset: 0;
-  background: rgb(0 0 0 / 0.45);
-  transition: opacity 220ms ease-out;
-}
-
-.sheet-layer[hidden] .veil {
-  opacity: 0;
-}
-
-.sheet-layer[hidden] .sheet {
-  transform: translateY(100%);
-}
-
-@starting-style {
-  .veil {
+  /* A ticked row closes before it goes to the bought section, and a group head before the list
+     becomes flat. `collapse` in app.js sets the height. */
+  .items > .leaving {
+    overflow: hidden;
+    min-height: 0;
     opacity: 0;
+    transition: height 200ms ease-out, opacity 200ms ease-out;
+  }
+
+  .item.gone {
+    display: none;
+  }
+
+  @keyframes flash {
+    from {
+      background: var(--accent-soft);
+    }
+  }
+
+  .section button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 16px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .group-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--line);
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .chevron {
+    font-size: 1rem;
+  }
+
+  /* An item row slides over the side menu and the backdrop behind it. */
+
+  .swipe {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+  }
+
+  .side.end {
+    right: 0;
+  }
+
+  /* The slide to the right shows its action below the row. The left side covers it. */
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    transition: background 120ms, color 120ms;
+  }
+
+  .swipe.armed .backdrop {
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .side button {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 100%;
+    border-radius: 0;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .side button + button {
+    border-left: 1px solid var(--surface);
+  }
+
+  .side .danger {
+    background: var(--danger);
+    color: var(--surface);
+  }
+
+  .row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 56px;
+    padding: 0 4px 0 8px;
+    background: var(--surface);
+  }
+
+  .swipe .row {
+    padding-right: 12px;
+    touch-action: pan-y;
+    user-select: none;
+    transition: transform 160ms ease-out;
+  }
+
+  .swipe .row.dragging {
+    transition: none;
+  }
+
+  .row input[type="checkbox"] {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    margin: 12px 4px 12px 8px;
+    border: 2px solid var(--muted);
+    border-radius: 50%;
+    background: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .row input[type="checkbox"]:checked {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  /* The tick: two sides of a small box, turned. */
+  .row input[type="checkbox"]:checked::after {
+    content: "";
+    width: 10px;
+    height: 5px;
+    margin-top: -2px;
+    border: solid var(--accent-text);
+    border-width: 0 0 2px 2px;
+    transform: rotate(-45deg);
+  }
+
+  .name {
+    flex: 1;
+    min-width: 0;
+    min-height: 56px;
+    padding: 0 4px;
+    border-radius: 0;
+    overflow-wrap: anywhere;
+    text-align: left;
+  }
+
+  /* A row of Próxima has no checkbox: its name keeps the place of one. */
+  .row > .name:first-child {
+    padding-left: 12px;
+  }
+
+  .item.bought .name {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  /* The shops of an item, below its name. */
+  .item .name {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .item .name small {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* The quantity of an item, after its name. */
+  .item .name .qty {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  /* A field of the edit sheet with its name as a label: inside the field while it is empty, on its
+     top border once it has a value or the focus. The placeholder only marks the empty field. */
+  .sheet .field {
+    position: relative;
+    display: block;
+    margin-top: 16px;
+  }
+
+  .sheet .field input::placeholder {
+    color: transparent;
+  }
+
+  .sheet .field span {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    padding: 0 4px;
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: top 150ms ease-out, font-size 150ms ease-out, color 150ms ease-out;
+  }
+
+  .sheet .field input:focus + span,
+  .sheet .field input:not(:placeholder-shown) + span {
+    top: 0;
+    background: linear-gradient(var(--surface) 50%, var(--bg) 50%);
+    font-size: 0.75rem;
+  }
+
+  .sheet .field input:focus + span {
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sheet .field span {
+      transition: none;
+    }
+  }
+
+  .rename {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    margin: 0 4px;
+    padding: 0 8px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: var(--bg);
+  }
+
+  .pill {
+    flex: none;
+    min-height: 0;
+    padding: 3px 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  button.pill {
+    min-height: 32px;
+  }
+
+  .pill.ghost {
+    border: 1px dashed var(--muted);
+    background: none;
+    color: var(--muted);
+  }
+
+  .recur {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--line);
+  }
+
+  .recur[aria-pressed="true"] {
+    color: var(--accent);
+  }
+
+  .more {
+    flex: none;
+    width: 44px;
+    color: var(--muted);
+    font-size: 1.25rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 2px 12px 12px 52px;
+  }
+
+  .actions button {
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    font-size: 0.92rem;
+  }
+
+  .actions .danger {
+    color: var(--danger);
+  }
+
+  .hint {
+    margin: 0;
+    padding: 12px 16px;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .empty {
+    margin: 48px 24px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .empty button {
+    margin-top: 8px;
+  }
+
+  /* The menu: one row for each day, with its two meals side by side. */
+  .day {
+    padding: 8px 12px 10px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .day h3 {
+    margin: 0 0 6px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .meals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .meal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
+    padding: 6px 10px;
+    background: var(--bg);
+    text-align: left;
+  }
+
+  .meal small {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .meal span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .meal.free span {
+    color: var(--muted);
+  }
+
+  /* Each button takes half of the line; a long text wraps inside its button. Llenar la cesta is at
+     the side of the hand. */
+  .menu-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 16px 12px;
+  }
+
+  #menu-fill {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .menu-actions button {
+    display: flex;
+    padding: 0 12px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* The cart with a plus, as on the send button of a recipe. */
+  .menu-actions svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  #menu-clear,
+  #meal-remove {
+    border: 1px solid var(--line);
+  }
+
+  #meal-query {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  .meal-empty {
+    margin: 10px 0;
+    color: var(--muted);
+  }
+
+  #meal-remove {
+    width: 100%;
+    color: var(--danger);
+  }
+
+  .banner {
+    margin: 16px 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: var(--accent-soft);
+  }
+
+  .banner p {
+    margin: 4px 0 12px;
+    font-size: 0.9rem;
+  }
+
+  .banner button {
+    width: 100%;
+  }
+
+  /* Recipes */
+
+  .recipe .name {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 8px;
+  }
+
+  .recipe .name small {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* The three buttons of a recipe take a third of the line each. */
+  .recipe .actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-left: 12px;
+  }
+
+  .recipe .actions button {
+    padding: 0 8px;
+  }
+
+  .send {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .recipe-link {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    color: var(--accent);
+  }
+
+  .recipe-link svg,
+  .group svg,
+  .send svg,
+  .side svg,
+  .backdrop svg,
+  .recur svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .products {
+    margin: 0;
+    padding: 0 4px 0 20px;
+    list-style: none;
+  }
+
+  .products li {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    border-top: 1px solid var(--line);
+  }
+
+  .products span {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .product-form {
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px 8px 20px;
+  }
+
+  .product-add .suggestions {
+    padding: 0 12px 8px 20px;
+  }
+
+  .product-form input {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg);
+  }
+
+  /* Recipe search */
+
+  .search {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .search input {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  /* Settings */
+
+  .settings h2 {
+    margin: 20px 16px 8px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .group {
+    margin: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .group button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 52px;
+    padding: 0 14px;
+    border-radius: 0;
+    text-align: left;
+  }
+
+  .group:has(> #export) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .group:has(> #export) button + button {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
+
+  .group svg {
+    flex: none;
+    color: var(--muted);
+  }
+
+  .group select {
+    appearance: none;
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    padding: 0 44px 0 14px;
+    border: 0;
+    background:
+      linear-gradient(45deg, transparent 50%, var(--muted) 50%) right 24px center / 6px 6px no-repeat,
+      linear-gradient(135deg, var(--muted) 50%, transparent 50%) right 18px center / 6px 6px no-repeat;
+    color: inherit;
+    font: inherit;
+  }
+
+  .group .switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 52px;
+    padding: 0 14px;
+  }
+
+  .group .switch + .switch {
+    border-top: 1px solid var(--line);
+  }
+
+  .group .switch input {
+    appearance: none;
+    position: relative;
+    flex: none;
+    width: 44px;
+    height: 26px;
+    margin: 0;
+    border-radius: 13px;
+    background: var(--line);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .group .switch input::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+    transition: transform 0.2s;
+  }
+
+  .group .switch input:checked {
+    background: var(--accent);
+  }
+
+  .group .switch input:checked::after {
+    transform: translateX(18px);
+  }
+
+  .group button + button {
+    border-top: 1px solid var(--line);
+  }
+
+  .about {
+    margin: 24px 12px 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .about p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px 6px;
+    margin: 0;
+  }
+
+  #version-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  #version-status svg {
+    display: none;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  #version-status[data-status='checking'] [data-for='checking'],
+  #version-status[data-status='current'] [data-for='current'],
+  #version-status[data-status='outdated'] [data-for='outdated'],
+  #version-status[data-status='unknown'] [data-for='unknown'] {
+    display: block;
+  }
+
+  #version-status[data-status='checking'] svg {
+    animation: spin 1s linear infinite;
+  }
+
+  #version-status[data-status='current'] {
+    color: var(--accent);
+  }
+
+  #version-status[data-status='outdated'] {
+    flex-basis: 100%;
+    justify-content: center;
+    color: var(--warning);
+  }
+
+  #version-status[data-status='unknown'] {
+    color: var(--danger);
+  }
+
+  /* The text of a state with a symbol stays for screen readers only. */
+  #version-status:not([data-status='outdated']) #version-status-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  #update {
+    min-height: 44px;
+    padding: 0 14px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Add button and bottom menu */
+
+  .fab {
+    position: fixed;
+    right: 16px;
+    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 16px);
+    z-index: 5;
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 2rem;
+    line-height: 1;
+    box-shadow: 0 6px 14px rgb(0 0 0 / 0.28);
+  }
+
+  .bnav {
+    display: flex;
+    flex: none;
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .bnav button {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    height: var(--nav-height);
+    border-radius: 0;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .bnav svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .bnav button[aria-current="page"] {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .dust {
+    position: fixed;
+    z-index: 40;
+    pointer-events: none;
+  }
+
+  .badge-count {
+    position: absolute;
+    top: 6px;
+    left: calc(50% + 6px);
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .badge-count:empty {
+    display: none;
+  }
+
+  /* Add sheet */
+
+  .sheet-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: display 220ms allow-discrete;
+  }
+
+  /* A sheet that leaves stays on the screen for the transition, and takes no tap. */
+  .sheet-layer[hidden] {
+    pointer-events: none;
+  }
+
+  .veil {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.45);
+    transition: opacity 220ms ease-out;
+  }
+
+  .sheet-layer[hidden] .veil {
+    opacity: 0;
+  }
+
+  .sheet-layer[hidden] .sheet {
+    transform: translateY(100%);
+  }
+
+  @starting-style {
+    .veil {
+      opacity: 0;
+    }
+
+    .sheet {
+      transform: translateY(100%);
+    }
   }
 
   .sheet {
-    transform: translateY(100%);
+    position: relative;
+    max-height: 85%;
+    overflow-y: auto;
+    padding: 10px 16px calc(16px + env(safe-area-inset-bottom));
+    border-radius: 22px 22px 0 0;
+    background: var(--surface);
+    transition: transform 220ms ease-out;
   }
-}
 
-.sheet {
-  position: relative;
-  max-height: 85%;
-  overflow-y: auto;
-  padding: 10px 16px calc(16px + env(safe-area-inset-bottom));
-  border-radius: 22px 22px 0 0;
-  background: var(--surface);
-  transition: transform 220ms ease-out;
-}
+  .grab {
+    width: 40px;
+    height: 4px;
+    margin: 0 auto 12px;
+    border-radius: 4px;
+    background: var(--line);
+  }
 
-.grab {
-  width: 40px;
-  height: 4px;
-  margin: 0 auto 12px;
-  border-radius: 4px;
-  background: var(--line);
-}
+  .add-row {
+    display: flex;
+    gap: 8px;
+  }
 
-.add-row {
-  display: flex;
-  gap: 8px;
-}
+  .add-row input {
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    padding: 0 12px;
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    background: var(--bg);
+  }
 
-.add-row input {
-  flex: 1;
-  min-width: 0;
-  height: 48px;
-  padding: 0 12px;
-  border: 2px solid var(--accent);
-  border-radius: 12px;
-  background: var(--bg);
-}
+  .add-row button {
+    min-height: 48px;
+  }
 
-.add-row button {
-  min-height: 48px;
-}
+  .seg {
+    display: flex;
+    gap: 6px;
+    margin: 10px 0 4px;
+  }
 
-.seg {
-  display: flex;
-  gap: 6px;
-  margin: 10px 0 4px;
-}
+  .seg button {
+    flex: 1;
+    min-height: 40px;
+    background: var(--bg);
+    font-size: 0.9rem;
+  }
 
-.seg button {
-  flex: 1;
-  min-height: 40px;
-  background: var(--bg);
-  font-size: 0.9rem;
-}
+  /* An entry of a sheet: a name, with its effect below it. */
+  .sheet .entry {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2px;
+    width: 100%;
+    min-height: 56px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: var(--bg);
+    text-align: left;
+  }
 
-/* An entry of a sheet: a name, with its effect below it. */
-.sheet .entry {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 2px;
-  width: 100%;
-  min-height: 56px;
-  margin-top: 8px;
-  padding: 8px 12px;
-  background: var(--bg);
-  text-align: left;
-}
+  .sheet .entry small {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
 
-.sheet .entry small {
-  color: var(--muted);
-  font-size: 0.8rem;
-}
+  .sheet h2 {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
 
-.sheet h2 {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
+  /* The title of a part of a sheet, below a line that separates it from the part above. */
+  .sheet h2.part {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
 
-/* The title of a part of a sheet, below a line that separates it from the part above. */
-.sheet h2.part {
-  margin-top: 20px;
-  padding-top: 14px;
-  border-top: 1px solid var(--line);
-}
+  /* With no shop in use, the hint takes the place of the chips, aligned with the title. */
+  #edit-chips:empty {
+    display: none;
+  }
 
-/* With no shop in use, the hint takes the place of the chips, aligned with the title. */
-#edit-chips:empty {
-  display: none;
-}
+  #edit-empty {
+    padding: 10px 0;
+  }
 
-#edit-empty {
-  padding: 10px 0;
-}
+  .sheet .edit-name {
+    width: 100%;
+    height: 48px;
+    padding: 0 12px;
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg);
+    font-size: 1.05rem;
+  }
 
-.sheet .edit-name {
-  width: 100%;
-  height: 48px;
-  padding: 0 12px;
-  border: 2px solid var(--line);
-  border-radius: 12px;
-  background: var(--bg);
-  font-size: 1.05rem;
-}
+  .sheet .edit-name:focus {
+    border-color: var(--accent);
+  }
 
-.sheet .edit-name:focus {
-  border-color: var(--accent);
-}
+  .seg button[aria-pressed="true"] {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+  }
 
-.seg button[aria-pressed="true"] {
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-weight: 700;
-}
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+  }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 10px 0;
-}
+  .chips button {
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 20px;
+    background: var(--bg);
+    font-size: 0.9rem;
+  }
 
-.chips button {
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 20px;
-  background: var(--bg);
-  font-size: 0.9rem;
-}
+  .chips button[aria-pressed="true"] {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+  }
 
-.chips button[aria-pressed="true"] {
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-weight: 700;
-}
+  /* The shop lists of Actual and Próxima: one line that scrolls on its own. */
+  .shop-chips {
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 8px 12px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--line);
+    scrollbar-width: none;
+  }
 
-/* The shop lists of Actual and Próxima: one line that scrolls on its own. */
-.shop-chips {
-  flex-wrap: nowrap;
-  margin: 0;
-  padding: 8px 12px;
-  overflow-x: auto;
-  border-bottom: 1px solid var(--line);
-  scrollbar-width: none;
-}
+  .shop-chips button {
+    flex: none;
+    background: var(--surface);
+  }
 
-.shop-chips button {
-  flex: none;
-  background: var(--surface);
-}
+  .shop-chips .chip-count {
+    margin-left: 6px;
+    color: var(--muted);
+    font-weight: 400;
+  }
 
-.shop-chips .chip-count {
-  margin-left: 6px;
-  color: var(--muted);
-  font-weight: 400;
-}
+  .suggestions {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
-.suggestions {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+  .suggestions button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 2px;
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    text-align: left;
+  }
 
-.suggestions button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  min-height: 48px;
-  padding: 0 2px;
-  border-top: 1px solid var(--line);
-  border-radius: 0;
-  text-align: left;
-}
+  .suggestion-name {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
 
-.suggestion-name {
-  flex: 1;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
+  .suggestion-where {
+    flex: none;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
 
-.suggestion-where {
-  flex: none;
-  color: var(--muted);
-  font-size: 0.8rem;
-}
+  .suggestions .create {
+    color: var(--accent);
+    font-weight: 700;
+  }
 
-.suggestions .create {
-  color: var(--accent);
-  font-weight: 700;
-}
+  /* Messages */
 
-/* Messages */
-
-.toast {
-  position: fixed;
-  /* Above the add button, in reach of the thumb. */
-  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 80px);
-  left: 12px;
-  right: 12px;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 48px;
-  padding: 4px 4px 4px 16px;
-  border-radius: 12px;
-  background: var(--toast-bg);
-  color: var(--toast-text);
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
-  transition: opacity 180ms ease-out, transform 180ms ease-out, display 180ms allow-discrete;
-}
-
-/* The toast leaves to this state, and enters from the same one. */
-.toast[hidden] {
-  opacity: 0;
-  transform: translateY(12px);
-}
-
-@starting-style {
   .toast {
+    position: fixed;
+    /* Above the add button, in reach of the thumb. */
+    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 80px);
+    left: 12px;
+    right: 12px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 4px 4px 4px 16px;
+    border-radius: 12px;
+    background: var(--toast-bg);
+    color: var(--toast-text);
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.25);
+    transition: opacity 180ms ease-out, transform 180ms ease-out, display 180ms allow-discrete;
+  }
+
+  /* The toast leaves to this state, and enters from the same one. */
+  .toast[hidden] {
     opacity: 0;
     transform: translateY(12px);
   }
-}
 
-/* An open sheet has the bottom of the screen, so the toast goes to the top. */
-body:has(.sheet-layer:not([hidden])) .toast {
-  top: calc(8px + env(safe-area-inset-top));
-  bottom: auto;
-}
-
-.toast span {
-  flex: 1;
-}
-
-.toast button {
-  min-height: 40px;
-  padding: 0 14px;
-  font-weight: 700;
-}
-
-/* Onboarding: the pages of the first start, over the full app. */
-
-.onboarding {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: calc(20px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
-    calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
-  background: var(--bg);
-  /* A horizontal slide changes the page, so the browser must not take it. */
-  touch-action: pan-y;
-  overflow: hidden auto;
-}
-
-.onboarding-page {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  text-align: center;
-}
-
-.onboarding-page.enter-next,
-.onboarding-page.enter-previous {
-  animation: enter 200ms ease-out;
-}
-
-.onboarding-page.enter-next {
-  --enter-from: 48px;
-}
-
-.onboarding-page.enter-previous {
-  --enter-from: -48px;
-}
-
-.onboarding-art svg {
-  display: block;
-  width: min(240px, 70vw);
-  height: auto;
-  fill: none;
-  stroke: var(--muted);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.onboarding-art .card {
-  fill: var(--surface);
-}
-
-.onboarding-art .accent {
-  stroke: var(--accent);
-}
-
-.onboarding-art .soft {
-  fill: var(--accent-soft);
-  stroke: var(--accent);
-}
-
-.onboarding-art .solid {
-  fill: var(--accent);
-  stroke: none;
-}
-
-.onboarding-art .on-solid {
-  stroke: var(--accent-text);
-}
-
-.onboarding h2 {
-  margin: 0 0 8px;
-  font-size: 1.375rem;
-}
-
-.onboarding p {
-  max-width: 32ch;
-  margin: 0;
-  color: var(--muted);
-}
-
-.onboarding-dots {
-  display: flex;
-  flex: none;
-  justify-content: center;
-  gap: 8px;
-}
-
-.onboarding-dots span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--line);
-}
-
-.onboarding-dots .on {
-  background: var(--accent);
-}
-
-/* Saltar sits beside Siguiente, on the side away from the thumb. On the last page Empezar fills the bar. */
-.onboarding-actions {
-  display: flex;
-  flex: none;
-  gap: 8px;
-}
-
-.onboarding-actions button {
-  flex: 1 1 50%;
-  min-height: 52px;
-}
-
-#onboarding-skip {
-  border: 1px solid var(--line);
-  color: var(--muted);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .toast,
-  .sheet-layer,
-  .veil,
-  .sheet,
-  .items > li,
-  .group .switch input,
-  .group .switch input::after {
-    transition: none;
+  @starting-style {
+    .toast {
+      opacity: 0;
+      transform: translateY(12px);
+    }
   }
 
-  main.enter-next > *,
-  main.enter-previous > *,
+  /* An open sheet has the bottom of the screen, so the toast goes to the top. */
+  body:has(.sheet-layer:not([hidden])) .toast {
+    top: calc(8px + env(safe-area-inset-top));
+    bottom: auto;
+  }
+
+  .toast span {
+    flex: 1;
+  }
+
+  .toast button {
+    min-height: 40px;
+    padding: 0 14px;
+    font-weight: 700;
+  }
+
+  /* Onboarding: the pages of the first start, over the full app. */
+
+  .onboarding {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: calc(20px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+      calc(20px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+    background: var(--bg);
+    /* A horizontal slide changes the page, so the browser must not take it. */
+    touch-action: pan-y;
+    overflow: hidden auto;
+  }
+
+  .onboarding-page {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    text-align: center;
+  }
+
   .onboarding-page.enter-next,
-  .onboarding-page.enter-previous,
-  #version-status svg {
-    animation: none;
+  .onboarding-page.enter-previous {
+    animation: enter 200ms ease-out;
+  }
+
+  .onboarding-page.enter-next {
+    --enter-from: 48px;
+  }
+
+  .onboarding-page.enter-previous {
+    --enter-from: -48px;
+  }
+
+  .onboarding-art svg {
+    display: block;
+    width: min(240px, 70vw);
+    height: auto;
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .onboarding-art .card {
+    fill: var(--surface);
+  }
+
+  .onboarding-art .accent {
+    stroke: var(--accent);
+  }
+
+  .onboarding-art .soft {
+    fill: var(--accent-soft);
+    stroke: var(--accent);
+  }
+
+  .onboarding-art .solid {
+    fill: var(--accent);
+    stroke: none;
+  }
+
+  .onboarding-art .on-solid {
+    stroke: var(--accent-text);
+  }
+
+  .onboarding h2 {
+    margin: 0 0 8px;
+    font-size: 1.375rem;
+  }
+
+  .onboarding p {
+    max-width: 32ch;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .onboarding-dots {
+    display: flex;
+    flex: none;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .onboarding-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+
+  .onboarding-dots .on {
+    background: var(--accent);
+  }
+
+  /* Saltar sits beside Siguiente, on the side away from the thumb. On the last page Empezar fills the bar. */
+  .onboarding-actions {
+    display: flex;
+    flex: none;
+    gap: 8px;
+  }
+
+  .onboarding-actions button {
+    flex: 1 1 50%;
+    min-height: 52px;
+  }
+
+  #onboarding-skip {
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toast,
+    .sheet-layer,
+    .veil,
+    .sheet,
+    .items > li,
+    .group .switch input,
+    .group .switch input::after {
+      transition: none;
+    }
+
+    main.enter-next > *,
+    main.enter-previous > *,
+    .onboarding-page.enter-next,
+    .onboarding-page.enter-previous,
+    #version-status svg {
+      animation: none;
+    }
+  }
+
+  /* Left hand: the controls change side. Text stays aligned to the left, and a row slides as before. */
+
+  [data-hand="left"] .head {
+    flex-direction: row-reverse;
+  }
+
+  [data-hand="left"] .tool:not([hidden]) ~ .tool:not([hidden]) {
+    margin-right: -8px;
+    margin-left: 0;
+  }
+
+  [data-hand="left"] .row {
+    flex-direction: row-reverse;
+    padding: 0 8px 0 4px;
+  }
+
+  [data-hand="left"] .swipe .row {
+    padding-right: 8px;
+    padding-left: 12px;
+  }
+
+  [data-hand="left"] .row input[type="checkbox"] {
+    margin: 12px 8px 12px 4px;
+  }
+
+  [data-hand="left"] .onboarding-actions {
+    flex-direction: row-reverse;
+  }
+
+  [data-hand="left"] #menu-fill {
+    grid-column: 1;
+  }
+
+  [data-hand="left"] .fab {
+    right: auto;
+    left: 16px;
   }
 }
-
-/* Left hand: the controls change side. Text stays aligned to the left, and a row slides as before. */
-
-[data-hand="left"] .head {
-  flex-direction: row-reverse;
-}
-
-[data-hand="left"] .tool:not([hidden]) ~ .tool:not([hidden]) {
-  margin-right: -8px;
-  margin-left: 0;
-}
-
-[data-hand="left"] .row {
-  flex-direction: row-reverse;
-  padding: 0 8px 0 4px;
-}
-
-[data-hand="left"] .swipe .row {
-  padding-right: 8px;
-  padding-left: 12px;
-}
-
-[data-hand="left"] .row input[type="checkbox"] {
-  margin: 12px 8px 12px 4px;
-}
-
-[data-hand="left"] .onboarding-actions {
-  flex-direction: row-reverse;
-}
-
-[data-hand="left"] #menu-fill {
-  grid-column: 1;
-}
-
-[data-hand="left"] .fab {
-  right: auto;
-  left: 16px;
-}
-

@@ -24,6 +24,7 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 | [12-engineering.md](12-engineering.md) | Modules, code rules, tests and checks |
 | [13-menu.md](13-menu.md) | The menu of the week and the fill of `Actual` |
 | [14-modules.md](14-modules.md) | The modules that `Ajustes` turns off |
+| [15-design-system.md](15-design-system.md) | Layers, tokens, components, icons and the catalogue |
 
 ## Rule identifiers
 
@@ -47,6 +48,7 @@ the identifier in a commit body or in a test name to point at a rule.
 | `ENG` | 12-engineering |
 | `MENU` | 13-menu |
 | `MOD` | 14-modules |
+| `DS` | 15-design-system |
 
 ## Words
 
