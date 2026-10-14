@@ -124,6 +124,8 @@ export const ui = {
   focusProduct: false,
   // The ids of the ticked items whose rows are closing. A render in that time builds them closed.
   leaving: new Set(),
+  // The keys of the recipe and product rows that the next render opens and flashes.
+  bringKeys: new Set(),
   // `running` is the version of the cached shell; `latest` is the deployed one, read when Ajustes opens.
   version: { running: null, latest: null, checking: false },
 };

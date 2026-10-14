@@ -20,7 +20,7 @@ import {
   commit,
 } from '#ui/context';
 import { inList, viewState } from '#ui/view';
-import { expand, pendingRows } from '#ui/motion';
+import { expand, pendingRows, rowKeys, bringIn } from '#ui/motion';
 import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { endReorder, bind as bindDrag } from '#ui/drag';
 import { moveRow } from '#ui/rows';
@@ -88,6 +88,8 @@ const renderAll = () => {
   $('items').querySelector('.rename')?.focus();
   if (ui.focusProduct) $('items').querySelector('.product-name')?.focus();
   ui.focusProduct = false;
+  bringIn(ui.bringKeys);
+  ui.bringKeys.clear();
   $('items').querySelector('.flash')?.scrollIntoView({ block: 'nearest' });
   ui.flashId = null;
   ui.settleFrom = null;
@@ -158,10 +160,12 @@ document.addEventListener('keydown', (event) => {
 $('toast-undo').addEventListener('click', () => {
   if (!undoState) return;
   const before = new Set(pendingRows().map((node) => node.dataset.id));
+  const keys = rowKeys();
   commit(undoState);
   hideToast();
-  // The rows that the undo puts back open, as a ticked row closes.
+  // The rows that the undo puts back open, as a ticked row closes. A recipe or a product also flashes.
   expand(pendingRows().filter((node) => !before.has(node.dataset.id)));
+  bringIn(new Set([...rowKeys()].filter((key) => !keys.has(key))));
 });
 
 bindMenu();

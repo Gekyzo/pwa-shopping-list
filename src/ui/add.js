@@ -91,6 +91,7 @@ const submitRecipe = () => {
   }
   // The new recipe shows expanded, with the cursor in its product field.
   Object.assign(ui, { sheetOpen: false, openRecipeId: result.id, focusProduct: true, query: '' });
+  ui.bringKeys.add(`recipe:${result.id}`);
   apply(result);
 };
 

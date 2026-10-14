@@ -81,9 +81,11 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 
 ## Effects
 
+- **REC-29** A new recipe row opens, flashes and scrolls into view.
 - **REC-30** A delete closes the recipe row before the recipe goes. A second tap in that time does
   nothing.
-- **REC-31** A removed product row closes before it goes.
+- **REC-31** A new product row opens and flashes. A removed product row closes before it goes.
+- **REC-32** A recipe or a product that `Deshacer` puts back opens and flashes.
 
 ## Limits
 
