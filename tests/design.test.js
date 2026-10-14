@@ -110,3 +110,8 @@ test('chips, pills, segments and switches are components (DS-3)', family(
   ['chips', 'shop-chips', 'chip-count', 'seg'],
   ['.chips button', '.seg button', 'button.pill', '.group .switch'],
 ));
+
+test('the muted colour of an icon button does not outrank its variants', () => {
+  const icon = rules.find((rule) => rule.selector.startsWith('.button.icon') && rule.declarations.some((d) => d.property === 'color'));
+  assert.match(icon.selector, /^\.button\.icon:where\(/);
+});
