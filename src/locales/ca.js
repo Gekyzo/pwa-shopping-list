@@ -175,6 +175,8 @@ export default {
   'error.productNotFound': 'Producte no trobat.',
   'error.shopRequired': 'Escriu el nom de la botiga.',
   'error.recipeEmpty': 'La recepta no té productes.',
+  'error.menuEmpty': 'El menú és buit. Posa una recepta en un àpat.',
+  'error.unknownMeal': 'Àpat desconegut.',
   'error.invalidJson': 'El fitxer no és un JSON vàlid.',
   'error.notBackup': 'El fitxer no és una còpia de seguretat de la llista.',
 };

@@ -7,11 +7,12 @@
 | `src/store.js` | Pure state operations and derived views | nothing |
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store` |
+| `src/menu.js` | Pure menu operations and the fill of `Actual` | `recipes` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
 | `src/sections.js` | The order of the sections and the rule of the slide between them | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
-| `src/storage.js` | Load, save, export, import, validation, the language key | `store`, `recipes` |
+| `src/storage.js` | Load, save, export, import, validation, the language key | `store`, `recipes`, `menu` |
 | `src/version.js` | Pure version rules | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
@@ -59,6 +60,7 @@
 | `tests/store.test.js` | Items, the trip, the order, the search, the figures |
 | `tests/recipes.test.js` | Recipes, the send, the groups, the search |
 | `tests/shops.test.js` | Shops and the list by shop |
+| `tests/menu.test.js` | The meals of the week and the fill |
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key |
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sections.test.js` | The slide between sections |
