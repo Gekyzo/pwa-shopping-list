@@ -92,7 +92,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **VER-14** The manifest makes the app installable from Chrome: **Add to Home screen →
   Install**. It runs `standalone`, in portrait, with `start_url` and `scope` `./`.
 - **VER-15** The icons are `icons/icon-192.png`, `icon-512.png` and `icon-maskable-512.png`,
-  written by `npm run icons` from the art of `icons/source.png`: a bag of vegetables on white.
+  written by `npm run icons` from the art of `icons/source.png`: a bag of groceries on white.
   The tab shows `icon-192.png`. The art of the maskable icon stays in the safe zone, a circle
   of radius 0.4 of the side.
 - **VER-16** The installed app and the site in Chrome share one storage. The data of the installed
