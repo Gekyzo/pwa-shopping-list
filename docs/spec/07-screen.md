@@ -146,20 +146,20 @@ of it.
 
   | Page | Title | Teaches |
   |---|---|---|
-  | 1 | `Dos listas` | `Actual` is the trip of today, `Próxima` holds the next one |
-  | 2 | `La compra se repite` | The recurrent mark and the result of **Terminar compra** |
+  | 1 | `Tu próxima compra, casi hecha` | `Actual` is the trip of today; `Próxima` gets the recurrent items by itself (LIST-15) and the items you add |
+  | 2 | `Marca lo de siempre` | The recurrent mark and the result of **Terminar compra** |
   | 3 | `Desliza una fila` | The tap on the name (ROW-7) and the two slides of a row (ROW-3, ROW-11), with the move to `Actual` of the slide to the right in `Próxima` |
-  | 4 | `Desliza la pantalla` | The slide between sections (NAV-3) and the `+` button |
-  | 5 | `Recetas y menú` | A recipe and its products, the send to `Actual` (REC-18) and the plan of the week in `Menú` |
-  | 6 | `Datos de ejemplo` | The switch that loads the sample recipe (ONB-13) |
+  | 4 | `Desliza la pantalla` | The slide between sections (NAV-3), the bottom bar and the `+` button |
+  | 5 | `¿Qué comemos esta semana?` | A recipe and its products, the send to `Actual` (REC-18) and the plan of the week in `Menú` |
+  | 6 | `Una receta para empezar` | The switch that adds the sample recipe (ONB-13) |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
   A line break in the text of a catalog starts a new line.
   Above the pages, the art of the app icon shows centred in the band between the top of the
   walkthrough and the drawing, 96 px wide, with no background (`icons/logo.png`, VER-15). It
-  is decorative (`alt=""`) and does not change or move with the page. The text keeps the room
-  of five lines, the longest text of a page in any language, so the drawing and the logo are at
-  the same place on each page.
+  is decorative (`alt=""`) and does not change or move with the page. The title keeps the room
+  of two lines and the text the room of five lines, the longest title and text of a page in any
+  language, so the drawing and the logo are at the same place on each page.
 - **ONB-3** The bar at the bottom has **Saltar** at the left and **Siguiente** at the right, each
   half of the bar wide; **Mano** `Izquierda` swaps them (NAV-13). **Saltar** has a thin border. On the last page **Saltar** does not show
   and **Empezar** takes the full bar. One dot for each page shows the place of the page in view;
@@ -185,14 +185,14 @@ of it.
   have the label `Página N de 6`. The title and the text are a live region.
 - **ONB-12** With `prefers-reduced-motion: reduce` a page changes with no animation. The
   walkthrough keeps out of the safe-area insets. **Mano** changes only the order of its bar (ONB-3).
-- **ONB-13** The last page has the switch **Cargar datos de ejemplo**, on at each open of the
+- **ONB-13** The last page has the switch **Añadir la receta de ejemplo**, on at each open of the
   walkthrough. It shows only while the state has no sample recipe (REC-27); on another page, or
   with the sample there, its room stays empty, so the page does not move. **Empezar** with the
   switch on adds the sample recipe, with no message. **Saltar**, `Escape` and **Empezar** with the
   switch off add nothing.
-- **ONB-14** `Ajustes` has **Borrar datos de ejemplo** in the group **Ayuda**, below **Ver la
+- **ONB-14** `Ajustes` has **Borrar la receta de ejemplo** in the group **Ayuda**, below **Ver la
   introducción**, while the sample recipe exists. It deletes the recipe as REC-6 does, with the
-  message `toast.sampleDeleted` `Datos de ejemplo borrados.` and `Deshacer`. The focus goes to
+  message `toast.sampleDeleted` `Receta de ejemplo borrada.` and `Deshacer`. The focus goes to
   **Ver la introducción**.
 
 ## Access and display

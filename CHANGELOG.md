@@ -11,10 +11,16 @@ no change for the user has no entry.
 
 ### Added
 
-- The walkthrough has two new pages: `Recetas y menú`, and `Datos de ejemplo` with the switch
-  **Cargar datos de ejemplo**, on by default. **Empezar** then adds the recipe `Pasta con salsa
-  de tomate`.
-- `Ajustes` has **Borrar datos de ejemplo** while the sample recipe exists.
+- The walkthrough has two new pages: `¿Qué comemos esta semana?`, and `Una receta para
+  empezar` with the switch **Añadir la receta de ejemplo**, on by default. **Empezar** then adds
+  the recipe `Pasta con salsa de tomate`.
+- `Ajustes` has **Borrar la receta de ejemplo** while the sample recipe exists.
+
+### Changed
+
+- The texts of the walkthrough are new and more friendly. The first page says that `Próxima`
+  fills itself with what you always buy.
+- The button **Comprar siempre** of a row shows the circular arrow of the walkthrough.
 
 ## 1.0.24 - 2026-10-14
 

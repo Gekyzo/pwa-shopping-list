@@ -29,7 +29,8 @@ export const renderOnboarding = () => {
     drawing.toggleAttribute('hidden', drawing.dataset.page !== page);
   });
   $('onboarding-title').textContent = t(`onboarding.${page}.title`);
-  $('onboarding-text').textContent = t(`onboarding.${page}.text`, { active: t('list.active'), next: t('list.next') });
+  const names = { active: t('list.active'), next: t('list.next'), name: t('sample.name') };
+  $('onboarding-text').textContent = t(`onboarding.${page}.text`, names);
   $('onboarding-dots').replaceChildren(...PAGES.map((id) => el('span', { className: id === page ? 'onboarding-dot on' : 'onboarding-dot' })));
   $('onboarding-dots').setAttribute('aria-label', t('onboarding.page', { page: ui.onboarding + 1, total: PAGES.length }));
   $('onboarding-skip').hidden = isLast(ui.onboarding);
