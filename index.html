@@ -184,9 +184,6 @@
     </div>
 
     <div id="onboarding" class="onboarding" role="dialog" aria-modal="true" data-i18n-attr="aria-label:onboarding.label" hidden>
-      <div class="onboarding-top">
-        <button id="onboarding-skip" type="button" data-i18n="onboarding.skip"></button>
-      </div>
       <div id="onboarding-page" class="onboarding-page">
         <div class="onboarding-art">
           <svg data-page="lists" viewBox="0 0 240 160" aria-hidden="true">
@@ -233,7 +230,10 @@
         </div>
       </div>
       <div id="onboarding-dots" class="onboarding-dots" role="img"></div>
-      <button id="onboarding-next" class="primary" type="button"></button>
+      <div class="onboarding-actions">
+        <button id="onboarding-skip" type="button" data-i18n="onboarding.skip"></button>
+        <button id="onboarding-next" class="primary" type="button"></button>
+      </div>
     </div>
 
     <input id="import-file" type="file" accept="application/json,.json" hidden>

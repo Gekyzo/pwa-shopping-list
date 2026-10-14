@@ -18,6 +18,11 @@ no change for the user has no entry.
   `Actual`, with `Deshacer`. A section that goes breaks into dust in the bottom bar,
   and a section that comes back forms from dust.
 
+### Changed
+
+- **Saltar** of the walkthrough moves from the top to the bottom bar, at the left of
+  **Siguiente**. With **Mano** `Izquierda` it is at the right.
+
 ## 1.0.10 - 2026-10-14
 
 ### Added

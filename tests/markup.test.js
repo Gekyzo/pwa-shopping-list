@@ -38,3 +38,10 @@ test('the walkthrough has one drawing for each page, in the order of the pages',
   const drawings = [...layer.matchAll(/<svg data-page="([^"]+)"/g)].map(([, page]) => page);
   assert.deepEqual(drawings, PAGES);
 });
+
+test('the walkthrough has Saltar and the next button in one bar at the bottom, Saltar first', () => {
+  const [bar = ''] = body.match(/<div class="onboarding-actions">[\s\S]*?<\/div>/) ?? [];
+  const buttons = [...bar.matchAll(/<button id="([^"]+)"/g)].map(([, id]) => id);
+  assert.deepEqual(buttons, ['onboarding-skip', 'onboarding-next']);
+  assert.doesNotMatch(body, /onboarding-top/);
+});

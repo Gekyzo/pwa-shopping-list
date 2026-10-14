@@ -110,6 +110,7 @@ of it.
   | `+` button | Bottom right | Bottom left |
   | Header | Ring, text, buttons | Buttons, text, ring; the trip menu opens below the left end |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
+  | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
 
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3).
@@ -135,9 +136,9 @@ of it.
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3) and the `+` button |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
-- **ONB-3** **Saltar** shows at the top of each page except the last one. The button at the bottom
-  is **Siguiente**, and **Empezar** on the last page. One dot for each page shows the place of the
-  page in view; a dot is not a button.
+- **ONB-3** The bar at the bottom has **Saltar** at the left and **Siguiente** at the right.
+  On the last page **Saltar** does not show and **Empezar** takes the full bar. One dot for each
+  page shows the place of the page in view; a dot is not a button.
 - **ONB-4** A horizontal slide with the measures of NAV-3 changes the page: to the left for the
   next one, to the right for the previous one. `ArrowRight` and `ArrowLeft` do the same. The move
   stops at the first and at the last page. The new page comes in from its side.
