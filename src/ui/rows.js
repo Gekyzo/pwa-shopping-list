@@ -177,13 +177,14 @@ export const itemNode = (item, groupId = null) => {
     requestAnimationFrame(() => requestAnimationFrame(() => moveRow(rowNode, shift(open, widths))));
   } else moveRow(rowNode, shift(open, widths));
   bindSwipe(rowNode, widths, item, groupId, right);
-  const classes = [
-    'item-row',
-    item.bought && ui.view === 'active' && 'bought',
-    ui.flashId === item.id && 'flash',
-    ui.leaving.has(item.id) && 'gone',
-  ];
-  const node = el('li', { className: classes.filter(Boolean).join(' ') }, [
+  const node = el('li', {
+    className: [
+      'item-row',
+      item.bought && ui.view === 'active' && 'bought',
+      ui.flashId === item.id && 'flash',
+      ui.leaving.has(item.id) && 'gone',
+    ].filter(Boolean).join(' '),
+  }, [
     el('div', { className: open ? 'item-row-swipe open' : 'item-row-swipe' }, [...layers, rowNode]),
   ]);
   node.dataset.id = item.id;

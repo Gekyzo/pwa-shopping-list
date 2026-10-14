@@ -16,6 +16,8 @@ const SCALES = [
   ['--tap', 'size'],
   ['--icon', 'size'],
   ['--nav-', 'size'],
+  ['--arrow', 'size'],
+  ['--art-', 'size'],
 ];
 
 const lineAt = (text, index) => text.slice(0, index).split('\n').length;
@@ -160,8 +162,11 @@ const expressionEnd = (js, start) => {
   return js.length;
 };
 
+// The words of the string literals of `text`, except a literal that a comparison uses.
 const literals = (text) =>
-  [...text.matchAll(/'([^'\n]*)'/g)].flatMap(([, value]) => value.split(/\s+/).filter((word) => /^[a-z][a-z0-9-]*$/.test(word)));
+  [...text.matchAll(/'([^'\n]*)'/g)]
+    .filter((match) => !/[=!]==?\s*$/.test(text.slice(0, match.index)))
+    .flatMap(([, value]) => value.split(/\s+/).filter((word) => /^[a-z][a-z0-9-]*$/.test(word)));
 
 export const classesInScript = (js) => [...new Set([
   ...[...js.matchAll(/\b(?:className|variant):\s*/g)].flatMap((match) => {

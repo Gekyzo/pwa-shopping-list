@@ -89,3 +89,19 @@ el('li', { className: [
 ].filter(Boolean).join(' ') });`;
   assert.deepEqual(classesInScript(js).sort(), ['bought', 'danger', 'item', 'lifted', 'open', 'swipe']);
 });
+
+test('parseCatalog gives the size scale to each size token, and colour only to a colour', () => {
+  const css = '@layer tokens { :root { --tap: 44px; --arrow: 6px; --art-width: 240px; --scrim: rgb(0 0 0 / 0.45); --knob: #fff; } }';
+  assert.deepEqual(parseCatalog({ css, sprite: '' }).tokens.map((token) => [token.name, token.scale]), [
+    ['--tap', 'size'],
+    ['--arrow', 'size'],
+    ['--art-width', 'size'],
+    ['--scrim', 'colour'],
+    ['--knob', 'colour'],
+  ]);
+});
+
+test('classesInScript skips a literal that a comparison uses', () => {
+  const js = "el('li', { className: [view === 'active' && 'bought', mode !== 'next' ? 'wide' : ''].join(' ') });";
+  assert.deepEqual(classesInScript(js).sort(), ['bought', 'wide']);
+});
