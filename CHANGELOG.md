@@ -16,6 +16,7 @@ no change for the user has no entry.
 
 ### Changed
 
+- In `Editar`, the shops of the item are under a line and the title **Tiendas**.
 - The fields of `Editar` keep their name in sight: it moves onto the border of the field when
   the field has a value.
 - In `Menú`, **Llenar la cesta** is at the side of the hand: at the right with `Derecha`, at

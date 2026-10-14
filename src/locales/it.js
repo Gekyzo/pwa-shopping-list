@@ -47,6 +47,7 @@ export default {
   'edit.title': 'Modifica',
   'edit.name': 'Nome',
   'edit.quantity': 'Quantità',
+  'edit.shops': 'Negozi',
   'group.others': 'Altri',
   'group.noShop': 'Senza negozio',
 

@@ -47,6 +47,7 @@ export default {
   'edit.title': 'Edita',
   'edit.name': 'Nom',
   'edit.quantity': 'Quantitat',
+  'edit.shops': 'Botigues',
   'group.others': 'Altres',
   'group.noShop': 'Sense botiga',
 
