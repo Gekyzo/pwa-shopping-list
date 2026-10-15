@@ -3,7 +3,7 @@
   "short_name": "Grocely",
   "description": "Lista de la compra con una lista actual y una lista próxima",
   "lang": "es",
-  "id": "./",
+  "id": "/shopping-list/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
