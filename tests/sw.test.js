@@ -31,7 +31,7 @@ test('localizeManifest takes the language, the name and the description of the t
 test('localizeManifest keeps the short name and the other members', () => {
   const manifest = localizeManifest(build(), { lang: 'en', name: 'Grocely - Shopping list', description: 'Shopping list' });
   assert.equal(manifest.short_name, 'Grocely');
-  assert.equal(manifest.id, './');
+  assert.equal(manifest.id, build().id);
   assert.deepEqual(manifest.icons, build().icons);
 });
 
