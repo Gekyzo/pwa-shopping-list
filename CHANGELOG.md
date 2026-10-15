@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.28 - 2026-10-15
+
 - The app has an install id of its own, so the other apps of the site can be installed next to it.
   Install it again once: uninstall the old icon, then install from Settings.
 
