@@ -156,6 +156,8 @@ export default {
   'sample.oliveOil': 'Azeite',
   'sample.salt': 'Sal',
   'settings.deleteSample': 'Apagar a receita de exemplo',
+  'settings.app': 'Aplicação',
+  'settings.install': 'Instalar a aplicação',
   'settings.help': 'Ajuda',
   'settings.onboarding': 'Ver a introdução',
   'settings.update': 'Atualizar',

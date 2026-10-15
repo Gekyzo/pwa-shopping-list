@@ -86,6 +86,10 @@
           <label class="switch"><span data-i18n="list.next"></span><input class="switch-input" type="checkbox" role="switch" data-module="next"></label>
           <label class="switch"><span data-i18n="settings.moduleRecipes"></span><input class="switch-input" type="checkbox" role="switch" data-module="recipes"></label>
         </div>
+        <h2 class="settings-title" data-i18n="settings.app"></h2>
+        <div class="list-group">
+          <button id="install" class="list-row" type="button" hidden><svg class="icon" aria-hidden="true"><use href="icons.svg#download"/></svg><span data-i18n="settings.install"></span></button>
+        </div>
         <h2 class="settings-title" data-i18n="settings.help"></h2>
         <div class="list-group">
           <button id="show-onboarding" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#help"/></svg><span data-i18n="settings.onboarding"></span></button>
@@ -319,6 +323,7 @@
           "#reorder": "./src/reorder.js",
           "#storage": "./src/storage.js",
           "#version": "./src/version.js",
+          "#install": "./src/install.js",
           "#i18n": "./src/i18n.js",
           "#locales/ca": "./src/locales/ca.js",
           "#locales/de": "./src/locales/de.js",
@@ -341,6 +346,7 @@
           "#ui/recipes": "./src/ui/recipes.js",
           "#ui/rows": "./src/ui/rows.js",
           "#ui/settings": "./src/ui/settings.js",
+          "#ui/install": "./src/ui/install.js",
           "#ui/view": "./src/ui/view.js"
         }
       }
