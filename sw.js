@@ -7,6 +7,8 @@ const SHELL = [
   './icons.svg',
   './manifest.webmanifest',
   './src/app.js',
+  './src/install.js',
+  './src/ui/install.js',
   './src/ui/add.js',
   './src/ui/arrange.js',
   './src/ui/context.js',

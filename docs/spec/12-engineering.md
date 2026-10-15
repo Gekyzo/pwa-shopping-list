@@ -16,6 +16,7 @@
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
 | `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu`, `modules` |
 | `src/version.js` | Pure version rules | nothing |
+| `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
 | `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
@@ -31,6 +32,7 @@
 | `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `menu`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu` |
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
+| `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, modules, export and import, the delete of the sample recipe | `store`, `recipes`, `storage`, `version`, `i18n`, `modules`, `ui/context`, `ui/onboarding` |
 | `src/ui/nav.js` | The bottom bar, its dust effect and the change of section | `sections`, `modules`, `particles`, `ui/context`, `ui/controls`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
@@ -93,6 +95,7 @@
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
 | `tests/version.test.js` | Version rules |
+| `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own |
 | `tests/aliases.test.js` | The import map against `package.json` |

@@ -156,6 +156,8 @@ export default {
   'sample.oliveOil': 'Oli d\'oliva',
   'sample.salt': 'Sal',
   'settings.deleteSample': 'Esborrar la recepta d’exemple',
+  'settings.app': 'Aplicació',
+  'settings.install': 'Instal·la l’aplicació',
   'settings.help': 'Ajuda',
   'settings.onboarding': 'Mostra la introducció',
   'settings.update': 'Actualitza',

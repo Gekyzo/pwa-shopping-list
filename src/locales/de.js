@@ -156,6 +156,8 @@ export default {
   'sample.oliveOil': 'Olivenöl',
   'sample.salt': 'Salz',
   'settings.deleteSample': 'Beispielrezept löschen',
+  'settings.app': 'App',
+  'settings.install': 'App installieren',
   'settings.help': 'Hilfe',
   'settings.onboarding': 'Einführung anzeigen',
   'settings.update': 'Aktualisieren',

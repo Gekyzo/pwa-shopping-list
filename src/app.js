@@ -40,6 +40,7 @@ import {
 import { renderSheet, closeSheet, bind as bindAdd } from '#ui/add';
 import { closeOnboarding, turnOnboarding, bind as bindOnboarding } from '#ui/onboarding';
 import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
+import { renderInstall, bind as bindInstall } from '#ui/install';
 import { showNavButton, bind as bindNav } from '#ui/nav';
 
 // Screen
@@ -74,6 +75,7 @@ const renderAll = () => {
   $('settings').hidden = ui.view !== 'settings';
   renderVersion();
   renderSample();
+  renderInstall();
   const outcome = [t('settings.back', { count: summary.back }), t('settings.gone', { count: summary.gone })];
   $('finish-menu-text').textContent = outcome.join(' · ');
   renderTrip();
@@ -175,6 +177,7 @@ $('toast-undo').addEventListener('click', () => {
 
 bindMenu();
 bindSettings();
+bindInstall();
 
 applyLanguage();
 if (ui.onboarding !== null) $('onboarding-next').focus();

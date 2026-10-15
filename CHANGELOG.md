@@ -9,7 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- `Ajustes → Aplicación → Instalar la aplicación` installs the app when Chrome offers it.
 
 ## 1.0.28 - 2026-10-15
 

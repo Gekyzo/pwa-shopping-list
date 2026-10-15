@@ -90,6 +90,8 @@ export let state = storage ? load(storage) : store.emptyState();
 // `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
 export const ui = {
   view: 'active',
+  // The install offer: `idle`, `available` or `installed` (INS-1).
+  install: 'idle',
   openId: null,
   flashId: null,
   sheetOpen: false,
