@@ -49,6 +49,8 @@ export default {
   'edit.name': 'Name',
   'edit.quantity': 'Menge',
   'edit.shops': 'Geschäfte',
+  'edit.aisle': 'Abteilung',
+  'edit.noAisles': 'Lege die Abteilungen in Optionen an.',
   'group.others': 'Andere',
   'group.noShop': 'Ohne Geschäft',
 

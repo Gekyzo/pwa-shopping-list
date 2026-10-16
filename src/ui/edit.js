@@ -1,5 +1,6 @@
 import * as store from '#store';
 import * as shops from '#shops';
+import * as aisles from '#aisles';
 import { $, el, state, ui, t, apply, render } from '#ui/context';
 import { bindField } from '#ui/controls';
 
@@ -45,6 +46,23 @@ export const renderEdit = () => {
   $('edit-empty').hidden = names.length > 0;
   // The field completes a typed name with a shop in use.
   $('edit-shops').replaceChildren(...shops.shopSuggestions(state, item.id).map((shop) => el('option', { value: shop })));
+  renderAisleChips(item);
+};
+
+// A tap on the chip of the aisle of the item clears it; a tap on another chip sets that aisle.
+const pickAisle = (aisle) => {
+  const item = state.items.find((entry) => entry.id === ui.editId);
+  if (item) apply(aisles.setItemAisle(state, item.id, item.aisle === aisle ? '' : aisle));
+};
+
+// One chip for each aisle, in the order of the walk, as the shop chips stay through a blur.
+const renderAisleChips = (item) => {
+  const box = $('edit-aisles');
+  if ([...box.children].map((chip) => chip.textContent).join('\n') !== state.aisles.join('\n')) {
+    box.replaceChildren(...state.aisles.map((aisle) => el('button', { type: 'button', className: 'chip', textContent: aisle, onclick: () => pickAisle(aisle) })));
+  }
+  for (const chip of box.children) chip.setAttribute('aria-pressed', String(chip.textContent === item.aisle));
+  $('edit-aisles-empty').hidden = state.aisles.length > 0;
 };
 
 // The sheet stays open after a new shop, so that an item gets two shops in one visit.

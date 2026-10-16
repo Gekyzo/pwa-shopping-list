@@ -49,6 +49,8 @@ export default {
   'edit.name': 'Name',
   'edit.quantity': 'Quantity',
   'edit.shops': 'Shops',
+  'edit.aisle': 'Section',
+  'edit.noAisles': 'Create the sections in Settings.',
   'group.others': 'Others',
   'group.noShop': 'No shop',
 
