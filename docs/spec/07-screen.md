@@ -48,6 +48,7 @@ of it.
   | `Actual` | **Mover a Próxima**, **Eliminar** |
   | `Próxima`, `list: 'next'` | **Mover a Actual**, **Eliminar** |
   | `Próxima`, `comprado hoy` | **Quitar de Próxima** |
+  | `Volver a comprar` | **Eliminar** |
 
 - **ROW-4** A drag becomes a slide after 10 px of horizontal move. A drag that is first vertical
   scrolls the list.
@@ -74,6 +75,8 @@ of it.
   which fills with the accent colour once the slide is long enough. A `comprado hoy` row does not
   slide to the right, and a row with its left side open closes it.
 - **ROW-12** A recipe row of `Recetas` slides with the same rules (REC-5).
+- **ROW-13** A row of `Volver a comprar` slides with the same rules (LIST-35). Its slide to the right
+  shows the icon `cart-add` in `Actual` and `calendar` in `Próxima`.
 
 ## Messages and undo
 

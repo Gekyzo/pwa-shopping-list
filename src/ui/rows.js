@@ -220,21 +220,14 @@ export const boughtSection = (bought) => {
   return [el('li', { className: 'section-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
 };
 
-// A saved item: a tap on its name or on its pill brings it to `list`, and the trash deletes it.
+// A saved item slides as an item row: to the right it comes back to `list`, to the left it shows
+// the delete. A tap on its name opens the edit sheet.
 const savedNode = (item, list) => {
-  const params = { name: item.name, list };
-  const bring = () => apply(store.bringToList(state, item.id, list), { undoText: say('toast.addedTo', params) });
-  const name = el('button', { type: 'button', className: 'item-row-name', onclick: bring }, nameParts(item));
-  name.setAttribute('aria-label', say('row.bringTo', params));
-  const pill = el('button', { type: 'button', className: 'pill ghost', textContent: `+ ${t(`list.${list}`)}`, onclick: bring });
-  pill.setAttribute('aria-label', say('row.bringTo', params));
-  const trash = el('button', {
-    type: 'button',
-    className: 'button icon',
-    onclick: () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
-  }, [icon('trash')]);
-  trash.setAttribute('aria-label', t('row.delete', { name: item.name }));
-  const node = el('li', { className: 'item-row' }, [el('div', { className: 'item-row-body' }, [name, pill, trash])]);
+  const bring = () => apply(store.bringToList(state, item.id, list), { undoText: say('toast.addedTo', { name: item.name, list }) });
+  const name = el('button', { type: 'button', className: 'item-row-name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
+  const right = { run: bring, icon: list === 'active' ? 'cart-add' : 'calendar' };
+  const { box } = swipeBox({ id: item.id, groupId: 'saved', row: [name], end: [deleteAction(item)], right });
+  const node = el('li', { className: 'item-row' }, [box]);
   node.dataset.id = item.id;
   return node;
 };
