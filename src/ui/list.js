@@ -49,7 +49,7 @@ const tripChoiceNode = (item) => {
   };
   return el('li', { className: 'trip-open-row' }, [
     el('span', { className: 'trip-open-name', textContent: item.name }),
-    el('div', { className: 'segmented' }, [segment('save', 'trip.discard'), segment('keep', 'trip.keep')]),
+    el('div', { className: 'segmented' }, [segment('save', 'trip.discard'), segment('keep', 'trip.postpone')]),
   ]);
 };
 

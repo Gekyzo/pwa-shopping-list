@@ -73,7 +73,7 @@ export default {
   'trip.menu': 'Opcions de la compra',
   'trip.open': 'El que no has comprat',
   'trip.discard': 'Descartar',
-  'trip.keep': 'Mantenir',
+  'trip.postpone': 'Ajornar',
 
   'recipes.search': 'Cerca recepta o producte',
   'search.label': 'Cerca a la llista',
@@ -152,6 +152,7 @@ export default {
   'settings.themeLight': 'Clar',
   'settings.themeDark': 'Fosc',
   'settings.tripEnd': 'En acabar la compra',
+  'settings.tripEndHint': 'Descartar porta el que no has comprat a Tornar a comprar; Ajornar ho deixa a Actual.',
   'settings.modules': 'Mòduls',
   'settings.moduleRecipes': 'Receptes i menú',
   'onboarding.recipes.title': 'Què mengem aquesta setmana?',

@@ -16,8 +16,8 @@ no change for the user has no entry.
 - **Agrupar por** has **Secciones**: the list follows the order of the sections, also in a shop
   list. The search of a list also finds the items of a section.
 - **Terminar compra** asks what to do with each item not bought: **Descartar** it to `Volver a
-  comprar` or **Mantener** it in `Actual`. **Al terminar la compra** in `Ajustes` sets the first
-  choice with two buttons, **Descartar** and **Mantener**.
+  comprar` or **Aplazar** it in `Actual`. **Al terminar la compra** in `Ajustes` sets the first
+  choice with two buttons, **Descartar** and **Aplazar**, and a line that says what each one does.
 
 ## 1.0.33 - 2026-10-16
 

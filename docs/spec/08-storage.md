@@ -11,7 +11,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.lang` | The language that the user chose ([09-languages.md](09-languages.md)) |
 | `localStorage` | `shopping.hand` | `left` when the user chose **Izquierda** ([07-screen.md](07-screen.md), NAV-12) |
 | `localStorage` | `shopping.theme` | `light` or `dark` when the user chose **Claro** or **Oscuro** ([07-screen.md](07-screen.md), NAV-17) |
-| `localStorage` | `shopping.tripEnd` | `keep` when the user chose **Mantener** ([03-lists.md](03-lists.md), TRIP-8) |
+| `localStorage` | `shopping.tripEnd` | `keep` when the user chose **Aplazar** ([03-lists.md](03-lists.md), TRIP-8) |
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.modules` | The ids of the modules that the user turned off, as JSON ([14-modules.md](14-modules.md), MOD-2) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |

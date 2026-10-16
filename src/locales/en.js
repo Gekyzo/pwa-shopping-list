@@ -73,7 +73,7 @@ export default {
   'trip.menu': 'Shopping options',
   'trip.open': 'What you did not buy',
   'trip.discard': 'Discard',
-  'trip.keep': 'Keep',
+  'trip.postpone': 'Postpone',
 
   'recipes.search': 'Search recipe or product',
   'search.label': 'Search the list',
@@ -152,6 +152,7 @@ export default {
   'settings.themeLight': 'Light',
   'settings.themeDark': 'Dark',
   'settings.tripEnd': 'When the trip ends',
+  'settings.tripEndHint': 'Discard moves what you did not buy to Buy again; Postpone leaves it in Current.',
   'settings.modules': 'Modules',
   'settings.moduleRecipes': 'Recipes and menu',
   'onboarding.recipes.title': 'What do we eat this week?',

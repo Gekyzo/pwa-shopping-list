@@ -73,7 +73,7 @@ export default {
   'trip.menu': 'Opzioni della spesa',
   'trip.open': 'Quello che non hai comprato',
   'trip.discard': 'Scarta',
-  'trip.keep': 'Tieni',
+  'trip.postpone': 'Rimanda',
 
   'recipes.search': 'Cerca ricetta o prodotto',
   'search.label': 'Cerca nella lista',
@@ -152,6 +152,7 @@ export default {
   'settings.themeLight': 'Chiaro',
   'settings.themeDark': 'Scuro',
   'settings.tripEnd': 'Alla fine della spesa',
+  'settings.tripEndHint': 'Scarta sposta ciò che non hai comprato in Da ricomprare; Rimanda lo lascia in Attuale.',
   'settings.modules': 'Moduli',
   'settings.moduleRecipes': 'Ricette e menù',
   'onboarding.recipes.title': 'Cosa mangiamo questa settimana?',

@@ -64,7 +64,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   | Ticked, one-time, no `again` | Saved: `list: 'saved'`, not ticked (LIST-30) |
   | Saved | Does not change |
   | In `Actual`, not ticked, recurrent | Stays |
-  | In `Actual`, not ticked, one-time | Saved, as a ticked one (LIST-30), or stays in `Actual`, not ticked, with `Mantener` (TRIP-6) |
+  | In `Actual`, not ticked, one-time | Saved, as a ticked one (LIST-30), or stays in `Actual`, not ticked, with `Aplazar` (TRIP-6) |
   | In `list: 'next'` | Moves to `Actual` |
 
 - **TRIP-3** **Terminar compra** empties `sent`. `group` and `sort` do not change. The relative
@@ -80,13 +80,14 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   state of before.
 - **TRIP-6** An open item is an item of `Actual`, not ticked, not recurrent and with no `again`.
   **Terminar compra** saves an open item (LIST-30), or keeps it in `Actual`, not ticked, when the
-  user chose `Mantener` for it. The entry of the trip sheet finishes at once when no item is open.
+  user chose `Aplazar` for it. The entry of the trip sheet finishes at once when no item is open.
   Else the sheet shows a second step: `Lo que no has comprado`, one row for each open item in the
-  order of `Actual` with its name and the choice `Descartar` / `Mantener` (TRIP-7 gives the first
+  order of `Actual` with its name and the choice `Descartar` / `Aplazar` (TRIP-7 gives the first
   value), and the button **Terminar compra**. A tap on the veil closes the sheet and changes
   nothing. The banner and `Traer N artículos de Próxima` never have an open item.
 - **TRIP-7** **Al terminar la compra** of `Ajustes` has two buttons side by side: `Descartar` and
-  `Mantener`, and the chosen one is pressed. It is the first choice of each open item at
+  `Aplazar`, and the chosen one is pressed. A line below the title says that `Descartar` takes an
+  open item to `Volver a comprar` and `Aplazar` leaves it in `Actual`. It is the first choice of each open item at
   **Terminar compra**, and the entry of the trip sheet counts the open items with it. An app with
   no choice uses `Descartar`.
 - **TRIP-8** The choice is stored in `shopping.tripEnd`. `Descartar` removes the key.
@@ -161,7 +162,7 @@ sheet is open.
 ## Saved items
 
 - **LIST-30** **Terminar compra** saves each one-time item of `Actual` with no `again`, ticked or
-  not: only `↻` (LIST-7), `+ Próxima` (LIST-14) and `Mantener` (TRIP-6) keep an item for the next trip. It leaves the two
+  not: only `↻` (LIST-7), `+ Próxima` (LIST-14) and `Aplazar` (TRIP-6) keep an item for the next trip. It leaves the two
   lists and keeps its name, its shops and its quantity. Only **Eliminar** deletes an item.
 - **LIST-31** A saved item keeps its name (DATA-3). The add sheet finds it (ADD-3), and an add of
   its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.

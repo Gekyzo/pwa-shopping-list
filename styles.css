@@ -1309,7 +1309,7 @@
      @part trip-open-list  The list of the items.
      @part trip-open-row  One item: its name, then its choice.
      @part trip-open-name  The name of the item.
-     @example <div class="trip-open"><ul class="trip-open-list"><li class="trip-open-row"><span class="trip-open-name">Pan</span><div class="segmented"><button class="segment" type="button" aria-pressed="true">Descartar</button><button class="segment" type="button" aria-pressed="false">Mantener</button></div></li></ul></div> */
+     @example <div class="trip-open"><ul class="trip-open-list"><li class="trip-open-row"><span class="trip-open-name">Pan</span><div class="segmented"><button class="segment" type="button" aria-pressed="true">Descartar</button><button class="segment" type="button" aria-pressed="false">Aplazar</button></div></li></ul></div> */
   .trip-open-list {
     margin: var(--space-2) 0 var(--space-3);
     padding: 0;
@@ -1550,6 +1550,7 @@
      @scope settings
      @summary The Ajustes section: titled list groups, then the about lines.
      @part settings-title  The title above a list group.
+     @part settings-hint   A line of help below a title, on a hint.
      @example <section class="settings" style="width: 100%"><h2 class="settings-title">Idioma</h2><div class="list-group"><select class="select" aria-label="Idioma"><option>Español</option></select></div></section> */
   .settings-title {
     margin: var(--space-5) var(--space-4) var(--space-2);
@@ -1557,6 +1558,10 @@
     font-size: var(--text-xs);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .settings-hint {
+    padding: 0 var(--space-4) var(--space-2);
   }
 
   .settings .list-group > .segmented {
