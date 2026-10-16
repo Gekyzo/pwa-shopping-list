@@ -1303,6 +1303,37 @@
     border-bottom: 1px solid var(--line);
   }
 
+  /* @component trip-open
+     @scope list
+     @summary The second step of the trip sheet: each item not bought, with its choice.
+     @part trip-open-list  The list of the items.
+     @part trip-open-row  One item: its name, then its choice.
+     @part trip-open-name  The name of the item.
+     @example <div class="trip-open"><ul class="trip-open-list"><li class="trip-open-row"><span class="trip-open-name">Pan</span><div class="segmented"><button class="segment" type="button" aria-pressed="true">Guardar</button><button class="segment" type="button" aria-pressed="false">Mantener</button></div></li></ul></div> */
+  .trip-open-list {
+    margin: var(--space-2) 0 var(--space-3);
+    padding: 0;
+    list-style: none;
+  }
+
+  .trip-open-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .trip-open-name {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .trip-open-row .segmented {
+    flex: 0 0 60%;
+    margin: var(--space-2) 0;
+  }
+
   /* @component search
      @scope list
      @summary The search box of Actual, Próxima and Recetas, below the header.

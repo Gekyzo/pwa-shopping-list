@@ -71,6 +71,9 @@ export default {
   },
   'finish.saved': { one: '{count} est enregistré.', other: '{count} sont enregistrés.' },
   'trip.menu': 'Options des courses',
+  'trip.open': 'Ce que vous n’avez pas acheté',
+  'trip.save': 'Enregistrer',
+  'trip.keep': 'Garder',
 
   'recipes.search': 'Chercher une recette ou un produit',
   'search.label': 'Chercher dans la liste',

@@ -71,6 +71,9 @@ export default {
   },
   'finish.saved': { one: '{count} se guarda.', other: '{count} se guardan.' },
   'trip.menu': 'Opciones de la compra',
+  'trip.open': 'Lo que no has comprado',
+  'trip.save': 'Guardar',
+  'trip.keep': 'Mantener',
 
   'recipes.search': 'Buscar receta o producto',
   'search.label': 'Buscar en la lista',
