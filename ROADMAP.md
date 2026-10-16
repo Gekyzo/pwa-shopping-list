@@ -17,6 +17,7 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
   choice: discard it or move it to `Próxima`.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
+- **Buy me a coffee.**
 
 ### Deferred
 
