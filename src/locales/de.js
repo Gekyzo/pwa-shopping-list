@@ -152,8 +152,6 @@ export default {
   'settings.themeLight': 'Hell',
   'settings.themeDark': 'Dunkel',
   'settings.tripEnd': 'Am Ende des Einkaufs',
-  'settings.tripEndSave': 'Nicht Gekauftes speichern',
-  'settings.tripEndKeep': 'Nicht Gekauftes behalten',
   'settings.modules': 'Module',
   'settings.moduleRecipes': 'Rezepte und Menü',
   'onboarding.recipes.title': 'Was essen wir diese Woche?',

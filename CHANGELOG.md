@@ -17,7 +17,7 @@ no change for the user has no entry.
   list. The search of a list also finds the items of a section.
 - **Terminar compra** asks what to do with each item not bought: **Guardar** it in `Volver a
   comprar` or **Mantener** it in `Actual`. **Al terminar la compra** in `Ajustes` sets the first
-  choice.
+  choice with two buttons, **Guardar** and **Mantener**.
 
 ## 1.0.33 - 2026-10-16
 

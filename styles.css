@@ -1559,6 +1559,10 @@
     text-transform: uppercase;
   }
 
+  .settings .list-group > .segmented {
+    margin: var(--space-2);
+  }
+
   /* @component about
      @scope settings
      @summary The version lines at the end of Ajustes.

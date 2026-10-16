@@ -122,16 +122,18 @@ export const applyLanguage = () => {
     themeOption('light', 'settings.themeLight'),
     themeOption('dark', 'settings.themeDark'),
   );
-  const tripEndOption = (value, key) => el('option', { value, textContent: t(key), selected: value === tripEnd });
-  $('trip-end').replaceChildren(
-    tripEndOption('save', 'settings.tripEndSave'),
-    tripEndOption('keep', 'settings.tripEndKeep'),
-  );
+  renderTripEnd();
   document.querySelectorAll('[data-module]').forEach((box) => {
     box.checked = isOn(box.dataset.module);
   });
   render();
   renderOnboarding();
+};
+
+const renderTripEnd = () => {
+  document.querySelectorAll('[data-trip-end]').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.tripEnd === tripEnd));
+  });
 };
 
 const download = (filename, text) => {
@@ -160,8 +162,11 @@ export const bind = () => {
 
   $('theme').addEventListener('change', (event) => setTheme(event.target.value));
 
-  $('trip-end').addEventListener('change', (event) => {
-    setTripEnd(event.target.value);
+  $('trip-end').addEventListener('click', (event) => {
+    const button = event.target.closest('[data-trip-end]');
+    if (!button) return;
+    setTripEnd(button.dataset.tripEnd);
+    renderTripEnd();
     render();
   });
 
