@@ -49,6 +49,8 @@ export default {
   'edit.name': 'Nom',
   'edit.quantity': 'Quantité',
   'edit.shops': 'Magasins',
+  'edit.aisle': 'Rayon',
+  'edit.noAisles': 'Créez les rayons dans Réglages.',
   'group.others': 'Autres',
   'group.noShop': 'Sans magasin',
 

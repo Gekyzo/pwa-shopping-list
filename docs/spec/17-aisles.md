@@ -39,6 +39,16 @@ bottom bar (NAV-1).
 - **AISLE-15** `✕` deletes the aisle (AISLE-5) with the message `Sección "<name>" eliminada.` and
   `Deshacer`. An add, a rename and a move have no message.
 
+## Aisle of an item
+
+- **AISLE-16** The edit sheet `Editar` (ROW-7) shows, below the shops, a line and the title
+  **Sección**, then each aisle as a chip, in its order. The chip of the aisle of the item is
+  pressed.
+- **AISLE-17** A tap on a chip sets that aisle on the item (AISLE-7). A tap on the pressed chip
+  clears it. The sheet stays open. The change is saved at once and has no message and no
+  `Deshacer`.
+- **AISLE-18** With no aisle, the sheet shows `Crea las secciones en Ajustes.`
+
 ## Limits
 
 No aisle on the products of a recipe, and no aisle field in the add sheet. One order of the aisles

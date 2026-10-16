@@ -49,6 +49,8 @@ export default {
   'edit.name': 'Nome',
   'edit.quantity': 'Quantità',
   'edit.shops': 'Negozi',
+  'edit.aisle': 'Reparto',
+  'edit.noAisles': 'Crea i reparti in Impostazioni.',
   'group.others': 'Altri',
   'group.noShop': 'Senza negozio',
 

@@ -49,6 +49,8 @@ export default {
   'edit.name': 'Nom',
   'edit.quantity': 'Quantitat',
   'edit.shops': 'Botigues',
+  'edit.aisle': 'Secció',
+  'edit.noAisles': 'Crea les seccions a Configuració.',
   'group.others': 'Altres',
   'group.noShop': 'Sense botiga',
 
