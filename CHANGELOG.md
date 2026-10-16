@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.31 - 2026-10-16
+
 - **Terminar compra** keeps for the next trip only the items with `↻` or `+ Próxima`. It saves
   the other items of `Actual`, bought or not, in place of a delete or a carry-over. They are at the
   end of `Actual` and of `Próxima`, under `Volver a comprar`, and the add sheet finds them. A slide to the right brings one back to the
