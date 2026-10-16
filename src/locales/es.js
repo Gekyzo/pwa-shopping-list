@@ -73,7 +73,7 @@ export default {
   'trip.menu': 'Opciones de la compra',
   'trip.open': 'Lo que no has comprado',
   'trip.discard': 'Descartar',
-  'trip.keep': 'Mantener',
+  'trip.postpone': 'Aplazar',
 
   'recipes.search': 'Buscar receta o producto',
   'search.label': 'Buscar en la lista',
@@ -152,6 +152,7 @@ export default {
   'settings.themeLight': 'Claro',
   'settings.themeDark': 'Oscuro',
   'settings.tripEnd': 'Al terminar la compra',
+  'settings.tripEndHint': 'Descartar lleva lo no comprado a Volver a comprar; Aplazar lo deja en Actual.',
   'settings.modules': 'Módulos',
   'settings.moduleRecipes': 'Recetas y menú',
   'onboarding.recipes.title': '¿Qué comemos esta semana?',

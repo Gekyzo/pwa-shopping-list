@@ -73,7 +73,7 @@ export default {
   'trip.menu': 'Optionen für den Einkauf',
   'trip.open': 'Was du nicht gekauft hast',
   'trip.discard': 'Verwerfen',
-  'trip.keep': 'Behalten',
+  'trip.postpone': 'Verschieben',
 
   'recipes.search': 'Rezept oder Produkt suchen',
   'search.label': 'In der Liste suchen',
@@ -152,6 +152,7 @@ export default {
   'settings.themeLight': 'Hell',
   'settings.themeDark': 'Dunkel',
   'settings.tripEnd': 'Am Ende des Einkaufs',
+  'settings.tripEndHint': 'Verwerfen legt nicht Gekauftes in Wieder kaufen ab; Verschieben lässt es in Aktuell.',
   'settings.modules': 'Module',
   'settings.moduleRecipes': 'Rezepte und Menü',
   'onboarding.recipes.title': 'Was essen wir diese Woche?',

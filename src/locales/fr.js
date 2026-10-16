@@ -73,7 +73,7 @@ export default {
   'trip.menu': 'Options des courses',
   'trip.open': 'Ce que vous n’avez pas acheté',
   'trip.discard': 'Écarter',
-  'trip.keep': 'Garder',
+  'trip.postpone': 'Reporter',
 
   'recipes.search': 'Chercher une recette ou un produit',
   'search.label': 'Chercher dans la liste',
@@ -152,6 +152,7 @@ export default {
   'settings.themeLight': 'Clair',
   'settings.themeDark': 'Sombre',
   'settings.tripEnd': 'À la fin des courses',
+  'settings.tripEndHint': 'Écarter range ce qui n’est pas acheté dans Racheter ; Reporter le laisse dans Actuelle.',
   'settings.modules': 'Modules',
   'settings.moduleRecipes': 'Recettes et menu',
   'onboarding.recipes.title': 'On mange quoi cette semaine ?',
