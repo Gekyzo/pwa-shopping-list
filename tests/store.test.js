@@ -287,6 +287,11 @@ test('openItems gives the one-time items of Actual that are not ticked', () => {
   assert.deepEqual(names(openItems(start)), ['Bread', 'Salt']);
 });
 
+test('openItems follows the order of Actual', () => {
+  const start = { ...build(['Salt', 'active'], ['Bread', 'active']), sort: 'name' };
+  assert.deepEqual(names(openItems(start)), ['Bread', 'Salt']);
+});
+
 test('startNewShopping keeps the open items of keep in Actual', () => {
   const start = build(['Milk', 'active', { bought: true }], ['Bread', 'active'], ['Salt', 'active']);
   const { state } = startNewShopping(start, [find(start, 'Bread').id]);

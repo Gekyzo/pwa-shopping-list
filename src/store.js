@@ -102,7 +102,7 @@ export const removeFromNext = (state, id) => {
 // The one-time items of Active that are not ticked: Terminar compra saves each one, or keeps it in
 // Active when the user chose Mantener (TRIP-6).
 const isOpen = (item) => item.list === 'active' && !item.bought && !item.recurrent && !item.again;
-export const openItems = (state) => state.items.filter(isOpen);
+export const openItems = (state) => sortItems(state, state.items.filter(isOpen));
 
 export const canStartNewShopping = (state) =>
   state.items.some((item) => item.bought || item.list === 'next' || isOpen(item));
