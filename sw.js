@@ -3,6 +3,7 @@ const CACHE = 'shopping-shell-v14';
 const SHELL = [
   './',
   './index.html',
+  './vendor/design-system/design-system.css',
   './styles.css',
   './icons.svg',
   './manifest.webmanifest',

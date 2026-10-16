@@ -28,6 +28,7 @@ npm test         # unit tests (node:test)
 npm run serve    # http://localhost:8080
 npm run icons    # write the PNG icons again after a change in icons/source.png or scripts/make-icons.mjs
 npm run release  # bump the version, commit it and tag it vX.Y.Z
+npm run ds       # copy the design system again from ../pwa-design-system
 ```
 
 A change of behaviour changes its rule in `docs/spec/` in the same commit. The `pre-commit` hook
@@ -36,8 +37,12 @@ a commit that changes no rule.
 
 ## Design system
 
-The screens are built from the tokens, components, layouts and icons of `styles.css` and
-`icons.svg` ([`docs/spec/15-design-system.md`](docs/spec/15-design-system.md)). The catalogue shows
+The shared tokens, components and layouts come from `pwa-design-system`, copied into
+`vendor/design-system/` by `npm run ds`; `SOURCE.json` there names the version and the commit.
+`index.html` loads `vendor/design-system/design-system.css`, then `styles.css`, which holds the
+parts of the app only. Change a shared part in `pwa-design-system`, then run `npm run ds`; never
+edit `vendor/` by hand. The icons are in `icons.svg`
+([`docs/spec/15-design-system.md`](docs/spec/15-design-system.md)). The catalogue shows
 each part with its name, its variants, a live example and its markup: run `npm run serve`, then
 open http://localhost:8080/designs/. Ask for a screen with those names. `tests/design.test.js`
 fails when a class, a raw value or an icon is not part of the system.

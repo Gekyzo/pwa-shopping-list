@@ -1,54 +1,46 @@
 # Design system
 
-The parts that the screen is built from, and the rules that keep them the same on each screen.
-`designs/index.html` shows each part; `tests/design.test.js` checks the rules.
+The shared tokens, base rules, components, layouts and icon rules come from `pwa-design-system`.
+Its rules DS-1 to DS-8 are in its `docs/spec/01-design-system.md`, and LAY-1 to LAY-4 in its
+`docs/spec/02-layout.md`. `vendor/design-system/SOURCE.json` names the version and the commit that
+this app uses. `tests/design.test.js` runs each rule of `vendor/design-system/rules.js` over the
+files of the app, except the exceptions of DSV-5. `designs/index.html` shows each part, shared and
+own.
 
-## Layers
+This document holds the rules of the app only.
 
-- **DS-1** `styles.css` declares `@layer tokens, base, components, layouts, screens;`, and each
-  rule is in one of the five layers. `tokens` holds `:root` and the themes, `base` the element
-  defaults, `components` one block class per component, `layouts` the arrangement classes, and
-  `screens` the parts of one section.
+## The copy
 
-## Tokens
+- **DSV-1** `vendor/design-system/` holds `design-system.css`, `catalog.js`, `rules.js` and
+  `SOURCE.json`: the version, the commit and the sha256 of each file, and no other file. Only
+  `npm run ds` writes it, from `../pwa-design-system` with no uncommitted change of those files. A
+  file that differs from its hash fails `tests/vendor.test.js`. The tests read the copy only, so
+  they pass with no `../pwa-design-system`.
+- **DSV-2** `index.html` and `designs/index.html` link `vendor/design-system/design-system.css`
+  before `styles.css`, and `SHELL` of `sw.js` has both (SW-2). A layer of the two sheets is one
+  layer: a rule of `styles.css` comes after the shared rules of its layer.
+- **DSV-3** `styles.css` starts with the same layer statement and holds the parts of the app only:
+  its tokens, the `body` rule and the font of the controls, the screen parts, and its versions of
+  shared components. A version of a shared component starts with the block `/* @extends <name> */`,
+  in the same layer, so that it wins; the block documents the parts, variants and states that the
+  app adds. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
+  app has its own versions of `icon`, `nav-bar`, `toast`, `item-row`, `group-head` and `fab`.
+- **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
+  Nothing edits `vendor/` by hand.
 
-- **DS-2** A raw value of colour, spacing (`padding`, `margin`, `gap`, `inset`), font size, font
-  weight, font family, radius, shadow or duration is only in `@layer tokens`. Other layers use
-  the tokens. `0`, `1px` and `2px` border widths, `%`, `auto`, `inherit`, `currentColor`,
-  `none` and `transparent` are always allowed. `width` and `height` are raw only in
-  `components` and `layouts`.
+## Exceptions
 
-## Names
+- **DSV-5** The app has one layout at each width: the bar stays at the bottom, with no rail and no
+  `pane` layout (LAY-1 to LAY-3). Its versions of `nav-bar`, `toast` and `fab` reset the rules of
+  the shared sheet for `min-width: 600px`. The app does not pad the page, the toast or the add
+  button for a cutout of the phone (LAY-4); a change to that would show on the screen, and it is
+  left to the user. `tests/design.test.js` skips the checks of LAY-3 and LAY-4.
 
-- **DS-3** A component is a block class. A variant is a modifier class, valid only with its
-  block: `class="button primary"`. A state is an attribute; the state classes of DS-6 are the
-  exception.
-- **DS-4** No selector styles a bare element inside a class of another component, and no
-  selector has an id.
+## Parts of the app
 
-## Icons
-
-- **DS-5** Each icon is a `<symbol>` of `icons.svg`, used as
-  `<svg class="icon"><use href="icons.svg#id"/></svg>`. In `src/ui/` only `icon(name)` builds an
-  SVG. The drawings of the walkthrough are inline art inside `onboarding-art`.
-
-## Documentation
-
-- **DS-6** Each component, layout and screen part has one comment block before its first rule,
-  with the tags `@component`, `@summary`, `@scope`, `@part`, `@variant`, `@state` and
-  `@example`. `@state` names a class that the code sets for a passing state.
-- **DS-7** `designs/index.html`, served by `npm run serve`, shows the tokens, the icons and each
-  documented part with its live examples, its snippet and the files that use it. A menu lists
-  each section and part and links to its anchor (`#button`): a sidebar on a wide screen, a drawer
-  on a phone.
-
-## Parts
-
-The parts of the catalogue, by layer. A request for a screen names them.
+The parts of `styles.css`, by layer. The shared parts are in the design system.
 
 | Layer | Parts |
 |---|---|
-| base | `main` |
-| components | `icon`, `button`, `fab`, `chip`, `pill`, `segmented`, `switch`, `input`, `field`, `select`, `app-header`, `ring`, `nav-bar`, `badge`, `sheet`, `toast`, `banner`, `empty-state`, `item-list`, `item-row`, `swipe-action`, `section-head`, `group-head`, `list-group` |
-| layouts | `cluster`, `input-row`, `split` |
+| components | versions of `icon`, `nav-bar`, `toast`, `item-row`, `group-head`, `fab` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal`, `menu-actions` · settings: `settings`, `about`, `version-status` · nav: `dust` · onboarding: `onboarding`, `onboarding-art` |
