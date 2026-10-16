@@ -36,6 +36,7 @@ export default {
   'count.recipes': { one: '{count} receita', other: '{count} receitas' },
   'count.products': { one: '{count} produto', other: '{count} produtos' },
   'count.bought': { one: '{count} comprado', other: '{count} comprados' },
+  'count.saved': { one: '{count} guardado', other: '{count} guardados' },
 
   'row.always': 'Comprar sempre: {name}',
   'row.moveTo': 'Mover para {list}: {name}',
@@ -44,6 +45,7 @@ export default {
   'row.again': 'Comprar outra vez na próxima: {name}',
   'row.boughtToday': 'comprado hoje',
   'row.removeFrom': 'Tirar de {list}: {name}',
+  'row.bringTo': 'Adicionar a {list}: {name}',
   'edit.title': 'Editar',
   'edit.name': 'Nome',
   'edit.quantity': 'Quantidade',
@@ -65,7 +67,7 @@ export default {
     one: '{count} artigo volta nas próximas compras.',
     other: '{count} artigos voltam nas próximas compras.',
   },
-  'finish.gone': { one: '{count} é eliminado.', other: '{count} são eliminados.' },
+  'finish.saved': { one: '{count} é guardado.', other: '{count} são guardados.' },
   'trip.menu': 'Opções das compras',
 
   'recipes.search': 'Procurar receita ou produto',
@@ -97,6 +99,7 @@ export default {
   'where.inNext': 'já em {list}',
   'where.boughtAddNext': 'comprado · adicionar a {list}',
   'where.inActiveMove': 'em {list} · mover',
+  'where.saved': 'guardado · adicionar',
 
   'arrange.label': 'Agrupar e ordenar',
   'arrange.groupBy': 'Agrupar por',
@@ -130,7 +133,7 @@ export default {
   'onboarding.sections.text': 'Deslize para os lados ou use a barra inferior para navegar entre secções. Com `+` adiciona o que precisar.',
 
   'settings.back': { one: '{count} volta', other: '{count} voltam' },
-  'settings.gone': { one: '{count} sai', other: '{count} saem' },
+  'settings.saved': { one: '{count} é guardado', other: '{count} são guardados' },
   'settings.backup': 'Cópia de segurança',
   'settings.export': 'Exportar',
   'settings.import': 'Importar',

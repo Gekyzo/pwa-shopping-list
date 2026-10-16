@@ -36,6 +36,7 @@ export default {
   'count.recipes': { one: '{count} Rezept', other: '{count} Rezepte' },
   'count.products': { one: '{count} Produkt', other: '{count} Produkte' },
   'count.bought': { one: '{count} gekauft', other: '{count} gekauft' },
+  'count.saved': { one: '{count} gespeichert', other: '{count} gespeichert' },
 
   'row.always': 'Immer kaufen: {name}',
   'row.moveTo': 'Nach {list} verschieben: {name}',
@@ -44,6 +45,7 @@ export default {
   'row.again': 'Nächstes Mal wieder kaufen: {name}',
   'row.boughtToday': 'heute gekauft',
   'row.removeFrom': 'Aus {list} entfernen: {name}',
+  'row.bringTo': 'Zu {list} hinzufügen: {name}',
   'edit.title': 'Bearbeiten',
   'edit.name': 'Name',
   'edit.quantity': 'Menge',
@@ -65,7 +67,7 @@ export default {
     one: '{count} Artikel kommt beim nächsten Einkauf zurück.',
     other: '{count} Artikel kommen beim nächsten Einkauf zurück.',
   },
-  'finish.gone': { one: '{count} wird gelöscht.', other: '{count} werden gelöscht.' },
+  'finish.saved': { one: '{count} wird gespeichert.', other: '{count} werden gespeichert.' },
   'trip.menu': 'Optionen für den Einkauf',
 
   'recipes.search': 'Rezept oder Produkt suchen',
@@ -97,6 +99,7 @@ export default {
   'where.inNext': 'schon in {list}',
   'where.boughtAddNext': 'gekauft · zu {list} hinzufügen',
   'where.inActiveMove': 'in {list} · verschieben',
+  'where.saved': 'gespeichert · hinzufügen',
 
   'arrange.label': 'Gruppieren und sortieren',
   'arrange.groupBy': 'Gruppieren nach',
@@ -130,7 +133,7 @@ export default {
   'onboarding.sections.text': 'Wische zur Seite oder nutze die untere Leiste, um zwischen den Bereichen zu wechseln. Mit `+` fügst du hinzu, was du brauchst.',
 
   'settings.back': { one: '{count} kommt zurück', other: '{count} kommen zurück' },
-  'settings.gone': { one: '{count} geht', other: '{count} gehen' },
+  'settings.saved': { one: '{count} wird gespeichert', other: '{count} werden gespeichert' },
   'settings.backup': 'Sicherung',
   'settings.export': 'Exportieren',
   'settings.import': 'Importieren',

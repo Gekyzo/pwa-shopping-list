@@ -70,8 +70,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   order of the items that stay does not change.
 - **TRIP-4** The control shows in three places:
   1. A banner `¿Has terminado?` in `Actual`, when the list has items and all are ticked. Its text
-     gives the count that comes back and the count that is deleted.
-  2. The entry of the trip sheet of `Actual` (NAV-9), with `N vuelven · N se van`. It is disabled
+     gives the count that comes back and the count that is saved.
+  2. The entry of the trip sheet of `Actual` (NAV-9), with `N vuelven · N se guardan`. It is disabled
      when TRIP-1 does not hold.
   3. The button `Traer N artículos de Próxima`, in the empty state of `Actual`, when items wait in
      `list: 'next'`. Its message is `Artículos traídos de Próxima.`
@@ -109,6 +109,7 @@ sheet is open.
   | `Próxima` | In the `Próxima` view | `ya en Próxima` | Nothing |
   | `Próxima` | Ticked, not in the view | `comprado · añadir a Próxima` | Sets `again` |
   | `Próxima` | To buy in `Actual` | `en Actual · mover` | Moves to `Próxima` |
+  | Either | Saved | `guardado · añadir` | Goes to the target, not ticked (LIST-32) |
 
 - **ADD-4** When no item has the typed name, the list ends with `+ Crear «name»`, which does the
   same as **Añadir**.
@@ -149,6 +150,16 @@ sheet is open.
   its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.
 - **LIST-32** A bring back puts a saved item in the target list, not ticked. `recurrent` does not
   change. A saved item cannot be ticked or moved: a move gives `error.itemSaved`.
+- **LIST-34** `Próxima` ends with the section `N guardados`, below the empty state when the list is
+  empty. It shows when an item is saved, and is closed at first; a tap on its head opens and closes
+  it. Open, it lists the saved items in name order, with their quantity and shops. When the module
+  `Próxima` is off, the section is at the end of `Actual`.
+- **LIST-35** A tap on the name or on the button `+ <list>` of a saved row brings the item to the
+  list in view (LIST-32), with `"name" añadido a <list>.` and `Deshacer`. The trash button deletes
+  the item for good, with `Deshacer`.
+- **LIST-36** The search of the list (LIST-22) filters the saved items too. The section shows open
+  while the field has a text, and does not show with no saved match. The search button shows when
+  the list or the section has an item.
 - **LIST-33** A saved item counts in no header figure, in no trip figure and not in the bottom
   bar.
 
