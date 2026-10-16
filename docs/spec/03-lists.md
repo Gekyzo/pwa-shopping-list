@@ -152,10 +152,10 @@ sheet is open.
   its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.
 - **LIST-32** A bring back puts a saved item in the target list, not ticked. `recurrent` does not
   change. A saved item cannot be ticked or moved: a move gives `error.itemSaved`.
-- **LIST-34** `Próxima` ends with the section `N guardados`, below the empty state when the list is
-  empty. It shows when an item is saved, and is closed at first; a tap on its head opens and closes
-  it. Open, it lists the saved items in name order, with their quantity and shops. When the module
-  `Próxima` is off, the section is at the end of `Actual`.
+- **LIST-34** `Actual` and `Próxima` end with the section `N guardados`, below the empty state when
+  the list is empty. It shows when an item is saved, and is closed at first; a tap on its head opens
+  and closes it, in the two lists at once. Open, it lists the saved items in name order, with their
+  quantity and shops.
 - **LIST-35** A tap on the name or on the button `+ <list>` of a saved row brings the item to the
   list in view (LIST-32), with `"name" añadido a <list>.` and `Deshacer`. The trash button deletes
   the item for good, with `Deshacer`.
