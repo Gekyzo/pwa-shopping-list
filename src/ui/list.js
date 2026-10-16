@@ -52,11 +52,8 @@ const listNodes = (items) => {
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
-// The list that shows the saved items: Próxima, or Actual when the module of Próxima is off.
-const savedHost = () => (isOn('next') ? 'next' : 'active');
-
+// Actual and Próxima end with the saved items; a tap brings one to the list in view.
 const savedNodes = () => {
-  if (ui.view !== savedHost()) return [];
   const saved = store.savedItems(viewState()).filter(found);
   return saved.length ? savedSection(saved, ui.view) : [];
 };
@@ -102,7 +99,7 @@ const emptyText = () => {
 // One field serves the three sections: Recetas shows it when it has a recipe, and a list shows it
 // after a tap on the search button, which a list with no item does not have.
 const renderSearch = (items, searchable) => {
-  const canOpen = inList() && (items.length > 0 || (ui.view === savedHost() && store.savedItems(viewState()).length > 0));
+  const canOpen = inList() && (items.length > 0 || store.savedItems(viewState()).length > 0);
   if (!canOpen) ui.searchOpen = false;
   const shown = searchable || ui.searchOpen;
   if (!shown) ui.query = '';
