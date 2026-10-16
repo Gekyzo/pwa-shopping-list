@@ -1,6 +1,6 @@
 {
-  "name": "Grocely - Lista de la compra",
-  "short_name": "Grocely",
+  "name": "Bodega - Lista de la compra",
+  "short_name": "Bodega",
   "description": "Lista de la compra con una lista actual y una lista próxima",
   "lang": "es",
   "id": "/shopping-list/",

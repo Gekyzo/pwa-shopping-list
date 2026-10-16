@@ -13,8 +13,8 @@ const { localizeManifest } = vm.runInNewContext(`${source}\n;({ localizeManifest
 const plain = (value) => JSON.parse(JSON.stringify(value));
 
 const build = () => ({
-  name: 'Grocely - Lista de la compra',
-  short_name: 'Grocely',
+  name: 'Bodega - Lista de la compra',
+  short_name: 'Bodega',
   description: 'Lista de la compra',
   lang: 'es',
   id: './',
@@ -22,15 +22,15 @@ const build = () => ({
 });
 
 test('localizeManifest takes the language, the name and the description of the text', () => {
-  const manifest = localizeManifest(build(), { lang: 'en', name: 'Grocely - Shopping list', description: 'Shopping list' });
+  const manifest = localizeManifest(build(), { lang: 'en', name: 'Bodega - Shopping list', description: 'Shopping list' });
   assert.equal(manifest.lang, 'en');
-  assert.equal(manifest.name, 'Grocely - Shopping list');
+  assert.equal(manifest.name, 'Bodega - Shopping list');
   assert.equal(manifest.description, 'Shopping list');
 });
 
 test('localizeManifest keeps the short name and the other members', () => {
-  const manifest = localizeManifest(build(), { lang: 'en', name: 'Grocely - Shopping list', description: 'Shopping list' });
-  assert.equal(manifest.short_name, 'Grocely');
+  const manifest = localizeManifest(build(), { lang: 'en', name: 'Bodega - Shopping list', description: 'Shopping list' });
+  assert.equal(manifest.short_name, 'Bodega');
   assert.equal(manifest.id, build().id);
   assert.deepEqual(manifest.icons, build().icons);
 });
@@ -44,11 +44,11 @@ test('localizeManifest ignores a member of the text that is not a non-empty stri
   assert.equal(manifest.lang, 'en');
   assert.equal(manifest.name, build().name);
   assert.equal(manifest.description, build().description);
-  assert.equal(manifest.short_name, 'Grocely');
+  assert.equal(manifest.short_name, 'Bodega');
 });
 
 test('localizeManifest does not change its input', () => {
   const input = build();
-  localizeManifest(input, { lang: 'en', name: 'Grocely - Shopping list', description: 'Shopping list' });
+  localizeManifest(input, { lang: 'en', name: 'Bodega - Shopping list', description: 'Shopping list' });
   assert.deepEqual(input, build());
 });

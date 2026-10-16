@@ -23,8 +23,8 @@ export default {
 
   'header.today': 'Courses du jour',
   'header.next': 'Prochaines courses',
-  'header.settingsSubtitle': 'Grocely',
-  'app.title': 'Grocely - Liste de courses',
+  'header.settingsSubtitle': 'Bodega',
+  'app.title': 'Bodega - Liste de courses',
   'app.description': 'Liste de courses avec une liste actuelle et une prochaine liste',
   'header.empty': 'La liste est vide',
   'header.allBought': 'Tout est acheté',

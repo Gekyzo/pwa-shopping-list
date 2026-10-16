@@ -23,8 +23,8 @@ export default {
 
   'header.today': 'Einkauf heute',
   'header.next': 'Nächster Einkauf',
-  'header.settingsSubtitle': 'Grocely',
-  'app.title': 'Grocely - Einkaufsliste',
+  'header.settingsSubtitle': 'Bodega',
+  'app.title': 'Bodega - Einkaufsliste',
   'app.description': 'Einkaufsliste mit einer aktuellen und einer nächsten Liste',
   'header.empty': 'Die Liste ist leer',
   'header.allBought': 'Alles gekauft',
