@@ -23,8 +23,8 @@ export default {
 
   'header.today': 'Compra de hoy',
   'header.next': 'Próxima compra',
-  'header.settingsSubtitle': 'Grocely',
-  'app.title': 'Grocely - Lista de la compra',
+  'header.settingsSubtitle': 'Bodega',
+  'app.title': 'Bodega - Lista de la compra',
   'app.description': 'Lista de la compra con una lista actual y una lista próxima',
   'header.empty': 'La lista está vacía',
   'header.allBought': 'Todo comprado',

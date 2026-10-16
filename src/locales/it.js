@@ -23,8 +23,8 @@ export default {
 
   'header.today': 'Spesa di oggi',
   'header.next': 'Prossima spesa',
-  'header.settingsSubtitle': 'Grocely',
-  'app.title': 'Grocely - Lista della spesa',
+  'header.settingsSubtitle': 'Bodega',
+  'app.title': 'Bodega - Lista della spesa',
   'app.description': 'Lista della spesa con una lista attuale e una lista successiva',
   'header.empty': 'La lista è vuota',
   'header.allBought': 'Tutto comprato',
