@@ -32,10 +32,12 @@ This document holds the rules of the app only.
 ## Exceptions
 
 - **DSV-5** The app has one layout at each width: the bar stays at the bottom, with no rail and no
-  `pane` layout (LAY-1 to LAY-3). Its versions of `nav-bar`, `toast` and `fab` reset the rules of
-  the shared sheet for `min-width: 600px`. The app does not pad the page, the toast or the add
-  button for a cutout of the phone (LAY-4); a change to that would show on the screen, and it is
-  left to the user. `tests/design.test.js` skips the checks of LAY-3 and LAY-4.
+  `pane` layout. So the app does not meet LAY-1 and LAY-2; the design system has no check of
+  them, so no test reports it. Its versions of `nav-bar`, `toast` and `fab` reset the rules of the
+  shared sheet for `min-width: 600px`. LAY-3 runs and passes: it checks the `pane` block of the
+  shared sheet, and the app has no list and detail section. The app does not pad the page, the
+  toast or the add button for a cutout of the phone (LAY-4); a change to that would show on the
+  screen, and it is left to the user. `tests/design.test.js` skips the check of LAY-4 only.
 
 ## Parts of the app
 
