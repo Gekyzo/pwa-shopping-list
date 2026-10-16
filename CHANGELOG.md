@@ -9,7 +9,12 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- `Ajustes` has **Secciones de la tienda**: the sections of the store, such as `Lácteos`, in the
+  order of your walk. Add, rename, move and delete them, or start with **Usar secciones
+  habituales**.
+- `Editar` sets the section of an item, below its shops.
+- **Agrupar por** has **Secciones**: the list follows the order of the sections, also in a shop
+  list. The search of a list also finds the items of a section.
 
 ## 1.0.33 - 2026-10-16
 
