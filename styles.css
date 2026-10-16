@@ -52,6 +52,9 @@
     --nav-height: 60px;
     --art-width: 240px; /* the drawings of the walkthrough */
     --logo: 96px; /* the app icon at the top of the walkthrough */
+    --corner-art: 260px; /* the basket in the corner of a list */
+    --corner-out: -50px; /* how far the basket goes out of the corner */
+    --corner-opacity: 0.06;
 
     --shadow-s: 0 1px 3px rgb(0 0 0 / 0.3);
     --shadow-l: 0 6px 18px rgb(0 0 0 / 0.25);
@@ -169,6 +172,8 @@
   /* @component icon
      @summary A line icon of icons.svg. It takes the colour of the text around it.
      @variant small  The size --icon-s, for an icon beside a label.
+     @variant corner    The basket behind a list, in the bottom corner on the other side of the +
+                      button. Tilted, cut by the corner, nearly transparent. One in the page.
      @example <svg class="icon" aria-hidden="true"><use href="icons.svg#cart"/></svg>
      @example <svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg> */
   .icon {
@@ -185,6 +190,27 @@
   .icon.small {
     width: var(--icon-s);
     height: var(--icon-s);
+  }
+
+  /* Behind the content (z-index -1): the rows, the + button and the bottom bar cover it. Its bottom
+     edge is measured from the top of the bottom bar. */
+  .icon.corner {
+    position: fixed;
+    z-index: -1;
+    left: var(--corner-out);
+    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--corner-out));
+    width: var(--corner-art);
+    height: var(--corner-art);
+    stroke-width: 0.75;
+    opacity: var(--corner-opacity);
+    transform: rotate(30deg);
+    pointer-events: none;
+  }
+
+  [data-hand="left"] .icon.corner {
+    left: auto;
+    right: var(--corner-out);
+    transform: rotate(-30deg);
   }
 
   /* @component button
