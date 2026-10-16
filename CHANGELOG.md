@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.34 - 2026-10-17
+
 - The app is now called **Bodega**.
 - `Ajustes` has **Secciones de la tienda**: the sections of the store, such as `Lácteos`, in the
   order of your walk. Add, rename, move and delete them, or start with **Usar secciones
