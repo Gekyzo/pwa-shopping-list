@@ -220,5 +220,44 @@ export const boughtSection = (bought) => {
   return [el('li', { className: 'section-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
 };
 
+// A saved item: a tap on its name or on its pill brings it to `list`, and the trash deletes it.
+const savedNode = (item, list) => {
+  const params = { name: item.name, list };
+  const bring = () => apply(store.bringToList(state, item.id, list), { undoText: say('toast.addedTo', params) });
+  const name = el('button', { type: 'button', className: 'item-row-name', onclick: bring }, nameParts(item));
+  name.setAttribute('aria-label', say('row.bringTo', params));
+  const pill = el('button', { type: 'button', className: 'pill ghost', textContent: `+ ${t(`list.${list}`)}`, onclick: bring });
+  pill.setAttribute('aria-label', say('row.bringTo', params));
+  const trash = el('button', {
+    type: 'button',
+    className: 'button icon',
+    onclick: () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
+  }, [icon('trash')]);
+  trash.setAttribute('aria-label', t('row.delete', { name: item.name }));
+  const node = el('li', { className: 'item-row' }, [el('div', { className: 'item-row-body' }, [name, pill, trash])]);
+  node.dataset.id = item.id;
+  return node;
+};
+
+// The saved items, behind one row that opens and closes them, as the ticked items of Actual. A
+// tap on an item brings it to `list`. A search keeps them open, so that a saved match is in view.
+export const savedSection = (saved, list) => {
+  const open = ui.savedOpen || searching();
+  const button = el('button', {
+    type: 'button',
+    className: 'section-head-button',
+    disabled: searching(),
+    onclick: () => {
+      ui.savedOpen = !ui.savedOpen;
+      render();
+    },
+  }, [
+    el('span', { textContent: t('count.saved', { count: saved.length }) }),
+    el('span', { className: 'chevron', textContent: open ? '▾' : '▸' }),
+  ]);
+  button.setAttribute('aria-expanded', String(open));
+  return [el('li', { className: 'section-head' }, [button]), ...(open ? saved.map((item) => savedNode(item, list)) : [])];
+};
+
 export const groupHead = (title, count) =>
   el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);

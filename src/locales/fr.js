@@ -36,6 +36,7 @@ export default {
   'count.recipes': { one: '{count} recette', other: '{count} recettes' },
   'count.products': { one: '{count} produit', other: '{count} produits' },
   'count.bought': { one: '{count} acheté', other: '{count} achetés' },
+  'count.saved': { one: '{count} enregistré', other: '{count} enregistrés' },
 
   'row.always': 'Toujours acheter : {name}',
   'row.moveTo': 'Déplacer vers {list} : {name}',
@@ -44,6 +45,7 @@ export default {
   'row.again': 'Acheter de nouveau la prochaine fois : {name}',
   'row.boughtToday': 'acheté aujourd’hui',
   'row.removeFrom': 'Retirer de {list} : {name}',
+  'row.bringTo': 'Ajouter à {list} : {name}',
   'edit.title': 'Modifier',
   'edit.name': 'Nom',
   'edit.quantity': 'Quantité',
@@ -65,7 +67,7 @@ export default {
     one: '{count} article revient aux prochaines courses.',
     other: '{count} articles reviennent aux prochaines courses.',
   },
-  'finish.gone': { one: '{count} est supprimé.', other: '{count} sont supprimés.' },
+  'finish.saved': { one: '{count} est enregistré.', other: '{count} sont enregistrés.' },
   'trip.menu': 'Options des courses',
 
   'recipes.search': 'Chercher une recette ou un produit',
@@ -97,6 +99,7 @@ export default {
   'where.inNext': 'déjà dans {list}',
   'where.boughtAddNext': 'acheté · ajouter à {list}',
   'where.inActiveMove': 'dans {list} · déplacer',
+  'where.saved': 'enregistré · ajouter',
 
   'arrange.label': 'Grouper et trier',
   'arrange.groupBy': 'Grouper par',
@@ -130,7 +133,7 @@ export default {
   'onboarding.sections.text': 'Faites glisser sur les côtés ou utilisez la barre inférieure pour naviguer entre les sections. Avec `+`, ajoutez ce qu’il vous faut.',
 
   'settings.back': { one: '{count} revient', other: '{count} reviennent' },
-  'settings.gone': { one: '{count} s’en va', other: '{count} s’en vont' },
+  'settings.saved': { one: '{count} est enregistré', other: '{count} sont enregistrés' },
   'settings.backup': 'Sauvegarde',
   'settings.export': 'Exporter',
   'settings.import': 'Importer',

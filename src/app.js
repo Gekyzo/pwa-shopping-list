@@ -76,7 +76,7 @@ const renderAll = () => {
   renderVersion();
   renderSample();
   renderInstall();
-  const outcome = [t('settings.back', { count: summary.back }), t('settings.gone', { count: summary.saved })];
+  const outcome = [t('settings.back', { count: summary.back }), t('settings.saved', { count: summary.saved })];
   $('finish-menu-text').textContent = outcome.join(' · ');
   renderTrip();
 

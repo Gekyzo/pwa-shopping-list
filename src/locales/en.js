@@ -36,6 +36,7 @@ export default {
   'count.recipes': { one: '{count} recipe', other: '{count} recipes' },
   'count.products': { one: '{count} product', other: '{count} products' },
   'count.bought': { one: '{count} bought', other: '{count} bought' },
+  'count.saved': { one: '{count} saved', other: '{count} saved' },
 
   'row.always': 'Always buy: {name}',
   'row.moveTo': 'Move to {list}: {name}',
@@ -44,6 +45,7 @@ export default {
   'row.again': 'Buy again next time: {name}',
   'row.boughtToday': 'bought today',
   'row.removeFrom': 'Remove from {list}: {name}',
+  'row.bringTo': 'Add to {list}: {name}',
   'edit.title': 'Edit',
   'edit.name': 'Name',
   'edit.quantity': 'Quantity',
@@ -65,7 +67,7 @@ export default {
     one: '{count} item comes back in the next shopping.',
     other: '{count} items come back in the next shopping.',
   },
-  'finish.gone': { one: '{count} is deleted.', other: '{count} are deleted.' },
+  'finish.saved': { one: '{count} is saved.', other: '{count} are saved.' },
   'trip.menu': 'Shopping options',
 
   'recipes.search': 'Search recipe or product',
@@ -97,6 +99,7 @@ export default {
   'where.inNext': 'already in {list}',
   'where.boughtAddNext': 'bought · add to {list}',
   'where.inActiveMove': 'in {list} · move',
+  'where.saved': 'saved · add',
 
   'arrange.label': 'Group and sort',
   'arrange.groupBy': 'Group by',
@@ -130,7 +133,7 @@ export default {
   'onboarding.sections.text': 'Slide to the sides or use the bottom bar to move between sections. With `+` you add what you need.',
 
   'settings.back': { one: '{count} comes back', other: '{count} come back' },
-  'settings.gone': { one: '{count} goes', other: '{count} go' },
+  'settings.saved': { one: '{count} is saved', other: '{count} are saved' },
   'settings.backup': 'Backup',
   'settings.export': 'Export',
   'settings.import': 'Import',

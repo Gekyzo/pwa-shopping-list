@@ -4,7 +4,7 @@ import * as shops from '#shops';
 import * as menu from '#menu';
 import { $, el, state, ui, t, say, isOn, shopLists, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
-import { itemNode, boughtSection, groupHead } from '#ui/rows';
+import { itemNode, boughtSection, savedSection, groupHead } from '#ui/rows';
 import { recipeNode } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
 
@@ -52,7 +52,16 @@ const listNodes = (items) => {
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
-const finishText = ({ back, saved }) => `${t('finish.back', { count: back })} ${t('finish.gone', { count: saved })}`;
+// The list that shows the saved items: Próxima, or Actual when the module of Próxima is off.
+const savedHost = () => (isOn('next') ? 'next' : 'active');
+
+const savedNodes = () => {
+  if (ui.view !== savedHost()) return [];
+  const saved = store.savedItems(viewState()).filter(found);
+  return saved.length ? savedSection(saved, ui.view) : [];
+};
+
+const finishText = ({ back, saved }) => `${t('finish.back', { count: back })} ${t('finish.saved', { count: saved })}`;
 
 const activeSubtitle = ({ total, left }) => {
   if (!total) return t('header.empty');
@@ -93,7 +102,7 @@ const emptyText = () => {
 // One field serves the three sections: Recetas shows it when it has a recipe, and a list shows it
 // after a tap on the search button, which a list with no item does not have.
 const renderSearch = (items, searchable) => {
-  const canOpen = inList() && items.length > 0;
+  const canOpen = inList() && (items.length > 0 || (ui.view === savedHost() && store.savedItems(viewState()).length > 0));
   if (!canOpen) ui.searchOpen = false;
   const shown = searchable || ui.searchOpen;
   if (!shown) ui.query = '';
@@ -137,13 +146,16 @@ export const renderList = (summary) => {
   const searchable = ui.view === 'recipes' && state.recipes.length > 0;
   renderSearch(items, searchable);
   const nodes = nodesOf(items);
+  const saved = inList() ? savedNodes() : [];
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
   if (ui.view === 'next' && nodes.length) {
     $('items').append(el('p', { className: 'hint', textContent: t('next.hint') }));
   }
+  $('saved').hidden = saved.length === 0;
+  $('saved').replaceChildren(...saved);
 
-  $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
+  $('empty').hidden = ui.view === 'settings' || nodes.length > 0 || (saved.length > 0 && searching());
   $('empty-text').textContent = emptyText();
   $('bring').hidden = !(isOn('next') && ui.view === 'active' && summary.incoming > 0) || searching();
   $('bring').textContent = say('empty.bring', { count: summary.incoming, list: 'next' });

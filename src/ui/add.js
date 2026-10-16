@@ -5,6 +5,7 @@ import { $, el, state, ui, t, say, textOf, isOn, showToast, apply, render } from
 import { inList, endSearch } from '#ui/view';
 
 const whereText = (item) => {
+  if (item.list === 'saved') return t('where.saved');
   const inNextView = item.list === 'next' || (item.bought && (item.recurrent || item.again));
   if (ui.target === 'active') {
     if (item.list === 'next') return say('where.inNextBring', { list: 'next' });

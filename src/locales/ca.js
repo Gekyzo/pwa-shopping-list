@@ -36,6 +36,7 @@ export default {
   'count.recipes': { one: '{count} recepta', other: '{count} receptes' },
   'count.products': { one: '{count} producte', other: '{count} productes' },
   'count.bought': { one: '{count} comprat', other: '{count} comprats' },
+  'count.saved': { one: '{count} desat', other: '{count} desats' },
 
   'row.always': 'Compra sempre: {name}',
   'row.moveTo': 'Mou a {list}: {name}',
@@ -44,6 +45,7 @@ export default {
   'row.again': 'Compra una altra vegada la pròxima: {name}',
   'row.boughtToday': 'comprat avui',
   'row.removeFrom': 'Treu de {list}: {name}',
+  'row.bringTo': 'Afegeix a {list}: {name}',
   'edit.title': 'Edita',
   'edit.name': 'Nom',
   'edit.quantity': 'Quantitat',
@@ -65,7 +67,7 @@ export default {
     one: '{count} article torna a la pròxima compra.',
     other: '{count} articles tornen a la pròxima compra.',
   },
-  'finish.gone': { one: '{count} s’elimina.', other: '{count} s’eliminen.' },
+  'finish.saved': { one: '{count} es desa.', other: '{count} es desen.' },
   'trip.menu': 'Opcions de la compra',
 
   'recipes.search': 'Cerca recepta o producte',
@@ -97,6 +99,7 @@ export default {
   'where.inNext': 'ja a {list}',
   'where.boughtAddNext': 'comprat · afegeix a {list}',
   'where.inActiveMove': 'a {list} · mou',
+  'where.saved': 'desat · afegir',
 
   'arrange.label': 'Agrupa i ordena',
   'arrange.groupBy': 'Agrupa per',
@@ -130,7 +133,7 @@ export default {
   'onboarding.sections.text': 'Llisca als costats o fes servir la barra inferior per navegar entre seccions. Amb `+` afegeixes el que necessitis.',
 
   'settings.back': { one: '{count} torna', other: '{count} tornen' },
-  'settings.gone': { one: '{count} se’n va', other: '{count} se’n van' },
+  'settings.saved': { one: '{count} es desa', other: '{count} es desen' },
   'settings.backup': 'Còpia de seguretat',
   'settings.export': 'Exporta',
   'settings.import': 'Importa',

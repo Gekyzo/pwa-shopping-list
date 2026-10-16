@@ -12,7 +12,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
   The sections are configurable in the settings.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
-- **Guardar productos.** Al terminar la compra, los artículos comprados no deben desaparecer deben poder volver a incluirse fácilmente en la siguiente lista
 
 ### Deferred
 

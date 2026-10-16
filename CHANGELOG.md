@@ -9,7 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- **Terminar compra** no longer deletes the bought one-time items: it saves them. They are at the
+  end of `Próxima`, under `N guardados`, and the add sheet finds them. A tap brings one back to the
+  list, with its shops and its quantity.
 
 ## 1.0.30 - 2026-10-16
 
