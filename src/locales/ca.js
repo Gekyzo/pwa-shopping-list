@@ -35,7 +35,7 @@ export default {
   'count.items': { one: '{count} article', other: '{count} articles' },
   'count.recipes': { one: '{count} recepta', other: '{count} receptes' },
   'count.products': { one: '{count} producte', other: '{count} productes' },
-  'count.bought': { one: '{count} comprat', other: '{count} comprats' },
+  'count.bought': { one: 'Comprats ({count})', other: 'Comprats ({count})' },
   'count.saved': { one: 'Tornar a comprar ({count})', other: 'Tornar a comprar ({count})' },
 
   'row.always': 'Compra sempre: {name}',

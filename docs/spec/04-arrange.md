@@ -54,7 +54,7 @@ the arrange sheet in `src/ui/arrange.js`.
 - **GROUP-8** The head of a group shows the name of the recipe and `ticked/total`, or `✓` when all
   its members are ticked. The group lists only the members to buy.
 - **GROUP-9** The items to buy that are in no group show below the head `Otros`.
-- **GROUP-10** The ticked items show one time each in `N comprados`, with no group.
+- **GROUP-10** The ticked items show one time each in `Comprados (N)`, with no group.
 
 ### By shop
 

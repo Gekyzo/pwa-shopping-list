@@ -35,7 +35,7 @@ export default {
   'count.items': { one: '{count} item', other: '{count} items' },
   'count.recipes': { one: '{count} recipe', other: '{count} recipes' },
   'count.products': { one: '{count} product', other: '{count} products' },
-  'count.bought': { one: '{count} bought', other: '{count} bought' },
+  'count.bought': { one: 'Bought ({count})', other: 'Bought ({count})' },
   'count.saved': { one: 'Buy again ({count})', other: 'Buy again ({count})' },
 
   'row.always': 'Always buy: {name}',

@@ -65,7 +65,7 @@ of it.
   quantity has no message and no `Deshacer`. The sheet opens with no focus in a field.
 - **ROW-8** The click that follows a drag, a hold or a section slide is ignored for 350 ms, so it
   does not tick an item or press a button.
-- **ROW-9** A ticked row closes in 200 ms before it goes to `N comprados`. A row that `Deshacer`
+- **ROW-9** A ticked row closes in 200 ms before it goes to `Comprados (N)`. A row that `Deshacer`
   puts back opens the same way.
 - **ROW-10** A long press of a finger on a row does not open the menu of the browser.
 - **ROW-11** A slide of a row to the right runs an action at the release: in `Actual` it ticks or
