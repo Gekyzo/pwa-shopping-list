@@ -5,7 +5,7 @@ the next trip, recipes, a menu of the week that fills the basket, and shops, in 
 four pages. Plain HTML, CSS and ES modules, with no build step and no dependencies. The data stays
 in the `localStorage` of the browser.
 
-- App: https://gekyzo.github.io/shopping-list/
+- App: https://gekyzo.github.io/pwa-shopping-list/
 - Specification: [`docs/spec/`](docs/spec/README.md), with one identifier for each rule.
 - Changes by version: [`CHANGELOG.md`](CHANGELOG.md).
 

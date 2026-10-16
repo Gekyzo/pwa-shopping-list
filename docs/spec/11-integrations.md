@@ -18,7 +18,7 @@ app (MacroDroid, Tasker) owns the geofence and opens the app with a parameter.
 
 Setup of the automation app: install the app from Chrome first, so that Android opens the URL in
 the installed app and its data. Trigger: a geofence on entry, radius 100 to 150 m. Action: open
-`https://gekyzo.github.io/shopping-list/?arrival`. The automation app needs the location
+`https://gekyzo.github.io/pwa-shopping-list/?arrival`. The automation app needs the location
 permission **Allow all the time** and no battery optimisation.
 
 Limits: no geolocation in the app, no system notification, one message for each place, no setting

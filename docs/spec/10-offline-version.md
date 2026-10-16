@@ -73,7 +73,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 ## Deploy
 
 - **VER-9** The app is a static site: the repository root, served over HTTPS at
-  `https://gekyzo.github.io/shopping-list/`. A release tag `vX.Y.Z` is a deploy: its push runs
+  `https://gekyzo.github.io/pwa-shopping-list/`. A release tag `vX.Y.Z` is a deploy: its push runs
   `.github/workflows/pages.yml`, which publishes the tagged commit to GitHub Pages. A push to
   `main` deploys nothing. The Pages source of the repository is GitHub Actions, and its
   `github-pages` environment allows the tags `v*`.
