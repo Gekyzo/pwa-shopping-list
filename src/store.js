@@ -101,10 +101,11 @@ export const canStartNewShopping = (state) => state.items.some((item) => item.bo
 
 export const startNewShopping = (state) => {
   if (!canStartNewShopping(state)) return reject(state, 'error.nothingToStart', { list: 'next' });
-  // A ticked one-time item is saved, not deleted, so that the user can bring it back.
+  // A one-time item of Active, ticked or not, is saved, not kept for the next trip: only a
+  // recurrent item, an item with `again` and an item of Next are in Active at the next trip.
   const items = state.items.map((item) => {
     if (item.list === 'saved') return item;
-    const list = item.bought && !item.recurrent && !item.again ? 'saved' : 'active';
+    const list = item.list === 'active' && !item.recurrent && !item.again ? 'saved' : 'active';
     return { ...item, list, bought: false, again: false };
   });
   return { state: { ...state, items, sent: [] } };
@@ -225,8 +226,8 @@ export const bringAllToActual = (state) => {
 // The saved items, in name order.
 export const savedItems = (state) => state.items.filter((item) => item.list === 'saved').sort(byName);
 
-// Figures for the header and for the preview of `startNewShopping`:
-// `back` items stay for the next trip, `saved` items are saved, `incoming` items wait in Next.
+// Figures for the header and for the preview of `startNewShopping`: `back` ticked items stay for
+// the next trip, `saved` one-time items of Active are saved, `incoming` items wait in Next.
 export const tripSummary = (state) => {
   const active = state.items.filter((item) => item.list === 'active');
   const bought = active.filter((item) => item.bought);
@@ -235,7 +236,7 @@ export const tripSummary = (state) => {
     total: active.length,
     left: active.length - bought.length,
     back,
-    saved: bought.length - back,
+    saved: active.filter((item) => !item.recurrent && !item.again).length,
     incoming: state.items.filter((item) => item.list === 'next').length,
   };
 };

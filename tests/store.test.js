@@ -248,14 +248,16 @@ test('startNewShopping applies each rule', () => {
     ['Soap', 'active', { bought: true, again: true }],
     ['Batteries', 'active', { bought: true }],
     ['Bread', 'active'],
+    ['Eggs', 'active', { recurrent: true }],
     ['Water', 'next'],
+    ['Tea', 'next', { recurrent: false }],
   );
   const { state, error } = startNewShopping(start);
   assert.equal(error, undefined);
-  assert.deepEqual(names(state.items), ['Milk', 'Soap', 'Batteries', 'Bread', 'Water']);
-  assert.equal(find(state, 'Batteries').list, 'saved');
+  assert.deepEqual(names(state.items), ['Milk', 'Soap', 'Batteries', 'Bread', 'Eggs', 'Water', 'Tea']);
+  assert.deepEqual(names(savedItems(state)), ['Batteries', 'Bread']);
   state.items.forEach((item) => {
-    assert.equal(item.list, item.name === 'Batteries' ? 'saved' : 'active');
+    assert.equal(item.list, ['Batteries', 'Bread'].includes(item.name) ? 'saved' : 'active');
     assert.equal(item.bought, false);
     assert.equal(item.again, false);
   });
@@ -368,7 +370,12 @@ test('tripSummary counts the items of each kind', () => {
     ['Bread', 'active'],
     ['Water', 'next'],
   );
-  assert.deepEqual(tripSummary(state), { total: 4, left: 1, back: 2, saved: 1, incoming: 1 });
+  assert.deepEqual(tripSummary(state), { total: 4, left: 1, back: 2, saved: 2, incoming: 1 });
+});
+
+test('tripSummary counts an item to buy as saved only when it is one-time', () => {
+  const state = build(['Bread', 'active'], ['Eggs', 'active', { recurrent: true }]);
+  assert.deepEqual(tripSummary(state), { total: 2, left: 2, back: 0, saved: 1, incoming: 0 });
 });
 
 test('tripSummary of an empty state is all zero', () => {

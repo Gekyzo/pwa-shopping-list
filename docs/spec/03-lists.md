@@ -63,7 +63,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   | Ticked, recurrent or with `again` | Stays in `Actual`, not ticked, `again` cleared |
   | Ticked, one-time, no `again` | Saved: `list: 'saved'`, not ticked (LIST-30) |
   | Saved | Does not change |
-  | In `Actual`, not ticked | Stays |
+  | In `Actual`, not ticked, recurrent | Stays |
+  | In `Actual`, not ticked, one-time | Saved, as a ticked one (LIST-30) |
   | In `list: 'next'` | Moves to `Actual` |
 
 - **TRIP-3** **Terminar compra** empties `sent`. `group` and `sort` do not change. The relative
@@ -144,7 +145,8 @@ sheet is open.
 
 ## Saved items
 
-- **LIST-30** **Terminar compra** saves a ticked one-time item with no `again`: it leaves the two
+- **LIST-30** **Terminar compra** saves each one-time item of `Actual` with no `again`, ticked or
+  not: only `↻` (LIST-7) and `+ Próxima` (LIST-14) keep an item for the next trip. It leaves the two
   lists and keeps its name, its shops and its quantity. Only **Eliminar** deletes an item.
 - **LIST-31** A saved item keeps its name (DATA-3). The add sheet finds it (ADD-3), and an add of
   its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.
