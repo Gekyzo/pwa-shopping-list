@@ -16,6 +16,7 @@ import {
   chosen,
   hand,
   theme,
+  tripEnd,
   off,
   isOn,
   say,
@@ -26,6 +27,7 @@ import {
   setLanguage,
   setHand,
   setTheme,
+  setTripEnd,
   setModules,
   setNavMotion,
 } from '#ui/context';
@@ -120,6 +122,11 @@ export const applyLanguage = () => {
     themeOption('light', 'settings.themeLight'),
     themeOption('dark', 'settings.themeDark'),
   );
+  const tripEndOption = (value, key) => el('option', { value, textContent: t(key), selected: value === tripEnd });
+  $('trip-end').replaceChildren(
+    tripEndOption('save', 'settings.tripEndSave'),
+    tripEndOption('keep', 'settings.tripEndKeep'),
+  );
   document.querySelectorAll('[data-module]').forEach((box) => {
     box.checked = isOn(box.dataset.module);
   });
@@ -152,6 +159,11 @@ export const bind = () => {
   $('hand').addEventListener('change', (event) => setHand(event.target.value));
 
   $('theme').addEventListener('change', (event) => setTheme(event.target.value));
+
+  $('trip-end').addEventListener('change', (event) => {
+    setTripEnd(event.target.value);
+    render();
+  });
 
   document.querySelectorAll('[data-module]').forEach((box) => {
     box.addEventListener('change', () => {

@@ -273,6 +273,30 @@ export const saveShopLists = (storage, choice) => {
   }
 };
 
+// What Terminar compra does at first with an item not bought: `save` it or `keep` it in Actual
+// (TRIP-7). A preference of the device, as the hand is.
+export const TRIP_END_KEY = 'shopping.tripEnd';
+
+// `keep` when stored, else `save`.
+export const loadTripEnd = (storage) => {
+  try {
+    return storage.getItem(TRIP_END_KEY) === 'keep' ? 'keep' : 'save';
+  } catch {
+    return 'save';
+  }
+};
+
+// `save` is the choice of an app with no choice: it removes the key.
+export const saveTripEnd = (storage, choice) => {
+  try {
+    if (choice === 'keep') storage.setItem(TRIP_END_KEY, 'keep');
+    else storage.removeItem(TRIP_END_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // The colours of the app: `light`, `dark`, or `system` to follow the phone. A preference of the
 // device, as the hand is.
 export const THEME_KEY = 'shopping.theme';

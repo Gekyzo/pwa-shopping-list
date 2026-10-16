@@ -7,6 +7,7 @@ import {
   storage,
   t,
   shopLists,
+  tripEnd,
   off,
   state,
   ui,
@@ -62,7 +63,9 @@ const renderAll = () => {
   for (const list of ['active', 'next']) {
     ui.shop[list] = shopLists === 'show' ? shops.validShop(state, list, ui.shop[list]) : null;
   }
-  const summary = store.tripSummary(state);
+  // The preview of Terminar compra counts the open items with the setting's choice (TRIP-7).
+  const kept = tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : [];
+  const summary = store.tripSummary(state, kept);
   const next = store.nextItems(state);
   const scoped = viewState();
   const header = headerOf(store.tripSummary(scoped), store.nextItems(scoped));

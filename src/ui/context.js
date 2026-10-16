@@ -8,6 +8,8 @@ import {
   saveHand,
   loadShopLists,
   saveShopLists,
+  loadTripEnd,
+  saveTripEnd,
   loadTheme,
   saveTheme,
   loadModules,
@@ -70,6 +72,8 @@ document.documentElement.dataset.hand = hand;
 export let theme = storage ? loadTheme(storage) : 'system';
 // `hide` takes the row of shop lists away from Actual and Próxima.
 export let shopLists = storage ? loadShopLists(storage) : 'show';
+// `keep` makes Mantener the first choice of an item not bought at Terminar compra (TRIP-7).
+export let tripEnd = storage ? loadTripEnd(storage) : 'save';
 document.documentElement.dataset.theme = theme;
 
 // The modules that the user turned off (MOD-2).
@@ -245,6 +249,11 @@ export const setTheme = (value) => {
 export const setShopLists = (choice) => {
   shopLists = choice;
   if (storage) saveShopLists(storage, shopLists);
+};
+
+export const setTripEnd = (choice) => {
+  tripEnd = choice === 'keep' ? 'keep' : 'save';
+  if (storage) saveTripEnd(storage, tripEnd);
 };
 
 export const setModules = (next) => {

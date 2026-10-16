@@ -81,6 +81,13 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 - **TRIP-6** An open item is an item of `Actual`, not ticked, not recurrent and with no `again`.
   **Terminar compra** saves an open item (LIST-30), or keeps it in `Actual`, not ticked, when the
   user chose `Mantener` for it.
+- **TRIP-7** **Al terminar la compra** of `Ajustes` has two values: `Guardar lo no comprado` and
+  `Mantener lo no comprado`. It is the first choice of each open item at **Terminar compra**, and
+  the entry of the trip sheet counts the open items with it. An app with no choice uses `Guardar lo
+  no comprado`.
+- **TRIP-8** The choice is stored in `shopping.tripEnd`. `Guardar lo no comprado` removes the key.
+  It is a preference of the device, not a part of the state: `Deshacer` and an import do not change
+  it.
 
 ## Header figures
 
