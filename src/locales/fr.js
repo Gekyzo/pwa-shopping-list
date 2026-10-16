@@ -53,6 +53,7 @@ export default {
   'edit.noAisles': 'Créez les rayons dans Réglages.',
   'group.others': 'Autres',
   'group.noShop': 'Sans magasin',
+  'group.noAisle': 'Sans rayon',
 
   'empty.active': 'La liste est vide. Touchez + pour ajouter un article.',
   'empty.next': 'Il n’y a rien pour les prochaines courses. Touchez + pour ajouter ce que vous achetez toujours.',
@@ -106,6 +107,7 @@ export default {
   'arrange.groupBy': 'Grouper par',
   'arrange.none': 'Rien',
   'arrange.shops': 'Magasins',
+  'arrange.aisles': 'Rayons',
   'arrange.sortBy': 'Trier par',
   'arrange.name': 'Nom',
   'arrange.custom': 'Personnalisé',

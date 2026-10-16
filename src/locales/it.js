@@ -53,6 +53,7 @@ export default {
   'edit.noAisles': 'Crea i reparti in Impostazioni.',
   'group.others': 'Altri',
   'group.noShop': 'Senza negozio',
+  'group.noAisle': 'Senza reparto',
 
   'empty.active': 'La lista è vuota. Tocca + per aggiungere un articolo.',
   'empty.next': 'Non c’è niente per la prossima spesa. Tocca + per aggiungere quello che compri sempre.',
@@ -106,6 +107,7 @@ export default {
   'arrange.groupBy': 'Raggruppa per',
   'arrange.none': 'Niente',
   'arrange.shops': 'Negozi',
+  'arrange.aisles': 'Reparti',
   'arrange.sortBy': 'Ordina per',
   'arrange.name': 'Nome',
   'arrange.custom': 'Personalizzato',

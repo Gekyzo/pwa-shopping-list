@@ -53,6 +53,7 @@ export default {
   'edit.noAisles': 'Crie as secções em Definições.',
   'group.others': 'Outros',
   'group.noShop': 'Sem loja',
+  'group.noAisle': 'Sem secção',
 
   'empty.active': 'A lista está vazia. Toque em + para adicionar um artigo.',
   'empty.next': 'Não há nada para as próximas compras. Toque em + para adicionar o que compra sempre.',
@@ -106,6 +107,7 @@ export default {
   'arrange.groupBy': 'Agrupar por',
   'arrange.none': 'Nada',
   'arrange.shops': 'Lojas',
+  'arrange.aisles': 'Secções',
   'arrange.sortBy': 'Ordenar por',
   'arrange.name': 'Nome',
   'arrange.custom': 'Personalizado',

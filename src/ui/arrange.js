@@ -8,8 +8,8 @@ import { collapse, expand, rowTops, slide, groupOnlyRows } from '#ui/motion';
 let ungrouping = false;
 
 export const renderArrange = () => {
-  const { recipe, shop, sort } = arrangeChoices();
-  const group = recipe || shop;
+  const { recipe, shop, aisle, sort } = arrangeChoices();
+  const group = recipe || shop || aisle;
   // The choice of the row of shop lists shows when the view has the row to show.
   const lists = inList() && shops.shopChips(state, ui.view).length > 0;
   if (!group && !sort && !lists) ui.arrangeOpen = false;
@@ -22,7 +22,7 @@ export const renderArrange = () => {
   document.querySelectorAll('#arrange-lists button').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.lists === shopLists));
   });
-  const shows = { recipe, shop, none: true };
+  const shows = { recipe, shop, aisle, none: true };
   // The view shows no group for a choice that it cannot show.
   const pressed = shownGroup();
   document.querySelectorAll('#arrange-group button').forEach((button) => {

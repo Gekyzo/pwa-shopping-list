@@ -17,23 +17,26 @@ export const found = (item) => store.matchesItem(item, ui.query);
 export const searching = () => ui.query.trim() !== '';
 
 // The choices that the arrange sheet has for the view: the recipe groups of Actual when a recipe
-// has a group, the shop groups when an item of the view has a shop, and the order of a list with
-// two items or more. A shop list has no shop groups.
+// has a group, the shop groups when an item of the view has a shop, the aisle groups when an item
+// of the view has an aisle, and the order of a list with two items or more. A shop list has no
+// shop groups, but it has aisle groups: at one shop, the list follows its aisles.
 export const arrangeChoices = () => {
-  if (!inList()) return { recipe: false, shop: false, sort: false };
+  if (!inList()) return { recipe: false, shop: false, aisle: false, sort: false };
   const scoped = viewState();
   const items = ui.view === 'active' ? store.activeItems(scoped) : store.nextItems(scoped);
   return {
     recipe: isOn('recipes') && ui.view === 'active' && recipes.recipeGroups(scoped).groups.length > 0,
     shop: ui.shop[ui.view] === null && items.some((item) => item.shops.length > 0),
+    aisle: items.some((item) => item.aisle !== ''),
     sort: items.length > 1,
   };
 };
 
 // The grouping that the view shows: the choice of the user, when the view can show it.
 export const shownGroup = () => {
-  const { recipe, shop } = arrangeChoices();
+  const { recipe, shop, aisle } = arrangeChoices();
   if (state.group === 'recipe' && recipe) return 'recipe';
+  if (state.group === 'aisle' && aisle) return 'aisle';
   return state.group === 'shop' && shop ? 'shop' : 'none';
 };
 

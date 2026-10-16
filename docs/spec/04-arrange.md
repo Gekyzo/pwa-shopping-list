@@ -1,7 +1,7 @@
 # Order, groups and the manual move
 
 Rules of `setSort`, `setGroup`, `reorderItems` and `sortItems` in `src/store.js`, of
-`recipeGroups` in `src/recipes.js`, of `shopGroups` in `src/shops.js`, of `src/reorder.js`, and of
+`recipeGroups` in `src/recipes.js`, of `shopGroups` in `src/shops.js`, of `aisleGroups` in `src/aisles.js`, of `src/reorder.js`, and of
 the arrange sheet in `src/ui/arrange.js`.
 
 ## Arrange sheet
@@ -29,12 +29,13 @@ the arrange sheet in `src/ui/arrange.js`.
 
 ## Groups
 
-- **GROUP-1** **Agrupar por** has **Recetas**, **Tiendas** and **Nada**. One choice, `group`,
+- **GROUP-1** **Agrupar por** has **Recetas**, **Tiendas**, **Secciones** and **Nada**. One choice, `group`,
   applies to the two lists. The default is `recipe`.
 - **GROUP-2** A choice shows only when the view can show it:
   - **Recetas**: in `Actual`, when one recipe group exists at least (GROUP-5).
   - **Tiendas**: when an item of the view has a shop, and not in a shop list (SHOP-19).
-  - **Nada**: each time that one of the two shows.
+  - **Secciones**: when an item of the view has an aisle, also in a shop list (GROUP-17).
+  - **Nada**: each time that one of the others shows.
 
   The sheet also has the choice of the row of shop lists (SHOP-25). The arrange button shows when
   the sheet has one choice at least.
@@ -64,12 +65,21 @@ the arrange sheet in `src/ui/arrange.js`.
 - **GROUP-13** The items with no shop show below the head `Sin tienda`.
 - **GROUP-14** A row in a list by shop does not show the shops of the item below its name.
 
+### By aisle
+
+- **GROUP-17** The groups are the aisles of the items of the view, in the order of `aisles`
+  (AISLE-1), not in name order. The heads have the counts of GROUP-11. A shop list can show its
+  items by aisle: at one shop, the list follows the walk through it.
+- **GROUP-18** An aisle with no item in the view does not show. The items with no aisle show last,
+  below the head `Sin sección`.
+- **GROUP-19** A row in a list by aisle shows its shops (SHOP-7), as in a flat list.
+
 ### Effect
 
 - **GROUP-15** When a grouping opens, the heads and the extra rows open and the other rows move.
   When the choice goes to **Nada**, the groups close first and then the list becomes flat. A tap
   on a grouping while the groups close keeps them.
-- **GROUP-16** A tap on the head of a group (a recipe, `Otros`, a shop or `Sin tienda`) closes the
+- **GROUP-16** A tap on the head of a group (a recipe, `Otros`, a shop, `Sin tienda`, an aisle or `Sin sección`) closes the
   rows of the group in 200 ms. The head stays, with its count and the chevron `▸`; a second tap opens
   the rows again in 200 ms. Each list keeps its closed groups until the app starts again. A search
   shows each group open and disables its head (LIST-25).
@@ -85,9 +95,9 @@ the arrange sheet in `src/ui/arrange.js`.
   | View | Rows that move | Scope |
   |---|---|---|
   | `Actual`, flat | Items to buy | The items to buy |
-  | `Actual`, grouped | Items to buy | The group of the row, or `Otros` / `Sin tienda` |
+  | `Actual`, grouped | Items to buy | The group of the row, or `Otros` / `Sin tienda` / `Sin sección` |
   | `Próxima`, flat | Items of `list: 'next'` | Those items |
-  | `Próxima`, by shop | Items of `list: 'next'` | The group of the row |
+  | `Próxima`, by shop or by aisle | Items of `list: 'next'` | The group of the row |
 
 - **MOVE-4** A ticked row and a row `comprado hoy` do not move. A row does not move while its side
   menu is open or its name is in edit. A scope of one row does not move. No row moves while the

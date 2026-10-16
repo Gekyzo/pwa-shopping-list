@@ -1,6 +1,7 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
+import * as aisles from '#aisles';
 import * as menu from '#menu';
 import { $, el, state, ui, t, say, isOn, shopLists, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
@@ -29,11 +30,28 @@ const shopNodes = (list) => {
   return [...grouped, ...others];
 };
 
-// The items of Actual still to buy: flat, below the recipe that asks for each one, or below
-// the shop of each one.
+// The rows of a list below the aisle of each item, in the order of the walk. A row of an aisle has
+// the group id `aisle:<name>`, so that it moves only inside its aisle.
+const aisleNodes = (list) => {
+  const { groups, rest } = store.filterGroups(aisles.aisleGroups(viewState(), list), ui.query);
+  const count = ({ left, total }) => {
+    if (list !== 'active') return '';
+    return left ? `${total - left}/${total}` : '✓';
+  };
+  const grouped = groups.flatMap((group) => {
+    const key = `aisle:${group.aisle}`;
+    return [groupHead(group.aisle, count(group), key), ...groupNodes(key, group.items.map((item) => itemNode(item, key)))];
+  });
+  const others = rest.length ? [groupHead(t('group.noAisle'), '', 'noAisle'), ...groupNodes('noAisle', rest.map((item) => itemNode(item)))] : [];
+  return [...grouped, ...others];
+};
+
+// The items of Actual still to buy: flat, below the recipe that asks for each one, below the shop
+// of each one, or below the aisle of each one.
 const pendingNodes = () => {
   const group = shownGroup();
   if (group === 'shop') return shopNodes('active');
+  if (group === 'aisle') return aisleNodes('active');
   if (group === 'none') {
     return store.activeItems(viewState()).filter((item) => !item.bought && found(item)).map((item) => itemNode(item));
   }
@@ -47,7 +65,11 @@ const pendingNodes = () => {
 };
 
 const listNodes = (items) => {
-  if (ui.view !== 'active') return shownGroup() === 'shop' ? shopNodes('next') : items.filter(found).map((item) => itemNode(item));
+  if (ui.view !== 'active') {
+    const group = shownGroup();
+    if (group === 'shop') return shopNodes('next');
+    return group === 'aisle' ? aisleNodes('next') : items.filter(found).map((item) => itemNode(item));
+  }
   const bought = items.filter((item) => item.bought && found(item));
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };

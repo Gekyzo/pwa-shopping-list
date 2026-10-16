@@ -53,6 +53,7 @@ export default {
   'edit.noAisles': 'Create the sections in Settings.',
   'group.others': 'Others',
   'group.noShop': 'No shop',
+  'group.noAisle': 'No section',
 
   'empty.active': 'The list is empty. Tap + to add an item.',
   'empty.next': 'There is nothing for the next shopping. Tap + to add what you always buy.',
@@ -106,6 +107,7 @@ export default {
   'arrange.groupBy': 'Group by',
   'arrange.none': 'Nothing',
   'arrange.shops': 'Shops',
+  'arrange.aisles': 'Sections',
   'arrange.sortBy': 'Sort by',
   'arrange.name': 'Name',
   'arrange.custom': 'Custom',
