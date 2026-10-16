@@ -32,7 +32,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 - **LIST-10** Only an item of `Actual` can be ticked. `Próxima` has no checkbox.
 - **LIST-11** A tap on the checkbox or a slide to the right (ROW-11) of a row of `Actual` changes
   `bought`. Each change clears `again`.
-- **LIST-12** A tick does not delete the item. The item goes to the section `N comprados` at the
+- **LIST-12** A tick does not delete the item. The item goes to the section `Comprados (N)` at the
   end of `Actual`, which is closed at first. A tap on that row opens and closes it.
 - **LIST-13** A tick has `Deshacer`, because the row leaves the place where the finger is. A tap
   on the checkbox of a ticked item removes the tick with no `Deshacer`.
@@ -137,7 +137,7 @@ sheet is open.
   full list.
 - **LIST-24** The text of the search is not stored. A change of section closes the search. An add
   from the add sheet closes it too, so that the row of the item is in view.
-- **LIST-25** In `Actual` the search filters the ticked items too. `N comprados` counts the ticked
+- **LIST-25** In `Actual` the search filters the ticked items too. `Comprados (N)` counts the ticked
   matches and shows open while the field has a text, and its head does not close it in that time.
   With no ticked match the head does not show.
 - **LIST-26** With no match the list shows `Ningún artículo coincide con «text».` The button
