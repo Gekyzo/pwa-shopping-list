@@ -152,8 +152,6 @@ export default {
   'settings.themeLight': 'Chiaro',
   'settings.themeDark': 'Scuro',
   'settings.tripEnd': 'Alla fine della spesa',
-  'settings.tripEndSave': 'Salva ciò che non è stato comprato',
-  'settings.tripEndKeep': 'Tieni ciò che non è stato comprato',
   'settings.modules': 'Moduli',
   'settings.moduleRecipes': 'Ricette e menù',
   'onboarding.recipes.title': 'Cosa mangiamo questa settimana?',

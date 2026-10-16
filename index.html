@@ -87,7 +87,10 @@
         </div>
         <h2 class="settings-title" data-i18n="settings.tripEnd"></h2>
         <div class="list-group">
-          <select id="trip-end" class="select" data-i18n-attr="aria-label:settings.tripEnd"></select>
+          <div id="trip-end" class="segmented" role="group" data-i18n-attr="aria-label:settings.tripEnd">
+            <button class="segment" type="button" data-trip-end="save" data-i18n="trip.save"></button>
+            <button class="segment" type="button" data-trip-end="keep" data-i18n="trip.keep"></button>
+          </div>
         </div>
         <h2 class="settings-title" data-i18n="settings.modules"></h2>
         <div class="list-group">

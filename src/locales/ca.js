@@ -152,8 +152,6 @@ export default {
   'settings.themeLight': 'Clar',
   'settings.themeDark': 'Fosc',
   'settings.tripEnd': 'En acabar la compra',
-  'settings.tripEndSave': 'Desar el que no s’ha comprat',
-  'settings.tripEndKeep': 'Mantenir el que no s’ha comprat',
   'settings.modules': 'Mòduls',
   'settings.moduleRecipes': 'Receptes i menú',
   'onboarding.recipes.title': 'Què mengem aquesta setmana?',

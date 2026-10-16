@@ -85,11 +85,11 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   order of `Actual` with its name and the choice `Guardar` / `Mantener` (TRIP-7 gives the first
   value), and the button **Terminar compra**. A tap on the veil closes the sheet and changes
   nothing. The banner and `Traer N artículos de Próxima` never have an open item.
-- **TRIP-7** **Al terminar la compra** of `Ajustes` has two values: `Guardar lo no comprado` and
-  `Mantener lo no comprado`. It is the first choice of each open item at **Terminar compra**, and
-  the entry of the trip sheet counts the open items with it. An app with no choice uses `Guardar lo
-  no comprado`.
-- **TRIP-8** The choice is stored in `shopping.tripEnd`. `Guardar lo no comprado` removes the key.
+- **TRIP-7** **Al terminar la compra** of `Ajustes` has two buttons side by side: `Guardar` and
+  `Mantener`, and the chosen one is pressed. It is the first choice of each open item at
+  **Terminar compra**, and the entry of the trip sheet counts the open items with it. An app with
+  no choice uses `Guardar`.
+- **TRIP-8** The choice is stored in `shopping.tripEnd`. `Guardar` removes the key.
   It is a preference of the device, not a part of the state: `Deshacer` and an import do not change
   it.
 

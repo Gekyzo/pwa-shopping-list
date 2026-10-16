@@ -152,8 +152,6 @@ export default {
   'settings.themeLight': 'Light',
   'settings.themeDark': 'Dark',
   'settings.tripEnd': 'When the trip ends',
-  'settings.tripEndSave': 'Save what was not bought',
-  'settings.tripEndKeep': 'Keep what was not bought',
   'settings.modules': 'Modules',
   'settings.moduleRecipes': 'Recipes and menu',
   'onboarding.recipes.title': 'What do we eat this week?',
