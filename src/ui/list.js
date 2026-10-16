@@ -36,9 +36,12 @@ const tripChoiceNode = (item) => {
       type: 'button',
       className: 'segment',
       textContent: t(key),
-      onclick: () => {
+      // The press changes the two buttons in place: a render would build new rows and lose the focus.
+      onclick: (event) => {
         ui.tripChoice.set(item.id, value);
-        render();
+        event.currentTarget.parentElement.querySelectorAll('.segment').forEach((other) => {
+          other.setAttribute('aria-pressed', String(other === event.currentTarget));
+        });
       },
     });
     button.setAttribute('aria-pressed', String(ui.tripChoice.get(item.id) === value));
