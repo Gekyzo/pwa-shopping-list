@@ -66,7 +66,8 @@ of it.
 - **ROW-8** The click that follows a drag, a hold or a section slide is ignored for 350 ms, so it
   does not tick an item or press a button.
 - **ROW-9** A ticked row closes in 200 ms before it goes to `Comprados (N)`. A row that `Deshacer`
-  puts back opens the same way.
+  puts back opens the same way, and so does a row that an untick or a slide of `Volver a comprar`
+  (LIST-35) puts back among the rows to buy. The row of `Volver a comprar` closes first.
 - **ROW-10** A long press of a finger on a row does not open the menu of the browser.
 - **ROW-11** A slide of a row to the right runs an action at the release: in `Actual` it ticks or
   unticks the item (LIST-11), in `Próxima` it moves a `list: 'next'` item to `Actual`, with
