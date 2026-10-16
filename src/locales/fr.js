@@ -139,7 +139,7 @@ export default {
   'onboarding.sections.text': 'Faites glisser sur les côtés ou utilisez la barre inférieure pour naviguer entre les sections. Avec `+`, ajoutez ce qu’il vous faut.',
 
   'settings.back': { one: '{count} revient', other: '{count} reviennent' },
-  'settings.saved': { one: '{count} est enregistré', other: '{count} sont enregistrés' },
+  'settings.discarded': { one: '{count} est écarté', other: '{count} sont écartés' },
   'settings.backup': 'Sauvegarde',
   'settings.export': 'Exporter',
   'settings.import': 'Importer',
@@ -152,7 +152,7 @@ export default {
   'settings.themeLight': 'Clair',
   'settings.themeDark': 'Sombre',
   'settings.tripEnd': 'À la fin des courses',
-  'settings.tripEndHint': 'Écarter range ce qui n’est pas acheté dans Racheter ; Reporter le laisse dans Actuelle.',
+  'settings.tripEndHint': 'Choisis ce que deviennent les articles non achetés : les écarter ou les reporter aux prochaines courses.',
   'settings.modules': 'Modules',
   'settings.moduleRecipes': 'Recettes et menu',
   'onboarding.recipes.title': 'On mange quoi cette semaine ?',
