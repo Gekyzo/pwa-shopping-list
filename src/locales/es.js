@@ -45,7 +45,6 @@ export default {
   'row.again': 'Comprar otra vez la próxima: {name}',
   'row.boughtToday': 'comprado hoy',
   'row.removeFrom': 'Quitar de {list}: {name}',
-  'row.bringTo': 'Añadir a {list}: {name}',
   'edit.title': 'Editar',
   'edit.name': 'Nombre',
   'edit.quantity': 'Cantidad',

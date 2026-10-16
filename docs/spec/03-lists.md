@@ -156,9 +156,10 @@ sheet is open.
   the list is empty. It shows when an item is saved, and is closed at first; a tap on its head opens
   and closes it, in the two lists at once. Open, it lists the saved items in name order, with their
   quantity and shops.
-- **LIST-35** A tap on the name or on the button `+ <list>` of a saved row brings the item to the
-  list in view (LIST-32), with `"name" añadido a <list>.` and `Deshacer`. The trash button deletes
-  the item for good, with `Deshacer`.
+- **LIST-35** A saved row has no button: it slides as an item row (ROW-13). A slide to the right
+  brings the item to the list in view (LIST-32), with `"name" añadido a <list>.` and `Deshacer`. A
+  slide to the left shows **Eliminar**, which deletes the item for good, with `Deshacer`. A tap on
+  the name opens the edit sheet (ROW-7).
 - **LIST-36** The search of the list (LIST-22) filters the saved items too. The section shows open
   while the field has a text, and does not show with no saved match. The search button shows when
   the list or the section has an item.
