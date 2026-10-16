@@ -1,7 +1,7 @@
 export default {
   'list.active': 'Current',
   'list.next': 'Next',
-  'list.saved': 'Saved',
+  'list.saved': 'Buy again',
   'nav.label': 'Sections',
   'nav.recipes': 'Recipes',
   'nav.settings': 'Settings',
@@ -36,7 +36,7 @@ export default {
   'count.recipes': { one: '{count} recipe', other: '{count} recipes' },
   'count.products': { one: '{count} product', other: '{count} products' },
   'count.bought': { one: '{count} bought', other: '{count} bought' },
-  'count.saved': { one: '{count} saved', other: '{count} saved' },
+  'count.saved': { one: 'Buy again ({count})', other: 'Buy again ({count})' },
 
   'row.always': 'Always buy: {name}',
   'row.moveTo': 'Move to {list}: {name}',
@@ -99,7 +99,7 @@ export default {
   'where.inNext': 'already in {list}',
   'where.boughtAddNext': 'bought · add to {list}',
   'where.inActiveMove': 'in {list} · move',
-  'where.saved': 'saved · add',
+  'where.saved': 'buy again · add',
 
   'arrange.label': 'Group and sort',
   'arrange.groupBy': 'Group by',
@@ -201,7 +201,7 @@ export default {
   'error.duplicateItem': '“{name}” is already in {list}.',
   'error.unknownList': 'Unknown list.',
   'error.itemNotFound': 'Item not found.',
-  'error.itemSaved': 'This item is saved. Bring it to a list.',
+  'error.itemSaved': 'This item is in Buy again. Bring it to a list.',
   'error.onlyActiveTick': 'Only the items of {list} can be ticked.',
   'error.tickFirst': 'Tick the item first.',
   'error.recurrentInNext': 'A recurrent item is already in {list}.',

@@ -1,7 +1,7 @@
 export default {
   'list.active': 'Actual',
   'list.next': 'Pròxima',
-  'list.saved': 'Desats',
+  'list.saved': 'Tornar a comprar',
   'nav.label': 'Seccions',
   'nav.recipes': 'Receptes',
   'nav.settings': 'Configuració',
@@ -36,7 +36,7 @@ export default {
   'count.recipes': { one: '{count} recepta', other: '{count} receptes' },
   'count.products': { one: '{count} producte', other: '{count} productes' },
   'count.bought': { one: '{count} comprat', other: '{count} comprats' },
-  'count.saved': { one: '{count} desat', other: '{count} desats' },
+  'count.saved': { one: 'Tornar a comprar ({count})', other: 'Tornar a comprar ({count})' },
 
   'row.always': 'Compra sempre: {name}',
   'row.moveTo': 'Mou a {list}: {name}',
@@ -99,7 +99,7 @@ export default {
   'where.inNext': 'ja a {list}',
   'where.boughtAddNext': 'comprat · afegeix a {list}',
   'where.inActiveMove': 'a {list} · mou',
-  'where.saved': 'desat · afegir',
+  'where.saved': 'tornar a comprar · afegir',
 
   'arrange.label': 'Agrupa i ordena',
   'arrange.groupBy': 'Agrupa per',
@@ -201,7 +201,7 @@ export default {
   'error.duplicateItem': '«{name}» ja és a {list}.',
   'error.unknownList': 'Llista desconeguda.',
   'error.itemNotFound': 'Article no trobat.',
-  'error.itemSaved': 'Aquest article està desat. Porta’l a una llista.',
+  'error.itemSaved': 'Aquest article és a Tornar a comprar. Porta’l a una llista.',
   'error.onlyActiveTick': 'Només es poden marcar els articles de {list}.',
   'error.tickFirst': 'Marca primer l’article.',
   'error.recurrentInNext': 'Un article recurrent ja és a {list}.',

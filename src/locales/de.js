@@ -1,7 +1,7 @@
 export default {
   'list.active': 'Aktuell',
   'list.next': 'Nächste',
-  'list.saved': 'Gespeichert',
+  'list.saved': 'Wieder kaufen',
   'nav.label': 'Bereiche',
   'nav.recipes': 'Rezepte',
   'nav.settings': 'Optionen',
@@ -36,7 +36,7 @@ export default {
   'count.recipes': { one: '{count} Rezept', other: '{count} Rezepte' },
   'count.products': { one: '{count} Produkt', other: '{count} Produkte' },
   'count.bought': { one: '{count} gekauft', other: '{count} gekauft' },
-  'count.saved': { one: '{count} gespeichert', other: '{count} gespeichert' },
+  'count.saved': { one: 'Wieder kaufen ({count})', other: 'Wieder kaufen ({count})' },
 
   'row.always': 'Immer kaufen: {name}',
   'row.moveTo': 'Nach {list} verschieben: {name}',
@@ -99,7 +99,7 @@ export default {
   'where.inNext': 'schon in {list}',
   'where.boughtAddNext': 'gekauft · zu {list} hinzufügen',
   'where.inActiveMove': 'in {list} · verschieben',
-  'where.saved': 'gespeichert · hinzufügen',
+  'where.saved': 'wieder kaufen · hinzufügen',
 
   'arrange.label': 'Gruppieren und sortieren',
   'arrange.groupBy': 'Gruppieren nach',
@@ -201,7 +201,7 @@ export default {
   'error.duplicateItem': '„{name}“ ist schon in {list}.',
   'error.unknownList': 'Unbekannte Liste.',
   'error.itemNotFound': 'Artikel nicht gefunden.',
-  'error.itemSaved': 'Dieser Artikel ist gespeichert. Hole ihn in eine Liste.',
+  'error.itemSaved': 'Dieser Artikel ist in Wieder kaufen. Hole ihn in eine Liste.',
   'error.onlyActiveTick': 'Nur die Artikel von {list} können markiert werden.',
   'error.tickFirst': 'Markiere zuerst den Artikel.',
   'error.recurrentInNext': 'Ein wiederkehrender Artikel ist schon in {list}.',

@@ -1,7 +1,7 @@
 export default {
   'list.active': 'Attuale',
   'list.next': 'Prossima',
-  'list.saved': 'Salvati',
+  'list.saved': 'Da ricomprare',
   'nav.label': 'Sezioni',
   'nav.recipes': 'Ricette',
   'nav.settings': 'Impostazioni',
@@ -36,7 +36,7 @@ export default {
   'count.recipes': { one: '{count} ricetta', other: '{count} ricette' },
   'count.products': { one: '{count} prodotto', other: '{count} prodotti' },
   'count.bought': { one: '{count} comprato', other: '{count} comprati' },
-  'count.saved': { one: '{count} salvato', other: '{count} salvati' },
+  'count.saved': { one: 'Da ricomprare ({count})', other: 'Da ricomprare ({count})' },
 
   'row.always': 'Compra sempre: {name}',
   'row.moveTo': 'Sposta in {list}: {name}',
@@ -99,7 +99,7 @@ export default {
   'where.inNext': 'già in {list}',
   'where.boughtAddNext': 'comprato · aggiungi a {list}',
   'where.inActiveMove': 'in {list} · sposta',
-  'where.saved': 'salvato · aggiungi',
+  'where.saved': 'da ricomprare · aggiungi',
 
   'arrange.label': 'Raggruppa e ordina',
   'arrange.groupBy': 'Raggruppa per',
@@ -201,7 +201,7 @@ export default {
   'error.duplicateItem': '«{name}» è già in {list}.',
   'error.unknownList': 'Lista sconosciuta.',
   'error.itemNotFound': 'Articolo non trovato.',
-  'error.itemSaved': 'Questo articolo è salvato. Riportalo in una lista.',
+  'error.itemSaved': 'Questo articolo è in Da ricomprare. Riportalo in una lista.',
   'error.onlyActiveTick': 'Si possono spuntare solo gli articoli di {list}.',
   'error.tickFirst': 'Spunta prima l’articolo.',
   'error.recurrentInNext': 'Un articolo ricorrente è già in {list}.',

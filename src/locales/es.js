@@ -1,7 +1,7 @@
 export default {
   'list.active': 'Actual',
   'list.next': 'Próxima',
-  'list.saved': 'Guardados',
+  'list.saved': 'Volver a comprar',
   'nav.label': 'Secciones',
   'nav.recipes': 'Recetas',
   'nav.settings': 'Ajustes',
@@ -36,7 +36,7 @@ export default {
   'count.recipes': { one: '{count} receta', other: '{count} recetas' },
   'count.products': { one: '{count} producto', other: '{count} productos' },
   'count.bought': { one: '{count} comprado', other: '{count} comprados' },
-  'count.saved': { one: '{count} guardado', other: '{count} guardados' },
+  'count.saved': { one: 'Volver a comprar ({count})', other: 'Volver a comprar ({count})' },
 
   'row.always': 'Comprar siempre: {name}',
   'row.moveTo': 'Mover a {list}: {name}',
@@ -99,7 +99,7 @@ export default {
   'where.inNext': 'ya en {list}',
   'where.boughtAddNext': 'comprado · añadir a {list}',
   'where.inActiveMove': 'en {list} · mover',
-  'where.saved': 'guardado · añadir',
+  'where.saved': 'volver a comprar · añadir',
 
   'arrange.label': 'Agrupar y ordenar',
   'arrange.groupBy': 'Agrupar por',
@@ -201,7 +201,7 @@ export default {
   'error.duplicateItem': '"{name}" ya está en {list}.',
   'error.unknownList': 'Lista desconocida.',
   'error.itemNotFound': 'Artículo no encontrado.',
-  'error.itemSaved': 'Este artículo está guardado. Tráelo a una lista.',
+  'error.itemSaved': 'Este artículo está en Volver a comprar. Tráelo a una lista.',
   'error.onlyActiveTick': 'Solo se pueden marcar los artículos de {list}.',
   'error.tickFirst': 'Marca primero el artículo.',
   'error.recurrentInNext': 'Un artículo recurrente ya está en {list}.',

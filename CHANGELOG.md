@@ -11,7 +11,7 @@ no change for the user has no entry.
 
 - **Terminar compra** keeps for the next trip only the items with `↻` or `+ Próxima`. It saves
   the other items of `Actual`, bought or not, in place of a delete or a carry-over. They are at the
-  end of `Actual` and of `Próxima`, under `N guardados`, and the add sheet finds them. A tap brings one back to the
+  end of `Actual` and of `Próxima`, under `Volver a comprar`, and the add sheet finds them. A tap brings one back to the
   list, with its shops and its quantity.
 
 ## 1.0.30 - 2026-10-16
