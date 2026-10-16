@@ -22,6 +22,23 @@ bottom bar (NAV-1).
 - **AISLE-8** The usual aisles add each of their names that is not an aisle yet, in their order.
 - **AISLE-9** The search of a list (LIST-22) also matches the aisle of an item.
 
+## Sheet `Secciones de la tienda`
+
+- **AISLE-10** `Ajustes` has the group **Secciones** with the row **Secciones de la tienda** and the
+  count of the aisles. A tap opens the sheet of the aisles. A tap out of the sheet or `Escape`
+  closes it.
+- **AISLE-11** The sheet lists each aisle in its order, as a name field, `↑`, `↓` and `✕`. The `↑`
+  of the first aisle and the `↓` of the last are disabled.
+- **AISLE-12** The name field renames the aisle when it loses the focus or on `Enter` (AISLE-4).
+  `Escape` puts the name back. An error keeps the old name.
+- **AISLE-13** The field **Nueva sección** with **Añadir** adds an aisle (AISLE-3). The field takes
+  40 characters at most and keeps the focus after an add.
+- **AISLE-14** With no aisle, the sheet shows `Añade las secciones en el orden de tu tienda.` and the
+  button **Usar secciones habituales**, which adds eight aisles in the language of the screen, in
+  the order of a common walk (AISLE-8).
+- **AISLE-15** `✕` deletes the aisle (AISLE-5) with the message `Sección "<name>" eliminada.` and
+  `Deshacer`. An add, a rename and a move have no message.
+
 ## Limits
 
 No aisle on the products of a recipe, and no aisle field in the add sheet. One order of the aisles

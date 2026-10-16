@@ -90,6 +90,10 @@
           <label class="switch"><span data-i18n="list.next"></span><input class="switch-input" type="checkbox" role="switch" data-module="next"></label>
           <label class="switch"><span data-i18n="settings.moduleRecipes"></span><input class="switch-input" type="checkbox" role="switch" data-module="recipes"></label>
         </div>
+        <h2 class="settings-title" data-i18n="settings.aisles"></h2>
+        <div class="list-group">
+          <button id="aisles-open" class="list-row" type="button" aria-haspopup="dialog" aria-controls="aisles"><svg class="icon" aria-hidden="true"><use href="icons.svg#basket"/></svg><span class="list-row-text" data-i18n="aisles.title"></span><span id="aisles-count" class="list-row-meta"></span></button>
+        </div>
         <h2 class="settings-title" data-i18n="settings.app"></h2>
         <div class="list-group">
           <button id="install" class="list-row" type="button" hidden><svg class="icon" aria-hidden="true"><use href="icons.svg#download"/></svg><span data-i18n="settings.install"></span></button>
@@ -213,6 +217,21 @@
           <button class="button primary" type="submit" data-i18n="shops.add"></button>
         </div>
         <datalist id="edit-shops"></datalist>
+      </form>
+    </div>
+
+    <div id="aisles" class="sheet-layer" hidden>
+      <div id="aisles-veil" class="sheet-veil"></div>
+      <form id="aisles-form" class="sheet" role="dialog" autocomplete="off" data-i18n-attr="aria-label:aisles.title">
+        <div class="sheet-grab"></div>
+        <h2 class="sheet-title" data-i18n="aisles.title"></h2>
+        <p id="aisles-empty" class="empty-state inline" data-i18n="aisles.empty" hidden></p>
+        <button id="aisles-usual" class="button outline wide" type="button" data-i18n="aisles.usual" hidden></button>
+        <ul id="aisles-list" class="products"></ul>
+        <div class="input-row">
+          <input id="aisles-new" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="40" data-i18n-attr="placeholder:aisles.placeholder,aria-label:aisles.placeholder">
+          <button class="button primary" type="submit" data-i18n="shops.add"></button>
+        </div>
       </form>
     </div>
 
@@ -351,6 +370,7 @@
           "#ui/recipes": "./src/ui/recipes.js",
           "#ui/rows": "./src/ui/rows.js",
           "#ui/settings": "./src/ui/settings.js",
+          "#ui/aisles": "./src/ui/aisles.js",
           "#ui/install": "./src/ui/install.js",
           "#ui/view": "./src/ui/view.js"
         }

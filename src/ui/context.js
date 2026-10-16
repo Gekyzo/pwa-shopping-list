@@ -125,6 +125,8 @@ export const ui = {
   arrangeOpen: false,
   // True while the sheet of the trip button of Actual is open.
   tripOpen: false,
+  // True while the sheet of the aisles of Ajustes is open.
+  aislesOpen: false,
   // The item whose edit sheet is open, or null.
   editId: null,
   // The meal whose sheet is open, as { day, meal }, or null.
