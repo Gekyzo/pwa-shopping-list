@@ -84,7 +84,7 @@ No view is stored.
 |---|---|---|
 | `Actual` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
 | `Próxima` | `nextItems` | The items of `list: 'next'`, then the ticked items of `Actual` that are recurrent or have `again` |
-| `Guardados` | `savedItems` | The items of `list: 'saved'`, in name order |
+| `Volver a comprar` | `savedItems` | The items of `list: 'saved'`, in name order |
 | Trip figures | `tripSummary` | `total`, `left`, `back`, `saved`, `incoming` |
 | Recipe groups | `recipeGroups` | `Actual` by recipe |
 | Shop groups | `shopGroups` | `Actual` or `Próxima` by shop |

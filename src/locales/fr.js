@@ -1,7 +1,7 @@
 export default {
   'list.active': 'Actuelle',
   'list.next': 'Prochaine',
-  'list.saved': 'Enregistrés',
+  'list.saved': 'Racheter',
   'nav.label': 'Sections',
   'nav.recipes': 'Recettes',
   'nav.settings': 'Réglages',
@@ -36,7 +36,7 @@ export default {
   'count.recipes': { one: '{count} recette', other: '{count} recettes' },
   'count.products': { one: '{count} produit', other: '{count} produits' },
   'count.bought': { one: '{count} acheté', other: '{count} achetés' },
-  'count.saved': { one: '{count} enregistré', other: '{count} enregistrés' },
+  'count.saved': { one: 'Racheter ({count})', other: 'Racheter ({count})' },
 
   'row.always': 'Toujours acheter : {name}',
   'row.moveTo': 'Déplacer vers {list} : {name}',
@@ -99,7 +99,7 @@ export default {
   'where.inNext': 'déjà dans {list}',
   'where.boughtAddNext': 'acheté · ajouter à {list}',
   'where.inActiveMove': 'dans {list} · déplacer',
-  'where.saved': 'enregistré · ajouter',
+  'where.saved': 'racheter · ajouter',
 
   'arrange.label': 'Grouper et trier',
   'arrange.groupBy': 'Grouper par',
@@ -201,7 +201,7 @@ export default {
   'error.duplicateItem': '« {name} » est déjà dans {list}.',
   'error.unknownList': 'Liste inconnue.',
   'error.itemNotFound': 'Article introuvable.',
-  'error.itemSaved': 'Cet article est enregistré. Ramenez-le dans une liste.',
+  'error.itemSaved': 'Cet article est dans Racheter. Ramenez-le dans une liste.',
   'error.onlyActiveTick': 'Seuls les articles de {list} peuvent être cochés.',
   'error.tickFirst': 'Cochez d’abord l’article.',
   'error.recurrentInNext': 'Un article récurrent est déjà dans {list}.',

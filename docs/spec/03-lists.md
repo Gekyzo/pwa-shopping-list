@@ -110,7 +110,7 @@ sheet is open.
   | `Próxima` | In the `Próxima` view | `ya en Próxima` | Nothing |
   | `Próxima` | Ticked, not in the view | `comprado · añadir a Próxima` | Sets `again` |
   | `Próxima` | To buy in `Actual` | `en Actual · mover` | Moves to `Próxima` |
-  | Either | Saved | `guardado · añadir` | Goes to the target, not ticked (LIST-32) |
+  | Either | Saved | `volver a comprar · añadir` | Goes to the target, not ticked (LIST-32) |
 
 - **ADD-4** When no item has the typed name, the list ends with `+ Crear «name»`, which does the
   same as **Añadir**.
@@ -152,7 +152,7 @@ sheet is open.
   its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.
 - **LIST-32** A bring back puts a saved item in the target list, not ticked. `recurrent` does not
   change. A saved item cannot be ticked or moved: a move gives `error.itemSaved`.
-- **LIST-34** `Actual` and `Próxima` end with the section `N guardados`, below the empty state when
+- **LIST-34** `Actual` and `Próxima` end with the section `Volver a comprar (N)`, below the empty state when
   the list is empty. It shows when an item is saved, and is closed at first; a tap on its head opens
   and closes it, in the two lists at once. Open, it lists the saved items in name order, with their
   quantity and shops.
