@@ -2,7 +2,7 @@ import * as store from '#store';
 import { reached, settle } from '#swipe';
 import { SIDE_BUTTON, DRAG_START, el, state, ui, t, say, isOn, apply, render, guardClick } from '#ui/context';
 import { isOpen, searching, shownGroup } from '#ui/view';
-import { leave, leaveNode, expand, pendingRows } from '#ui/motion';
+import { leave, leaveNode } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
 import { reorder, bindReorder } from '#ui/drag';
@@ -41,17 +41,10 @@ const deleteAction = (item) =>
     { variant: 'danger' },
   );
 
-// Runs a change that puts rows back among the rows to buy, and opens those rows, as `Deshacer` does.
-const opening = (change) => {
-  const before = new Set(pendingRows().map((node) => node.dataset.id));
-  change();
-  expand(pendingRows().filter((node) => !before.has(node.dataset.id)));
-};
-
 const activeRow = (item, groupId) => {
   const toggle = () => {
     if (item.bought) {
-      opening(() => apply(store.toggleBought(state, item.id)));
+      apply(store.toggleBought(state, item.id));
       return;
     }
     checkbox.checked = true;
@@ -216,7 +209,7 @@ export const boughtSection = (bought) => {
     className: 'section-head-button',
     disabled: searching(),
     onclick: () => {
-      ui.boughtOpen = !ui.boughtOpen;
+      Object.assign(ui, { boughtOpen: !ui.boughtOpen, animate: true });
       render();
     },
   }, [
@@ -232,7 +225,7 @@ export const boughtSection = (bought) => {
 const savedNode = (item, list) => {
   // The row closes in the section, then opens among the rows of the list.
   const bring = () => leaveNode(`saved:${item.id}`, [node], () =>
-    opening(() => apply(store.bringToList(state, item.id, list), { undoText: say('toast.addedTo', { name: item.name, list }) })));
+    apply(store.bringToList(state, item.id, list), { undoText: say('toast.addedTo', { name: item.name, list }) }));
   const name = el('button', { type: 'button', className: 'item-row-name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
   const right = { run: bring, icon: list === 'active' ? 'cart-add' : 'calendar' };
   const { box } = swipeBox({ id: item.id, groupId: 'saved', row: [name], end: [deleteAction(item)], right });
@@ -250,7 +243,7 @@ export const savedSection = (saved, list) => {
     className: 'section-head-button',
     disabled: searching(),
     onclick: () => {
-      ui.savedOpen = !ui.savedOpen;
+      Object.assign(ui, { savedOpen: !ui.savedOpen, animate: true });
       render();
     },
   }, [

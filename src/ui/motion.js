@@ -87,11 +87,62 @@ export const groupOnlyRows = () => {
   });
 };
 
+// The lists whose rows open and close when a change of the state or a section adds or removes them.
+const ROW_LISTS = ['items', 'saved', 'recipe-products'];
+
+// A row is the same row when it has the same list, the same item or key, and the same tick.
+// The first row of an item stands for the item: a second row of it, in a second group, is the
+// part of a change of grouping, which arrange.js moves.
+const rowKey = (list, node) => `${list}|${node.dataset.id ?? node.dataset.key}|${node.classList.contains('bought')}`;
+
+// The rows of the lists, in screen order, before a render. `animateRows` compares them after it.
+export const snapshotRows = () => {
+  const rows = new Map();
+  for (const list of ROW_LISTS) {
+    for (const node of $(list).querySelectorAll('li[data-id], li[data-key]')) {
+      const key = rowKey(list, node);
+      if (!rows.has(key)) rows.set(key, node);
+    }
+  }
+  return rows;
+};
+
+// After a render: a new row opens, and a row that is gone stays in its place and closes. A row
+// that its own motion has already closed (`leaving`) or that `bringIn` opens (`flash`) is left alone.
+export const animateRows = (before) => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const after = snapshotRows();
+  expand([...after].filter(([key, node]) => !before.has(key) && !node.classList.contains('flash')).map(([, node]) => node));
+  const old = [...before];
+  old.forEach(([key, node], index) => {
+    if (after.has(key) || node.classList.contains('leaving') || node.isConnected) return;
+    // The ghost goes before the next row that is still there, or after the row before it.
+    const next = old.slice(index + 1).find(([other]) => after.has(other));
+    const previous = old.slice(0, index).reverse().find(([other]) => after.has(other));
+    if (next) after.get(next[0]).before(node);
+    else if (previous) after.get(previous[0]).after(node);
+    else return;
+    node.inert = true;
+    node.style.pointerEvents = 'none';
+    const still = { minHeight: 0, overflow: 'hidden' };
+    node.animate(
+      [
+        { height: `${node.offsetHeight}px`, opacity: 1, ...still },
+        { height: '0px', opacity: 0, ...still },
+      ],
+      { duration: LEAVE_MS, easing: 'ease-out' },
+    ).finished.then(() => node.remove(), () => node.remove());
+  });
+};
+
 // The keys of the recipe and product rows on the screen, in the list and in the recipe sheet.
 export const rowKeys = () => new Set([...document.querySelectorAll('[data-key]')].map((node) => node.dataset.key));
 
 // Flashes the rows of `keys` and opens them. A row inside another row of `keys` only flashes: it
 // opens with the row around it.
+export const flash = (keys) =>
+  document.querySelectorAll('[data-key]').forEach((node) => keys.has(node.dataset.key) && node.classList.add('flash'));
+
 export const bringIn = (keys) => {
   const nodes = [...document.querySelectorAll('[data-key]')].filter((node) => keys.has(node.dataset.key));
   nodes.forEach((node) => node.classList.add('flash'));

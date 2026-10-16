@@ -65,9 +65,13 @@ of it.
   quantity has no message and no `Deshacer`. The sheet opens with no focus in a field.
 - **ROW-8** The click that follows a drag, a hold or a section slide is ignored for 350 ms, so it
   does not tick an item or press a button.
-- **ROW-9** A ticked row closes in 200 ms before it goes to `Comprados (N)`. A row that `Deshacer`
-  puts back opens the same way, and so does a row that an untick or a slide of `Volver a comprar`
-  (LIST-35) puts back among the rows to buy. The row of `Volver a comprar` closes first.
+- **ROW-9** No row appears or disappears at once. A ticked row closes in 200 ms before it goes to
+  `Comprados (N)`, and a row of `Volver a comprar` closes before it goes back to a list. After each
+  other change of the state (add, delete, move, untick, **Terminar compra**, `Deshacer`) and each open
+  or close of a section, a new row of `Actual`, `Próxima`, `Recetas`, `Volver a comprar` or the
+  products of `Receta` opens in 200 ms, and a row that is gone stays in its place and closes in
+  200 ms. A change of the grouping or of the order moves the rows ([04-arrange.md](04-arrange.md)). With
+  `prefers-reduced-motion` nothing moves.
 - **ROW-10** A long press of a finger on a row does not open the menu of the browser.
 - **ROW-11** A slide of a row to the right runs an action at the release: in `Actual` it ticks or
   unticks the item (LIST-11), in `Próxima` it moves a `list: 'next'` item to `Actual`, with
