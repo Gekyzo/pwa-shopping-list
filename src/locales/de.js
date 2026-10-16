@@ -53,6 +53,7 @@ export default {
   'edit.noAisles': 'Lege die Abteilungen in Optionen an.',
   'group.others': 'Andere',
   'group.noShop': 'Ohne Geschäft',
+  'group.noAisle': 'Ohne Abteilung',
 
   'empty.active': 'Die Liste ist leer. Tippe auf +, um einen Artikel hinzuzufügen.',
   'empty.next': 'Für den nächsten Einkauf gibt es nichts. Tippe auf +, um hinzuzufügen, was du immer kaufst.',
@@ -106,6 +107,7 @@ export default {
   'arrange.groupBy': 'Gruppieren nach',
   'arrange.none': 'Nichts',
   'arrange.shops': 'Geschäfte',
+  'arrange.aisles': 'Abteilungen',
   'arrange.sortBy': 'Sortieren nach',
   'arrange.name': 'Name',
   'arrange.custom': 'Eigene',

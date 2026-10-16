@@ -53,6 +53,7 @@ export default {
   'edit.noAisles': 'Crea les seccions a Configuració.',
   'group.others': 'Altres',
   'group.noShop': 'Sense botiga',
+  'group.noAisle': 'Sense secció',
 
   'empty.active': 'La llista és buida. Toca + per afegir un article.',
   'empty.next': 'No hi ha res per a la pròxima compra. Toca + per afegir el que compres sempre.',
@@ -106,6 +107,7 @@ export default {
   'arrange.groupBy': 'Agrupa per',
   'arrange.none': 'Res',
   'arrange.shops': 'Botigues',
+  'arrange.aisles': 'Seccions',
   'arrange.sortBy': 'Ordena per',
   'arrange.name': 'Nom',
   'arrange.custom': 'Personalitzat',
