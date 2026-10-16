@@ -42,6 +42,7 @@ import { renderSheet, closeSheet, bind as bindAdd } from '#ui/add';
 import { closeOnboarding, turnOnboarding, bind as bindOnboarding } from '#ui/onboarding';
 import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
 import { renderInstall, bind as bindInstall } from '#ui/install';
+import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
 import { showNavButton, bind as bindNav } from '#ui/nav';
 
 // Screen
@@ -87,7 +88,7 @@ const renderAll = () => {
   renderTrip();
 
   $('fab').hidden =
-    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
+    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.aislesOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   $('next-count').textContent = next.length || '';
   const sections = visibleSections(off);
@@ -109,6 +110,7 @@ const renderAll = () => {
   renderArrange();
   renderEdit();
   renderMeal();
+  renderAisles();
 };
 setRender(renderAll);
 
@@ -169,6 +171,7 @@ document.addEventListener('keydown', (event) => {
   if (ui.mealOpen !== null) closeMeal();
   if (ui.searchOpen) closeSearch();
   if (ui.tripOpen) closeTrip();
+  if (ui.aislesOpen) closeAisles();
 });
 
 $('toast-undo').addEventListener('click', () => {
@@ -185,6 +188,7 @@ $('toast-undo').addEventListener('click', () => {
 bindMenu();
 bindSettings();
 bindInstall();
+bindAisles();
 
 applyLanguage();
 if (ui.onboarding !== null) $('onboarding-next').focus();
