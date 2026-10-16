@@ -20,7 +20,7 @@ import {
   commit,
 } from '#ui/context';
 import { inList, viewState } from '#ui/view';
-import { expand, pendingRows, rowKeys, bringIn } from '#ui/motion';
+import { rowKeys, bringIn, flash, snapshotRows, animateRows } from '#ui/motion';
 import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { endReorder, bind as bindDrag } from '#ui/drag';
 import { moveRow } from '#ui/rows';
@@ -46,6 +46,8 @@ import { showNavButton, bind as bindNav } from '#ui/nav';
 // Screen
 
 const renderAll = () => {
+  const before = ui.animate ? snapshotRows() : null;
+  ui.animate = false;
   // A render builds new rows, so a lifted row loses its pointer and gets no release.
   endReorder(false);
   // The item of the edit sheet can go while the sheet is open: an undo, or an import.
@@ -95,6 +97,7 @@ const renderAll = () => {
   ui.focusProduct = false;
   bringIn(ui.bringKeys);
   ui.bringKeys.clear();
+  if (before) animateRows(before);
   $('items').querySelector('.flash')?.scrollIntoView({ block: 'nearest' });
   ui.flashId = null;
   ui.settleFrom = null;
@@ -166,13 +169,12 @@ document.addEventListener('keydown', (event) => {
 
 $('toast-undo').addEventListener('click', () => {
   if (!undoState) return;
-  const before = new Set(pendingRows().map((node) => node.dataset.id));
   const keys = rowKeys();
+  // The render of the commit opens the rows that the undo puts back (animateRows). A recipe or a
+  // product also flashes.
   commit(undoState);
   hideToast();
-  // The rows that the undo puts back open, as a ticked row closes. A recipe or a product also flashes.
-  expand(pendingRows().filter((node) => !before.has(node.dataset.id)));
-  bringIn(new Set([...rowKeys()].filter((key) => !keys.has(key))));
+  flash(new Set([...rowKeys()].filter((key) => !keys.has(key))));
 });
 
 bindMenu();

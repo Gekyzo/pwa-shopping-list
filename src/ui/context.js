@@ -125,6 +125,8 @@ export const ui = {
   // Where the last drag left its row, so that the next render moves the row from there.
   settleFrom: null,
   focusProduct: false,
+  // True when the next render must open the new rows and close the rows that are gone.
+  animate: false,
   // The ids of the ticked items whose rows are closing. A render in that time builds them closed.
   leaving: new Set(),
   // The keys of the recipe and product rows that the next render opens and flashes.
@@ -159,6 +161,7 @@ export const render = () => renderer();
 
 export const commit = (next) => {
   state = next;
+  ui.animate = true;
   const saved = storage !== null && save(storage, state);
   render();
   return saved;
