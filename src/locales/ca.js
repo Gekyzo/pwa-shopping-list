@@ -72,7 +72,7 @@ export default {
   'finish.saved': { one: '{count} es desa.', other: '{count} es desen.' },
   'trip.menu': 'Opcions de la compra',
   'trip.open': 'El que no has comprat',
-  'trip.save': 'Desar',
+  'trip.discard': 'Descartar',
   'trip.keep': 'Mantenir',
 
   'recipes.search': 'Cerca recepta o producte',

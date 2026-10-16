@@ -72,7 +72,7 @@ export default {
   'finish.saved': { one: '{count} wird gespeichert.', other: '{count} werden gespeichert.' },
   'trip.menu': 'Optionen für den Einkauf',
   'trip.open': 'Was du nicht gekauft hast',
-  'trip.save': 'Speichern',
+  'trip.discard': 'Verwerfen',
   'trip.keep': 'Behalten',
 
   'recipes.search': 'Rezept oder Produkt suchen',

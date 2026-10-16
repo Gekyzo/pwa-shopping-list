@@ -1309,7 +1309,7 @@
      @part trip-open-list  The list of the items.
      @part trip-open-row  One item: its name, then its choice.
      @part trip-open-name  The name of the item.
-     @example <div class="trip-open"><ul class="trip-open-list"><li class="trip-open-row"><span class="trip-open-name">Pan</span><div class="segmented"><button class="segment" type="button" aria-pressed="true">Guardar</button><button class="segment" type="button" aria-pressed="false">Mantener</button></div></li></ul></div> */
+     @example <div class="trip-open"><ul class="trip-open-list"><li class="trip-open-row"><span class="trip-open-name">Pan</span><div class="segmented"><button class="segment" type="button" aria-pressed="true">Descartar</button><button class="segment" type="button" aria-pressed="false">Mantener</button></div></li></ul></div> */
   .trip-open-list {
     margin: var(--space-2) 0 var(--space-3);
     padding: 0;
