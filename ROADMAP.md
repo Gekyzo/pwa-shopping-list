@@ -11,9 +11,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
   The sections are configurable in the settings.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
-- **Automatic export.** Export the backup once a day, as **Exportar** does.
-  Each export replaces the export of the day before. A switch in `Ajustes` turns
-  it on and off.
 
 ### Deferred
 
@@ -39,6 +36,12 @@ version keeps `Actual`, `Próxima`, `Recetas`, `Menú` and offline use.
 
 Back up the data to a server and restore it on a new phone with a recovery
 link, with no login. The features below need its server.
+
+- **Automatic backup.** Back up the data to the server at a frequency chosen in
+  `Ajustes`: never, daily, weekly or monthly. Each backup replaces the one
+  before. On a phone with no data, the app offers to restore the backup. A
+  backup in the phone does not survive **Clear site data** or an uninstall, and
+  a PWA cannot replace or read a file in `Descargas` on its own.
 
 - **Sync between devices.** Keep the lists the same on a phone, a tablet and the
   web.
