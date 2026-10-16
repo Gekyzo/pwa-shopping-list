@@ -14,7 +14,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.modules` | The ids of the modules that the user turned off, as JSON ([14-modules.md](14-modules.md), MOD-2) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
-| Cache API | `shopping-shell-v13` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-shell-v14` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 | Cache API | `shopping-manifest` | The name and the description of the manifest in the language of the screen (SW-13) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
@@ -35,8 +35,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   to `shopping.v1.corrupt` and starts with the empty state. The first change then replaces
   `shopping.v1`.
 - **STORE-6** A state is not valid when one of these is true:
-  - it is not an object, its `version` is not 1 to 6, or `items` is not a list;
-  - `recipes` is not a list, in version 2 to 6;
+  - it is not an object, its `version` is not 1 to 7, or `items` is not a list;
+  - `recipes` is not a list, in version 2 to 7;
   - an item has no string `id`, no name, a `list` that is not `active`, `next` or `saved`, or a flag
     (`recurrent`, `bought`, `again`) that is not a boolean;
   - a recipe has no string `id`, no name, an empty product, a product that is not text, or two
@@ -51,6 +51,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | `again` of an item not ticked, or recurrent | `false` |
   | `quantity` | Not text: `''`. Text: trimmed |
   | `shops` | Not a list: empty. An entry that is not text, is empty or is a duplicate: dropped |
+  | `aisles` | Not a list: empty. An entry that is not text, is empty or is a duplicate with no case distinction: dropped. The rest trimmed |
+  | `aisle` of an item | Not text, or not an aisle of `aisles`: `''`. An aisle: the spelling of `aisles` |
   | Shop spellings | Each shop gets the spelling of its first use |
   | `url` of a recipe | Not a valid link (REC-14): `''` |
   | `sent` | An id that is not text, is unknown or is a duplicate: dropped |
@@ -59,7 +61,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | `sort` | Unknown: `custom` |
   | Unknown fields | Dropped |
 
-- **STORE-8** An older state is migrated when it is read, and saved as version 6 at the next
+- **STORE-8** An older state is migrated when it is read, and saved as version 7 at the next
   change:
 
   | From | Change |
@@ -69,6 +71,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Version 1, 2 or 3 | `menu: []` |
   | Version 1 to 4 | Each item gets `quantity: ''` |
   | Version 1 to 5 | No change of the data: version 6 adds `list: 'saved'` |
+  | Version 1 to 6 | `aisles: []`, and each item gets `aisle: ''` |
 
 ## Failures
 

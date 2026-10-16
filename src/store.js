@@ -5,12 +5,14 @@ const LISTS = ['active', 'next'];
 // `custom` is the order of `items`: the insertion order, changed by the moves of the user.
 export const SORTS = ['custom', 'name'];
 
-// The groups of a list: by the recipes sent to Active, by the shops of each item, or none.
-export const GROUPS = ['recipe', 'shop', 'none'];
+// The groups of a list: by the recipes sent to Active, by the shops of each item, by the aisle of
+// each item, or none.
+export const GROUPS = ['recipe', 'shop', 'aisle', 'none'];
 
 // `sent` holds the ids of the recipes sent to Active in this trip. `group` is the choice of the
-// user to show a list in groups, and `sort` the order of the two lists.
-export const emptyState = () => ({ version: 6, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] });
+// user to show a list in groups, and `sort` the order of the two lists. `aisles` are the sections
+// of the store, in the order of the walk.
+export const emptyState = () => ({ version: 7, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] });
 
 // An error is a message: the key of its text, with the parameters of the text. A `list`
 // parameter holds a list id. The screen turns the message into text.
@@ -36,7 +38,7 @@ export const addItem = (state, rawName, list, newId = () => crypto.randomUUID())
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name);
   if (error) return reject(state, ...error);
-  const item = { id: newId(), name, recurrent: list === 'next', list, bought: false, again: false, shops: [], quantity: '' };
+  const item = { id: newId(), name, recurrent: list === 'next', list, bought: false, again: false, shops: [], quantity: '', aisle: '' };
   return { state: { ...state, items: [...state.items, item] } };
 };
 
@@ -159,10 +161,11 @@ export const fold = (text) =>
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '');
 
-// True when the name or one of the shops of the item contains the query. Each item for no query.
+// True when the name, one of the shops or the aisle of the item contains the query. Each item for
+// no query.
 export const matchesItem = (item, query) => {
   const key = fold(query);
-  return !key || [item.name, ...item.shops].some((text) => fold(text).includes(key));
+  return !key || [item.name, ...item.shops, item.aisle].some((text) => fold(text).includes(key));
 };
 
 // A list by group with only the items that match the query. A query takes away a group with no

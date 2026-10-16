@@ -26,6 +26,7 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 | [14-modules.md](14-modules.md) | The modules that `Ajustes` turns off |
 | [15-design-system.md](15-design-system.md) | Layers, tokens, components, icons and the catalogue |
 | [16-install.md](16-install.md) | The install offer and the Install button of `Ajustes` |
+| [17-aisles.md](17-aisles.md) | The sections of the store, the section of an item, the list by section |
 
 ## Rule identifiers
 
@@ -51,6 +52,7 @@ the identifier in a commit body or in a test name to point at a rule.
 | `MOD` | 14-modules |
 | `DS` | 15-design-system |
 | `INS` | 16-install |
+| `AISLE` | 17-aisles |
 
 ## Words
 
@@ -67,6 +69,7 @@ the identifier in a commit body or in a test name to point at a rule.
 | Recipe | A name and a list of product names |
 | Product | A name in a recipe. It is text, not an item |
 | Shop | A name that one item or more have. It has no record of its own |
+| Aisle | A section of a store, such as `Lácteos`. The screen says `Sección`; the code says `aisle`, because a section is a screen of the bottom bar |
 | Section | One of the five screens of the bottom bar |
 | Meal | The lunch or the dinner of one day of the menu |
 | Sheet | A panel that comes up from the bottom of the screen |
