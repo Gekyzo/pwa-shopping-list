@@ -1,6 +1,7 @@
 export default {
   'list.active': 'Current',
   'list.next': 'Next',
+  'list.saved': 'Saved',
   'nav.label': 'Sections',
   'nav.recipes': 'Recipes',
   'nav.settings': 'Settings',
@@ -197,6 +198,7 @@ export default {
   'error.duplicateItem': '“{name}” is already in {list}.',
   'error.unknownList': 'Unknown list.',
   'error.itemNotFound': 'Item not found.',
+  'error.itemSaved': 'This item is saved. Bring it to a list.',
   'error.onlyActiveTick': 'Only the items of {list} can be ticked.',
   'error.tickFirst': 'Tick the item first.',
   'error.recurrentInNext': 'A recurrent item is already in {list}.',

@@ -6,7 +6,7 @@ The app has one state object. Each operation returns a new object and never chan
 
 ```js
 {
-  version: 5,
+  version: 6,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
   sent: [string],     // ids of the recipes sent to Actual in this trip, in send order
@@ -16,7 +16,7 @@ The app has one state object. Each operation returns a new object and never chan
 }
 ```
 
-The empty state is `{ version: 5, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] }`.
+The empty state is `{ version: 6, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] }`.
 
 ## Item
 
@@ -25,7 +25,7 @@ The empty state is `{ version: 5, items: [], recipes: [], sent: [], group: 'reci
   id: string,         // crypto.randomUUID()
   name: string,       // trimmed, not empty
   recurrent: boolean, // comes back at each trip
-  list: 'active' | 'next',
+  list: 'active' | 'next' | 'saved', // 'saved': kept after a trip, in no list
   bought: boolean,    // ticked
   again: boolean,     // a ticked one-time item that the user wants at the next trip
   shops: [string],    // shop names
@@ -65,7 +65,7 @@ A meal with no recipe has no record. See [13-menu.md](13-menu.md).
   `leche` are one name; `Cafe` and `Café` are two.
 - **DATA-4** Recipe names are unique with no case distinction.
 - **DATA-5** The products of one recipe are unique with no case distinction.
-- **DATA-6** `bought` is true only for an item of `list: 'active'`.
+- **DATA-6** `bought` is true only for an item of `list: 'active'`. A saved item is never ticked.
 - **DATA-7** `again` is true only for an item that is ticked and not recurrent.
 - **DATA-8** The shops of one item are unique with no case distinction, trimmed and not empty.
 - **DATA-9** One shop has one spelling in the full state: the spelling of its first use.
@@ -84,13 +84,14 @@ No view is stored.
 |---|---|---|
 | `Actual` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
 | `Próxima` | `nextItems` | The items of `list: 'next'`, then the ticked items of `Actual` that are recurrent or have `again` |
-| Trip figures | `tripSummary` | `total`, `left`, `back`, `gone`, `incoming` |
+| `Guardados` | `savedItems` | The items of `list: 'saved'`, in name order |
+| Trip figures | `tripSummary` | `total`, `left`, `back`, `saved`, `incoming` |
 | Recipe groups | `recipeGroups` | `Actual` by recipe |
 | Shop groups | `shopGroups` | `Actual` or `Próxima` by shop |
 | Shops in use | `shopNames` | Each shop of an item, in name order |
 
 `tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the ticked
-ones that are recurrent or have `again`; `gone`, the other ticked ones; `incoming`, the items of
+ones that are recurrent or have `again`; `saved`, the other ticked ones; `incoming`, the items of
 `list: 'next'`.
 
 ## Name rules

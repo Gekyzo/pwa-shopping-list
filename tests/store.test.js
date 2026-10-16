@@ -11,6 +11,7 @@ import {
   moveItem,
   removeFromNext,
   startNewShopping,
+  canStartNewShopping,
   activeItems,
   nextItems,
   searchItems,
@@ -20,6 +21,7 @@ import {
   bringToList,
   bringAllToActual,
   tripSummary,
+  savedItems,
   arrivalMessage,
   setSort,
   sortItems,
@@ -250,9 +252,10 @@ test('startNewShopping applies each rule', () => {
   );
   const { state, error } = startNewShopping(start);
   assert.equal(error, undefined);
-  assert.deepEqual(names(state.items), ['Milk', 'Soap', 'Bread', 'Water']);
+  assert.deepEqual(names(state.items), ['Milk', 'Soap', 'Batteries', 'Bread', 'Water']);
+  assert.equal(find(state, 'Batteries').list, 'saved');
   state.items.forEach((item) => {
-    assert.equal(item.list, 'active');
+    assert.equal(item.list, item.name === 'Batteries' ? 'saved' : 'active');
     assert.equal(item.bought, false);
     assert.equal(item.again, false);
   });
@@ -365,11 +368,11 @@ test('tripSummary counts the items of each kind', () => {
     ['Bread', 'active'],
     ['Water', 'next'],
   );
-  assert.deepEqual(tripSummary(state), { total: 4, left: 1, back: 2, gone: 1, incoming: 1 });
+  assert.deepEqual(tripSummary(state), { total: 4, left: 1, back: 2, saved: 1, incoming: 1 });
 });
 
 test('tripSummary of an empty state is all zero', () => {
-  assert.deepEqual(tripSummary(emptyState()), { total: 0, left: 0, back: 0, gone: 0, incoming: 0 });
+  assert.deepEqual(tripSummary(emptyState()), { total: 0, left: 0, back: 0, saved: 0, incoming: 0 });
 });
 
 test('startNewShopping empties the sent recipes and keeps the recipes', () => {
@@ -624,4 +627,58 @@ test('a move and the end of a trip keep the quantity', () => {
   const after = startNewShopping(state).state;
   assert.deepEqual(after.items.map((item) => item.quantity), ['2 l', '12']);
   assert.equal(after.items[0].id, milk.id);
+});
+
+const saved = (...specs) => startNewShopping(build(...specs.map(([name, patch = {}]) => [name, 'active', { bought: true, ...patch }]))).state;
+
+test('startNewShopping keeps a saved item as it is', () => {
+  const start = saved(['Batteries', { shops: ['Lidl'], quantity: '4' }]);
+  const item = find(start, 'Batteries');
+  assert.deepEqual(item, { ...item, list: 'saved', bought: false, again: false, recurrent: false, shops: ['Lidl'], quantity: '4' });
+  const withNext = { ...start, items: [...start.items, ...build(['Water', 'next']).items] };
+  assert.deepEqual(find(startNewShopping(withNext).state, 'Batteries'), item);
+});
+
+test('a saved item is in no list view and not in the trip figures', () => {
+  const state = saved(['Batteries']);
+  assert.deepEqual(activeItems(state), []);
+  assert.deepEqual(nextItems(state), []);
+  assert.deepEqual(tripSummary(state), { total: 0, left: 0, back: 0, saved: 0, incoming: 0 });
+  assert.equal(canStartNewShopping(state), false);
+});
+
+test('savedItems gives the saved items in name order', () => {
+  const state = saved(['Soap'], ['batteries'], ['Milk', { recurrent: true }]);
+  assert.deepEqual(names(savedItems(state)), ['batteries', 'Soap']);
+  assert.deepEqual(savedItems(emptyState()), []);
+});
+
+test('bringToList takes a saved item to either list, not ticked', () => {
+  const state = saved(['Batteries', { shops: ['Lidl'] }]);
+  const id = find(state, 'Batteries').id;
+  for (const list of ['active', 'next']) {
+    const result = bringToList(state, id, list);
+    assert.equal(result.changed, true);
+    assert.deepEqual(find(result.state, 'Batteries'), { ...find(state, 'Batteries'), list });
+  }
+  assert.deepEqual(names(nextItems(bringToList(state, id, 'next').state)), ['Batteries']);
+});
+
+test('a saved item cannot be ticked or moved', () => {
+  const state = saved(['Batteries']);
+  const id = find(state, 'Batteries').id;
+  assert.deepEqual(toggleBought(state, id), { state, error: { key: 'error.onlyActiveTick', params: { list: 'active' } } });
+  assert.deepEqual(moveItem(state, id), { state, error: { key: 'error.itemSaved' } });
+});
+
+test('a saved item keeps its name: search finds it and an add of the name is a duplicate', () => {
+  const state = saved(['Batteries']);
+  assert.equal(findByName(state, 'batteries').list, 'saved');
+  assert.deepEqual(names(searchItems(state, 'batt')), ['Batteries']);
+  assert.deepEqual(addItem(state, 'Batteries', 'active').error, { key: 'error.duplicateItem', params: { name: 'Batteries', list: 'saved' } });
+});
+
+test('a delete removes a saved item for good', () => {
+  const state = saved(['Batteries']);
+  assert.deepEqual(deleteItem(state, find(state, 'Batteries').id).state.items, []);
 });

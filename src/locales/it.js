@@ -1,6 +1,7 @@
 export default {
   'list.active': 'Attuale',
   'list.next': 'Prossima',
+  'list.saved': 'Salvati',
   'nav.label': 'Sezioni',
   'nav.recipes': 'Ricette',
   'nav.settings': 'Impostazioni',
@@ -197,6 +198,7 @@ export default {
   'error.duplicateItem': '«{name}» è già in {list}.',
   'error.unknownList': 'Lista sconosciuta.',
   'error.itemNotFound': 'Articolo non trovato.',
+  'error.itemSaved': 'Questo articolo è salvato. Riportalo in una lista.',
   'error.onlyActiveTick': 'Si possono spuntare solo gli articoli di {list}.',
   'error.tickFirst': 'Spunta prima l’articolo.',
   'error.recurrentInNext': 'Un articolo ricorrente è già in {list}.',

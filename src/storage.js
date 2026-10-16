@@ -6,7 +6,7 @@ import { MODULES } from '#modules';
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
 
-const LISTS = ['active', 'next'];
+const LISTS = ['active', 'next', 'saved'];
 
 const unique = (values) => new Set(values).size === values.length;
 
@@ -99,9 +99,9 @@ const normalizeMenu = (rawMenu, known) => {
     .sort((a, b) => a.day - b.day || MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
 };
 
-const VERSIONS = [1, 2, 3, 4, 5];
+const VERSIONS = [1, 2, 3, 4, 5, 6];
 
-// Returns a clean version 5 state, or null when the data is not a known state.
+// Returns a clean version 6 state, or null when the data is not a known state.
 const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
@@ -121,7 +121,7 @@ const normalizeState = (data) => {
   const rawSent = Array.isArray(data.sent) ? data.sent : [];
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
   return {
-    version: 5,
+    version: 6,
     items: oneSpelling(items),
     recipes,
     sent,
