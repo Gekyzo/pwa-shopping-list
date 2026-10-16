@@ -17,6 +17,7 @@ No change.
   the other items of `Actual`, bought or not, in place of a delete or a carry-over. They are at the
   end of `Actual` and of `Próxima`, under `Volver a comprar`, and the add sheet finds them. A slide to the right brings one back to the
   list, with its shops and its quantity.
+- A tap on the head of a group (a recipe, `Otros`, a shop) closes and opens its rows.
 - The section of the ticked items reads `Comprados (N)`, in the form of `Volver a comprar (N)`.
 
 ## 1.0.30 - 2026-10-16
