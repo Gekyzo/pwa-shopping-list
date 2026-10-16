@@ -20,7 +20,6 @@ const files = {
 
 // The exceptions of docs/spec/15-design-system.md, by rule id.
 const SKIP = {
-  'LAY-3': 'the app has no list and detail section, so it has no pane layout (DSV-5)',
   'LAY-4': 'the app does not pad for a cutout (DSV-5)',
 };
 
@@ -35,8 +34,8 @@ test('the design system has rules to run', () => {
 
 for (const rule of RULES) test(rule.title, { skip: SKIP[rule.id] ?? false }, () => assert.deepEqual(rule.check(files), []));
 
-test('the parts of the app are documented (DSV-3)', () => {
-  const names = parseCatalog({ css: files.css, sprite: files.sprite }).components.map((part) => part.name);
+test('the parts of the app are documented in styles.css (DSV-3)', () => {
+  const names = parseCatalog({ css: read('styles.css'), sprite: files.sprite }).components.map((part) => part.name);
   for (const name of ['shop-lists', 'search', 'product-form', 'hint']) assert.ok(names.includes(name), name);
 });
 
