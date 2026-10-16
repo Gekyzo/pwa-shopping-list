@@ -139,7 +139,7 @@ export default {
   'onboarding.sections.text': 'Llisca als costats o fes servir la barra inferior per navegar entre seccions. Amb `+` afegeixes el que necessitis.',
 
   'settings.back': { one: '{count} torna', other: '{count} tornen' },
-  'settings.saved': { one: '{count} es desa', other: '{count} es desen' },
+  'settings.discarded': { one: '{count} es descarta', other: '{count} es descarten' },
   'settings.backup': 'Còpia de seguretat',
   'settings.export': 'Exporta',
   'settings.import': 'Importa',
@@ -152,7 +152,7 @@ export default {
   'settings.themeLight': 'Clar',
   'settings.themeDark': 'Fosc',
   'settings.tripEnd': 'En acabar la compra',
-  'settings.tripEndHint': 'Descartar porta el que no has comprat a Tornar a comprar; Ajornar ho deixa a Actual.',
+  'settings.tripEndHint': 'Tria què passa amb els articles no comprats: descartar-los o ajornar-los a la propera compra.',
   'settings.modules': 'Mòduls',
   'settings.moduleRecipes': 'Receptes i menú',
   'onboarding.recipes.title': 'Què mengem aquesta setmana?',

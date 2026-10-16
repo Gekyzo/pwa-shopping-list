@@ -139,7 +139,7 @@ export default {
   'onboarding.sections.text': 'Scorri ai lati o usa la barra inferiore per navigare tra le sezioni. Con `+` aggiungi ciò che ti serve.',
 
   'settings.back': { one: '{count} torna', other: '{count} tornano' },
-  'settings.saved': { one: '{count} viene salvato', other: '{count} vengono salvati' },
+  'settings.discarded': { one: '{count} viene scartato', other: '{count} vengono scartati' },
   'settings.backup': 'Copia di sicurezza',
   'settings.export': 'Esporta',
   'settings.import': 'Importa',
@@ -152,7 +152,7 @@ export default {
   'settings.themeLight': 'Chiaro',
   'settings.themeDark': 'Scuro',
   'settings.tripEnd': 'Alla fine della spesa',
-  'settings.tripEndHint': 'Scarta sposta ciò che non hai comprato in Da ricomprare; Rimanda lo lascia in Attuale.',
+  'settings.tripEndHint': 'Scegli cosa succede agli articoli non comprati: scartarli o rimandarli alla prossima spesa.',
   'settings.modules': 'Moduli',
   'settings.moduleRecipes': 'Ricette e menù',
   'onboarding.recipes.title': 'Cosa mangiamo questa settimana?',

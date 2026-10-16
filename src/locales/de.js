@@ -139,7 +139,7 @@ export default {
   'onboarding.sections.text': 'Wische zur Seite oder nutze die untere Leiste, um zwischen den Bereichen zu wechseln. Mit `+` fügst du hinzu, was du brauchst.',
 
   'settings.back': { one: '{count} kommt zurück', other: '{count} kommen zurück' },
-  'settings.saved': { one: '{count} wird gespeichert', other: '{count} werden gespeichert' },
+  'settings.discarded': { one: '{count} wird verworfen', other: '{count} werden verworfen' },
   'settings.backup': 'Sicherung',
   'settings.export': 'Exportieren',
   'settings.import': 'Importieren',
@@ -152,7 +152,7 @@ export default {
   'settings.themeLight': 'Hell',
   'settings.themeDark': 'Dunkel',
   'settings.tripEnd': 'Am Ende des Einkaufs',
-  'settings.tripEndHint': 'Verwerfen legt nicht Gekauftes in Wieder kaufen ab; Verschieben lässt es in Aktuell.',
+  'settings.tripEndHint': 'Wähle, was mit nicht gekauften Artikeln passiert: verwerfen oder auf den nächsten Einkauf verschieben.',
   'settings.modules': 'Module',
   'settings.moduleRecipes': 'Rezepte und Menü',
   'onboarding.recipes.title': 'Was essen wir diese Woche?',

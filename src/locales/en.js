@@ -139,7 +139,7 @@ export default {
   'onboarding.sections.text': 'Slide to the sides or use the bottom bar to move between sections. With `+` you add what you need.',
 
   'settings.back': { one: '{count} comes back', other: '{count} come back' },
-  'settings.saved': { one: '{count} is saved', other: '{count} are saved' },
+  'settings.discarded': { one: '{count} is discarded', other: '{count} are discarded' },
   'settings.backup': 'Backup',
   'settings.export': 'Export',
   'settings.import': 'Import',
@@ -152,7 +152,7 @@ export default {
   'settings.themeLight': 'Light',
   'settings.themeDark': 'Dark',
   'settings.tripEnd': 'When the trip ends',
-  'settings.tripEndHint': 'Discard moves what you did not buy to Buy again; Postpone leaves it in Current.',
+  'settings.tripEndHint': 'Choose what happens to the items you did not buy: discard them or postpone them to the next trip.',
   'settings.modules': 'Modules',
   'settings.moduleRecipes': 'Recipes and menu',
   'onboarding.recipes.title': 'What do we eat this week?',

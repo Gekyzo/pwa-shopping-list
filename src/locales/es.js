@@ -139,7 +139,7 @@ export default {
   'onboarding.sections.text': 'Desliza a los lados o usa la barra inferior para navegar entre secciones. Con `+` añades lo que necesites.',
 
   'settings.back': { one: '{count} vuelve', other: '{count} vuelven' },
-  'settings.saved': { one: '{count} se guarda', other: '{count} se guardan' },
+  'settings.discarded': { one: '{count} se descarta', other: '{count} se descartan' },
   'settings.backup': 'Copia de seguridad',
   'settings.export': 'Exportar',
   'settings.import': 'Importar',
@@ -152,7 +152,7 @@ export default {
   'settings.themeLight': 'Claro',
   'settings.themeDark': 'Oscuro',
   'settings.tripEnd': 'Al terminar la compra',
-  'settings.tripEndHint': 'Descartar lleva lo no comprado a Volver a comprar; Aplazar lo deja en Actual.',
+  'settings.tripEndHint': 'Selecciona qué ocurre con los artículos no comprados: descartarlos o aplazarlos a la próxima compra.',
   'settings.modules': 'Módulos',
   'settings.moduleRecipes': 'Recetas y menú',
   'onboarding.recipes.title': '¿Qué comemos esta semana?',

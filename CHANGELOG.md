@@ -17,7 +17,8 @@ no change for the user has no entry.
   list. The search of a list also finds the items of a section.
 - **Terminar compra** asks what to do with each item not bought: **Descartar** it to `Volver a
   comprar` or **Aplazar** it in `Actual`. **Al terminar la compra** in `Ajustes` sets the first
-  choice with two buttons, **Descartar** and **Aplazar**, and a line that says what each one does.
+  choice with two buttons, **Descartar** and **Aplazar**, and a line that says what the choice is for. The entry
+  **Terminar compra** counts the items that `se descartan`.
 
 ## 1.0.33 - 2026-10-16
 

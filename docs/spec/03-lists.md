@@ -72,7 +72,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 - **TRIP-4** The control shows in three places:
   1. A banner `¿Has terminado?` in `Actual`, when the list has items and all are ticked. Its text
      gives the count that comes back and the count that is saved.
-  2. The entry of the trip sheet of `Actual` (NAV-9), with `N vuelven · N se guardan`. It is disabled
+  2. The entry of the trip sheet of `Actual` (NAV-9), with `N vuelven · N se descartan`. It is disabled
      when TRIP-1 does not hold.
   3. The button `Traer N artículos de Próxima`, in the empty state of `Actual`, when items wait in
      `list: 'next'`. Its message is `Artículos traídos de Próxima.`
@@ -86,8 +86,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   value), and the button **Terminar compra**. A tap on the veil closes the sheet and changes
   nothing. The banner and `Traer N artículos de Próxima` never have an open item.
 - **TRIP-7** **Al terminar la compra** of `Ajustes` has two buttons side by side: `Descartar` and
-  `Aplazar`, and the chosen one is pressed. A line below the title says that `Descartar` takes an
-  open item to `Volver a comprar` and `Aplazar` leaves it in `Actual`. It is the first choice of each open item at
+  `Aplazar`, and the chosen one is pressed. A line below the title says that the choice sets what
+  happens to the items not bought: `Descartar` or `Aplazar` to the next trip. It is the first choice of each open item at
   **Terminar compra**, and the entry of the trip sheet counts the open items with it. An app with
   no choice uses `Descartar`.
 - **TRIP-8** The choice is stored in `shopping.tripEnd`. `Descartar` removes the key.
