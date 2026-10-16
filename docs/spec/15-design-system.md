@@ -23,7 +23,8 @@ This document holds the rules of the app only.
   its tokens, the `body` rule and the font of the controls, the screen parts, and its versions of
   shared components. A version of a shared component starts with the block `/* @extends <name> */`,
   in the same layer, so that it wins; the block documents the parts, variants and states that the
-  app adds. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
+  app adds. A version holds only the rules that differ from the shared ones, so that a change of
+  the shared sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
   app has its own versions of `icon`, `nav-bar`, `toast`, `item-row`, `group-head` and `fab`.
 - **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
   Nothing edits `vendor/` by hand.
