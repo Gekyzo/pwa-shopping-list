@@ -17,31 +17,39 @@ export const closeAisles = () => {
   $('aisles-open').focus();
 };
 
-const step = (aisle, label, by, disabled) => {
-  const button = el('button', { type: 'button', className: 'button icon', textContent: by < 0 ? '↑' : '↓', disabled });
-  button.addEventListener('click', () => apply(aisles.moveAisle(state, aisle, by)));
-  button.setAttribute('aria-label', t(label, { name: aisle }));
+// The rows keep their nodes while the count of aisles stays, and each handler reads the aisle of
+// its row when it runs: the blur of a renamed field renders between the press and the click of the
+// next tap, and a new node would lose that click.
+const step = (index, by) => {
+  const button = el('button', { type: 'button', className: 'button icon', textContent: by < 0 ? '↑' : '↓' });
+  button.addEventListener('click', () => apply(aisles.moveAisle(state, state.aisles[index], by)));
   return button;
 };
 
 // One aisle: its name field, which renames it on blur or Enter, the two moves and the delete.
-const aisleNode = (aisle, index) => {
-  const input = el('input', { type: 'text', className: 'input', value: aisle, maxLength: 40, enterKeyHint: 'done' });
+const aisleNode = (_, index) => {
+  const input = el('input', { type: 'text', className: 'input', maxLength: 40, enterKeyHint: 'done' });
   input.setAttribute('autocapitalize', 'sentences');
-  input.setAttribute('aria-label', t('aisles.name', { name: aisle }));
-  const current = () => (state.aisles.includes(aisle) ? aisle : undefined);
-  bindField(input, current, (value) => apply(aisles.renameAisle(state, aisle, value)));
-  const remove = el('button', {
-    type: 'button',
-    className: 'button icon',
-    textContent: '✕',
-    onclick: () => apply(aisles.deleteAisle(state, aisle), { undoText: t('toast.aisleDeleted', { name: aisle }) }),
+  bindField(input, () => state.aisles[index], (value) => apply(aisles.renameAisle(state, state.aisles[index], value)));
+  const remove = el('button', { type: 'button', className: 'button icon', textContent: '✕' });
+  remove.addEventListener('click', () => {
+    const name = state.aisles[index];
+    apply(aisles.deleteAisle(state, name), { undoText: t('toast.aisleDeleted', { name }) });
   });
+  return el('li', { className: 'product' }, [el('div', { className: 'input-row' }, [input, step(index, -1), step(index, 1), remove])]);
+};
+
+// Writes the aisle of each row: the name of a field that is not in edit, the labels, the ends.
+const fillRow = (row, index) => {
+  const aisle = state.aisles[index];
+  const [input, up, down, remove] = row.querySelectorAll('input, button');
+  if (document.activeElement !== input) input.value = aisle;
+  input.setAttribute('aria-label', t('aisles.name', { name: aisle }));
+  up.setAttribute('aria-label', t('aisles.up', { name: aisle }));
+  down.setAttribute('aria-label', t('aisles.down', { name: aisle }));
   remove.setAttribute('aria-label', t('aisles.delete', { name: aisle }));
-  const last = index === state.aisles.length - 1;
-  return el('li', { className: 'product' }, [
-    el('div', { className: 'input-row' }, [input, step(aisle, 'aisles.up', -1, index === 0), step(aisle, 'aisles.down', 1, last), remove]),
-  ]);
+  up.disabled = index === 0;
+  down.disabled = index === state.aisles.length - 1;
 };
 
 // The row of Ajustes shows the count; the sheet lists each aisle, in the order of the walk.
@@ -52,7 +60,9 @@ export const renderAisles = () => {
   const none = state.aisles.length === 0;
   $('aisles-empty').hidden = !none;
   $('aisles-usual').hidden = !none;
-  $('aisles-list').replaceChildren(...state.aisles.map(aisleNode));
+  const list = $('aisles-list');
+  if (list.children.length !== state.aisles.length) list.replaceChildren(...state.aisles.map(aisleNode));
+  [...list.children].forEach(fillRow);
 };
 
 export const bind = () => {
