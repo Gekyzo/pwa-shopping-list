@@ -12,6 +12,9 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
   The sections are configurable in the settings.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
+- **Automatic export.** Export the backup once a day, as **Exportar** does.
+  Each export replaces the export of the day before. A switch in `Ajustes` turns
+  it on and off.
 
 ### Deferred
 
