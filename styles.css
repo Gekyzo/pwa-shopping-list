@@ -31,21 +31,6 @@
   /* @extends icon
      @variant corner    The basket behind a list, in the bottom corner on the other side of the +
      button. Tilted, cut by the corner, nearly transparent. One in the page. */
-  .icon {
-    flex: none;
-    width: var(--icon);
-    height: var(--icon);
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .icon.small {
-    width: var(--icon-s);
-    height: var(--icon-s);
-  }
 
   /* Behind the content (z-index -1): the rows, the + button and the bottom bar cover it. Its bottom
      edge is measured from the top of the bottom bar. */
@@ -69,33 +54,6 @@
   }
 
   /* @extends nav-bar */
-  .nav-bar {
-    display: flex;
-    flex: none;
-    padding-bottom: env(safe-area-inset-bottom);
-    border-top: 1px solid var(--line);
-    background: var(--surface);
-  }
-
-  .nav-item {
-    position: relative;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-half);
-    height: var(--nav-height);
-    border-radius: 0;
-    color: var(--muted);
-    font-size: var(--text-xs);
-  }
-
-  .nav-item[aria-current="page"] {
-    color: var(--accent);
-    font-weight: var(--weight-strong);
-  }
-
   /* The bar stays at the bottom at each width: this resets the rail of the shared nav-bar. */
   @media (min-width: 600px) {
     .nav-bar {
@@ -137,29 +95,6 @@
     transition: opacity var(--motion) ease-out, transform var(--motion) ease-out, display var(--motion) allow-discrete;
   }
 
-  /* The toast leaves to this state, and enters from the same one. */
-  .toast[hidden] {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  @starting-style {
-    .toast {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-  }
-
-  /* An open sheet has the bottom of the screen, so the toast goes to the top. */
-  body:has(.sheet-layer:not([hidden])) .toast {
-    top: calc(var(--space-2) + env(safe-area-inset-top));
-    bottom: auto;
-  }
-
-  .toast-text {
-    flex: 1;
-  }
-
   /* The bar stays at the bottom, so the toast keeps its place above it at each width. */
   @media (min-width: 600px) {
     .toast {
@@ -171,166 +106,15 @@
   /* @extends item-row
      @variant recipe              A recipe: its name and product count, then its link and send buttons.
      @state bought    A ticked item of Actual. */
-  .item-row {
-    border-bottom: 1px solid var(--line);
-    background: var(--surface);
-    /* The rows of a scope open a gap for a lifted row. `placeLifted` in drag.js sets the transform. */
-    transition: transform var(--motion-fast) ease-out;
-  }
-
-  .item-row.lifted {
-    position: relative;
-    z-index: 2;
-    box-shadow: var(--shadow-l);
-    transition: none;
-  }
-
-  .item-row.flash .item-row-body {
-    animation: flash var(--motion-slow) ease-out;
-  }
-
-  .item-row.gone {
-    display: none;
-  }
-
-  @keyframes flash {
-    from {
-      background: var(--accent-soft);
-    }
-  }
-
-  .item-row-swipe {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .item-row-actions {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-  }
-
-  /* The slide to the right shows its action below the row. The actions cover it. */
-  .item-row-backdrop {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    padding-left: var(--space-5);
-    background: var(--accent-soft);
-    color: var(--accent);
-    transition: background var(--motion-fast), color var(--motion-fast);
-  }
-
-  .item-row-swipe.armed .item-row-backdrop {
-    background: var(--accent);
-    color: var(--accent-text);
-  }
-
-  .item-row-body {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    min-height: var(--tap-l);
-    padding: 0 var(--space-1) 0 var(--space-2);
-    background: var(--surface);
-  }
-
-  .item-row-swipe .item-row-body {
-    padding-right: var(--space-3);
-    touch-action: pan-y;
-    user-select: none;
-    transition: transform var(--motion-fast) ease-out;
-  }
-
-  .item-row-swipe .item-row-body.dragging {
-    transition: none;
-  }
-
-  .item-row-check {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: var(--icon);
-    height: var(--icon);
-    margin: var(--space-3) var(--space-1) var(--space-3) var(--space-2);
-    border: 2px solid var(--muted);
-    border-radius: var(--radius-round);
-    background: none;
-    appearance: none;
-    cursor: pointer;
-  }
-
-  .item-row-check:checked {
-    border-color: var(--accent);
-    background: var(--accent);
-  }
-
-  /* The tick: two sides of a small box, turned. */
-  .item-row-check:checked::after {
-    content: "";
-    width: 10px;
-    height: 5px;
-    margin-top: calc(var(--space-half) * -1);
-    border: solid var(--accent-text);
-    border-width: 0 0 2px 2px;
-    transform: rotate(-45deg);
-  }
-
-  .item-row-name {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    min-width: 0;
-    min-height: var(--tap-l);
-    padding: 0 var(--space-1);
-    border-radius: 0;
-    overflow-wrap: anywhere;
-    text-align: left;
-  }
-
-  /* A row of Próxima has no checkbox: its name keeps the place of one. */
-  .item-row-body > .item-row-name:first-child {
-    padding-left: var(--space-3);
-  }
 
   .item-row.bought .item-row-name {
     color: var(--muted);
     text-decoration: line-through;
   }
 
-  .item-row-meta {
-    color: var(--muted);
-    font-size: var(--text-xs);
-  }
-
-  .item-row-qty {
-    color: var(--muted);
-    font-size: var(--text-s);
-  }
-
   /* @extends group-head
      @part group-head-button  The full-width button that closes and opens the group, with aria-expanded.
      @part group-head-end     The count and the chevron, at the end of the button. */
-  .group-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2);
-    min-height: var(--tap);
-    padding: 0 var(--space-4);
-    border-bottom: 1px solid var(--line);
-    color: var(--accent);
-    font-size: var(--text-s);
-    font-weight: var(--weight-strong);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
 
   .group-head:has(> .group-head-button) {
     padding: 0;
@@ -374,29 +158,6 @@
   }
 
   /* Left hand: the controls change side. Text stays aligned to the left, and a row slides as before. */
-
-  [data-hand="left"] .app-header {
-    flex-direction: row-reverse;
-  }
-
-  [data-hand="left"] .app-header .button.icon:not([hidden]) ~ .button.icon:not([hidden]) {
-    margin-right: calc(var(--space-2) * -1);
-    margin-left: 0;
-  }
-
-  [data-hand="left"] .item-row-body {
-    flex-direction: row-reverse;
-    padding: 0 var(--space-2) 0 var(--space-1);
-  }
-
-  [data-hand="left"] .item-row-swipe .item-row-body {
-    padding-right: var(--space-2);
-    padding-left: var(--space-3);
-  }
-
-  [data-hand="left"] .item-row-check {
-    margin: var(--space-3) var(--space-2) var(--space-3) var(--space-1);
-  }
 
   [data-hand="left"] .fab {
     right: auto;
