@@ -1562,6 +1562,7 @@
 
   .settings-hint {
     padding: 0 var(--space-4) var(--space-2);
+    text-align: justify;
   }
 
   .settings .list-group > .segmented {
