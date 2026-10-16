@@ -72,7 +72,7 @@ export default {
   'finish.saved': { one: '{count} is saved.', other: '{count} are saved.' },
   'trip.menu': 'Shopping options',
   'trip.open': 'What you did not buy',
-  'trip.save': 'Save',
+  'trip.discard': 'Discard',
   'trip.keep': 'Keep',
 
   'recipes.search': 'Search recipe or product',

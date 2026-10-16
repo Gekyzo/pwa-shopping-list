@@ -15,9 +15,9 @@ no change for the user has no entry.
 - `Editar` sets the section of an item, below its shops.
 - **Agrupar por** has **Secciones**: the list follows the order of the sections, also in a shop
   list. The search of a list also finds the items of a section.
-- **Terminar compra** asks what to do with each item not bought: **Guardar** it in `Volver a
+- **Terminar compra** asks what to do with each item not bought: **Descartar** it to `Volver a
   comprar` or **Mantener** it in `Actual`. **Al terminar la compra** in `Ajustes` sets the first
-  choice with two buttons, **Guardar** and **Mantener**.
+  choice with two buttons, **Descartar** and **Mantener**.
 
 ## 1.0.33 - 2026-10-16
 
