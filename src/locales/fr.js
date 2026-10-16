@@ -1,6 +1,7 @@
 export default {
   'list.active': 'Actuelle',
   'list.next': 'Prochaine',
+  'list.saved': 'Enregistrés',
   'nav.label': 'Sections',
   'nav.recipes': 'Recettes',
   'nav.settings': 'Réglages',
@@ -197,6 +198,7 @@ export default {
   'error.duplicateItem': '« {name} » est déjà dans {list}.',
   'error.unknownList': 'Liste inconnue.',
   'error.itemNotFound': 'Article introuvable.',
+  'error.itemSaved': 'Cet article est enregistré. Ramenez-le dans une liste.',
   'error.onlyActiveTick': 'Seuls les articles de {list} peuvent être cochés.',
   'error.tickFirst': 'Cochez d’abord l’article.',
   'error.recurrentInNext': 'Un article récurrent est déjà dans {list}.',

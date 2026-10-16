@@ -23,7 +23,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 - **LIST-27** An item has a quantity: free text, such as `2`, `1 kg` or `3 latas`, or none. The
   quantity is trimmed; an empty text clears it. The same text changes nothing.
-- **LIST-28** A move, a tick and **Terminar compra** keep the quantity. A delete removes it with the
+- **LIST-28** A move, a tick, **Terminar compra** and a bring back of a saved item keep the quantity. A delete removes it with the
   item.
 - **LIST-29** The search of a list does not match the quantity (LIST-22).
 
@@ -61,7 +61,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   | Item | Result |
   |---|---|
   | Ticked, recurrent or with `again` | Stays in `Actual`, not ticked, `again` cleared |
-  | Ticked, one-time, no `again` | Deleted |
+  | Ticked, one-time, no `again` | Saved: `list: 'saved'`, not ticked (LIST-30) |
+  | Saved | Does not change |
   | In `Actual`, not ticked | Stays |
   | In `list: 'next'` | Moves to `Actual` |
 
@@ -139,6 +140,17 @@ sheet is open.
   With no ticked match the head does not show.
 - **LIST-26** With no match the list shows `Ningún artículo coincide con «text».` The button
   `Traer N artículos de Próxima` and the hint of LIST-18 do not show.
+
+## Saved items
+
+- **LIST-30** **Terminar compra** saves a ticked one-time item with no `again`: it leaves the two
+  lists and keeps its name, its shops and its quantity. Only **Eliminar** deletes an item.
+- **LIST-31** A saved item keeps its name (DATA-3). The add sheet finds it (ADD-3), and an add of
+  its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.
+- **LIST-32** A bring back puts a saved item in the target list, not ticked. `recurrent` does not
+  change. A saved item cannot be ticked or moved: a move gives `error.itemSaved`.
+- **LIST-33** A saved item counts in no header figure, in no trip figure and not in the bottom
+  bar.
 
 ## Limits
 

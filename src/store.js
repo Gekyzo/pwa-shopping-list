@@ -1,3 +1,5 @@
+// The lists that an item can be put in. A third value, `saved`, holds the items that a trip
+// ended: they are in no list until the user brings them back.
 const LISTS = ['active', 'next'];
 
 // `custom` is the order of `items`: the insertion order, changed by the moves of the user.
@@ -8,7 +10,7 @@ export const GROUPS = ['recipe', 'shop', 'none'];
 
 // `sent` holds the ids of the recipes sent to Active in this trip. `group` is the choice of the
 // user to show a list in groups, and `sort` the order of the two lists.
-export const emptyState = () => ({ version: 5, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] });
+export const emptyState = () => ({ version: 6, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] });
 
 // An error is a message: the key of its text, with the parameters of the text. A `list`
 // parameter holds a list id. The screen turns the message into text.
@@ -82,6 +84,7 @@ export const deleteItem = (state, id) => {
 export const moveItem = (state, id) => {
   const item = findItem(state, id);
   if (!item) return reject(state, 'error.itemNotFound');
+  if (item.list === 'saved') return reject(state, 'error.itemSaved');
   const list = item.list === 'active' ? 'next' : 'active';
   return patchItem(state, id, { list, bought: false, again: false });
 };
@@ -98,9 +101,12 @@ export const canStartNewShopping = (state) => state.items.some((item) => item.bo
 
 export const startNewShopping = (state) => {
   if (!canStartNewShopping(state)) return reject(state, 'error.nothingToStart', { list: 'next' });
-  const items = state.items
-    .filter((item) => !item.bought || item.recurrent || item.again)
-    .map((item) => ({ ...item, list: 'active', bought: false, again: false }));
+  // A ticked one-time item is saved, not deleted, so that the user can bring it back.
+  const items = state.items.map((item) => {
+    if (item.list === 'saved') return item;
+    const list = item.bought && !item.recurrent && !item.again ? 'saved' : 'active';
+    return { ...item, list, bought: false, again: false };
+  });
   return { state: { ...state, items, sent: [] } };
 };
 
@@ -198,6 +204,7 @@ export const bringToList = (state, id, list) => {
   const item = findItem(state, id);
   if (!item) return reject(state, 'error.itemNotFound');
   const done = (result) => ({ ...result, changed: true });
+  if (item.list === 'saved') return done(patchItem(state, id, { list }));
   if (list === 'active') {
     if (item.list === 'next') return done(moveItem(state, id));
     if (item.bought) return done(toggleBought(state, id));
@@ -215,8 +222,11 @@ export const bringAllToActual = (state) => {
   return { state: { ...state, items } };
 };
 
+// The saved items, in name order.
+export const savedItems = (state) => state.items.filter((item) => item.list === 'saved').sort(byName);
+
 // Figures for the header and for the preview of `startNewShopping`:
-// `back` items stay for the next trip, `gone` items are deleted, `incoming` items wait in Next.
+// `back` items stay for the next trip, `saved` items are saved, `incoming` items wait in Next.
 export const tripSummary = (state) => {
   const active = state.items.filter((item) => item.list === 'active');
   const bought = active.filter((item) => item.bought);
@@ -225,8 +235,8 @@ export const tripSummary = (state) => {
     total: active.length,
     left: active.length - bought.length,
     back,
-    gone: bought.length - back,
-    incoming: state.items.length - active.length,
+    saved: bought.length - back,
+    incoming: state.items.filter((item) => item.list === 'next').length,
   };
 };
 

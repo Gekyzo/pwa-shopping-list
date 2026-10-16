@@ -1,6 +1,7 @@
 export default {
   'list.active': 'Actual',
   'list.next': 'Próxima',
+  'list.saved': 'Guardados',
   'nav.label': 'Secciones',
   'nav.recipes': 'Recetas',
   'nav.settings': 'Ajustes',
@@ -197,6 +198,7 @@ export default {
   'error.duplicateItem': '"{name}" ya está en {list}.',
   'error.unknownList': 'Lista desconocida.',
   'error.itemNotFound': 'Artículo no encontrado.',
+  'error.itemSaved': 'Este artículo está guardado. Tráelo a una lista.',
   'error.onlyActiveTick': 'Solo se pueden marcar los artículos de {list}.',
   'error.tickFirst': 'Marca primero el artículo.',
   'error.recurrentInNext': 'Un artículo recurrente ya está en {list}.',

@@ -1,6 +1,7 @@
 export default {
   'list.active': 'Actual',
   'list.next': 'Pròxima',
+  'list.saved': 'Desats',
   'nav.label': 'Seccions',
   'nav.recipes': 'Receptes',
   'nav.settings': 'Configuració',
@@ -197,6 +198,7 @@ export default {
   'error.duplicateItem': '«{name}» ja és a {list}.',
   'error.unknownList': 'Llista desconeguda.',
   'error.itemNotFound': 'Article no trobat.',
+  'error.itemSaved': 'Aquest article està desat. Porta’l a una llista.',
   'error.onlyActiveTick': 'Només es poden marcar els articles de {list}.',
   'error.tickFirst': 'Marca primer l’article.',
   'error.recurrentInNext': 'Un article recurrent ja és a {list}.',

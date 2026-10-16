@@ -52,7 +52,7 @@ const listNodes = (items) => {
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
-const finishText = ({ back, gone }) => `${t('finish.back', { count: back })} ${t('finish.gone', { count: gone })}`;
+const finishText = ({ back, saved }) => `${t('finish.back', { count: back })} ${t('finish.gone', { count: saved })}`;
 
 const activeSubtitle = ({ total, left }) => {
   if (!total) return t('header.empty');
