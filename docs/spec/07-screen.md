@@ -32,6 +32,10 @@ of it.
   `No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.`, `No hay
   recetas. Toca + para crear una.` or, in `Menú`, `No hay recetas. Crea una en Recetas para
   planificar el menú.`
+- **NAV-18** `Actual`, `Próxima` and `Recetas` show a line drawing of the basket of the app icon
+  behind the content, in the bottom corner on the other side of the `+` button (NAV-13). It is
+  tilted 30° and at 6 % opacity, and the corner and the bottom bar cut part of it. It takes the
+  colour of the text, takes no tap and does not move with the scroll.
 
 ## Item rows
 
@@ -132,6 +136,7 @@ of it.
   | Part | `Derecha` | `Izquierda` |
   |---|---|---|
   | `+` button | Bottom right | Bottom left |
+  | Basket behind a list (NAV-18) | Bottom left | Bottom right |
   | Header | Ring, text, buttons | Buttons, text, ring |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
