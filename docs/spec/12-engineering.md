@@ -61,6 +61,11 @@
   `src/app.js`, a pure module never imports a view, and the imports among the views have no
   cycle. `src/ui/context.js` owns the values that the views share; another module reads them
   through its import and changes them only through a setter. `tests/layers.test.js` checks this.
+- **ENG-17** On the dev server (`localhost`, `127.0.0.1` or `[::1]`, as `npm run serve` gives) the
+  app writes a debug log to the console: the state at the start, each change of section, each change
+  of the state as a list of item changes, each message and each `Deshacer`. Each line starts with
+  `[shopping]`, and `copy(shoppingLog.join('\n'))` in the console copies the full log. On any other
+  host, such as the deploy, it writes nothing and compares nothing.
 
 ## Change guide
 

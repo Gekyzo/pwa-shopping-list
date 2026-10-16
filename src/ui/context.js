@@ -87,6 +87,32 @@ export const textOf = ({ key, params }) => say(key, params);
 const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredState(storage) }) : false;
 
 export let state = storage ? load(storage) : store.emptyState();
+
+// The debug log (ENG-17): each change of the state, to paste a flow into a session. Only on the dev
+// server (`npm run serve`), never on the deployed host.
+export const DEV = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+const debugRow = (item) => `${item.name} [${item.list}${item.bought ? ' bought' : ''}${item.recurrent ? ' recurrent' : ''}${item.again ? ' again' : ''}${item.quantity ? ` qty=${item.quantity}` : ''}${item.shops.length ? ` shops=${item.shops.join('|')}` : ''}]`;
+const debugDiff = (before, after) => {
+  const old = new Map(before.items.map((item) => [item.id, debugRow(item)]));
+  const now = new Map(after.items.map((item) => [item.id, debugRow(item)]));
+  const lines = [];
+  for (const [id, row] of now) if (!old.has(id)) lines.push(`  + ${row}`);
+  for (const [id, row] of old) if (!now.has(id)) lines.push(`  - ${row}`);
+  for (const [id, row] of now) if (old.has(id) && old.get(id) !== row) lines.push(`  ~ ${old.get(id)} -> ${row}`);
+  for (const key of ['sent', 'group', 'sort', 'version']) {
+    if (JSON.stringify(before[key]) !== JSON.stringify(after[key])) lines.push(`  ${key}: ${JSON.stringify(before[key])} -> ${JSON.stringify(after[key])}`);
+  }
+  return lines;
+};
+// In the console, `copy(shoppingLog.join('\n'))` puts the whole log on the clipboard.
+if (DEV) window.shoppingLog = [];
+export const debugLog = (label, lines = []) => {
+  if (!DEV) return;
+  const text = `[shopping] ${new Date().toLocaleTimeString()} ${label}${lines.length ? `\n${lines.join('\n')}` : ''}`;
+  window.shoppingLog.push(text);
+  console.log(text);
+};
+if (DEV) debugLog(`start v${state.version}`, state.items.map((item) => `  = ${debugRow(item)}`));
 // `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
 export const ui = {
   view: 'active',
@@ -138,6 +164,7 @@ let toastTimer = null;
 export let undoState = null;
 
 export const showToast = (text, { undo = null, ms = undo ? UNDO_MS : MESSAGE_MS } = {}) => {
+  debugLog(`toast: ${text}${undo ? ' (with undo)' : ''}`);
   clearTimeout(toastTimer);
   undoState = undo;
   $('toast-text').textContent = text;
@@ -160,6 +187,10 @@ export const setRender = (fn) => {
 export const render = () => renderer();
 
 export const commit = (next) => {
+  if (DEV) {
+    const lines = debugDiff(state, next);
+    debugLog(`change (view ${ui.view})${lines.length ? '' : ': no change'}`, lines);
+  }
   state = next;
   ui.animate = true;
   const saved = storage !== null && save(storage, state);

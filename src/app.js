@@ -18,6 +18,7 @@ import {
   setRender,
   render,
   commit,
+  debugLog,
 } from '#ui/context';
 import { inList, viewState } from '#ui/view';
 import { rowKeys, bringIn, flash, snapshotRows, animateRows } from '#ui/motion';
@@ -45,7 +46,9 @@ import { showNavButton, bind as bindNav } from '#ui/nav';
 
 // Screen
 
+let debugView = null;
 const renderAll = () => {
+  if (ui.view !== debugView) debugLog(`view ${(debugView = ui.view)}`);
   const before = ui.animate ? snapshotRows() : null;
   ui.animate = false;
   // A render builds new rows, so a lifted row loses its pointer and gets no release.
@@ -170,6 +173,7 @@ document.addEventListener('keydown', (event) => {
 $('toast-undo').addEventListener('click', () => {
   if (!undoState) return;
   const keys = rowKeys();
+  debugLog('undo');
   // The render of the commit opens the rows that the undo puts back (animateRows). A recipe or a
   // product also flashes.
   commit(undoState);
