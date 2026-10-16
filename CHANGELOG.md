@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.30 - 2026-10-16
+
 - A new app icon, drawn in the style that the family of apps shares.
 
 ## 1.0.29 - 2026-10-15
