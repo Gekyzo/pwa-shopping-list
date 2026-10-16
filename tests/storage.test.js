@@ -6,6 +6,7 @@ import {
   LANGUAGE_KEY,
   HAND_KEY,
   SHOP_LISTS_KEY,
+  TRIP_END_KEY,
   load,
   save,
   exportJson,
@@ -17,6 +18,8 @@ import {
   saveHand,
   loadShopLists,
   saveShopLists,
+  loadTripEnd,
+  saveTripEnd,
   THEME_KEY,
   loadTheme,
   saveTheme,
@@ -375,6 +378,33 @@ test('the hand functions do not throw when the storage does', () => {
 test('the hand is not part of the state', () => {
   const storage = fakeStorage();
   saveHand(storage, 'left');
+  assert.deepEqual(load(storage), emptyState());
+  assert.equal(storage.getItem(STORAGE_KEY), null);
+});
+
+test('loadTripEnd returns keep when stored and save for no value and an unknown value', () => {
+  assert.equal(loadTripEnd(fakeStorage({ [TRIP_END_KEY]: 'keep' })), 'keep');
+  assert.equal(loadTripEnd(fakeStorage()), 'save');
+  assert.equal(loadTripEnd(fakeStorage({ [TRIP_END_KEY]: 'other' })), 'save');
+});
+
+test('saveTripEnd stores keep and save removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveTripEnd(storage, 'keep'), true);
+  assert.equal(storage.getItem(TRIP_END_KEY), 'keep');
+  assert.equal(saveTripEnd(storage, 'save'), true);
+  assert.equal(storage.getItem(TRIP_END_KEY), null);
+});
+
+test('the trip end functions do not throw when the storage does', () => {
+  assert.equal(loadTripEnd(brokenStorage()), 'save');
+  assert.equal(saveTripEnd(brokenStorage(), 'keep'), false);
+  assert.equal(saveTripEnd(brokenStorage(), 'save'), false);
+});
+
+test('the trip end is not part of the state', () => {
+  const storage = fakeStorage();
+  saveTripEnd(storage, 'keep');
   assert.deepEqual(load(storage), emptyState());
   assert.equal(storage.getItem(STORAGE_KEY), null);
 });
