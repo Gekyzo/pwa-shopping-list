@@ -91,7 +91,7 @@ export let state = storage ? load(storage) : store.emptyState();
 // The debug log (ENG-17): each change of the state, to paste a flow into a session. Only on the dev
 // server (`npm run serve`), never on the deployed host.
 export const DEV = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
-const debugRow = (item) => `${item.name} [${item.list}${item.bought ? ' bought' : ''}${item.recurrent ? ' recurrent' : ''}${item.again ? ' again' : ''}${item.quantity ? ` qty=${item.quantity}` : ''}${item.shops.length ? ` shops=${item.shops.join('|')}` : ''}]`;
+const debugRow = (item) => `${item.name} [${item.list}${item.bought ? ' bought' : ''}${item.recurrent ? ' recurrent' : ''}${item.again ? ' again' : ''}${item.quantity ? ` qty=${item.quantity}` : ''}${item.shops.length ? ` shops=${item.shops.join('|')}` : ''}${item.aisle ? ` aisle=${item.aisle}` : ''}]`;
 const debugDiff = (before, after) => {
   const old = new Map(before.items.map((item) => [item.id, debugRow(item)]));
   const now = new Map(after.items.map((item) => [item.id, debugRow(item)]));

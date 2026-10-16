@@ -7,6 +7,7 @@
 | `src/store.js` | Pure state operations and derived views | nothing |
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store` |
+| `src/aisles.js` | Pure aisle operations and the list by aisle | `store` |
 | `src/menu.js` | Pure menu operations and the fill of `Actual` | `recipes` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
 | `src/sections.js` | The order of the sections and the rule of the slide between them | nothing |
@@ -73,7 +74,7 @@
 |---|---|
 | A new list rule | An operation in `src/store.js` with its tests, then a control in its view of `src/ui/` |
 | A new view | A module of `src/ui/` with a `bind()` that `src/app.js` calls, its alias, its file in `SHELL` and its row in the module table |
-| A new recipe or shop rule | The same, in `src/recipes.js` or `src/shops.js` |
+| A new recipe, shop or aisle rule | The same, in `src/recipes.js`, `src/shops.js` or `src/aisles.js` |
 | A change of the shape of an item | `normalizeItem` in `src/storage.js`, a new `version` and its migration |
 | A new text | A key in each of the seven catalogs, with the same placeholders |
 | A new module of `src/` | Its alias in the import map of `index.html`, and its file in `SHELL` of `sw.js` |
@@ -90,6 +91,7 @@
 | `tests/store.test.js` | Items, the trip, the order, the search, the figures, the bring of all of Próxima |
 | `tests/recipes.test.js` | Recipes, the send, the groups, the search, the sample recipe |
 | `tests/shops.test.js` | Shops and the list by shop |
+| `tests/aisles.test.js` | Aisles, the aisle of an item and the list by aisle |
 | `tests/menu.test.js` | The meals of the week and the fill |
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key and the device preferences |
 | `tests/swipe.test.js` | The settle rule of a row slide |

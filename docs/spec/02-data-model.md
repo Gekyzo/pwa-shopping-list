@@ -6,17 +6,18 @@ The app has one state object. Each operation returns a new object and never chan
 
 ```js
 {
-  version: 6,
+  version: 7,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
   sent: [string],     // ids of the recipes sent to Actual in this trip, in send order
-  group: 'recipe',    // 'recipe' | 'shop' | 'none'
+  group: 'recipe',    // 'recipe' | 'shop' | 'aisle' | 'none'
   sort: 'custom',     // 'custom' | 'name'
   menu: [Meal],       // the planned meals of the week, in day and meal order
+  aisles: [string],   // the sections of the store, in the order of the walk
 }
 ```
 
-The empty state is `{ version: 6, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [] }`.
+The empty state is `{ version: 7, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] }`.
 
 ## Item
 
@@ -30,6 +31,7 @@ The empty state is `{ version: 6, items: [], recipes: [], sent: [], group: 'reci
   again: boolean,     // a ticked one-time item that the user wants at the next trip
   shops: [string],    // shop names
   quantity: string,   // free text, such as '2' or '1 kg'; trimmed; '' for none
+  aisle: string,      // one name of `aisles`, or '' for none
 }
 ```
 
@@ -75,6 +77,9 @@ A meal with no recipe has no record. See [13-menu.md](13-menu.md).
 - **DATA-12** A shop has no record. It exists while an item has it.
 - **DATA-13** `menu` has one record for each meal at most, in day and meal order. Its `recipe` is
   the id of a recipe that exists.
+- **DATA-14** The names of `aisles` are trimmed, not empty and unique with no case distinction.
+- **DATA-15** `item.aisle` is `''` or a name of `aisles`, in the spelling of `aisles`. An item has
+  one aisle at most. See [17-aisles.md](17-aisles.md).
 
 ## Derived views
 
@@ -89,6 +94,7 @@ No view is stored.
 | Recipe groups | `recipeGroups` | `Actual` by recipe |
 | Shop groups | `shopGroups` | `Actual` or `Próxima` by shop |
 | Shops in use | `shopNames` | Each shop of an item, in name order |
+| Aisle groups | `aisleGroups` | `Actual` or `Próxima` by aisle, in the order of `aisles` |
 
 `tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the ticked
 ones that are recurrent or have `again`; `saved`, the one-time items of `Actual` with no `again`,
@@ -99,7 +105,7 @@ ticked or not; `incoming`, the items of
 
 | Use | Rule |
 |---|---|
-| Identity of an item, a recipe, a product, a shop | `toLowerCase()`: no case distinction, accents count |
+| Identity of an item, a recipe, a product, a shop, an aisle | `toLowerCase()`: no case distinction, accents count |
 | Search of items and of recipes | `fold`: trimmed, lower case, accents removed |
 | Order by name | `localeCompare(…, 'es', { sensitivity: 'base' })`: no case and no accent distinction, in each language of the screen |
 

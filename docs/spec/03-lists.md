@@ -130,7 +130,8 @@ sheet is open.
   arrange button. It shows when the view has one item at least.
 - **LIST-21** A tap on the button opens the field **Buscar artículo o tienda** with the focus. A
   second tap, `Escape`, or a loss of focus with an empty field closes it. A close clears the text.
-- **LIST-22** The list shows only the items whose name or one of whose shops contains the text,
+- **LIST-22** The list shows only the items whose name, one of whose shops or whose aisle
+  (AISLE-9) contains the text,
   with no case and no accent distinction. An empty text shows all items.
 - **LIST-23** The order and the grouping stay. A group with no match to buy does not show. The
   count of a group head, the header figures and the count of the bottom bar stay those of the

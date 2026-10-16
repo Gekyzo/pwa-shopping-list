@@ -28,7 +28,7 @@ const normalizeShops = (shops) => {
 
 const normalizeItem = (item) => {
   if (typeof item !== 'object' || item === null) return null;
-  const { id, name, recurrent, list, bought, again, shops, quantity } = item;
+  const { id, name, recurrent, list, bought, again, shops, quantity, aisle } = item;
   const valid =
     typeof id === 'string' &&
     id !== '' &&
@@ -47,7 +47,30 @@ const normalizeItem = (item) => {
     again: isBought && !recurrent && again,
     shops: normalizeShops(shops),
     quantity: typeof quantity === 'string' ? quantity.trim() : '',
+    aisle: typeof aisle === 'string' ? aisle.trim() : '',
   };
+};
+
+// `aisles` only groups a view, so a bad entry is dropped and the state stays valid. Versions 1 to 6
+// have no aisles.
+const normalizeAisles = (aisles) => {
+  if (!Array.isArray(aisles)) return [];
+  const seen = new Set();
+  return aisles
+    .filter((aisle) => typeof aisle === 'string')
+    .map((aisle) => aisle.trim())
+    .filter((aisle) => {
+      if (aisle === '' || seen.has(lower(aisle))) return false;
+      seen.add(lower(aisle));
+      return true;
+    });
+};
+
+// The aisle of an item takes the spelling of its entry in `aisles`; an aisle that is not there is
+// cleared.
+const knownAisles = (items, aisles) => {
+  const spelling = new Map(aisles.map((aisle) => [lower(aisle), aisle]));
+  return items.map((item) => ({ ...item, aisle: spelling.get(lower(item.aisle)) ?? '' }));
 };
 
 // Each shop gets the spelling of its first use, so that two spellings do not make two groups.
@@ -99,9 +122,9 @@ const normalizeMenu = (rawMenu, known) => {
     .sort((a, b) => a.day - b.day || MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
 };
 
-const VERSIONS = [1, 2, 3, 4, 5, 6];
+const VERSIONS = [1, 2, 3, 4, 5, 6, 7];
 
-// Returns a clean version 6 state, or null when the data is not a known state.
+// Returns a clean version 7 state, or null when the data is not a known state.
 const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
@@ -120,14 +143,16 @@ const normalizeState = (data) => {
   const known = new Set(recipes.map((recipe) => recipe.id));
   const rawSent = Array.isArray(data.sent) ? data.sent : [];
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
+  const aisles = normalizeAisles(data.aisles);
   return {
-    version: 6,
-    items: oneSpelling(items),
+    version: 7,
+    items: knownAisles(oneSpelling(items), aisles),
     recipes,
     sent,
     group: groupOf(data),
     sort: SORTS.includes(data.sort) ? data.sort : 'custom',
     menu: normalizeMenu(data.menu, known),
+    aisles,
   };
 };
 
