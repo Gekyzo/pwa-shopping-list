@@ -24,7 +24,7 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 | [12-engineering.md](12-engineering.md) | Modules, code rules, tests and checks |
 | [13-menu.md](13-menu.md) | The menu of the week and the fill of `Actual` |
 | [14-modules.md](14-modules.md) | The modules that `Ajustes` turns off |
-| [15-design-system.md](15-design-system.md) | Layers, tokens, components, icons and the catalogue |
+| [15-design-system.md](15-design-system.md) | The copy of the design system, its exceptions, the parts of the app |
 | [16-install.md](16-install.md) | The install offer and the Install button of `Ajustes` |
 | [17-aisles.md](17-aisles.md) | The sections of the store, the section of an item, the list by section |
 
@@ -33,6 +33,9 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 Each rule has an identifier, a prefix and a number, such as `LIST-7`. An identifier is stable: a
 rule that goes away keeps its number, marked as removed, and a new rule gets the next number. Use
 the identifier in a commit body or in a test name to point at a rule.
+
+The rules DS-1 to DS-8 and LAY-1 to LAY-4 belong to the design system, `pwa-design-system`.
+[15-design-system.md](15-design-system.md) says where they are.
 
 | Prefix | Document |
 |---|---|
@@ -50,7 +53,7 @@ the identifier in a commit body or in a test name to point at a rule.
 | `ENG` | 12-engineering |
 | `MENU` | 13-menu |
 | `MOD` | 14-modules |
-| `DS` | 15-design-system |
+| `DSV` | 15-design-system |
 | `INS` | 16-install |
 | `AISLE` | 17-aisles |
 
