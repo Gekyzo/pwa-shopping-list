@@ -54,8 +54,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 ## Trip
 
-- **TRIP-1** **Terminar compra** is available when an item is ticked or an item is in
-  `list: 'next'`. If not, the operation gives `error.nothingToStart`.
+- **TRIP-1** **Terminar compra** is available when an item is ticked, an item is open (TRIP-6) or
+  an item is in `list: 'next'`. If not, the operation gives `error.nothingToStart`.
 - **TRIP-2** **Terminar compra** does this to each item:
 
   | Item | Result |
@@ -64,7 +64,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   | Ticked, one-time, no `again` | Saved: `list: 'saved'`, not ticked (LIST-30) |
   | Saved | Does not change |
   | In `Actual`, not ticked, recurrent | Stays |
-  | In `Actual`, not ticked, one-time | Saved, as a ticked one (LIST-30) |
+  | In `Actual`, not ticked, one-time | Saved, as a ticked one (LIST-30), or stays in `Actual`, not ticked, with `Mantener` (TRIP-6) |
   | In `list: 'next'` | Moves to `Actual` |
 
 - **TRIP-3** **Terminar compra** empties `sent`. `group` and `sort` do not change. The relative
@@ -78,6 +78,9 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
      `list: 'next'`. Its message is `Artículos traídos de Próxima.`
 - **TRIP-5** After **Terminar compra** the screen shows `Actual`. `Deshacer` restores the full
   state of before.
+- **TRIP-6** An open item is an item of `Actual`, not ticked, not recurrent and with no `again`.
+  **Terminar compra** saves an open item (LIST-30), or keeps it in `Actual`, not ticked, when the
+  user chose `Mantener` for it.
 
 ## Header figures
 
@@ -147,7 +150,7 @@ sheet is open.
 ## Saved items
 
 - **LIST-30** **Terminar compra** saves each one-time item of `Actual` with no `again`, ticked or
-  not: only `↻` (LIST-7) and `+ Próxima` (LIST-14) keep an item for the next trip. It leaves the two
+  not: only `↻` (LIST-7), `+ Próxima` (LIST-14) and `Mantener` (TRIP-6) keep an item for the next trip. It leaves the two
   lists and keeps its name, its shops and its quantity. Only **Eliminar** deletes an item.
 - **LIST-31** A saved item keeps its name (DATA-3). The add sheet finds it (ADD-3), and an add of
   its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.

@@ -12,6 +12,7 @@ import {
   removeFromNext,
   startNewShopping,
   canStartNewShopping,
+  openItems,
   activeItems,
   nextItems,
   searchItems,
@@ -266,12 +267,51 @@ test('startNewShopping applies each rule', () => {
   assert.deepEqual(nextItems(state), []);
 });
 
-test('startNewShopping rejects when nothing is ticked and next is empty', () => {
-  const start = build(['Bread', 'active']);
+test('startNewShopping rejects when nothing is ticked, nothing is open and next is empty', () => {
+  const start = build(['Eggs', 'active', { recurrent: true }]);
   const result = startNewShopping(start);
   assert.deepEqual(result.error, { key: 'error.nothingToStart', params: { list: 'next' } });
   assert.equal(result.state, start);
   assert.deepEqual(startNewShopping(emptyState()).error, { key: 'error.nothingToStart', params: { list: 'next' } });
+});
+
+test('startNewShopping finishes with only open items', () => {
+  const start = build(['Bread', 'active']);
+  assert.equal(startNewShopping(start).error, undefined);
+  assert.equal(canStartNewShopping(start), true);
+});
+
+test('openItems gives the one-time items of Actual that are not ticked', () => {
+  const start = build(['Milk', 'active', { bought: true }], ['Bread', 'active'],
+    ['Eggs', 'active', { recurrent: true }], ['Water', 'next'], ['Salt', 'active']);
+  assert.deepEqual(names(openItems(start)), ['Bread', 'Salt']);
+});
+
+test('startNewShopping keeps the open items of keep in Actual', () => {
+  const start = build(['Milk', 'active', { bought: true }], ['Bread', 'active'], ['Salt', 'active']);
+  const { state } = startNewShopping(start, [find(start, 'Bread').id]);
+  assert.deepEqual(find(state, 'Bread'), { ...find(start, 'Bread'), list: 'active', bought: false, again: false });
+  assert.equal(find(state, 'Salt').list, 'saved');
+  assert.equal(find(state, 'Milk').list, 'saved');
+});
+
+test('startNewShopping ignores an id of keep that is not an open item', () => {
+  const start = build(['Milk', 'active', { bought: true }], ['Tea', 'active', { list: 'saved' }], ['Bread', 'active']);
+  const keep = ['Milk', 'Tea'].map((name) => find(start, name).id).concat('nope');
+  assert.deepEqual(startNewShopping(start, keep).state, startNewShopping(start).state);
+});
+
+test('startNewShopping with keep does not change the input state', () => {
+  const start = build(['Bread', 'active'], ['Water', 'next']);
+  const copy = structuredClone(start);
+  startNewShopping(start, [find(start, 'Bread').id]);
+  assert.deepEqual(start, copy);
+});
+
+test('tripSummary counts a kept open item as back', () => {
+  const start = build(['Milk', 'active', { bought: true }], ['Bread', 'active'], ['Salt', 'active']);
+  assert.deepEqual(tripSummary(start, [find(start, 'Bread').id]),
+    { total: 3, left: 2, back: 1, saved: 2, incoming: 0 });
 });
 
 test('startNewShopping does not change the input state', () => {
