@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.33 - 2026-10-16
+
 - `Actual`, `Próxima` and `Recetas` show a faint drawing of the basket of the app icon in the
   bottom corner, on the other side of the `+` button.
 
