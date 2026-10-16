@@ -51,4 +51,4 @@ The parts of the catalogue, by layer. A request for a screen names them.
 | base | `main` |
 | components | `icon`, `button`, `fab`, `chip`, `pill`, `segmented`, `switch`, `input`, `field`, `select`, `app-header`, `ring`, `nav-bar`, `badge`, `sheet`, `toast`, `banner`, `empty-state`, `item-list`, `item-row`, `swipe-action`, `section-head`, `group-head`, `list-group` |
 | layouts | `cluster`, `input-row`, `split` |
-| screens | list: `shop-lists`, `search`, `hint` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal`, `menu-actions` · settings: `settings`, `about`, `version-status` · nav: `dust` · onboarding: `onboarding`, `onboarding-art` |
+| screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal`, `menu-actions` · settings: `settings`, `about`, `version-status` · nav: `dust` · onboarding: `onboarding`, `onboarding-art` |

@@ -3,16 +3,51 @@ import * as recipes from '#recipes';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
-import { $, el, state, ui, t, say, isOn, shopLists, apply, render } from '#ui/context';
+import { $, el, state, ui, t, say, isOn, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { itemNode, boughtSection, savedSection, groupHead, groupNodes } from '#ui/rows';
 import { recipeNode } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
 
-const finishTrip = (undoText = t('toast.finished')) => {
-  if (!apply(store.startNewShopping(state), { undoText })) return;
-  Object.assign(ui, { view: 'active', openId: null, tripOpen: false });
+// `keep` holds the ids of the open items that stay in Actual (TRIP-6).
+const finishTrip = (undoText = t('toast.finished'), keep = []) => {
+  if (!apply(store.startNewShopping(state, keep), { undoText })) return;
+  Object.assign(ui, { view: 'active', openId: null, tripOpen: false, tripChoice: null });
   render();
+};
+
+// The entry of the trip sheet finishes at once with no open item. Else it shows the second step,
+// where each open item starts with the choice of Ajustes (TRIP-7).
+const startFinish = () => {
+  const open = store.openItems(state);
+  if (open.length === 0) {
+    finishTrip();
+    return;
+  }
+  ui.tripChoice = new Map(open.map((item) => [item.id, tripEnd]));
+  render();
+  $('trip-confirm').focus();
+};
+
+// One row of the second step: the name of the open item and its two choices.
+const tripChoiceNode = (item) => {
+  const segment = (value, key) => {
+    const button = el('button', {
+      type: 'button',
+      className: 'segment',
+      textContent: t(key),
+      onclick: () => {
+        ui.tripChoice.set(item.id, value);
+        render();
+      },
+    });
+    button.setAttribute('aria-pressed', String(ui.tripChoice.get(item.id) === value));
+    return button;
+  };
+  return el('li', { className: 'trip-open-row' }, [
+    el('span', { className: 'trip-open-name', textContent: item.name }),
+    el('div', { className: 'segmented' }, [segment('save', 'trip.save'), segment('keep', 'trip.keep')]),
+  ]);
 };
 
 // The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
@@ -190,10 +225,19 @@ export const renderList = (summary) => {
 // The trip button of the header and its sheet.
 export const renderTrip = () => {
   if (ui.view !== 'active') ui.tripOpen = false;
+  if (!ui.tripOpen) ui.tripChoice = null;
   $('trip-button').hidden = ui.view !== 'active';
   $('finish-menu').disabled = !store.canStartNewShopping(state);
   $('trip-button').setAttribute('aria-expanded', String(ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
+  // The second step follows the state: an undo or an import can change the open items.
+  const open = ui.tripChoice ? store.openItems(state) : [];
+  if (ui.tripChoice) {
+    ui.tripChoice = new Map(open.map((item) => [item.id, ui.tripChoice.get(item.id) ?? tripEnd]));
+  }
+  $('finish-menu').hidden = ui.tripChoice !== null;
+  $('trip-open').hidden = ui.tripChoice === null;
+  $('trip-open-list').replaceChildren(...open.map(tripChoiceNode));
 };
 
 export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
@@ -225,7 +269,7 @@ export const closeSearch = () => {
 };
 
 export const closeTrip = () => {
-  ui.tripOpen = false;
+  Object.assign(ui, { tripOpen: false, tripChoice: null });
   render();
   $('trip-button').focus();
 };
@@ -258,6 +302,10 @@ export const bind = () => {
   });
   $('trip-veil').addEventListener('click', closeTrip);
   $('finish-button').addEventListener('click', () => finishTrip());
-  $('finish-menu').addEventListener('click', () => finishTrip());
+  $('finish-menu').addEventListener('click', startFinish);
+  $('trip-confirm').addEventListener('click', () => {
+    const keep = [...ui.tripChoice].filter(([, choice]) => choice === 'keep').map(([id]) => id);
+    finishTrip(undefined, keep);
+  });
   $('bring').addEventListener('click', () => finishTrip(say('toast.brought', { list: 'next' })));
 };

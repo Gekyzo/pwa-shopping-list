@@ -13,8 +13,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
   screen, with less space in each row.
 - **Recipe in Actual mark.** In `Recetas`, a recipe whose products are all in
   `Actual` shows a mark.
-- **Trip end choice.** At **Terminar compra**, offer for each item not bought a
-  choice: discard it or move it to `Próxima`.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
 - **Buy me a coffee.**
