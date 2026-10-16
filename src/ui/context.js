@@ -135,6 +135,8 @@ export const ui = {
   target: 'active',
   boughtOpen: false,
   savedOpen: false,
+  // The groups of a list that the user closed, as `<view>:<group key>`. Not stored.
+  closedGroups: new Set(),
   // The recipe whose sheet is open, or null.
   recipeId: null,
   // The text of the search field, which Recetas shows always and a list shows on demand. It is

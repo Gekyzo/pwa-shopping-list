@@ -4,7 +4,7 @@ import * as shops from '#shops';
 import * as menu from '#menu';
 import { $, el, state, ui, t, say, isOn, shopLists, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
-import { itemNode, boughtSection, savedSection, groupHead } from '#ui/rows';
+import { itemNode, boughtSection, savedSection, groupHead, groupNodes } from '#ui/rows';
 import { recipeNode } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
 
@@ -21,11 +21,11 @@ const shopNodes = (list) => {
     if (list !== 'active') return '';
     return left ? `${total - left}/${total}` : '✓';
   };
-  const grouped = groups.flatMap((group) => [
-    groupHead(group.shop, count(group)),
-    ...group.items.map((item) => itemNode(item, `shop:${group.shop}`)),
-  ]);
-  const others = rest.length ? [groupHead(t('group.noShop'), ''), ...rest.map((item) => itemNode(item))] : [];
+  const grouped = groups.flatMap((group) => {
+    const key = `shop:${group.shop}`;
+    return [groupHead(group.shop, count(group), key), ...groupNodes(key, group.items.map((item) => itemNode(item, key)))];
+  });
+  const others = rest.length ? [groupHead(t('group.noShop'), '', 'noShop'), ...groupNodes('noShop', rest.map((item) => itemNode(item)))] : [];
   return [...grouped, ...others];
 };
 
@@ -39,10 +39,10 @@ const pendingNodes = () => {
   }
   const { groups, rest } = store.filterGroups(recipes.recipeGroups(viewState()), ui.query);
   const grouped = groups.flatMap(({ recipe, items, total, left }) => [
-    groupHead(recipe.name, left ? `${total - left}/${total}` : '✓'),
-    ...items.map((item) => itemNode(item, recipe.id)),
+    groupHead(recipe.name, left ? `${total - left}/${total}` : '✓', recipe.id),
+    ...groupNodes(recipe.id, items.map((item) => itemNode(item, recipe.id))),
   ]);
-  const others = rest.length ? [groupHead(t('group.others'), ''), ...rest.map((item) => itemNode(item))] : [];
+  const others = rest.length ? [groupHead(t('group.others'), '', 'others'), ...groupNodes('others', rest.map((item) => itemNode(item)))] : [];
   return [...grouped, ...others];
 };
 

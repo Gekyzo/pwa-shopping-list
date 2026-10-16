@@ -2,7 +2,7 @@ import * as store from '#store';
 import { reached, settle } from '#swipe';
 import { SIDE_BUTTON, DRAG_START, el, state, ui, t, say, isOn, apply, render, guardClick } from '#ui/context';
 import { isOpen, searching, shownGroup } from '#ui/view';
-import { leave, leaveNode } from '#ui/motion';
+import { leave, leaveNode, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
 import { reorder, bindReorder } from '#ui/drag';
@@ -254,5 +254,44 @@ export const savedSection = (saved, list) => {
   return [el('li', { className: 'section-head' }, [button]), ...(open ? saved.map((item) => savedNode(item, list)) : [])];
 };
 
-export const groupHead = (title, count) =>
-  el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
+// The rows of a group carry its key, so that its head can close and open them.
+const groupRows = (key) => [...document.querySelectorAll('#items .item-row')].filter((node) => node.dataset.group === key);
+
+// The head of a group: its title, its count and a chevron. A tap closes the rows of the group, and a
+// second tap opens them. A search shows each group open. With no key the head does not close.
+export const groupHead = (title, count, key = null) => {
+  if (key === null) return el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
+  const id = `${ui.view}:${key}`;
+  const open = !ui.closedGroups.has(id) || searching();
+  const button = el('button', {
+    type: 'button',
+    className: 'group-head-button',
+    disabled: searching(),
+    onclick: () => {
+      if (ui.closedGroups.has(id)) {
+        ui.closedGroups.delete(id);
+        render();
+        expand(groupRows(key));
+        return;
+      }
+      collapse(groupRows(key), () => {
+        ui.closedGroups.add(id);
+        render();
+      });
+    },
+  }, [
+    el('span', { textContent: title }),
+    el('span', { className: 'group-head-end' }, [el('span', { textContent: count }), el('span', { className: 'chevron', textContent: open ? '▾' : '▸' })]),
+  ]);
+  button.setAttribute('aria-expanded', String(open));
+  return el('li', { className: 'group-head' }, [button]);
+};
+
+// The rows of a group under its head, or none while the group is closed.
+export const groupNodes = (key, rows) => {
+  if (ui.closedGroups.has(`${ui.view}:${key}`) && !searching()) return [];
+  rows.forEach((node) => {
+    node.dataset.group = key;
+  });
+  return rows;
+};

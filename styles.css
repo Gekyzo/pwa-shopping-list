@@ -1037,7 +1037,10 @@
 
   /* @component group-head
      @summary The title of a group of a list, by recipe or by shop, with its count.
-     @example <ul class="item-list" style="width: 100%"><li class="group-head"><span>Mercadona</span><span>2</span></li></ul> */
+     @part group-head-button  The full-width button that closes and opens the group, with aria-expanded.
+     @part group-head-end     The count and the chevron, at the end of the button.
+     @example <ul class="item-list" style="width: 100%"><li class="group-head"><span>Mercadona</span><span>2</span></li></ul>
+     @example <ul class="item-list" style="width: 100%"><li class="group-head"><button class="group-head-button" type="button" aria-expanded="true"><span>Tortilla</span><span class="group-head-end"><span>1/2</span><span class="chevron">▾</span></span></button></li></ul> */
   .group-head {
     display: flex;
     align-items: center;
@@ -1051,6 +1054,31 @@
     font-weight: var(--weight-strong);
     letter-spacing: 0.04em;
     text-transform: uppercase;
+  }
+
+  .group-head:has(> .group-head-button) {
+    padding: 0;
+  }
+
+  .group-head-button {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    min-height: var(--tap);
+    padding: 0 var(--space-4);
+    border-radius: 0;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+  }
+
+  .group-head-end {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
   }
 
   /* @component list-group

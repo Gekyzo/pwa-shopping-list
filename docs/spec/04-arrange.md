@@ -69,6 +69,10 @@ the arrange sheet in `src/ui/arrange.js`.
 - **GROUP-15** When a grouping opens, the heads and the extra rows open and the other rows move.
   When the choice goes to **Nada**, the groups close first and then the list becomes flat. A tap
   on a grouping while the groups close keeps them.
+- **GROUP-16** A tap on the head of a group (a recipe, `Otros`, a shop or `Sin tienda`) closes the
+  rows of the group in 200 ms. The head stays, with its count and the chevron `▸`; a second tap opens
+  the rows again in 200 ms. Each list keeps its closed groups until the app starts again. A search
+  shows each group open and disables its head (LIST-25).
 
 ## Manual move
 
