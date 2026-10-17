@@ -71,7 +71,6 @@ export default {
   },
   'finish.saved': { one: '{count} wird gespeichert.', other: '{count} werden gespeichert.' },
   'trip.menu': 'Optionen für den Einkauf',
-  'trip.open': 'Was du nicht gekauft hast',
   'trip.discard': 'Verwerfen',
   'trip.postpone': 'Verschieben',
   'trip.willDiscard': { one: 'Der Artikel, den du nicht gekauft hast, wird verworfen.', other: 'Die {count} Artikel, die du nicht gekauft hast, werden verworfen.' },

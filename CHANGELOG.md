@@ -9,8 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
-- The second step of **Terminar compra** no longer asks about each item not bought. It says what
-  happens to them, as **Al terminar la compra** sets, and that `Ajustes` can change it.
+- **Terminar compra** in `Opciones de la compra` finishes with one tap. A line below the entry
+  says what happens to the items not bought, as **Al terminar la compra** sets, and that
+  `Ajustes` can change it.
 
 ## 1.0.34 - 2026-10-17
 

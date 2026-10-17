@@ -121,7 +121,7 @@ of it.
 - **NAV-9** The trip button of the header has three dots. It shows in `Actual`. A tap
   opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet has the
   title `Opciones de la compra` and one entry, **Terminar compra**, with `N vuelven · N se van`
-  below its name.
+  below its name, and the line of the open items (TRIP-6) below the entry.
 - **NAV-10** The trip sheet closes as each sheet does (NAV-8). The open puts the focus on
   **Terminar compra**, and the close puts it back on the trip button.
 

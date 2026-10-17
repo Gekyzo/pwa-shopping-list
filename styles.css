@@ -189,18 +189,10 @@
 
   /* @component trip-open
      @scope list
-     @summary The second step of the trip sheet: what happens to the items not bought.
-     @part trip-open-title  The question of the step, below the muted title of the sheet.
-     @example <div class="trip-open"><h3 class="trip-open-title">Lo que no has comprado</h3><p class="hint">Los 2 artículos que no has comprado se descartan. Puedes cambiarlo en Ajustes.</p></div> */
-  .trip-open-title {
-    margin: var(--space-3) 0 var(--space-1);
-    color: var(--text);
-    font-size: var(--text-m);
-    font-weight: var(--weight-strong);
-  }
-
-  .trip-open .hint {
-    padding: 0 0 var(--space-3);
+     @summary The line of the trip sheet that says what happens to the items not bought.
+     @example <p class="hint trip-open">Los 2 artículos que no has comprado se descartan. Puedes cambiarlo en Ajustes.</p> */
+  .hint.trip-open {
+    padding: var(--space-1) 0 var(--space-3);
   }
 
   /* @component search

@@ -129,8 +129,6 @@ export const ui = {
   arrangeOpen: false,
   // True while the sheet of the trip button of Actual is open.
   tripOpen: false,
-  // True while the trip sheet shows its second step (TRIP-6).
-  tripConfirm: false,
   // True while the sheet of the aisles of Ajustes is open.
   aislesOpen: false,
   // The item whose edit sheet is open, or null.

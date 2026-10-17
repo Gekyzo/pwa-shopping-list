@@ -12,23 +12,11 @@ import { dayNode } from '#ui/menu';
 // `keep` holds the ids of the open items that stay in Actual (TRIP-6).
 const finishTrip = (undoText = t('toast.finished'), keep = []) => {
   if (!apply(store.startNewShopping(state, keep), { undoText })) return;
-  Object.assign(ui, { view: 'active', openId: null, tripOpen: false, tripConfirm: false });
+  Object.assign(ui, { view: 'active', openId: null, tripOpen: false });
   render();
 };
 
-// The entry of the trip sheet finishes at once with no open item. Else it shows the second step,
-// which says what the choice of Ajustes does to the open items (TRIP-6, TRIP-7).
-const startFinish = () => {
-  if (store.openItems(state).length === 0) {
-    finishTrip();
-    return;
-  }
-  ui.tripConfirm = true;
-  render();
-  $('trip-confirm').focus();
-};
-
-// The ids of the open items that stay in Actual with the choice of Ajustes.
+// The ids of the open items that stay in Actual with the choice of Ajustes (TRIP-6, TRIP-7).
 const keptItems = () => (tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : []);
 
 // The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
@@ -206,18 +194,14 @@ export const renderList = (summary) => {
 // The trip button of the header and its sheet.
 export const renderTrip = () => {
   if (ui.view !== 'active') ui.tripOpen = false;
-  if (!ui.tripOpen) ui.tripConfirm = false;
   $('trip-button').hidden = ui.view !== 'active';
   $('finish-menu').disabled = !store.canStartNewShopping(state);
   $('trip-button').setAttribute('aria-expanded', String(ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
-  // The second step follows the state: an undo or an import can leave no open item.
-  const count = ui.tripConfirm ? store.openItems(state).length : 0;
-  if (count === 0) ui.tripConfirm = false;
-  $('finish-menu').hidden = ui.tripConfirm;
-  $('trip-open').hidden = !ui.tripConfirm;
+  const count = store.openItems(state).length;
+  $('trip-open').hidden = count === 0;
   const outcome = tripEnd === 'keep' ? 'trip.willPostpone' : 'trip.willDiscard';
-  $('trip-open-text').textContent = count ? `${t(outcome, { count })} ${t('trip.defaultHint')}` : '';
+  $('trip-open').textContent = count ? `${t(outcome, { count })} ${t('trip.defaultHint')}` : '';
 };
 
 export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
@@ -249,7 +233,7 @@ export const closeSearch = () => {
 };
 
 export const closeTrip = () => {
-  Object.assign(ui, { tripOpen: false, tripConfirm: false });
+  Object.assign(ui, { tripOpen: false });
   render();
   $('trip-button').focus();
 };
@@ -282,7 +266,6 @@ export const bind = () => {
   });
   $('trip-veil').addEventListener('click', closeTrip);
   $('finish-button').addEventListener('click', () => finishTrip());
-  $('finish-menu').addEventListener('click', startFinish);
-  $('trip-confirm').addEventListener('click', () => finishTrip(undefined, keptItems()));
+  $('finish-menu').addEventListener('click', () => finishTrip(undefined, keptItems()));
   $('bring').addEventListener('click', () => finishTrip(say('toast.brought', { list: 'next' })));
 };

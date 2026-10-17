@@ -71,7 +71,6 @@ export default {
   },
   'finish.saved': { one: '{count} se guarda.', other: '{count} se guardan.' },
   'trip.menu': 'Opciones de la compra',
-  'trip.open': 'Lo que no has comprado',
   'trip.discard': 'Descartar',
   'trip.postpone': 'Aplazar',
   'trip.willDiscard': { one: 'El artículo que no has comprado se descarta.', other: 'Los {count} artículos que no has comprado se descartan.' },
