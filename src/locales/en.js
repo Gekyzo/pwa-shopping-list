@@ -71,7 +71,6 @@ export default {
   },
   'finish.saved': { one: '{count} is saved.', other: '{count} are saved.' },
   'trip.menu': 'Shopping options',
-  'trip.open': 'What you did not buy',
   'trip.discard': 'Discard',
   'trip.postpone': 'Postpone',
   'trip.willDiscard': { one: 'The item you did not buy is discarded.', other: 'The {count} items you did not buy are discarded.' },

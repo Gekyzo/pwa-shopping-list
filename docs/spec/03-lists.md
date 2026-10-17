@@ -80,11 +80,10 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   state of before.
 - **TRIP-6** An open item is an item of `Actual`, not ticked, not recurrent and with no `again`.
   **Terminar compra** saves the open items (LIST-30), or keeps them in `Actual`, not ticked, when
-  the choice of TRIP-7 is `Aplazar`. The entry of the trip sheet finishes at once when no item is
-  open. Else the sheet shows a second step: `Lo que no has comprado` in the colour and size of the
-  text, below the muted title of the sheet, a line that says what happens to the open items, such as `Los 2 artículos que no has comprado se descartan. Puedes cambiarlo en
-  Ajustes.`, and the button **Terminar compra**. The sheet has no choice for each item. A tap on
-  the veil closes the sheet and changes nothing. The banner and `Traer N artículos de Próxima` never
+  the choice of TRIP-7 is `Aplazar`. The entry of the trip sheet finishes at once. When an item is
+  open, a line below the entry says what happens to the open items, such as `Los 2 artículos que
+  no has comprado se descartan. Puedes cambiarlo en Ajustes.` The sheet has one step and no choice
+  for each item. A tap on the veil closes the sheet and changes nothing. The banner and `Traer N artículos de Próxima` never
   have an open item.
 - **TRIP-7** **Al terminar la compra** of `Ajustes` has two buttons side by side: `Descartar` and
   `Aplazar`, and the chosen one is pressed. A line below the title says that the choice sets what
