@@ -22,6 +22,7 @@ import {
   bringToList,
   bringAllToActual,
   tripSummary,
+  tripOutcome,
   savedItems,
   arrivalMessage,
   setSort,
@@ -434,6 +435,40 @@ test('tripSummary counts each item of Actual as back or saved', () => {
   const { total, back, saved } = tripSummary(state);
   assert.equal(back + saved, total);
   assert.equal(back, 3);
+});
+
+test('tripOutcome counts each item of Actual by where it goes', () => {
+  const state = build(
+    ['Milk', 'active', { bought: true, recurrent: true }],
+    ['Eggs', 'active', { recurrent: true }],
+    ['Soap', 'active', { bought: true, again: true }],
+    ['Batteries', 'active', { bought: true }],
+    ['Bread', 'active'],
+    ['Salt', 'active'],
+    ['Water', 'next'],
+    ['Rice', 'saved'],
+  );
+  assert.deepEqual(tripOutcome(state), { recurrent: 2, again: 1, kept: 0, open: 2, bought: 1 });
+  assert.deepEqual(tripOutcome(state, [find(state, 'Bread').id, find(state, 'Milk').id]),
+    { recurrent: 2, again: 1, kept: 1, open: 1, bought: 1 });
+});
+
+test('tripOutcome adds up to the items of Actual', () => {
+  const state = build(
+    ['Agua Zoe', 'active', { bought: true }],
+    ['Leche', 'active', { bought: true, recurrent: true }],
+    ['Base pizza', 'active'],
+    ['Agua', 'active', { recurrent: true }],
+    ['Pepperoni', 'active', { bought: true }],
+  );
+  const outcome = tripOutcome(state, [find(state, 'Base pizza').id]);
+  assert.deepEqual(outcome, { recurrent: 2, again: 0, kept: 1, open: 0, bought: 2 });
+  const sum = Object.values(outcome).reduce((a, b) => a + b, 0);
+  assert.equal(sum, tripSummary(state).total);
+});
+
+test('tripOutcome of an empty state is all zero', () => {
+  assert.deepEqual(tripOutcome(emptyState()), { recurrent: 0, again: 0, kept: 0, open: 0, bought: 0 });
 });
 
 test('tripSummary of an empty state is all zero', () => {

@@ -73,12 +73,12 @@ export default {
   'trip.menu': 'Opções das compras',
   'trip.discard': 'Descartar',
   'trip.postpone': 'Adiar',
-  'trip.willDiscard': { one: 'O artigo que não comprou é descartado.', other: 'Os {count} artigos que não comprou são descartados.' },
-  'trip.willPostpone': {
-    one: 'O artigo que não comprou é adiado para a próxima compra.',
-    other: 'Os {count} artigos que não comprou são adiados para a próxima compra.',
-  },
-  'trip.defaultHint': 'Pode alterar isto em Definições.',
+  'trip.recurrent': { one: '{count} com ↻ volta', other: '{count} com ↻ voltam' },
+  'trip.again': { one: '{count} com ✓ Próxima volta', other: '{count} com ✓ Próxima voltam' },
+  'trip.kept': { one: '{count} sem comprar é adiado', other: '{count} sem comprar são adiados' },
+  'trip.open': { one: '{count} sem comprar é guardado', other: '{count} sem comprar são guardados' },
+  'trip.bought': { one: '{count} é guardado em Comprar de novo', other: '{count} são guardados em Comprar de novo' },
+  'trip.hint': 'Podes mudar o que acontece ao que não compraste em Definições.',
 
   'recipes.search': 'Procurar receita ou produto',
   'search.label': 'Procurar na lista',
@@ -143,8 +143,6 @@ export default {
   'onboarding.sections.title': 'Deslize o ecrã',
   'onboarding.sections.text': 'Deslize para os lados ou use a barra inferior para navegar entre secções. Com `+` adiciona o que precisar.',
 
-  'settings.back': { one: '{count} volta', other: '{count} voltam' },
-  'settings.discarded': { one: '{count} é descartado', other: '{count} são descartados' },
   'settings.backup': 'Cópia de segurança',
   'settings.export': 'Exportar',
   'settings.import': 'Importar',

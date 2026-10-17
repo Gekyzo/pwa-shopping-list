@@ -73,12 +73,12 @@ export default {
   'trip.menu': 'Shopping options',
   'trip.discard': 'Discard',
   'trip.postpone': 'Postpone',
-  'trip.willDiscard': { one: 'The item you did not buy is discarded.', other: 'The {count} items you did not buy are discarded.' },
-  'trip.willPostpone': {
-    one: 'The item you did not buy is postponed to the next trip.',
-    other: 'The {count} items you did not buy are postponed to the next trip.',
-  },
-  'trip.defaultHint': 'You can change this in Settings.',
+  'trip.recurrent': { one: '{count} with ↻ comes back', other: '{count} with ↻ come back' },
+  'trip.again': { one: '{count} with ✓ Next comes back', other: '{count} with ✓ Next come back' },
+  'trip.kept': { one: '{count} not bought is postponed', other: '{count} not bought are postponed' },
+  'trip.open': { one: '{count} not bought is saved', other: '{count} not bought are saved' },
+  'trip.bought': { one: '{count} is saved in Buy again', other: '{count} are saved in Buy again' },
+  'trip.hint': 'You can change what happens to items not bought in Settings.',
 
   'recipes.search': 'Search recipe or product',
   'search.label': 'Search the list',
@@ -143,8 +143,6 @@ export default {
   'onboarding.sections.title': 'Slide the screen',
   'onboarding.sections.text': 'Slide to the sides or use the bottom bar to move between sections. With `+` you add what you need.',
 
-  'settings.back': { one: '{count} comes back', other: '{count} come back' },
-  'settings.discarded': { one: '{count} is discarded', other: '{count} are discarded' },
   'settings.backup': 'Backup',
   'settings.export': 'Export',
   'settings.import': 'Import',

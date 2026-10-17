@@ -262,6 +262,20 @@ export const tripSummary = (state, keep = []) => {
   };
 };
 
+// Where each item of Active goes at `startNewShopping`, for the trip sheet: `recurrent` and `again`
+// items come back, `kept` open items stay, `open` items and `bought` one-time items are saved.
+export const tripOutcome = (state, keep = []) => {
+  const active = state.items.filter((item) => item.list === 'active');
+  const kept = keptIds(state, keep).size;
+  return {
+    recurrent: active.filter((item) => item.recurrent).length,
+    again: active.filter((item) => !item.recurrent && item.again).length,
+    kept,
+    open: active.filter(isOpen).length - kept,
+    bought: active.filter((item) => item.bought && !item.recurrent && !item.again).length,
+  };
+};
+
 // The message of the toast that an arrival at the shop shows, or null when nothing is left to buy.
 export const arrivalMessage = (state) => {
   const { left } = tripSummary(state);

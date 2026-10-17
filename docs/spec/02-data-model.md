@@ -91,6 +91,7 @@ No view is stored.
 | `Próxima` | `nextItems` | The items of `list: 'next'`, then the ticked items of `Actual` that are recurrent or have `again` |
 | `Volver a comprar` | `savedItems` | The items of `list: 'saved'`, in name order |
 | Trip figures | `tripSummary` | `total`, `left`, `back`, `saved`, `incoming` |
+| Trip outcome | `tripOutcome` | `recurrent`, `again`, `kept`, `open`, `bought` |
 | Recipe groups | `recipeGroups` | `Actual` by recipe |
 | Shop groups | `shopGroups` | `Actual` or `Próxima` by shop |
 | Shops in use | `shopNames` | Each shop of an item, in name order |
@@ -99,7 +100,10 @@ No view is stored.
 `tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the ones
 that are recurrent or have `again`, ticked or not, and the open items kept with `Aplazar` (TRIP-6); `saved`, the one-time items of `Actual` with no `again`,
 ticked or not; `incoming`, the items of
-`list: 'next'`.
+`list: 'next'`. `tripOutcome` splits the items of `Actual` by where each one goes (TRIP-4): `recurrent`
+come back; `again`, one-time with `again`, come back; `kept`, open items kept with `Aplazar`;
+`open`, the other open items, saved; `bought`, ticked one-time items with no `again`, saved. The five
+add up to `total`.
 
 ## Name rules
 

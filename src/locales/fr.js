@@ -73,12 +73,12 @@ export default {
   'trip.menu': 'Options des courses',
   'trip.discard': 'Écarter',
   'trip.postpone': 'Reporter',
-  'trip.willDiscard': { one: 'L’article que vous n’avez pas acheté est écarté.', other: 'Les {count} articles que vous n’avez pas achetés sont écartés.' },
-  'trip.willPostpone': {
-    one: 'L’article que vous n’avez pas acheté est reporté aux prochaines courses.',
-    other: 'Les {count} articles que vous n’avez pas achetés sont reportés aux prochaines courses.',
-  },
-  'trip.defaultHint': 'Vous pouvez le changer dans Réglages.',
+  'trip.recurrent': { one: '{count} avec ↻ revient', other: '{count} avec ↻ reviennent' },
+  'trip.again': { one: '{count} avec ✓ Prochaine revient', other: '{count} avec ✓ Prochaine reviennent' },
+  'trip.kept': { one: '{count} non acheté est reporté', other: '{count} non achetés sont reportés' },
+  'trip.open': { one: '{count} non acheté est gardé', other: '{count} non achetés sont gardés' },
+  'trip.bought': { one: '{count} va dans Racheter', other: '{count} vont dans Racheter' },
+  'trip.hint': 'Tu peux changer ce qui arrive aux articles non achetés dans Réglages.',
 
   'recipes.search': 'Chercher une recette ou un produit',
   'search.label': 'Chercher dans la liste',
@@ -143,8 +143,6 @@ export default {
   'onboarding.sections.title': 'Faites glisser l’écran',
   'onboarding.sections.text': 'Faites glisser sur les côtés ou utilisez la barre inférieure pour naviguer entre les sections. Avec `+`, ajoutez ce qu’il vous faut.',
 
-  'settings.back': { one: '{count} revient', other: '{count} reviennent' },
-  'settings.discarded': { one: '{count} est écarté', other: '{count} sont écartés' },
   'settings.backup': 'Sauvegarde',
   'settings.export': 'Exporter',
   'settings.import': 'Importer',

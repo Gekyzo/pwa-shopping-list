@@ -73,12 +73,12 @@ export default {
   'trip.menu': 'Opcions de la compra',
   'trip.discard': 'Descartar',
   'trip.postpone': 'Ajornar',
-  'trip.willDiscard': { one: 'L’article que no has comprat es descarta.', other: 'Els {count} articles que no has comprat es descarten.' },
-  'trip.willPostpone': {
-    one: 'L’article que no has comprat s’ajorna a la propera compra.',
-    other: 'Els {count} articles que no has comprat s’ajornen a la propera compra.',
-  },
-  'trip.defaultHint': 'Pots canviar-ho a Configuració.',
+  'trip.recurrent': { one: '{count} amb ↻ torna', other: '{count} amb ↻ tornen' },
+  'trip.again': { one: '{count} amb ✓ Pròxima torna', other: '{count} amb ✓ Pròxima tornen' },
+  'trip.kept': { one: '{count} sense comprar s\'ajorna', other: '{count} sense comprar s\'ajornen' },
+  'trip.open': { one: '{count} sense comprar es desa', other: '{count} sense comprar es desen' },
+  'trip.bought': { one: '{count} es desa a Tornar a comprar', other: '{count} es desen a Tornar a comprar' },
+  'trip.hint': 'Pots canviar què passa amb el que no has comprat a Configuració.',
 
   'recipes.search': 'Cerca recepta o producte',
   'search.label': 'Cerca a la llista',
@@ -143,8 +143,6 @@ export default {
   'onboarding.sections.title': 'Llisca la pantalla',
   'onboarding.sections.text': 'Llisca als costats o fes servir la barra inferior per navegar entre seccions. Amb `+` afegeixes el que necessitis.',
 
-  'settings.back': { one: '{count} torna', other: '{count} tornen' },
-  'settings.discarded': { one: '{count} es descarta', other: '{count} es descarten' },
   'settings.backup': 'Còpia de seguretat',
   'settings.export': 'Exporta',
   'settings.import': 'Importa',
