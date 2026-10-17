@@ -189,9 +189,6 @@ export const bringToList = (state, id) => {
   return { state, changed: false };
 };
 
-// The saved items, in name order.
-export const savedItems = (state) => state.items.filter((item) => item.list === 'saved').sort(byName);
-
 // Figures for the header and for the preview of `startNewShopping`: `back` recurrent items and
 // kept open items stay for the next trip, `saved` one-time items of Active are saved. `keep` is the
 // parameter of `startNewShopping`.

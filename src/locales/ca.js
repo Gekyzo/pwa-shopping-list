@@ -1,6 +1,6 @@
 export default {
   'list.active': 'Compra',
-  'list.saved': 'Tornar a comprar',
+  'list.saved': 'articles desats',
   'nav.label': 'Seccions',
   'nav.recipes': 'Receptes',
   'nav.settings': 'Configuració',
@@ -32,7 +32,6 @@ export default {
   'count.recipes': { one: '{count} recepta', other: '{count} receptes' },
   'count.products': { one: '{count} producte', other: '{count} productes' },
   'count.bought': { one: 'Comprats ({count})', other: 'Comprats ({count})' },
-  'count.saved': { one: 'Tornar a comprar ({count})', other: 'Tornar a comprar ({count})' },
 
   'row.always': 'Compra sempre: {name}',
   'row.delete': 'Elimina {name}',
@@ -65,7 +64,7 @@ export default {
   'trip.recurrent': { one: '{count} amb ↻ torna', other: '{count} amb ↻ tornen' },
   'trip.kept': { one: '{count} sense comprar s\'ajorna', other: '{count} sense comprar s\'ajornen' },
   'trip.open': { one: '{count} sense comprar es desa', other: '{count} sense comprar es desen' },
-  'trip.bought': { one: '{count} es desa a Tornar a comprar', other: '{count} es desen a Tornar a comprar' },
+  'trip.bought': { one: '{count} comprat surt de la llista', other: '{count} comprats surten de la llista' },
   'trip.hint': 'Pots canviar què passa amb el que no has comprat a Configuració.',
 
   'recipes.search': 'Cerca recepta o producte',
@@ -91,7 +90,7 @@ export default {
   'add.existing': 'Articles que ja existeixen',
   'where.boughtRepeat': 'ja comprat · repeteix',
   'where.inList': 'ja a la llista',
-  'where.saved': 'tornar a comprar · afegir',
+  'where.saved': 'comprat abans · afegir',
 
   'arrange.label': 'Agrupa i ordena',
   'arrange.groupBy': 'Agrupa per',

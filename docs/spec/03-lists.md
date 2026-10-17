@@ -65,8 +65,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   1. A banner `¿Has terminado?` in `Compra`, when the list has items and all are ticked. Its text
      gives the count that comes back and the count that is saved.
   2. The button of the trip sheet of `Compra` (NAV-9), below a line that counts the items of
-     `Compra` by where each one goes, such as `2 con ↻ vuelven · 1 sin comprar se aplaza · 4 se
-     guardan en Volver a comprar`. Its parts, in this order: recurrent items, open items kept with
+     `Compra` by where each one goes, such as `2 con ↻ vuelven · 1 sin comprar se aplaza · 4
+     comprados salen de la lista`. Its parts, in this order: recurrent items, open items kept with
      `Aplazar`, open items saved with `Descartar`, ticked one-time items. A part with no item does
      not show. It is disabled when TRIP-1 does not hold.
 - **TRIP-5** After **Terminar compra** the screen shows `Compra`. `Deshacer` restores the full
@@ -111,7 +111,7 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
   |---|---|---|
   | Ticked | `ya comprado · repetir` | Removes the tick |
   | To buy in `Compra` | `ya en la lista` | Nothing |
-  | Saved | `volver a comprar · añadir` | Goes to `Compra`, not ticked (LIST-32) |
+  | Saved | `comprado antes · añadir` | Goes to `Compra`, not ticked (LIST-32) |
 
 - **ADD-4** When no item has the typed name, the list ends with `+ Crear «name»`, which does the
   same as **Añadir**.
@@ -146,22 +146,17 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 
 - **LIST-30** **Terminar compra** saves each one-time item of `Compra` that is ticked, and each open
   item with `Descartar`: only `↻` (LIST-7) and `Aplazar` (TRIP-6) keep an item for the next trip.
-  A saved item leaves `Compra` and keeps its name, its shops and its quantity. Only **Eliminar**
-  deletes an item.
+  A saved item leaves `Compra` and keeps its name, its shops and its quantity. The screen does not
+  show it, and has no delete for it: to delete it, bring it back (LIST-32), then **Eliminar**.
 - **LIST-31** A saved item keeps its name (DATA-3). The add sheet finds it (ADD-3), and an add of
   its name brings it back (ADD-5). A recipe sent to `Compra` brings back a saved product.
 - **LIST-32** A bring back puts a saved item in `Compra`, not ticked. `recurrent` does not change.
   A saved item cannot be ticked (LIST-10).
-- **LIST-34** `Compra` ends with the section `Volver a comprar (N)`, below the empty state when the
-  list is empty. It shows when an item is saved, and is closed at first; a tap on its head opens
-  and closes it. Open, it lists the saved items in name order, with their quantity and shops.
-- **LIST-35** A saved row has no button: it slides as an item row (ROW-13). A slide to the right
-  brings the item back to `Compra` (LIST-32), with `"name" añadido a Compra.` and `Deshacer`. A
-  slide to the left shows **Eliminar**, which deletes the item for good, with `Deshacer`. A tap on
-  the name opens the edit sheet (ROW-7).
-- **LIST-36** The search of the list (LIST-22) filters the saved items too. The section shows open
-  while the field has a text, and does not show with no saved match. The search button shows when
-  the list or the section has an item.
+- **LIST-34** Removed: `Compra` has no section of the saved items (LIST-30). The add sheet is the
+  only way to them (LIST-31).
+- **LIST-35** Removed: a saved item has no row (LIST-34).
+- **LIST-36** Removed: the search of the list (LIST-22) does not find a saved item. The search
+  button shows when the list has an item.
 - **LIST-33** A saved item counts in no header figure and in no trip figure.
 
 ## Limits

@@ -88,7 +88,7 @@ export const groupOnlyRows = () => {
 };
 
 // The lists whose rows open and close when a change of the state or a section adds or removes them.
-const ROW_LISTS = ['items', 'saved', 'recipe-products'];
+const ROW_LISTS = ['items', 'recipe-products'];
 
 // A row is the same row when it has the same list, the same item or key, and the same tick.
 // The first row of an item stands for the item: a second row of it, in a second group, is the

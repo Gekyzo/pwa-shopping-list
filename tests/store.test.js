@@ -18,7 +18,6 @@ import {
   bringToList,
   tripSummary,
   tripOutcome,
-  savedItems,
   arrivalMessage,
   setSort,
   sortItems,
@@ -171,7 +170,7 @@ test('startNewShopping applies each rule', () => {
   const { state, error } = startNewShopping(start);
   assert.equal(error, undefined);
   assert.deepEqual(names(state.items), ['Milk', 'Batteries', 'Bread', 'Eggs', 'Tea']);
-  assert.deepEqual(names(savedItems(state)), ['Batteries', 'Bread', 'Tea']);
+  assert.deepEqual(names(state.items.filter((item) => item.list === 'saved')), ['Batteries', 'Bread', 'Tea']);
   state.items.forEach((item) => {
     assert.equal(item.list, ['Milk', 'Eggs'].includes(item.name) ? 'active' : 'saved');
     assert.equal(item.bought, false);
@@ -631,12 +630,6 @@ test('a saved item is in no list view and not in the trip figures', () => {
   assert.deepEqual(activeItems(state), []);
   assert.deepEqual(tripSummary(state), { total: 0, left: 0, back: 0, saved: 0 });
   assert.equal(canStartNewShopping(state), false);
-});
-
-test('savedItems gives the saved items in name order', () => {
-  const state = saved(['Soap'], ['batteries'], ['Milk', { recurrent: true }]);
-  assert.deepEqual(names(savedItems(state)), ['batteries', 'Soap']);
-  assert.deepEqual(savedItems(emptyState()), []);
 });
 
 test('bringToList takes a saved item to active, not ticked', () => {
