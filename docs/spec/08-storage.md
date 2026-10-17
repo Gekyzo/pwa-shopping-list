@@ -11,7 +11,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.lang` | The language that the user chose ([09-languages.md](09-languages.md)) |
 | `localStorage` | `shopping.hand` | `left` when the user chose **Izquierda** ([07-screen.md](07-screen.md), NAV-12) |
 | `localStorage` | `shopping.theme` | `light` or `dark` when the user chose **Claro** or **Oscuro** ([07-screen.md](07-screen.md), NAV-17) |
-| `localStorage` | `shopping.tripEnd` | `keep` when the user chose **Aplazar** ([03-lists.md](03-lists.md), TRIP-8) |
+| `localStorage` | `shopping.tripEnd` | `save` when the user chose **Descartar** ([03-lists.md](03-lists.md), TRIP-8) |
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.modules` | The ids of the modules that the user turned off, as JSON ([14-modules.md](14-modules.md), MOD-2) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
@@ -36,10 +36,11 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   to `shopping.v1.corrupt` and starts with the empty state. The first change then replaces
   `shopping.v1`.
 - **STORE-6** A state is not valid when one of these is true:
-  - it is not an object, its `version` is not 1 to 7, or `items` is not a list;
-  - `recipes` is not a list, in version 2 to 7;
-  - an item has no string `id`, no name, a `list` that is not `active`, `next` or `saved`, or a flag
-    (`recurrent`, `bought`, `again`) that is not a boolean;
+  - it is not an object, its `version` is not 1 to 8, or `items` is not a list;
+  - `recipes` is not a list, in version 2 to 8;
+  - an item has no string `id`, no name, a `list` that is not `active`, `saved` or the
+    old `next` (STORE-8), a flag (`recurrent`, `bought`) that is not a boolean, or an `again` that
+    is present and not a boolean;
   - a recipe has no string `id`, no name, an empty product, a product that is not text, or two
     products with the same name;
   - two items or two recipes have the same id or the same name (DATA-2 to DATA-4).
@@ -48,8 +49,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Field | Repair |
   |---|---|
   | Names of items, recipes, products, shops | Trimmed |
-  | `bought` of an item of `list: 'next'` or `list: 'saved'` | `false` |
-  | `again` of an item not ticked, or recurrent | `false` |
+  | `bought` of an item of `list: 'saved'` | `false` |
   | `quantity` | Not text: `''`. Text: trimmed |
   | `shops` | Not a list: empty. An entry that is not text, is empty or is a duplicate: dropped |
   | `aisles` | Not a list: empty. An entry that is not text, is empty or is a duplicate with no case distinction: dropped. The rest trimmed |
@@ -62,7 +62,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | `sort` | Unknown: `custom` |
   | Unknown fields | Dropped |
 
-- **STORE-8** An older state is migrated when it is read, and saved as version 7 at the next
+- **STORE-8** An older state is migrated when it is read, and saved as version 8 at the next
   change:
 
   | From | Change |
@@ -73,6 +73,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Version 1 to 4 | Each item gets `quantity: ''` |
   | Version 1 to 5 | No change of the data: version 6 adds `list: 'saved'` |
   | Version 1 to 6 | `aisles: []`, and each item gets `aisle: ''` |
+  | Version 1 to 7 | An item of `list: 'next'` goes to `Actual`, not ticked. A ticked one-time item with `again: true` goes to `Actual`, not ticked. Each item loses `again` |
 
 ## Failures
 

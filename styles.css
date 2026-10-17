@@ -179,7 +179,7 @@
 @layer screens {
   /* @component shop-lists
      @scope list
-     @summary The shop lists of Actual and Próxima, below the header.
+     @summary The shop lists of Actual, below the header.
      @example <div class="cluster scroll shop-lists"><button class="chip surface" type="button" aria-pressed="true"><span>Todas</span><span class="count">4</span></button></div> */
   .shop-lists {
     margin: 0;
@@ -197,7 +197,7 @@
 
   /* @component search
      @scope list
-     @summary The search box of Actual, Próxima and Recetas, below the header.
+     @summary The search box of Actual and Recetas, below the header.
      @example <div class="search"><input class="input raised" type="search" placeholder="Buscar"></div> */
   .search {
     padding: var(--space-2) var(--space-3);

@@ -70,10 +70,10 @@ document.documentElement.dataset.hand = hand;
 
 // The colours: `light` or `dark` override the phone, in styles.css; `system` follows it.
 export let theme = storage ? loadTheme(storage) : 'system';
-// `hide` takes the row of shop lists away from Actual and Próxima.
+// `hide` takes the row of shop lists away from Actual.
 export let shopLists = storage ? loadShopLists(storage) : 'show';
-// `keep` makes Aplazar the first choice of an item not bought at Terminar compra (TRIP-7).
-export let tripEnd = storage ? loadTripEnd(storage) : 'save';
+// `save` makes Descartar the first choice of an item not bought at Terminar compra (TRIP-7).
+export let tripEnd = storage ? loadTripEnd(storage) : 'keep';
 document.documentElement.dataset.theme = theme;
 
 // The modules that the user turned off (MOD-2).
@@ -95,7 +95,7 @@ export let state = storage ? load(storage) : store.emptyState();
 // The debug log (ENG-17): each change of the state, to paste a flow into a session. Only on the dev
 // server (`npm run serve`), never on the deployed host.
 export const DEV = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
-const debugRow = (item) => `${item.name} [${item.list}${item.bought ? ' bought' : ''}${item.recurrent ? ' recurrent' : ''}${item.again ? ' again' : ''}${item.quantity ? ` qty=${item.quantity}` : ''}${item.shops.length ? ` shops=${item.shops.join('|')}` : ''}${item.aisle ? ` aisle=${item.aisle}` : ''}]`;
+const debugRow = (item) => `${item.name} [${item.list}${item.bought ? ' bought' : ''}${item.recurrent ? ' recurrent' : ''}${item.quantity ? ` qty=${item.quantity}` : ''}${item.shops.length ? ` shops=${item.shops.join('|')}` : ''}${item.aisle ? ` aisle=${item.aisle}` : ''}]`;
 const debugDiff = (before, after) => {
   const old = new Map(before.items.map((item) => [item.id, debugRow(item)]));
   const now = new Map(after.items.map((item) => [item.id, debugRow(item)]));
@@ -117,7 +117,7 @@ export const debugLog = (label, lines = []) => {
   console.log(text);
 };
 if (DEV) debugLog(`start v${state.version}`, state.items.map((item) => `  = ${debugRow(item)}`));
-// `view` is the screen of the bottom menu; `target` is the list that the add sheet writes to.
+// `view` is the screen of the bottom menu.
 export const ui = {
   view: 'active',
   // The install offer: `idle`, `available` or `installed` (INS-1).
@@ -138,7 +138,6 @@ export const ui = {
   mealQuery: '',
   // The page of the walkthrough in view, or null while the walkthrough is closed.
   onboarding: firstStart ? 0 : null,
-  target: 'active',
   boughtOpen: false,
   savedOpen: false,
   // The groups of a list that the user closed, as `<view>:<group key>`. Not stored.
@@ -148,10 +147,10 @@ export const ui = {
   // The text of the search field, which Recetas shows always and a list shows on demand. It is
   // not stored.
   query: '',
-  // True while the search field of Actual or of Próxima is open.
+  // True while the search field of Actual is open.
   searchOpen: false,
-  // The shop list of each section: null for Todas, '' for Sin tienda, or a shop. Not stored.
-  shop: { active: null, next: null },
+  // The shop list of Actual: null for Todas, '' for Sin tienda, or a shop. Not stored.
+  shop: null,
   // The group where the row actions are open: a recipe id, `shop:<name>`, or null out of a group.
   openGroup: null,
   // The side menu of the open item row: 'end' (slide left) or null.
@@ -252,7 +251,7 @@ export const setShopLists = (choice) => {
 };
 
 export const setTripEnd = (choice) => {
-  tripEnd = choice === 'keep' ? 'keep' : 'save';
+  tripEnd = choice === 'save' ? 'save' : 'keep';
   if (storage) saveTripEnd(storage, tripEnd);
 };
 

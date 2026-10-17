@@ -42,7 +42,7 @@ export const renderOnboarding = () => {
     drawing.toggleAttribute('hidden', drawing.dataset.page !== page);
   });
   $('onboarding-title').textContent = t(`onboarding.${page}.title`);
-  const names = { active: t('list.active'), next: t('list.next'), name: t('sample.name') };
+  const names = { active: t('list.active'), name: t('sample.name') };
   const parts = textParts(t(`onboarding.${page}.text`, names));
   $('onboarding-text').replaceChildren(...parts.map(keyNode));
   $('onboarding-dots').replaceChildren(...PAGES.map((id) => el('span', { className: id === page ? 'onboarding-dot on' : 'onboarding-dot' })));

@@ -129,10 +129,11 @@ test('fillMenu sends each recipe of the menu to Active, one time, in menu order'
   assert.deepEqual(planned, before);
 });
 
-test('fillMenu brings an item from Next and counts an item to buy as already there', () => {
+test('fillMenu brings a saved item and counts an item to buy as already there', () => {
   const { state: start, lentils } = kitchen();
-  const withNext = addItem(start, 'Lentils', 'next', newId).state;
-  const withActive = addItem(withNext, 'Onion', 'active', newId).state;
+  const withLentils = addItem(start, 'Lentils', newId).state;
+  const withSaved = { ...withLentils, items: withLentils.items.map((item) => ({ ...item, list: 'saved' })) };
+  const withActive = addItem(withSaved, 'Onion', newId).state;
   const planned = plan(withActive, [[0, 'lunch', lentils]]);
   const { state, added, already } = fillMenu(planned, newId);
   assert.deepEqual(state.items.map(({ name, list }) => [name, list]), [['Lentils', 'active'], ['Onion', 'active']]);

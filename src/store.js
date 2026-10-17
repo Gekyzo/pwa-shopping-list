@@ -1,7 +1,3 @@
-// The lists that an item can be put in. A third value, `saved`, holds the items that a trip
-// ended: they are in no list until the user brings them back.
-const LISTS = ['active', 'next'];
-
 // `custom` is the order of `items`: the insertion order, changed by the moves of the user.
 export const SORTS = ['custom', 'name'];
 
@@ -10,9 +6,9 @@ export const SORTS = ['custom', 'name'];
 export const GROUPS = ['recipe', 'shop', 'aisle', 'none'];
 
 // `sent` holds the ids of the recipes sent to Active in this trip. `group` is the choice of the
-// user to show a list in groups, and `sort` the order of the two lists. `aisles` are the sections
+// user to show a list in groups, and `sort` the order of the list. `aisles` are the sections
 // of the store, in the order of the walk.
-export const emptyState = () => ({ version: 7, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] });
+export const emptyState = () => ({ version: 8, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] });
 
 // An error is a message: the key of its text, with the parameters of the text. A `list`
 // parameter holds a list id. The screen turns the message into text.
@@ -31,14 +27,12 @@ const nameError = (state, name, ownId) => {
   return duplicate ? ['error.duplicateItem', { name: duplicate.name, list: duplicate.list }] : null;
 };
 
-const inNextView = (item) => item.list === 'next' || (item.bought && (item.recurrent || item.again));
-
-export const addItem = (state, rawName, list, newId = () => crypto.randomUUID()) => {
-  if (!LISTS.includes(list)) return reject(state, 'error.unknownList');
+// A new item is one-time and goes to Actual.
+export const addItem = (state, rawName, newId = () => crypto.randomUUID()) => {
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name);
   if (error) return reject(state, ...error);
-  const item = { id: newId(), name, recurrent: list === 'next', list, bought: false, again: false, shops: [], quantity: '', aisle: '' };
+  const item = { id: newId(), name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '' };
   return { state: { ...state, items: [...state.items, item] } };
 };
 
@@ -60,22 +54,14 @@ export const setQuantity = (state, id, rawQuantity) => {
 export const toggleRecurrent = (state, id) => {
   const item = findItem(state, id);
   if (!item) return reject(state, 'error.itemNotFound');
-  return patchItem(state, id, { recurrent: !item.recurrent, again: false });
+  return patchItem(state, id, { recurrent: !item.recurrent });
 };
 
 export const toggleBought = (state, id) => {
   const item = findItem(state, id);
   if (!item) return reject(state, 'error.itemNotFound');
   if (item.list !== 'active') return reject(state, 'error.onlyActiveTick', { list: 'active' });
-  return patchItem(state, id, { bought: !item.bought, again: false });
-};
-
-export const toggleAgain = (state, id) => {
-  const item = findItem(state, id);
-  if (!item) return reject(state, 'error.itemNotFound');
-  if (!item.bought) return reject(state, 'error.tickFirst');
-  if (item.recurrent) return reject(state, 'error.recurrentInNext', { list: 'next' });
-  return patchItem(state, id, { again: !item.again });
+  return patchItem(state, id, { bought: !item.bought });
 };
 
 export const deleteItem = (state, id) => {
@@ -83,29 +69,13 @@ export const deleteItem = (state, id) => {
   return { state: { ...state, items: state.items.filter((item) => item.id !== id) } };
 };
 
-export const moveItem = (state, id) => {
-  const item = findItem(state, id);
-  if (!item) return reject(state, 'error.itemNotFound');
-  if (item.list === 'saved') return reject(state, 'error.itemSaved');
-  const list = item.list === 'active' ? 'next' : 'active';
-  return patchItem(state, id, { list, bought: false, again: false });
-};
-
-export const removeFromNext = (state, id) => {
-  const item = findItem(state, id);
-  if (!item) return reject(state, 'error.itemNotFound');
-  if (!inNextView(item)) return reject(state, 'error.notInNext', { list: 'next' });
-  if (item.list === 'next') return deleteItem(state, id);
-  return patchItem(state, id, { recurrent: false, again: false });
-};
-
 // The one-time items of Active that are not ticked: Terminar compra saves each one, or keeps it in
 // Active when the user chose Aplazar (TRIP-6).
-const isOpen = (item) => item.list === 'active' && !item.bought && !item.recurrent && !item.again;
+const isOpen = (item) => item.list === 'active' && !item.bought && !item.recurrent;
 export const openItems = (state) => sortItems(state, state.items.filter(isOpen));
 
 export const canStartNewShopping = (state) =>
-  state.items.some((item) => item.bought || item.list === 'next' || isOpen(item));
+  state.items.some((item) => item.bought || isOpen(item));
 
 // The ids of `keep` that name an open item.
 const keptIds = (state, keep) => {
@@ -115,16 +85,14 @@ const keptIds = (state, keep) => {
 
 // `keep` holds the ids of the open items that stay in Active; any other id is ignored.
 export const startNewShopping = (state, keep = []) => {
-  if (!canStartNewShopping(state)) return reject(state, 'error.nothingToStart', { list: 'next' });
+  if (!canStartNewShopping(state)) return reject(state, 'error.nothingToStart');
   const kept = keptIds(state, keep);
   // A one-time item of Active, ticked or not, is saved, not kept for the next trip: only a
-  // recurrent item, an item with `again`, a kept open item and an item of Next are in Active at
-  // the next trip.
+  // recurrent item and a kept open item are in Active at the next trip.
   const items = state.items.map((item) => {
     if (item.list === 'saved') return item;
-    const saved = item.list === 'active' && !item.recurrent && !item.again && !kept.has(item.id);
-    const list = saved ? 'saved' : 'active';
-    return { ...item, list, bought: false, again: false };
+    const saved = !item.recurrent && !kept.has(item.id);
+    return { ...item, list: saved ? 'saved' : 'active', bought: false };
   });
   return { state: { ...state, items, sent: [] } };
 };
@@ -162,12 +130,6 @@ export const activeItems = (state) => {
   const active = sortItems(state, state.items.filter((item) => item.list === 'active'));
   return [...active.filter((item) => !item.bought), ...active.filter((item) => item.bought)];
 };
-
-export const nextItems = (state) =>
-  sortItems(state, [
-    ...state.items.filter((item) => item.list === 'next'),
-    ...state.items.filter((item) => item.list === 'active' && inNextView(item)),
-  ]);
 
 // The form of a text for a search: no case and no accent distinction.
 export const fold = (text) =>
@@ -217,62 +179,45 @@ export const searchItems = (state, query, limit = 5) => {
     .slice(0, limit);
 };
 
-// Makes an existing item show as "to buy" in the given list. `changed` is false
-// when the item is there already.
-export const bringToList = (state, id, list) => {
-  if (!LISTS.includes(list)) return reject(state, 'error.unknownList');
+// Makes an existing item show as "to buy" in Actual. `changed` is false when the item is there
+// already.
+export const bringToList = (state, id) => {
   const item = findItem(state, id);
   if (!item) return reject(state, 'error.itemNotFound');
-  const done = (result) => ({ ...result, changed: true });
-  if (item.list === 'saved') return done(patchItem(state, id, { list }));
-  if (list === 'active') {
-    if (item.list === 'next') return done(moveItem(state, id));
-    if (item.bought) return done(toggleBought(state, id));
-  } else if (!inNextView(item)) {
-    return done(item.bought ? toggleAgain(state, id) : moveItem(state, id));
-  }
+  if (item.list === 'saved') return { ...patchItem(state, id, { list: 'active' }), changed: true };
+  if (item.bought) return { ...toggleBought(state, id), changed: true };
   return { state, changed: false };
-};
-
-// Moves each item of Next to Actual, as a move does (LIST-9). The same state when Next is empty.
-export const bringAllToActual = (state) => {
-  if (!state.items.some((item) => item.list === 'next')) return { state };
-  const items = state.items.map((item) =>
-    item.list === 'next' ? { ...item, list: 'active', bought: false, again: false } : item);
-  return { state: { ...state, items } };
 };
 
 // The saved items, in name order.
 export const savedItems = (state) => state.items.filter((item) => item.list === 'saved').sort(byName);
 
-// Figures for the header and for the preview of `startNewShopping`: `back` recurrent items, items
-// with `again` and kept open items stay for the next trip, `saved` one-time items of Active are saved, `incoming` items
-// wait in Next. `keep` is the parameter of `startNewShopping`.
+// Figures for the header and for the preview of `startNewShopping`: `back` recurrent items and
+// kept open items stay for the next trip, `saved` one-time items of Active are saved. `keep` is the
+// parameter of `startNewShopping`.
 export const tripSummary = (state, keep = []) => {
   const active = state.items.filter((item) => item.list === 'active');
   const bought = active.filter((item) => item.bought);
   const kept = keptIds(state, keep).size;
-  const back = active.filter((item) => item.recurrent || item.again).length + kept;
+  const back = active.filter((item) => item.recurrent).length + kept;
   return {
     total: active.length,
     left: active.length - bought.length,
     back,
-    saved: active.filter((item) => !item.recurrent && !item.again).length - kept,
-    incoming: state.items.filter((item) => item.list === 'next').length,
+    saved: active.filter((item) => !item.recurrent).length - kept,
   };
 };
 
-// Where each item of Active goes at `startNewShopping`, for the trip sheet: `recurrent` and `again`
-// items come back, `kept` open items stay, `open` items and `bought` one-time items are saved.
+// Where each item of Active goes at `startNewShopping`, for the trip sheet: `recurrent` items come
+// back, `kept` open items stay, `open` items and `bought` one-time items are saved.
 export const tripOutcome = (state, keep = []) => {
   const active = state.items.filter((item) => item.list === 'active');
   const kept = keptIds(state, keep).size;
   return {
     recurrent: active.filter((item) => item.recurrent).length,
-    again: active.filter((item) => !item.recurrent && item.again).length,
     kept,
     open: active.filter(isOpen).length - kept,
-    bought: active.filter((item) => item.bought && !item.recurrent && !item.again).length,
+    bought: active.filter((item) => item.bought && !item.recurrent).length,
   };
 };
 

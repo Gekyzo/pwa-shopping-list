@@ -97,7 +97,7 @@ export const sendRecipe = (state, id, newId) => {
   let added = 0;
   for (const product of recipe.products) {
     const existing = findByName(next, product);
-    const result = existing ? bringToList(next, existing.id, 'active') : addItem(next, product, 'active', newId);
+    const result = existing ? bringToList(next, existing.id) : addItem(next, product, newId);
     // The error of an item operation is a message already.
     if (result.error) return { state, error: result.error };
     if (!existing || result.changed) added += 1;

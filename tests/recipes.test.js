@@ -20,9 +20,10 @@ import {
 let counter = 0;
 const newId = () => `id-${++counter}`;
 
+// The list is 'active' or 'saved'.
 const withItem = (state, name, list, patch = {}) => {
-  const { state: added } = addItem(state, name, list, newId);
-  return { ...added, items: added.items.map((item) => (item.name === name ? { ...item, ...patch } : item)) };
+  const { state: added } = addItem(state, name, newId);
+  return { ...added, items: added.items.map((item) => (item.name === name ? { ...item, list, ...patch } : item)) };
 };
 
 const withRecipe = (state, name, products = []) => {
@@ -134,31 +135,31 @@ test('sendRecipe creates a one-time active item for each new product', () => {
   assert.deepEqual(
     result.state.items.map(({ id: itemId, ...rest }) => rest),
     [
-      { name: 'Eggs', recurrent: false, list: 'active', bought: false, again: false, shops: [], quantity: '', aisle: '' },
-      { name: 'Potatoes', recurrent: false, list: 'active', bought: false, again: false, shops: [], quantity: '', aisle: '' },
+      { name: 'Eggs', recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '' },
+      { name: 'Potatoes', recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '' },
     ],
   );
   assert.deepEqual(state.items, []);
   assert.equal(result.state.recipes, state.recipes);
 });
 
-test('sendRecipe brings an item from next, unticks a bought item and leaves a pending item', () => {
+test('sendRecipe brings a saved item, unticks a bought item and leaves a pending item', () => {
   let items = withItem(emptyState(), 'Eggs', 'active');
-  items = withItem(items, 'Potatoes', 'next');
-  items = withItem(items, 'Onion', 'active', { bought: true, again: true });
+  items = withItem(items, 'Potatoes', 'saved', { recurrent: true });
+  items = withItem(items, 'Onion', 'active', { bought: true });
   const { state, id } = withRecipe(items, 'Omelette', ['Eggs', 'Potatoes', 'Onion', 'Oil']);
   const result = sendRecipe(state, id, newId);
   assert.deepEqual([result.added, result.already], [3, 1]);
   assert.equal(result.state.items.length, 4);
   result.state.items.forEach((item) => {
-    assert.deepEqual([item.list, item.bought, item.again], ['active', false, false], item.name);
+    assert.deepEqual([item.list, item.bought], ['active', false], item.name);
   });
   assert.equal(find(result.state, 'Potatoes').recurrent, true);
-  assert.equal(find(state, 'Potatoes').list, 'next');
+  assert.equal(find(state, 'Potatoes').list, 'saved');
 });
 
 test('sendRecipe matches an item without case distinction and creates no duplicate', () => {
-  const { state, id } = withRecipe(withItem(emptyState(), 'Huevos', 'next'), 'Tortilla', ['huevos']);
+  const { state, id } = withRecipe(withItem(emptyState(), 'Huevos', 'saved'), 'Tortilla', ['huevos']);
   const result = sendRecipe(state, id, newId);
   assert.deepEqual(result.state.items.map((item) => [item.name, item.list]), [['Huevos', 'active']]);
   assert.deepEqual([result.added, result.already], [1, 0]);
@@ -255,10 +256,10 @@ test('recipeGroups counts a ticked item as a product in active', () => {
 });
 
 test('recipeGroups gives no group to a recipe that was not sent and has a product out of active', () => {
-  const items = withItem(withItem(emptyState(), 'Eggs', 'active'), 'Milk', 'next');
+  const items = withItem(withItem(emptyState(), 'Eggs', 'active'), 'Milk', 'saved');
   const missing = withRecipe(items, 'Omelette', ['Eggs', 'Potatoes']);
-  const inNext = withRecipe(missing.state, 'Flan', ['Eggs', 'Milk']);
-  const { state } = withRecipe(inNext.state, 'Soup');
+  const inSaved = withRecipe(missing.state, 'Flan', ['Eggs', 'Milk']);
+  const { state } = withRecipe(inSaved.state, 'Soup');
   assert.deepEqual(recipeGroups(state), { groups: [], rest: [find(state, 'Eggs')] });
 });
 
@@ -308,10 +309,10 @@ test('recipeGroups matches an item added by hand without case distinction', () =
   assert.deepEqual(names(recipeGroups(withButter).groups[0].items), ['Bread', 'BUTTER']);
 });
 
-test('recipeGroups ignores an item in next, a recipe with no item and a stale id', () => {
+test('recipeGroups ignores a saved item, a recipe with no item and a stale id', () => {
   const { state, flan } = twoSent();
-  const withNext = withItem(state, 'Sugar', 'next');
-  const flanPlus = addRecipeProduct(withNext, flan, 'Sugar').state;
+  const withSaved = withItem(state, 'Sugar', 'saved');
+  const flanPlus = addRecipeProduct(withSaved, flan, 'Sugar').state;
   assert.deepEqual(names(recipeGroups(flanPlus).groups[1].items), ['Eggs', 'Milk']);
   const empty = withRecipe(flanPlus, 'Soup', ['Leek']);
   const stale = { ...empty.state, sent: [...empty.state.sent, empty.id, 'gone'] };

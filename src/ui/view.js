@@ -6,10 +6,10 @@ import { state, ui, isOn } from '#ui/context';
 // An item of two recipes, or of two shops, shows in two groups: `groupId` tells its rows apart.
 export const isOpen = (id, groupId) => ui.openId === id && ui.openGroup === groupId;
 
-export const inList = () => ui.view === 'active' || ui.view === 'next';
+export const inList = () => ui.view === 'active';
 
 // The state of the shop list on the screen. The operations still run on the full state.
-export const viewState = () => (inList() ? shops.shopState(state, ui.shop[ui.view]) : state);
+export const viewState = () => (inList() ? shops.shopState(state, ui.shop) : state);
 
 // True for an item that the search of the list shows.
 export const found = (item) => store.matchesItem(item, ui.query);
@@ -23,10 +23,10 @@ export const searching = () => ui.query.trim() !== '';
 export const arrangeChoices = () => {
   if (!inList()) return { recipe: false, shop: false, aisle: false, sort: false };
   const scoped = viewState();
-  const items = ui.view === 'active' ? store.activeItems(scoped) : store.nextItems(scoped);
+  const items = store.activeItems(scoped);
   return {
-    recipe: isOn('recipes') && ui.view === 'active' && recipes.recipeGroups(scoped).groups.length > 0,
-    shop: ui.shop[ui.view] === null && items.some((item) => item.shops.length > 0),
+    recipe: isOn('recipes') && recipes.recipeGroups(scoped).groups.length > 0,
+    shop: ui.shop === null && items.some((item) => item.shops.length > 0),
     aisle: items.some((item) => item.aisle !== ''),
     sort: items.length > 1,
   };

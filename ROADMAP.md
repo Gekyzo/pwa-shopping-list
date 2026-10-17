@@ -36,7 +36,7 @@ Not needed yet. Each item names what makes it needed.
 ## Pro
 
 Candidate features for a paid version. Nothing here is committed. The free
-version keeps `Actual`, `Próxima`, `Recetas`, `Menú` and offline use.
+version keeps `Actual`, `Recetas`, `Menú` and offline use.
 
 ### Cloud storage
 
@@ -64,7 +64,7 @@ model.
 
 - **Automatic recipes and menus.** Generate recipes and a weekly menu from
   preferences, diets and the products at home, and add the missing products to
-  `Próxima`.
+  `Actual`.
 - **Receipt scan.** Read a photo of a receipt to tick the items, record the
   prices and keep the total.
 

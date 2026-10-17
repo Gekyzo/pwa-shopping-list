@@ -1,4 +1,3 @@
-import * as store from '#store';
 import { exportJson, exportFilename, importJson } from '#storage';
 import { parseVersion, versionStatus } from '#version';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
@@ -19,7 +18,6 @@ import {
   tripEnd,
   off,
   isOn,
-  say,
   textOf,
   showToast,
   apply,
@@ -173,11 +171,8 @@ export const bind = () => {
   document.querySelectorAll('[data-module]').forEach((box) => {
     box.addEventListener('change', () => {
       setModules(switchModule(off, box.dataset.module, box.checked));
-      // The switch-off of Próxima brings its items to Actual (MOD-6).
-      const result = box.dataset.module === 'next' && !box.checked ? store.bringAllToActual(state) : { state };
       setNavMotion(true);
-      if (result.state !== state) apply(result, { undoText: say('toast.brought', { list: 'next' }) });
-      else render();
+      render();
       setNavMotion(false);
     });
   });

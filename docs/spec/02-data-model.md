@@ -6,7 +6,7 @@ The app has one state object. Each operation returns a new object and never chan
 
 ```js
 {
-  version: 7,
+  version: 8,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
   sent: [string],     // ids of the recipes sent to Actual in this trip, in send order
@@ -17,7 +17,7 @@ The app has one state object. Each operation returns a new object and never chan
 }
 ```
 
-The empty state is `{ version: 7, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] }`.
+The empty state is `{ version: 8, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] }`.
 
 ## Item
 
@@ -26,9 +26,8 @@ The empty state is `{ version: 7, items: [], recipes: [], sent: [], group: 'reci
   id: string,         // crypto.randomUUID()
   name: string,       // trimmed, not empty
   recurrent: boolean, // comes back at each trip
-  list: 'active' | 'next' | 'saved', // 'saved': kept after a trip, in no list
+  list: 'active' | 'saved', // 'saved': kept after a trip, out of Actual
   bought: boolean,    // ticked
-  again: boolean,     // a ticked one-time item that the user wants at the next trip
   shops: [string],    // shop names
   quantity: string,   // free text, such as '2' or '1 kg'; trimmed; '' for none
   aisle: string,      // one name of `aisles`, or '' for none
@@ -60,15 +59,14 @@ A meal with no recipe has no record. See [13-menu.md](13-menu.md).
 
 ## Invariants
 
-- **DATA-1** An item is one record. It is never copied between the lists; a view computes where it
-  shows.
+- **DATA-1** An item is one record. It is never copied; a view computes where it shows.
 - **DATA-2** Item ids are unique. Recipe ids are unique.
-- **DATA-3** Item names are unique with no case distinction, across the two lists. `Leche` and
+- **DATA-3** Item names are unique with no case distinction, in `Actual` and saved. `Leche` and
   `leche` are one name; `Cafe` and `Café` are two.
 - **DATA-4** Recipe names are unique with no case distinction.
 - **DATA-5** The products of one recipe are unique with no case distinction.
 - **DATA-6** `bought` is true only for an item of `list: 'active'`. A saved item is never ticked.
-- **DATA-7** `again` is true only for an item that is ticked and not recurrent.
+- **DATA-7** Removed: an item has no `again` field (STORE-8).
 - **DATA-8** The shops of one item are unique with no case distinction, trimmed and not empty.
 - **DATA-9** One shop has one spelling in the full state: the spelling of its first use.
 - **DATA-10** `sent` holds only ids of recipes that exist, each one time.
@@ -88,22 +86,20 @@ No view is stored.
 | View | Function | Content |
 |---|---|---|
 | `Actual` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
-| `Próxima` | `nextItems` | The items of `list: 'next'`, then the ticked items of `Actual` that are recurrent or have `again` |
 | `Volver a comprar` | `savedItems` | The items of `list: 'saved'`, in name order |
-| Trip figures | `tripSummary` | `total`, `left`, `back`, `saved`, `incoming` |
-| Trip outcome | `tripOutcome` | `recurrent`, `again`, `kept`, `open`, `bought` |
+| Trip figures | `tripSummary` | `total`, `left`, `back`, `saved` |
+| Trip outcome | `tripOutcome` | `recurrent`, `kept`, `open`, `bought` |
 | Recipe groups | `recipeGroups` | `Actual` by recipe |
-| Shop groups | `shopGroups` | `Actual` or `Próxima` by shop |
+| Shop groups | `shopGroups` | `Actual` by shop |
 | Shops in use | `shopNames` | Each shop of an item, in name order |
-| Aisle groups | `aisleGroups` | `Actual` or `Próxima` by aisle, in the order of `aisles` |
+| Aisle groups | `aisleGroups` | `Actual` by aisle, in the order of `aisles` |
 
-`tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the ones
-that are recurrent or have `again`, ticked or not, and the open items kept with `Aplazar` (TRIP-6); `saved`, the one-time items of `Actual` with no `again`,
-ticked or not; `incoming`, the items of
-`list: 'next'`. `tripOutcome` splits the items of `Actual` by where each one goes (TRIP-4): `recurrent`
-come back; `again`, one-time with `again`, come back; `kept`, open items kept with `Aplazar`;
-`open`, the other open items, saved; `bought`, ticked one-time items with no `again`, saved. The five
-add up to `total`.
+`tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the
+recurrent items, ticked or not, and the open items kept with `Aplazar` (TRIP-6); `saved`, the
+other one-time items of `Actual`, ticked or not. `tripOutcome` splits the items of `Actual` by
+where each one goes (TRIP-4): `recurrent` come back; `kept`, open items kept with `Aplazar`;
+`open`, the other open items, saved; `bought`, ticked one-time items, saved. The four add up to
+`total`.
 
 ## Name rules
 
