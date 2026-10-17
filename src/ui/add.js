@@ -53,7 +53,7 @@ export const closeSheet = () => {
 // The shop that an add from the sheet puts on its item: the shop list in view, if any.
 const pickedShop = () => (inList() ? ui.shop : null);
 
-// Puts an item that exists already into Actual, in place of a duplicate. From a shop list the item
+// Puts an item that exists already into Compra, in place of a duplicate. From a shop list the item
 // also gets the shop, which is a change too.
 const useExisting = (item) => {
   const brought = store.bringToList(state, item.id);

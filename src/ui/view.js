@@ -16,7 +16,7 @@ export const found = (item) => store.matchesItem(item, ui.query);
 // True while the search field has a text.
 export const searching = () => ui.query.trim() !== '';
 
-// The choices that the arrange sheet has for the view: the recipe groups of Actual when a recipe
+// The choices that the arrange sheet has for the view: the recipe groups of Compra when a recipe
 // has a group, the shop groups when an item of the view has a shop, the aisle groups when an item
 // of the view has an aisle, and the order of a list with two items or more. A shop list has no
 // shop groups, but it has aisle groups: at one shop, the list follows its aisles.

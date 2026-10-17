@@ -7,7 +7,7 @@ the arrange sheet in `src/ui/arrange.js`.
 ## Arrange sheet
 
 - **SORT-1** The button at the right of the header opens the sheet **Agrupar y ordenar**. It shows
-  only in `Actual`, and only when the sheet has a choice to offer: a grouping
+  only in `Compra`, and only when the sheet has a choice to offer: a grouping
   (GROUP-2) or an order (SORT-3).
 - **SORT-2** The sheet stays open after a choice, so that the group and the order change in one
   visit. A tap out of the sheet or `Escape` closes it.
@@ -16,12 +16,12 @@ the arrange sheet in `src/ui/arrange.js`.
 
 - **SORT-3** **Ordenar por** has **Nombre** and **Personalizado**. It shows when the view has two
   items or more.
-- **SORT-4** One choice, `sort`, applies to `Actual`. The default is `custom`.
+- **SORT-4** One choice, `sort`, applies to `Compra`. The default is `custom`.
 - **SORT-5** **Personalizado** is the order of `items`: the insertion order, changed by the moves
   of the user. A new item goes to the end.
 - **SORT-6** **Nombre** is alphabetical with no case and no accent distinction. It does not change
   `items`.
-- **SORT-7** In `Actual` the items to buy come before the ticked items in each order.
+- **SORT-7** In `Compra` the items to buy come before the ticked items in each order.
 - **SORT-8** The order also applies inside each group. The recipes and their products have no
   order choice.
 - **SORT-9** A change of order has no message and no `Deshacer`. The rows move to their new places
@@ -30,7 +30,7 @@ the arrange sheet in `src/ui/arrange.js`.
 ## Groups
 
 - **GROUP-1** **Agrupar por** has **Recetas**, **Tiendas**, **Secciones** and **Nada**. One choice, `group`,
-  applies to `Actual`. The default is `recipe`.
+  applies to `Compra`. The default is `recipe`.
 - **GROUP-2** A choice shows only when the view can show it:
   - **Recetas**: when the module **Recetas y menú** is on (MOD-1) and one recipe group exists at
     least (GROUP-5).
@@ -42,16 +42,16 @@ the arrange sheet in `src/ui/arrange.js`.
   the sheet has one choice at least.
 - **GROUP-3** A view that cannot show the stored choice shows a flat list, and the sheet marks
   **Nada**. The stored choice does not change. Example: with `group: 'shop'` and no
-  item with a shop, `Actual` is flat.
+  item with a shop, `Compra` is flat.
 - **GROUP-4** A tap on the choice that the view shows already changes nothing. Thus a tap on
   **Nada** in a view that is flat by GROUP-3 keeps the stored grouping.
 
 ### By recipe
 
-- **GROUP-5** The groups of `Actual` are, in this order:
+- **GROUP-5** The groups of `Compra` are, in this order:
   1. each recipe of `sent`, in send order;
-  2. each other recipe that has products and whose products are all in `Actual`, ticked or not.
-- **GROUP-6** The members of a group are the items of `Actual` whose name is a product of the
+  2. each other recipe that has products and whose products are all in `Compra`, ticked or not.
+- **GROUP-6** The members of a group are the items of `Compra` whose name is a product of the
   recipe, with no case distinction. A group with no member does not show.
 - **GROUP-7** An item of two recipes shows in the two groups. One tick takes it out of both.
 - **GROUP-8** The head of a group shows the name of the recipe and `ticked/total`, or `✓` when all
@@ -96,8 +96,8 @@ the arrange sheet in `src/ui/arrange.js`.
 
   | View | Rows that move | Scope |
   |---|---|---|
-  | `Actual`, flat | Items to buy | The items to buy |
-  | `Actual`, grouped | Items to buy | The group of the row, or `Otros` / `Sin tienda` / `Sin sección` |
+  | `Compra`, flat | Items to buy | The items to buy |
+  | `Compra`, grouped | Items to buy | The group of the row, or `Otros` / `Sin tienda` / `Sin sección` |
 
 - **MOVE-4** A ticked row does not move. A row does not move while its side
   menu is open or its name is in edit. A scope of one row does not move. No row moves while the

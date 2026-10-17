@@ -1,6 +1,6 @@
 # Menu
 
-Rules of `src/menu.js`. The menu plans recipes for the meals of a week and fills `Actual` with
+Rules of `src/menu.js`. The menu plans recipes for the meals of a week and fills `Compra` with
 their products in one action.
 
 ## Week
@@ -15,7 +15,7 @@ their products in one action.
 
 ## Fill the basket
 
-- **MENU-5** **Llenar la cesta** sends each recipe of the menu to `Actual`, one time, in day
+- **MENU-5** **Llenar la cesta** sends each recipe of the menu to `Compra`, one time, in day
   and meal order of its first meal. Each send follows REC-18 and REC-19.
 - **MENU-6** A recipe with no product is skipped. A menu with no meal gives
   `error.menuEmpty`. A menu whose recipes have no product gives `error.recipeEmpty`.
@@ -36,7 +36,7 @@ their products in one action.
   recipe, in the order of the recipes; the chip of the recipe of the meal is on. A tap on a chip
   puts that recipe in the meal and closes the sheet. A meal with a recipe also has **Quitar**,
   with `Deshacer` and the message `Quitada del menú: «name».`
-- **MENU-12** Below the week, **Llenar la cesta** fills `Actual` (MENU-5). It has the icon
+- **MENU-12** Below the week, **Llenar la cesta** fills `Compra` (MENU-5). It has the icon
   `cart-add`, the cart with a plus, before its text. It is at the side of the hand: at the
   right of **Vaciar menú** with `Derecha`, at the left with `Izquierda` (NAV-13). The two
   buttons are on one line, each half of its width; a long text wraps in its button. Its message is

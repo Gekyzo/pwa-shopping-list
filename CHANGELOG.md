@@ -9,15 +9,15 @@ no change for the user has no entry.
 
 ## Unreleased
 
-- `Próxima` is gone: the app has one list, `Actual`. The bottom bar has four sections, and the
-  add sheet has no `Para hoy` / `Para la próxima` choice.
-- The next trip comes from `Actual` itself. At **Terminar compra** an item with `↻` comes back
+- `Próxima` is gone: the app has one list, `Compra`, which was `Actual`. The bottom bar has four
+  sections, and the add sheet has no `Para hoy` / `Para la próxima` choice.
+- The next trip comes from `Compra` itself. At **Terminar compra** an item with `↻` comes back
   not ticked, and an item not bought stays with `Aplazar`.
 - **Al terminar la compra** is `Aplazar` at first. A user who wants the old behaviour picks
   `Descartar` in `Ajustes`.
 - The `+ Próxima` button of a ticked item is gone. To keep an item for the next trip, mark it
   with `↻` or do not tick it.
-- The items that were in `Próxima`, and the ticked items with `✓ Próxima`, are in `Actual`, not
+- The items that were in `Próxima`, and the ticked items with `✓ Próxima`, are in `Compra`, not
   ticked, after the update.
 
 ## 1.0.36 - 2026-10-17

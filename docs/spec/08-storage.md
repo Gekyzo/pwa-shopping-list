@@ -73,7 +73,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Version 1 to 4 | Each item gets `quantity: ''` |
   | Version 1 to 5 | No change of the data: version 6 adds `list: 'saved'` |
   | Version 1 to 6 | `aisles: []`, and each item gets `aisle: ''` |
-  | Version 1 to 7 | An item of `list: 'next'` goes to `Actual`, not ticked. A ticked one-time item with `again: true` goes to `Actual`, not ticked. Each item loses `again` |
+  | Version 1 to 7 | An item of `list: 'next'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. Each item loses `again` |
 
 ## Failures
 

@@ -27,7 +27,7 @@ const nameError = (state, name, ownId) => {
   return duplicate ? ['error.duplicateItem', { name: duplicate.name, list: duplicate.list }] : null;
 };
 
-// A new item is one-time and goes to Actual.
+// A new item is one-time and goes to Compra.
 export const addItem = (state, rawName, newId = () => crypto.randomUUID()) => {
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name);
@@ -179,7 +179,7 @@ export const searchItems = (state, query, limit = 5) => {
     .slice(0, limit);
 };
 
-// Makes an existing item show as "to buy" in Actual. `changed` is false when the item is there
+// Makes an existing item show as "to buy" in Compra. `changed` is false when the item is there
 // already.
 export const bringToList = (state, id) => {
   const item = findItem(state, id);

@@ -12,17 +12,17 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 |---|---|
 | [01-product.md](01-product.md) | Purpose, user, constraints, what the app does not do |
 | [02-data-model.md](02-data-model.md) | The state, its records and its invariants |
-| [03-lists.md](03-lists.md) | Items, the list `Actual`, the trip cycle, the add sheet |
+| [03-lists.md](03-lists.md) | Items, the list `Compra`, the trip cycle, the add sheet |
 | [04-arrange.md](04-arrange.md) | Order, groups and the manual move of a row |
 | [05-shops.md](05-shops.md) | The shops of an item and the list by shop |
-| [06-recipes.md](06-recipes.md) | Recipes, the send to `Actual`, the search |
+| [06-recipes.md](06-recipes.md) | Recipes, the send to `Compra`, the search |
 | [07-screen.md](07-screen.md) | Sections, header, gestures, sheets, messages and undo, the walkthrough |
 | [08-storage.md](08-storage.md) | The stored format, validation, migration, backup |
 | [09-languages.md](09-languages.md) | The seven languages and the rules of the text |
 | [10-offline-version.md](10-offline-version.md) | Service worker, version, deploy, installation |
 | [11-integrations.md](11-integrations.md) | The reminder at the shop and the voice commands |
 | [12-engineering.md](12-engineering.md) | Modules, code rules, tests and checks |
-| [13-menu.md](13-menu.md) | The menu of the week and the fill of `Actual` |
+| [13-menu.md](13-menu.md) | The menu of the week and the fill of `Compra` |
 | [14-modules.md](14-modules.md) | The modules that `Ajustes` turns off |
 | [15-design-system.md](15-design-system.md) | The copy of the design system, its exceptions, the parts of the app |
 | [16-install.md](16-install.md) | The install offer and the Install button of `Ajustes` |
@@ -61,13 +61,13 @@ The rules DS-1 to DS-8 and LAY-1 to LAY-4 belong to the design system, `pwa-desi
 
 | Word | Meaning |
 |---|---|
-| Item | A product to buy. One record, in `Actual` or saved |
-| `Actual` | The list of the current trip. List id `active` |
+| Item | A product to buy. One record, in `Compra` or saved |
+| `Compra` | The list of the current trip. List id `active` |
 | Trip | The time from one **Terminar compra** to the next |
-| Ticked | An item of `Actual` with `bought: true` |
+| Ticked | An item of `Compra` with `bought: true` |
 | Recurrent | An item that comes back at each trip |
 | One-time | An item that is not recurrent |
-| Saved | An item that a trip took out of `Actual`, in `Volver a comprar`. List id `saved` |
+| Saved | An item that a trip took out of `Compra`, in `Volver a comprar`. List id `saved` |
 | Recipe | A name and a list of product names |
 | Product | A name in a recipe. It is text, not an item |
 | Shop | A name that one item or more have. It has no record of its own |

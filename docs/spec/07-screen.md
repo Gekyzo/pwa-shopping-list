@@ -11,14 +11,14 @@ of it.
 
 ## Sections
 
-- **NAV-1** The bottom bar has four sections, in this order: `Actual`, `Recetas`, `Menú`,
-  `Ajustes`. The app starts in `Actual`. A module that is off hides its sections (MOD-4). A
+- **NAV-1** The bottom bar has four sections, in this order: `Compra`, `Recetas`, `Menú`,
+  `Ajustes`. The app starts in `Compra`. A module that is off hides its sections (MOD-4). A
   section shows no count.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
   edit, clears the recipe search and closes the search of a list (LIST-24).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
-  vertical part at least. It stops at `Actual` and at `Ajustes`, and it skips a section that is hidden.
+  vertical part at least. It stops at `Compra` and at `Ajustes`, and it skips a section that is hidden.
 - **NAV-4** The slide starts on the header or on the content, but not on an item row, not on the
   row of shop lists (SHOP-17) and not on a text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
   (ONB-10).
@@ -31,22 +31,22 @@ of it.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
   `No hay recetas. Toca + para crear una.` or, in `Menú`, `No hay recetas. Crea una en Recetas
   para planificar el menú.`
-- **NAV-18** `Actual` and `Recetas` show a line drawing of the basket of the app icon
+- **NAV-18** `Compra` and `Recetas` show a line drawing of the basket of the app icon
   behind the content, in the bottom corner on the other side of the `+` button (NAV-13). It is
   tilted 30° and at 6 % opacity, and the corner and the bottom bar cut part of it. It takes the
   colour of the text, takes no tap and does not move with the scroll.
 
 ## Item rows
 
-- **ROW-1** A row of `Actual` has a checkbox, the name with its quantity after it in a muted
+- **ROW-1** A row of `Compra` has a checkbox, the name with its quantity after it in a muted
   colour and the shops below it, and the recurrent mark (LIST-7). A tap on the name opens the edit
   sheet (ROW-7).
-- **ROW-2** Removed: the app has one list, `Actual` (ROW-1).
+- **ROW-2** Removed: the app has one list, `Compra` (ROW-1).
 - **ROW-3** A slide of a row to the left shows its actions, as icon buttons 64 px wide:
 
   | Row | Slide to the left |
   |---|---|
-  | `Actual` | **Eliminar** |
+  | `Compra` | **Eliminar** |
   | `Volver a comprar` | **Eliminar** |
 
 - **ROW-4** A drag becomes a slide after 10 px of horizontal move. A drag that is first vertical
@@ -65,14 +65,14 @@ of it.
 - **ROW-8** The click that follows a drag, a hold or a section slide is ignored for 350 ms, so it
   does not tick an item or press a button.
 - **ROW-9** No row appears or disappears at once. A ticked row closes in 200 ms before it goes to
-  `Comprados (N)`, and a row of `Volver a comprar` closes before it goes back to `Actual`. After each
+  `Comprados (N)`, and a row of `Volver a comprar` closes before it goes back to `Compra`. After each
   other change of the state (add, delete, move, untick, **Terminar compra**, `Deshacer`) and each open
-  or close of a section, a new row of `Actual`, `Recetas`, `Volver a comprar` or the
+  or close of a section, a new row of `Compra`, `Recetas`, `Volver a comprar` or the
   products of `Receta` opens in 200 ms, and a row that is gone stays in its place and closes in
   200 ms. A change of the grouping or of the order moves the rows ([04-arrange.md](04-arrange.md)). With
   `prefers-reduced-motion` nothing moves.
 - **ROW-10** A long press of a finger on a row does not open the menu of the browser.
-- **ROW-11** A slide of a row to the right runs an action at the release: in `Actual` it ticks or
+- **ROW-11** A slide of a row to the right runs an action at the release: in `Compra` it ticks or
   unticks the item (LIST-11), with `Deshacer` for a tick (LIST-13). It runs when the slide passed 35 % of the width of the row, 80 px at least; a
   shorter slide puts the row back. The row slides over a backdrop with the icon of the action,
   which fills with the accent colour once the slide is long enough. A row with its left side open
@@ -113,7 +113,7 @@ of it.
 - **NAV-8** There are seven sheets: add, arrange (with the choice of shop lists, SHOP-25), trip,
   meal, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33). One is open at a time. A tap on the
   veil or `Escape` closes it. The `+` button does not show while a sheet is open.
-- **NAV-9** The trip button of the header has three dots. It shows in `Actual`. A tap
+- **NAV-9** The trip button of the header has three dots. It shows in `Compra`. A tap
   opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet has the
   title `Opciones de la compra`, the line of where the items go (TRIP-4), the line of the open items
   (TRIP-6) and the button **Terminar compra**, in this order.
@@ -155,11 +155,11 @@ of it.
 
   | Page | Title | Teaches |
   |---|---|---|
-  | 1 | `Tu próxima compra, casi hecha` | `Actual` is the trip of today; what you do not buy today stays in the list for the next trip (TRIP-2) |
+  | 1 | `Tu próxima compra, casi hecha` | `Compra` is the trip of today; what you do not buy today stays in the list for the next trip (TRIP-2) |
   | 2 | `Marca lo de siempre` | The recurrent mark and the result of **Terminar compra** |
   | 3 | `Desliza una fila` | The two slides of a row (ROW-3, ROW-11) and the tap on the name (ROW-7) |
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3), the bottom bar and the `+` button |
-  | 5 | `¿Qué comemos esta semana?` | A recipe and its products, the send to `Actual` (REC-18) and the plan of the week in `Menú` |
+  | 5 | `¿Qué comemos esta semana?` | A recipe and its products, the send to `Compra` (REC-18) and the plan of the week in `Menú` |
   | 6 | `Una receta para empezar` | The switch that adds the sample recipe (ONB-13) |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.

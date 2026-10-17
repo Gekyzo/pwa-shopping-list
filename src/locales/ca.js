@@ -1,5 +1,5 @@
 export default {
-  'list.active': 'Actual',
+  'list.active': 'Compra',
   'list.saved': 'Tornar a comprar',
   'nav.label': 'Seccions',
   'nav.recipes': 'Receptes',

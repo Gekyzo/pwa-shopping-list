@@ -3,7 +3,7 @@
 Rules of `src/modules.js`, and of its use in `src/ui/settings.js` and `src/ui/nav.js`.
 
 - **MOD-1** `Ajustes` has the group **Módulos**, with a switch for **Recetas y menú**. A switch is
-  a toggle with a knob that slides to the right when it is on. A new install has the module on. `Actual` and `Ajustes` are always on.
+  a toggle with a knob that slides to the right when it is on. A new install has the module on. `Compra` and `Ajustes` are always on.
 - **MOD-2** The modules that are off are stored in `shopping.modules`, as a JSON list of their
   ids. The only id is `recipes`. All modules on removes the key. A missing key and a text that is
   not a JSON list read as all on. An unknown id, such as the `next` of an older version, is

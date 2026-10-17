@@ -70,7 +70,7 @@ document.documentElement.dataset.hand = hand;
 
 // The colours: `light` or `dark` override the phone, in styles.css; `system` follows it.
 export let theme = storage ? loadTheme(storage) : 'system';
-// `hide` takes the row of shop lists away from Actual.
+// `hide` takes the row of shop lists away from Compra.
 export let shopLists = storage ? loadShopLists(storage) : 'show';
 // `save` makes Descartar the first choice of an item not bought at Terminar compra (TRIP-7).
 export let tripEnd = storage ? loadTripEnd(storage) : 'keep';
@@ -127,7 +127,7 @@ export const ui = {
   sheetOpen: false,
   // The sheet of the header button, with the group and the order of the list.
   arrangeOpen: false,
-  // True while the sheet of the trip button of Actual is open.
+  // True while the sheet of the trip button of Compra is open.
   tripOpen: false,
   // True while the sheet of the aisles of Ajustes is open.
   aislesOpen: false,
@@ -147,9 +147,9 @@ export const ui = {
   // The text of the search field, which Recetas shows always and a list shows on demand. It is
   // not stored.
   query: '',
-  // True while the search field of Actual is open.
+  // True while the search field of Compra is open.
   searchOpen: false,
-  // The shop list of Actual: null for Todas, '' for Sin tienda, or a shop. Not stored.
+  // The shop list of Compra: null for Todas, '' for Sin tienda, or a shop. Not stored.
   shop: null,
   // The group where the row actions are open: a recipe id, `shop:<name>`, or null out of a group.
   openGroup: null,

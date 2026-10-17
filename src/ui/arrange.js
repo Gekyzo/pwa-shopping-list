@@ -4,7 +4,7 @@ import { LEAVE_MS, $, state, ui, shopLists, commit, render, setShopLists } from 
 import { inList, arrangeChoices, shownGroup } from '#ui/view';
 import { collapse, expand, rowTops, slide, groupOnlyRows } from '#ui/motion';
 
-// True while the groups of Actual close, before the list becomes flat.
+// True while the groups of Compra close, before the list becomes flat.
 let ungrouping = false;
 
 export const renderArrange = () => {
