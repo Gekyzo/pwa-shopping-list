@@ -245,14 +245,14 @@ export const bringAllToActual = (state) => {
 // The saved items, in name order.
 export const savedItems = (state) => state.items.filter((item) => item.list === 'saved').sort(byName);
 
-// Figures for the header and for the preview of `startNewShopping`: `back` ticked items and kept
-// open items stay for the next trip, `saved` one-time items of Active are saved, `incoming` items
+// Figures for the header and for the preview of `startNewShopping`: `back` recurrent items, items
+// with `again` and kept open items stay for the next trip, `saved` one-time items of Active are saved, `incoming` items
 // wait in Next. `keep` is the parameter of `startNewShopping`.
 export const tripSummary = (state, keep = []) => {
   const active = state.items.filter((item) => item.list === 'active');
   const bought = active.filter((item) => item.bought);
   const kept = keptIds(state, keep).size;
-  const back = bought.filter((item) => item.recurrent || item.again).length + kept;
+  const back = active.filter((item) => item.recurrent || item.again).length + kept;
   return {
     total: active.length,
     left: active.length - bought.length,

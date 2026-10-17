@@ -9,7 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- `N vuelven · N se descartan` in `Opciones de la compra` also counts the items with `↻` that are
+  not ticked, so the two counts add up to the items of `Actual`.
 
 ## 1.0.35 - 2026-10-17
 

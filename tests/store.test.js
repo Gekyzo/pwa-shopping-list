@@ -420,7 +420,20 @@ test('tripSummary counts the items of each kind', () => {
 
 test('tripSummary counts an item to buy as saved only when it is one-time', () => {
   const state = build(['Bread', 'active'], ['Eggs', 'active', { recurrent: true }]);
-  assert.deepEqual(tripSummary(state), { total: 2, left: 2, back: 0, saved: 1, incoming: 0 });
+  assert.deepEqual(tripSummary(state), { total: 2, left: 2, back: 1, saved: 1, incoming: 0 });
+});
+
+test('tripSummary counts each item of Actual as back or saved', () => {
+  const state = build(
+    ['Milk', 'active', { bought: true, recurrent: true }],
+    ['Eggs', 'active', { recurrent: true }],
+    ['Soap', 'active', { again: true }],
+    ['Batteries', 'active', { bought: true }],
+    ['Bread', 'active'],
+  );
+  const { total, back, saved } = tripSummary(state);
+  assert.equal(back + saved, total);
+  assert.equal(back, 3);
 });
 
 test('tripSummary of an empty state is all zero', () => {
