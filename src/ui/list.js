@@ -12,46 +12,24 @@ import { dayNode } from '#ui/menu';
 // `keep` holds the ids of the open items that stay in Actual (TRIP-6).
 const finishTrip = (undoText = t('toast.finished'), keep = []) => {
   if (!apply(store.startNewShopping(state, keep), { undoText })) return;
-  Object.assign(ui, { view: 'active', openId: null, tripOpen: false, tripChoice: null });
+  Object.assign(ui, { view: 'active', openId: null, tripOpen: false, tripConfirm: false });
   render();
 };
 
 // The entry of the trip sheet finishes at once with no open item. Else it shows the second step,
-// where each open item starts with the choice of Ajustes (TRIP-7).
+// which says what the choice of Ajustes does to the open items (TRIP-6, TRIP-7).
 const startFinish = () => {
-  const open = store.openItems(state);
-  if (open.length === 0) {
+  if (store.openItems(state).length === 0) {
     finishTrip();
     return;
   }
-  ui.tripChoice = new Map(open.map((item) => [item.id, tripEnd]));
+  ui.tripConfirm = true;
   render();
   $('trip-confirm').focus();
 };
 
-// One row of the second step: the name of the open item and its two choices.
-const tripChoiceNode = (item) => {
-  const segment = (value, key) => {
-    const button = el('button', {
-      type: 'button',
-      className: 'segment',
-      textContent: t(key),
-      // The press changes the two buttons in place: a render would build new rows and lose the focus.
-      onclick: (event) => {
-        ui.tripChoice.set(item.id, value);
-        event.currentTarget.parentElement.querySelectorAll('.segment').forEach((other) => {
-          other.setAttribute('aria-pressed', String(other === event.currentTarget));
-        });
-      },
-    });
-    button.setAttribute('aria-pressed', String(ui.tripChoice.get(item.id) === value));
-    return button;
-  };
-  return el('li', { className: 'trip-open-row' }, [
-    el('span', { className: 'trip-open-name', textContent: item.name }),
-    el('div', { className: 'segmented' }, [segment('save', 'trip.discard'), segment('keep', 'trip.postpone')]),
-  ]);
-};
+// The ids of the open items that stay in Actual with the choice of Ajustes.
+const keptItems = () => (tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : []);
 
 // The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
 const shopNodes = (list) => {
@@ -228,19 +206,18 @@ export const renderList = (summary) => {
 // The trip button of the header and its sheet.
 export const renderTrip = () => {
   if (ui.view !== 'active') ui.tripOpen = false;
-  if (!ui.tripOpen) ui.tripChoice = null;
+  if (!ui.tripOpen) ui.tripConfirm = false;
   $('trip-button').hidden = ui.view !== 'active';
   $('finish-menu').disabled = !store.canStartNewShopping(state);
   $('trip-button').setAttribute('aria-expanded', String(ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
-  // The second step follows the state: an undo or an import can change the open items.
-  const open = ui.tripChoice ? store.openItems(state) : [];
-  if (ui.tripChoice) {
-    ui.tripChoice = new Map(open.map((item) => [item.id, ui.tripChoice.get(item.id) ?? tripEnd]));
-  }
-  $('finish-menu').hidden = ui.tripChoice !== null;
-  $('trip-open').hidden = ui.tripChoice === null;
-  $('trip-open-list').replaceChildren(...open.map(tripChoiceNode));
+  // The second step follows the state: an undo or an import can leave no open item.
+  const count = ui.tripConfirm ? store.openItems(state).length : 0;
+  if (count === 0) ui.tripConfirm = false;
+  $('finish-menu').hidden = ui.tripConfirm;
+  $('trip-open').hidden = !ui.tripConfirm;
+  const outcome = tripEnd === 'keep' ? 'trip.willPostpone' : 'trip.willDiscard';
+  $('trip-open-text').textContent = count ? `${t(outcome, { count })} ${t('trip.defaultHint')}` : '';
 };
 
 export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
@@ -272,7 +249,7 @@ export const closeSearch = () => {
 };
 
 export const closeTrip = () => {
-  Object.assign(ui, { tripOpen: false, tripChoice: null });
+  Object.assign(ui, { tripOpen: false, tripConfirm: false });
   render();
   $('trip-button').focus();
 };
@@ -306,9 +283,6 @@ export const bind = () => {
   $('trip-veil').addEventListener('click', closeTrip);
   $('finish-button').addEventListener('click', () => finishTrip());
   $('finish-menu').addEventListener('click', startFinish);
-  $('trip-confirm').addEventListener('click', () => {
-    const keep = [...ui.tripChoice].filter(([, choice]) => choice === 'keep').map(([id]) => id);
-    finishTrip(undefined, keep);
-  });
+  $('trip-confirm').addEventListener('click', () => finishTrip(undefined, keptItems()));
   $('bring').addEventListener('click', () => finishTrip(say('toast.brought', { list: 'next' })));
 };

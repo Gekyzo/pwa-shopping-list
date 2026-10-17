@@ -129,9 +129,8 @@ export const ui = {
   arrangeOpen: false,
   // True while the sheet of the trip button of Actual is open.
   tripOpen: false,
-  // The choice of each open item in the second step of the trip sheet, as a Map from id to `save`
-  // or `keep`, or null in the first step (TRIP-6).
-  tripChoice: null,
+  // True while the trip sheet shows its second step (TRIP-6).
+  tripConfirm: false,
   // True while the sheet of the aisles of Ajustes is open.
   aislesOpen: false,
   // The item whose edit sheet is open, or null.

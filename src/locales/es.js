@@ -74,7 +74,12 @@ export default {
   'trip.open': 'Lo que no has comprado',
   'trip.discard': 'Descartar',
   'trip.postpone': 'Aplazar',
-  'trip.defaultHint': 'Puedes cambiar la opción por defecto en Ajustes.',
+  'trip.willDiscard': { one: 'El artículo que no has comprado se descarta.', other: 'Los {count} artículos que no has comprado se descartan.' },
+  'trip.willPostpone': {
+    one: 'El artículo que no has comprado se aplaza a la próxima compra.',
+    other: 'Los {count} artículos que no has comprado se aplazan a la próxima compra.',
+  },
+  'trip.defaultHint': 'Puedes cambiarlo en Ajustes.',
 
   'recipes.search': 'Buscar receta o producto',
   'search.label': 'Buscar en la lista',

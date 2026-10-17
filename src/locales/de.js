@@ -74,7 +74,12 @@ export default {
   'trip.open': 'Was du nicht gekauft hast',
   'trip.discard': 'Verwerfen',
   'trip.postpone': 'Verschieben',
-  'trip.defaultHint': 'Du kannst die Standardauswahl in Optionen ändern.',
+  'trip.willDiscard': { one: 'Der Artikel, den du nicht gekauft hast, wird verworfen.', other: 'Die {count} Artikel, die du nicht gekauft hast, werden verworfen.' },
+  'trip.willPostpone': {
+    one: 'Der Artikel, den du nicht gekauft hast, wird auf den nächsten Einkauf verschoben.',
+    other: 'Die {count} Artikel, die du nicht gekauft hast, werden auf den nächsten Einkauf verschoben.',
+  },
+  'trip.defaultHint': 'Du kannst das in Optionen ändern.',
 
   'recipes.search': 'Rezept oder Produkt suchen',
   'search.label': 'In der Liste suchen',

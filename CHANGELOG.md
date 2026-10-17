@@ -9,8 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
-- The second step of **Terminar compra** says that the first choice of each item can be changed
-  in `Ajustes`.
+- The second step of **Terminar compra** no longer asks about each item not bought. It says what
+  happens to them, as **Al terminar la compra** sets, and that `Ajustes` can change it.
 
 ## 1.0.34 - 2026-10-17
 

@@ -74,7 +74,12 @@ export default {
   'trip.open': 'Quello che non hai comprato',
   'trip.discard': 'Scarta',
   'trip.postpone': 'Rimanda',
-  'trip.defaultHint': 'Puoi cambiare la scelta predefinita in Impostazioni.',
+  'trip.willDiscard': { one: 'L’articolo che non hai comprato viene scartato.', other: 'I {count} articoli che non hai comprato vengono scartati.' },
+  'trip.willPostpone': {
+    one: 'L’articolo che non hai comprato viene rimandato alla prossima spesa.',
+    other: 'I {count} articoli che non hai comprato vengono rimandati alla prossima spesa.',
+  },
+  'trip.defaultHint': 'Puoi cambiarlo in Impostazioni.',
 
   'recipes.search': 'Cerca ricetta o prodotto',
   'search.label': 'Cerca nella lista',
