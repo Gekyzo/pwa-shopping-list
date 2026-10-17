@@ -105,7 +105,15 @@
 
   /* @extends item-row
      @variant recipe              A recipe: its name and product count, then its link and send buttons.
+     @part recipe-mark            The cart of a recipe whose products are all in Compra.
      @state bought    A ticked item of Actual. */
+
+  .recipe-mark {
+    display: flex;
+    flex: none;
+    align-items: center;
+    color: var(--accent);
+  }
 
   .item-row.bought .item-row-name {
     color: var(--muted);

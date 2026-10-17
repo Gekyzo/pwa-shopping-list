@@ -11,6 +11,7 @@ import {
   isWebUrl,
   sendRecipe,
   recipeGroups,
+  inList,
   searchRecipes,
   SAMPLE_ID,
   hasSample,
@@ -474,4 +475,30 @@ test('hasSample is true only while the sample recipe exists', () => {
 test('hasSample is true for the renamed sample recipe', () => {
   const { state } = addSample(emptyState(), SAMPLE);
   assert.equal(hasSample(renameRecipe(state, SAMPLE_ID, 'Macarrones').state), true);
+});
+
+test('inList is true when each product of the recipe is an item of active, without case distinction', () => {
+  const items = withItem(withItem(emptyState(), 'Eggs', 'active'), 'POTATOES', 'active');
+  const { state, id } = withRecipe(items, 'Omelette', ['Eggs', 'Potatoes']);
+  assert.equal(inList(state, state.recipes.find((recipe) => recipe.id === id)), true);
+});
+
+test('inList counts a ticked item as a product in active', () => {
+  const { state, id } = withRecipe(withItem(emptyState(), 'Eggs', 'active'), 'Boiled eggs', ['Eggs']);
+  const ticked = toggleBought(state, find(state, 'Eggs').id).state;
+  assert.equal(inList(ticked, ticked.recipes.find((recipe) => recipe.id === id)), true);
+});
+
+test('inList is false for a product that is missing or saved, and for a recipe with no products', () => {
+  const items = withItem(withItem(emptyState(), 'Eggs', 'active'), 'Milk', 'saved');
+  const missing = withRecipe(items, 'Omelette', ['Eggs', 'Potatoes']);
+  const inSaved = withRecipe(missing.state, 'Flan', ['Eggs', 'Milk']);
+  const empty = withRecipe(inSaved.state, 'Soup');
+  const { state } = empty;
+  const before = structuredClone(state);
+  assert.deepEqual(
+    state.recipes.map((recipe) => inList(state, recipe)),
+    [false, false, false],
+  );
+  assert.deepEqual(state, before);
 });

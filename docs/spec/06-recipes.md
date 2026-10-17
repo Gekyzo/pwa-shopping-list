@@ -12,14 +12,18 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-3** The `+` button in `Recetas` opens the add sheet with the field `Nombre de la receta`
   and the button **Crear**, with no target choice. The new recipe opens its sheet (REC-33), with
   the cursor in its product field, and the search is cleared.
-- **REC-4** A recipe row shows the name and `N productos`, and the link (REC-15). A tap on the
-  name opens the sheet of the recipe (REC-33).
+- **REC-4** A recipe row shows the name and `N productos`, the mark of REC-35 and the link
+  (REC-15). A tap on the name opens the sheet of the recipe (REC-33).
 - **REC-5** A recipe row slides as an item row (ROW-4 to ROW-6, ROW-8, ROW-10). A slide to the
   left shows **Eliminar**, an icon button 64 px wide. A slide to the right sends the recipe at the
   release (REC-17), with the rule and the backdrop of ROW-11 and the icon `cart-add`.
 - **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
   `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation.
+- **REC-35** A recipe whose products are all items of `Compra`, ticked or not, with no case
+  distinction, shows the icon `cart` in its row, at the small icon size (`--icon-s`), before the
+  link. Its text for a screen reader is `Todo está en Compra`. It is not a control. A recipe with no
+  products has no mark. The rule of "all in `Compra`" is the one of the groups by recipe (GROUP-5).
 
 ## Products
 

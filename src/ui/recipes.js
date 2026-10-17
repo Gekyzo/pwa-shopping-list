@@ -90,6 +90,14 @@ const linkNode = (recipe) => {
   return link;
 };
 
+// The mark of a recipe whose products are all in Compra. It is not a control.
+const inListMark = () => {
+  const mark = el('span', { className: 'recipe-mark', title: t('recipe.inList') }, [icon('cart', 'small')]);
+  mark.setAttribute('role', 'img');
+  mark.setAttribute('aria-label', t('recipe.inList'));
+  return mark;
+};
+
 const deleteAction = (recipe, node) =>
   iconButton(
     'trash',
@@ -108,7 +116,7 @@ export const recipeNode = (recipe) => {
     el('small', { className: 'item-row-meta', textContent: t('count.products', { count: recipe.products.length }) }),
   ]);
   name.setAttribute('aria-haspopup', 'dialog');
-  const row = recipe.url ? [name, linkNode(recipe)] : [name];
+  const row = [name, ...(recipes.inList(state, recipe) ? [inListMark()] : []), ...(recipe.url ? [linkNode(recipe)] : [])];
   const node = el('li', { className: 'item-row recipe' });
   node.dataset.key = `recipe:${recipe.id}`;
   const right = { run: () => sendToList(recipe), icon: 'cart-add' };
