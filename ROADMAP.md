@@ -11,8 +11,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
   camera of the phone.
 - **Density mode.** A compact choice in `Ajustes` that shows more rows on one
   screen, with less space in each row.
-- **Recipe in Actual mark.** In `Recetas`, a recipe whose products are all in
-  `Actual` shows a mark.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
 - **Buy me a coffee.** Add support link

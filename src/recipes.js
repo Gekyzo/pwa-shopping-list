@@ -107,15 +107,23 @@ export const sendRecipe = (state, id, newId) => {
   return { state: next, added, already: recipe.products.length - added };
 };
 
+// The names of the items of Active, ticked or not, in lower case.
+const activeNames = (items) => new Set(items.filter((item) => item.list === 'active').map((item) => item.name.toLowerCase()));
+
+const allIn = (recipe, names) => recipe.products.length > 0 && recipe.products.every((product) => names.has(product.toLowerCase()));
+
+// True when each product of the recipe is an item of Active, ticked or not. A recipe with no
+// products is never in the list.
+export const inList = (state, recipe) => allIn(recipe, activeNames(state.items));
+
 // The Active list by recipe: the sent recipes in send order, then each other recipe whose
 // products are all in Active. An item of two recipes is in the two groups. `items` are the
 // members still to buy, `total` counts the ticked members too, and `rest` holds the items
 // to buy that are in no group.
 export const recipeGroups = (state) => {
   const active = sortItems(state, state.items.filter((item) => item.list === 'active'));
-  const inActive = new Set(active.map((item) => item.name.toLowerCase()));
-  const complete = (recipe) =>
-    recipe.products.length > 0 && recipe.products.every((product) => inActive.has(product.toLowerCase()));
+  const inActive = activeNames(active);
+  const complete = (recipe) => allIn(recipe, inActive);
   const sent = state.sent.map((id) => findRecipe(state, id)).filter(Boolean);
   const unsent = state.recipes.filter((recipe) => !state.sent.includes(recipe.id) && complete(recipe));
   const grouped = new Set();

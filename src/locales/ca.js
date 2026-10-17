@@ -71,6 +71,7 @@ export default {
   'search.label': 'Cerca a la llista',
   'search.items': 'Cerca article o botiga',
   'recipe.openLink': 'Obre l’enllaç de {name}',
+  'recipe.inList': 'Tot és a Compra',
   'recipe.title': 'Recepta',
   'recipe.products': 'Productes',
   'recipe.link': 'Enllaç',

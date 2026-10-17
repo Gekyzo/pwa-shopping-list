@@ -71,6 +71,7 @@ export default {
   'search.label': 'Buscar en la lista',
   'search.items': 'Buscar artículo o tienda',
   'recipe.openLink': 'Abrir el enlace de {name}',
+  'recipe.inList': 'Todo está en Compra',
   'recipe.title': 'Receta',
   'recipe.products': 'Productos',
   'recipe.link': 'Enlace',

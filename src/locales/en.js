@@ -71,6 +71,7 @@ export default {
   'search.label': 'Search the list',
   'search.items': 'Search item or shop',
   'recipe.openLink': 'Open the link of {name}',
+  'recipe.inList': 'All in Shopping',
   'recipe.title': 'Recipe',
   'recipe.products': 'Products',
   'recipe.link': 'Link',

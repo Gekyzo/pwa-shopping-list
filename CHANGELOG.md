@@ -9,6 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- In `Recetas`, a recipe whose products are all in `Compra` shows a cart in its row.
 - `Compra` no longer ends with `Volver a comprar`. The items that a trip takes out of the list stay
   stored: the add sheet still finds them, as `comprado antes · añadir`, and a tap brings one back.
   To delete one, bring it back, then **Eliminar**.
