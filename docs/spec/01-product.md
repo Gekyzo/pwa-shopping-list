@@ -41,7 +41,6 @@ next trip is almost ready.
 | A list for each shop, in `Compra` | [05-shops.md](05-shops.md) |
 | Recipes that send their products to `Compra` | [06-recipes.md](06-recipes.md) |
 | A menu of the week that fills `Compra` | [13-menu.md](13-menu.md) |
-| Modules that `Ajustes` turns off | [14-modules.md](14-modules.md) |
 | Backup to a file and from a file | [08-storage.md](08-storage.md) |
 | Seven languages | [09-languages.md](09-languages.md) |
 | Walkthrough at the first start | [07-screen.md](07-screen.md) |

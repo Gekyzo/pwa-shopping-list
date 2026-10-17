@@ -12,8 +12,6 @@ import {
   saveTripEnd,
   loadTheme,
   saveTheme,
-  loadModules,
-  saveModules,
   loadOnboarded,
   hasStoredState,
 } from '#storage';
@@ -75,11 +73,6 @@ export let shopLists = storage ? loadShopLists(storage) : 'show';
 // `save` makes Descartar the first choice of an item not bought at Terminar compra (TRIP-7).
 export let tripEnd = storage ? loadTripEnd(storage) : 'keep';
 document.documentElement.dataset.theme = theme;
-
-// The modules that the user turned off (MOD-2).
-export let off = storage ? loadModules(storage) : [];
-export const isOn = (id) => !off.includes(id);
-export let navMotion = false;
 
 // `t` for a text that names a list: the `list` parameter is a list id.
 export const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
@@ -253,14 +246,4 @@ export const setShopLists = (choice) => {
 export const setTripEnd = (choice) => {
   tripEnd = choice === 'save' ? 'save' : 'keep';
   if (storage) saveTripEnd(storage, tripEnd);
-};
-
-export const setModules = (next) => {
-  off = next;
-  if (storage) saveModules(storage, off);
-};
-
-// Set by a switch of Módulos, so that the render that follows animates the bottom bar (MOD-9).
-export const setNavMotion = (on) => {
-  navMotion = on;
 };

@@ -12,20 +12,20 @@ of it.
 ## Sections
 
 - **NAV-1** The bottom bar has four sections, in this order: `Compra`, `Recetas`, `Menú`,
-  `Ajustes`. The app starts in `Compra`. A module that is off hides its sections (MOD-4). A
+  `Ajustes`. The app starts in `Compra`. A
   section shows no count.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
   edit, clears the recipe search and closes the search of a list (LIST-24).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
-  vertical part at least. It stops at `Compra` and at `Ajustes`, and it skips a section that is hidden.
+  vertical part at least. It stops at `Compra` and at `Ajustes`.
 - **NAV-4** The slide starts on the header or on the content, but not on an item row, not on the
   row of shop lists (SHOP-17) and not on a text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has eight groups: **Copia de seguridad** (**Exportar**,
-  **Importar**), **Idioma**, **Mano**, **Tema**, **Al terminar la compra** (TRIP-7), **Módulos** (MOD-1), **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
+- **NAV-6** `Ajustes` has seven groups: **Copia de seguridad** (**Exportar**,
+  **Importar**), **Idioma**, **Mano**, **Tema**, **Al terminar la compra** (TRIP-7), **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
   two buttons of the backup has an icon before its text: an arrow that goes up out of a tray for
   the export, an arrow that goes down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,

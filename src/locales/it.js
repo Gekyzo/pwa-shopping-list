@@ -138,8 +138,6 @@ export default {
   'settings.themeDark': 'Scuro',
   'settings.tripEnd': 'Alla fine della spesa',
   'settings.tripEndHint': 'Scegli cosa succede agli articoli non comprati: scartarli o rimandarli alla prossima spesa.',
-  'settings.modules': 'Moduli',
-  'settings.moduleRecipes': 'Ricette e menù',
   'onboarding.recipes.title': 'Cosa mangiamo questa settimana?',
   'onboarding.recipes.text': 'Scrivi le tue ricette una volta e invia i loro ingredienti in `{active}` con `#cart-add`.\nIn `#menu Menù` organizzi la settimana e riempi il cestino in un colpo.',
   'onboarding.icon.cart-add': 'Invia alla lista',

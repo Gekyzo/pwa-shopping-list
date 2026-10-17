@@ -138,8 +138,6 @@ export default {
   'settings.themeDark': 'Fosc',
   'settings.tripEnd': 'En acabar la compra',
   'settings.tripEndHint': 'Tria què passa amb els articles no comprats: descartar-los o ajornar-los a la propera compra.',
-  'settings.modules': 'Mòduls',
-  'settings.moduleRecipes': 'Receptes i menú',
   'onboarding.recipes.title': 'Què mengem aquesta setmana?',
   'onboarding.recipes.text': 'Apunta les teves receptes un cop i envia’n els ingredients a `{active}` amb `#cart-add`.\nA `#menu Menú` organitzes la setmana i omples la cistella de cop.',
   'onboarding.icon.cart-add': 'Enviar a la llista',

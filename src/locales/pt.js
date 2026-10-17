@@ -138,8 +138,6 @@ export default {
   'settings.themeDark': 'Escuro',
   'settings.tripEnd': 'Ao terminar a compra',
   'settings.tripEndHint': 'Escolhe o que acontece aos artigos não comprados: descartá-los ou adiá-los para a próxima compra.',
-  'settings.modules': 'Módulos',
-  'settings.moduleRecipes': 'Receitas e menu',
   'onboarding.recipes.title': 'O que comemos esta semana?',
   'onboarding.recipes.text': 'Guarde as suas receitas uma vez e envie os ingredientes para `{active}` com `#cart-add`.\nNo `#menu Menu` organiza a semana e enche o cesto de uma vez.',
   'onboarding.icon.cart-add': 'Enviar para a lista',

@@ -32,8 +32,7 @@ the arrange sheet in `src/ui/arrange.js`.
 - **GROUP-1** **Agrupar por** has **Recetas**, **Tiendas**, **Secciones** and **Nada**. One choice, `group`,
   applies to `Compra`. The default is `recipe`.
 - **GROUP-2** A choice shows only when the view can show it:
-  - **Recetas**: when the module **Recetas y menú** is on (MOD-1) and one recipe group exists at
-    least (GROUP-5).
+  - **Recetas**: when one recipe group exists at least (GROUP-5).
   - **Tiendas**: when an item of the view has a shop, and not in a shop list (SHOP-19).
   - **Secciones**: when an item of the view has an aisle, also in a shop list (GROUP-17).
   - **Nada**: each time that one of the others shows.

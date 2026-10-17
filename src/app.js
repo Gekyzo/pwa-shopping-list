@@ -1,6 +1,5 @@
 import * as store from '#store';
 import * as shops from '#shops';
-import { visibleSections } from '#modules';
 import {
   ARRIVAL_MS,
   $,
@@ -8,7 +7,6 @@ import {
   t,
   shopLists,
   tripEnd,
-  off,
   state,
   ui,
   undoState,
@@ -44,7 +42,7 @@ import { closeOnboarding, turnOnboarding, bind as bindOnboarding } from '#ui/onb
 import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
 import { renderInstall, bind as bindInstall } from '#ui/install';
 import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
-import { showNavButton, bind as bindNav } from '#ui/nav';
+import { bind as bindNav } from '#ui/nav';
 
 // Screen
 
@@ -87,9 +85,7 @@ const renderAll = () => {
   $('fab').hidden =
     ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.aislesOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
-  const sections = visibleSections(off);
   document.querySelectorAll('.nav-item').forEach((button) => {
-    showNavButton(button, sections.includes(button.dataset.view));
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
   });
