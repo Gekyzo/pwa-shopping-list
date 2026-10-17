@@ -138,8 +138,6 @@ export default {
   'settings.themeDark': 'Sombre',
   'settings.tripEnd': 'À la fin des courses',
   'settings.tripEndHint': 'Choisis ce que deviennent les articles non achetés : les écarter ou les reporter aux prochaines courses.',
-  'settings.modules': 'Modules',
-  'settings.moduleRecipes': 'Recettes et menu',
   'onboarding.recipes.title': 'On mange quoi cette semaine ?',
   'onboarding.recipes.text': 'Notez vos recettes une fois et envoyez leurs ingrédients dans `{active}` avec `#cart-add`.\nDans `#menu Menu`, organisez la semaine et remplissez le panier d’un coup.',
   'onboarding.icon.cart-add': 'Envoyer à la liste',

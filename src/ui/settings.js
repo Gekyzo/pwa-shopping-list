@@ -1,7 +1,6 @@
 import { exportJson, exportFilename, importJson } from '#storage';
 import { parseVersion, versionStatus } from '#version';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
-import { switchModule } from '#modules';
 import { SAMPLE_ID, hasSample, deleteRecipe } from '#recipes';
 import {
   REFRESH_MS,
@@ -16,8 +15,6 @@ import {
   hand,
   theme,
   tripEnd,
-  off,
-  isOn,
   textOf,
   showToast,
   apply,
@@ -26,8 +23,6 @@ import {
   setHand,
   setTheme,
   setTripEnd,
-  setModules,
-  setNavMotion,
 } from '#ui/context';
 import { renderOnboarding } from '#ui/onboarding';
 
@@ -121,9 +116,6 @@ export const applyLanguage = () => {
     themeOption('dark', 'settings.themeDark'),
   );
   renderTripEnd();
-  document.querySelectorAll('[data-module]').forEach((box) => {
-    box.checked = isOn(box.dataset.module);
-  });
   render();
   renderOnboarding();
 };
@@ -168,14 +160,6 @@ export const bind = () => {
     render();
   });
 
-  document.querySelectorAll('[data-module]').forEach((box) => {
-    box.addEventListener('change', () => {
-      setModules(switchModule(off, box.dataset.module, box.checked));
-      setNavMotion(true);
-      render();
-      setNavMotion(false);
-    });
-  });
   $('update').addEventListener('click', async () => {
     $('update').disabled = true;
     if (await refreshShell()) {

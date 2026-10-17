@@ -1,7 +1,7 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
-import { state, ui, isOn } from '#ui/context';
+import { state, ui } from '#ui/context';
 
 // An item of two recipes, or of two shops, shows in two groups: `groupId` tells its rows apart.
 export const isOpen = (id, groupId) => ui.openId === id && ui.openGroup === groupId;
@@ -25,7 +25,7 @@ export const arrangeChoices = () => {
   const scoped = viewState();
   const items = store.activeItems(scoped);
   return {
-    recipe: isOn('recipes') && recipes.recipeGroups(scoped).groups.length > 0,
+    recipe: recipes.recipeGroups(scoped).groups.length > 0,
     shop: ui.shop === null && items.some((item) => item.shops.length > 0),
     aisle: items.some((item) => item.aisle !== ''),
     sort: items.length > 1,

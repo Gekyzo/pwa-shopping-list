@@ -19,6 +19,8 @@ no change for the user has no entry.
   with `↻` or do not tick it.
 - The items that were in `Próxima`, and the ticked items with `✓ Próxima`, are in `Compra`, not
   ticked, after the update.
+- The **Módulos** group of `Ajustes` is gone. `Recetas` and `Menú` are always in the bottom bar,
+  also on a phone that had them off.
 
 ## 1.0.36 - 2026-10-17
 

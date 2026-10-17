@@ -33,8 +33,6 @@ const SHELL = [
   './src/aisles.js',
   './src/swipe.js',
   './src/sections.js',
-  './src/modules.js',
-  './src/particles.js',
   './src/onboarding.js',
   './src/reorder.js',
   './src/storage.js',

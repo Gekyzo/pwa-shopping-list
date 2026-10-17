@@ -138,8 +138,6 @@ export default {
   'settings.themeDark': 'Dunkel',
   'settings.tripEnd': 'Am Ende des Einkaufs',
   'settings.tripEndHint': 'Wähle, was mit nicht gekauften Artikeln passiert: verwerfen oder auf den nächsten Einkauf verschieben.',
-  'settings.modules': 'Module',
-  'settings.moduleRecipes': 'Rezepte und Menü',
   'onboarding.recipes.title': 'Was essen wir diese Woche?',
   'onboarding.recipes.text': 'Schreib deine Rezepte einmal auf und schick ihre Zutaten mit `#cart-add` zu `{active}`.\nIm `#menu Menü` planst du die Woche und füllst den Korb auf einmal.',
   'onboarding.icon.cart-add': 'An die Liste senden',

@@ -450,16 +450,6 @@
     margin: 0;
   }
 
-  /* @component dust
-     @scope nav
-     @summary The canvas of the dust effect of a nav item that goes away or comes back.
-     @example <p class="hint">The dust canvas is drawn by nav.js; it has no example of its own.</p> */
-  .dust {
-    position: fixed;
-    z-index: 40;
-    pointer-events: none;
-  }
-
   /* @component onboarding
      @scope onboarding
      @summary The walkthrough of the first start, over the full app: a page, the dots, the buttons.

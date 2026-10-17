@@ -11,11 +11,9 @@
 | `src/menu.js` | Pure menu operations and the fill of `Compra` | `recipes` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
 | `src/sections.js` | The order of the sections and the rule of the slide between them | nothing |
-| `src/modules.js` | The modules that the user turns off and the sections that they hide | `sections` |
-| `src/particles.js` | The particles of a picture that breaks into dust, and their place in time | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
-| `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu`, `modules` |
+| `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu` |
 | `src/version.js` | Pure version rules | nothing |
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
@@ -35,8 +33,8 @@
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |
-| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, modules, export and import, the delete of the sample recipe | `recipes`, `storage`, `version`, `i18n`, `modules`, `ui/context`, `ui/onboarding` |
-| `src/ui/nav.js` | The bottom bar, its dust effect and the change of section | `sections`, `modules`, `particles`, `ui/context`, `ui/controls`, `ui/drag`, `ui/settings` |
+| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `recipes`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |
+| `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
 
@@ -98,8 +96,6 @@
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sw.test.js` | The manifest text that the worker puts in place (SW-13) |
 | `tests/sections.test.js` | The slide between sections |
-| `tests/modules.test.js` | The visible sections and the switch of a module |
-| `tests/particles.test.js` | The particles of a picture and their place in time |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
 | `tests/version.test.js` | Version rules |

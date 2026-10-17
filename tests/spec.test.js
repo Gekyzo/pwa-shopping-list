@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { emptyState, GROUPS, SORTS } from '#store';
-import { STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, MODULES_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY } from '#storage';
+import { STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY } from '#storage';
 import { CATALOGS, FALLBACK, LANGUAGES } from '#i18n';
 
 // The facts of docs/spec/ that the code can prove. A rule of behaviour has no check here.
@@ -67,7 +67,7 @@ test('the storage document has the keys of the storage and the name of the cache
   const storage = docs['08-storage.md'];
   const [, cache] = read('sw.js').match(/const CACHE = '([^']+)'/);
   const [, manifest] = read('sw.js').match(/const MANIFEST = '([^']+)'/);
-  for (const key of [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, MODULES_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY, cache, manifest]) assert.ok(storage.includes(`\`${key}\``), key);
+  for (const key of [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY, cache, manifest]) assert.ok(storage.includes(`\`${key}\``), key);
   for (const name of [cache, manifest]) assert.ok(docs['10-offline-version.md'].includes(`\`${name}\``), name);
 });
 

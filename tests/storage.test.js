@@ -23,9 +23,6 @@ import {
   THEME_KEY,
   loadTheme,
   saveTheme,
-  MODULES_KEY,
-  loadModules,
-  saveModules,
   ONBOARDED_KEY,
   loadOnboarded,
   saveOnboarded,
@@ -573,40 +570,6 @@ test('importJson gives an empty menu to a version 4 state without a menu list', 
   assert.deepEqual(importJson(JSON.stringify({ ...sample(), menu: 'x' })).state.menu, []);
   const { menu, ...withoutMenu } = sample();
   assert.deepEqual(importJson(JSON.stringify(withoutMenu)).state.menu, []);
-});
-
-test('loadModules returns the stored ids in the order of MODULES', () => {
-  assert.deepEqual(loadModules(fakeStorage({ [MODULES_KEY]: '["recipes"]' })), ['recipes']);
-  assert.deepEqual(loadModules(fakeStorage({ [MODULES_KEY]: '["next","recipes"]' })), ['recipes']);
-  assert.deepEqual(loadModules(fakeStorage({ [MODULES_KEY]: '["next"]' })), []);
-});
-
-test('loadModules returns no module off for no value, bad JSON, a value that is not a list and unknown ids', () => {
-  assert.deepEqual(loadModules(fakeStorage()), []);
-  assert.deepEqual(loadModules(fakeStorage({ [MODULES_KEY]: '{' })), []);
-  assert.deepEqual(loadModules(fakeStorage({ [MODULES_KEY]: '"recipes"' })), []);
-  assert.deepEqual(loadModules(fakeStorage({ [MODULES_KEY]: '{"recipes":true}' })), []);
-  assert.deepEqual(loadModules(fakeStorage({ [MODULES_KEY]: '["shops",1,null]' })), []);
-});
-
-test('saveModules stores the ids and an empty list removes the key', () => {
-  const storage = fakeStorage();
-  assert.equal(saveModules(storage, ['recipes']), true);
-  assert.equal(storage.getItem(MODULES_KEY), '["recipes"]');
-  assert.equal(saveModules(storage, []), true);
-  assert.equal(storage.getItem(MODULES_KEY), null);
-});
-
-test('saveModules keeps only known ids', () => {
-  const storage = fakeStorage();
-  assert.equal(saveModules(storage, ['shops', 'next', 'recipes']), true);
-  assert.equal(storage.getItem(MODULES_KEY), '["recipes"]');
-});
-
-test('the module functions do not throw when the storage does', () => {
-  assert.deepEqual(loadModules(brokenStorage()), []);
-  assert.equal(saveModules(brokenStorage(), ['recipes']), false);
-  assert.equal(saveModules(brokenStorage(), []), false);
 });
 
 test('load migrates a version 4 state with no quantity on each item', () => {

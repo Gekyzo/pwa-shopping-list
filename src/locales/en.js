@@ -138,8 +138,6 @@ export default {
   'settings.themeDark': 'Dark',
   'settings.tripEnd': 'When the trip ends',
   'settings.tripEndHint': 'Choose what happens to the items you did not buy: discard them or postpone them to the next trip.',
-  'settings.modules': 'Modules',
-  'settings.moduleRecipes': 'Recipes and menu',
   'onboarding.recipes.title': 'What do we eat this week?',
   'onboarding.recipes.text': 'Write your recipes once and send their ingredients to `{active}` with `#cart-add`.\nIn `#menu Menu` you plan the week and fill the basket at once.',
   'onboarding.icon.cart-add': 'Send to the list',
