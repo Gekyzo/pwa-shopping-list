@@ -6,7 +6,12 @@ import { MODULES } from '#modules';
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
 
-const LISTS = ['active', 'next', 'saved'];
+const LISTS = ['active', 'saved'];
+
+// Versions 1 to 7 have a second list, `next`, and `again`, the mark of a ticked one-time item that
+// comes back at the next trip. Both are items to buy at the next trip now: they go to Actual, not
+// ticked.
+const OLD_LISTS = ['next'];
 
 const unique = (values) => new Set(values).size === values.length;
 
@@ -34,17 +39,17 @@ const normalizeItem = (item) => {
     id !== '' &&
     typeof name === 'string' &&
     name.trim() !== '' &&
-    LISTS.includes(list) &&
-    [recurrent, bought, again].every((flag) => typeof flag === 'boolean');
+    [...LISTS, ...OLD_LISTS].includes(list) &&
+    [recurrent, bought].every((flag) => typeof flag === 'boolean') &&
+    (again === undefined || typeof again === 'boolean');
   if (!valid) return null;
-  const isBought = list === 'active' && bought;
+  const comesBack = list === 'next' || (list === 'active' && bought && !recurrent && again === true);
   return {
     id,
     name: name.trim(),
     recurrent,
-    list,
-    bought: isBought,
-    again: isBought && !recurrent && again,
+    list: list === 'saved' ? 'saved' : 'active',
+    bought: list === 'active' && bought && !comesBack,
     shops: normalizeShops(shops),
     quantity: typeof quantity === 'string' ? quantity.trim() : '',
     aisle: typeof aisle === 'string' ? aisle.trim() : '',
@@ -122,9 +127,9 @@ const normalizeMenu = (rawMenu, known) => {
     .sort((a, b) => a.day - b.day || MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
 };
 
-const VERSIONS = [1, 2, 3, 4, 5, 6, 7];
+const VERSIONS = [1, 2, 3, 4, 5, 6, 7, 8];
 
-// Returns a clean version 7 state, or null when the data is not a known state.
+// Returns a clean version 8 state, or null when the data is not a known state.
 const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
@@ -145,7 +150,7 @@ const normalizeState = (data) => {
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
   const aisles = normalizeAisles(data.aisles);
   return {
-    version: 7,
+    version: 8,
     items: knownAisles(oneSpelling(items), aisles),
     recipes,
     sent,
@@ -250,7 +255,7 @@ export const saveHand = (storage, hand) => {
   }
 };
 
-// Whether Actual and Próxima show the row of shop lists. A preference of the device, as the hand is.
+// Whether Actual shows the row of shop lists. A preference of the device, as the hand is.
 export const SHOP_LISTS_KEY = 'shopping.shopLists';
 
 // `hide` when stored, else `show`.
@@ -273,23 +278,23 @@ export const saveShopLists = (storage, choice) => {
   }
 };
 
-// What Terminar compra does at first with an item not bought: `save` it or `keep` it in Actual
+// What Terminar compra does at first with an item not bought: `keep` it in Actual or `save` it
 // (TRIP-7). A preference of the device, as the hand is.
 export const TRIP_END_KEY = 'shopping.tripEnd';
 
-// `keep` when stored, else `save`.
+// `save` when stored, else `keep`.
 export const loadTripEnd = (storage) => {
   try {
-    return storage.getItem(TRIP_END_KEY) === 'keep' ? 'keep' : 'save';
+    return storage.getItem(TRIP_END_KEY) === 'save' ? 'save' : 'keep';
   } catch {
-    return 'save';
+    return 'keep';
   }
 };
 
-// `save` is the choice of an app with no choice: it removes the key.
+// `keep` is the choice of an app with no choice: it removes the key.
 export const saveTripEnd = (storage, choice) => {
   try {
-    if (choice === 'keep') storage.setItem(TRIP_END_KEY, 'keep');
+    if (choice === 'save') storage.setItem(TRIP_END_KEY, 'save');
     else storage.removeItem(TRIP_END_KEY);
     return true;
   } catch {

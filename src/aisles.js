@@ -1,4 +1,4 @@
-import { activeItems, nextItems } from '#store';
+import { activeItems } from '#store';
 
 // An aisle is a section of the store, such as Dairy. `state.aisles` holds them in the order of
 // the walk through the store, and `item.aisle` is one of them or ''.
@@ -80,12 +80,11 @@ export const addDefaultAisles = (state, names) => {
   return { state: next.aisles.length === state.aisles.length ? state : next };
 };
 
-// A list by aisle, with the aisles in the order of the walk. For Active, `items` are the members
-// still to buy and `total` counts the ticked members too. `rest` holds the items with no aisle.
-export const aisleGroups = (state, list) => {
-  const active = list === 'active';
-  const source = active ? activeItems(state) : nextItems(state);
-  const shown = (item) => !active || !item.bought;
+// A list by aisle, with the aisles in the order of the walk. `items` are the members still to buy
+// and `total` counts the ticked members too. `rest` holds the items with no aisle.
+export const aisleGroups = (state) => {
+  const source = activeItems(state);
+  const shown = (item) => !item.bought;
   const groups = state.aisles
     .map((aisle) => {
       const members = source.filter((item) => item.aisle === aisle);

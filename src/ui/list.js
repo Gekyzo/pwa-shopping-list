@@ -3,7 +3,7 @@ import * as recipes from '#recipes';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
-import { $, el, state, ui, t, say, isOn, shopLists, tripEnd, apply, render } from '#ui/context';
+import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { itemNode, boughtSection, savedSection, groupHead, groupNodes } from '#ui/rows';
 import { recipeNode } from '#ui/recipes';
@@ -19,32 +19,26 @@ const finishTrip = (undoText = t('toast.finished'), keep = []) => {
 // The ids of the open items that stay in Actual with the choice of Ajustes (TRIP-6, TRIP-7).
 const keptItems = () => (tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : []);
 
-// The rows of a list below the shop of each item. A row of a shop has the group id `shop:<name>`.
-const shopNodes = (list) => {
-  const { groups, rest } = store.filterGroups(shops.shopGroups(viewState(), list), ui.query);
-  const count = ({ left, total }) => {
-    if (list !== 'active') return '';
-    return left ? `${total - left}/${total}` : '✓';
-  };
+const groupCount = ({ left, total }) => (left ? `${total - left}/${total}` : '✓');
+
+// The rows of the list below the shop of each item. A row of a shop has the group id `shop:<name>`.
+const shopNodes = () => {
+  const { groups, rest } = store.filterGroups(shops.shopGroups(viewState()), ui.query);
   const grouped = groups.flatMap((group) => {
     const key = `shop:${group.shop}`;
-    return [groupHead(group.shop, count(group), key), ...groupNodes(key, group.items.map((item) => itemNode(item, key)))];
+    return [groupHead(group.shop, groupCount(group), key), ...groupNodes(key, group.items.map((item) => itemNode(item, key)))];
   });
   const others = rest.length ? [groupHead(t('group.noShop'), '', 'noShop'), ...groupNodes('noShop', rest.map((item) => itemNode(item)))] : [];
   return [...grouped, ...others];
 };
 
-// The rows of a list below the aisle of each item, in the order of the walk. A row of an aisle has
-// the group id `aisle:<name>`, so that it moves only inside its aisle.
-const aisleNodes = (list) => {
-  const { groups, rest } = store.filterGroups(aisles.aisleGroups(viewState(), list), ui.query);
-  const count = ({ left, total }) => {
-    if (list !== 'active') return '';
-    return left ? `${total - left}/${total}` : '✓';
-  };
+// The rows of the list below the aisle of each item, in the order of the walk. A row of an aisle
+// has the group id `aisle:<name>`, so that it moves only inside its aisle.
+const aisleNodes = () => {
+  const { groups, rest } = store.filterGroups(aisles.aisleGroups(viewState()), ui.query);
   const grouped = groups.flatMap((group) => {
     const key = `aisle:${group.aisle}`;
-    return [groupHead(group.aisle, count(group), key), ...groupNodes(key, group.items.map((item) => itemNode(item, key)))];
+    return [groupHead(group.aisle, groupCount(group), key), ...groupNodes(key, group.items.map((item) => itemNode(item, key)))];
   });
   const others = rest.length ? [groupHead(t('group.noAisle'), '', 'noAisle'), ...groupNodes('noAisle', rest.map((item) => itemNode(item)))] : [];
   return [...grouped, ...others];
@@ -54,14 +48,14 @@ const aisleNodes = (list) => {
 // of each one, or below the aisle of each one.
 const pendingNodes = () => {
   const group = shownGroup();
-  if (group === 'shop') return shopNodes('active');
-  if (group === 'aisle') return aisleNodes('active');
+  if (group === 'shop') return shopNodes();
+  if (group === 'aisle') return aisleNodes();
   if (group === 'none') {
     return store.activeItems(viewState()).filter((item) => !item.bought && found(item)).map((item) => itemNode(item));
   }
   const { groups, rest } = store.filterGroups(recipes.recipeGroups(viewState()), ui.query);
   const grouped = groups.flatMap(({ recipe, items, total, left }) => [
-    groupHead(recipe.name, left ? `${total - left}/${total}` : '✓', recipe.id),
+    groupHead(recipe.name, groupCount({ left, total }), recipe.id),
     ...groupNodes(recipe.id, items.map((item) => itemNode(item, recipe.id))),
   ]);
   const others = rest.length ? [groupHead(t('group.others'), '', 'others'), ...groupNodes('others', rest.map((item) => itemNode(item)))] : [];
@@ -69,19 +63,14 @@ const pendingNodes = () => {
 };
 
 const listNodes = (items) => {
-  if (ui.view !== 'active') {
-    const group = shownGroup();
-    if (group === 'shop') return shopNodes('next');
-    return group === 'aisle' ? aisleNodes('next') : items.filter(found).map((item) => itemNode(item));
-  }
   const bought = items.filter((item) => item.bought && found(item));
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
-// Actual and Próxima end with the saved items; a tap brings one to the list in view.
+// Actual ends with the saved items; a tap brings one back.
 const savedNodes = () => {
   const saved = store.savedItems(viewState()).filter(found);
-  return saved.length ? savedSection(saved, ui.view) : [];
+  return saved.length ? savedSection(saved) : [];
 };
 
 const finishText = ({ back, saved }) => `${t('finish.back', { count: back })} ${t('finish.saved', { count: saved })}`;
@@ -92,7 +81,7 @@ const activeSubtitle = ({ total, left }) => {
   return t('header.left', { count: left });
 };
 
-export const headerOf = (summary, next) => {
+export const headerOf = (summary) => {
   if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), ring: '⚙', pct: 0 };
   if (ui.view === 'menu') {
     const count = menu.mealCount(state);
@@ -104,18 +93,12 @@ export const headerOf = (summary, next) => {
     const subtitle = count ? t('count.recipes', { count }) : t('header.noRecipes');
     return { title: t('nav.recipes'), subtitle, ring: String(count), pct: 0 };
   }
-  if (ui.view === 'next') {
-    const boughtToday = next.length - summary.incoming;
-    const parts = [next.length ? t('count.items', { count: next.length }) : t('header.nothingReady')];
-    if (boughtToday) parts.push(t('header.boughtToday', { count: boughtToday }));
-    return { title: t('header.next'), subtitle: parts.join(' · '), ring: String(next.length), pct: 0 };
-  }
   const { total, left } = summary;
   const pct = total ? Math.round(((total - left) / total) * 100) : 0;
   return { title: t('header.today'), subtitle: activeSubtitle(summary), ring: `${total - left}/${total}`, pct };
 };
 
-const EMPTY_KEYS = { active: 'empty.active', next: 'empty.next', recipes: 'empty.recipes', menu: 'empty.menu' };
+const EMPTY_KEYS = { active: 'empty.active', recipes: 'empty.recipes', menu: 'empty.menu' };
 
 const emptyText = () => {
   if (searching()) return t(ui.view === 'recipes' ? 'empty.noMatch' : 'empty.noItemMatch', { query: ui.query.trim() });
@@ -149,7 +132,7 @@ const nodesOf = (items) => {
 // A shop list of Actual with nothing to buy, while other items are still to buy, points to the
 // next shop list that has some.
 const renderShopDone = (summary) => {
-  const shop = ui.shop.active;
+  const shop = ui.shop;
   const done = ui.view === 'active' && shop !== null && !searching() && summary.left > 0 &&
     store.tripSummary(viewState()).left === 0;
   $('shop-done').hidden = !done;
@@ -158,35 +141,30 @@ const renderShopDone = (summary) => {
   $('shop-done-text').textContent = t('shops.nothingLeft', { shop: shopLabel(shop) });
   $('shop-done-next').textContent = shopLabel(next);
   $('shop-done-next').onclick = () => {
-    ui.shop.active = next;
+    ui.shop = next;
     render();
   };
 };
 
 export const renderList = (summary) => {
   const scoped = viewState();
-  const items = ui.view === 'active' ? store.activeItems(scoped) : store.nextItems(scoped);
+  const items = ui.view === 'active' ? store.activeItems(scoped) : [];
   const searchable = ui.view === 'recipes' && state.recipes.length > 0;
   renderSearch(items, searchable);
   const nodes = nodesOf(items);
   const saved = inList() ? savedNodes() : [];
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
-  if (ui.view === 'next' && nodes.length) {
-    $('items').append(el('p', { className: 'hint', textContent: t('next.hint') }));
-  }
   $('saved').hidden = saved.length === 0;
   $('saved').replaceChildren(...saved);
 
   $('empty').hidden = ui.view === 'settings' || nodes.length > 0 || (saved.length > 0 && searching());
   $('empty-text').textContent = emptyText();
-  $('bring').hidden = !(isOn('next') && ui.view === 'active' && summary.incoming > 0) || searching();
-  $('bring').textContent = say('empty.bring', { count: summary.incoming, list: 'next' });
 
   $('menu-actions').hidden = !(ui.view === 'menu' && state.recipes.length > 0);
   $('menu-clear').disabled = menu.mealCount(state) === 0;
 
-  $('finish').hidden = !(ui.view === 'active' && ui.shop.active === null && summary.total > 0 && summary.left === 0);
+  $('finish').hidden = !(ui.view === 'active' && ui.shop === null && summary.total > 0 && summary.left === 0);
   renderShopDone(summary);
   $('finish-text').textContent = finishText(summary);
 };
@@ -200,7 +178,7 @@ export const renderTrip = () => {
   $('trip').hidden = !ui.tripOpen;
   const outcome = store.tripOutcome(state, keptItems());
   // One part for each place an item goes, in this order; a part with no item does not show (TRIP-4).
-  const parts = ['recurrent', 'again', 'kept', 'open', 'bought'].filter((key) => outcome[key] > 0);
+  const parts = ['recurrent', 'kept', 'open', 'bought'].filter((key) => outcome[key] > 0);
   $('finish-menu-text').textContent = parts.map((key) => t(`trip.${key}`, { count: outcome[key] })).join(' · ');
   $('trip-open').hidden = store.openItems(state).length === 0;
   $('trip-open').textContent = t('trip.hint');
@@ -208,22 +186,22 @@ export const renderTrip = () => {
 
 export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
 
-// The row of the shop lists of Actual and Próxima. A count of Actual is the items to buy.
+// The row of the shop lists of Actual. A count is the items to buy.
 export const renderShopChips = () => {
-  const chips = inList() && shopLists === 'show' ? shops.shopChips(state, ui.view) : [];
+  const chips = inList() && shopLists === 'show' ? shops.shopChips(state) : [];
   $('shop-chips').hidden = chips.length === 0;
-  const count = (value) => (ui.view === 'active' && value === 0 ? '✓' : String(value));
+  const count = (value) => (value === 0 ? '✓' : String(value));
   const buttons = chips.map(({ shop, count: value }) => {
     const pick = () => {
       Object.assign(ui, { openId: null, openSide: null });
-      ui.shop[ui.view] = shop;
+      ui.shop = shop;
       render();
     };
     const button = el('button', { type: 'button', className: 'chip surface', onclick: pick }, [
       el('span', { textContent: shopLabel(shop) }),
       el('span', { className: 'count', textContent: count(value) }),
     ]);
-    button.setAttribute('aria-pressed', String(shop === ui.shop[ui.view]));
+    button.setAttribute('aria-pressed', String(shop === ui.shop));
     return button;
   });
   $('shop-chips').replaceChildren(...buttons);
@@ -269,5 +247,4 @@ export const bind = () => {
   $('trip-veil').addEventListener('click', closeTrip);
   $('finish-button').addEventListener('click', () => finishTrip());
   $('finish-menu').addEventListener('click', () => finishTrip(undefined, keptItems()));
-  $('bring').addEventListener('click', () => finishTrip(say('toast.brought', { list: 'next' })));
 };

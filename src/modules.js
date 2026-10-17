@@ -1,10 +1,10 @@
 import { SECTIONS } from '#sections';
 
 // The modules that the user can turn off in Ajustes, by id.
-export const MODULES = ['next', 'recipes'];
+export const MODULES = ['recipes'];
 
 // The sections that a module shows.
-const SECTIONS_OF = { next: ['next'], recipes: ['recipes', 'menu'] };
+const SECTIONS_OF = { recipes: ['recipes', 'menu'] };
 
 // The sections of the bottom bar, in their order, without the sections of the modules in `off`.
 export const visibleSections = (off) => {

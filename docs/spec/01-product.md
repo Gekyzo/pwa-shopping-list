@@ -3,8 +3,9 @@
 ## Purpose
 
 Bodega is a shopping list for one person on one Android phone. It works in the shop with no
-connection. It separates what to buy now (`Actual`) from what to buy at the next trip
-(`Próxima`), and it brings back the products that the user buys each time.
+connection. It keeps one list, `Actual`, for the trip. At the end of a trip it keeps
+the products that the user buys each time and the products not bought, so that the list for the
+next trip is almost ready.
 
 ## User and device
 
@@ -31,13 +32,13 @@ connection. It separates what to buy now (`Actual`) from what to buy at the next
 
 | Function | Document |
 |---|---|
-| Two lists and the trip cycle | [03-lists.md](03-lists.md) |
+| The list `Actual` and the trip cycle | [03-lists.md](03-lists.md) |
 | Add with search, with no duplicate | [03-lists.md](03-lists.md) |
-| Search in `Actual` and in `Próxima` | [03-lists.md](03-lists.md) |
+| Search in `Actual` | [03-lists.md](03-lists.md) |
 | Order by name or custom, with a manual move | [04-arrange.md](04-arrange.md) |
 | Groups by recipe or by shop | [04-arrange.md](04-arrange.md) |
 | Shops of an item | [05-shops.md](05-shops.md) |
-| A list for each shop, in `Actual` and `Próxima` | [05-shops.md](05-shops.md) |
+| A list for each shop, in `Actual` | [05-shops.md](05-shops.md) |
 | Recipes that send their products to `Actual` | [06-recipes.md](06-recipes.md) |
 | A menu of the week that fills `Actual` | [13-menu.md](13-menu.md) |
 | Modules that `Ajustes` turns off | [14-modules.md](14-modules.md) |
@@ -52,7 +53,7 @@ connection. It separates what to buy now (`Actual`) from what to buy at the next
 These are decisions, not gaps.
 
 - Quantities, units, prices, categories, notes and photos of an item.
-- More than two lists, and a history of past trips.
+- More than one list for the trip, a list for a later trip, and a history of past trips.
 - A sync between devices, an account, a shared list. Google Tasks as a shared list was rejected.
 - Geolocation in the app and system notifications.
 - Steps, quantities and photos of a recipe.

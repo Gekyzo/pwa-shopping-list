@@ -1,6 +1,6 @@
 import * as store from '#store';
 import { reached, settle } from '#swipe';
-import { SIDE_BUTTON, DRAG_START, el, state, ui, t, say, isOn, apply, render, guardClick } from '#ui/context';
+import { SIDE_BUTTON, DRAG_START, el, state, ui, t, say, apply, render, guardClick } from '#ui/context';
 import { isOpen, searching, shownGroup } from '#ui/view';
 import { leave, leaveNode, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
@@ -26,13 +26,6 @@ const recurrentToggle = (item) => {
   return button;
 };
 
-const moveAction = (item) => {
-  const toNext = item.list === 'active';
-  const params = { list: toNext ? 'next' : 'active', name: item.name };
-  return iconButton(toNext ? 'calendar' : 'cart', say('row.moveTo', params), () =>
-    apply(store.moveItem(state, item.id), { undoText: say('toast.movedTo', params) }));
-};
-
 const deleteAction = (item) =>
   iconButton(
     'trash',
@@ -41,7 +34,7 @@ const deleteAction = (item) =>
     { variant: 'danger' },
   );
 
-const activeRow = (item, groupId) => {
+const itemRow = (item) => {
   const toggle = () => {
     if (item.bought) {
       apply(store.toggleBought(state, item.id));
@@ -54,37 +47,8 @@ const activeRow = (item, groupId) => {
   const checkbox = el('input', { type: 'checkbox', className: 'item-row-check', checked: item.bought, onchange: toggle });
   checkbox.setAttribute('aria-label', t('row.bought', { name: item.name }));
   const name = el('button', { type: 'button', className: 'item-row-name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
-  const row = [checkbox, name];
-  if (item.bought && !item.recurrent && isOn('next')) {
-    const again = el('button', {
-      type: 'button',
-      className: item.again ? 'pill' : 'pill ghost',
-      textContent: `${item.again ? '✓' : '+'} ${t('list.next')}`,
-      onclick: () => apply(store.toggleAgain(state, item.id)),
-    });
-    again.setAttribute('aria-pressed', String(item.again));
-    again.setAttribute('aria-label', t('row.again', { name: item.name }));
-    row.push(again);
-  }
-  row.push(recurrentToggle(item));
-  const end = isOn('next') ? [moveAction(item), deleteAction(item)] : [deleteAction(item)];
-  return { row, end, right: { run: toggle, icon: item.bought ? 'undo' : 'check' } };
-};
-
-const nextRow = (item, groupId) => {
-  const pending = item.list === 'next';
-  const name = el('button', { type: 'button', className: 'item-row-name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
-  const row = [name];
-  if (!pending) row.push(el('span', { className: 'pill', textContent: t('row.boughtToday') }));
-  row.push(recurrentToggle(item));
-  if (pending) {
-    const right = { run: () => moveAction(item).onclick(), icon: 'cart' };
-    return { row, end: [moveAction(item), deleteAction(item)], right };
-  }
-  const params = { list: 'next', name: item.name };
-  const remove = iconButton('calendar-off', say('row.removeFrom', params), () =>
-    apply(store.removeFromNext(state, item.id), { undoText: say('toast.removedFrom', params) }));
-  return { row, end: [remove], right: null };
+  const row = [checkbox, name, recurrentToggle(item)];
+  return { row, end: [deleteAction(item)], right: { run: toggle, icon: item.bought ? 'undo' : 'check' } };
 };
 
 const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
@@ -147,10 +111,7 @@ const bindSwipe = (row, widths, id, groupId, right) => {
 
 // The rows that a row can move among: its group, or the rows to buy of a flat list.
 // Null for a row that does not move.
-const scopeOf = (item, groupId) => {
-  if (ui.view === 'next') return item.list === 'next' ? groupId ?? 'next' : null;
-  return item.bought ? null : groupId ?? 'rest';
-};
+const scopeOf = (item, groupId) => (item.bought ? null : groupId ?? 'rest');
 
 // A side action closes the row, then runs.
 const closing = (button) => {
@@ -183,12 +144,12 @@ export const swipeBox = ({ id, groupId = null, row, end, right }) => {
 };
 
 export const itemNode = (item, groupId = null) => {
-  const { row, end, right } = ui.view === 'active' ? activeRow(item, groupId) : nextRow(item, groupId);
+  const { row, end, right } = itemRow(item);
   const { box, body } = swipeBox({ id: item.id, groupId, row, end, right });
   const node = el('li', {
     className: [
       'item-row',
-      item.bought && ui.view === 'active' && 'bought',
+      item.bought && 'bought',
       ui.flashId === item.id && 'flash',
       ui.leaving.has(item.id) && 'gone',
     ].filter(Boolean).join(' '),
@@ -220,14 +181,14 @@ export const boughtSection = (bought) => {
   return [el('li', { className: 'section-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
 };
 
-// A saved item slides as an item row: to the right it comes back to `list`, to the left it shows
+// A saved item slides as an item row: to the right it comes back to Actual, to the left it shows
 // the delete. A tap on its name opens the edit sheet.
-const savedNode = (item, list) => {
+const savedNode = (item) => {
   // The row closes in the section, then opens among the rows of the list.
   const bring = () => leaveNode(`saved:${item.id}`, [node], () =>
-    apply(store.bringToList(state, item.id, list), { undoText: say('toast.addedTo', { name: item.name, list }) }));
+    apply(store.bringToList(state, item.id), { undoText: say('toast.addedTo', { name: item.name, list: 'active' }) }));
   const name = el('button', { type: 'button', className: 'item-row-name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
-  const right = { run: bring, icon: list === 'active' ? 'cart-add' : 'calendar' };
+  const right = { run: bring, icon: 'cart-add' };
   const { box } = swipeBox({ id: item.id, groupId: 'saved', row: [name], end: [deleteAction(item)], right });
   const node = el('li', { className: 'item-row' }, [box]);
   node.dataset.id = item.id;
@@ -235,8 +196,8 @@ const savedNode = (item, list) => {
 };
 
 // The saved items, behind one row that opens and closes them, as the ticked items of Actual. A
-// tap on an item brings it to `list`. A search keeps them open, so that a saved match is in view.
-export const savedSection = (saved, list) => {
+// tap on an item brings it back. A search keeps them open, so that a saved match is in view.
+export const savedSection = (saved) => {
   const open = ui.savedOpen || searching();
   const button = el('button', {
     type: 'button',
@@ -251,7 +212,7 @@ export const savedSection = (saved, list) => {
     el('span', { className: 'chevron', textContent: open ? '▾' : '▸' }),
   ]);
   button.setAttribute('aria-expanded', String(open));
-  return [el('li', { className: 'section-head' }, [button]), ...(open ? saved.map((item) => savedNode(item, list)) : [])];
+  return [el('li', { className: 'section-head' }, [button]), ...(open ? saved.map((item) => savedNode(item)) : [])];
 };
 
 // The rows of a group carry its key, so that its head can close and open them.

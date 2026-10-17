@@ -11,9 +11,9 @@ of it.
 
 ## Sections
 
-- **NAV-1** The bottom bar has five sections, in this order: `Actual`, `Próxima`, `Recetas`,
-  `Menú`, `Ajustes`. The app starts in `Actual`. A module that is off hides its sections (MOD-4,
-  MOD-5).
+- **NAV-1** The bottom bar has four sections, in this order: `Actual`, `Recetas`, `Menú`,
+  `Ajustes`. The app starts in `Actual`. A module that is off hides its sections (MOD-4). A
+  section shows no count.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
   edit, clears the recipe search and closes the search of a list (LIST-24).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
@@ -29,10 +29,9 @@ of it.
   two buttons of the backup has an icon before its text: an arrow that goes up out of a tray for
   the export, an arrow that goes down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
-  `No hay nada para la próxima compra. Toca + para añadir lo que compras siempre.`, `No hay
-  recetas. Toca + para crear una.` or, in `Menú`, `No hay recetas. Crea una en Recetas para
-  planificar el menú.`
-- **NAV-18** `Actual`, `Próxima` and `Recetas` show a line drawing of the basket of the app icon
+  `No hay recetas. Toca + para crear una.` or, in `Menú`, `No hay recetas. Crea una en Recetas
+  para planificar el menú.`
+- **NAV-18** `Actual` and `Recetas` show a line drawing of the basket of the app icon
   behind the content, in the bottom corner on the other side of the `+` button (NAV-13). It is
   tilted 30° and at 6 % opacity, and the corner and the bottom bar cut part of it. It takes the
   colour of the text, takes no tap and does not move with the scroll.
@@ -40,18 +39,14 @@ of it.
 ## Item rows
 
 - **ROW-1** A row of `Actual` has a checkbox, the name with its quantity after it in a muted
-  colour and the shops below it, the button
-  `+ Próxima` when LIST-14 applies, and the recurrent mark. A tap on the name opens the edit
+  colour and the shops below it, and the recurrent mark (LIST-7). A tap on the name opens the edit
   sheet (ROW-7).
-- **ROW-2** A row of `Próxima` has the name with its quantity and the shops, the mark `comprado hoy` when LIST-16
-  applies, and the recurrent mark. A tap on the name opens the edit sheet (ROW-7).
+- **ROW-2** Removed: the app has one list, `Actual` (ROW-1).
 - **ROW-3** A slide of a row to the left shows its actions, as icon buttons 64 px wide:
 
   | Row | Slide to the left |
   |---|---|
-  | `Actual` | **Mover a Próxima**, **Eliminar** |
-  | `Próxima`, `list: 'next'` | **Mover a Actual**, **Eliminar** |
-  | `Próxima`, `comprado hoy` | **Quitar de Próxima** |
+  | `Actual` | **Eliminar** |
   | `Volver a comprar` | **Eliminar** |
 
 - **ROW-4** A drag becomes a slide after 10 px of horizontal move. A drag that is first vertical
@@ -70,22 +65,21 @@ of it.
 - **ROW-8** The click that follows a drag, a hold or a section slide is ignored for 350 ms, so it
   does not tick an item or press a button.
 - **ROW-9** No row appears or disappears at once. A ticked row closes in 200 ms before it goes to
-  `Comprados (N)`, and a row of `Volver a comprar` closes before it goes back to a list. After each
+  `Comprados (N)`, and a row of `Volver a comprar` closes before it goes back to `Actual`. After each
   other change of the state (add, delete, move, untick, **Terminar compra**, `Deshacer`) and each open
-  or close of a section, a new row of `Actual`, `Próxima`, `Recetas`, `Volver a comprar` or the
+  or close of a section, a new row of `Actual`, `Recetas`, `Volver a comprar` or the
   products of `Receta` opens in 200 ms, and a row that is gone stays in its place and closes in
   200 ms. A change of the grouping or of the order moves the rows ([04-arrange.md](04-arrange.md)). With
   `prefers-reduced-motion` nothing moves.
 - **ROW-10** A long press of a finger on a row does not open the menu of the browser.
 - **ROW-11** A slide of a row to the right runs an action at the release: in `Actual` it ticks or
-  unticks the item (LIST-11), in `Próxima` it moves a `list: 'next'` item to `Actual`, with
-  `Deshacer`. It runs when the slide passed 35 % of the width of the row, 80 px at least; a
+  unticks the item (LIST-11), with `Deshacer` for a tick (LIST-13). It runs when the slide passed 35 % of the width of the row, 80 px at least; a
   shorter slide puts the row back. The row slides over a backdrop with the icon of the action,
-  which fills with the accent colour once the slide is long enough. A `comprado hoy` row does not
-  slide to the right, and a row with its left side open closes it.
+  which fills with the accent colour once the slide is long enough. A row with its left side open
+  closes it.
 - **ROW-12** A recipe row of `Recetas` slides with the same rules (REC-5).
 - **ROW-13** A row of `Volver a comprar` slides with the same rules (LIST-35). Its slide to the right
-  shows the icon `cart-add` in `Actual` and `calendar` in `Próxima`.
+  shows the icon `cart-add`.
 
 ## Messages and undo
 
@@ -101,14 +95,14 @@ of it.
 
   | Area | Changes |
   |---|---|
-  | Items | Tick, by the checkbox or by a slide (ROW-11), move to the other list, by a button or by a slide, delete, **Quitar de Próxima**, an existing item brought by the add sheet, a manual move |
-  | Trip | **Terminar compra**, `Traer N artículos de Próxima`, the switch-off of `Próxima` (MOD-6) |
+  | Items | Tick, by the checkbox or by a slide (ROW-11), delete, an existing item brought by the add sheet, a saved item brought back (LIST-35), a manual move |
+  | Trip | **Terminar compra** |
   | Recipes | Send, delete, removal of a product, save and removal of a link |
   | Menu | **Llenar la cesta**, **Quitar** of a meal, **Vaciar menú** |
   | Backup | Import |
 
 - **MSG-6** These changes have no `Deshacer`: a new item, a rename, the recurrent mark,
-  `+ Próxima`, the removal of a tick, a new recipe, a new product, the shops, the order, the
+  the removal of a tick, a new recipe, a new product, the shops, the order, the
   grouping and a recipe put in a meal.
 - **MSG-7** A rejected operation shows the text of its error and changes nothing.
 - **MSG-8** When a save fails, the change stays on the screen and the message is `El cambio no se
@@ -116,7 +110,8 @@ of it.
 
 ## Sheets
 
-- **NAV-8** There are five sheets: add, arrange, trip, shops and meal. One is open at a time. A tap on the
+- **NAV-8** There are seven sheets: add, arrange (with the choice of shop lists, SHOP-25), trip,
+  meal, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33). One is open at a time. A tap on the
   veil or `Escape` closes it. The `+` button does not show while a sheet is open.
 - **NAV-9** The trip button of the header has three dots. It shows in `Actual`. A tap
   opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet has the
@@ -160,7 +155,7 @@ of it.
 
   | Page | Title | Teaches |
   |---|---|---|
-  | 1 | `Tu próxima compra, casi hecha` | `Actual` is the trip of today; `Próxima` gets the recurrent items by itself (LIST-15) and the items you add |
+  | 1 | `Tu próxima compra, casi hecha` | `Actual` is the trip of today; what you do not buy today stays in the list for the next trip (TRIP-2) |
   | 2 | `Marca lo de siempre` | The recurrent mark and the result of **Terminar compra** |
   | 3 | `Desliza una fila` | The two slides of a row (ROW-3, ROW-11) and the tap on the name (ROW-7) |
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3), the bottom bar and the `+` button |

@@ -60,16 +60,12 @@ const renderAll = () => {
   if (!state.recipes.some((recipe) => recipe.id === ui.recipeId)) ui.recipeId = null;
   // A shop list whose chip went shows Todas.
   // A hidden row leaves no list filtered.
-  for (const list of ['active', 'next']) {
-    ui.shop[list] = shopLists === 'show' ? shops.validShop(state, list, ui.shop[list]) : null;
-  }
+  ui.shop = shopLists === 'show' ? shops.validShop(state, ui.shop) : null;
   // The preview of Terminar compra counts the open items with the setting's choice (TRIP-7).
   const kept = tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : [];
   const summary = store.tripSummary(state, kept);
-  const next = store.nextItems(state);
-  const scoped = viewState();
-  const header = headerOf(store.tripSummary(scoped), store.nextItems(scoped));
-  if (inList() && ui.shop[ui.view] !== null) header.title = shopLabel(ui.shop[ui.view]);
+  const header = headerOf(store.tripSummary(viewState()));
+  if (inList() && ui.shop !== null) header.title = shopLabel(ui.shop);
 
   renderShopChips();
   $('title').textContent = header.title;
@@ -82,7 +78,7 @@ const renderAll = () => {
   renderRecipe();
 
   $('settings').hidden = ui.view !== 'settings';
-  document.querySelector('.icon.corner').hidden = !['active', 'next', 'recipes'].includes(ui.view);
+  document.querySelector('.icon.corner').hidden = !['active', 'recipes'].includes(ui.view);
   renderVersion();
   renderSample();
   renderInstall();
@@ -91,7 +87,6 @@ const renderAll = () => {
   $('fab').hidden =
     ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.aislesOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
-  $('next-count').textContent = next.length || '';
   const sections = visibleSections(off);
   document.querySelectorAll('.nav-item').forEach((button) => {
     showNavButton(button, sections.includes(button.dataset.view));

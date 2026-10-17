@@ -12,7 +12,7 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 |---|---|
 | [01-product.md](01-product.md) | Purpose, user, constraints, what the app does not do |
 | [02-data-model.md](02-data-model.md) | The state, its records and its invariants |
-| [03-lists.md](03-lists.md) | Items, the two lists, the trip cycle, the add sheet |
+| [03-lists.md](03-lists.md) | Items, the list `Actual`, the trip cycle, the add sheet |
 | [04-arrange.md](04-arrange.md) | Order, groups and the manual move of a row |
 | [05-shops.md](05-shops.md) | The shops of an item and the list by shop |
 | [06-recipes.md](06-recipes.md) | Recipes, the send to `Actual`, the search |
@@ -61,19 +61,18 @@ The rules DS-1 to DS-8 and LAY-1 to LAY-4 belong to the design system, `pwa-desi
 
 | Word | Meaning |
 |---|---|
-| Item | A product to buy. One record, in one of the two lists |
+| Item | A product to buy. One record, in `Actual` or saved |
 | `Actual` | The list of the current trip. List id `active` |
-| `Próxima` | The list of the next trip. List id `next` |
 | Trip | The time from one **Terminar compra** to the next |
 | Ticked | An item of `Actual` with `bought: true` |
 | Recurrent | An item that comes back at each trip |
 | One-time | An item that is not recurrent |
-| `Próxima` view | The items that `Próxima` shows: the items of the list, and the ticked items of `Actual` that come back |
+| Saved | An item that a trip took out of `Actual`, in `Volver a comprar`. List id `saved` |
 | Recipe | A name and a list of product names |
 | Product | A name in a recipe. It is text, not an item |
 | Shop | A name that one item or more have. It has no record of its own |
 | Aisle | A section of a store, such as `Lácteos`. The screen says `Sección`; the code says `aisle`, because a section is a screen of the bottom bar |
-| Section | One of the five screens of the bottom bar |
+| Section | One of the four screens of the bottom bar |
 | Meal | The lunch or the dinner of one day of the menu |
 | Sheet | A panel that comes up from the bottom of the screen |
 | Message | An error or a notice as `{ key, params }`, which the screen turns into text |

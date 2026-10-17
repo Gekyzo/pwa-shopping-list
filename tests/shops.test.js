@@ -18,10 +18,11 @@ import {
 let counter = 0;
 const newId = () => `id-${++counter}`;
 
+// Each spec is [name, list, patch]: the list is 'active' or 'saved'.
 const build = (...specs) =>
   specs.reduce((state, [name, list, patch = {}]) => {
-    const { state: added } = addItem(state, name, list, newId);
-    const items = added.items.map((item) => (item.name === name ? { ...item, ...patch } : item));
+    const { state: added } = addItem(state, name, newId);
+    const items = added.items.map((item) => (item.name === name ? { ...item, list, ...patch } : item));
     return { ...added, items };
   }, emptyState());
 
@@ -89,21 +90,21 @@ test('removeItemShop returns the same state for a shop that the item does not ha
 test('shopNames gives each shop in use one time, in name order', () => {
   const state = build(
     ['Milk', 'active', { shops: ['Zeta', 'árbol'] }],
-    ['Salt', 'next', { shops: ['beta', 'Zeta'] }],
+    ['Salt', 'saved', { shops: ['beta', 'Zeta'] }],
     ['Rice', 'active'],
   );
   assert.deepEqual(shopNames(state), ['árbol', 'beta', 'Zeta']);
   assert.deepEqual(shopNames(emptyState()), []);
 });
 
-test('shopGroups of active puts an item of two shops in the two groups', () => {
+test('shopGroups puts an item of two shops in the two groups and leaves out a saved item', () => {
   const state = build(
     ['Milk', 'active', { shops: ['Market'] }],
     ['Bread', 'active', { shops: ['Lidl', 'Market'] }],
     ['Salt', 'active'],
-    ['Wine', 'next', { shops: ['Cellar'] }],
+    ['Wine', 'saved', { shops: ['Cellar'] }],
   );
-  assert.deepEqual(shape(shopGroups(state, 'active')), {
+  assert.deepEqual(shape(shopGroups(state)), {
     groups: [
       ['Lidl', ['Bread'], 1],
       ['Market', ['Milk', 'Bread'], 2],
@@ -118,7 +119,7 @@ test('a ticked item counts in the total and is not in the items or in the rest',
     ['Milk', 'active', { shops: ['Market'] }],
     ['Oil', 'active', { bought: true }],
   );
-  assert.deepEqual(shape(shopGroups(state, 'active')), {
+  assert.deepEqual(shape(shopGroups(state)), {
     groups: [
       ['Lidl', [], 1],
       ['Market', ['Milk'], 2],
@@ -129,38 +130,36 @@ test('a ticked item counts in the total and is not in the items or in the rest',
 
 test('shopGroups uses the order of the list inside a group', () => {
   const state = build(['Milk', 'active', { shops: ['Lidl'] }], ['Bread', 'active', { shops: ['Lidl'] }]);
-  assert.deepEqual(names(shopGroups(state, 'active').groups[0].items), ['Milk', 'Bread']);
+  assert.deepEqual(names(shopGroups(state).groups[0].items), ['Milk', 'Bread']);
   const sorted = setSort(state, 'name').state;
-  assert.deepEqual(names(shopGroups(sorted, 'active').groups[0].items), ['Bread', 'Milk']);
+  assert.deepEqual(names(shopGroups(sorted).groups[0].items), ['Bread', 'Milk']);
 });
 
-test('shopGroups of next has the waiting items and the bought items that go back', () => {
+test('shopGroups counts a ticked recurrent item in the total and leaves it out of the items', () => {
   const state = build(
-    ['Milk', 'next', { shops: ['Lidl'] }],
+    ['Milk', 'active', { shops: ['Lidl'] }],
     ['Soap', 'active', { bought: true, recurrent: true, shops: ['Lidl', 'Market'] }],
-    ['Salt', 'next'],
-    ['Rice', 'active', { shops: ['Lidl'] }],
+    ['Salt', 'active'],
   );
-  assert.deepEqual(shape(shopGroups(state, 'next')), {
+  assert.deepEqual(shape(shopGroups(state)), {
     groups: [
-      ['Lidl', ['Milk', 'Soap'], 2],
-      ['Market', ['Soap'], 1],
+      ['Lidl', ['Milk'], 2],
+      ['Market', [], 1],
     ],
     rest: ['Salt'],
   });
 });
 
 test('shopGroups with no shops has no groups and all the items in rest', () => {
-  const state = build(['Milk', 'active'], ['Salt', 'active'], ['Rice', 'next']);
-  assert.deepEqual(shape(shopGroups(state, 'active')), { groups: [], rest: ['Milk', 'Salt'] });
-  assert.deepEqual(shape(shopGroups(state, 'next')), { groups: [], rest: ['Rice'] });
-  assert.deepEqual(shape(shopGroups(emptyState(), 'active')), { groups: [], rest: [] });
+  const state = build(['Milk', 'active'], ['Salt', 'active'], ['Rice', 'saved', { shops: ['Lidl'] }]);
+  assert.deepEqual(shape(shopGroups(state)), { groups: [], rest: ['Milk', 'Salt'] });
+  assert.deepEqual(shape(shopGroups(emptyState())), { groups: [], rest: [] });
 });
 
 test('shopSuggestions gives the shops in use that the item does not have, in name order', () => {
   const state = build(
     ['Milk', 'active', { shops: ['Lidl'] }],
-    ['Salt', 'next', { shops: ['Zeta', 'árbol', 'lidl'] }],
+    ['Salt', 'saved', { shops: ['Zeta', 'árbol', 'lidl'] }],
     ['Rice', 'active'],
   );
   assert.deepEqual(shopSuggestions(state, find(state, 'Milk').id), ['árbol', 'Zeta']);
@@ -175,17 +174,18 @@ test('shopSuggestions is empty for an unknown item and for no shops', () => {
 });
 
 test('shopChips is empty when no item of the view has a shop', () => {
-  assert.deepEqual(shopChips(build(['Milk', 'active']), 'active'), []);
+  assert.deepEqual(shopChips(build(['Milk', 'active'])), []);
+  assert.deepEqual(shopChips(build(['Milk', 'active'], ['Rice', 'saved', { shops: ['Lidl'] }])), []);
 });
 
-test('shopChips of active has Todas, the shops in name order and Sin tienda, with the items to buy', () => {
+test('shopChips has Todas, the shops in name order and Sin tienda, with the items to buy', () => {
   const state = build(
     ['Milk', 'active', { shops: ['Lidl', 'aldi'] }],
     ['Salt', 'active', { shops: ['Lidl'], bought: true }],
     ['Bread', 'active'],
-    ['Rice', 'next', { shops: ['Market'] }],
+    ['Rice', 'saved', { shops: ['Market'] }],
   );
-  assert.deepEqual(shopChips(state, 'active'), [
+  assert.deepEqual(shopChips(state), [
     { shop: null, count: 2 },
     { shop: 'aldi', count: 1 },
     { shop: 'Lidl', count: 1 },
@@ -193,9 +193,9 @@ test('shopChips of active has Todas, the shops in name order and Sin tienda, wit
   ]);
 });
 
-test('shopChips of next counts the items of the view and has no Sin tienda when each has a shop', () => {
-  const state = build(['Rice', 'next', { shops: ['Market'] }], ['Milk', 'active', { shops: ['Lidl'] }]);
-  assert.deepEqual(shopChips(state, 'next'), [{ shop: null, count: 1 }, { shop: 'Market', count: 1 }]);
+test('shopChips has no Sin tienda when each item has a shop and counts only the items to buy', () => {
+  const state = build(['Rice', 'active', { shops: ['Market'], bought: true }], ['Milk', 'active', { shops: ['Lidl'] }]);
+  assert.deepEqual(shopChips(state), [{ shop: null, count: 1 }, { shop: 'Lidl', count: 1 }, { shop: 'Market', count: 0 }]);
 });
 
 test('inShop takes each item for null, the items of a shop with no case distinction, and the items with no shop for an empty name', () => {
@@ -217,12 +217,12 @@ test('shopState keeps only the items of the shop and returns the same state for 
 
 test('validShop keeps a shop of the view in its current spelling and gives null for a shop that went', () => {
   const state = build(['Milk', 'active', { shops: ['Lidl'] }], ['Bread', 'active']);
-  assert.equal(validShop(state, 'active', 'LIDL'), 'Lidl');
-  assert.equal(validShop(state, 'active', 'Aldi'), null);
-  assert.equal(validShop(state, 'active', ''), '');
-  assert.equal(validShop(state, 'active', null), null);
-  assert.equal(validShop(build(['Milk', 'active', { shops: ['Lidl'] }]), 'active', ''), null);
-  assert.equal(validShop(build(['Milk', 'active']), 'active', 'Lidl'), null);
+  assert.equal(validShop(state, 'LIDL'), 'Lidl');
+  assert.equal(validShop(state, 'Aldi'), null);
+  assert.equal(validShop(state, ''), '');
+  assert.equal(validShop(state, null), null);
+  assert.equal(validShop(build(['Milk', 'active', { shops: ['Lidl'] }]), ''), null);
+  assert.equal(validShop(build(['Milk', 'active']), 'Lidl'), null);
 });
 
 test('nextShop gives the next shop with an item to buy, in chip order, from the start after the end', () => {

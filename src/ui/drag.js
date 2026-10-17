@@ -34,8 +34,7 @@ const edgeScroll = () => {
 };
 
 const lift = (node, rowNode, pointerId, y) => {
-  // The rows of the scope that are next to the row. In the name order a row of Próxima that was
-  // bought today can be between two rows of the scope; a move does not pass it.
+  // The rows of the scope that are next to the row; a move does not pass a row of another scope.
   const inScope = (row) => row?.dataset.scope === node.dataset.scope;
   const rows = [node];
   for (let row = node.previousElementSibling; inScope(row); row = row.previousElementSibling) rows.unshift(row);

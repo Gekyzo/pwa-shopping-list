@@ -6,21 +6,16 @@ import {
   renameItem,
   toggleRecurrent,
   toggleBought,
-  toggleAgain,
   deleteItem,
-  moveItem,
-  removeFromNext,
   startNewShopping,
   canStartNewShopping,
   openItems,
   activeItems,
-  nextItems,
   searchItems,
   matchesItem,
   filterGroups,
   findByName,
   bringToList,
-  bringAllToActual,
   tripSummary,
   tripOutcome,
   savedItems,
@@ -37,10 +32,11 @@ import {
 let counter = 0;
 const newId = () => `id-${++counter}`;
 
+// Each spec is [name, list, patch]: the list is 'active' or 'saved'.
 const build = (...specs) =>
   specs.reduce((state, [name, list, patch = {}]) => {
-    const { state: added } = addItem(state, name, list, newId);
-    const items = added.items.map((item) => (item.name === name ? { ...item, ...patch } : item));
+    const { state: added } = addItem(state, name, newId);
+    const items = added.items.map((item) => (item.name === name ? { ...item, list, ...patch } : item));
     return { ...added, items };
   }, emptyState());
 
@@ -48,44 +44,45 @@ const find = (state, name) => state.items.find((item) => item.name === name);
 const names = (items) => items.map((item) => item.name);
 
 test('addItem adds a one-time item to active', () => {
-  const { state, error } = addItem(emptyState(), 'Bread', 'active', newId);
+  const { state, error } = addItem(emptyState(), 'Bread', newId);
   assert.equal(error, undefined);
   assert.equal(state.items.length, 1);
   const { id, ...rest } = state.items[0];
   assert.ok(id);
-  assert.deepEqual(rest, { name: 'Bread', recurrent: false, list: 'active', bought: false, again: false, shops: [], quantity: '', aisle: '' });
+  assert.deepEqual(rest, { name: 'Bread', recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '' });
 });
 
-test('addItem adds a recurrent item to next', () => {
-  const { state } = addItem(emptyState(), 'Milk', 'next', newId);
-  assert.equal(state.items[0].recurrent, true);
-  assert.equal(state.items[0].list, 'next');
+test('addItem always creates a one-time item in active, with no again field', () => {
+  const start = build(['Milk', 'active', { recurrent: true }], ['Batteries', 'saved']);
+  const { state } = addItem(start, 'Eggs', newId);
+  const item = find(state, 'Eggs');
+  assert.equal(item.recurrent, false);
+  assert.equal(item.list, 'active');
+  assert.equal(item.bought, false);
+  assert.equal('again' in item, false);
+  assert.equal(addItem(emptyState(), 'Tea').state.items[0].list, 'active');
 });
 
 test('addItem trims the name and rejects an empty one', () => {
-  const { state } = addItem(emptyState(), '  Eggs  ', 'active', newId);
+  const { state } = addItem(emptyState(), '  Eggs  ', newId);
   assert.equal(state.items[0].name, 'Eggs');
   const start = emptyState();
-  const rejected = addItem(start, '   ', 'active', newId);
+  const rejected = addItem(start, '   ', newId);
   assert.equal(rejected.state, start);
   assert.deepEqual(rejected.error, { key: 'error.nameRequired' });
 });
 
-test('addItem rejects a duplicate in either list, without case distinction', () => {
-  const start = build(['Milk', 'next'], ['Bread', 'active']);
-  const inNext = addItem(start, ' milk ', 'active', newId);
-  assert.equal(inNext.state, start);
-  assert.deepEqual(inNext.error, { key: 'error.duplicateItem', params: { name: 'Milk', list: 'next' } });
-  assert.deepEqual(addItem(start, 'BREAD', 'next', newId).error, { key: 'error.duplicateItem', params: { name: 'Bread', list: 'active' } });
-});
-
-test('addItem rejects an unknown list', () => {
-  assert.deepEqual(addItem(emptyState(), 'Milk', 'other', newId).error, { key: 'error.unknownList' });
+test('addItem rejects a duplicate in active or saved, without case distinction', () => {
+  const start = build(['Milk', 'saved'], ['Bread', 'active']);
+  const inSaved = addItem(start, ' milk ', newId);
+  assert.equal(inSaved.state, start);
+  assert.deepEqual(inSaved.error, { key: 'error.duplicateItem', params: { name: 'Milk', list: 'saved' } });
+  assert.deepEqual(addItem(start, 'BREAD', newId).error, { key: 'error.duplicateItem', params: { name: 'Bread', list: 'active' } });
 });
 
 test('addItem does not change the input state', () => {
   const start = emptyState();
-  addItem(start, 'Bread', 'active', newId);
+  addItem(start, 'Bread', newId);
   assert.deepEqual(start, emptyState());
 });
 
@@ -96,11 +93,11 @@ test('renameItem renames and trims', () => {
 });
 
 test('renameItem rejects an empty name and a duplicate of another item', () => {
-  const start = build(['Bread', 'active'], ['Milk', 'next']);
+  const start = build(['Bread', 'active'], ['Milk', 'saved']);
   const { id } = find(start, 'Bread');
   assert.deepEqual(renameItem(start, id, ' ').error, { key: 'error.nameRequired' });
   const duplicate = renameItem(start, id, 'MILK');
-  assert.deepEqual(duplicate.error, { key: 'error.duplicateItem', params: { name: 'Milk', list: 'next' } });
+  assert.deepEqual(duplicate.error, { key: 'error.duplicateItem', params: { name: 'Milk', list: 'saved' } });
   assert.equal(duplicate.state, start);
 });
 
@@ -117,10 +114,8 @@ test('operations reject an unknown id', () => {
     renameItem(start, 'nope', 'X'),
     toggleRecurrent(start, 'nope'),
     toggleBought(start, 'nope'),
-    toggleAgain(start, 'nope'),
     deleteItem(start, 'nope'),
-    moveItem(start, 'nope'),
-    removeFromNext(start, 'nope'),
+    bringToList(start, 'nope'),
   ];
   calls.forEach((result) => {
     assert.deepEqual(result.error, { key: 'error.itemNotFound' });
@@ -128,152 +123,70 @@ test('operations reject an unknown id', () => {
   });
 });
 
-test('toggleRecurrent flips the flag', () => {
-  const start = build(['Bread', 'active']);
+test('toggleRecurrent flips the flag and changes nothing else', () => {
+  const start = build(['Bread', 'active', { bought: true }]);
   const { id } = find(start, 'Bread');
   const { state } = toggleRecurrent(start, id);
-  assert.equal(state.items[0].recurrent, true);
+  assert.deepEqual(state.items[0], { ...start.items[0], recurrent: true });
   assert.equal(toggleRecurrent(state, id).state.items[0].recurrent, false);
-});
-
-test('toggleRecurrent on clears again, because the item is in next already', () => {
-  const start = build(['Soap', 'active', { bought: true, again: true }]);
-  const { state } = toggleRecurrent(start, find(start, 'Soap').id);
-  assert.equal(state.items[0].recurrent, true);
-  assert.equal(state.items[0].again, false);
 });
 
 test('toggleBought ticks an active item and keeps it in active', () => {
   const start = build(['Bread', 'active']);
   const { state } = toggleBought(start, find(start, 'Bread').id);
-  assert.equal(state.items[0].bought, true);
-  assert.equal(state.items[0].list, 'active');
+  assert.deepEqual(state.items[0], { ...start.items[0], bought: true });
 });
 
-test('toggleBought off resets again', () => {
-  const start = build(['Soap', 'active', { bought: true, again: true }]);
-  const { state } = toggleBought(start, find(start, 'Soap').id);
-  assert.equal(state.items[0].bought, false);
-  assert.equal(state.items[0].again, false);
-});
-
-test('toggleBought rejects an item in next', () => {
-  const start = build(['Milk', 'next']);
-  const result = toggleBought(start, find(start, 'Milk').id);
-  assert.deepEqual(result.error, { key: 'error.onlyActiveTick', params: { list: 'active' } });
-  assert.equal(result.state, start);
-});
-
-test('toggleAgain flips again on a ticked one-time item', () => {
+test('toggleBought off unticks the item and changes nothing else', () => {
   const start = build(['Soap', 'active', { bought: true }]);
-  const { id } = find(start, 'Soap');
-  const { state } = toggleAgain(start, id);
-  assert.equal(state.items[0].again, true);
-  assert.equal(toggleAgain(state, id).state.items[0].again, false);
-});
-
-test('toggleAgain rejects an item that is not ticked', () => {
-  const start = build(['Soap', 'active']);
-  const result = toggleAgain(start, find(start, 'Soap').id);
-  assert.deepEqual(result.error, { key: 'error.tickFirst' });
-  assert.equal(result.state, start);
-});
-
-test('toggleAgain rejects a recurrent item', () => {
-  const start = build(['Milk', 'active', { bought: true, recurrent: true }]);
-  assert.deepEqual(toggleAgain(start, find(start, 'Milk').id).error, { key: 'error.recurrentInNext', params: { list: 'next' } });
+  const { state } = toggleBought(start, find(start, 'Soap').id);
+  assert.deepEqual(state.items[0], { ...start.items[0], bought: false });
 });
 
 test('deleteItem removes the item', () => {
-  const start = build(['Bread', 'active'], ['Milk', 'next']);
+  const start = build(['Bread', 'active'], ['Milk', 'saved']);
   const { state } = deleteItem(start, find(start, 'Bread').id);
   assert.deepEqual(names(state.items), ['Milk']);
-});
-
-test('moveItem moves to the other list and resets bought and again', () => {
-  const start = build(['Soap', 'active', { bought: true, again: true }], ['Milk', 'next']);
-  const moved = moveItem(start, find(start, 'Soap').id).state;
-  assert.deepEqual(
-    { ...find(moved, 'Soap'), id: undefined },
-    { id: undefined, name: 'Soap', recurrent: false, list: 'next', bought: false, again: false, shops: [], quantity: '', aisle: '' },
-  );
-  const back = moveItem(moved, find(moved, 'Milk').id).state;
-  assert.equal(find(back, 'Milk').list, 'active');
 });
 
 test('activeItems lists active items, not bought first, in insertion order', () => {
   const state = build(
     ['A', 'active', { bought: true }],
     ['B', 'active'],
-    ['N', 'next'],
+    ['S', 'saved'],
     ['C', 'active', { bought: true }],
     ['D', 'active'],
   );
   assert.deepEqual(names(activeItems(state)), ['B', 'D', 'A', 'C']);
 });
 
-test('nextItems lists next items, then ticked active items that are recurrent or again', () => {
-  const state = build(
-    ['Milk', 'active', { bought: true, recurrent: true }],
-    ['Soap', 'active', { bought: true, again: true }],
-    ['Batteries', 'active', { bought: true }],
-    ['Eggs', 'active', { recurrent: true }],
-    ['Water', 'next'],
-  );
-  assert.deepEqual(names(nextItems(state)), ['Water', 'Milk', 'Soap']);
-});
-
-test('removeFromNext deletes an item of the next list', () => {
-  const start = build(['Water', 'next']);
-  const { state } = removeFromNext(start, find(start, 'Water').id);
-  assert.deepEqual(state.items, []);
-});
-
-test('removeFromNext keeps a ticked active item and clears again and recurrent', () => {
-  const start = build(['Milk', 'active', { bought: true, recurrent: true }]);
-  const { state } = removeFromNext(start, find(start, 'Milk').id);
-  assert.deepEqual(
-    { ...state.items[0], id: undefined },
-    { id: undefined, name: 'Milk', recurrent: false, list: 'active', bought: true, again: false, shops: [], quantity: '', aisle: '' },
-  );
-  assert.deepEqual(nextItems(state), []);
-});
-
-test('removeFromNext rejects an active item that is not in the next view', () => {
-  const start = build(['Bread', 'active']);
-  assert.deepEqual(removeFromNext(start, find(start, 'Bread').id).error, { key: 'error.notInNext', params: { list: 'next' } });
-});
-
 test('startNewShopping applies each rule', () => {
   const start = build(
     ['Milk', 'active', { bought: true, recurrent: true }],
-    ['Soap', 'active', { bought: true, again: true }],
     ['Batteries', 'active', { bought: true }],
     ['Bread', 'active'],
     ['Eggs', 'active', { recurrent: true }],
-    ['Water', 'next'],
-    ['Tea', 'next', { recurrent: false }],
+    ['Tea', 'saved'],
   );
   const { state, error } = startNewShopping(start);
   assert.equal(error, undefined);
-  assert.deepEqual(names(state.items), ['Milk', 'Soap', 'Batteries', 'Bread', 'Eggs', 'Water', 'Tea']);
-  assert.deepEqual(names(savedItems(state)), ['Batteries', 'Bread']);
+  assert.deepEqual(names(state.items), ['Milk', 'Batteries', 'Bread', 'Eggs', 'Tea']);
+  assert.deepEqual(names(savedItems(state)), ['Batteries', 'Bread', 'Tea']);
   state.items.forEach((item) => {
-    assert.equal(item.list, ['Batteries', 'Bread'].includes(item.name) ? 'saved' : 'active');
+    assert.equal(item.list, ['Milk', 'Eggs'].includes(item.name) ? 'active' : 'saved');
     assert.equal(item.bought, false);
-    assert.equal(item.again, false);
   });
   assert.equal(find(state, 'Milk').recurrent, true);
-  assert.equal(find(state, 'Soap').recurrent, false);
-  assert.deepEqual(nextItems(state), []);
+  assert.equal(find(state, 'Batteries').recurrent, false);
 });
 
-test('startNewShopping rejects when nothing is ticked, nothing is open and next is empty', () => {
-  const start = build(['Eggs', 'active', { recurrent: true }]);
+test('startNewShopping rejects when nothing is ticked and nothing is open', () => {
+  const start = build(['Eggs', 'active', { recurrent: true }], ['Tea', 'saved']);
   const result = startNewShopping(start);
-  assert.deepEqual(result.error, { key: 'error.nothingToStart', params: { list: 'next' } });
+  assert.deepEqual(result.error, { key: 'error.nothingToStart' });
   assert.equal(result.state, start);
-  assert.deepEqual(startNewShopping(emptyState()).error, { key: 'error.nothingToStart', params: { list: 'next' } });
+  assert.equal(canStartNewShopping(start), false);
+  assert.deepEqual(startNewShopping(emptyState()).error, { key: 'error.nothingToStart' });
 });
 
 test('startNewShopping finishes with only open items', () => {
@@ -284,7 +197,7 @@ test('startNewShopping finishes with only open items', () => {
 
 test('openItems gives the one-time items of Actual that are not ticked', () => {
   const start = build(['Milk', 'active', { bought: true }], ['Bread', 'active'],
-    ['Eggs', 'active', { recurrent: true }], ['Water', 'next'], ['Salt', 'active']);
+    ['Eggs', 'active', { recurrent: true }], ['Water', 'saved'], ['Salt', 'active']);
   assert.deepEqual(names(openItems(start)), ['Bread', 'Salt']);
 });
 
@@ -296,19 +209,44 @@ test('openItems follows the order of Actual', () => {
 test('startNewShopping keeps the open items of keep in Actual', () => {
   const start = build(['Milk', 'active', { bought: true }], ['Bread', 'active'], ['Salt', 'active']);
   const { state } = startNewShopping(start, [find(start, 'Bread').id]);
-  assert.deepEqual(find(state, 'Bread'), { ...find(start, 'Bread'), list: 'active', bought: false, again: false });
+  assert.deepEqual(find(state, 'Bread'), { ...find(start, 'Bread'), list: 'active', bought: false });
   assert.equal(find(state, 'Salt').list, 'saved');
   assert.equal(find(state, 'Milk').list, 'saved');
 });
 
+test('startNewShopping keeps the open items in keep and saves each other one-time item', () => {
+  const start = build(
+    ['Bread', 'active'],
+    ['Salt', 'active'],
+    ['Rice', 'active'],
+    ['Soap', 'active', { bought: true }],
+    ['Milk', 'active', { recurrent: true, bought: true }],
+    ['Tea', 'saved', { shops: ['Lidl'] }],
+  );
+  const keep = ['Bread', 'Rice', 'Soap', 'Milk', 'Tea'].map((name) => find(start, name).id);
+  const { state, error } = startNewShopping(start, keep);
+  assert.equal(error, undefined);
+  const where = Object.fromEntries(state.items.map(({ name, list, bought }) => [name, `${list}${bought ? ' ticked' : ''}`]));
+  assert.deepEqual(where, {
+    Bread: 'active',
+    Salt: 'saved',
+    Rice: 'active',
+    Soap: 'saved',
+    Milk: 'active',
+    Tea: 'saved',
+  });
+  assert.equal(find(state, 'Tea'), find(start, 'Tea'));
+  assert.equal(find(state, 'Milk').recurrent, true);
+});
+
 test('startNewShopping ignores an id of keep that is not an open item', () => {
-  const start = build(['Milk', 'active', { bought: true }], ['Tea', 'active', { list: 'saved' }], ['Bread', 'active']);
+  const start = build(['Milk', 'active', { bought: true }], ['Tea', 'saved'], ['Bread', 'active']);
   const keep = ['Milk', 'Tea'].map((name) => find(start, name).id).concat('nope');
   assert.deepEqual(startNewShopping(start, keep).state, startNewShopping(start).state);
 });
 
 test('startNewShopping with keep does not change the input state', () => {
-  const start = build(['Bread', 'active'], ['Water', 'next']);
+  const start = build(['Bread', 'active'], ['Water', 'saved']);
   const copy = structuredClone(start);
   startNewShopping(start, [find(start, 'Bread').id]);
   assert.deepEqual(start, copy);
@@ -317,11 +255,11 @@ test('startNewShopping with keep does not change the input state', () => {
 test('tripSummary counts a kept open item as back', () => {
   const start = build(['Milk', 'active', { bought: true }], ['Bread', 'active'], ['Salt', 'active']);
   assert.deepEqual(tripSummary(start, [find(start, 'Bread').id]),
-    { total: 3, left: 2, back: 1, saved: 2, incoming: 0 });
+    { total: 3, left: 2, back: 1, saved: 2 });
 });
 
 test('startNewShopping does not change the input state', () => {
-  const start = build(['Batteries', 'active', { bought: true }], ['Water', 'next']);
+  const start = build(['Batteries', 'active', { bought: true }], ['Water', 'saved']);
   const copy = structuredClone(start);
   startNewShopping(start);
   assert.deepEqual(start, copy);
@@ -332,14 +270,14 @@ test('searchItems returns nothing for an empty query', () => {
   assert.deepEqual(searchItems(state, '   '), []);
 });
 
-test('searchItems matches part of a name in both lists, without case or accent distinction', () => {
-  const state = build(['Milk', 'next'], ['Oat milk', 'active'], ['Bread', 'active'], ['Jamón', 'active']);
+test('searchItems matches part of a name in active and saved, without case or accent distinction', () => {
+  const state = build(['Milk', 'saved'], ['Oat milk', 'active'], ['Bread', 'active'], ['Jamón', 'active']);
   assert.deepEqual(names(searchItems(state, 'MIL')), ['Milk', 'Oat milk']);
   assert.deepEqual(names(searchItems(state, 'jamon')), ['Jamón']);
 });
 
 test('searchItems puts the exact match first, then names that start with the query', () => {
-  const state = build(['Oat milk', 'active'], ['Milk chocolate', 'active'], ['Milk', 'next']);
+  const state = build(['Oat milk', 'active'], ['Milk chocolate', 'active'], ['Milk', 'saved']);
   assert.deepEqual(names(searchItems(state, 'milk')), ['Milk', 'Milk chocolate', 'Oat milk']);
 });
 
@@ -349,108 +287,79 @@ test('searchItems respects the limit', () => {
 });
 
 test('findByName finds the item with the same name, trimmed and without case distinction', () => {
-  const state = build(['Milk', 'next']);
+  const state = build(['Milk', 'saved']);
   assert.equal(findByName(state, '  mILK ').name, 'Milk');
   assert.equal(findByName(state, 'Mil'), undefined);
   assert.equal(findByName(state, ''), undefined);
 });
 
-test('bringToList active: moves an item from next', () => {
-  const start = build(['Milk', 'next']);
-  const { state, changed } = bringToList(start, find(start, 'Milk').id, 'active');
+test('bringToList brings a saved item to active, not ticked', () => {
+  const start = build(['Milk', 'saved', { recurrent: true }]);
+  const { state, changed } = bringToList(start, find(start, 'Milk').id);
   assert.equal(changed, true);
-  assert.equal(state.items[0].list, 'active');
-  assert.equal(state.items[0].recurrent, true);
+  assert.deepEqual(state.items[0], { ...start.items[0], list: 'active', bought: false });
 });
 
-test('bringToList active: unticks a bought item', () => {
-  const start = build(['Soap', 'active', { bought: true, again: true }]);
-  const { state, changed } = bringToList(start, find(start, 'Soap').id, 'active');
-  assert.equal(changed, true);
-  assert.equal(state.items[0].bought, false);
-  assert.equal(state.items[0].again, false);
-});
-
-test('bringToList active: changes nothing for an item that is there and not bought', () => {
-  const start = build(['Bread', 'active']);
-  const result = bringToList(start, find(start, 'Bread').id, 'active');
-  assert.equal(result.changed, false);
-  assert.equal(result.state, start);
-});
-
-test('bringToList next: sets again on a bought one-time item', () => {
+test('bringToList unticks a bought item', () => {
   const start = build(['Soap', 'active', { bought: true }]);
-  const { state, changed } = bringToList(start, find(start, 'Soap').id, 'next');
+  const { state, changed } = bringToList(start, find(start, 'Soap').id);
   assert.equal(changed, true);
-  assert.equal(state.items[0].again, true);
-  assert.equal(state.items[0].list, 'active');
+  assert.deepEqual(state.items[0], { ...start.items[0], bought: false });
 });
 
-test('bringToList next: moves an item that is not bought', () => {
-  const start = build(['Bread', 'active']);
-  const { state, changed } = bringToList(start, find(start, 'Bread').id, 'next');
-  assert.equal(changed, true);
-  assert.equal(state.items[0].list, 'next');
-});
-
-test('bringToList next: changes nothing for an item that is in the next view', () => {
-  const start = build(['Water', 'next'], ['Milk', 'active', { bought: true, recurrent: true }]);
-  ['Water', 'Milk'].forEach((name) => {
-    const result = bringToList(start, find(start, name).id, 'next');
+test('bringToList changes nothing for an item that is in active and not bought', () => {
+  const start = build(['Bread', 'active'], ['Milk', 'active', { recurrent: true }]);
+  ['Bread', 'Milk'].forEach((name) => {
+    const result = bringToList(start, find(start, name).id);
     assert.equal(result.changed, false);
     assert.equal(result.state, start);
   });
 });
 
-test('bringToList rejects an unknown id and an unknown list', () => {
+test('bringToList rejects an unknown id', () => {
   const start = build(['Bread', 'active']);
-  assert.deepEqual(bringToList(start, 'nope', 'active').error, { key: 'error.itemNotFound' });
-  assert.deepEqual(bringToList(start, find(start, 'Bread').id, 'other').error, { key: 'error.unknownList' });
+  assert.deepEqual(bringToList(start, 'nope'), { state: start, error: { key: 'error.itemNotFound' } });
 });
 
 test('tripSummary counts the items of each kind', () => {
   const state = build(
     ['Milk', 'active', { bought: true, recurrent: true }],
-    ['Soap', 'active', { bought: true, again: true }],
     ['Batteries', 'active', { bought: true }],
     ['Bread', 'active'],
-    ['Water', 'next'],
+    ['Water', 'saved'],
   );
-  assert.deepEqual(tripSummary(state), { total: 4, left: 1, back: 2, saved: 2, incoming: 1 });
+  assert.deepEqual(tripSummary(state), { total: 3, left: 1, back: 1, saved: 2 });
 });
 
 test('tripSummary counts an item to buy as saved only when it is one-time', () => {
   const state = build(['Bread', 'active'], ['Eggs', 'active', { recurrent: true }]);
-  assert.deepEqual(tripSummary(state), { total: 2, left: 2, back: 1, saved: 1, incoming: 0 });
+  assert.deepEqual(tripSummary(state), { total: 2, left: 2, back: 1, saved: 1 });
 });
 
 test('tripSummary counts each item of Actual as back or saved', () => {
   const state = build(
     ['Milk', 'active', { bought: true, recurrent: true }],
     ['Eggs', 'active', { recurrent: true }],
-    ['Soap', 'active', { again: true }],
     ['Batteries', 'active', { bought: true }],
     ['Bread', 'active'],
   );
   const { total, back, saved } = tripSummary(state);
   assert.equal(back + saved, total);
-  assert.equal(back, 3);
+  assert.equal(back, 2);
 });
 
 test('tripOutcome counts each item of Actual by where it goes', () => {
   const state = build(
     ['Milk', 'active', { bought: true, recurrent: true }],
     ['Eggs', 'active', { recurrent: true }],
-    ['Soap', 'active', { bought: true, again: true }],
     ['Batteries', 'active', { bought: true }],
     ['Bread', 'active'],
     ['Salt', 'active'],
-    ['Water', 'next'],
     ['Rice', 'saved'],
   );
-  assert.deepEqual(tripOutcome(state), { recurrent: 2, again: 1, kept: 0, open: 2, bought: 1 });
+  assert.deepEqual(tripOutcome(state), { recurrent: 2, kept: 0, open: 2, bought: 1 });
   assert.deepEqual(tripOutcome(state, [find(state, 'Bread').id, find(state, 'Milk').id]),
-    { recurrent: 2, again: 1, kept: 1, open: 1, bought: 1 });
+    { recurrent: 2, kept: 1, open: 1, bought: 1 });
 });
 
 test('tripOutcome adds up to the items of Actual', () => {
@@ -462,17 +371,17 @@ test('tripOutcome adds up to the items of Actual', () => {
     ['Pepperoni', 'active', { bought: true }],
   );
   const outcome = tripOutcome(state, [find(state, 'Base pizza').id]);
-  assert.deepEqual(outcome, { recurrent: 2, again: 0, kept: 1, open: 0, bought: 2 });
+  assert.deepEqual(outcome, { recurrent: 2, kept: 1, open: 0, bought: 2 });
   const sum = Object.values(outcome).reduce((a, b) => a + b, 0);
   assert.equal(sum, tripSummary(state).total);
 });
 
 test('tripOutcome of an empty state is all zero', () => {
-  assert.deepEqual(tripOutcome(emptyState()), { recurrent: 0, again: 0, kept: 0, open: 0, bought: 0 });
+  assert.deepEqual(tripOutcome(emptyState()), { recurrent: 0, kept: 0, open: 0, bought: 0 });
 });
 
 test('tripSummary of an empty state is all zero', () => {
-  assert.deepEqual(tripSummary(emptyState()), { total: 0, left: 0, back: 0, saved: 0, incoming: 0 });
+  assert.deepEqual(tripSummary(emptyState()), { total: 0, left: 0, back: 0, saved: 0 });
 });
 
 test('startNewShopping empties the sent recipes and keeps the recipes', () => {
@@ -487,14 +396,14 @@ test('startNewShopping empties the sent recipes and keeps the recipes', () => {
 test('an item operation keeps the recipes and the sent recipes', () => {
   const start = { ...build(['Bread', 'active']), recipes: [{ id: 'r1', name: 'Omelette', products: [] }], sent: ['r1'] };
   const { id } = find(start, 'Bread');
-  [deleteItem(start, id), toggleBought(start, id), moveItem(start, id), renameItem(start, id, 'Loaf')].forEach(({ state }) => {
+  [deleteItem(start, id), toggleBought(start, id), toggleRecurrent(start, id), renameItem(start, id, 'Loaf')].forEach(({ state }) => {
     assert.equal(state.recipes, start.recipes);
     assert.equal(state.sent, start.sent);
   });
 });
 
 test('arrivalMessage counts the items of Active that are not bought', () => {
-  const state = build(['Milk', 'active'], ['Bread', 'active'], ['Soap', 'active', { bought: true }], ['Water', 'next']);
+  const state = build(['Milk', 'active'], ['Bread', 'active'], ['Soap', 'active', { bought: true }], ['Water', 'saved']);
   const before = structuredClone(state);
   assert.deepEqual(arrivalMessage(state), { key: 'toast.arrival', params: { count: 2, list: 'active' } });
   assert.deepEqual(state, before);
@@ -505,7 +414,7 @@ test('arrivalMessage uses the singular for one item', () => {
 });
 
 test('arrivalMessage is null when no item of Active is left', () => {
-  assert.equal(arrivalMessage(build(['Milk', 'active', { bought: true }], ['Water', 'next'])), null);
+  assert.equal(arrivalMessage(build(['Milk', 'active', { bought: true }], ['Water', 'saved'])), null);
   assert.equal(arrivalMessage(emptyState()), null);
 });
 
@@ -534,15 +443,9 @@ test('sortItems gives the Spanish name order without case or accent distinction'
 });
 
 test('activeItems sorts by name and keeps the bought items last', () => {
-  const start = build(['Pan', 'active'], ['Zumo', 'active', { bought: true }], ['Arroz', 'active'], ['Agua', 'active', { bought: true }], ['Sal', 'next']);
+  const start = build(['Pan', 'active'], ['Zumo', 'active', { bought: true }], ['Arroz', 'active'], ['Agua', 'active', { bought: true }], ['Sal', 'saved']);
   assert.deepEqual(names(activeItems(start)), ['Pan', 'Arroz', 'Zumo', 'Agua']);
   assert.deepEqual(names(activeItems(setSort(start, 'name').state)), ['Arroz', 'Pan', 'Agua', 'Zumo']);
-});
-
-test('nextItems is one list in name order', () => {
-  const start = build(['Sal', 'next'], ['Zumo', 'active', { bought: true, recurrent: true }], ['Arroz', 'next'], ['Leche', 'active', { bought: true, again: true }]);
-  assert.deepEqual(names(nextItems(start)), ['Sal', 'Arroz', 'Zumo', 'Leche']);
-  assert.deepEqual(names(nextItems(setSort(start, 'name').state)), ['Arroz', 'Leche', 'Sal', 'Zumo']);
 });
 
 test('reorderItems writes the new order of a full scope', () => {
@@ -677,26 +580,6 @@ test('filterGroups keeps each group and each item for an empty query', () => {
   assert.deepEqual(filterGroups(view, ' '), { groups: [{ shop: 'Lidl', items: [], total: 2, left: 0 }], rest: [coffee] });
 });
 
-test('bringAllToActual moves each item of next to active, not ticked, again cleared', () => {
-  const state = build(['Pan', 'next', { again: true }], ['Leche', 'active', { bought: true }]);
-  const before = structuredClone(state);
-  const result = bringAllToActual(state);
-  assert.equal(result.error, undefined);
-  assert.deepEqual(
-    result.state.items.map(({ name, list, bought, again }) => ({ name, list, bought, again })),
-    [
-      { name: 'Pan', list: 'active', bought: false, again: false },
-      { name: 'Leche', list: 'active', bought: true, again: false },
-    ],
-  );
-  assert.deepEqual(state, before);
-});
-
-test('bringAllToActual returns the same state when next has no item', () => {
-  const state = build(['Leche', 'active']);
-  assert.equal(bringAllToActual(state).state, state);
-});
-
 test('addItem creates an item with no quantity', () => {
   assert.equal(build(['Milk', 'active']).items[0].quantity, '');
 });
@@ -725,11 +608,10 @@ test('setQuantity rejects an unknown item with the same state', () => {
   assert.deepEqual(setQuantity(state, 'nope', '2'), { state, error: { key: 'error.itemNotFound' } });
 });
 
-test('a move and the end of a trip keep the quantity', () => {
-  const state = build(['Milk', 'active', { quantity: '2 l', recurrent: true, bought: true }], ['Eggs', 'next', { quantity: '12' }]);
+test('the end of a trip keeps the quantity', () => {
+  const state = build(['Milk', 'active', { quantity: '2 l', recurrent: true, bought: true }], ['Eggs', 'active', { quantity: '12' }]);
   const [milk, eggs] = state.items;
-  assert.equal(moveItem(state, eggs.id).state.items[1].quantity, '12');
-  const after = startNewShopping(state).state;
+  const after = startNewShopping(state, [eggs.id]).state;
   assert.deepEqual(after.items.map((item) => item.quantity), ['2 l', '12']);
   assert.equal(after.items[0].id, milk.id);
 });
@@ -739,16 +621,15 @@ const saved = (...specs) => startNewShopping(build(...specs.map(([name, patch = 
 test('startNewShopping keeps a saved item as it is', () => {
   const start = saved(['Batteries', { shops: ['Lidl'], quantity: '4' }]);
   const item = find(start, 'Batteries');
-  assert.deepEqual(item, { ...item, list: 'saved', bought: false, again: false, recurrent: false, shops: ['Lidl'], quantity: '4' });
-  const withNext = { ...start, items: [...start.items, ...build(['Water', 'next']).items] };
-  assert.deepEqual(find(startNewShopping(withNext).state, 'Batteries'), item);
+  assert.deepEqual(item, { ...item, list: 'saved', bought: false, recurrent: false, shops: ['Lidl'], quantity: '4' });
+  const withOpen = { ...start, items: [...start.items, ...build(['Water', 'active']).items] };
+  assert.equal(find(startNewShopping(withOpen).state, 'Batteries'), item);
 });
 
 test('a saved item is in no list view and not in the trip figures', () => {
   const state = saved(['Batteries']);
   assert.deepEqual(activeItems(state), []);
-  assert.deepEqual(nextItems(state), []);
-  assert.deepEqual(tripSummary(state), { total: 0, left: 0, back: 0, saved: 0, incoming: 0 });
+  assert.deepEqual(tripSummary(state), { total: 0, left: 0, back: 0, saved: 0 });
   assert.equal(canStartNewShopping(state), false);
 });
 
@@ -758,29 +639,26 @@ test('savedItems gives the saved items in name order', () => {
   assert.deepEqual(savedItems(emptyState()), []);
 });
 
-test('bringToList takes a saved item to either list, not ticked', () => {
+test('bringToList takes a saved item to active, not ticked', () => {
   const state = saved(['Batteries', { shops: ['Lidl'] }]);
   const id = find(state, 'Batteries').id;
-  for (const list of ['active', 'next']) {
-    const result = bringToList(state, id, list);
-    assert.equal(result.changed, true);
-    assert.deepEqual(find(result.state, 'Batteries'), { ...find(state, 'Batteries'), list });
-  }
-  assert.deepEqual(names(nextItems(bringToList(state, id, 'next').state)), ['Batteries']);
+  const result = bringToList(state, id);
+  assert.equal(result.changed, true);
+  assert.deepEqual(find(result.state, 'Batteries'), { ...find(state, 'Batteries'), list: 'active' });
+  assert.deepEqual(names(activeItems(result.state)), ['Batteries']);
 });
 
-test('a saved item cannot be ticked or moved', () => {
+test('a saved item cannot be ticked', () => {
   const state = saved(['Batteries']);
   const id = find(state, 'Batteries').id;
   assert.deepEqual(toggleBought(state, id), { state, error: { key: 'error.onlyActiveTick', params: { list: 'active' } } });
-  assert.deepEqual(moveItem(state, id), { state, error: { key: 'error.itemSaved' } });
 });
 
 test('a saved item keeps its name: search finds it and an add of the name is a duplicate', () => {
   const state = saved(['Batteries']);
   assert.equal(findByName(state, 'batteries').list, 'saved');
   assert.deepEqual(names(searchItems(state, 'batt')), ['Batteries']);
-  assert.deepEqual(addItem(state, 'Batteries', 'active').error, { key: 'error.duplicateItem', params: { name: 'Batteries', list: 'saved' } });
+  assert.deepEqual(addItem(state, 'Batteries').error, { key: 'error.duplicateItem', params: { name: 'Batteries', list: 'saved' } });
 });
 
 test('a delete removes a saved item for good', () => {

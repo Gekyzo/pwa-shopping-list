@@ -6,128 +6,112 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 - **LIST-1** A new item has a name that is trimmed and not empty. An empty name gives
   `error.nameRequired`.
-- **LIST-2** A name that an item has already, in either list, gives `error.duplicateItem` with the
-  name and the list of that item (DATA-3).
-- **LIST-3** An item created in `Actual` is one-time. An item created in `Próxima` is recurrent.
+- **LIST-2** A name that an item has already, in `Actual` or saved, gives `error.duplicateItem` with
+  the name and the list of that item (DATA-3).
+- **LIST-3** A new item is one-time and goes to `Actual`.
 - **LIST-4** A new item goes to the end of `items`, with no shop, no quantity, not ticked.
 - **LIST-5** A rename has the rules LIST-1 and LIST-2. The item keeps its own name without an
   error. A rename to the same text changes nothing.
 - **LIST-6** A name field of the screen takes 80 characters at most. The store has no limit.
-- **LIST-7** The recurrent mark shows on each row of the two lists. A tap changes `recurrent` and
-  clears `again`.
+- **LIST-7** The recurrent mark `↻` shows on each row of `Actual`. A tap changes `recurrent`.
 - **LIST-8** A delete removes the item. Its shops go with it.
-- **LIST-9** A move puts the item in the other list, not ticked, with `again` cleared. `recurrent`
-  does not change.
+- **LIST-9** Removed: `Actual` is the only list, so an item has no other list to move to.
 
 ## Quantity
 
 - **LIST-27** An item has a quantity: free text, such as `2`, `1 kg` or `3 latas`, or none. The
   quantity is trimmed; an empty text clears it. The same text changes nothing.
-- **LIST-28** A move, a tick, **Terminar compra** and a bring back of a saved item keep the quantity. A delete removes it with the
-  item.
+- **LIST-28** A tick, **Terminar compra** and a bring back of a saved item keep the quantity. A
+  delete removes it with the item.
 - **LIST-29** The search of a list does not match the quantity (LIST-22).
 
 ## Tick
 
-- **LIST-10** Only an item of `Actual` can be ticked. `Próxima` has no checkbox.
+- **LIST-10** Only an item of `Actual` can be ticked. A saved item gives `error.onlyActiveTick`.
 - **LIST-11** A tap on the checkbox or a slide to the right (ROW-11) of a row of `Actual` changes
-  `bought`. Each change clears `again`.
+  `bought`.
 - **LIST-12** A tick does not delete the item. The item goes to the section `Comprados (N)` at the
   end of `Actual`, which is closed at first. A tap on that row opens and closes it.
 - **LIST-13** A tick has `Deshacer`, because the row leaves the place where the finger is. A tap
   on the checkbox of a ticked item removes the tick with no `Deshacer`.
-- **LIST-14** A ticked one-time item has the button `+ Próxima`. A tap sets `again`, and the button
-  shows `✓ Próxima`. A second tap clears it. A ticked recurrent item has no such button.
+- **LIST-14** Removed: a ticked one-time item has no mark that keeps it for the next trip. `↻`
+  and `Aplazar` do that.
 
-## The `Próxima` view
+## Removed: the second list
 
-- **LIST-15** `Próxima` shows the items of `list: 'next'`, then the ticked items of `Actual` that
-  are recurrent or have `again`. In the order **Nombre** the two parts are one sorted list.
-- **LIST-16** A row of the second part has the mark `comprado hoy`.
-- **LIST-17** **Quitar de Próxima** on a row of the second part clears `recurrent` and `again`. The
-  item stays ticked in `Actual`. On an item of `list: 'next'` the same operation is a delete; the
-  screen shows **Mover a Actual** and **Eliminar** for that row instead.
-- **LIST-18** A list with items ends with the hint `Un artículo con ↻ activo vuelve aquí al
-  comprarlo.`
-- **LIST-19** The bottom bar shows the count of the `Próxima` view beside its name. Zero shows
-  nothing.
+- **LIST-15** Removed: the app has one list, `Actual`.
+- **LIST-16** Removed: the app has one list, `Actual`.
+- **LIST-17** Removed: the app has one list, `Actual`.
+- **LIST-18** Removed: the app has one list, `Actual`.
+- **LIST-19** Removed: the bottom bar shows no count.
 
 ## Trip
 
-- **TRIP-1** **Terminar compra** is available when an item is ticked, an item is open (TRIP-6) or
-  an item is in `list: 'next'`. If not, the operation gives `error.nothingToStart`.
+- **TRIP-1** **Terminar compra** is available when an item is ticked or an item is open (TRIP-6).
+  If not, the operation gives `error.nothingToStart`.
 - **TRIP-2** **Terminar compra** does this to each item:
 
   | Item | Result |
   |---|---|
-  | Ticked, recurrent or with `again` | Stays in `Actual`, not ticked, `again` cleared |
-  | Ticked, one-time, no `again` | Saved: `list: 'saved'`, not ticked (LIST-30) |
+  | Ticked, recurrent | Stays in `Actual`, not ticked |
+  | Ticked, one-time | Saved: `list: 'saved'`, not ticked (LIST-30) |
   | Saved | Does not change |
   | In `Actual`, not ticked, recurrent | Stays |
-  | In `Actual`, not ticked, one-time | Saved, as a ticked one (LIST-30), or stays in `Actual`, not ticked, with `Aplazar` (TRIP-6) |
-  | In `list: 'next'` | Moves to `Actual` |
+  | In `Actual`, not ticked, one-time | Stays in `Actual`, not ticked, with `Aplazar`, or is saved with `Descartar` (TRIP-6) |
 
 - **TRIP-3** **Terminar compra** empties `sent`. `group` and `sort` do not change. The relative
   order of the items that stay does not change.
-- **TRIP-4** The control shows in three places:
+- **TRIP-4** The control shows in two places:
   1. A banner `¿Has terminado?` in `Actual`, when the list has items and all are ticked. Its text
      gives the count that comes back and the count that is saved.
   2. The button of the trip sheet of `Actual` (NAV-9), below a line that counts the items of
      `Actual` by where each one goes, such as `2 con ↻ vuelven · 1 sin comprar se aplaza · 4 se
-     guardan en Volver a comprar`. Its parts, in this order: recurrent items, items with `again`
-     (`✓ Próxima`), open items kept with `Aplazar`, open items saved with `Descartar`, ticked
-     one-time items. A part with no item does not show. It is disabled when TRIP-1 does not hold.
-  3. The button `Traer N artículos de Próxima`, in the empty state of `Actual`, when items wait in
-     `list: 'next'`. Its message is `Artículos traídos de Próxima.`
+     guardan en Volver a comprar`. Its parts, in this order: recurrent items, open items kept with
+     `Aplazar`, open items saved with `Descartar`, ticked one-time items. A part with no item does
+     not show. It is disabled when TRIP-1 does not hold.
 - **TRIP-5** After **Terminar compra** the screen shows `Actual`. `Deshacer` restores the full
   state of before.
-- **TRIP-6** An open item is an item of `Actual`, not ticked, not recurrent and with no `again`.
-  **Terminar compra** saves the open items (LIST-30), or keeps them in `Actual`, not ticked, when
-  the choice of TRIP-7 is `Aplazar`. The button of the trip sheet finishes at once. When an item is
-  open, a line above the button says `Puedes cambiar qué pasa con lo no comprado en Ajustes.` The sheet has one step and no choice
-  for each item. A tap on the veil closes the sheet and changes nothing. The banner and `Traer N artículos de Próxima` never
-  have an open item.
+- **TRIP-6** An open item is an item of `Actual`, not ticked and not recurrent. **Terminar compra**
+  keeps the open items in `Actual`, not ticked, when the choice of TRIP-7 is `Aplazar`. It saves
+  them (LIST-30) when the choice is `Descartar`. The button of the trip sheet finishes at once.
+  When an item is open, a line above the button says `Puedes cambiar qué pasa con lo no comprado
+  en Ajustes.` The sheet has one step and no choice for each item. A tap on the veil closes the
+  sheet and changes nothing. The banner never has an open item.
 - **TRIP-7** **Al terminar la compra** of `Ajustes` has two buttons side by side: `Descartar` and
   `Aplazar`, and the chosen one is pressed. A line below the title says that the choice sets what
   happens to the items not bought: `Descartar` or `Aplazar` to the next trip. It applies to every
   open item at **Terminar compra**, and the trip sheet counts the open items with it.
-  An app with no choice uses `Descartar`.
-- **TRIP-8** The choice is stored in `shopping.tripEnd`. `Descartar` removes the key.
-  It is a preference of the device, not a part of the state: `Deshacer` and an import do not change
-  it.
+  An app with no choice uses `Aplazar`.
+- **TRIP-8** The choice is stored in `shopping.tripEnd`: the value `save` for `Descartar`.
+  `Aplazar` removes the key. Any other stored value, such as a `keep` of an older version, reads as
+  `Aplazar`. It is a preference of the device, not a part of the state: `Deshacer` and an import do
+  not change it.
 
 ## Header figures
 
 | Section | Title | Subtitle | Ring |
 |---|---|---|---|
 | `Actual` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `Quedan N artículos` | `ticked/total`, filled to that share |
-| `Próxima` | `Próxima compra` | `N artículos`, plus `N comprados hoy` when there are some; `Nada preparado` when empty | The count of the view |
 | `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | The count of recipes |
 | `Ajustes` | `Ajustes` | `Bodega` | `⚙` |
 
 ## Add sheet
 
-The `+` button opens the sheet in `Actual`, `Próxima` and `Recetas`. In `Recetas` it creates a
-recipe (see [06-recipes.md](06-recipes.md)). The button does not show in `Ajustes` or while a
-sheet is open.
+The `+` button opens the sheet in `Actual` and `Recetas`. In `Recetas` it creates a recipe (see
+[06-recipes.md](06-recipes.md)). The button does not show in `Ajustes` or while a sheet is open.
 
-- **ADD-1** The sheet has a name field, the button **Añadir** and the target choice **Para hoy** /
-  **Para la próxima**. The target starts as `Próxima` when the sheet opens from `Próxima`, and as
-  `Actual` if not.
+- **ADD-1** The sheet has a name field and the button **Añadir**. It has no target choice: an add
+  always goes to `Actual`.
 - **ADD-2** While the user types, the sheet lists up to 5 items whose name contains the text, with
   no case or accent distinction: the exact match first, then the names that start with the text,
   then the others.
 - **ADD-3** Each listed item says where it is and what a tap does:
 
-  | Target | State of the item | Text | Effect of the tap |
-  |---|---|---|---|
-  | `Actual` | In `list: 'next'` | `en Próxima · traer` | Moves to `Actual` |
-  | `Actual` | Ticked | `ya comprado · repetir` | Removes the tick |
-  | `Actual` | To buy in `Actual` | `ya en la lista` | Nothing |
-  | `Próxima` | In the `Próxima` view | `ya en Próxima` | Nothing |
-  | `Próxima` | Ticked, not in the view | `comprado · añadir a Próxima` | Sets `again` |
-  | `Próxima` | To buy in `Actual` | `en Actual · mover` | Moves to `Próxima` |
-  | Either | Saved | `volver a comprar · añadir` | Goes to the target, not ticked (LIST-32) |
+  | State of the item | Text | Effect of the tap |
+  |---|---|---|
+  | Ticked | `ya comprado · repetir` | Removes the tick |
+  | To buy in `Actual` | `ya en la lista` | Nothing |
+  | Saved | `volver a comprar · añadir` | Goes to `Actual`, not ticked (LIST-32) |
 
 - **ADD-4** When no item has the typed name, the list ends with `+ Crear «name»`, which does the
   same as **Añadir**.
@@ -138,53 +122,51 @@ sheet is open.
 - **ADD-7** A new item shows `"name" añadido a <list>.` with no `Deshacer`.
 - **ADD-8** After each add the sheet stays open, with an empty field that has the focus, so that
   the user adds several items in one visit. A tap out of the sheet or `Escape` closes it.
-- **ADD-9** When the target is the list on the screen, the row of an item that the sheet brought
-  flashes and scrolls into view.
+- **ADD-9** The row of an item that the sheet brought flashes and scrolls into view.
 
 ## Search
 
-- **LIST-20** The header of `Actual` and of `Próxima` has a search button, at the left of the
-  arrange button. It shows when the view has one item at least.
+- **LIST-20** The header of `Actual` has a search button, at the left of the arrange button. It
+  shows when the view has one item at least.
 - **LIST-21** A tap on the button opens the field **Buscar artículo o tienda** with the focus. A
   second tap, `Escape`, or a loss of focus with an empty field closes it. A close clears the text.
 - **LIST-22** The list shows only the items whose name, one of whose shops or whose aisle
   (AISLE-9) contains the text,
   with no case and no accent distinction. An empty text shows all items.
 - **LIST-23** The order and the grouping stay. A group with no match to buy does not show. The
-  count of a group head, the header figures and the count of the bottom bar stay those of the
-  full list.
+  count of a group head and the header figures stay those of the full list.
 - **LIST-24** The text of the search is not stored. A change of section closes the search. An add
   from the add sheet closes it too, so that the row of the item is in view.
 - **LIST-25** In `Actual` the search filters the ticked items too. `Comprados (N)` counts the ticked
   matches and shows open while the field has a text, and its head does not close it in that time.
   With no ticked match the head does not show.
-- **LIST-26** With no match the list shows `Ningún artículo coincide con «text».` The button
-  `Traer N artículos de Próxima` and the hint of LIST-18 do not show.
+- **LIST-26** With no match the list shows `Ningún artículo coincide con «text».`
 
 ## Saved items
 
-- **LIST-30** **Terminar compra** saves each one-time item of `Actual` with no `again`, ticked or
-  not: only `↻` (LIST-7), `+ Próxima` (LIST-14) and `Aplazar` (TRIP-6) keep an item for the next trip. It leaves the two
-  lists and keeps its name, its shops and its quantity. Only **Eliminar** deletes an item.
+- **LIST-30** **Terminar compra** saves each one-time item of `Actual` that is ticked, and each open
+  item with `Descartar`: only `↻` (LIST-7) and `Aplazar` (TRIP-6) keep an item for the next trip.
+  A saved item leaves `Actual` and keeps its name, its shops and its quantity. Only **Eliminar**
+  deletes an item.
 - **LIST-31** A saved item keeps its name (DATA-3). The add sheet finds it (ADD-3), and an add of
   its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.
-- **LIST-32** A bring back puts a saved item in the target list, not ticked. `recurrent` does not
-  change. A saved item cannot be ticked or moved: a move gives `error.itemSaved`.
-- **LIST-34** `Actual` and `Próxima` end with the section `Volver a comprar (N)`, below the empty state when
-  the list is empty. It shows when an item is saved, and is closed at first; a tap on its head opens
-  and closes it, in the two lists at once. Open, it lists the saved items in name order, with their
-  quantity and shops.
+- **LIST-32** A bring back puts a saved item in `Actual`, not ticked. `recurrent` does not change.
+  A saved item cannot be ticked (LIST-10).
+- **LIST-34** `Actual` ends with the section `Volver a comprar (N)`, below the empty state when the
+  list is empty. It shows when an item is saved, and is closed at first; a tap on its head opens
+  and closes it. Open, it lists the saved items in name order, with their quantity and shops.
 - **LIST-35** A saved row has no button: it slides as an item row (ROW-13). A slide to the right
-  brings the item to the list in view (LIST-32), with `"name" añadido a <list>.` and `Deshacer`. A
+  brings the item back to `Actual` (LIST-32), with `"name" añadido a Actual.` and `Deshacer`. A
   slide to the left shows **Eliminar**, which deletes the item for good, with `Deshacer`. A tap on
   the name opens the edit sheet (ROW-7).
 - **LIST-36** The search of the list (LIST-22) filters the saved items too. The section shows open
   while the field has a text, and does not show with no saved match. The search button shows when
   the list or the section has an item.
-- **LIST-33** A saved item counts in no header figure, in no trip figure and not in the bottom
-  bar.
+- **LIST-33** A saved item counts in no header figure and in no trip figure.
 
 ## Limits
 
-No unit and no arithmetic of quantities, no quantity on the products of a recipe, no note. No add of several items from one text. No ranking of the results of
-a list search, and no match by the recipe of an item.
+One list for the trip: no list for a later trip, and no mark on an item for a later trip. No unit
+and no arithmetic of quantities, no quantity on the products of a recipe, no note. No add of
+several items from one text. No ranking of the results of a list search, and no match by the
+recipe of an item.

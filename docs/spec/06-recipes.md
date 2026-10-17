@@ -51,7 +51,7 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
   send button. A recipe with no product gives `error.recipeEmpty`.
 - **REC-18** For each product, in order:
   - an item with that name exists, with no case distinction: the item becomes "to buy" in `Actual`
-    (it moves from `Próxima`, or it loses its tick, or it stays as it is);
+    (it comes back from `Volver a comprar`, or it loses its tick, or it stays as it is);
   - no such item exists: a one-time item with that name is created in `Actual`.
 - **REC-19** The send adds the id of the recipe to `sent`, one time. A send never makes a
   duplicate item.
@@ -102,5 +102,4 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 
 ## Limits
 
-No quantity, unit, step, photo or category. No choice of products at send time. No send to
-`Próxima`. No rename of a product: remove it and add it again. No order of recipes or of products.
+No quantity, unit, step, photo or category. No choice of products at send time. No rename of a product: remove it and add it again. No order of recipes or of products.

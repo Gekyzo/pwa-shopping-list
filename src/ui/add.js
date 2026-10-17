@@ -1,19 +1,12 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
-import { $, el, state, ui, t, say, textOf, isOn, showToast, apply, render } from '#ui/context';
+import { $, el, state, ui, t, say, textOf, showToast, apply, render } from '#ui/context';
 import { inList, endSearch } from '#ui/view';
 
 const whereText = (item) => {
   if (item.list === 'saved') return t('where.saved');
-  const inNextView = item.list === 'next' || (item.bought && (item.recurrent || item.again));
-  if (ui.target === 'active') {
-    if (item.list === 'next') return say('where.inNextBring', { list: 'next' });
-    return t(item.bought ? 'where.boughtRepeat' : 'where.inList');
-  }
-  if (inNextView) return say('where.inNext', { list: 'next' });
-  if (item.bought) return say('where.boughtAddNext', { list: 'next' });
-  return say('where.inActiveMove', { list: 'active' });
+  return t(item.bought ? 'where.boughtRepeat' : 'where.inList');
 };
 
 export const renderSheet = () => {
@@ -21,7 +14,6 @@ export const renderSheet = () => {
   if (!ui.sheetOpen) return;
   const forRecipe = ui.view === 'recipes';
   const label = t(forRecipe ? 'add.recipeName' : 'add.itemLabel');
-  $('seg').hidden = forRecipe || !isOn('next');
   $('add-submit').textContent = t(forRecipe ? 'add.create' : 'add.submit');
   $('add-name').placeholder = label;
   $('add-name').setAttribute('aria-label', label);
@@ -30,9 +22,6 @@ export const renderSheet = () => {
     $('suggestions').replaceChildren();
     return;
   }
-  document.querySelectorAll('#seg .segment').forEach((button) => {
-    button.setAttribute('aria-pressed', String(button.dataset.target === ui.target));
-  });
   const text = $('add-name').value.trim();
   const rows = store.searchItems(state, text).map((item) =>
     el('li', {}, [
@@ -50,7 +39,7 @@ export const renderSheet = () => {
 };
 
 const openSheet = () => {
-  Object.assign(ui, { sheetOpen: true, target: ui.view === 'next' && isOn('next') ? 'next' : 'active', openId: null });
+  Object.assign(ui, { sheetOpen: true, openId: null });
   $('add-name').value = '';
   render();
   $('add-name').focus();
@@ -62,17 +51,17 @@ export const closeSheet = () => {
 };
 
 // The shop that an add from the sheet puts on its item: the shop list in view, if any.
-const pickedShop = () => (inList() ? ui.shop[ui.view] : null);
+const pickedShop = () => (inList() ? ui.shop : null);
 
-// Puts an item that exists already into the target list, in place of a duplicate. From a shop
-// list the item also gets the shop, which is a change too.
+// Puts an item that exists already into Actual, in place of a duplicate. From a shop list the item
+// also gets the shop, which is a change too.
 const useExisting = (item) => {
-  const brought = store.bringToList(state, item.id, ui.target);
+  const brought = store.bringToList(state, item.id);
   const result = shops.withShop(brought, item.id, pickedShop());
   if (result.state !== brought.state) result.changed = true;
-  const params = { name: item.name, list: ui.target };
+  const params = { name: item.name, list: 'active' };
   $('add-name').value = '';
-  if (ui.target === ui.view) ui.flashId = item.id;
+  ui.flashId = item.id;
   if (!result.error) endSearch();
   if (result.changed) apply(result, { undoText: say('toast.existsNowIn', params) });
   else {
@@ -108,25 +97,18 @@ const submitAdd = () => {
     return;
   }
   const name = input.value.trim();
-  const added = store.addItem(state, input.value, ui.target);
+  const added = store.addItem(state, input.value);
   const result = added.error ? added : shops.withShop(added, added.state.items.at(-1).id, pickedShop());
   if (!result.error) endSearch();
   if (apply(result)) {
     input.value = '';
     renderSheet();
-    showToast(say('toast.addedTo', { name, list: ui.target }));
+    showToast(say('toast.addedTo', { name, list: 'active' }));
   }
   input.focus();
 };
 
 export const bind = () => {
-  document.querySelectorAll('#seg .segment').forEach((button) => {
-    button.addEventListener('click', () => {
-      ui.target = button.dataset.target;
-      renderSheet();
-      $('add-name').focus();
-    });
-  });
   $('fab').addEventListener('click', openSheet);
   $('veil').addEventListener('click', closeSheet);
   $('add-name').addEventListener('input', renderSheet);

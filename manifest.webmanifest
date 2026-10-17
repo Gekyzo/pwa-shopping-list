@@ -1,7 +1,7 @@
 {
   "name": "Bodega - Lista de la compra",
   "short_name": "Bodega",
-  "description": "Lista de la compra con una lista actual y una lista próxima",
+  "description": "Lista de la compra que se prepara sola para la próxima vez",
   "lang": "es",
   "id": "/shopping-list/",
   "start_url": "./",

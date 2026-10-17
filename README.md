@@ -1,8 +1,8 @@
 # Bodega
 
-An offline shopping list PWA for one Android phone. It has a list for the current trip, a list for
-the next trip, recipes, a menu of the week that fills the basket, and shops, in seven languages. A new install starts with a walkthrough of
-four pages. Plain HTML, CSS and ES modules, with no build step and no dependencies. The data stays
+An offline shopping list PWA for one Android phone. It has one list for the trip, which keeps the
+recurrent items and the items not bought for the next trip, recipes, a menu of the week that fills
+the basket, and shops, in seven languages. A new install starts with a walkthrough of six pages. Plain HTML, CSS and ES modules, with no build step and no dependencies. The data stays
 in the `localStorage` of the browser.
 
 - App: https://gekyzo.github.io/pwa-shopping-list/

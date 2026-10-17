@@ -53,4 +53,4 @@ their products in one action.
 
 ## Limits
 
-No date, no week after this one, no third meal. No fill to `Próxima`. No quantity.
+No date, no week after this one, no third meal. No quantity.

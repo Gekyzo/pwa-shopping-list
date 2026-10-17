@@ -35,27 +35,26 @@ in [04-arrange.md](04-arrange.md).
 
 ## Shop lists
 
-A shop list is a view of `Actual` or of `Próxima`, not a list in the data. The rules of the list
+A shop list is a view of `Actual`, not a list in the data. The rules of the list
 apply in it.
 
-- **SHOP-16** `Actual` and `Próxima` have a row of chips below the header: **Todas**, then each
+- **SHOP-16** `Actual` has a row of chips below the header: **Todas**, then each
   shop of the view in name order (SHOP-6), then **Sin tienda**. A tap on a chip shows that list.
   The chip of the list in view is pressed.
 - **SHOP-17** The row shows when an item of the view has a shop. **Sin tienda** shows when an item
   of the view has no shop. The row scrolls horizontally, and a slide on it does not change the
   section (NAV-4). `Izquierda` does not change the row.
-- **SHOP-18** A chip of `Actual` shows the count of its items to buy, or `✓` for none. A chip of
-  `Próxima` shows the count of its items in the view.
+- **SHOP-18** A chip shows the count of its items to buy, or `✓` for none.
 - **SHOP-19** A shop list shows the items that have the shop. **Sin tienda** shows the items with
   no shop. An item of two shops shows in the two lists, and one tick is a tick in each. The search,
   the order and the groups by recipe apply in the list. **Tiendas** is not a choice there
   (GROUP-2).
 - **SHOP-20** The header shows the name of the list as its title. Its subtitle and its ring are
-  those of the items of the list. The count of the bottom bar is that of the full view (LIST-19).
+  those of the items of the list.
 - **SHOP-21** **Terminar compra** stays one operation on the full state (TRIP-2). The banner
   `¿Has terminado?` shows only in **Todas**.
-- **SHOP-22** The choice is a state of the screen and is not stored. A start shows **Todas**. Each
-  of `Actual` and `Próxima` keeps its own choice while the app runs. A choice whose chip goes, for
+- **SHOP-22** The choice is a state of the screen and is not stored. A start shows **Todas**. The
+  choice stays while the app runs. A choice whose chip goes, for
   example by a removal of a shop, `Deshacer`, **Terminar compra** or an import, goes back to
   **Todas**.
 - **SHOP-23** A shop list of `Actual` with no item to buy, while items of `Actual` are still to
@@ -67,8 +66,8 @@ apply in it.
   gets the shop too, with the message and `Deshacer` of ADD-6. From **Todas** and **Sin tienda**
   the add puts no shop.
 - **SHOP-25** The arrange sheet has the choice **Listas por tienda**, **Mostrar** or **Ocultar**,
-  when the view has the row of SHOP-17. **Ocultar** hides the row in `Actual` and in `Próxima`
-  and shows **Todas**. The choice is a preference of the device, stored in `shopping.shopLists`;
+  when the view has the row of SHOP-17. **Ocultar** hides the row in `Actual` and shows
+  **Todas**. The choice is a preference of the device, stored in `shopping.shopLists`;
   **Mostrar** removes the key. `Deshacer` and an import do not change it. The row closes and opens
   as a head of GROUP-15 does, and the rows below move with it.
 

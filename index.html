@@ -52,7 +52,6 @@
 
       <div id="empty" class="empty-state" hidden>
         <p id="empty-text"></p>
-        <button id="bring" class="button primary" type="button" hidden></button>
       </div>
 
       <ul id="saved" class="item-list" hidden></ul>
@@ -96,7 +95,6 @@
         </div>
         <h2 class="settings-title" data-i18n="settings.modules"></h2>
         <div class="list-group">
-          <label class="switch"><span data-i18n="list.next"></span><input class="switch-input" type="checkbox" role="switch" data-module="next"></label>
           <label class="switch"><span data-i18n="settings.moduleRecipes"></span><input class="switch-input" type="checkbox" role="switch" data-module="recipes"></label>
         </div>
         <h2 class="settings-title" data-i18n="settings.aisles"></h2>
@@ -126,11 +124,6 @@
         <svg class="icon" aria-hidden="true"><use href="icons.svg#cart"/></svg>
         <span data-i18n="list.active"></span>
       </button>
-      <button class="nav-item" type="button" data-view="next">
-        <svg class="icon" aria-hidden="true"><use href="icons.svg#calendar"/></svg>
-        <span data-i18n="list.next"></span>
-        <em id="next-count" class="badge"></em>
-      </button>
       <button class="nav-item" type="button" data-view="recipes">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#book"/></svg>
         <span data-i18n="nav.recipes"></span>
@@ -152,10 +145,6 @@
         <div class="input-row">
           <input id="add-name" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
           <button id="add-submit" class="button primary" type="submit"></button>
-        </div>
-        <div id="seg" class="segmented">
-          <button class="segment" type="button" data-target="active" data-i18n="add.today"></button>
-          <button class="segment" type="button" data-target="next" data-i18n="add.later"></button>
         </div>
         <ul id="suggestions" class="list-group plain" data-i18n-attr="aria-label:add.existing"></ul>
       </form>
@@ -267,14 +256,13 @@
       <div id="onboarding-page" class="onboarding-page">
         <div class="onboarding-art">
           <svg data-page="lists" viewBox="0 0 240 160" aria-hidden="true">
-            <rect class="art-card art-accent" x="20" y="20" width="90" height="120" rx="10"/>
-            <rect class="art-accent" x="32" y="40" width="12" height="12" rx="3"/>
-            <path class="art-accent" d="M35 46l2.5 2.5 4-5"/>
-            <rect class="art-accent" x="32" y="70" width="12" height="12" rx="3"/>
-            <rect class="art-accent" x="32" y="100" width="12" height="12" rx="3"/>
-            <path d="M52 46h44M52 76h36M52 106h40"/>
-            <rect class="art-card" x="130" y="20" width="90" height="120" rx="10"/>
-            <path d="M144 46h62M144 76h50M144 106h56"/>
+            <rect class="art-card art-accent" x="60" y="20" width="120" height="120" rx="10"/>
+            <rect class="art-accent" x="72" y="40" width="12" height="12" rx="3"/>
+            <path class="art-accent" d="M75 46l2.5 2.5 4-5"/>
+            <rect class="art-accent" x="72" y="70" width="12" height="12" rx="3"/>
+            <rect class="art-accent" x="72" y="100" width="12" height="12" rx="3"/>
+            <path d="M92 46h56M92 76h48M92 106h52"/>
+            <path class="art-accent" d="M164 70a8 8 0 1 1-3-6M161 64v-5M161 64h5"/>
           </svg>
           <svg data-page="trip" viewBox="0 0 240 160" aria-hidden="true">
             <path class="art-accent" d="M200 62c-20-34-140-34-160 0M40 62l-2-11M40 62l11-3"/>
