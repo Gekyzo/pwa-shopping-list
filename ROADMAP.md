@@ -16,7 +16,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
 - **Buy me a coffee.** Add support link
-- **Delete Proxima.** Merge proxima with actual. Make the proxima be inferred from the summary when completing actual.
 
 ### Deferred
 
