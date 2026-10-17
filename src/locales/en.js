@@ -74,6 +74,7 @@ export default {
   'trip.open': 'What you did not buy',
   'trip.discard': 'Discard',
   'trip.postpone': 'Postpone',
+  'trip.defaultHint': 'You can change the default choice in Settings.',
 
   'recipes.search': 'Search recipe or product',
   'search.label': 'Search the list',

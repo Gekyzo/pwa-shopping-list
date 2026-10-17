@@ -74,6 +74,7 @@ export default {
   'trip.open': 'Ce que vous n’avez pas acheté',
   'trip.discard': 'Écarter',
   'trip.postpone': 'Reporter',
+  'trip.defaultHint': 'Vous pouvez changer le choix par défaut dans Réglages.',
 
   'recipes.search': 'Chercher une recette ou un produit',
   'search.label': 'Chercher dans la liste',

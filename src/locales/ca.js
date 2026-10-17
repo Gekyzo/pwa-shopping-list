@@ -74,6 +74,7 @@ export default {
   'trip.open': 'El que no has comprat',
   'trip.discard': 'Descartar',
   'trip.postpone': 'Ajornar',
+  'trip.defaultHint': 'Pots canviar l’opció per defecte a Configuració.',
 
   'recipes.search': 'Cerca recepta o producte',
   'search.label': 'Cerca a la llista',
