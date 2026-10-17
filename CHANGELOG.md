@@ -9,9 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
-- **Terminar compra** in `Opciones de la compra` finishes with one tap. A line below the entry
-  says what happens to the items not bought, as **Al terminar la compra** sets, and that
-  `Ajustes` can change it.
+- **Terminar compra** in `Opciones de la compra` is a button that finishes with one tap. Above it,
+  the sheet shows `N vuelven · N se descartan` and a line that says what happens to the items not
+  bought, as **Al terminar la compra** sets, and that `Ajustes` can change it.
 
 ## 1.0.34 - 2026-10-17
 

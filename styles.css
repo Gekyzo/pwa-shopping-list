@@ -189,7 +189,7 @@
 
   /* @component trip-open
      @scope list
-     @summary The line of the trip sheet that says what happens to the items not bought.
+     @summary A line of the trip sheet above Terminar compra: the counts, and what happens to the items not bought.
      @example <p class="hint trip-open">Los 2 artículos que no has comprado se descartan. Puedes cambiarlo en Ajustes.</p> */
   .hint.trip-open {
     padding: var(--space-1) 0 var(--space-3);
