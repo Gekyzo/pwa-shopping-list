@@ -55,8 +55,7 @@ test('the trip button opens a sheet from the bottom, with a veil, and the header
   const [layer = ''] = body.match(/<div id="trip" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>/) ?? [];
   assert.match(layer, /<div id="trip-veil" class="sheet-veil">/);
   assert.match(layer, /<div class="sheet" role="dialog"/);
-  assert.match(layer, /<button id="finish-menu"/);
-  assert.match(layer, /<button id="finish-menu"[\s\S]*<p id="trip-open" class="hint trip-open" hidden>/);
+  assert.match(layer, /<p id="finish-menu-text" class="hint trip-open">[\s\S]*<p id="trip-open" class="hint trip-open" hidden>[\s\S]*<button id="finish-menu" class="button primary wide"/);
   assert.doesNotMatch(layer, /trip-open-list|trip-confirm/);
   assert.match(body, /<button id="trip-button"[^>]*aria-haspopup="dialog"[^>]*aria-controls="trip"/);
   assert.doesNotMatch(body, /trip-menu|role="menu"/);
