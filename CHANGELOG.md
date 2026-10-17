@@ -9,7 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- The second step of **Terminar compra** says that the first choice of each item can be changed
+  in `Ajustes`.
 
 ## 1.0.34 - 2026-10-17
 

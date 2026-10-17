@@ -74,6 +74,7 @@ export default {
   'trip.open': 'O que não comprou',
   'trip.discard': 'Descartar',
   'trip.postpone': 'Adiar',
+  'trip.defaultHint': 'Pode alterar a opção predefinida em Definições.',
 
   'recipes.search': 'Procurar receita ou produto',
   'search.label': 'Procurar na lista',

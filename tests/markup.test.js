@@ -56,6 +56,7 @@ test('the trip button opens a sheet from the bottom, with a veil, and the header
   assert.match(layer, /<div id="trip-veil" class="sheet-veil">/);
   assert.match(layer, /<div class="sheet" role="dialog"/);
   assert.match(layer, /<button id="finish-menu"/);
+  assert.match(layer, /<div id="trip-open"[\s\S]*<p class="hint" data-i18n="trip.defaultHint">/);
   assert.match(body, /<button id="trip-button"[^>]*aria-haspopup="dialog"[^>]*aria-controls="trip"/);
   assert.doesNotMatch(body, /trip-menu|role="menu"/);
 });
