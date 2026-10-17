@@ -96,8 +96,8 @@ No view is stored.
 | Shops in use | `shopNames` | Each shop of an item, in name order |
 | Aisle groups | `aisleGroups` | `Actual` or `Próxima` by aisle, in the order of `aisles` |
 
-`tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the ticked
-ones that are recurrent or have `again`; `saved`, the one-time items of `Actual` with no `again`,
+`tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the ones
+that are recurrent or have `again`, ticked or not, and the open items kept with `Aplazar` (TRIP-6); `saved`, the one-time items of `Actual` with no `again`,
 ticked or not; `incoming`, the items of
 `list: 'next'`.
 
