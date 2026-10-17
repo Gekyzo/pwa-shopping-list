@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.36 - 2026-10-17
+
 - `Opciones de la compra` counts the items of `Actual` by where each one goes, such as `2 con ↻
   vuelven · 1 sin comprar se aplaza · 4 se guardan en Volver a comprar`. The counts add up to the
   items of `Actual`, and the line below only says that `Ajustes` changes what happens to the items
