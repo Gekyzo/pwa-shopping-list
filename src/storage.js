@@ -9,7 +9,7 @@ export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
 const LISTS = ['active', 'saved'];
 
 // Versions 1 to 7 have a second list, `next`, and `again`, the mark of a ticked one-time item that
-// comes back at the next trip. Both are items to buy at the next trip now: they go to Actual, not
+// comes back at the next trip. Both are items to buy at the next trip now: they go to Compra, not
 // ticked.
 const OLD_LISTS = ['next'];
 
@@ -255,7 +255,7 @@ export const saveHand = (storage, hand) => {
   }
 };
 
-// Whether Actual shows the row of shop lists. A preference of the device, as the hand is.
+// Whether Compra shows the row of shop lists. A preference of the device, as the hand is.
 export const SHOP_LISTS_KEY = 'shopping.shopLists';
 
 // `hide` when stored, else `show`.
@@ -278,7 +278,7 @@ export const saveShopLists = (storage, choice) => {
   }
 };
 
-// What Terminar compra does at first with an item not bought: `keep` it in Actual or `save` it
+// What Terminar compra does at first with an item not bought: `keep` it in Compra or `save` it
 // (TRIP-7). A preference of the device, as the hand is.
 export const TRIP_END_KEY = 'shopping.tripEnd';
 

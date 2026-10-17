@@ -9,14 +9,14 @@ import { itemNode, boughtSection, savedSection, groupHead, groupNodes } from '#u
 import { recipeNode } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
 
-// `keep` holds the ids of the open items that stay in Actual (TRIP-6).
+// `keep` holds the ids of the open items that stay in Compra (TRIP-6).
 const finishTrip = (undoText = t('toast.finished'), keep = []) => {
   if (!apply(store.startNewShopping(state, keep), { undoText })) return;
   Object.assign(ui, { view: 'active', openId: null, tripOpen: false });
   render();
 };
 
-// The ids of the open items that stay in Actual with the choice of Ajustes (TRIP-6, TRIP-7).
+// The ids of the open items that stay in Compra with the choice of Ajustes (TRIP-6, TRIP-7).
 const keptItems = () => (tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : []);
 
 const groupCount = ({ left, total }) => (left ? `${total - left}/${total}` : '✓');
@@ -44,7 +44,7 @@ const aisleNodes = () => {
   return [...grouped, ...others];
 };
 
-// The items of Actual still to buy: flat, below the recipe that asks for each one, below the shop
+// The items of Compra still to buy: flat, below the recipe that asks for each one, below the shop
 // of each one, or below the aisle of each one.
 const pendingNodes = () => {
   const group = shownGroup();
@@ -67,7 +67,7 @@ const listNodes = (items) => {
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
-// Actual ends with the saved items; a tap brings one back.
+// Compra ends with the saved items; a tap brings one back.
 const savedNodes = () => {
   const saved = store.savedItems(viewState()).filter(found);
   return saved.length ? savedSection(saved) : [];
@@ -129,7 +129,7 @@ const nodesOf = (items) => {
   return ui.view === 'recipes' ? recipes.searchRecipes(state, ui.query).map(recipeNode) : listNodes(items);
 };
 
-// A shop list of Actual with nothing to buy, while other items are still to buy, points to the
+// A shop list of Compra with nothing to buy, while other items are still to buy, points to the
 // next shop list that has some.
 const renderShopDone = (summary) => {
   const shop = ui.shop;
@@ -186,7 +186,7 @@ export const renderTrip = () => {
 
 export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
 
-// The row of the shop lists of Actual. A count is the items to buy.
+// The row of the shop lists of Compra. A count is the items to buy.
 export const renderShopChips = () => {
   const chips = inList() && shopLists === 'show' ? shops.shopChips(state) : [];
   $('shop-chips').hidden = chips.length === 0;

@@ -1,7 +1,7 @@
 # Recipes
 
 Rules of `src/recipes.js` and of the section `Recetas` in `src/ui/recipes.js`. The groups by recipe
-in `Actual` are in [04-arrange.md](04-arrange.md).
+in `Compra` are in [04-arrange.md](04-arrange.md).
 
 ## Recipe
 
@@ -45,18 +45,18 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
   (`--icon-s`). It opens the address in a new browser context, with `noopener noreferrer`.
 - **REC-16** A save and a removal of a link have `Deshacer`.
 
-## Send to `Actual`
+## Send to `Compra`
 
 - **REC-17** A slide of the recipe row to the right sends the recipe (REC-5). The row has no
   send button. A recipe with no product gives `error.recipeEmpty`.
 - **REC-18** For each product, in order:
-  - an item with that name exists, with no case distinction: the item becomes "to buy" in `Actual`
+  - an item with that name exists, with no case distinction: the item becomes "to buy" in `Compra`
     (it comes back from `Volver a comprar`, or it loses its tick, or it stays as it is);
-  - no such item exists: a one-time item with that name is created in `Actual`.
+  - no such item exists: a one-time item with that name is created in `Compra`.
 - **REC-19** The send adds the id of the recipe to `sent`, one time. A send never makes a
   duplicate item.
 - **REC-20** The message is `«name»: N añadidos, N ya estaban.` with `Deshacer`. `añadidos` counts
-  the items that were created or changed; `ya estaban` counts those that were to buy in `Actual`
+  the items that were created or changed; `ya estaban` counts those that were to buy in `Compra`
   already.
 - **REC-21** A send that changes nothing shows `«name»: todo estaba ya en la lista.` and keeps the
   `Deshacer` of the send that is still on the screen.
@@ -77,7 +77,7 @@ in `Actual` are in [04-arrange.md](04-arrange.md).
 - **REC-27** The sample recipe has the fixed id `sample-pasta`, so it stays the sample after a
   rename or an edit. Its name and products are in the language of the screen at the time it is
   added: `Pasta con salsa de tomate`, with `Salsa de tomate`, `Pasta`, `Ajo`, `Aceite de oliva`
-  and `Sal`. It has no link, goes last in `recipes`, and is not sent to `Actual` or put in the
+  and `Sal`. It has no link, goes last in `recipes`, and is not sent to `Compra` or put in the
   menu.
 - **REC-28** The add of the sample changes nothing when the sample exists, or when a recipe has
   its name with no case distinction (DATA-4).

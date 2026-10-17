@@ -161,7 +161,7 @@ export const itemNode = (item, groupId = null) => {
   return node;
 };
 
-// The ticked items of Actual, behind one row that opens and closes them. A search keeps them open,
+// The ticked items of Compra, behind one row that opens and closes them. A search keeps them open,
 // so that a ticked match is in view.
 export const boughtSection = (bought) => {
   const open = ui.boughtOpen || searching();
@@ -181,7 +181,7 @@ export const boughtSection = (bought) => {
   return [el('li', { className: 'section-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
 };
 
-// A saved item slides as an item row: to the right it comes back to Actual, to the left it shows
+// A saved item slides as an item row: to the right it comes back to Compra, to the left it shows
 // the delete. A tap on its name opens the edit sheet.
 const savedNode = (item) => {
   // The row closes in the section, then opens among the rows of the list.
@@ -195,7 +195,7 @@ const savedNode = (item) => {
   return node;
 };
 
-// The saved items, behind one row that opens and closes them, as the ticked items of Actual. A
+// The saved items, behind one row that opens and closes them, as the ticked items of Compra. A
 // tap on an item brings it back. A search keeps them open, so that a saved match is in view.
 export const savedSection = (saved) => {
   const open = ui.savedOpen || searching();

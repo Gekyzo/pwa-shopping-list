@@ -35,10 +35,10 @@ in [04-arrange.md](04-arrange.md).
 
 ## Shop lists
 
-A shop list is a view of `Actual`, not a list in the data. The rules of the list
+A shop list is a view of `Compra`, not a list in the data. The rules of the list
 apply in it.
 
-- **SHOP-16** `Actual` has a row of chips below the header: **Todas**, then each
+- **SHOP-16** `Compra` has a row of chips below the header: **Todas**, then each
   shop of the view in name order (SHOP-6), then **Sin tienda**. A tap on a chip shows that list.
   The chip of the list in view is pressed.
 - **SHOP-17** The row shows when an item of the view has a shop. **Sin tienda** shows when an item
@@ -57,7 +57,7 @@ apply in it.
   choice stays while the app runs. A choice whose chip goes, for
   example by a removal of a shop, `Deshacer`, **Terminar compra** or an import, goes back to
   **Todas**.
-- **SHOP-23** A shop list of `Actual` with no item to buy, while items of `Actual` are still to
+- **SHOP-23** A shop list of `Compra` with no item to buy, while items of `Compra` are still to
   buy, shows `Nada más en <shop>.` and a button with the name of the next list, in chip order
   and from the start after the end, that has an item to buy. A tap shows that list. A search
   hides the message.
@@ -66,7 +66,7 @@ apply in it.
   gets the shop too, with the message and `Deshacer` of ADD-6. From **Todas** and **Sin tienda**
   the add puts no shop.
 - **SHOP-25** The arrange sheet has the choice **Listas por tienda**, **Mostrar** or **Ocultar**,
-  when the view has the row of SHOP-17. **Ocultar** hides the row in `Actual` and shows
+  when the view has the row of SHOP-17. **Ocultar** hides the row in `Compra` and shows
   **Todas**. The choice is a preference of the device, stored in `shopping.shopLists`;
   **Mostrar** removes the key. `Deshacer` and an import do not change it. The row closes and opens
   as a head of GROUP-15 does, and the rows below move with it.

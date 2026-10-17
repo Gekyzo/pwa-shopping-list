@@ -6,16 +6,16 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 - **LIST-1** A new item has a name that is trimmed and not empty. An empty name gives
   `error.nameRequired`.
-- **LIST-2** A name that an item has already, in `Actual` or saved, gives `error.duplicateItem` with
+- **LIST-2** A name that an item has already, in `Compra` or saved, gives `error.duplicateItem` with
   the name and the list of that item (DATA-3).
-- **LIST-3** A new item is one-time and goes to `Actual`.
+- **LIST-3** A new item is one-time and goes to `Compra`.
 - **LIST-4** A new item goes to the end of `items`, with no shop, no quantity, not ticked.
 - **LIST-5** A rename has the rules LIST-1 and LIST-2. The item keeps its own name without an
   error. A rename to the same text changes nothing.
 - **LIST-6** A name field of the screen takes 80 characters at most. The store has no limit.
-- **LIST-7** The recurrent mark `↻` shows on each row of `Actual`. A tap changes `recurrent`.
+- **LIST-7** The recurrent mark `↻` shows on each row of `Compra`. A tap changes `recurrent`.
 - **LIST-8** A delete removes the item. Its shops go with it.
-- **LIST-9** Removed: `Actual` is the only list, so an item has no other list to move to.
+- **LIST-9** Removed: `Compra` is the only list, so an item has no other list to move to.
 
 ## Quantity
 
@@ -27,11 +27,11 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 ## Tick
 
-- **LIST-10** Only an item of `Actual` can be ticked. A saved item gives `error.onlyActiveTick`.
-- **LIST-11** A tap on the checkbox or a slide to the right (ROW-11) of a row of `Actual` changes
+- **LIST-10** Only an item of `Compra` can be ticked. A saved item gives `error.onlyActiveTick`.
+- **LIST-11** A tap on the checkbox or a slide to the right (ROW-11) of a row of `Compra` changes
   `bought`.
 - **LIST-12** A tick does not delete the item. The item goes to the section `Comprados (N)` at the
-  end of `Actual`, which is closed at first. A tap on that row opens and closes it.
+  end of `Compra`, which is closed at first. A tap on that row opens and closes it.
 - **LIST-13** A tick has `Deshacer`, because the row leaves the place where the finger is. A tap
   on the checkbox of a ticked item removes the tick with no `Deshacer`.
 - **LIST-14** Removed: a ticked one-time item has no mark that keeps it for the next trip. `↻`
@@ -39,10 +39,10 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 ## Removed: the second list
 
-- **LIST-15** Removed: the app has one list, `Actual`.
-- **LIST-16** Removed: the app has one list, `Actual`.
-- **LIST-17** Removed: the app has one list, `Actual`.
-- **LIST-18** Removed: the app has one list, `Actual`.
+- **LIST-15** Removed: the app has one list, `Compra`.
+- **LIST-16** Removed: the app has one list, `Compra`.
+- **LIST-17** Removed: the app has one list, `Compra`.
+- **LIST-18** Removed: the app has one list, `Compra`.
 - **LIST-19** Removed: the bottom bar shows no count.
 
 ## Trip
@@ -53,26 +53,26 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
   | Item | Result |
   |---|---|
-  | Ticked, recurrent | Stays in `Actual`, not ticked |
+  | Ticked, recurrent | Stays in `Compra`, not ticked |
   | Ticked, one-time | Saved: `list: 'saved'`, not ticked (LIST-30) |
   | Saved | Does not change |
-  | In `Actual`, not ticked, recurrent | Stays |
-  | In `Actual`, not ticked, one-time | Stays in `Actual`, not ticked, with `Aplazar`, or is saved with `Descartar` (TRIP-6) |
+  | In `Compra`, not ticked, recurrent | Stays |
+  | In `Compra`, not ticked, one-time | Stays in `Compra`, not ticked, with `Aplazar`, or is saved with `Descartar` (TRIP-6) |
 
 - **TRIP-3** **Terminar compra** empties `sent`. `group` and `sort` do not change. The relative
   order of the items that stay does not change.
 - **TRIP-4** The control shows in two places:
-  1. A banner `¿Has terminado?` in `Actual`, when the list has items and all are ticked. Its text
+  1. A banner `¿Has terminado?` in `Compra`, when the list has items and all are ticked. Its text
      gives the count that comes back and the count that is saved.
-  2. The button of the trip sheet of `Actual` (NAV-9), below a line that counts the items of
-     `Actual` by where each one goes, such as `2 con ↻ vuelven · 1 sin comprar se aplaza · 4 se
+  2. The button of the trip sheet of `Compra` (NAV-9), below a line that counts the items of
+     `Compra` by where each one goes, such as `2 con ↻ vuelven · 1 sin comprar se aplaza · 4 se
      guardan en Volver a comprar`. Its parts, in this order: recurrent items, open items kept with
      `Aplazar`, open items saved with `Descartar`, ticked one-time items. A part with no item does
      not show. It is disabled when TRIP-1 does not hold.
-- **TRIP-5** After **Terminar compra** the screen shows `Actual`. `Deshacer` restores the full
+- **TRIP-5** After **Terminar compra** the screen shows `Compra`. `Deshacer` restores the full
   state of before.
-- **TRIP-6** An open item is an item of `Actual`, not ticked and not recurrent. **Terminar compra**
-  keeps the open items in `Actual`, not ticked, when the choice of TRIP-7 is `Aplazar`. It saves
+- **TRIP-6** An open item is an item of `Compra`, not ticked and not recurrent. **Terminar compra**
+  keeps the open items in `Compra`, not ticked, when the choice of TRIP-7 is `Aplazar`. It saves
   them (LIST-30) when the choice is `Descartar`. The button of the trip sheet finishes at once.
   When an item is open, a line above the button says `Puedes cambiar qué pasa con lo no comprado
   en Ajustes.` The sheet has one step and no choice for each item. A tap on the veil closes the
@@ -91,17 +91,17 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 | Section | Title | Subtitle | Ring |
 |---|---|---|---|
-| `Actual` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `Quedan N artículos` | `ticked/total`, filled to that share |
+| `Compra` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `Quedan N artículos` | `ticked/total`, filled to that share |
 | `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | The count of recipes |
 | `Ajustes` | `Ajustes` | `Bodega` | `⚙` |
 
 ## Add sheet
 
-The `+` button opens the sheet in `Actual` and `Recetas`. In `Recetas` it creates a recipe (see
+The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it creates a recipe (see
 [06-recipes.md](06-recipes.md)). The button does not show in `Ajustes` or while a sheet is open.
 
 - **ADD-1** The sheet has a name field and the button **Añadir**. It has no target choice: an add
-  always goes to `Actual`.
+  always goes to `Compra`.
 - **ADD-2** While the user types, the sheet lists up to 5 items whose name contains the text, with
   no case or accent distinction: the exact match first, then the names that start with the text,
   then the others.
@@ -110,8 +110,8 @@ The `+` button opens the sheet in `Actual` and `Recetas`. In `Recetas` it create
   | State of the item | Text | Effect of the tap |
   |---|---|---|
   | Ticked | `ya comprado · repetir` | Removes the tick |
-  | To buy in `Actual` | `ya en la lista` | Nothing |
-  | Saved | `volver a comprar · añadir` | Goes to `Actual`, not ticked (LIST-32) |
+  | To buy in `Compra` | `ya en la lista` | Nothing |
+  | Saved | `volver a comprar · añadir` | Goes to `Compra`, not ticked (LIST-32) |
 
 - **ADD-4** When no item has the typed name, the list ends with `+ Crear «name»`, which does the
   same as **Añadir**.
@@ -126,7 +126,7 @@ The `+` button opens the sheet in `Actual` and `Recetas`. In `Recetas` it create
 
 ## Search
 
-- **LIST-20** The header of `Actual` has a search button, at the left of the arrange button. It
+- **LIST-20** The header of `Compra` has a search button, at the left of the arrange button. It
   shows when the view has one item at least.
 - **LIST-21** A tap on the button opens the field **Buscar artículo o tienda** with the focus. A
   second tap, `Escape`, or a loss of focus with an empty field closes it. A close clears the text.
@@ -137,26 +137,26 @@ The `+` button opens the sheet in `Actual` and `Recetas`. In `Recetas` it create
   count of a group head and the header figures stay those of the full list.
 - **LIST-24** The text of the search is not stored. A change of section closes the search. An add
   from the add sheet closes it too, so that the row of the item is in view.
-- **LIST-25** In `Actual` the search filters the ticked items too. `Comprados (N)` counts the ticked
+- **LIST-25** In `Compra` the search filters the ticked items too. `Comprados (N)` counts the ticked
   matches and shows open while the field has a text, and its head does not close it in that time.
   With no ticked match the head does not show.
 - **LIST-26** With no match the list shows `Ningún artículo coincide con «text».`
 
 ## Saved items
 
-- **LIST-30** **Terminar compra** saves each one-time item of `Actual` that is ticked, and each open
+- **LIST-30** **Terminar compra** saves each one-time item of `Compra` that is ticked, and each open
   item with `Descartar`: only `↻` (LIST-7) and `Aplazar` (TRIP-6) keep an item for the next trip.
-  A saved item leaves `Actual` and keeps its name, its shops and its quantity. Only **Eliminar**
+  A saved item leaves `Compra` and keeps its name, its shops and its quantity. Only **Eliminar**
   deletes an item.
 - **LIST-31** A saved item keeps its name (DATA-3). The add sheet finds it (ADD-3), and an add of
-  its name brings it back (ADD-5). A recipe sent to `Actual` brings back a saved product.
-- **LIST-32** A bring back puts a saved item in `Actual`, not ticked. `recurrent` does not change.
+  its name brings it back (ADD-5). A recipe sent to `Compra` brings back a saved product.
+- **LIST-32** A bring back puts a saved item in `Compra`, not ticked. `recurrent` does not change.
   A saved item cannot be ticked (LIST-10).
-- **LIST-34** `Actual` ends with the section `Volver a comprar (N)`, below the empty state when the
+- **LIST-34** `Compra` ends with the section `Volver a comprar (N)`, below the empty state when the
   list is empty. It shows when an item is saved, and is closed at first; a tap on its head opens
   and closes it. Open, it lists the saved items in name order, with their quantity and shops.
 - **LIST-35** A saved row has no button: it slides as an item row (ROW-13). A slide to the right
-  brings the item back to `Actual` (LIST-32), with `"name" añadido a Actual.` and `Deshacer`. A
+  brings the item back to `Compra` (LIST-32), with `"name" añadido a Compra.` and `Deshacer`. A
   slide to the left shows **Eliminar**, which deletes the item for good, with `Deshacer`. A tap on
   the name opens the edit sheet (ROW-7).
 - **LIST-36** The search of the list (LIST-22) filters the saved items too. The section shows open

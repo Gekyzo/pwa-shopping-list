@@ -7,8 +7,8 @@ Status: on `main`. Rules of `arrivalMessage` in `src/store.js` and of the start 
 A PWA gets a position only while it is open, so it cannot detect an arrival. An Android automation
 app (MacroDroid, Tasker) owns the geofence and opens the app with a parameter.
 
-- **ARR-1** A start with `?arrival` in the URL shows `N artículos por comprar en Actual.`, in the
-  language of the screen, where N is the count of items of `Actual` that are not ticked.
+- **ARR-1** A start with `?arrival` in the URL shows `N artículos por comprar en Compra.`, in the
+  language of the screen, where N is the count of items of `Compra` that are not ticked.
 - **ARR-2** The message stays 10 seconds, because the app opened by itself.
 - **ARR-3** With nothing left to buy the app shows no message.
 - **ARR-4** The app removes `arrival` from the URL at once and keeps each other parameter, so a

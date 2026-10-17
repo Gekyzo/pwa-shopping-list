@@ -9,7 +9,7 @@ The app has one state object. Each operation returns a new object and never chan
   version: 8,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
-  sent: [string],     // ids of the recipes sent to Actual in this trip, in send order
+  sent: [string],     // ids of the recipes sent to Compra in this trip, in send order
   group: 'recipe',    // 'recipe' | 'shop' | 'aisle' | 'none'
   sort: 'custom',     // 'custom' | 'name'
   menu: [Meal],       // the planned meals of the week, in day and meal order
@@ -26,7 +26,7 @@ The empty state is `{ version: 8, items: [], recipes: [], sent: [], group: 'reci
   id: string,         // crypto.randomUUID()
   name: string,       // trimmed, not empty
   recurrent: boolean, // comes back at each trip
-  list: 'active' | 'saved', // 'saved': kept after a trip, out of Actual
+  list: 'active' | 'saved', // 'saved': kept after a trip, out of Compra
   bought: boolean,    // ticked
   shops: [string],    // shop names
   quantity: string,   // free text, such as '2' or '1 kg'; trimmed; '' for none
@@ -61,7 +61,7 @@ A meal with no recipe has no record. See [13-menu.md](13-menu.md).
 
 - **DATA-1** An item is one record. It is never copied; a view computes where it shows.
 - **DATA-2** Item ids are unique. Recipe ids are unique.
-- **DATA-3** Item names are unique with no case distinction, in `Actual` and saved. `Leche` and
+- **DATA-3** Item names are unique with no case distinction, in `Compra` and saved. `Leche` and
   `leche` are one name; `Cafe` and `Café` are two.
 - **DATA-4** Recipe names are unique with no case distinction.
 - **DATA-5** The products of one recipe are unique with no case distinction.
@@ -85,18 +85,18 @@ No view is stored.
 
 | View | Function | Content |
 |---|---|---|
-| `Actual` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
+| `Compra` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
 | `Volver a comprar` | `savedItems` | The items of `list: 'saved'`, in name order |
 | Trip figures | `tripSummary` | `total`, `left`, `back`, `saved` |
 | Trip outcome | `tripOutcome` | `recurrent`, `kept`, `open`, `bought` |
-| Recipe groups | `recipeGroups` | `Actual` by recipe |
-| Shop groups | `shopGroups` | `Actual` by shop |
+| Recipe groups | `recipeGroups` | `Compra` by recipe |
+| Shop groups | `shopGroups` | `Compra` by shop |
 | Shops in use | `shopNames` | Each shop of an item, in name order |
-| Aisle groups | `aisleGroups` | `Actual` by aisle, in the order of `aisles` |
+| Aisle groups | `aisleGroups` | `Compra` by aisle, in the order of `aisles` |
 
-`tripSummary` gives: `total`, the items of `Actual`; `left`, those not ticked; `back`, the
+`tripSummary` gives: `total`, the items of `Compra`; `left`, those not ticked; `back`, the
 recurrent items, ticked or not, and the open items kept with `Aplazar` (TRIP-6); `saved`, the
-other one-time items of `Actual`, ticked or not. `tripOutcome` splits the items of `Actual` by
+other one-time items of `Compra`, ticked or not. `tripOutcome` splits the items of `Compra` by
 where each one goes (TRIP-4): `recurrent` come back; `kept`, open items kept with `Aplazar`;
 `open`, the other open items, saved; `bought`, ticked one-time items, saved. The four add up to
 `total`.
@@ -114,5 +114,5 @@ where each one goes (TRIP-4): `recurrent` come back; `kept`, open items kept wit
 - The language that the user chose. It is a preference of the device, with its own key. See
   [09-languages.md](09-languages.md).
 - The section that is open, an open row, the text of a search and each other state of the screen.
-  A start of the app shows `Actual` with all rows closed.
+  A start of the app shows `Compra` with all rows closed.
 - The state before the last change, which `Deshacer` uses. It lives only while its message shows.
