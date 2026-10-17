@@ -74,7 +74,12 @@ export default {
   'trip.open': 'O que não comprou',
   'trip.discard': 'Descartar',
   'trip.postpone': 'Adiar',
-  'trip.defaultHint': 'Pode alterar a opção predefinida em Definições.',
+  'trip.willDiscard': { one: 'O artigo que não comprou é descartado.', other: 'Os {count} artigos que não comprou são descartados.' },
+  'trip.willPostpone': {
+    one: 'O artigo que não comprou é adiado para a próxima compra.',
+    other: 'Os {count} artigos que não comprou são adiados para a próxima compra.',
+  },
+  'trip.defaultHint': 'Pode alterar isto em Definições.',
 
   'recipes.search': 'Procurar receita ou produto',
   'search.label': 'Procurar na lista',

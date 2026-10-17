@@ -74,7 +74,12 @@ export default {
   'trip.open': 'Ce que vous n’avez pas acheté',
   'trip.discard': 'Écarter',
   'trip.postpone': 'Reporter',
-  'trip.defaultHint': 'Vous pouvez changer le choix par défaut dans Réglages.',
+  'trip.willDiscard': { one: 'L’article que vous n’avez pas acheté est écarté.', other: 'Les {count} articles que vous n’avez pas achetés sont écartés.' },
+  'trip.willPostpone': {
+    one: 'L’article que vous n’avez pas acheté est reporté aux prochaines courses.',
+    other: 'Les {count} articles que vous n’avez pas achetés sont reportés aux prochaines courses.',
+  },
+  'trip.defaultHint': 'Vous pouvez le changer dans Réglages.',
 
   'recipes.search': 'Chercher une recette ou un produit',
   'search.label': 'Chercher dans la liste',

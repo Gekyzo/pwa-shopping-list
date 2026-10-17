@@ -79,18 +79,18 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 - **TRIP-5** After **Terminar compra** the screen shows `Actual`. `Deshacer` restores the full
   state of before.
 - **TRIP-6** An open item is an item of `Actual`, not ticked, not recurrent and with no `again`.
-  **Terminar compra** saves an open item (LIST-30), or keeps it in `Actual`, not ticked, when the
-  user chose `Aplazar` for it. The entry of the trip sheet finishes at once when no item is open.
-  Else the sheet shows a second step: `Lo que no has comprado`, a line that says the first choice
-  can be changed in `Ajustes`, one row for each open item in the
-  order of `Actual` with its name and the choice `Descartar` / `Aplazar` (TRIP-7 gives the first
-  value), and the button **Terminar compra**. A tap on the veil closes the sheet and changes
-  nothing. The banner and `Traer N artículos de Próxima` never have an open item.
+  **Terminar compra** saves the open items (LIST-30), or keeps them in `Actual`, not ticked, when
+  the choice of TRIP-7 is `Aplazar`. The entry of the trip sheet finishes at once when no item is
+  open. Else the sheet shows a second step: `Lo que no has comprado`, a line that says what happens
+  to the open items, such as `Los 2 artículos que no has comprado se descartan. Puedes cambiarlo en
+  Ajustes.`, and the button **Terminar compra**. The sheet has no choice for each item. A tap on
+  the veil closes the sheet and changes nothing. The banner and `Traer N artículos de Próxima` never
+  have an open item.
 - **TRIP-7** **Al terminar la compra** of `Ajustes` has two buttons side by side: `Descartar` and
   `Aplazar`, and the chosen one is pressed. A line below the title says that the choice sets what
-  happens to the items not bought: `Descartar` or `Aplazar` to the next trip. It is the first choice of each open item at
-  **Terminar compra**, and the entry of the trip sheet counts the open items with it. An app with
-  no choice uses `Descartar`.
+  happens to the items not bought: `Descartar` or `Aplazar` to the next trip. It applies to every
+  open item at **Terminar compra**, and the entry of the trip sheet counts the open items with it.
+  An app with no choice uses `Descartar`.
 - **TRIP-8** The choice is stored in `shopping.tripEnd`. `Descartar` removes the key.
   It is a preference of the device, not a part of the state: `Deshacer` and an import do not change
   it.

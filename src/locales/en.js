@@ -74,7 +74,12 @@ export default {
   'trip.open': 'What you did not buy',
   'trip.discard': 'Discard',
   'trip.postpone': 'Postpone',
-  'trip.defaultHint': 'You can change the default choice in Settings.',
+  'trip.willDiscard': { one: 'The item you did not buy is discarded.', other: 'The {count} items you did not buy are discarded.' },
+  'trip.willPostpone': {
+    one: 'The item you did not buy is postponed to the next trip.',
+    other: 'The {count} items you did not buy are postponed to the next trip.',
+  },
+  'trip.defaultHint': 'You can change this in Settings.',
 
   'recipes.search': 'Search recipe or product',
   'search.label': 'Search the list',

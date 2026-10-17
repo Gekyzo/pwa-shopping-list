@@ -74,7 +74,12 @@ export default {
   'trip.open': 'El que no has comprat',
   'trip.discard': 'Descartar',
   'trip.postpone': 'Ajornar',
-  'trip.defaultHint': 'Pots canviar l’opció per defecte a Configuració.',
+  'trip.willDiscard': { one: 'L’article que no has comprat es descarta.', other: 'Els {count} articles que no has comprat es descarten.' },
+  'trip.willPostpone': {
+    one: 'L’article que no has comprat s’ajorna a la propera compra.',
+    other: 'Els {count} articles que no has comprat s’ajornen a la propera compra.',
+  },
+  'trip.defaultHint': 'Pots canviar-ho a Configuració.',
 
   'recipes.search': 'Cerca recepta o producte',
   'search.label': 'Cerca a la llista',
