@@ -73,12 +73,12 @@ export default {
   'trip.menu': 'Optionen für den Einkauf',
   'trip.discard': 'Verwerfen',
   'trip.postpone': 'Verschieben',
-  'trip.willDiscard': { one: 'Der Artikel, den du nicht gekauft hast, wird verworfen.', other: 'Die {count} Artikel, die du nicht gekauft hast, werden verworfen.' },
-  'trip.willPostpone': {
-    one: 'Der Artikel, den du nicht gekauft hast, wird auf den nächsten Einkauf verschoben.',
-    other: 'Die {count} Artikel, die du nicht gekauft hast, werden auf den nächsten Einkauf verschoben.',
-  },
-  'trip.defaultHint': 'Du kannst das in Optionen ändern.',
+  'trip.recurrent': { one: '{count} mit ↻ kommt zurück', other: '{count} mit ↻ kommen zurück' },
+  'trip.again': { one: '{count} mit ✓ Nächste kommt zurück', other: '{count} mit ✓ Nächste kommen zurück' },
+  'trip.kept': { one: '{count} nicht gekauft wird verschoben', other: '{count} nicht gekauft werden verschoben' },
+  'trip.open': { one: '{count} nicht gekauft wird gespeichert', other: '{count} nicht gekauft werden gespeichert' },
+  'trip.bought': { one: '{count} kommt in Wieder kaufen', other: '{count} kommen in Wieder kaufen' },
+  'trip.hint': 'Was mit nicht Gekauftem passiert, änderst du in den Optionen.',
 
   'recipes.search': 'Rezept oder Produkt suchen',
   'search.label': 'In der Liste suchen',
@@ -143,8 +143,6 @@ export default {
   'onboarding.sections.title': 'Wische über den Bildschirm',
   'onboarding.sections.text': 'Wische zur Seite oder nutze die untere Leiste, um zwischen den Bereichen zu wechseln. Mit `+` fügst du hinzu, was du brauchst.',
 
-  'settings.back': { one: '{count} kommt zurück', other: '{count} kommen zurück' },
-  'settings.discarded': { one: '{count} wird verworfen', other: '{count} werden verworfen' },
   'settings.backup': 'Sicherung',
   'settings.export': 'Exportieren',
   'settings.import': 'Importieren',

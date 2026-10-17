@@ -9,8 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
-- `N vuelven · N se descartan` in `Opciones de la compra` also counts the items with `↻` that are
-  not ticked, so the two counts add up to the items of `Actual`.
+- `Opciones de la compra` counts the items of `Actual` by where each one goes, such as `2 con ↻
+  vuelven · 1 sin comprar se aplaza · 4 se guardan en Volver a comprar`. The counts add up to the
+  items of `Actual`, and the line below only says that `Ajustes` changes what happens to the items
+  not bought.
 
 ## 1.0.35 - 2026-10-17
 

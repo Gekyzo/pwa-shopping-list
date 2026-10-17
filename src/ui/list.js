@@ -198,10 +198,12 @@ export const renderTrip = () => {
   $('finish-menu').disabled = !store.canStartNewShopping(state);
   $('trip-button').setAttribute('aria-expanded', String(ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
-  const count = store.openItems(state).length;
-  $('trip-open').hidden = count === 0;
-  const outcome = tripEnd === 'keep' ? 'trip.willPostpone' : 'trip.willDiscard';
-  $('trip-open').textContent = count ? `${t(outcome, { count })} ${t('trip.defaultHint')}` : '';
+  const outcome = store.tripOutcome(state, keptItems());
+  // One part for each place an item goes, in this order; a part with no item does not show (TRIP-4).
+  const parts = ['recurrent', 'again', 'kept', 'open', 'bought'].filter((key) => outcome[key] > 0);
+  $('finish-menu-text').textContent = parts.map((key) => t(`trip.${key}`, { count: outcome[key] })).join(' · ');
+  $('trip-open').hidden = store.openItems(state).length === 0;
+  $('trip-open').textContent = t('trip.hint');
 };
 
 export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);

@@ -86,8 +86,6 @@ const renderAll = () => {
   renderVersion();
   renderSample();
   renderInstall();
-  const outcome = [t('settings.back', { count: summary.back }), t('settings.discarded', { count: summary.saved })];
-  $('finish-menu-text').textContent = outcome.join(' · ');
   renderTrip();
 
   $('fab').hidden =
