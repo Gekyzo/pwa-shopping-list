@@ -9,6 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- `Compra` no longer ends with `Volver a comprar`. The items that a trip takes out of the list stay
+  stored: the add sheet still finds them, as `comprado antes · añadir`, and a tap brings one back.
+  To delete one, bring it back, then **Eliminar**.
 - `Próxima` is gone: the app has one list, `Compra`, which was `Actual`. The bottom bar has four
   sections, and the add sheet has no `Para hoy` / `Para la próxima` choice.
 - The next trip comes from `Compra` itself. At **Terminar compra** an item with `↻` comes back

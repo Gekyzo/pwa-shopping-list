@@ -47,7 +47,6 @@ of it.
   | Row | Slide to the left |
   |---|---|
   | `Compra` | **Eliminar** |
-  | `Volver a comprar` | **Eliminar** |
 
 - **ROW-4** A drag becomes a slide after 10 px of horizontal move. A drag that is first vertical
   scrolls the list.
@@ -65,9 +64,9 @@ of it.
 - **ROW-8** The click that follows a drag, a hold or a section slide is ignored for 350 ms, so it
   does not tick an item or press a button.
 - **ROW-9** No row appears or disappears at once. A ticked row closes in 200 ms before it goes to
-  `Comprados (N)`, and a row of `Volver a comprar` closes before it goes back to `Compra`. After each
+  `Comprados (N)`. After each
   other change of the state (add, delete, move, untick, **Terminar compra**, `Deshacer`) and each open
-  or close of a section, a new row of `Compra`, `Recetas`, `Volver a comprar` or the
+  or close of a section, a new row of `Compra`, `Recetas` or the
   products of `Receta` opens in 200 ms, and a row that is gone stays in its place and closes in
   200 ms. A change of the grouping or of the order moves the rows ([04-arrange.md](04-arrange.md)). With
   `prefers-reduced-motion` nothing moves.
@@ -78,8 +77,7 @@ of it.
   which fills with the accent colour once the slide is long enough. A row with its left side open
   closes it.
 - **ROW-12** A recipe row of `Recetas` slides with the same rules (REC-5).
-- **ROW-13** A row of `Volver a comprar` slides with the same rules (LIST-35). Its slide to the right
-  shows the icon `cart-add`.
+- **ROW-13** Removed: a saved item has no row (LIST-35).
 
 ## Messages and undo
 

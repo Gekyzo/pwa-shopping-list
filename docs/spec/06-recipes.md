@@ -51,7 +51,7 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   send button. A recipe with no product gives `error.recipeEmpty`.
 - **REC-18** For each product, in order:
   - an item with that name exists, with no case distinction: the item becomes "to buy" in `Compra`
-    (it comes back from `Volver a comprar`, or it loses its tick, or it stays as it is);
+    (it comes back from the saved items, or it loses its tick, or it stays as it is);
   - no such item exists: a one-time item with that name is created in `Compra`.
 - **REC-19** The send adds the id of the recipe to `sent`, one time. A send never makes a
   duplicate item.

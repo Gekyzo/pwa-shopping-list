@@ -67,7 +67,7 @@ The rules DS-1 to DS-8 and LAY-1 to LAY-4 belong to the design system, `pwa-desi
 | Ticked | An item of `Compra` with `bought: true` |
 | Recurrent | An item that comes back at each trip |
 | One-time | An item that is not recurrent |
-| Saved | An item that a trip took out of `Compra`, in `Volver a comprar`. List id `saved` |
+| Saved | An item that a trip took out of `Compra`; the screen does not show it. List id `saved` |
 | Recipe | A name and a list of product names |
 | Product | A name in a recipe. It is text, not an item |
 | Shop | A name that one item or more have. It has no record of its own |

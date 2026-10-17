@@ -86,7 +86,6 @@ No view is stored.
 | View | Function | Content |
 |---|---|---|
 | `Compra` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
-| `Volver a comprar` | `savedItems` | The items of `list: 'saved'`, in name order |
 | Trip figures | `tripSummary` | `total`, `left`, `back`, `saved` |
 | Trip outcome | `tripOutcome` | `recurrent`, `kept`, `open`, `bought` |
 | Recipe groups | `recipeGroups` | `Compra` by recipe |

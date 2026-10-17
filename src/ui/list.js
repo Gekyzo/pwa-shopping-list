@@ -5,7 +5,7 @@ import * as aisles from '#aisles';
 import * as menu from '#menu';
 import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
-import { itemNode, boughtSection, savedSection, groupHead, groupNodes } from '#ui/rows';
+import { itemNode, boughtSection, groupHead, groupNodes } from '#ui/rows';
 import { recipeNode } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
 
@@ -67,12 +67,6 @@ const listNodes = (items) => {
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
-// Compra ends with the saved items; a tap brings one back.
-const savedNodes = () => {
-  const saved = store.savedItems(viewState()).filter(found);
-  return saved.length ? savedSection(saved) : [];
-};
-
 const finishText = ({ back, saved }) => `${t('finish.back', { count: back })} ${t('finish.saved', { count: saved })}`;
 
 const activeSubtitle = ({ total, left }) => {
@@ -108,7 +102,7 @@ const emptyText = () => {
 // One field serves the three sections: Recetas shows it when it has a recipe, and a list shows it
 // after a tap on the search button, which a list with no item does not have.
 const renderSearch = (items, searchable) => {
-  const canOpen = inList() && (items.length > 0 || store.savedItems(viewState()).length > 0);
+  const canOpen = inList() && items.length > 0;
   if (!canOpen) ui.searchOpen = false;
   const shown = searchable || ui.searchOpen;
   if (!shown) ui.query = '';
@@ -152,13 +146,10 @@ export const renderList = (summary) => {
   const searchable = ui.view === 'recipes' && state.recipes.length > 0;
   renderSearch(items, searchable);
   const nodes = nodesOf(items);
-  const saved = inList() ? savedNodes() : [];
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
-  $('saved').hidden = saved.length === 0;
-  $('saved').replaceChildren(...saved);
 
-  $('empty').hidden = ui.view === 'settings' || nodes.length > 0 || (saved.length > 0 && searching());
+  $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
   $('empty-text').textContent = emptyText();
 
   $('menu-actions').hidden = !(ui.view === 'menu' && state.recipes.length > 0);

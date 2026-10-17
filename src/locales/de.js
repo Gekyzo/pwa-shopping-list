@@ -1,6 +1,6 @@
 export default {
   'list.active': 'Einkauf',
-  'list.saved': 'Wieder kaufen',
+  'list.saved': 'den gespeicherten Artikeln',
   'nav.label': 'Bereiche',
   'nav.recipes': 'Rezepte',
   'nav.settings': 'Optionen',
@@ -32,7 +32,6 @@ export default {
   'count.recipes': { one: '{count} Rezept', other: '{count} Rezepte' },
   'count.products': { one: '{count} Produkt', other: '{count} Produkte' },
   'count.bought': { one: 'Gekauft ({count})', other: 'Gekauft ({count})' },
-  'count.saved': { one: 'Wieder kaufen ({count})', other: 'Wieder kaufen ({count})' },
 
   'row.always': 'Immer kaufen: {name}',
   'row.delete': '{name} löschen',
@@ -65,7 +64,7 @@ export default {
   'trip.recurrent': { one: '{count} mit ↻ kommt zurück', other: '{count} mit ↻ kommen zurück' },
   'trip.kept': { one: '{count} nicht gekauft wird verschoben', other: '{count} nicht gekauft werden verschoben' },
   'trip.open': { one: '{count} nicht gekauft wird gespeichert', other: '{count} nicht gekauft werden gespeichert' },
-  'trip.bought': { one: '{count} kommt in Wieder kaufen', other: '{count} kommen in Wieder kaufen' },
+  'trip.bought': { one: '{count} gekauft verlässt die Liste', other: '{count} gekauft verlassen die Liste' },
   'trip.hint': 'Was mit nicht Gekauftem passiert, änderst du in den Optionen.',
 
   'recipes.search': 'Rezept oder Produkt suchen',
@@ -91,7 +90,7 @@ export default {
   'add.existing': 'Artikel, die schon existieren',
   'where.boughtRepeat': 'schon gekauft · wiederholen',
   'where.inList': 'schon in der Liste',
-  'where.saved': 'wieder kaufen · hinzufügen',
+  'where.saved': 'früher gekauft · hinzufügen',
 
   'arrange.label': 'Gruppieren und sortieren',
   'arrange.groupBy': 'Gruppieren nach',

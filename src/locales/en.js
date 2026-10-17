@@ -1,6 +1,6 @@
 export default {
   'list.active': 'Shopping',
-  'list.saved': 'Buy again',
+  'list.saved': 'saved items',
   'nav.label': 'Sections',
   'nav.recipes': 'Recipes',
   'nav.settings': 'Settings',
@@ -32,7 +32,6 @@ export default {
   'count.recipes': { one: '{count} recipe', other: '{count} recipes' },
   'count.products': { one: '{count} product', other: '{count} products' },
   'count.bought': { one: 'Bought ({count})', other: 'Bought ({count})' },
-  'count.saved': { one: 'Buy again ({count})', other: 'Buy again ({count})' },
 
   'row.always': 'Always buy: {name}',
   'row.delete': 'Delete {name}',
@@ -65,7 +64,7 @@ export default {
   'trip.recurrent': { one: '{count} with ↻ comes back', other: '{count} with ↻ come back' },
   'trip.kept': { one: '{count} not bought is postponed', other: '{count} not bought are postponed' },
   'trip.open': { one: '{count} not bought is saved', other: '{count} not bought are saved' },
-  'trip.bought': { one: '{count} is saved in Buy again', other: '{count} are saved in Buy again' },
+  'trip.bought': { one: '{count} bought leaves the list', other: '{count} bought leave the list' },
   'trip.hint': 'You can change what happens to items not bought in Settings.',
 
   'recipes.search': 'Search recipe or product',
@@ -91,7 +90,7 @@ export default {
   'add.existing': 'Items that already exist',
   'where.boughtRepeat': 'already bought · repeat',
   'where.inList': 'already in the list',
-  'where.saved': 'buy again · add',
+  'where.saved': 'bought before · add',
 
   'arrange.label': 'Group and sort',
   'arrange.groupBy': 'Group by',

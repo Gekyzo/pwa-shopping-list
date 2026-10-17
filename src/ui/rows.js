@@ -1,8 +1,8 @@
 import * as store from '#store';
 import { reached, settle } from '#swipe';
-import { SIDE_BUTTON, DRAG_START, el, state, ui, t, say, apply, render, guardClick } from '#ui/context';
+import { SIDE_BUTTON, DRAG_START, el, state, ui, t, apply, render, guardClick } from '#ui/context';
 import { isOpen, searching, shownGroup } from '#ui/view';
-import { leave, leaveNode, collapse, expand } from '#ui/motion';
+import { leave, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
 import { reorder, bindReorder } from '#ui/drag';
@@ -179,40 +179,6 @@ export const boughtSection = (bought) => {
   ]);
   button.setAttribute('aria-expanded', String(open));
   return [el('li', { className: 'section-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
-};
-
-// A saved item slides as an item row: to the right it comes back to Compra, to the left it shows
-// the delete. A tap on its name opens the edit sheet.
-const savedNode = (item) => {
-  // The row closes in the section, then opens among the rows of the list.
-  const bring = () => leaveNode(`saved:${item.id}`, [node], () =>
-    apply(store.bringToList(state, item.id), { undoText: say('toast.addedTo', { name: item.name, list: 'active' }) }));
-  const name = el('button', { type: 'button', className: 'item-row-name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
-  const right = { run: bring, icon: 'cart-add' };
-  const { box } = swipeBox({ id: item.id, groupId: 'saved', row: [name], end: [deleteAction(item)], right });
-  const node = el('li', { className: 'item-row' }, [box]);
-  node.dataset.id = item.id;
-  return node;
-};
-
-// The saved items, behind one row that opens and closes them, as the ticked items of Compra. A
-// tap on an item brings it back. A search keeps them open, so that a saved match is in view.
-export const savedSection = (saved) => {
-  const open = ui.savedOpen || searching();
-  const button = el('button', {
-    type: 'button',
-    className: 'section-head-button',
-    disabled: searching(),
-    onclick: () => {
-      Object.assign(ui, { savedOpen: !ui.savedOpen, animate: true });
-      render();
-    },
-  }, [
-    el('span', { textContent: t('count.saved', { count: saved.length }) }),
-    el('span', { className: 'chevron', textContent: open ? '▾' : '▸' }),
-  ]);
-  button.setAttribute('aria-expanded', String(open));
-  return [el('li', { className: 'section-head' }, [button]), ...(open ? saved.map((item) => savedNode(item)) : [])];
 };
 
 // The rows of a group carry its key, so that its head can close and open them.
