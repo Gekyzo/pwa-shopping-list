@@ -19,9 +19,7 @@ const files = {
 };
 
 // The exceptions of docs/spec/15-design-system.md, by rule id.
-const SKIP = {
-  'LAY-4': 'the app does not pad for a cutout (DSV-5)',
-};
+const SKIP = {};
 
 test('the rules read the shared stylesheet and styles.css', () => {
   // LAY-4 reads the body rule of the app only when there are two sheets.
