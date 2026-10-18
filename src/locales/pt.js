@@ -73,7 +73,7 @@ export default {
   'outcome.kept': { one: '{count} sem comprar é adiado', other: '{count} sem comprar são adiados' },
   'outcome.open': { one: '{count} sem comprar é guardado', other: '{count} sem comprar são guardados' },
   'outcome.bought': { one: '{count} comprado sai da lista', other: '{count} comprados saem da lista' },
-  'trip.hint': 'Podes mudar o que acontece ao que não compraste em',
+  'trip.hint': 'Podes mudar o que acontece ao que não compraste nas',
   'trip.question': 'Terminar as compras?',
   'trip.continue': 'Continuar a comprar',
 

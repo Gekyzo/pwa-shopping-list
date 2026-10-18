@@ -72,7 +72,7 @@ const listNodes = (items) => {
 };
 
 // One part for each place an item goes, in this order; a part with no item does not show (TRIP-4).
-const OUTCOMES = [['recurrent', 'repeat'], ['kept', 'check'], ['open', 'undo'], ['bought', 'cart']];
+const OUTCOMES = [['recurrent', 'repeat'], ['kept', 'cart'], ['open', 'download'], ['bought', 'check']];
 
 const outcomeRows = () => {
   const outcome = store.tripOutcome(state, keptItems());

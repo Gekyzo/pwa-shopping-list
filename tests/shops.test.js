@@ -256,6 +256,12 @@ test('nextShop counts an item of two shops in both', () => {
   assert.deepEqual(nextShop(state, 'Lidl'), { shop: 'Aldi', count: 1 });
 });
 
+test('nextShop from Todas or from a shop that is gone gives the first shop with an item to buy', () => {
+  const state = build(['Milk', 'active', { shops: ['Aldi'] }], ['Rice', 'active', { shops: ['Lidl'] }]);
+  assert.deepEqual(nextShop(state, null), { shop: 'Aldi', count: 1 });
+  assert.deepEqual(nextShop(state, 'Gone'), { shop: 'Aldi', count: 1 });
+});
+
 test('withShop adds the shop to the item of the result and leaves Todas, Sin tienda and errors alone', () => {
   const start = build(['Milk', 'active']);
   const id = find(start, 'Milk').id;

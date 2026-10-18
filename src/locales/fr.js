@@ -73,7 +73,7 @@ export default {
   'outcome.kept': { one: '{count} non acheté est reporté', other: '{count} non achetés sont reportés' },
   'outcome.open': { one: '{count} non acheté est gardé', other: '{count} non achetés sont gardés' },
   'outcome.bought': { one: '{count} acheté quitte la liste', other: '{count} achetés quittent la liste' },
-  'trip.hint': 'Tu peux changer ce qui arrive aux articles non achetés dans',
+  'trip.hint': 'Tu peux changer ce qui arrive aux articles non achetés dans les',
   'trip.question': 'Terminer les courses ?',
   'trip.continue': 'Continuer les courses',
 
