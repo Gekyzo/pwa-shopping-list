@@ -25,15 +25,19 @@ This document holds the rules of the app only.
   in the same layer, so that it wins; the block documents the parts, variants and states that the
   app adds. A version holds only the rules that differ from the shared ones, so that a change of
   the shared sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
-  app has its own versions of `icon`, `app-header`, `sheet`, `item-row` and `group-head`.
+  app has its own versions of `icon`, `nav-bar`, `toast`, `fab`, `app-header`, `sheet`, `item-row`
+  and `group-head`.
 - **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
   Nothing edits `vendor/` by hand.
 
 ## Exceptions
 
-- **DSV-5** The app follows LAY-1, LAY-2 and LAY-4, and the shared `nav-bar`, `toast` and `fab`
-  apply unchanged. Below 600px the bar is at the bottom. From 600px the bar is the rail at the
-  start side, and `body` pads the start side by `--rail-width`. The header content and the
+- **DSV-5** The app follows LAY-1 and LAY-4, and LAY-2 except for the side of the rail. Below
+  600px the bar is at the bottom. From 600px the bar is the rail at the side of the hand (NAV-13):
+  at the right with `Derecha`, at the start side of LAY-2 with `Izquierda`. `body`, the sheets, the
+  toast and the `+` button clear the rail on that side; the app versions of `nav-bar`, `toast` and
+  `fab` move them for `Derecha`. A rail at the side of the hand is in reach of the thumb that taps
+  the `+` button. The header content and the
   content of `main` form one column of at most `--content-max`, centred beside the rail. The
   basket in the corner stands beside the rail. The expanded class (840px and up) keeps this
   layout: the app has no list and detail section, so it has no `pane` layout. LAY-3 runs and
@@ -50,5 +54,5 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 
 | Layer | Parts |
 |---|---|
-| components | versions of `icon`, `app-header`, `sheet`, `item-row`, `group-head` (DSV-3) |
+| components | versions of `icon`, `nav-bar`, `toast`, `fab`, `app-header`, `sheet`, `item-row`, `group-head` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal`, `menu-actions` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |
