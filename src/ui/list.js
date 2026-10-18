@@ -3,11 +3,14 @@ import * as recipes from '#recipes';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
+import { emptyAction } from '#sections';
 import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
-import { recipeNode } from '#ui/recipes';
+import { recipeNode, sendToList } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
+import { openSheet, addQuery } from '#ui/add';
+import { showView } from '#ui/nav';
 
 // `keep` holds the ids of the open items that stay in Compra (TRIP-6).
 const finishTrip = (undoText = t('toast.finished'), keep = []) => {
@@ -92,11 +95,29 @@ export const headerOf = (summary) => {
   return { title: t('header.today'), subtitle: activeSubtitle(summary), ring: `${total - left}/${total}`, pct };
 };
 
-const EMPTY_KEYS = { active: 'empty.active', recipes: 'empty.recipes', menu: 'empty.menu' };
+// The button text of each action of an empty section.
+const ACTION_KEYS = { 'create-recipe': 'empty.createRecipe', 'go-recipes': 'empty.goRecipes', 'add-query': 'empty.addQuery', 'add-sample': 'empty.addSample' };
 
-const emptyText = () => {
-  if (searching()) return t(ui.view === 'recipes' ? 'empty.noMatch' : 'empty.noItemMatch', { query: ui.query.trim() });
-  return EMPTY_KEYS[ui.view] ? t(EMPTY_KEYS[ui.view]) : '';
+let emptyRun = null;
+
+// The title, the text and the action button of an empty section (STATE-1). With no action the add
+// button of the screen is the action, and the button of the state stays hidden.
+const renderEmpty = (shown) => {
+  $('empty').hidden = !shown;
+  const sample = state.recipes.find((recipe) => recipe.id === recipes.SAMPLE_ID);
+  const { title, text, action } = emptyAction(ui.view, { query: ui.query, hasRecipes: state.recipes.length > 0, sample: Boolean(sample) });
+  const params = { query: ui.query.trim(), recipe: sample?.name ?? '' };
+  $('empty-title').hidden = !title;
+  $('empty-title').textContent = title ? t(title) : '';
+  $('empty-text').textContent = text ? t(text, params) : '';
+  $('empty-action').hidden = !shown || !action;
+  $('empty-action').textContent = action ? t(ACTION_KEYS[action], params) : '';
+  emptyRun = {
+    'create-recipe': openSheet,
+    'go-recipes': () => showView('recipes'),
+    'add-query': addQuery,
+    'add-sample': () => sendToList(sample),
+  }[action] ?? null;
 };
 
 // One field serves the three sections: Recetas shows it when it has a recipe, and a list shows it
@@ -150,8 +171,7 @@ export const renderList = (summary) => {
   $('items').replaceChildren(...nodes);
   if (ui.view === 'active') hintSwipe();
 
-  $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
-  $('empty-text').textContent = emptyText();
+  renderEmpty(ui.view !== 'settings' && nodes.length === 0);
 
   $('menu-actions').hidden = !(ui.view === 'menu' && state.recipes.length > 0);
 
@@ -214,6 +234,7 @@ export const closeTrip = () => {
 };
 
 export const bind = () => {
+  $('empty-action').addEventListener('click', () => emptyRun?.());
   $('query').addEventListener('input', (event) => {
     Object.assign(ui, { query: event.target.value, openId: null });
     render();

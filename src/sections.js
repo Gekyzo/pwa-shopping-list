@@ -38,3 +38,21 @@ export const shortcutStart = (name) => {
   if (!SHORTCUTS.includes(name)) return null;
   return name === 'add' ? { view: 'active', add: true } : { view: name, add: false };
 };
+
+// What an empty section says and offers. `title` and `text` are keys of the catalog, `title` null for
+// a search with no match. `action` is the next step as a button: `create-recipe`, `go-recipes`,
+// `add-query` or `add-sample`; null when the add button of the screen is the action (or nothing is).
+// `query` is the search text, `hasRecipes` is true with a recipe, `sample` with the sample recipe.
+export const emptyAction = (view, { query, hasRecipes, sample }) => {
+  const none = { title: null, text: null, action: null };
+  const searching = query.trim() !== '';
+  if (view === 'recipes') {
+    if (searching && hasRecipes) return { ...none, text: 'empty.noMatch' };
+    return { title: 'empty.recipesTitle', text: 'empty.recipes', action: 'create-recipe' };
+  }
+  if (view === 'menu') return { title: 'empty.recipesTitle', text: 'empty.menu', action: 'go-recipes' };
+  if (view !== 'active') return none;
+  if (searching) return { ...none, text: 'empty.noItemMatch', action: 'add-query' };
+  if (sample) return { title: 'empty.activeTitle', text: 'empty.sample', action: 'add-sample' };
+  return { title: 'empty.activeTitle', text: 'empty.active', action: null };
+};

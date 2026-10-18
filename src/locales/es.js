@@ -52,9 +52,15 @@ export default {
   'group.noShop': 'Sin tienda',
   'group.noAisle': 'Sin sección',
 
-  'empty.active': 'La lista está vacía. Toca + para añadir un artículo.',
-  'empty.recipes': 'No hay recetas. Toca + para crear una.',
-  'empty.action': 'Añadir',
+  'empty.active': 'Toca + para añadir un artículo.',
+  'empty.activeTitle': 'La lista está vacía',
+  'empty.sample': 'Tienes la receta «{recipe}». Envía sus productos a Compra.',
+  'empty.addSample': 'Añadir ingredientes de «{recipe}»',
+  'empty.recipes': 'Guarda una receta y envía sus productos a Compra con un toque.',
+  'empty.recipesTitle': 'Aún no hay recetas',
+  'empty.createRecipe': '+ Crear receta',
+  'empty.goRecipes': 'Ir a Recetas',
+  'empty.addQuery': '+ Añadir «{query}»',
   'empty.noMatch': 'Ninguna receta coincide con «{query}».',
   'empty.noItemMatch': 'Ningún artículo coincide con «{query}».',
 

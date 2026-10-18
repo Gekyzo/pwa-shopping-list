@@ -85,8 +85,9 @@ const renderAll = () => {
   renderTrip();
   renderMenuMore();
 
+  // An action in the empty state replaces the add button.
   $('fab').hidden =
-    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.menuMoreOpen || ui.aislesOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
+    ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.menuMoreOpen || ui.aislesOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   document.querySelectorAll('.nav-item').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');

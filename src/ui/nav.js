@@ -12,7 +12,7 @@ const enter = (way) => {
   scroller.classList.add(way > 0 ? 'enter-next' : 'enter-previous');
 };
 
-const showView = (view) => {
+export const showView = (view) => {
   const way = direction(ui.view, view);
   // The field is shared: the focus of a list search must not go with it to Recetas.
   $('query').blur();

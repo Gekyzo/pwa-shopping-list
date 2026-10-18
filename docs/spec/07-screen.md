@@ -40,9 +40,16 @@ the bottom bar at each width.
   with its title, while the install is not offered (INS-1). The version line is at the end of
   `Ajustes`; while a newer version is deployed, a banner above it says `Versión X disponible` and
   `Tienes la Y.` (the version in use), with the button **Actualizar** across the full width.
-- **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
-  `No hay recetas. Toca + para crear una.` or, in `Menú`, `No hay recetas. Crea una en Recetas
-  para planificar el menú.`
+- **NAV-7** An empty section shows a title and a text in the lower half of the list area, and
+  one action as a wide button below them. `Compra` says `La lista está vacía` and
+  `Toca + para añadir un artículo.`, with no button: the `+` button is the action. With the sample
+  recipe in the state it says `Tienes la receta «name». Envía sus productos a Compra.` and the
+  button **Añadir ingredientes de «name»** sends that recipe to `Compra`. `Recetas` says `Aún no hay
+  recetas` and the button **+ Crear receta** opens the add sheet. `Menú` says `Aún no hay recetas`
+  and the button **Ir a Recetas** shows `Recetas`. A search with no match says `Ningún artículo
+  coincide con «text».` in `Compra`, with the button **+ Añadir «text»**, which adds the name as
+  the add sheet does and ends the search; in `Recetas` it says `Ninguna receta coincide con
+  «text».` with no button. While the button shows, the `+` button hides.
 - **NAV-18** `Compra` and `Recetas` show a line drawing of the basket of the app icon
   behind the content, in the bottom corner on the other side of the `+` button (NAV-13). It is
   tilted 30° and at 6 % opacity, and the corner and the bottom bar (the rail from 600px) cut part of it. It takes the

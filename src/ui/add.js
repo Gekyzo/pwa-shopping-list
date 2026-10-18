@@ -70,8 +70,9 @@ const useExisting = (item) => {
   const result = shops.withShop(brought, item.id, pickedShop());
   if (result.state !== brought.state) result.changed = true;
   if (!result.changed) {
-    // Nothing changed: the text stays, and the help under the input says why.
+    // Nothing changed: the text stays, and the help under the input says why. With no sheet, a toast.
     if (result.error) showToast(textOf(result.error));
+    else if (!ui.sheetOpen) showToast(t('add.duplicate', { name: item.name }));
     else setHelp(t('add.duplicate', { name: item.name }));
     $('add-name').focus();
     return;
@@ -109,17 +110,30 @@ const submitAdd = () => {
     useExisting(existing);
     return;
   }
-  const name = input.value.trim();
-  const added = store.addItem(state, input.value);
-  const result = added.error ? added : shops.withShop(added, added.state.items.at(-1).id, pickedShop());
-  if (!result.error) endSearch();
-  if (apply(result)) {
+  if (addNew(input.value)) {
     input.value = '';
     setHelp('');
     renderSheet();
-    showToast(say('toast.addedTo', { name, list: 'active' }));
   }
   input.focus();
+};
+
+// Adds a name that is not in the list, with the toast of the add. True when it was added.
+const addNew = (text) => {
+  const name = text.trim();
+  const added = store.addItem(state, text);
+  const result = added.error ? added : shops.withShop(added, added.state.items.at(-1).id, pickedShop());
+  if (!result.error) endSearch();
+  if (!apply(result)) return false;
+  showToast(say('toast.addedTo', { name, list: 'active' }));
+  return true;
+};
+
+// The action of the empty state of a search with no match: adds the searched name, and the search ends.
+export const addQuery = () => {
+  const existing = store.findByName(state, ui.query);
+  if (existing) useExisting(existing);
+  else addNew(ui.query);
 };
 
 export const bind = () => {

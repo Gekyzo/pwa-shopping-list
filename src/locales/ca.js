@@ -52,9 +52,15 @@ export default {
   'group.noShop': 'Sense botiga',
   'group.noAisle': 'Sense secció',
 
-  'empty.active': 'La llista és buida. Toca + per afegir un article.',
-  'empty.recipes': 'No hi ha receptes. Toca + per crear-ne una.',
-  'empty.action': 'Afegeix',
+  'empty.active': 'Toca + per afegir un article.',
+  'empty.activeTitle': 'La llista és buida',
+  'empty.sample': 'Tens la recepta «{recipe}». Envia’n els productes a Compra.',
+  'empty.addSample': 'Afegeix els ingredients de «{recipe}»',
+  'empty.recipes': 'Desa una recepta i envia’n els productes a Compra amb un toc.',
+  'empty.recipesTitle': 'Encara no hi ha receptes',
+  'empty.createRecipe': '+ Crea una recepta',
+  'empty.goRecipes': 'Ves a Receptes',
+  'empty.addQuery': '+ Afegeix «{query}»',
   'empty.noMatch': 'Cap recepta coincideix amb «{query}».',
   'empty.noItemMatch': 'Cap article coincideix amb «{query}».',
 
