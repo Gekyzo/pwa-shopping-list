@@ -23,6 +23,9 @@ import {
   THEME_KEY,
   loadTheme,
   saveTheme,
+  DENSITY_KEY,
+  loadDensity,
+  saveDensity,
   ONBOARDED_KEY,
   loadOnboarded,
   saveOnboarded,
@@ -482,6 +485,43 @@ test('the theme functions do not throw when the storage does', () => {
 test('the theme is not part of the state', () => {
   const storage = fakeStorage();
   saveTheme(storage, 'dark');
+  assert.deepEqual(load(storage), emptyState());
+  assert.equal(storage.getItem(STORAGE_KEY), null);
+});
+
+test('loadDensity returns compact when it is stored', () => {
+  assert.equal(loadDensity(fakeStorage({ [DENSITY_KEY]: 'compact' })), 'compact');
+});
+
+test('loadDensity returns normal for no value and for an unknown value', () => {
+  assert.equal(loadDensity(fakeStorage()), 'normal');
+  assert.equal(loadDensity(fakeStorage({ [DENSITY_KEY]: 'tiny' })), 'normal');
+  assert.equal(loadDensity(fakeStorage({ [DENSITY_KEY]: '' })), 'normal');
+});
+
+test('saveDensity stores compact and normal removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveDensity(storage, 'compact'), true);
+  assert.equal(storage.getItem(DENSITY_KEY), 'compact');
+  assert.equal(saveDensity(storage, 'normal'), true);
+  assert.equal(storage.getItem(DENSITY_KEY), null);
+});
+
+test('saveDensity removes the key for an unknown density', () => {
+  const storage = fakeStorage({ [DENSITY_KEY]: 'compact' });
+  assert.equal(saveDensity(storage, 'tiny'), true);
+  assert.equal(storage.getItem(DENSITY_KEY), null);
+});
+
+test('the density functions do not throw when the storage does', () => {
+  assert.equal(loadDensity(brokenStorage()), 'normal');
+  assert.equal(saveDensity(brokenStorage(), 'compact'), false);
+  assert.equal(saveDensity(brokenStorage(), 'normal'), false);
+});
+
+test('the density is not part of the state', () => {
+  const storage = fakeStorage();
+  saveDensity(storage, 'compact');
   assert.deepEqual(load(storage), emptyState());
   assert.equal(storage.getItem(STORAGE_KEY), null);
 });

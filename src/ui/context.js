@@ -12,6 +12,8 @@ import {
   saveTripEnd,
   loadTheme,
   saveTheme,
+  loadDensity,
+  saveDensity,
   loadOnboarded,
   hasStoredState,
 } from '#storage';
@@ -73,6 +75,9 @@ export let shopLists = storage ? loadShopLists(storage) : 'show';
 // `save` makes Descartar the first choice of an item not bought at Terminar compra (TRIP-7).
 export let tripEnd = storage ? loadTripEnd(storage) : 'keep';
 document.documentElement.dataset.theme = theme;
+// `compact` takes space out of the rows of a list, in styles.css.
+export let density = storage ? loadDensity(storage) : 'normal';
+document.documentElement.dataset.density = density;
 
 // `t` for a text that names a list: the `list` parameter is a list id.
 export const say = (key, params = {}) => t(key, params.list ? { ...params, list: t(`list.${params.list}`) } : params);
@@ -235,6 +240,12 @@ export const setTheme = (value) => {
   theme = ['light', 'dark'].includes(value) ? value : 'system';
   if (storage) saveTheme(storage, theme);
   document.documentElement.dataset.theme = theme;
+};
+
+export const setDensity = (value) => {
+  density = value === 'compact' ? 'compact' : 'normal';
+  if (storage) saveDensity(storage, density);
+  document.documentElement.dataset.density = density;
 };
 
 export const setShopLists = (choice) => {

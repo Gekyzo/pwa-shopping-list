@@ -28,8 +28,8 @@ the bottom bar at each width.
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has seven groups: **Copia de seguridad** (**Exportar**,
-  **Importar**), **Idioma**, **Mano**, **Tema**, **Al terminar la compra** (TRIP-7), **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
+- **NAV-6** `Ajustes` has eight groups: **Copia de seguridad** (**Exportar**,
+  **Importar**), **Idioma**, **Mano**, **Tema**, **Densidad**, **Al terminar la compra** (TRIP-7), **Ayuda** (**Ver la introducción**) and **Versión**. Each of the
   two buttons of the backup has an icon before its text: an arrow that goes up out of a tray for
   the export, an arrow that goes down into a tray for the import.
 - **NAV-7** An empty section shows a text: `La lista está vacía. Toca + para añadir un artículo.`,
@@ -150,6 +150,16 @@ the bottom bar at each width.
 - **NAV-16** `Automático` follows the phone (A11Y-6). `Claro` shows the light colours and `Oscuro`
   the dark colours, whatever the phone uses. A change shows at once, with no restart.
 - **NAV-17** The choice is stored in `shopping.theme`. `Automático` removes the key. It is a
+  preference of the device, not a part of the state: `Deshacer` and an import do not change it.
+
+## Density
+
+- **NAV-19** **Densidad** of `Ajustes` has two values: `Normal` and `Compacta`. An app with no
+  choice uses `Normal`.
+- **NAV-20** `Compacta` makes the rows of `Compra` and of `Recetas` 44 px high at the least, the
+  size of a tap target, in place of 56 px, so more rows fit on one screen. The sheets, `Ajustes`
+  and the bottom bar do not change. A change shows at once, with no restart.
+- **NAV-21** The choice is stored in `shopping.density`. `Normal` removes the key. It is a
   preference of the device, not a part of the state: `Deshacer` and an import do not change it.
 
 ## Onboarding

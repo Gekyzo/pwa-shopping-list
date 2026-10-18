@@ -15,6 +15,7 @@ import {
   chosen,
   hand,
   theme,
+  density,
   tripEnd,
   textOf,
   showToast,
@@ -23,6 +24,7 @@ import {
   setLanguage,
   setHand,
   setTheme,
+  setDensity,
   setTripEnd,
 } from '#ui/context';
 import { renderOnboarding } from '#ui/onboarding';
@@ -120,6 +122,8 @@ export const applyLanguage = () => {
     themeOption('light', 'settings.themeLight'),
     themeOption('dark', 'settings.themeDark'),
   );
+  const densityOption = (value, key) => el('option', { value, textContent: t(key), selected: value === density });
+  $('density').replaceChildren(densityOption('normal', 'settings.densityNormal'), densityOption('compact', 'settings.densityCompact'));
   renderTripEnd();
   render();
   renderOnboarding();
@@ -156,6 +160,8 @@ export const bind = () => {
   $('hand').addEventListener('change', (event) => setHand(event.target.value));
 
   $('theme').addEventListener('change', (event) => setTheme(event.target.value));
+
+  $('density').addEventListener('change', (event) => setDensity(event.target.value));
 
   $('trip-end').addEventListener('click', (event) => {
     const button = event.target.closest('[data-trip-end]');
