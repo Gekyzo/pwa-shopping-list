@@ -26,17 +26,26 @@ const editAction = (item) => iconButton('edit', t('row.edit'), () => openEdit(it
 const repeatAction = (item) =>
   iconButton('repeat', t(item.recurrent ? 'row.noRepeat' : 'row.repeat'), () => apply(store.toggleRecurrent(state, item.id)), { labelled: true });
 
-const deleteAction = (item) =>
-  iconButton(
+// Its visible name is Eliminar; a screen reader also hears the name of the item.
+const deleteAction = (item) => {
+  const button = iconButton(
     'trash',
     t('sheet.delete'),
     () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
     { variant: 'danger', labelled: true },
   );
+  button.setAttribute('aria-label', t('row.delete', { name: item.name }));
+  return button;
+};
 
 // The edit button at the end of a row. It is out of the name, so a tap on it does not tick.
 const editButton = (item) => {
-  const button = el('button', { type: 'button', className: 'button icon', title: t('row.edit'), onclick: () => openEdit(item) }, [icon('edit')]);
+  const edit = () => {
+    // An open row closes first (ROW-6).
+    Object.assign(ui, { openId: null, openSide: null });
+    openEdit(item);
+  };
+  const button = el('button', { type: 'button', className: 'button icon', title: t('row.edit'), onclick: edit }, [icon('edit')]);
   button.setAttribute('aria-label', t('row.edit'));
   button.setAttribute('aria-haspopup', 'dialog');
   return button;
@@ -144,12 +153,12 @@ export const hintSwipe = () => {
       hinted = false;
       return;
     }
-    body.style.transition = 'transform var(--motion) var(--ease)';
-    moveRow(body, -HINT_SHIFT);
-    body.addEventListener('transitionend', () => {
-      moveRow(body, 0);
-      body.addEventListener('transitionend', () => body.style.removeProperty('transition'), { once: true });
-    }, { once: true });
+    const style = getComputedStyle(body);
+    const duration = 2 * (parseFloat(style.getPropertyValue('--motion')) || 200);
+    body.animate(
+      [{ transform: 'translateX(0)' }, { transform: `translateX(${-HINT_SHIFT}px)` }, { transform: 'translateX(0)' }],
+      { duration, easing: style.getPropertyValue('--ease').trim() || 'ease' },
+    );
     if (storage) saveSwipeHint(storage);
   }, HINT_WAIT_MS);
 };
@@ -169,11 +178,12 @@ const closing = (button) => {
 };
 
 // A tap on the body of a row runs `tap`, except on its end slot. A tap on an open row only closes
-// it (ROW-6). The click that follows a drag, a hold or a slide never comes here (ROW-8).
-const tapBody = (event, body, tap) => {
+// it (ROW-6), with the slide back from where it is. The click that follows a drag, a hold or a
+// slide never comes here (ROW-8).
+const tapBody = (event, opened, tap) => {
   if (event.target.closest('.item-row-end')) return;
-  if (body.parentNode.classList.contains('open')) {
-    Object.assign(ui, { openId: null, openSide: null });
+  if (opened) {
+    Object.assign(ui, { openId: null, openSide: null, settleFrom: opened });
     render();
     return;
   }
@@ -187,7 +197,9 @@ export const swipeBox = ({ id, groupId = null, row, end, right, tap = null }) =>
   const open = isOpen(id, groupId) ? ui.openSide : null;
   const widths = { start: 0, end: end.length * SIDE_BUTTON };
   const body = el('div', { className: tap ? 'item-row-body tick' : 'item-row-body' }, row);
-  if (tap) body.addEventListener('click', (event) => tapBody(event, body, tap));
+  // While the row is open, a tap closes it from its open place.
+  const opened = open ? { id, groupId, x: shift(open, widths) } : null;
+  if (tap) body.addEventListener('click', (event) => tapBody(event, opened, tap));
   const layers = [el('div', { className: 'item-row-actions', inert: open !== 'end' }, end.map(closing))];
   // The slide to the right shows its action below the row.
   if (right) layers.unshift(el('div', { className: 'item-row-backdrop' }, [icon(right.icon)]));

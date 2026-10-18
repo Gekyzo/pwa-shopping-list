@@ -15,7 +15,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 - **LIST-6** A name field of the screen takes 80 characters at most. The store has no limit.
 - **LIST-7** A recurrent item of `Compra` shows `↻ cada compra` below its name. The action
   **Repetir** of the slide to the left (ROW-3) changes `recurrent`; on a recurrent item it is
-  `No repetir`.
+  `No repetir`. The switch **Repetir en cada compra** of the edit sheet (ROW-7) changes it too, and
+  shows `Guardado`.
 - **LIST-8** A delete removes the item. Its shops go with it.
 - **LIST-9** Removed: `Compra` is the only list, so an item has no other list to move to.
 

@@ -119,8 +119,8 @@ test('the edit sheet has a veil, a dialog, the name and quantity fields and the 
   // Each field keeps its name in sight: a label that floats onto the border once the field has a value.
   assert.match(layer, /<label class="field"><input id="edit-name"[^>]*><span class="field-label" data-i18n="edit.name"><\/span><\/label>/);
   assert.match(layer, /<label class="field"><input id="edit-quantity"[^>]*><span class="field-label" data-i18n="edit.quantity"><\/span><\/label>/);
-  // A titled part after the fields holds the shops of the item.
-  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<h2 class="sheet-title part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster">/);
+  // The switch of the recurrence follows the fields (LIST-7), then a titled part holds the shops of the item.
+  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<label class="switch"><span data-i18n="edit.repeat"><\/span><input id="edit-repeat" class="switch-input" type="checkbox" role="switch"><\/label>\s*<h2 class="sheet-title part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster">/);
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);
 });

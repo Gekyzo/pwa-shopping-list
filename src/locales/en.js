@@ -42,6 +42,7 @@ export default {
   'edit.done': 'Done',
   'edit.name': 'Name',
   'edit.quantity': 'Quantity',
+  'edit.repeat': 'Repeat on every trip',
   'edit.shops': 'Shops',
   'edit.aisle': 'Section',
   'edit.noAisles': 'Create the sections in Settings.',
