@@ -154,6 +154,15 @@
     padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
   }
 
+  /* A field beside a button, as the link of a recipe beside its open button, takes the room that is left. */
+  .input-row > .field {
+    flex: 1;
+  }
+
+  .input-row > .button.icon {
+    align-self: flex-end;
+  }
+
   /* Guardado holds a check icon before its text. */
   .sheet-saved {
     display: inline-flex;
@@ -162,8 +171,7 @@
   }
 
   /* @extends item-row
-     @variant recipe              A recipe: its name and product count, then its link and send buttons.
-     @part recipe-mark            The cart of a recipe whose products are all in Compra.
+     @variant recipe              A recipe: its name and its meta line, then its send button.
      @state bought    A ticked item of Actual. */
 
   /* From 600px the recipes stand in two columns, so more of them fit on the screen of a tablet or an
@@ -174,13 +182,6 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       column-gap: var(--space-2);
     }
-  }
-
-  .recipe-mark {
-    display: flex;
-    flex: none;
-    align-items: center;
-    color: var(--accent);
   }
 
   .item-row.bought .item-row-name {
