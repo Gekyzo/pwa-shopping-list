@@ -9,6 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- `Ajustes` shows its settings as groups of rows. **Idioma**, **Mano**, **Tema** and **Densidad** are in **Preferencias** and show their value; a tap on the row opens the list. A pending update shows as a banner with a wide **Actualizar** button.
 - In `Menú`, **Llenar cesta** stays at the bottom of the list. **Vaciar menú** moved to the `⋮` button of the header. In the compact density the days show a short name above their meals, and a meal name takes two lines.
 - The buttons and rows are larger, the corners are softer, and the hint in Ajustes no longer stretches its lines.
 - Each sheet has a head with its title and **Listo**, and a drag down closes it. The edit and recipe sheets show **Eliminar** at the bottom, and **Guardado** after a change.
