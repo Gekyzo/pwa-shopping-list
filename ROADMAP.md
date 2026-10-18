@@ -5,7 +5,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 ## Planned
 
 - **Reset setting**. Reset app data, with confirmation.
-- **Responsive**. Adapt screens to different phones sizes, models, viewport,foldable phones, tablets.
 - **Optional reagents**. Make reagents optional.
 - **Density mode.** A compact choice in `Ajustes` that shows more rows on one
   screen, with less space in each row.
