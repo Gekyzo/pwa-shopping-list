@@ -26,7 +26,7 @@
 | `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and the `Guardado` of a sheet save | `sheets`, `ui/context` |
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `shops`, `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `store`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/rows.js` | The item rows, their side menus and their swipe | `store`, `swipe`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
+| `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
 | `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `store`, `recipes`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |

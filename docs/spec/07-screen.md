@@ -42,22 +42,28 @@ the bottom bar at each width.
 
 ## Item rows
 
-- **ROW-1** A row of `Compra` has a checkbox, the name with its quantity after it in a muted
-  colour and the shops below it, and the recurrent mark (LIST-7). A tap on the name opens the edit
-  sheet (ROW-7).
+- **ROW-1** A row of `Compra` has a check mark, the name with its quantity after it in a muted
+  colour, a line below it with the shops and `↻ cada compra` for a recurrent item (LIST-7), and an
+  edit button **Editar** at its end. The name keeps two lines, then ends with an ellipsis. A tap on
+  the body of the row ticks or unticks the item (LIST-11); the check mark only shows the state. A
+  tap on the edit button opens the edit sheet (ROW-7) and does not tick. With **Izquierda**
+  (NAV-12) the edit button is at the start of the row and the check mark at its end. For the
+  keyboard and a screen reader, the name is a checkbox: `Space` or `Enter` ticks it.
 - **ROW-2** Removed: the app has one list, `Compra` (ROW-1).
-- **ROW-3** A slide of a row to the left shows its actions, as icon buttons 64 px wide:
+- **ROW-3** A slide of a row to the left shows its actions, as buttons 72 px wide with an icon and
+  its name below it:
 
   | Row | Slide to the left |
   |---|---|
-  | `Compra` | **Eliminar** |
+  | `Compra` | **Editar**, **Repetir** (`No repetir` for a recurrent item, LIST-7), **Eliminar** |
 
 - **ROW-4** A drag becomes a slide after 10 px of horizontal move. A drag that is first vertical
   scrolls the list.
 - **ROW-5** The left side opens when the drag passes 40 % of the width of that side, 40 px at least. An
   open side closes with a drag back of the same length. If not, the row goes back to where it was.
 - **ROW-6** One row is open at a time. A tap out of the open row closes it, and that tap still
-  does its own work. An action closes the row, then runs.
+  does its own work. A tap on the body of the open row only closes it. An action closes the row,
+  then runs.
 - **ROW-7** The edit sheet `Editar` has the field **Nombre**, 80 characters at most, the field
   **Cantidad**, 20 characters at most (LIST-27), then the shops (SHOP-9 to SHOP-15). The name of
   a field shows inside it while it is empty, and moves onto its top border when it has a value or
@@ -78,10 +84,13 @@ the bottom bar at each width.
 - **ROW-11** A slide of a row to the right runs an action at the release: in `Compra` it ticks or
   unticks the item (LIST-11), with `Deshacer` for a tick (LIST-13). It runs when the slide passed 35 % of the width of the row, 80 px at least; a
   shorter slide puts the row back. The row slides over a backdrop with the icon of the action,
-  which fills with the accent colour once the slide is long enough. A row with its left side open
-  closes it.
+  which fills with the accent colour once the slide is long enough. At that moment the phone
+  vibrates for 10 ms, for a tick and for an untick. A row with its left side open closes it.
 - **ROW-12** A recipe row of `Recetas` slides with the same rules (REC-5).
 - **ROW-13** Removed: a saved item has no row (LIST-35).
+- **ROW-14** The first time `Compra` shows a row, after 600 ms the body of its first row slides
+  24 px to the left and back, so the user sees that a row slides. Then `shopping.swipeHint` is
+  `1` and the hint does not play again. With `prefers-reduced-motion` it does not play.
 
 ## Messages and undo
 
@@ -97,7 +106,7 @@ the bottom bar at each width.
 
   | Area | Changes |
   |---|---|
-  | Items | Tick, by the checkbox or by a slide (ROW-11), delete, an existing item brought by the add sheet, a saved item brought back (LIST-35), a manual move |
+  | Items | Tick, by a tap on the row (ROW-1) or by a slide (ROW-11), delete, an existing item brought by the add sheet, a saved item brought back (LIST-35), a manual move |
   | Trip | **Terminar compra** |
   | Recipes | Send, delete, removal of a product, save and removal of a link |
   | Menu | **Llenar la cesta**, **Quitar** of a meal, **Vaciar menú** |
@@ -182,7 +191,7 @@ the bottom bar at each width.
   |---|---|---|
   | 1 | `Tu próxima compra, casi hecha` | `Compra` is the trip of today; what you do not buy today stays in the list for the next trip (TRIP-2) |
   | 2 | `Marca lo de siempre` | The recurrent mark and the result of **Terminar compra** |
-  | 3 | `Desliza una fila` | The two slides of a row (ROW-3, ROW-11) and the tap on the name (ROW-7) |
+  | 3 | `Desliza una fila` | The tap on a row (ROW-1) and its two slides (ROW-3, ROW-11) |
   | 4 | `Desliza la pantalla` | The slide between sections (NAV-3), the bottom bar and the `+` button |
   | 5 | `¿Qué comemos esta semana?` | A recipe and its products, the send to `Compra` (REC-18) and the plan of the week in `Menú` |
   | 6 | `Una receta para empezar` | The switch that adds the sample recipe (ONB-13) |
@@ -250,6 +259,7 @@ the bottom bar at each width.
 
 ## Limits
 
-No move of a row with the keyboard, and no keyboard way to open a side menu of an item row. The
+No move of a row with the keyboard, and no keyboard way to open a side menu of an item row: the
+recurrent mark changes in the side menu only. The
 walkthrough has no tour of shops, shop lists, quantities, backup or the settings of `Ajustes`,
 and no marks on the real controls. The sample data is one recipe only: no item and no meal.

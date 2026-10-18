@@ -40,7 +40,7 @@ repository root.
 | `src/ui/controls.js` | The controls that several views use: icons, the rename field and its `Guardado`, the more button | `sheets`, `store`, `ui/context`, `ui/view` |
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `shops`, `aisles`, `ui/context` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `store`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/rows.js` | The item rows, their side menus and their swipe | `store`, `swipe`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
+| `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
 | `src/ui/recipes.js` | The section `Recetas` | `store`, `recipes`, `ui/context`, `ui/controls`, `ui/motion` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
@@ -69,6 +69,8 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
 - **`localStorage`**, key `shopping.onboarded`: `1` after the walkthrough of the first start closed. No
   key and no `shopping.v1` means a new install, which shows the walkthrough. It is not part of the
   state and not part of the backup.
+- **`localStorage`**, key `shopping.swipeHint`: `1` after `Compra` showed the slide of a row one
+  time (ROW-14). It is not part of the state and not part of the backup.
 - **Cache API**, cache `shopping-shell-v15`: the app shell, served
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers

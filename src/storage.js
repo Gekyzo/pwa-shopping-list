@@ -381,3 +381,26 @@ export const hasStoredState = (storage) => {
     return false;
   }
 };
+
+// Set after Compra showed the slide of a row one time (ROW-14). A preference of the device, as the
+// hand is.
+export const SWIPE_HINT_KEY = 'shopping.swipeHint';
+
+// A storage that cannot be read counts as not shown: the app cannot save it either, so the hint
+// plays at each start.
+export const loadSwipeHint = (storage) => {
+  try {
+    return storage.getItem(SWIPE_HINT_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+
+export const saveSwipeHint = (storage) => {
+  try {
+    storage.setItem(SWIPE_HINT_KEY, '1');
+    return true;
+  } catch {
+    return false;
+  }
+};

@@ -14,6 +14,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.density` | `compact` when the user chose **Compacta** ([07-screen.md](07-screen.md), NAV-21) |
 | `localStorage` | `shopping.tripEnd` | `save` when the user chose **Descartar** ([03-lists.md](03-lists.md), TRIP-8) |
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
+| `localStorage` | `shopping.swipeHint` | `1` after `Compra` showed the slide of a row one time ([07-screen.md](07-screen.md), ROW-14) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
 | Cache API | `shopping-shell-v15` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 | Cache API | `shopping-manifest` | The name, the description and the shortcut names of the manifest in the language of the screen (SW-13) |

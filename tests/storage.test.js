@@ -30,6 +30,9 @@ import {
   loadOnboarded,
   saveOnboarded,
   hasStoredState,
+  SWIPE_HINT_KEY,
+  loadSwipeHint,
+  saveSwipeHint,
 } from '#storage';
 import { emptyState } from '#store';
 
@@ -708,4 +711,24 @@ test('save writes a version 8 state with no again field', () => {
   const stored = JSON.parse(storage.getItem(STORAGE_KEY));
   assert.equal(stored.version, 8);
   assert.equal(stored.items.some((item) => 'again' in item), false);
+});
+
+test('loadSwipeHint is false when no hint was shown', () => {
+  assert.equal(loadSwipeHint(fakeStorage()), false);
+});
+
+test('saveSwipeHint stores the hint, and loadSwipeHint then reads it as shown', () => {
+  const storage = fakeStorage();
+  assert.equal(saveSwipeHint(storage), true);
+  assert.equal(storage.getItem(SWIPE_HINT_KEY), '1');
+  assert.equal(loadSwipeHint(storage), true);
+});
+
+test('loadSwipeHint is false for another value', () => {
+  assert.equal(loadSwipeHint(fakeStorage({ [SWIPE_HINT_KEY]: 'true' })), false);
+});
+
+test('loadSwipeHint is false and saveSwipeHint fails for a storage that throws', () => {
+  assert.equal(loadSwipeHint(brokenStorage()), false);
+  assert.equal(saveSwipeHint(brokenStorage()), false);
 });
