@@ -65,3 +65,10 @@ test('SHELL of sw.js has the style sheet and the icons', () => {
   const shell = read('sw.js');
   for (const file of ['./styles.css', './icons.svg']) assert.ok(shell.includes(`'${file}'`), file);
 });
+
+test('SHELL of sw.js has every path of the import map', () => {
+  const shell = read('sw.js');
+  const map = JSON.parse(read('index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]);
+  const missing = Object.values(map.imports).filter((path) => !shell.includes(`'${path}'`));
+  assert.deepEqual(missing, []);
+});

@@ -9,6 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- Review fixes: an idle switch is darker and easier to see, a row of **Preferencias** shows a ring when the keyboard reaches it, **Añadir** of a shop or a section stays off while its field is empty, **Vaciar menú** off sends the focus to **Listo**, and the short day of **Compacta** shows in capitals.
 - The address parameter `?lang=pseudo` shows every text longer and accented, to check that the layout holds. It is not a language of Ajustes and is never stored.
 - The introduction has **Atrás** at the top left and **Saltar** at the top right, and one wide **Siguiente** at the bottom. The icon shows on the first page only, no button has a ring when it opens, and the controls named in a text show as bold accent text, not as boxes. The drawings and texts no longer show the old **↻** button at the end of a row.
 - On a phone, the shop list and the search move to a dock above the bottom bar, in thumb reach: **‹** and **›** step to the previous and next shop with items, the shop chip opens a list of the shops, and the search opens there with **Cancelar**, matches nearest the field. The ring shows the items left and the subtitle **T de N comprados**; Ajustes has no ring. The **+** button gets smaller while the list scrolls down. **Escape** and the back button close the top sheet, open row or search first. From 840px the recipes stand in two columns and a sheet opens at the side; the rail follows the hand on every screen. **Compacta** also makes the bars shorter.

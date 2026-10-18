@@ -33,7 +33,7 @@ their products in one action.
   Below 600px wide the name stands above the meals; from 600px it stands at the start of the row,
   with the width of the longest name, so the week fits on the screen of a tablet or an unfolded
   phone. In the compact density below 600px the name above the meals is the short weekday of
-  the language (`lun`), and the name of a meal takes up to two lines.
+  the language (`LUN`), and the name of a meal takes up to two lines.
 - **MENU-10** The header shows `Menú` and `N comidas planificadas`, or `Sin comidas
   planificadas`. The ring shows the number of planned meals.
 - **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each

@@ -51,6 +51,7 @@ export const renderEdit = () => {
   // The field completes a typed name with a shop in use.
   $('edit-shops').replaceChildren(...shops.shopSuggestions(state, item.id).map((shop) => el('option', { value: shop })));
   renderAisleChips(item);
+  syncShopSubmit();
 };
 
 // A tap on the chip of the aisle of the item clears it; a tap on another chip sets that aisle.
@@ -69,9 +70,15 @@ const renderAisleChips = (item) => {
   $('edit-aisles-empty').hidden = state.aisles.length > 0;
 };
 
+// Añadir stays disabled while the field has no text, as Añadir of the add sheet does.
+const syncShopSubmit = () => {
+  $('edit-shop-submit').disabled = !$('edit-shop').value.trim();
+};
+
 // The sheet stays open after a new shop, so that an item gets two shops in one visit.
 const submitShop = () => {
   if (applySaved($('edit-form'), shops.addItemShop(state, ui.editId, $('edit-shop').value))) $('edit-shop').value = '';
+  syncShopSubmit();
 };
 const editItem = () => state.items.find((entry) => entry.id === ui.editId);
 
@@ -91,6 +98,7 @@ export const bind = () => {
   });
   // A suggestion that the user picks replaces the text of the field: it adds the shop at once.
   $('edit-shop').addEventListener('input', (event) => {
+    syncShopSubmit();
     const picked = event.inputType === 'insertReplacementText' || event.inputType === undefined;
     if (picked && shops.shopSuggestions(state, ui.editId).includes(event.target.value)) submitShop();
   });
