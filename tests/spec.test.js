@@ -122,3 +122,7 @@ test('the manifest id is the path of the deploy, unique on a shared origin (VER-
   assert.equal(manifest.id, '/shopping-list/');
   assert.equal(manifest.start_url, './');
 });
+
+test('the installed app turns with the device (INS-4)', () => {
+  assert.equal(JSON.parse(read('manifest.webmanifest')).orientation, 'any');
+});

@@ -12,6 +12,7 @@ no change for the user has no entry.
 - On a tablet, an unfolded phone or a phone on its side, the bottom bar becomes a rail at the left
   side, and the lists, the sheets and the introduction form one centred column. A phone on its
   side gives more height to the list. On a phone held upright nothing changes.
+- The installed app turns with the phone or the tablet; it is no longer held upright.
 
 ## 1.0.38 - 2026-10-18
 
