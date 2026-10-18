@@ -27,3 +27,14 @@ export const direction = (from, to, sections = SECTIONS) => {
   const [a, b] = [sections.indexOf(from), sections.indexOf(to)];
   return a < 0 || b < 0 ? 0 : Math.sign(b - a);
 };
+
+// The shortcuts of the launcher, in the order of `shortcuts` of the manifest. Each one opens the
+// app at `?open=<name>`.
+export const SHORTCUTS = ['add', 'active', 'recipes', 'menu'];
+
+// The start of a shortcut: the section to show, and `add` to open the add sheet there. Null for a
+// name that is not a shortcut.
+export const shortcutStart = (name) => {
+  if (!SHORTCUTS.includes(name)) return null;
+  return name === 'add' ? { view: 'active', add: true } : { view: name, add: false };
+};

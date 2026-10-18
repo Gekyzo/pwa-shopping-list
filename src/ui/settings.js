@@ -2,6 +2,7 @@ import { exportJson, exportFilename, importJson } from '#storage';
 import { parseVersion, versionStatus } from '#version';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
 import { SAMPLE_ID, hasSample, deleteRecipe } from '#recipes';
+import { SHORTCUTS } from '#sections';
 import {
   REFRESH_MS,
   CHECK_MS,
@@ -86,12 +87,16 @@ const refreshShell = () =>
     worker.postMessage({ type: 'refresh' }, [channel.port2]);
   });
 
+// The text of each shortcut of the launcher (SHORT-3).
+const SHORTCUT_KEYS = { add: 'add.item', active: 'list.active', recipes: 'nav.recipes', menu: 'nav.menu' };
+
 // Writes the fixed text of the page, then the text that a render builds.
 export const applyLanguage = () => {
   document.documentElement.lang = lang;
   document.title = t('app.title');
   // The worker answers the manifest in this language (SW-13).
-  const text = { type: 'manifest', lang, name: t('app.title'), description: t('app.description') };
+  const shortcuts = Object.fromEntries(SHORTCUTS.map((name) => [name, t(SHORTCUT_KEYS[name])]));
+  const text = { type: 'manifest', lang, name: t('app.title'), description: t('app.description'), shortcuts };
   navigator.serviceWorker?.ready.then((registration) => registration.active?.postMessage(text)).catch(() => {});
   document.querySelectorAll('[data-i18n]').forEach((node) => {
     node.textContent = t(node.dataset.i18n);

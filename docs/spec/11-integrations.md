@@ -24,6 +24,30 @@ permission **Allow all the time** and no battery optimisation.
 Limits: no geolocation in the app, no system notification, one message for each place, no setting
 to turn the message off.
 
+## Launcher shortcuts
+
+Status: on `main`. Rules of `SHORTCUTS` and `shortcutStart` in `src/sections.js`, of `shortcuts` in
+`manifest.webmanifest` and of the start of `src/app.js`.
+
+A long press on the icon of the installed app shows its shortcuts. Android reads them from the
+manifest when Chrome installs or updates the app.
+
+- **SHORT-1** The manifest has four shortcuts, in this order: **Añadir artículo**
+  (`./?open=add`), **Compra** (`./?open=active`), **Recetas** (`./?open=recipes`) and **Menú**
+  (`./?open=menu`).
+- **SHORT-2** A start with `?open=<name>` shows that section. `add` shows `Compra` and opens the
+  add sheet there. An unknown name is ignored. While the walkthrough of a first start shows, the
+  section changes below it and the add sheet does not open.
+- **SHORT-3** The names of the shortcuts are the texts `add.item`, `list.active`, `nav.recipes`
+  and `nav.menu` in the language of the screen, through the worker (SW-13).
+- **SHORT-4** Each shortcut has an icon of 192 px: the line icon of its action, white on a disc of
+  the theme colour (VER-15).
+- **SHORT-5** The app removes `open` from the URL at once and keeps each other parameter, as ARR-4.
+
+Limits: Android shows a change of the shortcuts, or of their names, only after the next update
+check of Chrome for the installed app. The shortcuts work offline (SW-6, SW-7): the worker
+ignores the query of the URL.
+
 ## Voice commands
 
 Status: **not on `main`**. The work is on the branch `voice-commands` (3 commits:

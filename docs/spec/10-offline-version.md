@@ -27,10 +27,12 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **SW-10** A change of the stored state that an old module cannot read needs a new cache name, so
   that the worker loads the full shell again.
 - **SW-13** At each start and change of language, `applyLanguage` of `src/ui/settings.js` sends
-  `{ type: 'manifest', lang, name, description }` to the active worker, with `app.title` and
-  `app.description` of the language of the screen. The worker stores `{ lang, name, description }`
-  in the cache `shopping-manifest`, and answers `manifest.webmanifest` as SW-6 and SW-7 with these
-  three members in place of the ones of the file (`localizeManifest`). A member that is not a
+  `{ type: 'manifest', lang, name, description, shortcuts }` to the active worker, with `app.title`,
+  `app.description` and the names of the shortcuts (SHORT-3) in the language of the screen.
+  `shortcuts` maps the name of each shortcut, as in `?open=<name>`, to its text. The worker stores
+  `{ lang, name, description, shortcuts }` in the cache `shopping-manifest`, and answers
+  `manifest.webmanifest` as SW-6 and SW-7 with the three members and the name of each shortcut in
+  place of the ones of the file (`localizeManifest`). A member or a shortcut name that is not a
   non-empty string keeps the value of the file. With no stored text, or a manifest that is not
   JSON, the file is answered as it is.
 
@@ -109,7 +111,9 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   written by `npm run icons` from the art of `icons/source.png`: a basket of groceries and lists on white.
   The tab shows `icon-192.png`. The art of the maskable icon stays in the safe zone, a circle
   of radius 0.4 of the side. `icons/logo.png`, 288 px, is the same art with its white background
-  made transparent: the white that touches the edge goes, a white inside the art stays.
+  made transparent: the white that touches the edge goes, a white inside the art stays. The
+  icons of the shortcuts, `icons/shortcut-<name>.png` at 192 px, are a white line icon of
+  `icons.svg` on a disc of the theme colour, drawn by `npm run icons` (SHORT-4).
 - **VER-16** The installed app and the site in Chrome share one storage. The data of the installed
   app goes away with **Clear site data** and with the uninstall.
 

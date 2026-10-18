@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { SECTIONS, direction, slideDirection, slideTo } from '#sections';
+import { readFileSync } from 'node:fs';
+import { SECTIONS, SHORTCUTS, direction, slideDirection, slideTo, shortcutStart } from '#sections';
 
 test('SECTIONS has the order of the bottom bar', () => {
   assert.deepEqual(SECTIONS, ['active', 'recipes', 'menu', 'settings']);
@@ -88,4 +89,22 @@ test('direction uses the given list of sections', () => {
   assert.equal(direction('active', 'settings', sections), 1);
   assert.equal(direction('settings', 'active', sections), -1);
   assert.equal(direction('recipes', 'settings', sections), 0);
+});
+
+test('shortcutStart opens the add sheet of Compra for add', () => {
+  assert.deepEqual(shortcutStart('add'), { view: 'active', add: true });
+});
+
+test('shortcutStart opens the section of a section shortcut, with no sheet', () => {
+  for (const view of ['active', 'recipes', 'menu']) assert.deepEqual(shortcutStart(view), { view, add: false });
+});
+
+test('shortcutStart is null for an unknown name, for settings and for no name', () => {
+  for (const name of ['settings', 'other', '', null, undefined, 'toString']) assert.equal(shortcutStart(name), null);
+});
+
+test('SHORTCUTS has each shortcut of the manifest, in its order', () => {
+  const manifest = JSON.parse(readFileSync(new URL('../manifest.webmanifest', import.meta.url), 'utf8'));
+  assert.deepEqual(manifest.shortcuts.map(({ url }) => url), SHORTCUTS.map((name) => `./?open=${name}`));
+  for (const name of SHORTCUTS) assert.ok(shortcutStart(name), name);
 });

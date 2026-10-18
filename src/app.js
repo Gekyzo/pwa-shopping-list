@@ -1,5 +1,6 @@
 import * as store from '#store';
 import * as shops from '#shops';
+import { shortcutStart } from '#sections';
 import {
   ARRIVAL_MS,
   $,
@@ -37,7 +38,7 @@ import {
   closeTrip,
   bind as bindList,
 } from '#ui/list';
-import { renderSheet, closeSheet, bind as bindAdd } from '#ui/add';
+import { renderSheet, openSheet, closeSheet, bind as bindAdd } from '#ui/add';
 import { closeOnboarding, turnOnboarding, bind as bindOnboarding } from '#ui/onboarding';
 import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
 import { renderInstall, bind as bindInstall } from '#ui/install';
@@ -189,7 +190,18 @@ const params = new URLSearchParams(location.search);
 if (params.has('arrival')) {
   const message = store.arrivalMessage(state);
   if (message) showToast(textOf(message), { ms: ARRIVAL_MS });
+}
+// A shortcut of the launcher opens `?open=<name>`. The walkthrough of a first start stays on top
+// and gets no sheet below it.
+const start = shortcutStart(params.get('open'));
+if (start) {
+  ui.view = start.view;
+  if (start.add && ui.onboarding === null) openSheet();
+  else render();
+}
+if (params.has('arrival') || params.has('open')) {
   params.delete('arrival');
+  params.delete('open');
   const query = params.toString();
   history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
 }

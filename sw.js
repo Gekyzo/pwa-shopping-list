@@ -50,6 +50,10 @@ const SHELL = [
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
   './icons/logo.png',
+  './icons/shortcut-add.png',
+  './icons/shortcut-active.png',
+  './icons/shortcut-recipes.png',
+  './icons/shortcut-menu.png',
 ];
 
 // The text of the manifest in the language of the screen, which the page sends (`manifest`
@@ -58,12 +62,23 @@ const MANIFEST = 'shopping-manifest';
 const MANIFEST_TEXT = './manifest-text.json';
 const LOCALIZED = ['lang', 'name', 'description'];
 
-// The manifest with each member of LOCALIZED that `text` holds as a non-empty string.
+const named = (value) => typeof value === 'string' && value !== '';
+
+// The name of each shortcut `./?open=<name>` from `text.shortcuts[<name>]`, when it is non-empty.
+const localizeShortcuts = (shortcuts, names) => {
+  if (!Array.isArray(shortcuts) || !names || typeof names !== 'object' || Array.isArray(names)) return shortcuts;
+  return shortcuts.map((shortcut) => {
+    const [, open] = /[?&]open=([^&#]+)/.exec(shortcut.url ?? '') ?? [];
+    return open && Object.hasOwn(names, open) && named(names[open]) ? { ...shortcut, name: names[open] } : shortcut;
+  });
+};
+
+// The manifest with each member of LOCALIZED that `text` holds as a non-empty string, and the
+// names of its shortcuts.
 const localizeManifest = (manifest, text) => ({
   ...manifest,
-  ...Object.fromEntries(
-    LOCALIZED.filter((key) => typeof text?.[key] === 'string' && text[key]).map((key) => [key, text[key]]),
-  ),
+  ...Object.fromEntries(LOCALIZED.filter((key) => named(text?.[key])).map((key) => [key, text[key]])),
+  ...(manifest.shortcuts && { shortcuts: localizeShortcuts(manifest.shortcuts, text?.shortcuts) }),
 });
 
 // `reload` goes past the HTTP cache, so the shell is never a mix of two deploys.
@@ -144,9 +159,9 @@ self.addEventListener('fetch', (event) => {
 // `Actualizar` of Ajustes: load the full shell of the new deploy, then answer on the port.
 // The page sends the text of the manifest in the language of the screen at each start and
 // change of language.
-const storeManifestText = async ({ lang, name, description }) => {
+const storeManifestText = async ({ lang, name, description, shortcuts }) => {
   const cache = await caches.open(MANIFEST);
-  const body = JSON.stringify({ lang, name, description });
+  const body = JSON.stringify({ lang, name, description, shortcuts });
   await cache.put(MANIFEST_TEXT, new Response(body, { headers: { 'Content-Type': 'application/json' } }));
 };
 
