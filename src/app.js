@@ -1,5 +1,6 @@
 import * as store from '#store';
 import * as shops from '#shops';
+import { bindSheetDrag } from '#ds/sheet';
 import { shortcutStart } from '#sections';
 import {
   ARRIVAL_MS,
@@ -27,7 +28,7 @@ import { endReorder, bind as bindDrag } from '#ui/drag';
 import { moveRow } from '#ui/rows';
 import { renderRecipe, closeRecipe, bind as bindRecipe } from '#ui/recipes';
 import { renderMeal, closeMeal, bind as bindMenu } from '#ui/menu';
-import { renderArrange, bind as bindArrange } from '#ui/arrange';
+import { renderArrange, closeArrange, bind as bindArrange } from '#ui/arrange';
 import {
   headerOf,
   shopLabel,
@@ -155,10 +156,7 @@ document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape') return;
   endReorder(false);
   if (ui.sheetOpen) closeSheet();
-  if (ui.arrangeOpen) {
-    ui.arrangeOpen = false;
-    render();
-  }
+  if (ui.arrangeOpen) closeArrange();
   if (ui.editId !== null) closeEdit();
   if (ui.recipeId !== null) closeRecipe();
   if (ui.mealOpen !== null) closeMeal();
@@ -182,6 +180,22 @@ bindMenu();
 bindSettings();
 bindInstall();
 bindAisles();
+
+// Each sheet closes by Listo of its head and by a drag down of its grab or head. Each close
+// hides the layer at once, so the closing transition starts where the drag left the sheet.
+const SHEET_CLOSE = {
+  sheet: closeSheet,
+  arrange: closeArrange,
+  trip: closeTrip,
+  meal: closeMeal,
+  edit: closeEdit,
+  aisles: closeAisles,
+  recipe: closeRecipe,
+};
+for (const [id, close] of Object.entries(SHEET_CLOSE)) {
+  $(id).querySelector('.sheet-head .button').addEventListener('click', close);
+  bindSheetDrag($(id), { close });
+}
 
 applyLanguage();
 if (ui.onboarding !== null) $('onboarding-next').focus();

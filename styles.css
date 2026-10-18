@@ -148,6 +148,19 @@
     }
   }
 
+  /* A headed sheet without a foot ends at the screen edge, so its body clears the bottom inset
+     (A11Y-7). Design system 0.5.0 has this rule; its adoption removes this copy. */
+  .sheet:has(.sheet-head):not(:has(.sheet-foot)) .sheet-body {
+    padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  }
+
+  /* Guardado holds a check icon before its text. */
+  .sheet-saved {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
   /* @extends item-row
      @variant recipe              A recipe: its name and product count, then its link and send buttons.
      @part recipe-mark            The cart of a recipe whose products are all in Compra.

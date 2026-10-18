@@ -52,6 +52,7 @@
 
       <div id="empty" class="empty-state" hidden>
         <p id="empty-text"></p>
+        <button id="empty-action" class="button primary wide" type="button" data-i18n="empty.action" hidden></button>
       </div>
 
 
@@ -141,11 +142,14 @@
       <div id="veil" class="sheet-veil"></div>
       <form id="add" class="sheet" autocomplete="off">
         <div class="sheet-grab"></div>
-        <div class="input-row">
-          <input id="add-name" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
-          <button id="add-submit" class="button primary" type="submit"></button>
+        <header class="sheet-head"><h2 id="add-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <div class="input-row">
+            <input id="add-name" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
+            <button id="add-submit" class="button primary" type="submit"></button>
+          </div>
+          <ul id="suggestions" class="list-group plain" data-i18n-attr="aria-label:add.existing"></ul>
         </div>
-        <ul id="suggestions" class="list-group plain" data-i18n-attr="aria-label:add.existing"></ul>
       </form>
     </div>
 
@@ -153,27 +157,30 @@
       <div id="arrange-veil" class="sheet-veil"></div>
       <div class="sheet" role="dialog" data-i18n-attr="aria-label:arrange.label">
         <div class="sheet-grab"></div>
-        <div id="arrange-group">
-          <h2 class="sheet-title" data-i18n="arrange.groupBy"></h2>
-          <div class="segmented">
-            <button class="segment" type="button" data-group="recipe" data-i18n="nav.recipes"></button>
-            <button class="segment" type="button" data-group="shop" data-i18n="arrange.shops"></button>
-            <button class="segment" type="button" data-group="aisle" data-i18n="arrange.aisles"></button>
-            <button class="segment" type="button" data-group="none" data-i18n="arrange.none"></button>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="arrange.label"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <div id="arrange-group">
+            <h2 class="sheet-title" data-i18n="arrange.groupBy"></h2>
+            <div class="segmented">
+              <button class="segment" type="button" data-group="recipe" data-i18n="nav.recipes"></button>
+              <button class="segment" type="button" data-group="shop" data-i18n="arrange.shops"></button>
+              <button class="segment" type="button" data-group="aisle" data-i18n="arrange.aisles"></button>
+              <button class="segment" type="button" data-group="none" data-i18n="arrange.none"></button>
+            </div>
           </div>
-        </div>
-        <div id="arrange-sort">
-          <h2 class="sheet-title" data-i18n="arrange.sortBy"></h2>
-          <div class="segmented">
-            <button class="segment" type="button" data-sort="name" data-i18n="arrange.name"></button>
-            <button class="segment" type="button" data-sort="custom" data-i18n="arrange.custom"></button>
+          <div id="arrange-sort">
+            <h2 class="sheet-title" data-i18n="arrange.sortBy"></h2>
+            <div class="segmented">
+              <button class="segment" type="button" data-sort="name" data-i18n="arrange.name"></button>
+              <button class="segment" type="button" data-sort="custom" data-i18n="arrange.custom"></button>
+            </div>
           </div>
-        </div>
-        <div id="arrange-lists">
-          <h2 class="sheet-title" data-i18n="shops.lists"></h2>
-          <div class="segmented">
-            <button class="segment" type="button" data-lists="show" data-i18n="arrange.show"></button>
-            <button class="segment" type="button" data-lists="hide" data-i18n="arrange.hide"></button>
+          <div id="arrange-lists">
+            <h2 class="sheet-title" data-i18n="shops.lists"></h2>
+            <div class="segmented">
+              <button class="segment" type="button" data-lists="show" data-i18n="arrange.show"></button>
+              <button class="segment" type="button" data-lists="hide" data-i18n="arrange.hide"></button>
+            </div>
           </div>
         </div>
       </div>
@@ -183,10 +190,12 @@
       <div id="trip-veil" class="sheet-veil"></div>
       <div class="sheet" role="dialog" data-i18n-attr="aria-label:trip.menu">
         <div class="sheet-grab"></div>
-        <h2 class="sheet-title" data-i18n="trip.menu"></h2>
-        <p id="finish-menu-text" class="hint trip-open"></p>
-        <p id="trip-open" class="hint trip-open" hidden></p>
-        <button id="finish-menu" class="button primary wide" type="button" data-i18n="finish.button"></button>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.menu"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <p id="finish-menu-text" class="hint trip-open"></p>
+          <p id="trip-open" class="hint trip-open" hidden></p>
+          <button id="finish-menu" class="button primary wide" type="button" data-i18n="finish.button"></button>
+        </div>
       </div>
     </div>
 
@@ -194,11 +203,13 @@
       <div id="meal-veil" class="sheet-veil"></div>
       <div id="meal-sheet" class="sheet" role="dialog">
         <div class="sheet-grab"></div>
-        <h2 id="meal-title" class="sheet-title"></h2>
-        <input id="meal-query" class="input" type="search" maxlength="80" autocomplete="off" enterkeyhint="search" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search">
-        <p id="meal-empty" class="empty-state inline" hidden></p>
-        <div id="meal-chips" class="cluster"></div>
-        <button id="meal-remove" class="button outline danger wide" type="button" data-i18n="menu.remove" hidden></button>
+        <header class="sheet-head"><h2 id="meal-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <input id="meal-query" class="input" type="search" maxlength="80" autocomplete="off" enterkeyhint="search" data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search">
+          <p id="meal-empty" class="empty-state inline" hidden></p>
+          <div id="meal-chips" class="cluster"></div>
+          <button id="meal-remove" class="button outline danger wide" type="button" data-i18n="menu.remove" hidden></button>
+        </div>
       </div>
     </div>
 
@@ -206,20 +217,23 @@
       <div id="edit-veil" class="sheet-veil"></div>
       <form id="edit-form" class="sheet" role="dialog" autocomplete="off">
         <div class="sheet-grab"></div>
-        <h2 id="edit-title" class="sheet-title"></h2>
-        <label class="field"><input id="edit-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
-        <label class="field"><input id="edit-quantity" class="input field-input" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span class="field-label" data-i18n="edit.quantity"></span></label>
-        <h2 class="sheet-title part" data-i18n="edit.shops"></h2>
-        <div id="edit-chips" class="cluster"></div>
-        <p id="edit-empty" class="empty-state inline" data-i18n="shops.empty" hidden></p>
-        <div class="input-row">
-          <input id="edit-shop" class="input strong" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
-          <button class="button primary" type="submit" data-i18n="shops.add"></button>
+        <header class="sheet-head"><h2 id="edit-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <label class="field"><input id="edit-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
+          <label class="field"><input id="edit-quantity" class="input field-input" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span class="field-label" data-i18n="edit.quantity"></span></label>
+          <h2 class="sheet-title part" data-i18n="edit.shops"></h2>
+          <div id="edit-chips" class="cluster"></div>
+          <p id="edit-empty" class="empty-state inline" data-i18n="shops.empty" hidden></p>
+          <div class="input-row">
+            <input id="edit-shop" class="input strong" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
+            <button class="button primary" type="submit" data-i18n="shops.add"></button>
+          </div>
+          <datalist id="edit-shops"></datalist>
+          <h2 class="sheet-title part" data-i18n="edit.aisle"></h2>
+          <div id="edit-aisles" class="cluster"></div>
+          <p id="edit-aisles-empty" class="empty-state inline" data-i18n="edit.noAisles" hidden></p>
         </div>
-        <datalist id="edit-shops"></datalist>
-        <h2 class="sheet-title part" data-i18n="edit.aisle"></h2>
-        <div id="edit-aisles" class="cluster"></div>
-        <p id="edit-aisles-empty" class="empty-state inline" data-i18n="edit.noAisles" hidden></p>
+        <footer class="sheet-foot"><button id="edit-delete" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"/></svg><span data-i18n="sheet.delete"></span></button><span class="sheet-saved"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="sheet.saved"></span></span></footer>
       </form>
     </div>
 
@@ -227,13 +241,15 @@
       <div id="aisles-veil" class="sheet-veil"></div>
       <form id="aisles-form" class="sheet" role="dialog" autocomplete="off" data-i18n-attr="aria-label:aisles.title">
         <div class="sheet-grab"></div>
-        <h2 class="sheet-title" data-i18n="aisles.title"></h2>
-        <p id="aisles-empty" class="empty-state inline" data-i18n="aisles.empty" hidden></p>
-        <button id="aisles-usual" class="button outline wide" type="button" data-i18n="aisles.usual" hidden></button>
-        <ul id="aisles-list" class="products"></ul>
-        <div class="input-row">
-          <input id="aisles-new" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="40" data-i18n-attr="placeholder:aisles.placeholder,aria-label:aisles.placeholder">
-          <button class="button primary" type="submit" data-i18n="shops.add"></button>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="aisles.title"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <p id="aisles-empty" class="empty-state inline" data-i18n="aisles.empty" hidden></p>
+          <button id="aisles-usual" class="button outline wide" type="button" data-i18n="aisles.usual" hidden></button>
+          <ul id="aisles-list" class="products"></ul>
+          <div class="input-row">
+            <input id="aisles-new" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="40" data-i18n-attr="placeholder:aisles.placeholder,aria-label:aisles.placeholder">
+            <button class="button primary" type="submit" data-i18n="shops.add"></button>
+          </div>
         </div>
       </form>
     </div>
@@ -242,11 +258,14 @@
       <div id="recipe-veil" class="sheet-veil"></div>
       <div id="recipe-sheet" class="sheet" role="dialog">
         <div class="sheet-grab"></div>
-        <h2 id="recipe-title" class="sheet-title" data-i18n="recipe.title"></h2>
-        <label class="field"><input id="recipe-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" autocapitalize="sentences" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
-        <label class="field"><input id="recipe-url" class="input field-input" type="url" inputmode="url" enterkeyhint="done" autocapitalize="off" data-i18n-attr="aria-label:recipe.link,placeholder:recipe.link"><span class="field-label" data-i18n="recipe.link"></span></label>
-        <h2 class="sheet-title" data-i18n="recipe.products"></h2>
-        <div id="recipe-products"></div>
+        <header class="sheet-head"><h2 id="recipe-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <label class="field"><input id="recipe-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" autocapitalize="sentences" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
+          <label class="field"><input id="recipe-url" class="input field-input" type="url" inputmode="url" enterkeyhint="done" autocapitalize="off" data-i18n-attr="aria-label:recipe.link,placeholder:recipe.link"><span class="field-label" data-i18n="recipe.link"></span></label>
+          <h2 class="sheet-title" data-i18n="recipe.products"></h2>
+          <div id="recipe-products"></div>
+        </div>
+        <footer class="sheet-foot"><button id="recipe-delete" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"/></svg><span data-i18n="sheet.delete"></span></button><span class="sheet-saved"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="sheet.saved"></span></span></footer>
       </div>
     </div>
 
@@ -336,6 +355,7 @@
       {
         "imports": {
           "#app": "./src/app.js",
+          "#ds/sheet": "./vendor/design-system/sheet.js",
           "#store": "./src/store.js",
           "#recipes": "./src/recipes.js",
           "#menu": "./src/menu.js",
@@ -345,6 +365,7 @@
           "#sections": "./src/sections.js",
           "#onboarding": "./src/onboarding.js",
           "#reorder": "./src/reorder.js",
+          "#sheets": "./src/sheets.js",
           "#storage": "./src/storage.js",
           "#version": "./src/version.js",
           "#install": "./src/install.js",

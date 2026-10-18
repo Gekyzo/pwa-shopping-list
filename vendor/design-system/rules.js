@@ -303,4 +303,44 @@ export const RULES = [
       ...outlines.filter((o) => onInput(o) && visible(o)).map(({ rule, d }) => where(rule, d)),
     ];
   }),
+
+  // A sheet of the app has a head with its close or Done button. The button is inside the head, which ends at </header> or </div>.
+  define('SHEET-1', 'each sheet has a sheet-head with a close or Done button (SHEET-1)', ['html'], ({ html }) => {
+    const opens = [...html.matchAll(/class="([^"]*)"/g)].filter(([, value]) => value.split(/\s+/).includes('sheet'));
+    return opens
+      .map((open, i) => html.slice(open.index, opens[i + 1]?.index ?? html.length))
+      .filter((part) => !/class="[^"]*\bsheet-head\b[^"]*"[^>]*>(?:(?!<\/header>|<\/div>)[\s\S])*?<button\b/.test(part))
+      .map((part) => part.slice(0, 60));
+  }),
+
+  // An empty state of the app holds a button, except an inline one. The part ends at the close tag of its own element.
+  define('STATE-1', 'each empty state holds a button, except an inline one (STATE-1)', ['html'], ({ html }) => {
+    const tags = [...html.matchAll(/<(\/?)([a-zA-Z][\w-]*)\b([^>]*)>/g)];
+    const ends = (start) => {
+      const name = tags[start][2].toLowerCase();
+      let depth = 0;
+      for (let i = start; i < tags.length; i += 1) {
+        if (tags[i][2].toLowerCase() !== name) continue;
+        depth += tags[i][1] ? -1 : tags[i][3].endsWith('/') ? 0 : 1;
+        if (depth === 0) return tags[i].index;
+      }
+      return html.length;
+    };
+    return tags
+      .map((tag, i) => ({ tag, i }))
+      .filter(({ tag }) => !tag[1] && (/\bclass="([^"]*)"/.exec(tag[3])?.[1].split(/\s+/) ?? []).some((name) => name === 'empty-state') && !/\bclass="[^"]*\binline\b/.test(tag[3]))
+      .map(({ tag, i }) => html.slice(tag.index, ends(i)))
+      .filter((part) => !/<button\b/.test(part))
+      .map((part) => part.slice(0, 60));
+  }),
+
+  // The blocks that mirror for the left hand: each one the css defines needs a [data-hand="left"] rule.
+  define('HAND-1', 'each mirrored block that the css defines has a left-hand rule (HAND-1)', ['css'], ({ rules }) => {
+    const parts = rules.flatMap((rule) => rule.selector.split(',').map((part) => part.trim()));
+    const has = (part, name) => new RegExp(`\\.${name}(?![\\w-])`).test(part);
+    return ['app-header', 'input-row', 'sheet-head', 'sheet-foot', 'item-row-end', 'dock']
+      .filter((name) => parts.some((part) => !part.includes('[data-hand="left"]') && has(part, name)))
+      .filter((name) => !parts.some((part) => part.includes('[data-hand="left"]') && has(part, name)))
+      .map((name) => `.${name} has no [data-hand="left"] rule`);
+  }),
 ];

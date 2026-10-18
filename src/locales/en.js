@@ -37,6 +37,7 @@ export default {
   'row.delete': 'Delete {name}',
   'row.bought': 'Bought: {name}',
   'edit.title': 'Edit',
+  'edit.done': 'Done',
   'edit.name': 'Name',
   'edit.quantity': 'Quantity',
   'edit.shops': 'Shops',
@@ -48,6 +49,7 @@ export default {
 
   'empty.active': 'The list is empty. Tap + to add an item.',
   'empty.recipes': 'There are no recipes. Tap + to create one.',
+  'empty.action': 'Add',
   'empty.noMatch': 'No recipe matches “{query}”.',
   'empty.noItemMatch': 'No item matches “{query}”.',
 
@@ -72,7 +74,8 @@ export default {
   'search.items': 'Search item or shop',
   'recipe.openLink': 'Open the link of {name}',
   'recipe.inList': 'All in Shopping',
-  'recipe.title': 'Recipe',
+  'sheet.delete': 'Delete',
+  'sheet.saved': 'Saved',
   'recipe.products': 'Products',
   'recipe.link': 'Link',
   'recipe.addProduct': 'Add product',

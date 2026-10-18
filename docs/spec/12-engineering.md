@@ -13,6 +13,7 @@
 | `src/sections.js` | The order of the sections, the rule of the slide between them and the start of a shortcut | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
+| `src/sheets.js` | The rules of a sheet: when a field save shows `Guardado`, and for how long | nothing |
 | `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu` |
 | `src/version.js` | Pure version rules | nothing |
 | `src/install.js` | The install offer state machine | nothing |
@@ -21,7 +22,7 @@
 | `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
-| `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field | `ui/context` |
+| `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and its `Guardado` | `sheets`, `ui/context` |
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `shops`, `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `store`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/rows.js` | The item rows, their side menus and their swipe | `store`, `swipe`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
@@ -98,11 +99,12 @@
 | `tests/sections.test.js` | The slide between sections; the start of each shortcut and its place in the manifest (SHORT-1, SHORT-2) |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
+| `tests/sheets.test.js` | When a field save of a sheet shows `Guardado` (NAV-22) |
 | `tests/version.test.js` | Version rules |
 | `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own |
-| `tests/aliases.test.js` | The import map against `package.json` |
+| `tests/aliases.test.js` | The import map against `package.json`; each `#ds/` alias names a vendored module |
 | `tests/layers.test.js` | The layer rules: no import of `src/app.js`, no view in a pure module, no cycle among `src/ui/`, one owner for each shared value, `SHELL` (ENG-16) |
 | `tests/design.test.js` | Each rule of `vendor/design-system/rules.js` over the two stylesheets, `index.html`, `icons.svg`, `src/ui/` and `designs/` (DSV-5); the classes of the item rows |
 | `tests/vendor.test.js` | The copy of the design system: its files and hashes, its place in `index.html`, `designs/index.html` and `SHELL`, no copied rule in `styles.css` (DSV-1 to DSV-3) |
