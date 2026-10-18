@@ -7,6 +7,9 @@ export const shouldShow = ({ seen, hasState }) => !seen && !hasState;
 // The index of the page after a move of `direction` (1, -1 or 0). It stays in the pages.
 export const step = (index, direction) => Math.min(Math.max(index + direction, 0), PAGES.length - 1);
 
+// Atrás shows on every page but the first.
+export const hasBack = (index) => index > 0;
+
 export const isLast = (index) => index === PAGES.length - 1;
 
 // A key that starts with `#name` shows the icon `name` of the sprite, then the rest of its text.

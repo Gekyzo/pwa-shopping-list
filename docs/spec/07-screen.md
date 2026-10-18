@@ -227,18 +227,19 @@ the bottom bar at each width.
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
   A line break in the text of a catalog starts a new line. A text between two backticks, such as
-  `↻` or `+`, names a control and shows as a key: a border and a monospace font, as inline code.
+  `↻` or `+`, names a control and shows as a key: its icon and its text in bold accent colour, with no border, box or monospace font.
   A key that starts with `#name` shows the icon `name` of `icons.svg`, then the rest of its text.
   A key with an icon and no text has the label `onboarding.icon.<name>`.
-  Above the pages, the art of the app icon shows centred in the band between the top of the
-  walkthrough and the drawing, 96 px wide, with no background (`icons/logo.png`, VER-15). It
-  is decorative (`alt=""`) and does not change or move with the page. The title keeps the room
+  The app icon shows on page 1 only, above the drawing and inside the page group, 96 px wide, with
+  no background (`icons/logo.png`, VER-15). It is decorative (`alt=""`). The title keeps the room
   of two lines and the text the room of five lines, the longest title and text of a page in any
-  language, so the drawing and the logo are at the same place on each page.
-- **ONB-3** The bar at the bottom has **Saltar** at the left and **Siguiente** at the right, each
-  half of the bar wide; **Mano** `Izquierda` swaps them (NAV-13). **Saltar** has a thin border. On the last page **Saltar** does not show
-  and **Empezar** takes the full bar. One dot for each page shows the place of the page in view;
-  a dot is not a button.
+  language, so the drawing is at the same place on pages 2 to 6.
+- **ONB-3** The top bar has **Atrás** at the start and **Saltar** at the end, both without a border
+  or a fill. **Atrás** is in accent colour and shows on pages 2 to 6; a tap shows the previous
+  page. **Saltar** does not show on the last page. The bar keeps out of the top safe-area inset
+  and does not follow **Mano**. **Siguiente** takes the full width at the bottom, 56 px high
+  (`--tap-l`); on the last page it reads **Empezar**. One dot for each page shows the place of the
+  page in view; a dot is not a button.
 - **ONB-4** A horizontal slide with the measures of NAV-3 changes the page: to the left for the
   next one, to the right for the previous one. `ArrowRight` and `ArrowLeft` do the same. The move
   stops at the first and at the last page. The new page comes in from its side.
@@ -256,10 +257,12 @@ the bottom bar at each width.
 - **ONB-10** While the walkthrough is open the app below is `inert`. A message of the start stays
   below it.
 - **ONB-11** The walkthrough is a `role="dialog"` with `aria-modal` and the label `Introducción`.
-  The focus goes to the button at the bottom when it opens and at each change of page. The dots
+  The focus goes to the title of the page when it opens, so no ring shows on load; a change of
+  page keeps the focus on the button that was pressed, or moves it to **Siguiente** when that
+  button goes away. The dots
   have the label `Página N de 6`. The title and the text are a live region.
 - **ONB-12** With `prefers-reduced-motion: reduce` a page changes with no animation. The
-  walkthrough keeps out of the safe-area insets. **Mano** changes only the order of its bar (ONB-3).
+  walkthrough keeps out of the safe-area insets. **Mano** changes nothing in the walkthrough.
 - **ONB-13** The last page has the switch **Añadir la receta de ejemplo**, on at each open of the
   walkthrough. It shows only while the state has no sample recipe (REC-27); on another page, or
   with the sample there, its room stays empty, so the page does not move. **Empezar** with the
