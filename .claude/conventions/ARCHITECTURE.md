@@ -67,7 +67,7 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
 - **`localStorage`**, key `shopping.onboarded`: `1` after the walkthrough of the first start closed. No
   key and no `shopping.v1` means a new install, which shows the walkthrough. It is not part of the
   state and not part of the backup.
-- **Cache API**, cache `shopping-shell-v14`: the app shell, served
+- **Cache API**, cache `shopping-shell-v15`: the app shell, served
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers
   `{ ok }` on the message port.

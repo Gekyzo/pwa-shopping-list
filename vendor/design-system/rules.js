@@ -18,6 +18,12 @@ import { LAYERS, rulesOf, iconsOf, parseCatalog, classesOf, classesInScript } fr
 const TOKEN_PROPERTIES = /^(color|background(-color)?|border(-(top|right|bottom|left))?(-color)?|outline(-color)?|fill|stroke|padding(-\w+)?|margin(-\w+)?|gap|row-gap|column-gap|inset|top|right|bottom|left|font-size|font-weight|font-family|font|border-radius|box-shadow|transition|animation)$/;
 // A value part that needs no token: a keyword, a token, env(), a percent, or a small border width.
 const ALLOWED = /^(0|1px|2px|-?\d+(\.\d+)?%|-?\d+deg|var\(--[\w-]+\)|env\([\w-]+\)|[a-zA-Z-]+)$/;
+// The controls that carry the tap size, and the heights a control may have.
+const TAP_CLASSES = ['button', 'chip', 'input', 'swipe-action', 'segment'];
+const TAP_TOKENS = ['--tap', '--tap-l'];
+// The classes of the last compound of each selector of a rule.
+const lastClasses = (selector) =>
+  selector.split(',').flatMap((part) => [...(part.trim().split(/[\s>+~]+/).pop() ?? '').matchAll(/\.([a-z][\w-]*)(?![\w-])/g)].map(([, name]) => name));
 // The drawings of the walkthrough are art: their shapes are bare svg elements.
 const ART = /^\.onboarding-art > svg/;
 
@@ -254,5 +260,47 @@ export const RULES = [
     const docs = [...(css[0] ?? '').matchAll(/\/\*[\s\S]*?\*\//g)].map(([comment]) => comment).join('\n');
     const foreign = /\b(Leche|Café|Siempre|Buscar|Nueva tienda|Nombre|Idioma|Borrar|Próxima|Actual|recipes?|shops?|trip|bought|products?|groceries)\b/gi;
     return [...new Set(docs.match(foreign) ?? [])];
+  }),
+
+  // `switch-input` is the checkbox of a switch: it is drawn at 26px inside the 56px row of `.switch`,
+  // which owns the hit area. It is not in TAP_CLASSES, so it is exempt by name.
+  define('TAP-1', 'a height is never 44px, and a control is at least the tap size (TAP-1)', ['css'], ({ rules }) =>
+    rules
+      .filter((rule) => !rule.keyframe && rule.layer !== 'tokens')
+      .flatMap((rule) =>
+        rule.declarations
+          .filter((d) => /^(min-)?height$/.test(d.property))
+          .filter((d) => {
+            if (/(^|[^\d.])44px/.test(d.value)) return true;
+            if (!lastClasses(rule.selector).some((name) => TAP_CLASSES.includes(name))) return false;
+            const tokens = [...d.value.matchAll(/var\((--[\w-]+)\)/g)].map(([, token]) => token);
+            if (tokens.length && tokens.every((token) => TAP_TOKENS.includes(token))) return false;
+            const pixels = [...d.value.matchAll(/(\d+(?:\.\d+)?)px/g)].map(([, px]) => Number(px));
+            return tokens.some((token) => !TAP_TOKENS.includes(token)) || pixels.some((px) => px < 48);
+          })
+          .map((d) => where(rule, d)))),
+
+  define('TAP-2', 'the line colour is a border, never a text colour (TAP-2)', ['css'], ({ rules }) =>
+    rules
+      .filter((rule) => !rule.keyframe && rule.layer !== 'tokens')
+      .flatMap((rule) => rule.declarations.filter((d) => d.property === 'color' && /var\(--line\)/.test(d.value)).map((d) => where(rule, d)))),
+
+  define('TXT-1', 'text is never justified (TXT-1)', ['css'], ({ rules }) =>
+    rules.flatMap((rule) => rule.declarations.filter((d) => d.property === 'text-align' && d.value.replace(/\s*!important$/, '') === 'justify').map((d) => where(rule, d)))),
+
+  // One focus ring: the global :focus-visible outline, and an input that draws a border instead.
+  define('FOCUS-1', 'an input draws its focus as a border, with no outline (FOCUS-1)', ['css'], ({ rules }) => {
+    const outlines = rules.flatMap((rule) => rule.declarations.filter((d) => d.property === 'outline').map((d) => ({ rule, d })));
+    const visible = ({ d }) => !/^(none|0)$/.test(d.value.replace(/\s*!important$/, '').trim());
+    const lastCompound = (selector) => selector.split(',').map((part) => part.trim().split(/[\s>+~]+/).pop() ?? '');
+    const isInput = (compound) => /\.(input|field-input)(?![\w-])/.test(compound);
+    const focus = /:focus(-visible)?(?![\w-])/;
+    const onInput = ({ rule }) => lastCompound(rule.selector).some((compound) => isInput(compound) && focus.test(compound));
+    const global = outlines.filter((o) => visible(o) && /:focus-visible(?![\w-])/.test(o.rule.selector) && !onInput(o));
+    const dropped = outlines.some((o) => !visible(o) && lastCompound(o.rule.selector).some((compound) => /\.input(?![\w-])/.test(compound) && focus.test(compound)));
+    return [
+      ...(global.length && !dropped ? ['no .input:focus-visible rule sets outline: none'] : []),
+      ...outlines.filter((o) => onInput(o) && visible(o)).map(({ rule, d }) => where(rule, d)),
+    ];
   }),
 ];

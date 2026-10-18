@@ -9,7 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- The buttons and rows are larger, the corners are softer, and the hint in Ajustes no longer stretches its lines.
 
 ## 1.0.39 - 2026-10-18
 

@@ -1,9 +1,9 @@
 {
-  "version": "0.2.1",
-  "commit": "30e981303becaa71c2e33972ac4843f471386f4c",
+  "version": "0.3.0",
+  "commit": "d838db9b73255067a328df75782e0bb9e1de5fe2",
   "files": {
-    "design-system.css": "46edf0b3b189927c752668c1ef5fbd571fbe99c6234fce8c95113bcc861fc66c",
+    "design-system.css": "dd852433db5f831cc05bc392dae6f1f44f6a34582b1d07030b1d5d707bc9ef9c",
     "catalog.js": "14df9d2754ade53c097cf51572cefe7cb18857b02461434e5520413cee1e4ba5",
-    "rules.js": "260ccca7835c0338e016412d883f6d81a1220ddeaf125898b6ed8feabab2da11"
+    "rules.js": "553a6d4a5725d8e64d33f0e666d31da5974d5a699ea37492255289b268d5a650"
   }
 }
