@@ -2,6 +2,7 @@ import * as store from '#store';
 import * as shops from '#shops';
 import { bindSheetDrag } from '#ds/sheet';
 import { shortcutStart, fabState } from '#sections';
+import { sheetOpen, closeTop } from '#layers';
 import {
   ARRIVAL_MS,
   $,
@@ -21,8 +22,6 @@ import {
   render,
   commit,
   debugLog,
-  sheetOpen,
-  closeTop,
 } from '#ui/context';
 import { inList, viewState } from '#ui/view';
 import { rowKeys, bringIn, flash, snapshotRows, animateRows } from '#ui/motion';
@@ -56,12 +55,21 @@ import { bind as bindNav } from '#ui/nav';
 // Screen
 
 // While a layer is open, one entry of the history stands for it, so the back of the phone closes the
-// layer and not the app. A back with no layer to close (an entry left by a close of another kind) goes on.
+// layer and not the app (NAV-25). A layer closed in another way takes its entry away again: `skipPop`
+// marks the pop of that `history.back()`, which closes nothing. One entry at most.
 let backEntry = false;
+let skipPop = false;
 const holdBack = () => {
-  if (backEntry || closeTop(ui) === null) return;
-  history.pushState({ layer: true }, '');
-  backEntry = true;
+  if (skipPop) return;
+  const open = closeTop(ui) !== null;
+  if (open && !backEntry) {
+    history.pushState({ layer: true }, '');
+    backEntry = true;
+  } else if (!open && backEntry) {
+    backEntry = false;
+    skipPop = true;
+    history.back();
+  }
 };
 
 let debugView = null;
@@ -148,6 +156,7 @@ document.addEventListener(
     box.querySelectorAll('.item-row-actions').forEach((side) => {
       side.inert = true;
     });
+    holdBack();
   },
   true,
 );
@@ -194,10 +203,16 @@ const closeLayer = () => {
 
 // The back of the phone closes the top layer first (popstate below).
 window.addEventListener('popstate', () => {
+  if (skipPop) {
+    skipPop = false;
+    // A layer that opened while the entry went away gets its own entry now.
+    holdBack();
+    return;
+  }
   backEntry = false;
   if (ui.onboarding !== null) return;
   endReorder(false);
-  if (closeLayer() === null) history.back();
+  closeLayer();
 });
 
 // The add button collapses while the list scrolls down, and opens on a scroll up or at the top.
@@ -273,16 +288,19 @@ if (params.has('arrival')) {
 // A shortcut of the launcher opens `?open=<name>`. The walkthrough of a first start stays on top
 // and gets no sheet below it.
 const start = shortcutStart(params.get('open'));
+// The query goes before a sheet opens: the entry of the sheet (holdBack) then comes after an address
+// with no query, and a reload opens nothing.
+if (params.has('arrival') || params.has('open')) {
+  const rest = new URLSearchParams(params);
+  rest.delete('arrival');
+  rest.delete('open');
+  const query = rest.toString();
+  history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
+}
 if (start) {
   ui.view = start.view;
   if (start.add && ui.onboarding === null) openSheet();
   else render();
-}
-if (params.has('arrival') || params.has('open')) {
-  params.delete('arrival');
-  params.delete('open');
-  const query = params.toString();
-  history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
 }
 if (!storage) showToast(t('error.noStorage'));
 navigator.storage?.persist?.().catch(() => {});

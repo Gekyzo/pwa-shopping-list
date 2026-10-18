@@ -165,9 +165,10 @@ the bottom bar at each width.
   list of more than 24 px down, and opens again on any scroll up and at the top of the list
   (`fabState`).
 - **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an open sheet,
-  then an open row, then the search of a list. While a layer is open, one entry of the history
-  stands for it, so the back closes the layer and not the app. A back with nothing to close goes
-  back as the browser does.
+  then an open row, then the search of a list (`closeTop`). While a layer is open, one entry of the
+  history stands for it, so the back closes the layer and not the app. A layer closed in another
+  way takes its entry away, so the next back goes back as the browser does. A start from a
+  shortcut or an arrival takes its query out of the address before it opens anything.
 
 ## Hand
 

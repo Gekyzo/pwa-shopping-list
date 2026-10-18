@@ -26,6 +26,7 @@ repository root.
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store.js` |
 | `src/swipe.js` | The rule that settles the swipe of an item row | nothing |
 | `src/sections.js` | The order of the sections, the rule of the slide that changes the section, the start of a launcher shortcut, and what an empty section says and offers, the collapse of the `+` button on a scroll | nothing |
+| `src/layers.js` | The layers over a section: whether a sheet is open, and the top layer that `Escape` and the back close (`closeTop`) | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The rules of a row move: drop place, gap, new order | nothing |
 | `src/sheets.js` | The rules of a sheet: when a field save shows `Guardado`, and for how long | nothing |
@@ -34,7 +35,7 @@ repository root.
 | `src/version.js` | Pure version rules: validation, comparison, the next version | nothing |
 | `src/i18n.js` | The language to show (`resolveLanguage`) and the function `t(key, params)` of one language (`translator`) | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language: a flat object from key to a text or to `{ one, other }` | nothing |
-| `src/ui/context.js` | The values that the views share, their setters, the open sheet and the top layer to close (`closeTop`), the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
+| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, the rename field and its `Guardado`, the more button | `sheets`, `store`, `ui/context`, `ui/view` |
@@ -49,7 +50,7 @@ repository root.
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `store`, `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |
-| `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `ui/context`, `ui/drag`, `ui/settings` |
+| `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document | all of the above |
 | `sw.js` | Offline cache of the app shell | nothing; it is not a module of the app |
 

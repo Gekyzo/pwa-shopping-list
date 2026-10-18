@@ -309,8 +309,16 @@ export const closeShopPick = () => {
 };
 
 // The search of the dock fills the list from the bottom, so the nearest match is next to the field.
+// The list goes to its end when the search opens and when its text changes; another render, such as
+// a tick, leaves the scroll where it is.
+let scrolledQuery = null;
 export const showDockMatches = () => {
-  if (!ui.searchOpen || $('dock').hidden || matchMedia('(min-width: 600px)').matches) return;
+  if (!ui.searchOpen || $('dock').hidden || matchMedia('(min-width: 600px)').matches) {
+    scrolledQuery = null;
+    return;
+  }
+  if (ui.query === scrolledQuery) return;
+  scrolledQuery = ui.query;
   const main = document.querySelector('main');
   main.scrollTop = main.scrollHeight;
 };
@@ -371,7 +379,7 @@ export const bind = () => {
   });
   // The clear and the cancel must not take the focus out of the field first: the blur of an empty
   // field closes the search.
-  for (const id of ['dock-clear', 'dock-cancel']) $(id).addEventListener('mousedown', (event) => event.preventDefault());
+  for (const id of ['dock-clear', 'dock-cancel']) $(id).addEventListener('pointerdown', (event) => event.preventDefault());
   $('dock-clear').addEventListener('click', () => {
     Object.assign(ui, { query: '', openId: null });
     render();
