@@ -5,13 +5,25 @@ import { $, el, state, ui, t, lang, undoState, showToast, apply, render } from '
 import { sendText } from '#ui/recipes';
 
 // The name of a day of the week in the language of the screen. 1 January 2024 is a Monday.
-const dayName = (day) => new Intl.DateTimeFormat(intlTag(lang), { weekday: 'long' }).format(new Date(2024, 0, 1 + day));
+const dayName = (day, weekday = 'long') => new Intl.DateTimeFormat(intlTag(lang), { weekday }).format(new Date(2024, 0, 1 + day));
+
+const shortDay = (day) => {
+  const node = el('span', { className: 'day-short', textContent: dayName(day, 'short') });
+  node.setAttribute('aria-hidden', 'true');
+  return node;
+};
 
 const mealTitle = (day, meal) => t('menu.title', { meal: t(`meal.${meal}`), day: dayName(day) });
 
 const openMeal = (day, meal) => {
   Object.assign(ui, { mealOpen: { day, meal }, mealQuery: '' });
   render();
+};
+
+export const closeMenuMore = () => {
+  ui.menuMoreOpen = false;
+  render();
+  $('trip-button').focus();
 };
 
 export const closeMeal = () => {
@@ -32,7 +44,8 @@ const mealNode = (day, { meal, recipe }) => {
 
 export const dayNode = ({ day, meals }) =>
   el('li', { className: 'day' }, [
-    el('h3', { className: 'day-title', textContent: dayName(day) }),
+    // The long name shows from 600px or in the normal density; the short one in the compact density below 600px.
+    el('h3', { className: 'day-title' }, [el('span', { className: 'day-long', textContent: dayName(day) }), shortDay(day)]),
     el('div', { className: 'meals' }, meals.map((entry) => mealNode(day, entry))),
   ]);
 
@@ -43,6 +56,12 @@ const fillBasket = () => {
   }
   // A second tap changes nothing: keep the undo of the fill that is still on the screen.
   else showToast(t('toast.menuNothing'), { undo: undoState });
+};
+
+export const renderMenuMore = () => {
+  if (ui.view !== 'menu') ui.menuMoreOpen = false;
+  $('menu-more').hidden = !ui.menuMoreOpen;
+  $('menu-clear').disabled = menu.mealCount(state) === 0;
 };
 
 export const renderMeal = () => {
@@ -77,7 +96,11 @@ export const renderMeal = () => {
 
 export const bind = () => {
   $('menu-fill').addEventListener('click', fillBasket);
-  $('menu-clear').addEventListener('click', () => apply(menu.clearMenu(state), { undoText: t('toast.menuCleared') }));
+  $('menu-clear').addEventListener('click', () => {
+    ui.menuMoreOpen = false;
+    apply(menu.clearMenu(state), { undoText: t('toast.menuCleared') });
+  });
+  $('menu-more-veil').addEventListener('click', closeMenuMore);
   $('meal-veil').addEventListener('click', closeMeal);
   $('meal-query').addEventListener('input', (event) => {
     ui.mealQuery = event.target.value;

@@ -130,6 +130,7 @@ export const ui = {
   arrangeOpen: false,
   // True while the sheet of the trip button of Compra is open.
   tripOpen: false,
+  menuMoreOpen: false,
   // True while the sheet of the aisles of Ajustes is open.
   aislesOpen: false,
   // The item whose edit sheet is open, or null.

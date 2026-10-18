@@ -55,4 +55,4 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 | Layer | Parts |
 |---|---|
 | components | versions of `icon`, `nav-bar`, `toast`, `fab`, `app-header`, `sheet`, `item-row`, `group-head` (DSV-3) |
-| screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal`, `menu-actions` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |
+| screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |

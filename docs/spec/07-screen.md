@@ -109,7 +109,7 @@ the bottom bar at each width.
   | Items | Tick, by a tap on the row (ROW-1) or by a slide (ROW-11), delete, an existing item brought by the add sheet, a saved item brought back (LIST-35), a manual move |
   | Trip | **Terminar compra** |
   | Recipes | Send, delete, removal of a product, save and removal of a link |
-  | Menu | **Llenar la cesta**, **Quitar** of a meal, **Vaciar menú** |
+  | Menu | **Llenar cesta**, **Quitar** of a meal, **Vaciar menú** |
   | Backup | Import |
 
 - **MSG-6** These changes have no `Deshacer`: a new item, a rename, the recurrent mark,
@@ -158,7 +158,6 @@ the bottom bar at each width.
   | Header | Ring, text, buttons | Buttons, text, ring |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
-  | Buttons of `Menú` | **Vaciar menú**, **Llenar la cesta** | **Llenar la cesta**, **Vaciar menú** |
 
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).
