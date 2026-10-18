@@ -35,6 +35,13 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
   `src/app.js` and `src/ui/`, turns a message into text. A `list` parameter holds a list id, which the screen replaces with
   the name of the list in the language.
 
+## Pseudo-locale
+
+- **LANG-18** The address parameter `?lang=pseudo` shows each text of the Spanish catalog with
+  accented vowels, in `[ ]`, padded with `~` to 1.4 times its length. A `{name}` stays as it is,
+  and each plural form changes. It is a tool for layout checks: it is not in the list of Idioma, it
+  is not stored, no `navigator.languages` value selects it, and the `lang` attribute stays `es`.
+
 ## Not translated
 
 - **LANG-14** The data of the user: the names of items, recipes, products and shops stay as typed.

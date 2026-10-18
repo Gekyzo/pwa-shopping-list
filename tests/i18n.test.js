@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { CATALOGS, FALLBACK, LANGUAGES, LANGUAGE_NAMES, intlTag, resolveLanguage, translator } from '#i18n';
+import { CATALOGS, FALLBACK, LANGUAGES, LANGUAGE_NAMES, intlTag, pseudo, resolveLanguage, translator } from '#i18n';
 
 const fake = {
   en: { hello: 'Hello {name}', items: { one: '{count} item', other: '{count} items' }, onlyEn: 'English only' },
@@ -123,4 +123,29 @@ test('Portuguese uses the European plural rule: zero is plural', () => {
 test('intlTag gives the regional tag of Portuguese and the code of each other language', () => {
   assert.equal(intlTag('pt'), 'pt-PT');
   for (const lang of LANGUAGES.filter((code) => code !== 'pt')) assert.equal(intlTag(lang), lang);
+});
+
+test('pseudo accents the vowels, wraps in brackets and pads to 1.4 times the length', () => {
+  const text = pseudo('Compra');
+  assert.ok(text.startsWith('[') && text.endsWith(']'));
+  assert.ok(text.length >= 9);
+  assert.equal(pseudo('Compra'), '[Cömprä~]');
+});
+
+test('pseudo keeps each placeholder intact', () => {
+  assert.ok(pseudo('{count} left').includes('{count}'));
+});
+
+test('the pseudo translator applies pseudo over es, to each plural form, and fills the parameters', () => {
+  const t = translator('pseudo', fake);
+  assert.equal(t('hello', { name: 'Ana' }).startsWith('[Hölä Ana'), true);
+  assert.ok(t('items', { count: 1 }).includes('1 '));
+  assert.ok(t('items', { count: 2 }).includes('2 '));
+  assert.notEqual(t('items', { count: 1 }), t('items', { count: 2 }));
+});
+
+test('pseudo is not a language and no navigator language or stored value selects it', () => {
+  assert.ok(!LANGUAGES.includes('pseudo'));
+  assert.equal(resolveLanguage(['pseudo', 'es'], 'pseudo'), 'es');
+  assert.equal(resolveLanguage(['pseudo'], null), FALLBACK);
 });

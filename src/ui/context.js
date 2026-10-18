@@ -17,7 +17,7 @@ import {
   loadOnboarded,
   hasStoredState,
 } from '#storage';
-import { LANGUAGES, resolveLanguage, translator } from '#i18n';
+import { LANGUAGES, PSEUDO, resolveLanguage, translator } from '#i18n';
 import { shouldShow } from '#onboarding';
 
 // The values that the views share. A view reads them through the import, a live binding, and
@@ -66,7 +66,10 @@ export const scroller = document.querySelector('main');
 // The choice of the user, or null to follow the phone.
 export let chosen = storage ? loadLanguage(storage, LANGUAGES) : null;
 export let lang = resolveLanguage(navigator.languages, chosen);
-export let t = translator(lang);
+// Only `?lang=pseudo` selects the pseudo-locale (LANG-18): never saved, and `lang` stays a real code.
+const pseudoLocale = new URLSearchParams(location.search).get('lang') === PSEUDO;
+const translatorFor = (code) => translator(pseudoLocale ? PSEUDO : code);
+export let t = translatorFor(lang);
 // The hand that holds the phone: `left` mirrors the controls, in styles.css.
 export let hand = storage ? loadHand(storage) : 'right';
 document.documentElement.dataset.hand = hand;
@@ -233,7 +236,7 @@ export const setLanguage = (code) => {
   chosen = code;
   if (storage) saveLanguage(storage, chosen);
   lang = resolveLanguage(navigator.languages, chosen);
-  t = translator(lang);
+  t = translatorFor(lang);
 };
 
 export const setHand = (value) => {

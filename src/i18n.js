@@ -38,13 +38,25 @@ export const resolveLanguage = (preferred, stored) => {
 const fill = (text, params) =>
   text.replace(/\{(\w+)\}/g, (match, name) => (Object.hasOwn(params, name) ? String(params[name]) : match));
 
+// The pseudo-locale: a text with accented vowels, in `[ ]`, padded with `~` to 1.4 times its length,
+// so a layout check sees clipped and overflowing text. A `{name}` stays as it is.
+const ACCENTS = { a: 'ä', e: 'é', i: 'î', o: 'ö', u: 'ü', A: 'Ä', E: 'É', I: 'Î', O: 'Ö', U: 'Ü' };
+export const PSEUDO = 'pseudo';
+export const pseudo = (text) =>
+  `[${text.replace(/\{\w+\}|[aeiouAEIOU]/g, (match) => ACCENTS[match] ?? match)}`.padEnd(
+    Math.ceil(text.length * 1.4) - 1,
+    '~',
+  ) + ']';
+
 // `t(key, params)` for one language. An entry is a text, or `{ one, other }` selected by `params.count`.
 export const translator = (lang, catalogs = CATALOGS) => {
-  const rules = new Intl.PluralRules(intlTag(lang));
+  const isPseudo = lang === PSEUDO;
+  const source = isPseudo ? 'es' : lang;
+  const rules = new Intl.PluralRules(intlTag(source));
   return (key, params = {}) => {
-    const entry = catalogs[lang]?.[key] ?? catalogs[FALLBACK]?.[key];
+    const entry = catalogs[source]?.[key] ?? catalogs[FALLBACK]?.[key];
     if (entry === undefined) return key;
     const text = typeof entry === 'string' ? entry : entry[rules.select(Number(params.count))] ?? entry.other;
-    return fill(text, params);
+    return fill(isPseudo ? pseudo(text) : text, params);
   };
 };
