@@ -42,6 +42,7 @@ export default {
   'edit.done': 'Fertig',
   'edit.name': 'Name',
   'edit.quantity': 'Menge',
+  'edit.repeat': 'Bei jedem Einkauf wiederholen',
   'edit.shops': 'Geschäfte',
   'edit.aisle': 'Abteilung',
   'edit.noAisles': 'Lege die Abteilungen in Optionen an.',

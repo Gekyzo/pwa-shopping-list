@@ -42,6 +42,7 @@ export default {
   'edit.done': 'Concluído',
   'edit.name': 'Nome',
   'edit.quantity': 'Quantidade',
+  'edit.repeat': 'Repetir em cada compra',
   'edit.shops': 'Lojas',
   'edit.aisle': 'Secção',
   'edit.noAisles': 'Crie as secções em Definições.',

@@ -65,7 +65,7 @@ the bottom bar at each width.
   does its own work. A tap on the body of the open row only closes it. An action closes the row,
   then runs.
 - **ROW-7** The edit sheet `Editar` has the field **Nombre**, 80 characters at most, the field
-  **Cantidad**, 20 characters at most (LIST-27), then the shops (SHOP-9 to SHOP-15). The name of
+  **Cantidad**, 20 characters at most (LIST-27), the switch **Repetir en cada compra** (LIST-7), then the shops (SHOP-9 to SHOP-15). The name of
   a field shows inside it while it is empty, and moves onto its top border when it has a value or
   the focus. `Enter` or a
   loss of focus saves a field (LIST-5); an error shows its message and the field shows the old
@@ -259,7 +259,6 @@ the bottom bar at each width.
 
 ## Limits
 
-No move of a row with the keyboard, and no keyboard way to open a side menu of an item row: the
-recurrent mark changes in the side menu only. The
+No move of a row with the keyboard, and no keyboard way to open a side menu of an item row. The
 walkthrough has no tour of shops, shop lists, quantities, backup or the settings of `Ajustes`,
 and no marks on the real controls. The sample data is one recipe only: no item and no meal.

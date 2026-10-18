@@ -37,6 +37,7 @@ export const renderEdit = () => {
   $('edit-form').setAttribute('aria-label', t('edit.title'));
   if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
   if (document.activeElement !== $('edit-quantity')) $('edit-quantity').value = item.quantity;
+  $('edit-repeat').checked = item.recurrent;
   const own = new Set(item.shops.map((shop) => shop.toLowerCase()));
   const names = shops.shopNames(state);
   // The chips stay when the shops in use do not change: the blur of the name field renders
@@ -94,6 +95,10 @@ export const bind = () => {
     if (picked && shops.shopSuggestions(state, ui.editId).includes(event.target.value)) submitShop();
   });
   $('edit-delete').addEventListener('click', deleteItem);
+  // The switch sets the recurrence of the item (LIST-7), as Repetir of the slide does.
+  $('edit-repeat').addEventListener('change', () => {
+    if (editItem()) applySaved($('edit-form'), store.toggleRecurrent(state, ui.editId));
+  });
   const onSaved = () => flashSaved($('edit-form'));
   bindField($('edit-name'), { read: () => editItem()?.name, write: (value) => apply(store.renameItem(state, ui.editId, value)), onSaved });
   bindField($('edit-quantity'), { read: () => editItem()?.quantity, write: (value) => apply(store.setQuantity(state, ui.editId, value)), onSaved });

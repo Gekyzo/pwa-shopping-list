@@ -12,7 +12,7 @@ no change for the user has no entry.
 - The buttons and rows are larger, the corners are softer, and the hint in Ajustes no longer stretches its lines.
 - Each sheet has a head with its title and **Listo**, and a drag down closes it. The edit and recipe sheets show **Eliminar** at the bottom, and **Guardado** after a change.
 - The add input stays at the bottom with the suggestions above it, and **Crear** sits next to it. A name that is on the list already shows a note under the input, not a toast.
-- A tap on a row of Compra ticks it, and a pencil button at its end opens **Editar**. A slide to the left shows **Editar**, **Repetir** and **Eliminar** with their names, and a recurrent item says **↻ cada compra** under its name. The first row slides a little once to show that it slides.
+- A tap on a row of Compra ticks it, and a pencil button at its end opens **Editar**. A slide to the left shows **Editar**, **Repetir** and **Eliminar** with their names, and a recurrent item says **↻ cada compra** under its name. The first row slides a little once to show that it slides. The edit sheet has the switch **Repetir en cada compra**.
 
 ## 1.0.39 - 2026-10-18
 
