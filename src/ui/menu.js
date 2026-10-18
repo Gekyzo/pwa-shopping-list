@@ -64,10 +64,17 @@ export const renderMenuMore = () => {
   $('menu-clear').disabled = menu.mealCount(state) === 0;
 };
 
+// The height of the sheet at its first render while open: the results change, the sheet does not.
+let mealHeight = null;
+
 export const renderMeal = () => {
   const open = ui.mealOpen;
   $('meal').hidden = !open;
-  if (!open) return;
+  if (!open) {
+    mealHeight = null;
+    $('meal-sheet').style.minHeight = '';
+    return;
+  }
   const { day, meal } = open;
   const title = mealTitle(day, meal);
   $('meal-title').textContent = title;
@@ -92,6 +99,8 @@ export const renderMeal = () => {
   });
   $('meal-chips').replaceChildren(...chips);
   $('meal-remove').hidden = !current;
+  mealHeight ??= $('meal-sheet').offsetHeight;
+  $('meal-sheet').style.minHeight = `${mealHeight}px`;
 };
 
 export const bind = () => {

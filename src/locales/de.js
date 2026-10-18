@@ -52,9 +52,15 @@ export default {
   'group.noShop': 'Ohne Geschäft',
   'group.noAisle': 'Ohne Abteilung',
 
-  'empty.active': 'Die Liste ist leer. Tippe auf +, um einen Artikel hinzuzufügen.',
-  'empty.recipes': 'Es gibt keine Rezepte. Tippe auf +, um eines zu erstellen.',
-  'empty.action': 'Hinzufügen',
+  'empty.active': 'Tippe auf +, um einen Artikel hinzuzufügen.',
+  'empty.activeTitle': 'Die Liste ist leer',
+  'empty.sample': 'Du hast das Rezept „{recipe}“. Sende seine Produkte zum Einkauf.',
+  'empty.addSample': 'Zutaten von „{recipe}“ hinzufügen',
+  'empty.recipes': 'Speichere ein Rezept und sende seine Produkte mit einem Tipp zum Einkauf.',
+  'empty.recipesTitle': 'Noch keine Rezepte',
+  'empty.createRecipe': '+ Rezept erstellen',
+  'empty.goRecipes': 'Zu Rezepte',
+  'empty.addQuery': '+ „{query}“ hinzufügen',
   'empty.noMatch': 'Kein Rezept passt zu „{query}“.',
   'empty.noItemMatch': 'Kein Artikel passt zu „{query}“.',
 

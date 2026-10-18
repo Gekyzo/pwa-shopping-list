@@ -52,9 +52,15 @@ export default {
   'group.noShop': 'Senza negozio',
   'group.noAisle': 'Senza reparto',
 
-  'empty.active': 'La lista è vuota. Tocca + per aggiungere un articolo.',
-  'empty.recipes': 'Non ci sono ricette. Tocca + per crearne una.',
-  'empty.action': 'Aggiungi',
+  'empty.active': 'Tocca + per aggiungere un articolo.',
+  'empty.activeTitle': 'La lista è vuota',
+  'empty.sample': 'Hai la ricetta «{recipe}». Invia i suoi prodotti alla Spesa.',
+  'empty.addSample': 'Aggiungi gli ingredienti di «{recipe}»',
+  'empty.recipes': 'Salva una ricetta e invia i suoi prodotti alla Spesa con un tocco.',
+  'empty.recipesTitle': 'Ancora nessuna ricetta',
+  'empty.createRecipe': '+ Crea ricetta',
+  'empty.goRecipes': 'Vai a Ricette',
+  'empty.addQuery': '+ Aggiungi «{query}»',
   'empty.noMatch': 'Nessuna ricetta corrisponde a «{query}».',
   'empty.noItemMatch': 'Nessun articolo corrisponde a «{query}».',
 

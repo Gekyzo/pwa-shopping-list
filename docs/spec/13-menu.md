@@ -55,7 +55,8 @@ their products in one action.
 - **MENU-15** **Terminar compra** does not change the menu.
 - **MENU-16** The meal sheet has the field **Buscar receta o producto** above the chips. It
   filters the chips while the user types, with the match of REC-24. With no match the sheet
-  shows `Ninguna receta coincide con «text».` The text is empty each time the sheet opens.
+  shows `Ninguna receta coincide con «text».` The text is empty each time the sheet opens. The sheet keeps the height of its first render while
+  it is open, so that the sheet does not shrink as the matches fall.
 
 ## Limits
 

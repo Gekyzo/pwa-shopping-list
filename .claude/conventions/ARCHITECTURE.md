@@ -25,7 +25,7 @@ repository root.
 | `src/shops.js` | Pure shop operations and the list by shop | `store.js` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store.js` |
 | `src/swipe.js` | The rule that settles the swipe of an item row | nothing |
-| `src/sections.js` | The order of the sections, the rule of the slide that changes the section, and the start of a launcher shortcut | nothing |
+| `src/sections.js` | The order of the sections, the rule of the slide that changes the section, the start of a launcher shortcut, and what an empty section says and offers | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The rules of a row move: drop place, gap, new order | nothing |
 | `src/sheets.js` | The rules of a sheet: when a field save shows `Guardado`, and for how long | nothing |
@@ -44,7 +44,7 @@ repository root.
 | `src/ui/recipes.js` | The section `Recetas` | `store`, `recipes`, `ui/context`, `ui/controls`, `ui/motion` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu` |
+| `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |

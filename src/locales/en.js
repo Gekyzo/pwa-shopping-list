@@ -52,9 +52,15 @@ export default {
   'group.noShop': 'No shop',
   'group.noAisle': 'No section',
 
-  'empty.active': 'The list is empty. Tap + to add an item.',
-  'empty.recipes': 'There are no recipes. Tap + to create one.',
-  'empty.action': 'Add',
+  'empty.active': 'Tap + to add an item.',
+  'empty.activeTitle': 'The list is empty',
+  'empty.sample': 'You have the recipe “{recipe}”. Send its products to Shopping.',
+  'empty.addSample': 'Add the ingredients of “{recipe}”',
+  'empty.recipes': 'Save a recipe and send its products to Shopping with one tap.',
+  'empty.recipesTitle': 'No recipes yet',
+  'empty.createRecipe': '+ Create recipe',
+  'empty.goRecipes': 'Go to Recipes',
+  'empty.addQuery': '+ Add “{query}”',
   'empty.noMatch': 'No recipe matches “{query}”.',
   'empty.noItemMatch': 'No item matches “{query}”.',
 

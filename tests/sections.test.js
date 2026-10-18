@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SECTIONS, SHORTCUTS, direction, slideDirection, slideTo, shortcutStart } from '#sections';
+import { SECTIONS, SHORTCUTS, direction, emptyAction, slideDirection, slideTo, shortcutStart } from '#sections';
 
 test('SECTIONS has the order of the bottom bar', () => {
   assert.deepEqual(SECTIONS, ['active', 'recipes', 'menu', 'settings']);
@@ -107,4 +107,42 @@ test('SHORTCUTS has each shortcut of the manifest, in its order', () => {
   const manifest = JSON.parse(readFileSync(new URL('../manifest.webmanifest', import.meta.url), 'utf8'));
   assert.deepEqual(manifest.shortcuts.map(({ url }) => url), SHORTCUTS.map((name) => `./?open=${name}`));
   for (const name of SHORTCUTS) assert.ok(shortcutStart(name), name);
+});
+
+const NO_QUERY = { query: '', hasRecipes: false, sample: false };
+
+test('emptyAction of Recetas with no recipe creates one', () => {
+  assert.deepEqual(emptyAction('recipes', NO_QUERY), { title: 'empty.recipesTitle', text: 'empty.recipes', action: 'create-recipe' });
+});
+
+test('emptyAction of Menu with no recipe goes to Recetas', () => {
+  assert.deepEqual(emptyAction('menu', NO_QUERY), { title: 'empty.recipesTitle', text: 'empty.menu', action: 'go-recipes' });
+});
+
+test('emptyAction of a list search with no match adds the searched name', () => {
+  const result = emptyAction('active', { ...NO_QUERY, query: ' xyz ' });
+  assert.deepEqual(result, { title: null, text: 'empty.noItemMatch', action: 'add-query' });
+});
+
+test('emptyAction of a search that is only spaces is the empty list', () => {
+  assert.equal(emptyAction('active', { ...NO_QUERY, query: '   ' }).title, 'empty.activeTitle');
+});
+
+test('emptyAction of a recipe search with no match has no action', () => {
+  const result = emptyAction('recipes', { query: 'xyz', hasRecipes: true, sample: false });
+  assert.deepEqual(result, { title: null, text: 'empty.noMatch', action: null });
+});
+
+test('emptyAction of an empty list with the sample recipe adds its ingredients', () => {
+  const result = emptyAction('active', { ...NO_QUERY, hasRecipes: true, sample: true });
+  assert.deepEqual(result, { title: 'empty.activeTitle', text: 'empty.sample', action: 'add-sample' });
+});
+
+test('emptyAction of an empty list without the sample leaves the add button as the action', () => {
+  const result = emptyAction('active', { ...NO_QUERY, hasRecipes: true });
+  assert.deepEqual(result, { title: 'empty.activeTitle', text: 'empty.active', action: null });
+});
+
+test('emptyAction of a section with nothing to say is empty', () => {
+  assert.deepEqual(emptyAction('settings', NO_QUERY), { title: null, text: null, action: null });
 });

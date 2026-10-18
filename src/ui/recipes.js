@@ -12,7 +12,7 @@ export const sendText = ({ added, already }) => {
   return parts.join(', ');
 };
 
-const sendToList = (recipe) => {
+export const sendToList = (recipe) => {
   const result = recipes.sendRecipe(state, recipe.id);
   if (result.error || result.state !== state) {
     apply(result, { undoText: t('toast.sent', { name: recipe.name, summary: sendText(result) }) });

@@ -40,6 +40,17 @@
     }
   }
 
+  /* The empty state sits in the lower half of the list area: `main` gives it all the room below the
+     search field, and the DS `low` variant ends its content at the bottom. */
+  main:has(> .empty-state.low:not([hidden])) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main > .empty-state.low {
+    flex: 1;
+  }
+
   button,
   input {
     font: inherit;
