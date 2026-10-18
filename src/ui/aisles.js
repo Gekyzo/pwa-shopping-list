@@ -63,6 +63,12 @@ export const renderAisles = () => {
   const list = $('aisles-list');
   if (list.children.length !== state.aisles.length) list.replaceChildren(...state.aisles.map(aisleNode));
   [...list.children].forEach(fillRow);
+  syncSubmit();
+};
+
+// Añadir stays disabled while the field has no text.
+const syncSubmit = () => {
+  $('aisles-submit').disabled = !$('aisles-new').value.trim();
 };
 
 export const bind = () => {
@@ -72,8 +78,10 @@ export const bind = () => {
   $('aisles-form').addEventListener('submit', (event) => {
     event.preventDefault();
     if (apply(aisles.addAisle(state, $('aisles-new').value))) $('aisles-new').value = '';
+    syncSubmit();
     $('aisles-new').focus();
   });
+  $('aisles-new').addEventListener('input', syncSubmit);
   $('aisles-usual').addEventListener('click', () => {
     apply(aisles.addDefaultAisles(state, USUAL.map((key) => t(`aisles.usual.${key}`))));
     $('aisles-new').focus();

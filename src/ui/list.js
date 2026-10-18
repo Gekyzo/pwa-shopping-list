@@ -271,7 +271,7 @@ export const renderDock = () => {
   $('dock-shop').replaceChildren(
     el('span', { textContent: shopLabel(current.shop) }),
     el('span', { className: 'count', textContent: current.count === 0 ? '✓' : String(current.count) }),
-    el('span', { className: 'chevron', textContent: '▾' }),
+    el('span', { className: 'chevron', textContent: '▾', ariaHidden: 'true' }),
   );
   $('dock-shop').setAttribute('aria-expanded', String(ui.shopPickOpen));
   const previous = shops.previousShop(state, ui.shop);
@@ -355,7 +355,8 @@ export const bind = () => {
     if (ui.view === 'menu') {
       ui.menuMoreOpen = true;
       render();
-      $('menu-clear').focus();
+      // An empty menu disables Vaciar menú: Listo takes the focus then.
+      ($('menu-clear').disabled ? $('menu-more-sheet').querySelector('.sheet-head .button') : $('menu-clear')).focus();
       return;
     }
     Object.assign(ui, { tripOpen: true, openId: null });

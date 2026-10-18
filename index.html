@@ -286,7 +286,7 @@
           <p id="edit-empty" class="empty-state inline" data-i18n="shops.empty" hidden></p>
           <div class="input-row">
             <input id="edit-shop" class="input strong" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
-            <button class="button primary" type="submit" data-i18n="shops.add"></button>
+            <button id="edit-shop-submit" class="button primary" type="submit" data-i18n="shops.add" disabled></button>
           </div>
           <datalist id="edit-shops"></datalist>
           <h2 class="sheet-title part" data-i18n="edit.aisle"></h2>
@@ -308,7 +308,7 @@
           <ul id="aisles-list" class="products"></ul>
           <div class="input-row">
             <input id="aisles-new" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="40" data-i18n-attr="placeholder:aisles.placeholder,aria-label:aisles.placeholder">
-            <button class="button primary" type="submit" data-i18n="shops.add"></button>
+            <button id="aisles-submit" class="button primary" type="submit" data-i18n="shops.add" disabled></button>
           </div>
         </div>
       </form>

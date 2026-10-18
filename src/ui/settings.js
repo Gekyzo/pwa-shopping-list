@@ -29,7 +29,6 @@ import {
 } from '#ui/context';
 import { renderOnboarding } from '#ui/onboarding';
 
-// Borrar datos de ejemplo shows while the sample recipe exists (ONB-14).
 // The value of a row of Preferencias is the text of the option that the select has.
 const renderValues = () => {
   for (const id of ['language', 'hand', 'theme', 'density']) {
@@ -38,6 +37,7 @@ const renderValues = () => {
   }
 };
 
+// Borrar datos de ejemplo shows while the sample recipe exists (ONB-14).
 export const renderSample = () => {
   $('delete-sample').hidden = !hasSample(state);
 };

@@ -40,7 +40,7 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
 - **LANG-18** The address parameter `?lang=pseudo` shows each text of the Spanish catalog with
   accented vowels, in `[ ]`, padded with `~` to 1.4 times its length. A `{name}` stays as it is,
   and each plural form changes. It is a tool for layout checks: it is not in the list of Idioma, it
-  is not stored, no `navigator.languages` value selects it, and the `lang` attribute stays `es`.
+  is not stored, no `navigator.languages` value selects it, and the `lang` attribute stays the real resolved language code.
 
 ## Not translated
 
