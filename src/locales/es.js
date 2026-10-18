@@ -92,6 +92,7 @@ export default {
   'add.create': 'Crear',
   'add.createNamed': '+ Crear «{name}»',
   'add.existing': 'Artículos que ya existen',
+  'add.duplicate': '«{name}» ya está en la lista',
   'where.boughtRepeat': 'ya comprado · repetir',
   'where.inList': 'ya en la lista',
   'where.saved': 'comprado antes · añadir',

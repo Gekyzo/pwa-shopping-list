@@ -29,6 +29,7 @@ repository root.
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The rules of a row move: drop place, gap, new order | nothing |
 | `src/sheets.js` | The rules of a sheet: when a field save shows `Guardado`, and for how long | nothing |
+| `src/suggest.js` | The rows above the add input: create first, then the matching items, and which are in the list | `store` |
 | `src/storage.js` | Load, save, export, import, validation | `store.js`, `recipes.js` |
 | `src/version.js` | Pure version rules: validation, comparison, the next version | nothing |
 | `src/i18n.js` | The language to show (`resolveLanguage`) and the function `t(key, params)` of one language (`translator`) | `locales/*` |
@@ -44,7 +45,7 @@ repository root.
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu` |
-| `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
+| `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `store`, `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |

@@ -14,6 +14,7 @@
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
 | `src/sheets.js` | The rules of a sheet: when a field save shows `Guardado`, and for how long | nothing |
+| `src/suggest.js` | The rows above the add input: create first, then the matching items, and which are in the list | `store` |
 | `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu` |
 | `src/version.js` | Pure version rules | nothing |
 | `src/install.js` | The install offer state machine | nothing |
@@ -30,7 +31,7 @@
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The list `Compra`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu` |
-| `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
+| `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |
@@ -100,6 +101,7 @@
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
 | `tests/sheets.test.js` | When a save of a sheet shows `Guardado` (NAV-22) |
+| `tests/suggest.test.js` | The rows above the add input: create first, the cap of 6, which are in the list (ADD-2) |
 | `tests/version.test.js` | Version rules |
 | `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
