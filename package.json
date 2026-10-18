@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "imports": {
+    "#ds/*": "./vendor/design-system/*.js",
     "#*": "./src/*.js"
   },
   "scripts": {

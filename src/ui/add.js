@@ -14,6 +14,7 @@ export const renderSheet = () => {
   if (!ui.sheetOpen) return;
   const forRecipe = ui.view === 'recipes';
   const label = t(forRecipe ? 'add.recipeName' : 'add.itemLabel');
+  $('add-title').textContent = label;
   $('add-submit').textContent = t(forRecipe ? 'add.create' : 'add.submit');
   $('add-name').placeholder = label;
   $('add-name').setAttribute('aria-label', label);

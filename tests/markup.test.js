@@ -55,10 +55,59 @@ test('the trip button opens a sheet from the bottom, with a veil, and the header
   const [layer = ''] = body.match(/<div id="trip" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>/) ?? [];
   assert.match(layer, /<div id="trip-veil" class="sheet-veil">/);
   assert.match(layer, /<div class="sheet" role="dialog"/);
-  assert.match(layer, /<p id="finish-menu-text" class="hint trip-open">[\s\S]*<p id="trip-open" class="hint trip-open" hidden>[\s\S]*<button id="finish-menu" class="button primary wide"/);
+  assert.match(layer, /<header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.menu"><\/h2>/);
+  assert.match(layer, /<div class="sheet-body">\s*<p id="finish-menu-text" class="hint trip-open">[\s\S]*<p id="trip-open" class="hint trip-open" hidden>[\s\S]*<button id="finish-menu" class="button primary wide"/);
   assert.doesNotMatch(layer, /trip-open-list|trip-confirm/);
   assert.match(body, /<button id="trip-button"[^>]*aria-haspopup="dialog"[^>]*aria-controls="trip"/);
   assert.doesNotMatch(body, /trip-menu|role="menu"/);
+});
+
+// Each sheet of the page: the markup from its open tag to the open tag of the next sheet.
+const sheetParts = () => {
+  const opens = [...body.matchAll(/<(div|form) (?:id="([^"]+)" )?class="sheet"/g)];
+  return opens.map((open, i) => ({ id: open[2] ?? null, part: body.slice(open.index, opens[i + 1]?.index ?? body.length) }));
+};
+
+test('each of the seven sheets has the grab, then a head with its title and Listo, then a body', () => {
+  const parts = sheetParts();
+  assert.equal(parts.length, 7);
+  for (const { id, part } of parts) {
+    assert.match(
+      part,
+      /^<(div|form)[^>]*>\s*<div class="sheet-grab"><\/div>\s*<header class="sheet-head"><h2 [^>]*class="sheet-title main"[^>]*><\/h2><button class="button primary" type="button" data-i18n="edit.done"><\/button><\/header>\s*<div class="sheet-body">/,
+      id ?? part.slice(0, 60),
+    );
+  }
+});
+
+test('the edit and recipe sheets have a foot with Eliminar and Guardado; the other sheets have none', () => {
+  const feet = sheetParts().filter(({ part }) => part.includes('sheet-foot')).map(({ id }) => id);
+  assert.deepEqual(feet, ['edit-form', 'recipe-sheet']);
+  for (const [id, prefix] of [['edit-form', 'edit'], ['recipe-sheet', 'recipe']]) {
+    const { part } = sheetParts().find((sheet) => sheet.id === id);
+    assert.match(
+      part,
+      new RegExp(`<\\/div>\\s*<footer class="sheet-foot"><button id="${prefix}-delete" class="button outline danger" type="button"><svg [^>]*><use href="icons.svg#trash"\\/><\\/svg><span data-i18n="sheet.delete"><\\/span><\\/button><span class="sheet-saved"><svg [^>]*><use href="icons.svg#check"\\/><\\/svg><span data-i18n="sheet.saved"><\\/span><\\/span><\\/footer>\\s*<\\/(div|form)>`),
+      id,
+    );
+  }
+});
+
+test('the sheets with a title of their own give it an id; the others a fixed text', () => {
+  const titles = sheetParts().map(({ part }) => part.match(/<h2 ([^>]*)class="sheet-title main"([^>]*)>/).slice(1).join(''));
+  assert.deepEqual(titles, [
+    'id="add-title" ',
+    ' data-i18n="arrange.label"',
+    ' data-i18n="trip.menu"',
+    'id="meal-title" ',
+    'id="edit-title" ',
+    ' data-i18n="aisles.title"',
+    'id="recipe-title" ',
+  ]);
+});
+
+test('the empty state of a list holds an action button, hidden for now', () => {
+  assert.match(body, /<div id="empty" class="empty-state" hidden>\s*<p id="empty-text"><\/p>\s*<button id="empty-action" class="button primary wide" type="button" data-i18n="empty.action" hidden><\/button>\s*<\/div>/);
 });
 
 test('the edit sheet has a veil, a dialog, the name and quantity fields and the shops', () => {

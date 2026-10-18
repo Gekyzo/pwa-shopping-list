@@ -1,7 +1,7 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import { $, el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
-import { icon, iconButton, bindField } from '#ui/controls';
+import { icon, iconButton, bindField, flashSaved } from '#ui/controls';
 import { leaveNode } from '#ui/motion';
 import { swipeBox } from '#ui/rows';
 
@@ -150,6 +150,7 @@ export const renderRecipe = () => {
     return;
   }
   $('recipe-sheet').setAttribute('aria-label', recipe.name);
+  $('recipe-title').textContent = recipe.name;
   if (document.activeElement !== $('recipe-name')) $('recipe-name').value = recipe.name;
   if (document.activeElement !== $('recipe-url')) $('recipe-url').value = recipe.url;
   const products = el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product)));
@@ -161,22 +162,32 @@ export const renderRecipe = () => {
   shown = { id: recipe.id, name: recipe.name, products: recipe.products };
 };
 
+// Eliminar of the foot deletes the recipe, with Deshacer, and closes the sheet.
+const deleteOpenRecipe = () => {
+  const recipe = openRecipeOf();
+  if (!recipe) return;
+  ui.recipeId = null;
+  apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) });
+};
+
 export const bind = () => {
   $('recipe-veil').addEventListener('click', closeRecipe);
-  bindField(
-    $('recipe-name'),
-    () => openRecipeOf()?.name,
-    (value) => apply(recipes.renameRecipe(state, ui.recipeId, value)),
-  );
-  bindField(
-    $('recipe-url'),
-    () => openRecipeOf()?.url,
-    (value) => {
+  $('recipe-delete').addEventListener('click', deleteOpenRecipe);
+  const onSaved = () => flashSaved($('recipe-sheet'));
+  bindField($('recipe-name'), {
+    read: () => openRecipeOf()?.name,
+    write: (value) => apply(recipes.renameRecipe(state, ui.recipeId, value)),
+    onSaved,
+  });
+  bindField($('recipe-url'), {
+    read: () => openRecipeOf()?.url,
+    write: (value) => {
       const before = openRecipeOf().url;
       const result = recipes.setRecipeUrl(state, ui.recipeId, value);
       // A text that gives the same address, as one with no scheme, changes nothing.
       if (!result.error && result.state.recipes.find((recipe) => recipe.id === ui.recipeId).url === before) return false;
       return apply(result, { undoText: t(value.trim() ? 'toast.linkSaved' : 'toast.linkRemoved') });
     },
-  );
+    onSaved,
+  });
 };

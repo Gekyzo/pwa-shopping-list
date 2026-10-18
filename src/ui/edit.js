@@ -2,7 +2,7 @@ import * as store from '#store';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
 import { $, el, state, ui, t, apply, render } from '#ui/context';
-import { bindField } from '#ui/controls';
+import { bindField, flashSaved } from '#ui/controls';
 
 export const openEdit = (item) => {
   Object.assign(ui, { editId: item.id, openId: null });
@@ -30,7 +30,7 @@ export const renderEdit = () => {
   const item = state.items.find((entry) => entry.id === ui.editId);
   $('edit').hidden = !item;
   if (!item) return;
-  $('edit-title').textContent = t('edit.title');
+  $('edit-title').textContent = item.name;
   $('edit-form').setAttribute('aria-label', t('edit.title'));
   if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
   if (document.activeElement !== $('edit-quantity')) $('edit-quantity').value = item.quantity;
@@ -71,6 +71,14 @@ const submitShop = () => {
 };
 const editItem = () => state.items.find((entry) => entry.id === ui.editId);
 
+// Eliminar of the foot deletes the item, with Deshacer, and closes the sheet.
+const deleteItem = () => {
+  const item = editItem();
+  if (!item) return;
+  ui.editId = null;
+  apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) });
+};
+
 export const bind = () => {
   $('edit-veil').addEventListener('click', closeEdit);
   $('edit-form').addEventListener('submit', (event) => {
@@ -82,6 +90,8 @@ export const bind = () => {
     const picked = event.inputType === 'insertReplacementText' || event.inputType === undefined;
     if (picked && shops.shopSuggestions(state, ui.editId).includes(event.target.value)) submitShop();
   });
-  bindField($('edit-name'), () => editItem()?.name, (value) => apply(store.renameItem(state, ui.editId, value)));
-  bindField($('edit-quantity'), () => editItem()?.quantity, (value) => apply(store.setQuantity(state, ui.editId, value)));
+  $('edit-delete').addEventListener('click', deleteItem);
+  const onSaved = () => flashSaved($('edit-form'));
+  bindField($('edit-name'), { read: () => editItem()?.name, write: (value) => apply(store.renameItem(state, ui.editId, value)), onSaved });
+  bindField($('edit-quantity'), { read: () => editItem()?.quantity, write: (value) => apply(store.setQuantity(state, ui.editId, value)), onSaved });
 };

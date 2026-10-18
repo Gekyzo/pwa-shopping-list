@@ -37,6 +37,7 @@ export default {
   'row.delete': 'Elimina {name}',
   'row.bought': 'Comprat: {name}',
   'edit.title': 'Edita',
+  'edit.done': 'Fet',
   'edit.name': 'Nom',
   'edit.quantity': 'Quantitat',
   'edit.shops': 'Botigues',
@@ -48,6 +49,7 @@ export default {
 
   'empty.active': 'La llista és buida. Toca + per afegir un article.',
   'empty.recipes': 'No hi ha receptes. Toca + per crear-ne una.',
+  'empty.action': 'Afegeix',
   'empty.noMatch': 'Cap recepta coincideix amb «{query}».',
   'empty.noItemMatch': 'Cap article coincideix amb «{query}».',
 
@@ -72,7 +74,8 @@ export default {
   'search.items': 'Cerca article o botiga',
   'recipe.openLink': 'Obre l’enllaç de {name}',
   'recipe.inList': 'Tot és a Compra',
-  'recipe.title': 'Recepta',
+  'sheet.delete': 'Elimina',
+  'sheet.saved': 'Desat',
   'recipe.products': 'Productes',
   'recipe.link': 'Enllaç',
   'recipe.addProduct': 'Afegeix producte',

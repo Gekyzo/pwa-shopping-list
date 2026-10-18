@@ -37,6 +37,7 @@ export default {
   'row.delete': '{name} löschen',
   'row.bought': 'Gekauft: {name}',
   'edit.title': 'Bearbeiten',
+  'edit.done': 'Fertig',
   'edit.name': 'Name',
   'edit.quantity': 'Menge',
   'edit.shops': 'Geschäfte',
@@ -48,6 +49,7 @@ export default {
 
   'empty.active': 'Die Liste ist leer. Tippe auf +, um einen Artikel hinzuzufügen.',
   'empty.recipes': 'Es gibt keine Rezepte. Tippe auf +, um eines zu erstellen.',
+  'empty.action': 'Hinzufügen',
   'empty.noMatch': 'Kein Rezept passt zu „{query}“.',
   'empty.noItemMatch': 'Kein Artikel passt zu „{query}“.',
 
@@ -72,7 +74,8 @@ export default {
   'search.items': 'Artikel oder Geschäft suchen',
   'recipe.openLink': 'Link von {name} öffnen',
   'recipe.inList': 'Alles im Einkauf',
-  'recipe.title': 'Rezept',
+  'sheet.delete': 'Löschen',
+  'sheet.saved': 'Gespeichert',
   'recipe.products': 'Produkte',
   'recipe.link': 'Link',
   'recipe.addProduct': 'Produkt hinzufügen',

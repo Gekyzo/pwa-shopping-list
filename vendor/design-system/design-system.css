@@ -408,7 +408,11 @@
      @variant strong  The main box of a sheet, with an accent border.
      @example <input class="input" type="text" placeholder="New tag">
      @example <input class="input raised" type="search" placeholder="Search">
-     @example <input class="input strong" type="text" placeholder="Añadir artículo a la lista"> */
+     @example <input class="input strong" type="text" placeholder="Añadir artículo a la lista">
+     @state invalid  aria-invalid="true": the border takes --danger.
+     @part input-help  A line of help or error below the box.
+     @variant danger  On input-help: the error text in --danger.
+     @example <div><input class="input" type="text" value="Notes" aria-invalid="true"><p class="input-help danger">Enter a name</p></div> */
   .input {
     width: 100%;
     min-width: 0;
@@ -430,6 +434,20 @@
 
   .input::-webkit-search-cancel-button {
     appearance: none;
+  }
+
+  .input[aria-invalid="true"] {
+    border-color: var(--danger);
+  }
+
+  .input-help {
+    margin: var(--space-1) 0 0;
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
+  .input-help.danger {
+    color: var(--danger);
   }
 
   .input.strong {
@@ -654,12 +672,19 @@
      @summary A panel that comes up from the bottom over a veil. The layer is hidden to close it.
      @part sheet-layer  The fixed layer that holds the veil and the sheet.
      @part sheet-veil   The dark veil; a tap on it closes the sheet.
-     @part sheet-grab   The handle at the top.
+     @part sheet-grab   The handle at the top. A drag on it closes the sheet.
+     @part sheet-head   The bar under the handle: a title and a Done or close button.
+     @part sheet-body   The part that scrolls, between the head and the foot.
+     @part sheet-foot   The bar that stays at the bottom: the actions of the sheet.
+     @part sheet-saved  A short note in the foot, such as Saved.
+     @state on          On sheet-saved: the note shows.
      @part sheet-title  A title of the sheet or of one of its parts.
+     @variant main      On sheet-title: the title of the head, one line.
      @variant part      On sheet-title: a title below a line that separates it from the part above.
      @part entry        A choice of the sheet: a name, with its effect below it.
      @part entry-note   The effect of an entry.
-     @example <div class="sheet" style="border-radius: var(--radius-xl)"><div class="sheet-grab"></div><h2 class="sheet-title">Group by</h2><button class="entry" type="button"><span>Finish</span><small class="entry-note">Done notes leave the list</small></button><h2 class="sheet-title part">Tags</h2></div> */
+     @example <div class="sheet" style="border-radius: var(--radius-xl)"><div class="sheet-grab"></div><h2 class="sheet-title">Group by</h2><button class="entry" type="button"><span>Finish</span><small class="entry-note">Done notes leave the list</small></button><h2 class="sheet-title part">Tags</h2></div>
+     @example <div class="sheet" style="border-radius: var(--radius-xl); position: static"><div class="sheet-grab"></div><header class="sheet-head"><h2 class="sheet-title main">Note</h2><button class="button" type="button">Done</button></header><div class="sheet-body">Text of the note.</div><footer class="sheet-foot"><button class="button outline danger" type="button">Delete</button><span class="sheet-saved on">Saved</span></footer></div> */
   .sheet-layer {
     position: fixed;
     inset: 0;
@@ -703,19 +728,97 @@
   .sheet {
     position: relative;
     max-height: 85%;
-    overflow-y: auto;
-    padding: var(--space-3) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     background: var(--surface);
     transition: transform var(--motion) var(--ease);
   }
 
+  /* A sheet without a head scrolls as a whole, as before. */
+  .sheet:not(:has(.sheet-head)) {
+    overflow-y: auto;
+    padding: var(--space-3) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+  }
+
+  /* A sheet with a head keeps its padding in the parts, and only the body scrolls. */
+  .sheet:has(.sheet-head) {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  /* The handle. A sheet without a head keeps the small bar of 0.2.1. */
   .sheet-grab {
     width: 40px;
     height: 4px;
     margin: 0 auto var(--space-3);
     border-radius: var(--radius-s);
     background: var(--line);
+    touch-action: none;
+  }
+
+  /* With a head, the handle is a tap tall and draws its bar inside. */
+  .sheet:has(.sheet-head) .sheet-grab {
+    position: relative;
+    flex: none;
+    width: auto;
+    height: var(--tap);
+    margin: 0;
+    background: none;
+  }
+
+  .sheet:has(.sheet-head) .sheet-grab::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 4px;
+    border-radius: var(--radius-s);
+    background: var(--muted);
+    transform: translate(-50%, -50%);
+  }
+
+  .sheet-head {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0 var(--space-4) var(--space-2);
+    touch-action: none;
+  }
+
+  .sheet-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 var(--space-4);
+  }
+
+  .sheet-foot {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+  }
+
+  .sheet-saved {
+    color: var(--muted);
+    font-size: var(--text-s);
+    opacity: 0;
+    transition: opacity var(--motion);
+  }
+
+  .sheet-saved.on {
+    opacity: 1;
+  }
+
+  [data-hand="left"] .sheet-head,
+  [data-hand="left"] .sheet-foot {
+    flex-direction: row-reverse;
   }
 
   .sheet-title {
@@ -723,6 +826,19 @@
     color: var(--muted);
     font-size: var(--text-s);
     font-weight: var(--weight-strong);
+  }
+
+  /* The title of the head: it takes the free width and keeps to one line. */
+  .sheet-title.main {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    color: var(--text);
+    font-size: var(--text-l);
+    font-weight: var(--weight-strong);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* A title below a line that separates its part from the part above. */
@@ -822,9 +938,12 @@
   }
 
   /* @component empty-state
-     @summary The text of a list or a part with nothing in it, with an optional action.
+     @summary The text of a list or a part with nothing in it. Holds a button, except inline (STATE-1).
      @variant inline  In a sheet: aligned with the content, with less space.
+     @variant low     At the bottom of its area, in reach of the thumb. The app gives the list area a height, as the percent needs one.
+     @part empty-state-title  The short title above the text.
      @example <div class="empty-state"><p>The list is empty.</p><button class="button primary" type="button">Bring from Later</button></div>
+     @example <div class="empty-state low" style="height: 240px"><h2 class="empty-state-title">Nothing here</h2><p>Add the first note.</p><button class="button primary" type="button">Add a note</button></div>
      @example <p class="empty-state inline">No note matches.</p> */
   .empty-state {
     margin: calc(var(--space-6) * 2) var(--space-6);
@@ -839,6 +958,29 @@
   .empty-state.inline {
     margin: var(--space-3) 0;
     text-align: left;
+  }
+
+  .empty-state.low {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    min-height: 50%;
+    margin: 0 var(--space-5) var(--space-6);
+  }
+
+  .empty-state.low .button {
+    width: 100%;
+    min-height: var(--tap-l);
+    margin-top: 0;
+  }
+
+  .empty-state-title {
+    margin: 0;
+    color: var(--text);
+    font-size: var(--text-l);
+    font-weight: var(--weight-strong);
   }
 
   /* @component item-list
@@ -865,7 +1007,10 @@
      @part item-row-check         The round checkbox of an entry that can be done.
      @part item-row-name          The name button, with its quantity and its meta line.
      @part item-row-qty           The quantity after the name.
+     @part item-row-label         The text of the name. It keeps two lines, then ends with an ellipsis.
      @part item-row-meta          A muted line below the name, such as its tags.
+     @part item-row-end           The fixed slot at the end, two buttons wide. It holds up to two button icon and
+                                  mirrors as a whole for the left hand.
      @part item-row-actions       The swipe actions behind the right end. Hidden while the row is closed, so a
                                   fractional pixel ratio shows no edge of them. The drag code adds open on settle.
      @part item-row-backdrop      The action under a slide to the right.
@@ -877,8 +1022,10 @@
      @state open      On item-row-swipe: the actions show.
      @state armed     On item-row-swipe: a slide far enough to run its action.
      @state dragging  On item-row-body: the body follows the finger, with no transition.
-     @example <ul class="item-list" style="width: 100%"><li class="item-row"><div class="item-row-swipe"><div class="item-row-body"><input class="item-row-check" type="checkbox" aria-label="Call Ana"><button class="item-row-name" type="button"><span>Ideas <span class="item-row-qty">1 h</span></span><small class="item-row-meta">Work</small></button><button class="button icon toggle" type="button" aria-pressed="false" aria-label="Repeat"><svg class="icon" aria-hidden="true"><use href="icons.svg#refresh"/></svg></button></div></div></li><li class="item-row done"><div class="item-row-body"><input class="item-row-check" type="checkbox" checked aria-label="Read book"><button class="item-row-name" type="button"><span>Read book</span></button><button class="pill ghost" type="button">+ Later</button></div></li></ul>
-     @example <ul class="item-list" style="width: 100%"><li class="item-row"><div class="item-row-swipe open"><div class="item-row-actions"><button class="swipe-action" type="button" aria-label="Move"><svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg></button><button class="swipe-action danger" type="button" aria-label="Delete"><svg class="icon" aria-hidden="true"><use href="icons.svg#trash"/></svg></button></div><div class="item-row-body" style="transform: translateX(-128px)"><button class="item-row-name" type="button"><span>Call Ana</span></button></div></div></li></ul> */
+     @state tick      On item-row-body: the whole body is the tick target. The check is a mark only.
+     @example <ul class="item-list" style="width: 100%"><li class="item-row"><div class="item-row-swipe"><div class="item-row-body"><input class="item-row-check" type="checkbox" aria-label="Call Ana"><button class="item-row-name" type="button"><span class="item-row-label">Ideas <span class="item-row-qty">1 h</span></span><small class="item-row-meta">Work</small></button><button class="button icon toggle" type="button" aria-pressed="false" aria-label="Repeat"><svg class="icon" aria-hidden="true"><use href="icons.svg#refresh"/></svg></button></div></div></li><li class="item-row done"><div class="item-row-body"><input class="item-row-check" type="checkbox" checked aria-label="Read book"><button class="item-row-name" type="button"><span>Read book</span></button><button class="pill ghost" type="button">+ Later</button></div></li></ul>
+     @example <ul class="item-list" style="width: 100%"><li class="item-row"><div class="item-row-body tick"><input class="item-row-check" type="checkbox" aria-label="Call Ana"><button class="item-row-name" type="button"><span class="item-row-label">Call Ana about the long list of notes for the next meeting at the office</span></button><div class="item-row-end"><button class="button icon" type="button" aria-label="Edit"><svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg></button><button class="button icon" type="button" aria-label="Delete"><svg class="icon" aria-hidden="true"><use href="icons.svg#trash"/></svg></button></div></div></li></ul>
+     @example <ul class="item-list" style="width: 100%"><li class="item-row"><div class="item-row-swipe open"><div class="item-row-actions"><button class="swipe-action" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg><span class="swipe-action-label">Move</span></button><button class="swipe-action danger" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#trash"/></svg><span class="swipe-action-label">Delete</span></button></div><div class="item-row-body" style="transform: translateX(-144px)"><button class="item-row-name" type="button"><span>Call Ana</span></button></div></div></li></ul> */
   .item-row {
     border-bottom: 1px solid var(--line);
     background: var(--surface);
@@ -992,6 +1139,24 @@
     transform: rotate(-45deg);
   }
 
+  /* The slot at the end: as wide as two buttons, so the text ends at the same place on every row. */
+  .item-row-end {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: calc(var(--tap) * 2);
+  }
+
+  /* With tick, the body takes the tap and the check only shows the state. */
+  .item-row-body.tick {
+    cursor: pointer;
+  }
+
+  .item-row-body.tick .item-row-check {
+    pointer-events: none;
+  }
+
   .item-row-name {
     flex: 1;
     display: flex;
@@ -1016,6 +1181,14 @@
     text-decoration: line-through;
   }
 
+  /* The text of a name keeps two lines. The meta line below it is not clamped. */
+  .item-row-label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
   .item-row-meta {
     color: var(--muted);
     font-size: var(--text-xs);
@@ -1028,20 +1201,31 @@
 
   /* @component swipe-action
      @summary An action behind the right end of a row, shown by a slide to the left.
-     @variant danger  Removes the item.
-     @example <div style="display: flex; height: 56px"><button class="swipe-action" type="button" aria-label="Move"><svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg></button><button class="swipe-action danger" type="button" aria-label="Delete"><svg class="icon" aria-hidden="true"><use href="icons.svg#trash"/></svg></button></div> */
+     @variant neutral  A plain action, such as edit, in the surface colour.
+     @variant danger   Removes the item.
+     @part swipe-action-label  The word below the icon.
+     @example <div style="display: flex; height: 64px"><button class="swipe-action neutral" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg><span class="swipe-action-label">Edit</span></button><button class="swipe-action" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#refresh"/></svg><span class="swipe-action-label">Repeat</span></button><button class="swipe-action danger" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#trash"/></svg><span class="swipe-action-label">Delete</span></button></div> */
   .swipe-action {
-    display: grid;
-    place-items: center;
-    width: calc(var(--tap) + var(--space-5));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-half);
+    width: calc(var(--tap) + var(--space-6));
     height: 100%;
     border-radius: 0;
+    font-size: var(--text-xs);
     background: var(--accent-soft);
     color: var(--accent);
   }
 
   .swipe-action + .swipe-action {
     border-left: 1px solid var(--surface);
+  }
+
+  .swipe-action.neutral {
+    background: var(--surface-2);
+    color: var(--text);
   }
 
   .swipe-action.danger {
@@ -1100,9 +1284,17 @@
      @part list-row-text  The main text of a row that has two.
      @part list-row-meta  A muted text at the end of a row.
      @variant accent      On list-row: the row that makes a new thing.
+     @variant card        No border: a soft shadow lifts the box.
+     @part list-group-head      The quiet title above a group.
+     @part settings-row         A tall row of a group: a label, a value and a chevron.
+     @part settings-row-label   The text of a settings row.
+     @part settings-row-value   The muted value at the end of a settings row.
+     @part chevron              The muted end mark of a settings row (see section-head).
+     @variant danger      On settings-row: the row of a risky action, in the danger colour.
      @example <div class="list-group" style="width: 100%"><button class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#help"/></svg><span>Show the introduction</span></button><select class="select" aria-label="Language"><option>English</option></select></div>
      @example <div class="list-group pair" style="width: 100%"><button class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#export"/></svg><span>Export</span></button><button class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#import"/></svg><span>Import</span></button></div>
-     @example <ul class="list-group plain" style="width: 100%"><li><button class="list-row" type="button"><span class="list-row-text">Buy milk</span><span class="list-row-meta">In Notes</span></button></li><li><button class="list-row accent" type="button">Create «Buy»</button></li></ul> */
+     @example <ul class="list-group plain" style="width: 100%"><li><button class="list-row" type="button"><span class="list-row-text">Buy milk</span><span class="list-row-meta">In Notes</span></button></li><li><button class="list-row accent" type="button">Create «Buy»</button></li></ul>
+     @example <h3 class="list-group-head">Data</h3><div class="list-group card" style="width: 100%"><button class="settings-row" type="button"><span class="settings-row-label">Language</span><span class="settings-row-value">English</span><span class="chevron">›</span></button><button class="settings-row danger" type="button"><span class="settings-row-label">Delete all</span></button></div> */
   .list-group {
     margin: 0 var(--space-3);
     border: 1px solid var(--line);
@@ -1172,6 +1364,54 @@
     font-size: var(--text-xs);
   }
 
+  .list-group.card {
+    border: 0;
+    box-shadow: var(--shadow-s);
+  }
+
+  .list-group-head {
+    margin: var(--space-5) var(--space-4) var(--space-2);
+    color: var(--muted);
+    font-size: var(--text-s);
+    font-weight: var(--weight-medium);
+  }
+
+  .settings-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    min-height: var(--tap-l);
+    padding: 0 var(--space-3) 0 var(--space-4);
+    border-radius: 0;
+    color: var(--text);
+    font-size: var(--text-m);
+    text-align: start;
+  }
+
+  .settings-row + .settings-row {
+    border-top: 1px solid var(--line);
+  }
+
+  .settings-row-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .settings-row-value {
+    color: var(--muted);
+  }
+
+  .settings-row .chevron {
+    flex: none;
+    color: var(--muted);
+  }
+
+  .settings-row.danger {
+    color: var(--danger);
+    font-weight: var(--weight-medium);
+  }
+
   /* @component fab
      @summary The add button, fixed above the bottom bar at the side of the hand.
      @example <button class="fab" type="button" style="position: static">+</button> */
@@ -1190,6 +1430,24 @@
     box-shadow: var(--shadow-l);
   }
 
+  /* @component action-bar
+     @summary A row of buttons stuck to the bottom of a scroll area, over a fade.
+     @example <div class="action-bar" style="position: static"><button class="button" type="button">Cancel</button><button class="button primary" type="button">Save</button></div> */
+  .action-bar {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: linear-gradient(transparent, var(--bg) var(--space-4));
+  }
+
+  .action-bar .button {
+    flex: 1;
+    min-height: var(--tap-l);
+    white-space: nowrap;
+  }
+
   /* Left hand: the controls change side. Text stays aligned to the left, and a row slides as before. */
 
   [data-hand="left"] .app-header {
@@ -1201,18 +1459,23 @@
     margin-left: 0;
   }
 
+  /* The text of a row starts at --space-4 with either hand. Only the check and the trailing slot change side. */
   [data-hand="left"] .item-row-body {
-    flex-direction: row-reverse;
-    padding: 0 var(--space-2) 0 var(--space-1);
+    padding-left: calc(var(--space-4) - var(--space-1));
   }
 
-  [data-hand="left"] .item-row-swipe .item-row-body {
-    padding-right: var(--space-2);
-    padding-left: var(--space-3);
+  [data-hand="left"] .item-row-body > .item-row-name:first-child {
+    padding-left: var(--space-1);
   }
 
   [data-hand="left"] .item-row-check {
+    order: 1;
     margin: var(--space-3) var(--space-2) var(--space-3) var(--space-1);
+  }
+
+  [data-hand="left"] .item-row-end {
+    order: -1;
+    flex-direction: row-reverse;
   }
 
   [data-hand="left"] .fab {
@@ -1257,8 +1520,11 @@
   }
 
   /* @component input-row
-     @summary An input that grows, and the button that submits it.
-     @example <div class="input-row"><input class="input" type="text" placeholder="New tag"><button class="button primary" type="button">Add</button></div> */
+     @summary An input that grows, and the button that submits it. With the left hand the button is on the left.
+       The button has no fill while it is disabled, so an empty box reads as not ready.
+     @variant pinned  Sticks to the bottom of a sheet body, on --surface.
+     @example <div class="input-row"><input class="input" type="text" placeholder="New tag"><button class="button primary" type="button">Add</button></div>
+     @example <div class="input-row pinned" style="position: static"><input class="input" type="text" placeholder="New tag"><button class="button primary" type="button" disabled>Add</button></div> */
   .input-row {
     display: flex;
     gap: var(--space-2);
@@ -1266,6 +1532,23 @@
 
   .input-row > .input {
     flex: 1;
+  }
+
+  .input-row > .button:disabled {
+    background: var(--surface-2);
+    color: var(--muted);
+    opacity: 1;
+  }
+
+  .input-row.pinned {
+    position: sticky;
+    bottom: 0;
+    padding-block: var(--space-2);
+    background: var(--surface);
+  }
+
+  [data-hand="left"] .input-row {
+    flex-direction: row-reverse;
   }
 
   /* @component split

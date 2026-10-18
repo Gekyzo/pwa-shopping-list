@@ -114,7 +114,17 @@ the bottom bar at each width.
 
 - **NAV-8** There are seven sheets: add, arrange (with the choice of shop lists, SHOP-25), trip,
   meal, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33). One is open at a time. A tap on the
-  veil or `Escape` closes it. The `+` button does not show while a sheet is open.
+  veil, **Listo** or `Escape` closes it. The `+` button does not show while a sheet is open.
+- **NAV-22** Each sheet has a head: the grab, a title on one line and the button **Listo**. The
+  title of the edit sheet is the name of the item, of the recipe sheet the name of the recipe, of
+  the add sheet `Añadir artículo a la lista` or `Nombre de la receta` by the section. Only the body
+  below the head scrolls. The edit and recipe sheets have a foot: **Eliminar** deletes the item or
+  the recipe with `Deshacer` (the message of a delete from the row) and closes the sheet; `Guardado`
+  shows for 1.2 s after a field save that changed the value, and not after a loss of focus with no
+  change or an error.
+- **NAV-23** A drag down of the grab or the head of a sheet closes it when the drag passes 30 % of
+  the height of the sheet, or when the release is faster than 0.5 px/ms. A shorter, slower drag
+  puts the sheet back. A drag that starts on a button or a field of the head does nothing.
 - **NAV-9** The trip button of the header has three dots. It shows in `Compra`. A tap
   opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet has the
   title `Opciones de la compra`, the line of where the items go (TRIP-4), the line of the open items

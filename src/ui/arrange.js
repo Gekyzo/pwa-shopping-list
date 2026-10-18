@@ -68,15 +68,17 @@ const changeShopLists = (choice) => {
   });
 };
 
+export const closeArrange = () => {
+  ui.arrangeOpen = false;
+  render();
+};
+
 export const bind = () => {
   $('arrange-button').addEventListener('click', () => {
     Object.assign(ui, { arrangeOpen: true, openId: null });
     render();
   });
-  $('arrange-veil').addEventListener('click', () => {
-    ui.arrangeOpen = false;
-    render();
-  });
+  $('arrange-veil').addEventListener('click', closeArrange);
   // The sheet stays open after a choice, so that the group and the order change in one visit.
   document.querySelectorAll('#arrange-group button').forEach((button) => {
     button.addEventListener('click', () => {

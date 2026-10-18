@@ -1,3 +1,4 @@
+import { SAVED_MS, savedChange } from '#sheets';
 import { el } from '#ui/context';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -20,15 +21,29 @@ export const iconButton = (name, label, onClick, { variant = '' } = {}) => {
   return button;
 };
 
-// A field of a sheet saves when it loses the focus. `current` gives the stored value, or undefined
-// when the sheet has no entry; `save` applies a new value and returns false on an error, which
-// keeps the old value in the field.
-export const bindField = (input, current, save) => {
+// Guardado shows in the foot of `sheet` for SAVED_MS. A new save starts the time again.
+const savedTimers = new WeakMap();
+export const flashSaved = (sheet) => {
+  const note = sheet.querySelector('.sheet-saved');
+  if (!note) return;
+  clearTimeout(savedTimers.get(note));
+  note.classList.add('on');
+  savedTimers.set(note, setTimeout(() => note.classList.remove('on'), SAVED_MS));
+};
+
+// A field of a sheet saves when it loses the focus. `read` gives the stored value, or undefined
+// when the sheet has no entry; `write` applies a new value and returns false on an error, which
+// keeps the old value in the field. `onSaved` runs when the write changed the stored value.
+export const bindField = (input, { read, write, onSaved = () => {} }) => {
   input.addEventListener('blur', () => {
-    const value = current();
+    const value = read();
     if (value === undefined) return;
-    if (input.value.trim() !== value && save(input.value)) return;
-    input.value = current() ?? value;
+    if (input.value.trim() !== value) {
+      const written = write(input.value);
+      if (savedChange(value, read(), !written)) onSaved();
+      if (written) return;
+    }
+    input.value = read() ?? value;
   });
   input.addEventListener('keydown', (event) => {
     // Enter saves the field; it does not submit a form.
@@ -39,7 +54,7 @@ export const bindField = (input, current, save) => {
     // Escape puts the value back and keeps the sheet open.
     if (event.key === 'Escape') {
       event.stopPropagation();
-      input.value = current() ?? input.value;
+      input.value = read() ?? input.value;
       input.blur();
     }
   });

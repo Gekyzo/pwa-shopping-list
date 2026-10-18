@@ -10,6 +10,7 @@ no change for the user has no entry.
 ## Unreleased
 
 - The buttons and rows are larger, the corners are softer, and the hint in Ajustes no longer stretches its lines.
+- Each sheet has a head with its title and **Listo**, and a drag down closes it. The edit and recipe sheets show **Eliminar** at the bottom, and **Guardado** after a change.
 
 ## 1.0.39 - 2026-10-18
 
