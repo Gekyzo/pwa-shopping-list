@@ -7,9 +7,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 - **Reset setting**. Reset app data, with confirmation.
 - **Responsive**. Adapt screens to different phones sizes, models, viewport,foldable phones, tablets.
 - **Optional reagents**. Make reagents optional.
-- **Barcode scanner.** Add an item from the barcode of a product, with the
-  camera of the phone. Implemented on the branch `barcode-scanner`, not yet
-  merged into `main`.
 - **Density mode.** A compact choice in `Ajustes` that shows more rows on one
   screen, with less space in each row.
 - **Recipe categories.** Give each recipe one or more categories, such as
@@ -79,6 +76,9 @@ price. It needs the **Browser database**. The features below need the history.
 
 ### Other
 
+- **Barcode scanner.** Add an item from the barcode of a product, with the
+  camera of the phone. Implemented on the branch `barcode-scanner`, not yet
+  merged into `main`.
 - **Pantry.** Track the products at home, with expiry dates and a reminder
   before a product expires. Feeds the menu generation.
 - **Nutrition.** Show calories and nutrients for a recipe and for the weekly
