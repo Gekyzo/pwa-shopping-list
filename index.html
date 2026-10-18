@@ -67,51 +67,68 @@
       </section>
 
       <section id="settings" class="settings" hidden>
-        <h2 class="settings-title" data-i18n="settings.backup"></h2>
-        <div class="list-group pair">
-          <button id="export" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#export"/></svg><span data-i18n="settings.export"></span></button>
-          <button id="import" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#import"/></svg><span data-i18n="settings.import"></span></button>
+        <h2 class="list-group-head" data-i18n="settings.backup"></h2>
+        <div class="list-group card">
+          <button id="export" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.export"></span><span class="chevron" aria-hidden="true">›</span></button>
+          <button id="import" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.import"></span><span class="chevron" aria-hidden="true">›</span></button>
         </div>
-        <h2 class="settings-title" data-i18n="settings.language"></h2>
-        <div class="list-group">
-          <select id="language" class="select" data-i18n-attr="aria-label:settings.language"></select>
+        <h2 class="list-group-head" data-i18n="settings.preferences"></h2>
+        <div class="list-group card">
+          <div class="settings-row">
+            <span class="settings-row-label" data-i18n="settings.language"></span>
+            <span id="language-value" class="settings-row-value"></span>
+            <span class="chevron" aria-hidden="true">›</span>
+            <select id="language" class="select" data-i18n-attr="aria-label:settings.language"></select>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-label" data-i18n="settings.hand"></span>
+            <span id="hand-value" class="settings-row-value"></span>
+            <span class="chevron" aria-hidden="true">›</span>
+            <select id="hand" class="select" data-i18n-attr="aria-label:settings.hand"></select>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-label" data-i18n="settings.theme"></span>
+            <span id="theme-value" class="settings-row-value"></span>
+            <span class="chevron" aria-hidden="true">›</span>
+            <select id="theme" class="select" data-i18n-attr="aria-label:settings.theme"></select>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-label" data-i18n="settings.density"></span>
+            <span id="density-value" class="settings-row-value"></span>
+            <span class="chevron" aria-hidden="true">›</span>
+            <select id="density" class="select" data-i18n-attr="aria-label:settings.density"></select>
+          </div>
         </div>
-        <h2 class="settings-title" data-i18n="settings.hand"></h2>
-        <div class="list-group">
-          <select id="hand" class="select" data-i18n-attr="aria-label:settings.hand"></select>
-        </div>
-        <h2 class="settings-title" data-i18n="settings.theme"></h2>
-        <div class="list-group">
-          <select id="theme" class="select" data-i18n-attr="aria-label:settings.theme"></select>
-        </div>
-        <h2 class="settings-title" data-i18n="settings.density"></h2>
-        <div class="list-group">
-          <select id="density" class="select" data-i18n-attr="aria-label:settings.density"></select>
-        </div>
-        <h2 class="settings-title" data-i18n="settings.tripEnd"></h2>
+        <h2 class="list-group-head" data-i18n="settings.tripEnd"></h2>
         <p class="hint settings-hint" data-i18n="settings.tripEndHint"></p>
-        <div class="list-group">
+        <div class="list-group card">
           <div id="trip-end" class="segmented" role="group" data-i18n-attr="aria-label:settings.tripEnd">
             <button class="segment" type="button" data-trip-end="save" data-i18n="trip.discard"></button>
             <button class="segment" type="button" data-trip-end="keep" data-i18n="trip.postpone"></button>
           </div>
         </div>
-        <h2 class="settings-title" data-i18n="settings.aisles"></h2>
-        <div class="list-group">
-          <button id="aisles-open" class="list-row" type="button" aria-haspopup="dialog" aria-controls="aisles"><svg class="icon" aria-hidden="true"><use href="icons.svg#basket"/></svg><span class="list-row-text" data-i18n="aisles.title"></span><span id="aisles-count" class="list-row-meta"></span></button>
+        <h2 class="list-group-head" data-i18n="settings.aisles"></h2>
+        <div class="list-group card">
+          <button id="aisles-open" class="settings-row" type="button" aria-haspopup="dialog" aria-controls="aisles"><span class="settings-row-label" data-i18n="aisles.title"></span><span id="aisles-count" class="settings-row-value"></span><span class="chevron" aria-hidden="true">›</span></button>
         </div>
-        <h2 class="settings-title" data-i18n="settings.app"></h2>
-        <div class="list-group">
-          <button id="install" class="list-row" type="button" hidden><svg class="icon" aria-hidden="true"><use href="icons.svg#download"/></svg><span data-i18n="settings.install"></span></button>
+        <div id="install-group" hidden>
+          <h2 class="list-group-head" data-i18n="settings.app"></h2>
+          <div class="list-group card">
+            <button id="install" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.install"></span><span class="chevron" aria-hidden="true">›</span></button>
+          </div>
         </div>
-        <h2 class="settings-title" data-i18n="settings.help"></h2>
-        <div class="list-group">
-          <button id="show-onboarding" class="list-row" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#help"/></svg><span data-i18n="settings.onboarding"></span></button>
-          <button id="delete-sample" class="list-row" type="button" hidden><svg class="icon" aria-hidden="true"><use href="icons.svg#trash"/></svg><span data-i18n="settings.deleteSample"></span></button>
+        <h2 class="list-group-head" data-i18n="settings.help"></h2>
+        <div class="list-group card">
+          <button id="show-onboarding" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.onboarding"></span><span class="chevron" aria-hidden="true">›</span></button>
+          <button id="delete-sample" class="settings-row danger" type="button" hidden><span class="settings-row-label" data-i18n="settings.deleteSample"></span></button>
+        </div>
+        <div id="update-banner" class="banner" hidden>
+          <strong id="update-title"></strong>
+          <p id="update-text" class="banner-text"></p>
+          <button id="update" class="button primary wide" type="button" data-i18n="settings.update"></button>
         </div>
         <footer class="about">
           <p class="about-line"><span id="version"></span><span id="version-status" class="version-status" role="status" data-status="checking"><svg data-for="checking" class="icon small" aria-hidden="true"><use href="icons.svg#refresh"/></svg><svg data-for="current" class="icon small" aria-hidden="true"><use href="icons.svg#check-circle"/></svg><svg data-for="outdated" class="icon small" aria-hidden="true"><use href="icons.svg#download"/></svg><svg data-for="unknown" class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span id="version-status-text" class="version-status-text"></span></span></p>
-          <button id="update" class="button accent" type="button" hidden><span data-i18n="settings.update"></span></button>
         </footer>
       </section>
     </main>

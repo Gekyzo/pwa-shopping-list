@@ -30,6 +30,14 @@ import {
 import { renderOnboarding } from '#ui/onboarding';
 
 // Borrar datos de ejemplo shows while the sample recipe exists (ONB-14).
+// The value of a row of Preferencias is the text of the option that the select has.
+const renderValues = () => {
+  for (const id of ['language', 'hand', 'theme', 'density']) {
+    const select = $(id);
+    $(`${id}-value`).textContent = select.selectedOptions[0]?.textContent ?? '';
+  }
+};
+
 export const renderSample = () => {
   $('delete-sample').hidden = !hasSample(state);
 };
@@ -48,7 +56,12 @@ export const renderVersion = () => {
   $('version-status').dataset.status = checking ? 'checking' : status;
   $('version-status').title = text;
   $('version-status-text').textContent = text;
-  $('update').hidden = checking || status !== 'outdated';
+  const outdated = !checking && status === 'outdated';
+  $('update-banner').hidden = !outdated;
+  if (outdated) {
+    $('update-title').textContent = t('version.available', { version: latest.version });
+    $('update-text').textContent = t('settings.updateReady', { version: running.version });
+  }
 };
 
 export const readVersion = async (url, options) => {
@@ -124,6 +137,7 @@ export const applyLanguage = () => {
   );
   const densityOption = (value, key) => el('option', { value, textContent: t(key), selected: value === density });
   $('density').replaceChildren(densityOption('normal', 'settings.densityNormal'), densityOption('compact', 'settings.densityCompact'));
+  renderValues();
   renderTripEnd();
   render();
   renderOnboarding();
@@ -162,6 +176,8 @@ export const bind = () => {
   $('theme').addEventListener('change', (event) => setTheme(event.target.value));
 
   $('density').addEventListener('change', (event) => setDensity(event.target.value));
+
+  for (const id of ['hand', 'theme', 'density']) $(id).addEventListener('change', renderValues);
 
   $('trip-end').addEventListener('click', (event) => {
     const button = event.target.closest('[data-trip-end]');

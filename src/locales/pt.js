@@ -187,6 +187,8 @@ export default {
   'settings.install': 'Instalar a aplicação',
   'settings.help': 'Ajuda',
   'settings.onboarding': 'Ver a introdução',
+  'settings.preferences': 'Preferências',
+  'settings.updateReady': 'Tens a versão {version}.',
   'settings.update': 'Atualizar',
   'version.running': 'Versão {version} · {date}',
   'version.none': 'Versão desconhecida',

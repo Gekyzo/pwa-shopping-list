@@ -542,22 +542,27 @@
 
   /* @component settings
      @scope settings
-     @summary The Ajustes section: titled list groups, then the about lines.
-     @part settings-title  The title above a list group.
-     @part settings-hint   A line of help below a title, on a hint.
-     @example <section class="settings" style="width: 100%"><h2 class="settings-title">Idioma</h2><div class="list-group"><select class="select" aria-label="Idioma"><option>Español</option></select></div></section> */
-  .settings-title {
-    margin: var(--space-5) var(--space-4) var(--space-2);
-    color: var(--muted);
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
+     @summary The Ajustes section: groups of settings rows (list-group card) under a list-group-head. A row of Preferencias holds a real select laid over it, so a tap opens the native picker.
+     @part settings-hint    A line of help below a group head, on a hint.
+     @example <section class="settings" style="width: 100%"><h2 class="list-group-head">Preferencias</h2><div class="list-group card"><div class="settings-row"><span class="settings-row-label">Idioma</span><span class="settings-row-value">Español</span><span class="chevron" aria-hidden="true">›</span><select class="select" aria-label="Idioma"><option>Español</option></select></div></div></section> */
   .settings-hint {
     padding: 0 var(--space-4) var(--space-2);
     text-align: start;
     hyphens: auto;
+  }
+
+  /* @extends list-group */
+  .settings .settings-row {
+    position: relative;
+  }
+
+  .settings .settings-row > .select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
   }
 
   .settings .list-group > .segmented {

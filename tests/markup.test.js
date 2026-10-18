@@ -27,6 +27,7 @@ test('an element with a text key is empty in the markup', () => {
 test('the markup has no text of its own', () => {
   const visible = body
     .replace(/<svg[\s\S]*?<\/svg>/g, '')
+    .replace(/<span class="chevron"[^>]*>[^<]*<\/span>/g, '')
     .replace(/<[^>]+>/g, ' ')
     .replace(/[+\s]/g, '');
   assert.equal(visible, '');
@@ -145,4 +146,45 @@ test('Llenar cesta stands in an action bar; Vaciar menú is an entry of the menu
 test('the es text of menu.fill is Llenar cesta', async () => {
   const { default: es } = await import('../src/locales/es.js');
   assert.equal(es['menu.fill'], 'Llenar cesta');
+});
+
+const settings = body.match(/<section id="settings"[\s\S]*?<\/section>/)?.[0] ?? '';
+const groups = settings.split('<h2 ').slice(1).map((part) => [part, part.split('</h2>')[1]]);
+
+test('each group of Ajustes is a list-group-head and one list-group card', () => {
+  assert.equal(groups.length, 6);
+  assert.equal([...settings.matchAll(/<h2 /g)].length, 6);
+  assert.equal([...settings.matchAll(/class="list-group card"/g)].length, 6);
+  assert.doesNotMatch(settings, /settings-title/);
+});
+
+test('language, hand, theme and density are rows of the group Preferencias', () => {
+  const [, rows] = groups.find(([all]) => all.includes('data-i18n="settings.preferences"')) ?? [];
+  assert.ok(rows);
+  for (const id of ['language', 'hand', 'theme', 'density']) {
+    assert.match(rows, new RegExp(`<select id="${id}" class="select"`));
+    assert.match(rows, new RegExp(`id="${id}-value" class="settings-row-value"`));
+  }
+});
+
+test('Borrar la receta de ejemplo is a danger row with no chevron', () => {
+  const [row = ''] = settings.match(/<button id="delete-sample"[\s\S]*?<\/button>/) ?? [];
+  assert.match(row, /class="settings-row danger"/);
+  assert.doesNotMatch(row, /chevron/);
+});
+
+test('the rows that open something end with a chevron', () => {
+  for (const id of ['export', 'import', 'aisles-open', 'show-onboarding', 'install']) {
+    const [row = ''] = settings.match(new RegExp(`<button id="${id}"[\\s\\S]*?</button>`)) ?? [];
+    assert.match(row, /class="settings-row"/, id);
+    assert.match(row, /<span class="chevron" aria-hidden="true">[^<]*<\/span>\s*<\/button>$/, id);
+  }
+});
+
+test('the update notice is a banner with a wide primary button above the version line', () => {
+  const [banner = ''] = settings.match(/<div id="update-banner"[\s\S]*?<\/div>/) ?? [];
+  assert.match(banner, /class="banner"[^>]* hidden/);
+  assert.match(banner, /<strong id="update-title"><\/strong>\s*<p id="update-text" class="banner-text"><\/p>/);
+  assert.match(banner, /<button id="update" class="button primary wide"/);
+  assert.ok(settings.indexOf('id="update-banner"') < settings.indexOf('id="version"'));
 });
