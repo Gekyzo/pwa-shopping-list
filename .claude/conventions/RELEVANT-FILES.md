@@ -29,7 +29,7 @@ description: Where to look first in this component, what to ignore, and which pe
 
 ## Tests
 
-`tests/<module>.test.js` for `store`, `recipes`, `shops`, `aisles`, `swipe`, `sections`, `onboarding`, `reorder`, `storage` and `version`, `tests/sw.test.js` for `localizeManifest` of `sw.js`, `tests/png.test.js` for `scripts/png.mjs` and `tests/changelog.test.js` for `scripts/changelog.mjs`. Run
+`tests/<module>.test.js` for `store`, `recipes`, `shops`, `aisles`, `swipe`, `sections`, `onboarding`, `reorder`, `storage` and `version`, `tests/sw.test.js` for `localizeManifest` of `sw.js`, `tests/png.test.js` for `scripts/png.mjs`, `tests/glyph.test.js` for `scripts/glyph.mjs` and `tests/changelog.test.js` for `scripts/changelog.mjs`. Run
 `npm test` (`node --test`). `src/app.js`, `src/ui/` and the rest of `sw.js` have no unit tests; check them in
 a browser with `npm run serve`. `tests/spec.test.js` checks `docs/spec/` against the code, and
 `tests/layers.test.js` the layer rules of `src/ui/`. `tests/design.test.js` runs the rules of the design system and
@@ -41,6 +41,7 @@ first one with a bare remote.
 
 - `vendor/`: written by `npm run ds`. Change `../pwa-design-system`, then run it again.
 - `icons/icon-*.png`: written by `npm run icons` from `icons/source.png`, the art of the icon.
+- `icons/shortcut-*.png`: written by `npm run icons` from the glyphs of `scripts/make-icons.mjs`.
 - `docs/superpowers/plans/*.progress.md`: written by `plan-current.sh`.
 - `version.json` and the `version` of `package.json`: written by `scripts/bump-version.mjs`. Do not edit them by hand.
 - The version headings of `CHANGELOG.md`: written by `scripts/bump-version.mjs` from `Unreleased`. Write a change under `Unreleased` only.

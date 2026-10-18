@@ -25,7 +25,7 @@ repository root.
 | `src/shops.js` | Pure shop operations and the list by shop | `store.js` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store.js` |
 | `src/swipe.js` | The rule that settles the swipe of an item row | nothing |
-| `src/sections.js` | The order of the sections and the rule of the slide that changes the section | nothing |
+| `src/sections.js` | The order of the sections, the rule of the slide that changes the section, and the start of a launcher shortcut | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The rules of a row move: drop place, gap, new order | nothing |
 | `src/storage.js` | Load, save, export, import, validation | `store.js`, `recipes.js` |
@@ -46,7 +46,7 @@ repository root.
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
-| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `store`, `recipes`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |
+| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `store`, `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |
 | `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document | all of the above |
 | `sw.js` | Offline cache of the app shell | nothing; it is not a module of the app |

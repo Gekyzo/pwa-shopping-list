@@ -52,3 +52,37 @@ test('localizeManifest does not change its input', () => {
   localizeManifest(input, { lang: 'en', name: 'Bodega - Shopping list', description: 'Shopping list' });
   assert.deepEqual(input, build());
 });
+
+const withShortcuts = () => ({
+  ...build(),
+  shortcuts: [
+    { name: 'Añadir artículo', url: './?open=add', icons: [{ src: 'icons/shortcut-add.png' }] },
+    { name: 'Compra', url: './?open=active' },
+    { name: 'Otro', url: './?other=1' },
+  ],
+});
+
+test('localizeManifest takes the name of each shortcut from the text, by its open parameter', () => {
+  const manifest = localizeManifest(withShortcuts(), { shortcuts: { add: 'Add item', active: 'Shopping' } });
+  assert.deepEqual(plain(manifest.shortcuts.map(({ name }) => name)), ['Add item', 'Shopping', 'Otro']);
+  assert.deepEqual(plain(manifest.shortcuts[0].icons), withShortcuts().shortcuts[0].icons);
+  assert.equal(manifest.shortcuts[0].url, './?open=add');
+});
+
+test('localizeManifest keeps the name of a shortcut that the text has not as a non-empty string', () => {
+  const manifest = localizeManifest(withShortcuts(), { shortcuts: { add: '', active: 7 } });
+  assert.deepEqual(plain(manifest.shortcuts.map(({ name }) => name)), ['Añadir artículo', 'Compra', 'Otro']);
+});
+
+test('localizeManifest ignores shortcuts of the text that are not an object', () => {
+  for (const shortcuts of [null, 'add', ['Add item']]) {
+    const manifest = localizeManifest(withShortcuts(), { shortcuts });
+    assert.deepEqual(plain(manifest.shortcuts), withShortcuts().shortcuts);
+  }
+});
+
+test('localizeManifest does not change the shortcuts of its input', () => {
+  const input = withShortcuts();
+  localizeManifest(input, { shortcuts: { add: 'Add item' } });
+  assert.deepEqual(input, withShortcuts());
+});

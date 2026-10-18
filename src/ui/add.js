@@ -38,7 +38,7 @@ export const renderSheet = () => {
   $('suggestions').replaceChildren(...rows);
 };
 
-const openSheet = () => {
+export const openSheet = () => {
   Object.assign(ui, { sheetOpen: true, openId: null });
   $('add-name').value = '';
   render();

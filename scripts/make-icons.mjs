@@ -2,6 +2,7 @@
 // Run: npm run icons
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { encodePng, decodePng, clearWhite, resizeRgba } from './png.mjs';
+import { pathSegments, segmentDistance } from './glyph.mjs';
 
 const WHITE = [255, 255, 255];
 const SAMPLES = 4;
@@ -77,3 +78,47 @@ const LOGO_SIZE = 288;
 const logo = resizeRgba({ ...art, rgba: clearWhite(art) }, LOGO_SIZE);
 writeFileSync(new URL('logo.png', outDir), encodePng(LOGO_SIZE, logo));
 console.log('icons/logo.png');
+
+// The icons of the shortcuts of the manifest: a white line icon of icons.svg on a disc of the theme
+// colour. Arcs and cubic curves are drawn again as quadratic ones, which glyph.mjs reads.
+const THEME = [0x1f, 0x7a, 0x4d];
+const SHORTCUT_SIZE = 192;
+const GLYPHS = {
+  add: { d: 'M2 3h3l2.5 12h11L21 7H6M13 8.5v4M11 10.5h4', circles: [{ cx: 9, cy: 20, r: 1.5 }, { cx: 18, cy: 20, r: 1.5 }] },
+  active: { d: 'M2 3h3l2.5 12h11L21 7H6', circles: [{ cx: 9, cy: 20, r: 1.5 }, { cx: 18, cy: 20, r: 1.5 }] },
+  recipes: { d: 'M5 3H18Q19 3 19 4V21H6Q4 21 4 19V4Q4 3 5 3ZM4 17H19M9 8H15' },
+  menu: { d: 'M7 3V21M4 3V8Q4 11 7 11Q10 11 10 8V3M17 21V3Q13 5 13 10V13H17' },
+};
+
+// The glyph is 24 units wide, with a stroke of 2, and fills `scale` of the disc.
+const drawShortcut = (size, { d, circles = [] }, scale = 0.5) => {
+  const segments = pathSegments(d, 12, circles);
+  const unit = (size * scale) / 24;
+  const rgba = Buffer.alloc(size * size * 4);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      let [disc, ink] = [0, 0];
+      for (let sy = 0; sy < SAMPLES; sy++) {
+        for (let sx = 0; sx < SAMPLES; sx++) {
+          const px = x + (sx + 0.5) / SAMPLES;
+          const py = y + (sy + 0.5) / SAMPLES;
+          if (Math.hypot(px - size / 2, py - size / 2) > size / 2) continue;
+          disc++;
+          const gx = (px - size / 2) / unit + 12;
+          const gy = (py - size / 2) / unit + 12;
+          if (segments.some((segment) => segmentDistance(gx, gy, segment) <= 1)) ink++;
+        }
+      }
+      const offset = (y * size + x) * 4;
+      const share = disc ? ink / disc : 0;
+      THEME.forEach((value, c) => (rgba[offset + c] = Math.round(value + (255 - value) * share)));
+      rgba[offset + 3] = Math.round((disc / SAMPLES ** 2) * 255);
+    }
+  }
+  return encodePng(size, rgba);
+};
+
+Object.entries(GLYPHS).forEach(([name, glyph]) => {
+  writeFileSync(new URL(`shortcut-${name}.png`, outDir), drawShortcut(SHORTCUT_SIZE, glyph));
+  console.log(`icons/shortcut-${name}.png`);
+});
