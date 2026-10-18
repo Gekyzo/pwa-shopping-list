@@ -123,6 +123,7 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 - **ADD-8** After each add the sheet stays open, with an empty field that has the focus, so that
   the user adds several items in one visit. A tap out of the sheet or `Escape` closes it.
 - **ADD-9** The row of an item that the sheet brought flashes and scrolls into view.
+- **ADD-10** In `Compra`, the sheet can also add an item from its barcode (CODE-6 to CODE-11).
 
 ## Search
 

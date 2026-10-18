@@ -9,7 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- Add an item from its barcode: the button of the add sheet opens the camera. The first scan
+  of a code asks for its name; each later scan adds that item to `Compra`.
 
 ## 1.0.38 - 2026-10-18
 

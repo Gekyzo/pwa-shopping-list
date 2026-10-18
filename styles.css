@@ -212,6 +212,19 @@
     border-bottom: 1px solid var(--line);
   }
 
+  /* @component scan-video
+     @scope list
+     @summary The camera image of the scan sheet, above its hint.
+     @example <video class="scan-video" muted playsinline></video> */
+  .scan-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-m);
+    background: var(--line);
+  }
+
   /* @component product-form
      @scope recipes
      @summary The row that adds a product to a recipe, in the recipe sheet.

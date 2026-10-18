@@ -1,8 +1,10 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
+import * as barcode from '#barcode';
 import { $, el, state, ui, t, say, textOf, showToast, apply, render } from '#ui/context';
 import { inList, endSearch } from '#ui/view';
+import { openScan } from '#ui/scan';
 
 const whereText = (item) => {
   if (item.list === 'saved') return t('where.saved');
@@ -13,7 +15,9 @@ export const renderSheet = () => {
   $('sheet').hidden = !ui.sheetOpen;
   if (!ui.sheetOpen) return;
   const forRecipe = ui.view === 'recipes';
-  const label = t(forRecipe ? 'add.recipeName' : 'add.itemLabel');
+  if (forRecipe) ui.pendingCode = null;
+  const label = t(forRecipe ? 'add.recipeName' : ui.pendingCode ? 'scan.name' : 'add.itemLabel');
+  $('add-scan').hidden = forRecipe || !ui.scan;
   $('add-submit').textContent = t(forRecipe ? 'add.create' : 'add.submit');
   $('add-name').placeholder = label;
   $('add-name').setAttribute('aria-label', label);
@@ -46,8 +50,17 @@ export const openSheet = () => {
 };
 
 export const closeSheet = () => {
-  ui.sheetOpen = false;
+  Object.assign(ui, { sheetOpen: false, pendingCode: null });
   render();
+};
+
+// The scanned code that waits for a name also gets the name of the item of the add (CODE-10).
+const withCode = (result, name) => {
+  if (result.error || !ui.pendingCode) return result;
+  const learned = barcode.learnCode(result.state, ui.pendingCode, name);
+  if (learned.error) return result;
+  ui.pendingCode = null;
+  return { ...result, state: learned.state, learned: learned.state !== result.state };
 };
 
 // The shop that an add from the sheet puts on its item: the shop list in view, if any.
@@ -57,14 +70,18 @@ const pickedShop = () => (inList() ? ui.shop : null);
 // also gets the shop, which is a change too.
 const useExisting = (item) => {
   const brought = store.bringToList(state, item.id);
-  const result = shops.withShop(brought, item.id, pickedShop());
-  if (result.state !== brought.state) result.changed = true;
+  const shopped = shops.withShop(brought, item.id, pickedShop());
+  if (shopped.state !== brought.state) shopped.changed = true;
+  const result = withCode(shopped, item.name);
   const params = { name: item.name, list: 'active' };
   $('add-name').value = '';
   ui.flashId = item.id;
   if (!result.error) endSearch();
   if (result.changed) apply(result, { undoText: say('toast.existsNowIn', params) });
-  else {
+  else if (result.learned) {
+    apply(result);
+    showToast(t('toast.codeLearned', { name: item.name }));
+  } else {
     render();
     showToast(result.error ? textOf(result.error) : say('error.duplicateItem', params));
   }
@@ -98,7 +115,7 @@ const submitAdd = () => {
   }
   const name = input.value.trim();
   const added = store.addItem(state, input.value);
-  const result = added.error ? added : shops.withShop(added, added.state.items.at(-1).id, pickedShop());
+  const result = added.error ? added : withCode(shops.withShop(added, added.state.items.at(-1).id, pickedShop()), name);
   if (!result.error) endSearch();
   if (apply(result)) {
     input.value = '';
@@ -108,8 +125,26 @@ const submitAdd = () => {
   input.focus();
 };
 
+// A known code does the add of its name (ADD-5); an unknown one waits for the name of the next add.
+const useCode = (code) => {
+  const input = $('add-name');
+  const name = barcode.nameOfCode(state, code);
+  ui.pendingCode = null;
+  if (name) {
+    input.value = name;
+    submitAdd();
+    return;
+  }
+  ui.pendingCode = code;
+  input.value = '';
+  render();
+  showToast(t('toast.codeNew'));
+  input.focus();
+};
+
 export const bind = () => {
   $('fab').addEventListener('click', openSheet);
+  $('add-scan').addEventListener('click', () => openScan(useCode));
   $('veil').addEventListener('click', closeSheet);
   $('add-name').addEventListener('input', renderSheet);
   $('add').addEventListener('submit', (event) => {

@@ -139,10 +139,24 @@
         <div class="sheet-grab"></div>
         <div class="input-row">
           <input id="add-name" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
+          <button id="add-scan" class="button icon" type="button" data-i18n-attr="aria-label:scan.open" aria-haspopup="dialog" aria-controls="scan" hidden>
+            <svg class="icon" aria-hidden="true"><use href="icons.svg#barcode"/></svg>
+          </button>
           <button id="add-submit" class="button primary" type="submit"></button>
         </div>
         <ul id="suggestions" class="list-group plain" data-i18n-attr="aria-label:add.existing"></ul>
       </form>
+    </div>
+
+    <div id="scan" class="sheet-layer" hidden>
+      <div id="scan-veil" class="sheet-veil"></div>
+      <div class="sheet" role="dialog" data-i18n-attr="aria-label:scan.title">
+        <div class="sheet-grab"></div>
+        <h2 class="sheet-title" data-i18n="scan.title"></h2>
+        <video id="scan-video" class="scan-video" muted playsinline></video>
+        <p class="hint" data-i18n="scan.hint"></p>
+        <button id="scan-cancel" class="button outline wide" type="button" data-i18n="scan.cancel"></button>
+      </div>
     </div>
 
     <div id="arrange" class="sheet-layer" hidden>
@@ -366,6 +380,7 @@
           "#ui/onboarding": "./src/ui/onboarding.js",
           "#ui/recipes": "./src/ui/recipes.js",
           "#ui/rows": "./src/ui/rows.js",
+          "#ui/scan": "./src/ui/scan.js",
           "#ui/settings": "./src/ui/settings.js",
           "#ui/aisles": "./src/ui/aisles.js",
           "#ui/install": "./src/ui/install.js",
