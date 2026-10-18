@@ -69,9 +69,9 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
      is the outcome parts of the trip sheet, joined by ` · `.
   2. The trip sheet of `Compra` (NAV-9). Its title is the question `¿Terminar la compra?`. It lists
      the items of `Compra` by where each one goes, one row for each outcome with an icon and its
-     count: `↻` recurrent items that come back (`2 con ↻ vuelven`), open items kept with `Aplazar`
-     (`1 sin comprar se aplaza`), open items saved with `Descartar` (`1 sin comprar se guarda`) and
-     ticked one-time items (`4 comprados salen de la lista`). An outcome with no item has no row.
+     count: recurrent items that come back (icon `repeat`, `2 con ↻ vuelven`), open items kept with
+     `Aplazar` (`cart`, `1 sin comprar se aplaza`), open items saved with `Descartar` (`download`,
+     `1 sin comprar se guarda`) and ticked one-time items (`check`, `4 comprados salen de la lista`). An outcome with no item has no row.
      The banner and the sheet use the same text for each outcome. Below the rows, the primary
      button **Terminar compra** is disabled when TRIP-1 does not hold, and the secondary button
      **Seguir comprando** closes the sheet.

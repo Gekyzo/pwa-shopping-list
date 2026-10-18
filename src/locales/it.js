@@ -73,7 +73,7 @@ export default {
   'outcome.kept': { one: '{count} non comprato si rimanda', other: '{count} non comprati si rimandano' },
   'outcome.open': { one: '{count} non comprato si salva', other: '{count} non comprati si salvano' },
   'outcome.bought': { one: '{count} comprato esce dalla lista', other: '{count} comprati escono dalla lista' },
-  'trip.hint': 'Puoi cambiare cosa succede a ciò che non hai comprato in',
+  'trip.hint': 'Puoi cambiare cosa succede a ciò che non hai comprato nelle',
   'trip.question': 'Finire la spesa?',
   'trip.continue': 'Continua la spesa',
 

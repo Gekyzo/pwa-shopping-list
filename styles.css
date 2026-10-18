@@ -260,6 +260,11 @@
     padding: var(--space-1) 0 var(--space-3);
   }
 
+  /* The Ajustes button ends the sentence of the hint. */
+  .hint.trip-open .button::after {
+    content: ".";
+  }
+
   /* @component search
      @scope list
      @summary The search box of Actual and Recetas, below the header.
