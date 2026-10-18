@@ -23,11 +23,16 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* From 600px (LAY-1): the fixed rail takes the start side, and the content is one column of at most
-     --content-max, centred in the space beside the rail. */
+  /* From 600px (LAY-1): the fixed rail takes the side of the hand (DSV-5), and the content is one
+     column of at most --content-max, centred in the space beside the rail. */
   @media (min-width: 600px) {
     body {
-      padding-inline-start: calc(var(--rail-width) + env(safe-area-inset-left));
+      padding-right: calc(var(--rail-width) + env(safe-area-inset-right));
+    }
+
+    [data-hand="left"] body {
+      padding-right: env(safe-area-inset-right);
+      padding-left: calc(var(--rail-width) + env(safe-area-inset-left));
     }
 
     main {
@@ -68,11 +73,42 @@
     transform: rotate(-30deg);
   }
 
-  /* From 600px the rail stands at the start side, so the basket stands beside it. */
+  /* From 600px there is no bar at the bottom; the rail stands on the other side of the basket. */
   @media (min-width: 600px) {
     .icon.corner {
-      left: calc(var(--rail-width) + env(safe-area-inset-left) + var(--corner-out));
       bottom: calc(env(safe-area-inset-bottom) + var(--corner-out));
+    }
+  }
+
+  /* @extends nav-bar */
+  /* From 600px the rail stands at the side of the hand, as the + button does (DSV-5). The shared
+     rail stands at the start side, which is the side of the left hand. */
+  @media (min-width: 600px) {
+    :root:not([data-hand="left"]) .nav-bar {
+      inset-inline-start: auto;
+      right: 0;
+      width: calc(var(--rail-width) + env(safe-area-inset-right));
+      padding-inline-start: 0;
+      padding-right: env(safe-area-inset-right);
+      border-inline-end: 0;
+      border-left: 1px solid var(--line);
+    }
+  }
+
+  /* @extends toast */
+  /* The toast clears the rail at the side of the hand. */
+  @media (min-width: 600px) {
+    :root:not([data-hand="left"]) .toast {
+      left: calc(var(--space-3) + env(safe-area-inset-left));
+      right: calc(var(--rail-width) + env(safe-area-inset-right) + var(--space-3));
+    }
+  }
+
+  /* @extends fab */
+  /* The button stands beside the rail, at the side of the hand. */
+  @media (min-width: 600px) {
+    .fab {
+      right: calc(var(--rail-width) + env(safe-area-inset-right) + var(--space-4));
     }
   }
 
@@ -97,7 +133,12 @@
      it as wide as the screen. The veil still covers the rail. */
   @media (min-width: 600px) {
     .sheet-layer {
-      padding-inline-start: calc(var(--rail-width) + env(safe-area-inset-left));
+      padding-right: calc(var(--rail-width) + env(safe-area-inset-right));
+    }
+
+    [data-hand="left"] .sheet-layer {
+      padding-right: 0;
+      padding-left: calc(var(--rail-width) + env(safe-area-inset-left));
     }
 
     .sheet {

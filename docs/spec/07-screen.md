@@ -10,7 +10,7 @@ edge. A sheet comes up from the bottom, over a veil. The walkthrough of the firs
 of it.
 
 From 600px wide (a tablet, an unfolded phone, a phone on its side) the bottom bar is a rail at the
-left side, and the header and the content form one centred column (DSV-5). The rules below name it
+side of the hand (NAV-13), and the header and the content form one centred column (DSV-5). The rules below name it
 the bottom bar at each width.
 
 ## Sections
@@ -133,13 +133,14 @@ the bottom bar at each width.
   | Part | `Derecha` | `Izquierda` |
   |---|---|---|
   | `+` button | Bottom right | Bottom left |
+  | Rail, from 600px wide (DSV-5) | Right | Left |
   | Basket behind a list (NAV-18) | Bottom left | Bottom right |
   | Header | Ring, text, buttons | Buttons, text, ring |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
   | Buttons of `Menú` | **Vaciar menú**, **Llenar la cesta** | **Llenar la cesta**, **Vaciar menú** |
 
-- **NAV-14** `Izquierda` does not change the alignment of text, the order of the bottom bar, the
+- **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).
 
 ## Theme
