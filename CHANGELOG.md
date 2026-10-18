@@ -16,6 +16,7 @@ no change for the user has no entry.
 - The installed app turns with the phone or the tablet; it is no longer held upright.
 - On a tablet or an unfolded phone, `Menú` shows the name of each day beside its meals, so the
   whole week fits on the screen.
+- On a tablet or an unfolded phone, `Recetas` shows the recipes in two columns.
 
 ## 1.0.38 - 2026-10-18
 

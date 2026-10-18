@@ -19,7 +19,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   release (REC-17), with the rule and the backdrop of ROW-11 and the icon `cart-add`.
 - **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
   `Deshacer`. The items that the recipe sent stay in the lists.
-- **REC-7** The recipes show in the order of their creation.
+- **REC-7** The recipes show in the order of their creation. Below 600px wide they stand in one column; from
+  600px in two, filled row by row, so more of them fit on the screen of a tablet or an unfolded phone.
 - **REC-35** A recipe whose products are all items of `Compra`, ticked or not, with no case
   distinction, shows the icon `cart` in its row, at the small icon size (`--icon-s`), before the
   link. Its text for a screen reader is `Todo está en Compra`. It is not a control. A recipe with no
