@@ -39,6 +39,7 @@ import {
   bind as bindList,
 } from '#ui/list';
 import { renderSheet, openSheet, closeSheet, bind as bindAdd } from '#ui/add';
+import { renderScan, closeScan, bind as bindScan } from '#ui/scan';
 import { closeOnboarding, turnOnboarding, bind as bindOnboarding } from '#ui/onboarding';
 import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
 import { renderInstall, bind as bindInstall } from '#ui/install';
@@ -100,6 +101,7 @@ const renderAll = () => {
   ui.flashId = null;
   ui.settleFrom = null;
   renderSheet();
+  renderScan();
   renderArrange();
   renderEdit();
   renderMeal();
@@ -112,6 +114,7 @@ setRender(renderAll);
 bindNav();
 bindOnboarding();
 bindAdd();
+bindScan();
 
 // A tap out of the open row closes it, without a render, so that the tap still does its work.
 document.addEventListener(
@@ -154,6 +157,11 @@ document.addEventListener('keydown', (event) => {
   }
   if (event.key !== 'Escape') return;
   endReorder(false);
+  // The scan sheet is on top of the add sheet: Escape closes it only.
+  if (ui.scanOpen) {
+    closeScan();
+    return;
+  }
   if (ui.sheetOpen) closeSheet();
   if (ui.arrangeOpen) {
     ui.arrangeOpen = false;

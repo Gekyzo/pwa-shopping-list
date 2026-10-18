@@ -30,7 +30,8 @@
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The list `Compra`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu` |
-| `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
+| `src/ui/add.js` | The add sheet and the code that waits for a name | `store`, `recipes`, `shops`, `barcode`, `ui/context`, `ui/view`, `ui/scan` |
+| `src/ui/scan.js` | The scan sheet: the camera and the read of a barcode | `barcode`, `ui/context` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |

@@ -96,7 +96,7 @@ const debugDiff = (before, after) => {
   for (const [id, row] of now) if (!old.has(id)) lines.push(`  + ${row}`);
   for (const [id, row] of old) if (!now.has(id)) lines.push(`  - ${row}`);
   for (const [id, row] of now) if (old.has(id) && old.get(id) !== row) lines.push(`  ~ ${old.get(id)} -> ${row}`);
-  for (const key of ['sent', 'group', 'sort', 'version']) {
+  for (const key of ['sent', 'group', 'sort', 'version', 'codes']) {
     if (JSON.stringify(before[key]) !== JSON.stringify(after[key])) lines.push(`  ${key}: ${JSON.stringify(before[key])} -> ${JSON.stringify(after[key])}`);
   }
   return lines;
@@ -124,6 +124,11 @@ export const ui = {
   tripOpen: false,
   // True while the sheet of the aisles of Ajustes is open.
   aislesOpen: false,
+  // True when the phone reads barcodes (CODE-6), and true while the scan sheet is open.
+  scan: false,
+  scanOpen: false,
+  // The scanned code with no name, which the next add of the add sheet learns (CODE-10). Not stored.
+  pendingCode: null,
   // The item whose edit sheet is open, or null.
   editId: null,
   // The meal whose sheet is open, as { day, meal }, or null.

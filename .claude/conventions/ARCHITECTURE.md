@@ -24,6 +24,7 @@ repository root.
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store.js` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store.js` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store.js` |
+| `src/barcode.js` | Pure barcode rules: a valid code, the learned name of a code | nothing |
 | `src/swipe.js` | The rule that settles the swipe of an item row | nothing |
 | `src/sections.js` | The order of the sections, the rule of the slide that changes the section, and the start of a launcher shortcut | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
@@ -43,7 +44,8 @@ repository root.
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `ui/context`, `ui/view`, `ui/rows`, `ui/recipes`, `ui/menu` |
-| `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `ui/context`, `ui/view` |
+| `src/ui/add.js` | The add sheet and the scanned code that waits for a name | `store`, `recipes`, `shops`, `barcode`, `ui/context`, `ui/view`, `ui/scan` |
+| `src/ui/scan.js` | The scan sheet: the camera and the read of a barcode | `barcode`, `ui/context` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `store`, `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |
@@ -59,7 +61,7 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
 ## Boundaries
 
 - **`localStorage`**, key `shopping.v1`: the only data store. The state is
-  `{ version: 7, items, recipes, sent, group, sort, menu, aisles }`; a state of version 1 to 6 is migrated when it is read. Invalid content is
+  `{ version: 9, items, recipes, sent, group, sort, menu, aisles, codes }`; a state of version 1 to 8 is migrated when it is read. Invalid content is
   kept under `shopping.v1.corrupt`.
 - **`localStorage`**, key `shopping.lang`: the language that the user chose in `Ajustes`, one of
   `ca`, `de`, `en`, `es`, `fr`, `it`, `pt`. No key means that the app follows `navigator.languages`,
@@ -77,6 +79,8 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
   writes the same version to `package.json`; `.githooks/pre-push` runs it for a patch.
 - **Network:** only the static files of the same origin. There is no API and no
   account.
+- **Camera:** only while the scan sheet is open, through `getUserMedia` and the native
+  `BarcodeDetector`. No image leaves the phone.
 - **Files:** the JSON backup that the user exports and imports.
 
 ## Seams
