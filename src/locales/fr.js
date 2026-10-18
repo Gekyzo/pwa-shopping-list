@@ -204,6 +204,7 @@ export default {
   'error.noStorage': 'Le stockage n’est pas disponible : les changements ne sont pas enregistrés.',
   'error.updateFailed': 'La mise à jour a échoué.',
   'error.nameRequired': 'Écrivez un nom.',
+  'error.invalidCode': 'Ce code-barres n’est pas valide.',
   'error.duplicateItem': '« {name} » est déjà dans {list}.',
   'error.itemNotFound': 'Article introuvable.',
   'error.onlyActiveTick': 'Seuls les articles de {list} peuvent être cochés.',

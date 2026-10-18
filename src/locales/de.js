@@ -204,6 +204,7 @@ export default {
   'error.noStorage': 'Der Speicher ist nicht verfügbar: Änderungen werden nicht gespeichert.',
   'error.updateFailed': 'Die Aktualisierung ist fehlgeschlagen.',
   'error.nameRequired': 'Schreibe einen Namen.',
+  'error.invalidCode': 'Dieser Strichcode ist nicht gültig.',
   'error.duplicateItem': '„{name}“ ist schon in {list}.',
   'error.itemNotFound': 'Artikel nicht gefunden.',
   'error.onlyActiveTick': 'Nur die Artikel von {list} können markiert werden.',

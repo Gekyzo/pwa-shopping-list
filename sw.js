@@ -1,4 +1,4 @@
-const CACHE = 'shopping-shell-v14';
+const CACHE = 'shopping-shell-v15';
 
 const SHELL = [
   './',
@@ -31,6 +31,7 @@ const SHELL = [
   './src/menu.js',
   './src/shops.js',
   './src/aisles.js',
+  './src/barcode.js',
   './src/swipe.js',
   './src/sections.js',
   './src/onboarding.js',

@@ -8,12 +8,13 @@
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store` |
+| `src/barcode.js` | Pure barcode rules: a valid code, the learned name of a code | nothing |
 | `src/menu.js` | Pure menu operations and the fill of `Compra` | `recipes` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
 | `src/sections.js` | The order of the sections, the rule of the slide between them and the start of a shortcut | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
-| `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu` |
+| `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu`, `barcode` |
 | `src/version.js` | Pure version rules | nothing |
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
@@ -91,6 +92,7 @@
 | `tests/recipes.test.js` | Recipes, the send, the groups, the search, the sample recipe |
 | `tests/shops.test.js` | Shops and the list by shop |
 | `tests/aisles.test.js` | Aisles, the aisle of an item and the list by aisle |
+| `tests/barcode.test.js` | A valid barcode, the learn of its name, the codes of a renamed item |
 | `tests/menu.test.js` | The meals of the week and the fill |
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key and the device preferences |
 | `tests/swipe.test.js` | The settle rule of a row slide |

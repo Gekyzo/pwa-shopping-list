@@ -7,8 +7,8 @@ export const GROUPS = ['recipe', 'shop', 'aisle', 'none'];
 
 // `sent` holds the ids of the recipes sent to Active in this trip. `group` is the choice of the
 // user to show a list in groups, and `sort` the order of the list. `aisles` are the sections
-// of the store, in the order of the walk.
-export const emptyState = () => ({ version: 8, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] });
+// of the store, in the order of the walk. `codes` holds the item name of each scanned barcode.
+export const emptyState = () => ({ version: 9, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [], codes: {} });
 
 // An error is a message: the key of its text, with the parameters of the text. A `list`
 // parameter holds a list id. The screen turns the message into text.
@@ -36,11 +36,16 @@ export const addItem = (state, rawName, newId = () => crypto.randomUUID()) => {
   return { state: { ...state, items: [...state.items, item] } };
 };
 
+// The codes of the old name follow the item, so that the next scan finds it.
 export const renameItem = (state, id, rawName) => {
-  if (!findItem(state, id)) return reject(state, 'error.itemNotFound');
+  const item = findItem(state, id);
+  if (!item) return reject(state, 'error.itemNotFound');
   const name = String(rawName ?? '').trim();
   const error = nameError(state, name, id);
-  return error ? reject(state, ...error) : patchItem(state, id, { name });
+  if (error) return reject(state, ...error);
+  const old = item.name.toLowerCase();
+  const codes = Object.fromEntries(Object.entries(state.codes).map(([code, value]) => [code, value.toLowerCase() === old ? name : value]));
+  return patchItem({ ...state, codes }, id, { name });
 };
 
 // The quantity is free text, such as `2` or `1 kg`. An empty text clears it.

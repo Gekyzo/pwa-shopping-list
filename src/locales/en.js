@@ -204,6 +204,7 @@ export default {
   'error.noStorage': 'The storage is not available: changes are not saved.',
   'error.updateFailed': 'The update failed.',
   'error.nameRequired': 'Write a name.',
+  'error.invalidCode': 'This barcode is not valid.',
   'error.duplicateItem': '“{name}” is already in {list}.',
   'error.itemNotFound': 'Item not found.',
   'error.onlyActiveTick': 'Only the items of {list} can be ticked.',

@@ -204,6 +204,7 @@ export default {
   'error.noStorage': 'La memoria non è disponibile: le modifiche non vengono salvate.',
   'error.updateFailed': 'Aggiornamento non riuscito.',
   'error.nameRequired': 'Scrivi un nome.',
+  'error.invalidCode': 'Questo codice a barre non è valido.',
   'error.duplicateItem': '«{name}» è già in {list}.',
   'error.itemNotFound': 'Articolo non trovato.',
   'error.onlyActiveTick': 'Si possono spuntare solo gli articoli di {list}.',
