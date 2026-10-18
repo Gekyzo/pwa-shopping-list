@@ -9,6 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- The trip sheet asks **¿Terminar la compra?** and lists where the items go, one row with an icon and a count for each outcome; the banner says the same. **Seguir comprando** closes it, and **Ajustes** in its hint opens Ajustes. A shop list with everything bought shows **«shop»: todo comprado**, a button to the next shop with items (**Siguiente: shop (n) →**) and **Ver todas las tiendas**.
 - An empty section shows a title and a text in the lower half of the screen, and a wide button with its next step: **+ Crear receta**, **Ir a Recetas**, **+ Añadir «name»** after a search with no match, or **Añadir ingredientes de «name»** with the sample recipe. The sheet of a meal keeps its height while its results change.
 - `Ajustes` shows its settings as groups of rows. **Idioma**, **Mano**, **Tema** and **Densidad** are in **Preferencias** and show their value; a tap on the row opens the list. A pending update shows as a banner with a wide **Actualizar** button.
 - In `Menú`, **Llenar cesta** stays at the bottom of the list. **Vaciar menú** moved to the `⋮` button of the header. In the compact density the days show a short name above their meals, and a meal name takes two lines.

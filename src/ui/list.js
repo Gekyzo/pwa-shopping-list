@@ -6,6 +6,7 @@ import * as menu from '#menu';
 import { emptyAction } from '#sections';
 import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
+import { icon } from '#ui/controls';
 import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
 import { recipeNode, sendToList } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
@@ -70,7 +71,15 @@ const listNodes = (items) => {
   return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
 };
 
-const finishText = ({ back, saved }) => `${t('finish.back', { count: back })} ${t('finish.saved', { count: saved })}`;
+// One part for each place an item goes, in this order; a part with no item does not show (TRIP-4).
+const OUTCOMES = [['recurrent', 'repeat'], ['kept', 'check'], ['open', 'undo'], ['bought', 'cart']];
+
+const outcomeRows = () => {
+  const outcome = store.tripOutcome(state, keptItems());
+  return OUTCOMES.filter(([key]) => outcome[key] > 0).map(([key, name]) => ({ icon: name, text: t(`outcome.${key}`, { count: outcome[key] }) }));
+};
+
+const finishText = () => outcomeRows().map(({ text }) => text).join(' · ');
 
 const activeSubtitle = ({ total, left }) => {
   if (!total) return t('header.empty');
@@ -153,10 +162,15 @@ const renderShopDone = (summary) => {
   $('shop-done').hidden = !done;
   if (!done) return;
   const next = shops.nextShop(state, shop);
-  $('shop-done-text').textContent = t('shops.nothingLeft', { shop: shopLabel(shop) });
-  $('shop-done-next').textContent = shopLabel(next);
+  $('shop-done-text').textContent = t('shops.done', { shop: shopLabel(shop) });
+  $('shop-done-next').hidden = next === null;
+  if (next) $('shop-done-next').textContent = t('shops.next', { shop: shopLabel(next.shop), count: next.count });
   $('shop-done-next').onclick = () => {
-    ui.shop = next;
+    ui.shop = next.shop;
+    render();
+  };
+  $('shop-done-all').onclick = () => {
+    ui.shop = null;
     render();
   };
 };
@@ -177,7 +191,7 @@ export const renderList = (summary) => {
 
   $('finish').hidden = !(ui.view === 'active' && ui.shop === null && summary.total > 0 && summary.left === 0);
   renderShopDone(summary);
-  $('finish-text').textContent = finishText(summary);
+  $('finish-text').textContent = finishText();
 };
 
 // The trip button of the header and its sheet.
@@ -191,12 +205,11 @@ export const renderTrip = () => {
   $('finish-menu').disabled = !store.canStartNewShopping(state);
   $('trip-button').setAttribute('aria-expanded', String(inMenu ? ui.menuMoreOpen : ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
-  const outcome = store.tripOutcome(state, keptItems());
-  // One part for each place an item goes, in this order; a part with no item does not show (TRIP-4).
-  const parts = ['recurrent', 'kept', 'open', 'bought'].filter((key) => outcome[key] > 0);
-  $('finish-menu-text').textContent = parts.map((key) => t(`trip.${key}`, { count: outcome[key] })).join(' · ');
+  $('trip-outcomes').replaceChildren(...outcomeRows().map(({ icon: name, text }) => el('li', { className: 'list-row' }, [
+    icon(name),
+    el('span', { className: 'list-row-text', textContent: text }),
+  ])));
   $('trip-open').hidden = store.openItems(state).length === 0;
-  $('trip-open').textContent = t('trip.hint');
 };
 
 export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
@@ -267,6 +280,11 @@ export const bind = () => {
     $('finish-menu').focus();
   });
   $('trip-veil').addEventListener('click', closeTrip);
+  $('trip-continue').addEventListener('click', closeTrip);
+  $('trip-settings').addEventListener('click', () => {
+    ui.tripOpen = false;
+    showView('settings');
+  });
   $('finish-button').addEventListener('click', () => finishTrip());
   $('finish-menu').addEventListener('click', () => finishTrip(undefined, keptItems()));
 };

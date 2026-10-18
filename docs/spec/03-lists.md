@@ -66,19 +66,22 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   order of the items that stay does not change.
 - **TRIP-4** The control shows in two places:
   1. A banner `¿Has terminado?` in `Compra`, when the list has items and all are ticked. Its text
-     gives the count that comes back and the count that is saved.
-  2. The button of the trip sheet of `Compra` (NAV-9), below a line that counts the items of
-     `Compra` by where each one goes, such as `2 con ↻ vuelven · 1 sin comprar se aplaza · 4
-     comprados salen de la lista`. Its parts, in this order: recurrent items, open items kept with
-     `Aplazar`, open items saved with `Descartar`, ticked one-time items. A part with no item does
-     not show. It is disabled when TRIP-1 does not hold.
+     is the outcome parts of the trip sheet, joined by ` · `.
+  2. The trip sheet of `Compra` (NAV-9). Its title is the question `¿Terminar la compra?`. It lists
+     the items of `Compra` by where each one goes, one row for each outcome with an icon and its
+     count: `↻` recurrent items that come back (`2 con ↻ vuelven`), open items kept with `Aplazar`
+     (`1 sin comprar se aplaza`), open items saved with `Descartar` (`1 sin comprar se guarda`) and
+     ticked one-time items (`4 comprados salen de la lista`). An outcome with no item has no row.
+     The banner and the sheet use the same text for each outcome. Below the rows, the primary
+     button **Terminar compra** is disabled when TRIP-1 does not hold, and the secondary button
+     **Seguir comprando** closes the sheet.
 - **TRIP-5** After **Terminar compra** the screen shows `Compra`. `Deshacer` restores the full
   state of before.
 - **TRIP-6** An open item is an item of `Compra`, not ticked and not recurrent. **Terminar compra**
   keeps the open items in `Compra`, not ticked, when the choice of TRIP-7 is `Aplazar`. It saves
   them (LIST-30) when the choice is `Descartar`. The button of the trip sheet finishes at once.
   When an item is open, a line above the button says `Puedes cambiar qué pasa con lo no comprado
-  en Ajustes.` The sheet has one step and no choice for each item. A tap on the veil closes the
+  en Ajustes.`; `Ajustes` is a button that closes the sheet and opens `Ajustes`. The sheet has one step and no choice for each item. A tap on the veil closes the
   sheet and changes nothing. The banner never has an open item.
 - **TRIP-7** **Al terminar la compra** of `Ajustes` has two buttons side by side: `Descartar` and
   `Aplazar`, and the chosen one is pressed. A line below the title says that the choice sets what

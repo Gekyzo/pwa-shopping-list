@@ -56,8 +56,8 @@ test('the trip button opens a sheet from the bottom, with a veil, and the header
   const [layer = ''] = body.match(/<div id="trip" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>/) ?? [];
   assert.match(layer, /<div id="trip-veil" class="sheet-veil">/);
   assert.match(layer, /<div class="sheet" role="dialog"/);
-  assert.match(layer, /<header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.menu"><\/h2>/);
-  assert.match(layer, /<div class="sheet-body">\s*<p id="finish-menu-text" class="hint trip-open">[\s\S]*<p id="trip-open" class="hint trip-open" hidden>[\s\S]*<button id="finish-menu" class="button primary wide"/);
+  assert.match(layer, /<header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.question"><\/h2>/);
+  assert.match(layer, /<div class="sheet-body">\s*<ul id="trip-outcomes"[^>]*><\/ul>\s*<p id="trip-open" class="hint trip-open" hidden>[\s\S]*<button id="trip-settings"[\s\S]*<button id="finish-menu" class="button primary wide"[\s\S]*<button id="trip-continue" class="button outline wide"[^>]*data-i18n="trip.continue"/);
   assert.doesNotMatch(layer, /trip-open-list|trip-confirm/);
   assert.match(body, /<button id="trip-button"[^>]*aria-haspopup="dialog"[^>]*aria-controls="trip"/);
   assert.doesNotMatch(body, /trip-menu|role="menu"/);
@@ -99,7 +99,7 @@ test('the sheets with a title of their own give it an id; the others a fixed tex
   assert.deepEqual(titles, [
     'id="add-title" ',
     ' data-i18n="arrange.label"',
-    ' data-i18n="trip.menu"',
+    ' data-i18n="trip.question"',
     'id="meal-title" ',
     ' data-i18n="nav.menu"',
     'id="edit-title" ',

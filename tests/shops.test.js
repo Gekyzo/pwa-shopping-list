@@ -225,17 +225,35 @@ test('validShop keeps a shop of the view in its current spelling and gives null 
   assert.equal(validShop(build(['Milk', 'active']), 'Lidl'), null);
 });
 
-test('nextShop gives the next shop with an item to buy, in chip order, from the start after the end', () => {
+test('nextShop gives the next shop with an item to buy and its count, in chip order, wrapping', () => {
   const state = build(
     ['Milk', 'active', { shops: ['Aldi'] }],
     ['Salt', 'active', { shops: ['Lidl'], bought: true }],
     ['Rice', 'active', { shops: ['Market'] }],
     ['Bread', 'active'],
   );
-  assert.equal(nextShop(state, 'Lidl'), 'Market');
-  assert.equal(nextShop(state, 'Market'), '');
-  assert.equal(nextShop(state, ''), 'Aldi');
-  assert.equal(nextShop(build(['Salt', 'active', { shops: ['Lidl'], bought: true }]), 'Lidl'), null);
+  assert.deepEqual(nextShop(state, 'Aldi'), { shop: 'Market', count: 1 });
+  assert.deepEqual(nextShop(state, 'Market'), { shop: '', count: 1 });
+  assert.deepEqual(nextShop(state, ''), { shop: 'Aldi', count: 1 });
+});
+
+test('nextShop skips a shop with nothing to buy and gives null when every other shop is done', () => {
+  const done = build(['Salt', 'active', { shops: ['Lidl'], bought: true }]);
+  assert.equal(nextShop(done, 'Lidl'), null);
+  const only = build(['Milk', 'active', { shops: ['Aldi'] }], ['Salt', 'active', { shops: ['Lidl'], bought: true }]);
+  assert.equal(nextShop(only, 'Aldi'), null);
+  assert.deepEqual(nextShop(only, 'Lidl'), { shop: 'Aldi', count: 1 });
+  assert.equal(nextShop(emptyState(), 'Lidl'), null);
+});
+
+test('nextShop counts an item of two shops in both', () => {
+  const state = build(
+    ['Milk', 'active', { shops: ['Aldi', 'Lidl'] }],
+    ['Rice', 'active', { shops: ['Lidl'] }],
+    ['Salt', 'active', { shops: ['Aldi'], bought: true }],
+  );
+  assert.deepEqual(nextShop(state, 'Aldi'), { shop: 'Lidl', count: 2 });
+  assert.deepEqual(nextShop(state, 'Lidl'), { shop: 'Aldi', count: 1 });
 });
 
 test('withShop adds the shop to the item of the result and leaves Todas, Sin tienda and errors alone', () => {

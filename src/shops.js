@@ -86,12 +86,12 @@ export const validShop = (state, shop) => {
 };
 
 // The shop list of Active after `shop`, in chip order and from the start after the end, that has an
-// item to buy. Null when there is none.
+// item to buy: `{ shop, count }`. Null when no other shop list has one.
 export const nextShop = (state, shop) => {
   const chips = shopChips(state).filter((chip) => chip.shop !== null);
   const at = chips.findIndex((chip) => chip.shop === shop);
   const order = [...chips.slice(at + 1), ...chips.slice(0, at + 1)];
-  return order.find((chip) => chip.shop !== shop && chip.count > 0)?.shop ?? null;
+  return order.find((chip) => chip.shop !== shop && chip.count > 0) ?? null;
 };
 
 // An add from a shop list puts its shop on the item. Todas, Sin tienda and an error change nothing.
