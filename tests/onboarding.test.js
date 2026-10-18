@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { PAGES, isLast, shouldShow, step, textParts } from '#onboarding';
+import { PAGES, hasBack, isLast, shouldShow, step, textParts } from '#onboarding';
 
 test('PAGES has the six pages in their order, each one time', () => {
   assert.deepEqual(PAGES, ['lists', 'trip', 'row', 'sections', 'recipes', 'sample']);
@@ -86,4 +86,10 @@ test('textParts reads a # that is not at the start of a key, or a lone #, as tex
     { text: ' y ', key: false },
     { text: '#', key: true },
   ]);
+});
+
+test('hasBack is false on the first page and true on the others', () => {
+  assert.equal(hasBack(0), false);
+  assert.equal(hasBack(1), true);
+  assert.equal(hasBack(PAGES.length - 1), true);
 });

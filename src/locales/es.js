@@ -135,6 +135,7 @@ export default {
 
   'onboarding.label': 'Introducción',
   'onboarding.skip': 'Saltar',
+  'onboarding.back': 'Atrás',
   'onboarding.next': 'Siguiente',
   'onboarding.start': 'Empezar',
   'onboarding.page': 'Página {page} de {total}',

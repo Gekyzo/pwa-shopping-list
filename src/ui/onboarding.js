@@ -1,4 +1,4 @@
-import { PAGES, isLast, step, textParts } from '#onboarding';
+import { PAGES, hasBack, isLast, step, textParts } from '#onboarding';
 import { hasSample, addSample } from '#recipes';
 import { slideDirection } from '#sections';
 import { saveOnboarded } from '#storage';
@@ -47,6 +47,8 @@ export const renderOnboarding = () => {
   $('onboarding-text').replaceChildren(...parts.map(keyNode));
   $('onboarding-dots').replaceChildren(...PAGES.map((id) => el('span', { className: id === page ? 'onboarding-dot on' : 'onboarding-dot' })));
   $('onboarding-dots').setAttribute('aria-label', t('onboarding.page', { page: ui.onboarding + 1, total: PAGES.length }));
+  $('onboarding-logo').hidden = ui.onboarding !== 0;
+  $('onboarding-back').hidden = !hasBack(ui.onboarding);
   $('onboarding-skip').hidden = isLast(ui.onboarding);
   $('onboarding-next').textContent = t(isLast(ui.onboarding) ? 'onboarding.start' : 'onboarding.next');
 };
@@ -55,7 +57,8 @@ const openOnboarding = () => {
   ui.onboarding = 0;
   $('sample-switch').checked = true;
   renderOnboarding();
-  $('onboarding-next').focus();
+  // The title takes the focus, not a button: no ring shows on load (ONB-11).
+  $('onboarding-title').focus();
 };
 
 // A close marks the walkthrough as seen. With no storage it shows only from Ajustes.
@@ -71,9 +74,10 @@ export const turnOnboarding = (way) => {
   const index = step(ui.onboarding, way);
   if (index === ui.onboarding) return;
   ui.onboarding = index;
+  const leaving = document.activeElement;
   renderOnboarding();
-  // The skip button goes away on the last page, and the focus must not go with it.
-  $('onboarding-next').focus();
+  // Atrás goes away on the first page, and the focus must not go with it.
+  if (leaving?.hidden) $('onboarding-next').focus();
   const page = $('onboarding-page');
   page.classList.remove('enter-next', 'enter-previous');
   // The read of the width starts the animation again when a change follows another one.
@@ -91,6 +95,7 @@ export const bind = () => {
     if (offersSample() && $('sample-switch').checked) apply(addSample(state, sampleText()));
     closeOnboarding();
   });
+  $('onboarding-back').addEventListener('click', () => turnOnboarding(-1));
   $('onboarding-skip').addEventListener('click', closeOnboarding);
   $('show-onboarding').addEventListener('click', openOnboarding);
 

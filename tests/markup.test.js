@@ -40,16 +40,25 @@ test('the walkthrough has one drawing for each page, in the order of the pages',
   assert.deepEqual(drawings, PAGES);
 });
 
-test('the walkthrough shows the app icon first, out of the page that changes, with no text', () => {
-  const [, layer = ''] = body.match(/<div id="onboarding"[^>]*>\s*([\s\S]*?)<div id="onboarding-page"/) ?? [];
-  assert.match(layer, /^<img class="onboarding-logo" src="\.\/icons\/logo\.png" alt="">\s*$/);
+test('the walkthrough puts the app icon first inside the page group, with no text', () => {
+  const [, page = ''] = body.match(/<div id="onboarding-page"[^>]*>\s*([\s\S]*?)<div class="onboarding-art">/) ?? [];
+  assert.match(page, /^<img id="onboarding-logo" class="onboarding-logo" src="\.\/icons\/logo\.png" alt="">\s*$/);
 });
 
-test('the walkthrough has Saltar and the next button in one bar at the bottom, Saltar first', () => {
-  const [bar = ''] = body.match(/<div class="onboarding-actions">[\s\S]*?<\/div>/) ?? [];
-  const buttons = [...bar.matchAll(/<button id="([^"]+)"/g)].map(([, id]) => id);
-  assert.deepEqual(buttons, ['onboarding-skip', 'onboarding-next']);
-  assert.doesNotMatch(body, /onboarding-top/);
+test('the walkthrough order is: top bar with Atrás and Saltar, the page, the dots, the next button', () => {
+  const [layer = ''] = body.match(/<div id="onboarding"[\s\S]*?<input id="import-file"/) ?? [];
+  const order = [...layer.matchAll(/class="onboarding-top"|id="onboarding-page"|id="onboarding-dots"|id="onboarding-next"/g)].map(([found]) => found);
+  assert.deepEqual(order, ['class="onboarding-top"', 'id="onboarding-page"', 'id="onboarding-dots"', 'id="onboarding-next"']);
+  const [bar = ''] = layer.match(/<div class="onboarding-top">[\s\S]*?<\/div>/) ?? [];
+  assert.deepEqual([...bar.matchAll(/<button id="([^"]+)"/g)].map(([, id]) => id), ['onboarding-back', 'onboarding-skip']);
+  assert.match(bar, /id="onboarding-back" class="button accent"[^>]*data-i18n="onboarding\.back"/);
+  assert.match(bar, /id="onboarding-skip" class="button quiet"/);
+  assert.match(layer, /<button id="onboarding-next" class="button primary wide"/);
+  assert.doesNotMatch(layer, /onboarding-actions/);
+});
+
+test('the walkthrough title can take the focus, so no button shows a ring on load', () => {
+  assert.match(body, /<h2 id="onboarding-title" class="onboarding-title" tabindex="-1">/);
 });
 
 test('the trip button opens a sheet from the bottom, with a veil, and the header has no dropdown', () => {

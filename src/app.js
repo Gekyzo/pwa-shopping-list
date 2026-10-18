@@ -278,7 +278,7 @@ for (const [id, close] of Object.entries(SHEET_CLOSE)) {
 }
 
 applyLanguage();
-if (ui.onboarding !== null) $('onboarding-next').focus();
+if (ui.onboarding !== null) $('onboarding-title').focus();
 // An automation of the phone opens `?arrival` at the shop. The query goes away, so a reload is silent.
 const params = new URLSearchParams(location.search);
 if (params.has('arrival')) {
