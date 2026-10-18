@@ -8,7 +8,8 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 - **Responsive**. Adapt screens to different phones sizes, models, viewport,foldable phones, tablets.
 - **Optional reagents**. Make reagents optional.
 - **Barcode scanner.** Add an item from the barcode of a product, with the
-  camera of the phone. In progress on the branch `barcode-scanner`.
+  camera of the phone. Implemented on the branch `barcode-scanner`, not yet
+  merged into `main`.
 - **Density mode.** A compact choice in `Ajustes` that shows more rows on one
   screen, with less space in each row.
 - **Recipe categories.** Give each recipe one or more categories, such as
