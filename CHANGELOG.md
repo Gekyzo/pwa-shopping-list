@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.38 - 2026-10-18
+
 - A long press on the icon of the installed app shows four shortcuts: **Añadir artículo**,
   **Compra**, **Recetas** and **Menú**.
 
