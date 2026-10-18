@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.1.0 - 2026-10-19
+
 - Review fixes: an idle switch is darker and easier to see, a row of **Preferencias** shows a ring when the keyboard reaches it, **Añadir** of a shop or a section stays off while its field is empty, **Vaciar menú** off sends the focus to **Listo**, and the short day of **Compacta** shows in capitals.
 - The address parameter `?lang=pseudo` shows every text longer and accented, to check that the layout holds. It is not a language of Ajustes and is never stored.
 - The introduction has **Atrás** at the top left and **Saltar** at the top right, and one wide **Siguiente** at the bottom. The icon shows on the first page only, no button has a ring when it opens, and the controls named in a text show as bold accent text, not as boxes. The drawings and texts no longer show the old **↻** button at the end of a row.
