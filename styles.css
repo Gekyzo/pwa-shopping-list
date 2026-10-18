@@ -153,8 +153,9 @@
     justify-content: flex-end;
   }
 
-  /* With the left hand the search button comes to the start side, and the arrows keep the order
-     that they point to: ‹ before the shop, › after it. The search mode mirrors as the shared dock. */
+  /* @extends dock */
+  /* Left hand: the shared mirror would read the arrows backwards, so ‹ chip › keep their order and
+     only the search button moves to the start side. The search mode mirrors as the shared dock. */
   [data-hand="left"] .dock {
     flex-direction: row;
     justify-content: flex-start;

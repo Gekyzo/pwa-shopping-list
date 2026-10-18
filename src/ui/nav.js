@@ -1,5 +1,6 @@
 import { direction, slideTo } from '#sections';
-import { $, scroller, ui, render, guardClick, sheetOpen } from '#ui/context';
+import { sheetOpen } from '#layers';
+import { $, scroller, ui, render, guardClick } from '#ui/context';
 import { reorder } from '#ui/drag';
 import { checkVersion } from '#ui/settings';
 
