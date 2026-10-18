@@ -40,8 +40,9 @@
       <div id="shop-chips" class="cluster scroll shop-lists" role="group" data-i18n-attr="aria-label:shops.lists" hidden></div>
 
       <div id="shop-done" class="empty-state" hidden>
-        <p id="shop-done-text"></p>
+        <h2 id="shop-done-text" class="empty-state-title"></h2>
         <button id="shop-done-next" class="button primary" type="button"></button>
+        <button id="shop-done-all" class="button outline" type="button" data-i18n="shops.seeAll"></button>
       </div>
 
       <div id="search" class="search" hidden>
@@ -208,11 +209,12 @@
       <div id="trip-veil" class="sheet-veil"></div>
       <div class="sheet" role="dialog" data-i18n-attr="aria-label:trip.menu">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.menu"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.question"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
-          <p id="finish-menu-text" class="hint trip-open"></p>
-          <p id="trip-open" class="hint trip-open" hidden></p>
+          <ul id="trip-outcomes" class="list-group plain"></ul>
+          <p id="trip-open" class="hint trip-open" hidden><span data-i18n="trip.hint"></span> <button id="trip-settings" class="button accent" type="button" data-i18n="nav.settings"></button></p>
           <button id="finish-menu" class="button primary wide" type="button" data-i18n="finish.button"></button>
+          <button id="trip-continue" class="button outline wide" type="button" data-i18n="trip.continue"></button>
         </div>
       </div>
     </div>
