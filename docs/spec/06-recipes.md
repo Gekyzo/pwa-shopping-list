@@ -12,19 +12,21 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-3** The `+` button in `Recetas` opens the add sheet with the field `Nombre de la receta`
   and the button **Crear**, with no target choice. The new recipe opens its sheet (REC-33), with
   the cursor in its product field, and the search is cleared.
-- **REC-4** A recipe row shows the name and `N productos`, the mark of REC-35 and the link
-  (REC-15). A tap on the name opens the sheet of the recipe (REC-33).
+- **REC-4** A recipe row shows the name and, below it, the meta line `N productos`, then
+  `en la lista` when REC-35 applies and `con enlace` when the recipe has a link (REC-15), joined by
+  ` · `. A tap on the name opens the sheet of the recipe (REC-33). The send button of REC-17 stays at the
+  end of the row.
 - **REC-5** A recipe row slides as an item row (ROW-4 to ROW-6, ROW-8, ROW-10). A slide to the
-  left shows **Eliminar**, an icon button 64 px wide. A slide to the right sends the recipe at the
+  left shows **Eliminar**, an icon button 64 px wide with its name under the icon. Its text for a screen reader
+  is `Eliminar {name}`. A slide to the right sends the recipe at the
   release (REC-17), with the rule and the backdrop of ROW-11 and the icon `cart-add`.
 - **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
   `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation. Below 600px wide they stand in one column; from
   600px in two, filled row by row, so more of them fit on the screen of a tablet or an unfolded phone.
 - **REC-35** A recipe whose products are all items of `Compra`, ticked or not, with no case
-  distinction, shows the icon `cart` in its row, at the small icon size (`--icon-s`), before the
-  link. Its text for a screen reader is `Todo está en Compra`. It is not a control. A recipe with no
-  products has no mark. The rule of "all in `Compra`" is the one of the groups by recipe (GROUP-5).
+  distinction, adds `en la lista` to its meta line (REC-4). A recipe with no products has no such
+  text. The rule of "all in `Compra`" is the one of the groups by recipe (GROUP-5).
 
 ## Products
 
@@ -46,14 +48,15 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-14** A text with no scheme gets `https://`. Only an `http` or `https` address is valid,
   with no space and a host name of two parts at least, such as `example.com`; another text gives
   `error.invalidLink`. A stored link that is not valid becomes empty (STORE-7).
-- **REC-15** A recipe with a link shows a chain symbol in its row, at the small icon size
-  (`--icon-s`). It opens the address in a new browser context, with `noopener noreferrer`.
+- **REC-15** A recipe with a link adds `con enlace` to its meta line (REC-4). The sheet of the
+  recipe shows an icon button with a chain symbol beside the field **Enlace** while the recipe has a
+  link. It opens the address in a new browser context, with `noopener noreferrer`.
 - **REC-16** A save and a removal of a link have `Deshacer`.
 
 ## Send to `Compra`
 
-- **REC-17** A slide of the recipe row to the right sends the recipe (REC-5). The row has no
-  send button. A recipe with no product gives `error.recipeEmpty`.
+- **REC-17** A slide of the recipe row to the right sends the recipe (REC-5). So does the icon
+  button `cart-add` at the end of the row, named `Añadir a Compra`, with the same toast. A recipe with no product gives `error.recipeEmpty`.
 - **REC-18** For each product, in order:
   - an item with that name exists, with no case distinction: the item becomes "to buy" in `Compra`
     (it comes back from the saved items, or it loses its tick, or it stays as it is);

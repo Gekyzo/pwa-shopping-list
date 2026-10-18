@@ -82,41 +82,43 @@ const productForm = (recipe) => {
   return el('div', { className: 'product-add' }, [form, suggestions]);
 };
 
-const linkNode = (recipe) => {
-  const link = el('a', { className: 'button icon accent', href: recipe.url, target: '_blank', rel: 'noopener noreferrer' }, [
-    icon('link', 'small'),
-  ]);
-  link.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
-  return link;
+// The send button at the end of a recipe row. It is out of the name and runs what the slide to the
+// right runs.
+const sendButton = (recipe) => {
+  const button = el('button', { type: 'button', className: 'button icon', title: t('recipe.send'), onclick: () => sendToList(recipe) }, [icon('cart-add')]);
+  button.setAttribute('aria-label', t('recipe.send'));
+  return button;
 };
 
-// The mark of a recipe whose products are all in Compra. It is not a control.
-const inListMark = () => {
-  const mark = el('span', { className: 'recipe-mark', title: t('recipe.inList') }, [icon('cart', 'small')]);
-  mark.setAttribute('role', 'img');
-  mark.setAttribute('aria-label', t('recipe.inList'));
-  return mark;
-};
-
-const deleteAction = (recipe, node) =>
-  iconButton(
+// Its visible name is Eliminar; a screen reader also hears the name of the recipe.
+const deleteAction = (recipe, node) => {
+  const button = iconButton(
     'trash',
-    t('row.delete', { name: recipe.name }),
+    t('sheet.delete'),
     () =>
       leaveNode(node.dataset.key, [node], () =>
         apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
       ),
-    { variant: 'danger' },
+    { variant: 'danger', labelled: true },
   );
+  button.setAttribute('aria-label', t('row.delete', { name: recipe.name }));
+  return button;
+};
 
-// A recipe row: a tap opens its sheet, a slide to the left shows Eliminar, a slide to the right sends it.
+// A recipe row: a tap on the name opens its sheet, the send button stays at the end, a slide to the
+// left shows Eliminar, and a slide to the right sends it.
 export const recipeNode = (recipe) => {
+  const meta = [
+    t('count.products', { count: recipe.products.length }),
+    ...(recipes.inList(state, recipe) ? [t('recipe.inListShort')] : []),
+    ...(recipe.url ? [t('recipe.hasLink')] : []),
+  ];
   const name = el('button', { type: 'button', className: 'item-row-name', onclick: () => openRecipe(recipe) }, [
-    el('span', { textContent: recipe.name }),
-    el('small', { className: 'item-row-meta', textContent: t('count.products', { count: recipe.products.length }) }),
+    el('span', { className: 'item-row-label', textContent: recipe.name }),
+    el('small', { className: 'item-row-meta', textContent: meta.join(' · ') }),
   ]);
   name.setAttribute('aria-haspopup', 'dialog');
-  const row = [name, ...(recipes.inList(state, recipe) ? [inListMark()] : []), ...(recipe.url ? [linkNode(recipe)] : [])];
+  const row = [name, el('div', { className: 'item-row-end' }, [sendButton(recipe)])];
   const node = el('li', { className: 'item-row recipe' });
   node.dataset.key = `recipe:${recipe.id}`;
   const right = { run: () => sendToList(recipe), icon: 'cart-add' };
@@ -154,6 +156,11 @@ export const renderRecipe = () => {
   $('recipe-title').textContent = recipe.name;
   if (document.activeElement !== $('recipe-name')) $('recipe-name').value = recipe.name;
   if (document.activeElement !== $('recipe-url')) $('recipe-url').value = recipe.url;
+  const open = $('recipe-open');
+  open.hidden = !recipe.url;
+  open.href = recipe.url || '#';
+  open.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
+  open.title = t('recipe.openLink', { name: recipe.name });
   const products = el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product)));
   if (shown?.id !== recipe.id || shown.name !== recipe.name) {
     $('recipe-products').replaceChildren(products, productForm(recipe));
