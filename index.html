@@ -144,11 +144,12 @@
         <div class="sheet-grab"></div>
         <header class="sheet-head"><h2 id="add-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
-          <div class="input-row">
-            <input id="add-name" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80">
-            <button id="add-submit" class="button primary" type="submit"></button>
-          </div>
           <ul id="suggestions" class="list-group plain" data-i18n-attr="aria-label:add.existing"></ul>
+          <p id="add-help" class="input-help danger" role="alert" hidden></p>
+          <div class="input-row pinned">
+            <input id="add-name" class="input strong" type="text" enterkeyhint="done" autocapitalize="sentences" maxlength="80" aria-describedby="add-help">
+            <button id="add-submit" class="button primary" type="submit" disabled></button>
+          </div>
         </div>
       </form>
     </div>
@@ -366,6 +367,7 @@
           "#onboarding": "./src/onboarding.js",
           "#reorder": "./src/reorder.js",
           "#sheets": "./src/sheets.js",
+          "#suggest": "./src/suggest.js",
           "#storage": "./src/storage.js",
           "#version": "./src/version.js",
           "#install": "./src/install.js",

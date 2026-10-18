@@ -1,6 +1,7 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
+import { suggestionRows } from '#suggest';
 import { $, el, state, ui, t, say, textOf, showToast, apply, render } from '#ui/context';
 import { inList, endSearch } from '#ui/view';
 
@@ -19,29 +20,37 @@ export const renderSheet = () => {
   $('add-name').placeholder = label;
   $('add-name').setAttribute('aria-label', label);
   $('add').setAttribute('aria-label', t(forRecipe ? 'add.recipe' : 'add.item'));
+  const text = $('add-name').value.trim();
+  $('add-submit').disabled = !text;
   if (forRecipe) {
     $('suggestions').replaceChildren();
     return;
   }
-  const text = $('add-name').value.trim();
-  const rows = store.searchItems(state, text).map((item) =>
-    el('li', {}, [
-      el('button', { type: 'button', className: 'list-row', onclick: () => useExisting(item) }, [
-        el('span', { className: 'list-row-text', textContent: item.name }),
-        el('span', { className: 'list-row-meta', textContent: whereText(item) }),
+  // The array runs from the best row to the worst; the list shows it upside down, so that the
+  // first row sits next to the input.
+  const rows = suggestionRows(state, text).map((row) => el('li', {}, [
+    row.kind === 'create'
+      ? el('button', { type: 'button', className: 'list-row accent', textContent: t('add.createNamed', { name: text }), onclick: submitAdd })
+      : el('button', { type: 'button', className: 'list-row', onclick: () => useExisting(row.item) }, [
+        el('span', { className: 'list-row-text', textContent: row.item.name }),
+        el('span', { className: 'list-row-meta', textContent: whereText(row.item) }),
       ]),
-    ]));
-  if (text && !store.findByName(state, text)) {
-    rows.push(
-      el('li', {}, [el('button', { type: 'button', className: 'list-row accent', textContent: t('add.createNamed', { name: text }), onclick: submitAdd })]),
-    );
-  }
-  $('suggestions').replaceChildren(...rows);
+  ]));
+  $('suggestions').replaceChildren(...rows.reverse());
+};
+
+// The text under the input that says why an add did nothing. The next input clears it.
+const setHelp = (text) => {
+  $('add-help').textContent = text;
+  $('add-help').hidden = !text;
+  if (text) $('add-name').setAttribute('aria-invalid', 'true');
+  else $('add-name').removeAttribute('aria-invalid');
 };
 
 export const openSheet = () => {
   Object.assign(ui, { sheetOpen: true, openId: null });
   $('add-name').value = '';
+  setHelp('');
   render();
   $('add-name').focus();
 };
@@ -60,15 +69,18 @@ const useExisting = (item) => {
   const brought = store.bringToList(state, item.id);
   const result = shops.withShop(brought, item.id, pickedShop());
   if (result.state !== brought.state) result.changed = true;
-  const params = { name: item.name, list: 'active' };
-  $('add-name').value = '';
-  ui.flashId = item.id;
-  if (!result.error) endSearch();
-  if (result.changed) apply(result, { undoText: say('toast.existsNowIn', params) });
-  else {
-    render();
-    showToast(result.error ? textOf(result.error) : say('error.duplicateItem', params));
+  if (!result.changed) {
+    // Nothing changed: the text stays, and the help under the input says why.
+    if (result.error) showToast(textOf(result.error));
+    else setHelp(t('add.duplicate', { name: item.name }));
+    $('add-name').focus();
+    return;
   }
+  $('add-name').value = '';
+  setHelp('');
+  ui.flashId = item.id;
+  endSearch();
+  apply(result, { undoText: say('toast.existsNowIn', { name: item.name, list: 'active' }) });
   $('add-name').focus();
 };
 
@@ -103,6 +115,7 @@ const submitAdd = () => {
   if (!result.error) endSearch();
   if (apply(result)) {
     input.value = '';
+    setHelp('');
     renderSheet();
     showToast(say('toast.addedTo', { name, list: 'active' }));
   }
@@ -112,7 +125,10 @@ const submitAdd = () => {
 export const bind = () => {
   $('fab').addEventListener('click', openSheet);
   $('veil').addEventListener('click', closeSheet);
-  $('add-name').addEventListener('input', renderSheet);
+  $('add-name').addEventListener('input', () => {
+    setHelp('');
+    renderSheet();
+  });
   $('add').addEventListener('submit', (event) => {
     event.preventDefault();
     submitAdd();

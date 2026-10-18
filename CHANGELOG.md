@@ -11,6 +11,7 @@ no change for the user has no entry.
 
 - The buttons and rows are larger, the corners are softer, and the hint in Ajustes no longer stretches its lines.
 - Each sheet has a head with its title and **Listo**, and a drag down closes it. The edit and recipe sheets show **Eliminar** at the bottom, and **Guardado** after a change.
+- The add input stays at the bottom with the suggestions above it, and **Crear** sits next to it. A name that is on the list already shows a note under the input, not a toast.
 
 ## 1.0.39 - 2026-10-18
 

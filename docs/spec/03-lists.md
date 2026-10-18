@@ -102,9 +102,12 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 
 - **ADD-1** The sheet has a name field and the button **Añadir**. It has no target choice: an add
   always goes to `Compra`.
-- **ADD-2** While the user types, the sheet lists up to 5 items whose name contains the text, with
-  no case or accent distinction: the exact match first, then the names that start with the text,
-  then the others.
+- **ADD-2** While the user types, the sheet lists up to 6 rows above the input, which stays pinned
+  at the bottom of the sheet and does not move: `+ Crear «name»` first when no item has the
+  typed name, then the items whose name contains the text, with no case or accent distinction (the
+  exact match first, then the names that start with the text, then the others). The list shows the
+  rows upside down, so that the first row sits next to the input. **Añadir** is off while the field
+  is empty. `Recetas` shows no rows.
 - **ADD-3** Each listed item says where it is and what a tap does:
 
   | State of the item | Text | Effect of the tap |
@@ -116,9 +119,11 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 - **ADD-4** When no item has the typed name, the list ends with `+ Crear «name»`, which does the
   same as **Añadir**.
 - **ADD-5** **Añadir** with the name of an item that exists does the effect of ADD-3 for that item.
-  It never creates a duplicate.
+  It never creates a duplicate. When the effect changes nothing (the item is to buy in `Compra`
+  already), the text stays in the field, the field gets the error mark, and the help under it says
+  `«name» ya está en la lista`. The next input clears the help.
 - **ADD-6** An effect that changes the state shows `"name" ya existe. Ahora está en <list>.` with
-  `Deshacer`. An effect that changes nothing shows `"name" ya está en <list>.`
+  `Deshacer`. An effect that changes nothing shows no toast (ADD-5).
 - **ADD-7** A new item shows `"name" añadido a <list>.` with no `Deshacer`.
 - **ADD-8** After each add the sheet stays open, with an empty field that has the focus, so that
   the user adds several items in one visit. A tap out of the sheet or `Escape` closes it.
