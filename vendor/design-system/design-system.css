@@ -393,7 +393,7 @@
     height: 26px;
     margin: 0;
     border-radius: var(--radius-l);
-    background: var(--line);
+    background: var(--muted);
     cursor: pointer;
     transition: background var(--motion);
   }
