@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.0.39 - 2026-10-18
+
 - **Densidad** in `Ajustes`: `Compacta` makes the rows of the lists and of `Recetas` lower, so
   more of them fit on one screen. In `Menú` it puts the name of each day beside its meals, so the
   whole week fits on the screen of a phone.
