@@ -510,7 +510,8 @@
 
   .settings-hint {
     padding: 0 var(--space-4) var(--space-2);
-    text-align: justify;
+    text-align: start;
+    hyphens: auto;
   }
 
   .settings .list-group > .segmented {
@@ -686,7 +687,7 @@
     width: var(--space-2);
     height: var(--space-2);
     border-radius: var(--radius-round);
-    background: var(--line);
+    background: var(--muted);
   }
 
   .onboarding-dot.on {

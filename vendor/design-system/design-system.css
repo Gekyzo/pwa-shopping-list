@@ -5,7 +5,8 @@
     /* `light-dark()` takes its value from `color-scheme`: the phone, or Theme in Settings. */
     color-scheme: light dark;
     --bg: light-dark(#f6f7f5, #111613); /* page */
-    --surface: light-dark(#ffffff, #1a211d); /* rows, header, sheets */
+    --surface: light-dark(#ffffff, #1d2621); /* rows, header, sheets */
+    --surface-2: light-dark(#eef2ef, #26302a); /* a field or a row set on --surface */
     --text: light-dark(#17201b, #e8ede9);
     --muted: light-dark(#667069, #98a39c); /* second text, idle icons */
     --line: light-dark(#dfe4e0, #2c3530); /* borders and separators */
@@ -24,9 +25,10 @@
     --text-xs: 0.75rem; /* labels, badges, captions */
     --text-s: 0.875rem; /* second text, chips */
     --text-m: 1rem; /* body */
-    --text-l: 1.25rem; /* screen title */
+    --text-l: 1.375rem; /* screen title */
     --text-xl: 2rem; /* the + of the add button */
     --weight-normal: 400;
+    --weight-medium: 600; /* titles, selected labels */
     --weight-strong: 700;
 
     --space-half: 2px;
@@ -36,20 +38,22 @@
     --space-4: 16px;
     --space-5: 20px;
     --space-6: 24px;
+    --space-7: 32px;
 
     --radius-s: 4px;
-    --radius-m: 10px; /* buttons, inputs */
-    --radius-l: 16px; /* groups, banner, add button */
-    --radius-xl: 22px; /* top of a sheet */
+    --radius-m: 12px; /* buttons, inputs */
+    --radius-l: 20px; /* groups, banner, add button */
+    --radius-xl: 28px; /* top of a sheet */
     --radius-pill: 999px;
     --radius-round: 50%;
 
-    --tap: 44px; /* least size of a tap target */
+    --tap: 48px; /* least size of a tap target */
     --tap-l: 56px; /* rows, add button */
     --icon: 24px;
     --icon-s: 20px;
     --arrow: 6px; /* the arrow of a select */
-    --nav-height: 60px;
+    --nav-height: 64px;
+    --dock-height: 56px; /* the bar of the main action above the bottom bar */
     /* The adaptive layout (LAY-1): the rail from 600px, the two panes from 840px. */
     --rail-width: 80px;
     --content-max: 640px;
@@ -58,11 +62,12 @@
     --logo: 96px; /* the app icon at the top of the walkthrough */
 
     --shadow-s: 0 1px 3px rgb(0 0 0 / 0.3);
-    --shadow-l: 0 6px 18px rgb(0 0 0 / 0.25);
+    --shadow-l: 0 8px 24px rgb(0 0 0 / 0.14);
 
     --motion-fast: 150ms;
-    --motion: 200ms;
+    --motion: 250ms;
     --motion-slow: 1.2s;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1); /* the curve of every move */
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -93,7 +98,7 @@
   }
 
   button {
-    min-height: 44px;
+    min-height: var(--tap);
     border: 0;
     border-radius: var(--radius-m);
     background: none;
@@ -133,7 +138,7 @@
      and the bottom padding do not move. */
   main.enter-next > *,
   main.enter-previous > * {
-    animation: enter var(--motion) ease-out;
+    animation: enter var(--motion) var(--ease);
   }
 
   main.enter-next {
@@ -183,7 +188,7 @@
      @variant danger   Removes data. Combine with outline.
      @variant strong   Strong text, for the action of a toast.
      @variant icon     Square, icon or one sign only. Needs an aria-label.
-     @variant toggle   An icon button that is on with aria-pressed="true".
+     @variant toggle   An icon button that is on with aria-pressed="true": the icon takes the accent over a soft accent shape.
      @variant wide     Takes the full width of its box.
      @example <button class="button primary" type="button">Add</button>
      @example <button class="button outline" type="button">Clear menu</button>
@@ -249,11 +254,12 @@
   }
 
   .button.toggle {
-    color: var(--line);
+    color: var(--muted);
   }
 
   .button.toggle[aria-pressed="true"] {
     color: var(--accent);
+    background: var(--accent-soft);
   }
 
   .button.wide {
@@ -417,8 +423,21 @@
     background: var(--surface);
   }
 
+  .input:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
   .input.strong {
-    border: 2px solid var(--accent);
+    border: 1px solid var(--accent);
+  }
+
+  .input.strong:focus-visible {
+    border-width: 2px;
   }
 
   /* @component field
@@ -457,7 +476,7 @@
     line-height: 1;
     pointer-events: none;
     transform: translateY(-50%);
-    transition: top var(--motion-fast) ease-out, font-size var(--motion-fast) ease-out, color var(--motion-fast) ease-out;
+    transition: top var(--motion-fast) var(--ease), font-size var(--motion-fast) var(--ease), color var(--motion-fast) var(--ease);
   }
 
   .field-input:focus + .field-label,
@@ -660,7 +679,7 @@
     position: absolute;
     inset: 0;
     background: var(--scrim);
-    transition: opacity var(--motion) ease-out;
+    transition: opacity var(--motion) var(--ease);
   }
 
   .sheet-layer[hidden] .sheet-veil {
@@ -688,7 +707,7 @@
     padding: var(--space-3) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     background: var(--surface);
-    transition: transform var(--motion) ease-out;
+    transition: transform var(--motion) var(--ease);
   }
 
   .sheet-grab {
@@ -752,7 +771,7 @@
     background: var(--toast-bg);
     color: var(--toast-text);
     box-shadow: var(--shadow-l);
-    transition: opacity var(--motion) ease-out, transform var(--motion) ease-out, display var(--motion) allow-discrete;
+    transition: opacity var(--motion) var(--ease), transform var(--motion) var(--ease), display var(--motion) allow-discrete;
   }
 
   /* The toast leaves to this state, and enters from the same one. */
@@ -836,7 +855,7 @@
     overflow: hidden;
     min-height: 0;
     opacity: 0;
-    transition: height var(--motion) ease-out, opacity var(--motion) ease-out;
+    transition: height var(--motion) var(--ease), opacity var(--motion) var(--ease);
   }
 
   /* @component item-row
@@ -847,7 +866,8 @@
      @part item-row-name          The name button, with its quantity and its meta line.
      @part item-row-qty           The quantity after the name.
      @part item-row-meta          A muted line below the name, such as its tags.
-     @part item-row-actions       The swipe actions behind the right end.
+     @part item-row-actions       The swipe actions behind the right end. Hidden while the row is closed, so a
+                                  fractional pixel ratio shows no edge of them. The drag code adds open on settle.
      @part item-row-backdrop      The action under a slide to the right.
      @state done      A ticked entry: its name is struck out.
      @state flash     A row that has just come back: its body flashes.
@@ -863,7 +883,7 @@
     border-bottom: 1px solid var(--line);
     background: var(--surface);
     /* The rows of a scope open a gap for a lifted row. `placeLifted` in drag.js sets the transform. */
-    transition: transform var(--motion-fast) ease-out;
+    transition: transform var(--motion-fast) var(--ease);
   }
 
   .item-row.lifted {
@@ -874,7 +894,7 @@
   }
 
   .item-row.flash .item-row-body {
-    animation: flash var(--motion-slow) ease-out;
+    animation: flash var(--motion-slow) var(--ease);
   }
 
   .item-row.gone {
@@ -898,6 +918,10 @@
     right: 0;
     bottom: 0;
     display: flex;
+  }
+
+  .item-row-swipe:not(.open) .item-row-actions {
+    visibility: hidden;
   }
 
   /* The slide to the right shows its action below the row. The actions cover it. */
@@ -931,7 +955,7 @@
     padding-right: var(--space-3);
     touch-action: pan-y;
     user-select: none;
-    transition: transform var(--motion-fast) ease-out;
+    transition: transform var(--motion-fast) var(--ease);
   }
 
   .item-row-swipe .item-row-body.dragging {
@@ -1228,6 +1252,8 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
+    padding-inline-end: var(--space-6);
+    mask-image: linear-gradient(to right, black calc(100% - var(--space-7)), transparent);
   }
 
   /* @component input-row
