@@ -1,10 +1,10 @@
 {
-  "version": "0.4.0",
-  "commit": "afec33a9a7ee6178ef908e356a8be9e39d3d2963",
+  "version": "0.5.0",
+  "commit": "8c65e62bbc19382b4cf25a394464130a27dbd574",
   "files": {
-    "design-system.css": "e6cec0593fe70a927829f474f8fe11765ba2caf8d6d5182c71eff48f3ec29eee",
-    "catalog.js": "14df9d2754ade53c097cf51572cefe7cb18857b02461434e5520413cee1e4ba5",
-    "rules.js": "de2f2cbe4957ec2945e854643290c0a55189049b3202b0e9ece0400f74e3276d",
-    "sheet.js": "fac536b3c8ee998c1e4fc77c5c9528f6d1a25acf3bb9cb2a9b3bec5611ceb0ee"
+    "design-system.css": "915914dab4458f110fccae1876d7af7b430def08dccd00debca624404bdd740f",
+    "catalog.js": "9d083eb7e452bbc1951829125750b0da5634df357ac99f6b28910f846def810f",
+    "rules.js": "aa8a48dfcdbc51b90dca0d70b2c7442b26c9c6c5b921f52b701460f87e50d779",
+    "sheet.js": "98e27e1ddb882500c4b0ebc6b21ab9197b60a0c62133162d54b5e8edcc2df686"
   }
 }

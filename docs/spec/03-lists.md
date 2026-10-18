@@ -97,9 +97,9 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 | Section | Title | Subtitle | Ring |
 |---|---|---|---|
-| `Compra` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `Quedan N artículos` | `ticked/total`, filled to that share |
+| `Compra` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `T de N comprados` (ticked of total) | The count of items to buy, or `✓` when all are bought, filled to the share ticked |
 | `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | The count of recipes |
-| `Ajustes` | `Ajustes` | `Bodega` | `⚙` |
+| `Ajustes` | `Ajustes` | `Bodega` | None: the ring does not show |
 
 ## Add sheet
 
@@ -137,10 +137,18 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 
 ## Search
 
-- **LIST-20** The header of `Compra` has a search button, at the left of the arrange button. It
-  shows when the view has one item at least.
-- **LIST-21** A tap on the button opens the field **Buscar artículo o tienda** with the focus. A
-  second tap, `Escape`, or a loss of focus with an empty field closes it. A close clears the text.
+- **LIST-20** From 600px wide the header of `Compra` has a search button, at the left of the
+  arrange button. It shows when the view has one item at least. Below 600px the search button is
+  in the dock (SHOP-26), and the header has none.
+- **LIST-21** A tap on the button of the header opens the field **Buscar artículo o tienda** below
+  the header, with the focus. A second tap, `Escape` (NAV-25), or a loss of focus with an empty
+  field closes it. A close clears the text.
+- **LIST-37** Below 600px a tap on the search button of the dock turns the dock into the field
+  **Buscar artículo o tienda**, with the focus, a clear button while it has a text, and the button
+  **Cancelar**. **Cancelar**, `Escape` and the back of the phone (NAV-25), or a loss of focus with an
+  empty field close it; a close clears the text. The list ends at the dock while the field is
+  open, so the matches fill it from the bottom and the nearest match is next to the field. A group
+  head keeps its colour.
 - **LIST-22** The list shows only the items whose name, one of whose shops or whose aisle
   (AISLE-9) contains the text,
   with no case and no accent distinction. An empty text shows all items.

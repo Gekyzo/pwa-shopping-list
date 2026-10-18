@@ -81,14 +81,18 @@ const outcomeRows = () => {
 
 const finishText = () => outcomeRows().map(({ text }) => text).join(' · ');
 
+// The subtitle of Compra holds the full figures; the ring holds the count left.
 const activeSubtitle = ({ total, left }) => {
   if (!total) return t('header.empty');
   if (!left) return t('header.allBought');
-  return t('header.left', { count: left });
+  return t('header.bought', { done: total - left, count: total });
 };
 
+const activeRing = ({ total, left }) => (total && !left ? '✓' : String(left));
+
 export const headerOf = (summary) => {
-  if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), ring: '⚙', pct: 0 };
+  // Ajustes has no figure: its ring does not show.
+  if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), ring: null, pct: 0 };
   if (ui.view === 'menu') {
     const count = menu.mealCount(state);
     const subtitle = count ? t('header.menuMeals', { count }) : t('header.noMeals');
@@ -101,7 +105,7 @@ export const headerOf = (summary) => {
   }
   const { total, left } = summary;
   const pct = total ? Math.round(((total - left) / total) * 100) : 0;
-  return { title: t('header.today'), subtitle: activeSubtitle(summary), ring: `${total - left}/${total}`, pct };
+  return { title: t('header.today'), subtitle: activeSubtitle(summary), ring: activeRing(summary), pct };
 };
 
 // The button text of each action of an empty section.
@@ -240,6 +244,77 @@ export const closeSearch = () => {
   render();
 };
 
+const pickShop = (shop) => {
+  Object.assign(ui, { openId: null, openSide: null, shop });
+  render();
+};
+
+// The dock of Compra below 600px (styles.css hides it from 600px): the shop list in view between the
+// arrows of the previous and the next list, and the search button; while the search is open, the
+// search field and Cancelar. It shows while Compra has an item.
+export const renderDock = () => {
+  const shown = inList() && store.activeItems(state).length > 0;
+  $('dock').hidden = !shown;
+  if (!shown) return;
+  const chips = shopLists === 'show' ? shops.shopChips(state) : [];
+  const search = ui.searchOpen;
+  $('dock').classList.toggle('searching', search);
+  for (const id of ['dock-prev', 'dock-shop', 'dock-next']) $(id).hidden = search || chips.length === 0;
+  $('dock-search').hidden = search;
+  $('dock-search').setAttribute('aria-expanded', String(search));
+  $('dock-field').hidden = !search;
+  $('dock-cancel').hidden = !search;
+  $('dock-clear').hidden = ui.query === '';
+  if ($('dock-query').value !== ui.query) $('dock-query').value = ui.query;
+  if (!chips.length) return;
+  const current = chips.find((chip) => chip.shop === ui.shop) ?? chips[0];
+  $('dock-shop').replaceChildren(
+    el('span', { textContent: shopLabel(current.shop) }),
+    el('span', { className: 'count', textContent: current.count === 0 ? '✓' : String(current.count) }),
+    el('span', { className: 'chevron', textContent: '▾' }),
+  );
+  $('dock-shop').setAttribute('aria-expanded', String(ui.shopPickOpen));
+  const previous = shops.previousShop(state, ui.shop);
+  const next = shops.nextShop(state, ui.shop);
+  $('dock-prev').disabled = previous === null;
+  $('dock-next').disabled = next === null;
+  $('dock-prev').onclick = () => previous && pickShop(previous.shop);
+  $('dock-next').onclick = () => next && pickShop(next.shop);
+};
+
+// The shop picker of the dock: one entry for each shop list, with the count of its items to buy.
+export const renderShopPick = () => {
+  if (!inList()) ui.shopPickOpen = false;
+  $('shop-pick').hidden = !ui.shopPickOpen;
+  if (!ui.shopPickOpen) return;
+  const chips = shopLists === 'show' ? shops.shopChips(state) : [];
+  $('shop-pick').querySelector('.sheet-body').replaceChildren(...chips.map(({ shop, count }) => {
+    const pick = () => {
+      ui.shop = shop;
+      closeShopPick();
+    };
+    const button = el('button', { type: 'button', className: 'button outline entry', onclick: pick }, [
+      el('span', { textContent: shopLabel(shop) }),
+      el('small', { className: 'entry-note', textContent: count ? t('header.left', { count }) : t('header.allBought') }),
+    ]);
+    button.setAttribute('aria-pressed', String(shop === ui.shop));
+    return button;
+  }));
+};
+
+export const closeShopPick = () => {
+  ui.shopPickOpen = false;
+  render();
+  $('dock-shop').focus();
+};
+
+// The search of the dock fills the list from the bottom, so the nearest match is next to the field.
+export const showDockMatches = () => {
+  if (!ui.searchOpen || $('dock').hidden || matchMedia('(min-width: 600px)').matches) return;
+  const main = document.querySelector('main');
+  main.scrollTop = main.scrollHeight;
+};
+
 export const closeTrip = () => {
   Object.assign(ui, { tripOpen: false });
   render();
@@ -278,6 +353,36 @@ export const bind = () => {
     Object.assign(ui, { tripOpen: true, openId: null });
     render();
     $('finish-menu').focus();
+  });
+  $('dock-shop').addEventListener('click', () => {
+    Object.assign(ui, { shopPickOpen: true, openId: null, openSide: null });
+    render();
+    $('shop-pick').querySelector('.sheet-body').querySelector('[aria-pressed="true"]')?.focus();
+  });
+  $('shop-pick-veil').addEventListener('click', closeShopPick);
+  $('dock-search').addEventListener('click', () => {
+    Object.assign(ui, { searchOpen: true, openId: null });
+    render();
+    $('dock-query').focus();
+  });
+  $('dock-query').addEventListener('input', (event) => {
+    Object.assign(ui, { query: event.target.value, openId: null });
+    render();
+  });
+  // The clear and the cancel must not take the focus out of the field first: the blur of an empty
+  // field closes the search.
+  for (const id of ['dock-clear', 'dock-cancel']) $(id).addEventListener('mousedown', (event) => event.preventDefault());
+  $('dock-clear').addEventListener('click', () => {
+    Object.assign(ui, { query: '', openId: null });
+    render();
+    $('dock-query').focus();
+  });
+  $('dock-cancel').addEventListener('click', () => {
+    closeSearch();
+    $('dock-search').focus();
+  });
+  $('dock-query').addEventListener('blur', () => {
+    if (ui.searchOpen && !ui.query.trim()) closeSearch();
   });
   $('trip-veil').addEventListener('click', closeTrip);
   $('trip-continue').addEventListener('click', closeTrip);

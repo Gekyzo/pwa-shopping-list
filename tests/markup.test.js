@@ -69,9 +69,9 @@ const sheetParts = () => {
   return opens.map((open, i) => ({ id: open[2] ?? null, part: body.slice(open.index, opens[i + 1]?.index ?? body.length) }));
 };
 
-test('each of the eight sheets has the grab, then a head with its title and Listo, then a body', () => {
+test('each of the nine sheets has the grab, then a head with its title and Listo, then a body', () => {
   const parts = sheetParts();
-  assert.equal(parts.length, 8);
+  assert.equal(parts.length, 9);
   for (const { id, part } of parts) {
     assert.match(
       part,
@@ -99,6 +99,7 @@ test('the sheets with a title of their own give it an id; the others a fixed tex
   assert.deepEqual(titles, [
     'id="add-title" ',
     ' data-i18n="arrange.label"',
+    ' data-i18n="shops.lists"',
     ' data-i18n="trip.question"',
     'id="meal-title" ',
     ' data-i18n="nav.menu"',
@@ -187,4 +188,20 @@ test('the update notice is a banner with a wide primary button above the version
   assert.match(banner, /<strong id="update-title"><\/strong>\s*<p id="update-text" class="banner-text"><\/p>/);
   assert.match(banner, /<button id="update" class="button primary wide"/);
   assert.ok(settings.indexOf('id="update-banner"') < settings.indexOf('id="version"'));
+});
+
+test('the dock stands before the add button with the shop arrows, the shop chip and the search', () => {
+  const [dock = ''] = body.match(/<div id="dock" class="dock"[\s\S]*?<button id="fab"/) ?? [];
+  const ids = [...dock.matchAll(/<button id="([^"]+)"/g)].map(([, id]) => id);
+  assert.deepEqual(ids.slice(0, 4), ['dock-prev', 'dock-shop', 'dock-next', 'dock-search']);
+  assert.match(dock, /<label id="dock-field" class="dock-field"[^>]*>[\s\S]*<input id="dock-query" class="dock-input" type="search"[\s\S]*<button id="dock-clear" class="dock-clear"/);
+  assert.match(dock, /<button id="dock-cancel" class="button accent" type="button" data-i18n="search.cancel"/);
+});
+
+test('the shop chip of the dock opens the shop picker, a sheet with a head', () => {
+  assert.match(body, /<button id="dock-shop" class="chip" type="button" aria-haspopup="dialog" aria-controls="shop-pick"/);
+  const [layer = ''] = body.match(/<div id="shop-pick" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/) ?? [];
+  assert.match(layer, /<div id="shop-pick-veil" class="sheet-veil">/);
+  assert.match(layer, /<div class="sheet-grab"><\/div>\s*<header class="sheet-head"><h2 class="sheet-title main" data-i18n="shops.lists"><\/h2><button class="button primary" type="button" data-i18n="edit.done"><\/button><\/header>/);
+  assert.match(layer, /<div class="sheet-body"><\/div>/);
 });

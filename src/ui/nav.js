@@ -1,5 +1,5 @@
 import { direction, slideTo } from '#sections';
-import { $, scroller, ui, render, guardClick } from '#ui/context';
+import { $, scroller, ui, render, guardClick, sheetOpen } from '#ui/context';
 import { reorder } from '#ui/drag';
 import { checkVersion } from '#ui/settings';
 
@@ -16,7 +16,7 @@ export const showView = (view) => {
   const way = direction(ui.view, view);
   // The field is shared: the focus of a list search must not go with it to Recetas.
   $('query').blur();
-  Object.assign(ui, { view, openId: null, query: '', searchOpen: false, mealOpen: null, recipeId: null });
+  Object.assign(ui, { view, openId: null, query: '', searchOpen: false, mealOpen: null, recipeId: null, shopPickOpen: false });
   render();
   enter(way);
   if (ui.view === 'settings') checkVersion();
@@ -35,9 +35,8 @@ export const bind = () => {
   let sectionSlide = null;
   document.addEventListener('pointerdown', (event) => {
     sectionSlide = null;
-    const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.menuMoreOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
-    if (!event.isPrimary || event.button !== 0 || reorder || sheet) return;
-    if (!event.target.closest('.app-header, main') || event.target.closest('.item-row-swipe, .shop-lists, input, textarea')) return;
+    if (!event.isPrimary || event.button !== 0 || reorder || sheetOpen(ui)) return;
+    if (!event.target.closest('.app-header, main') || event.target.closest('.item-row-swipe, .shop-lists, .dock, input, textarea')) return;
     sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
   });
   document.addEventListener('pointerup', (event) => {

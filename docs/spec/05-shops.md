@@ -38,9 +38,10 @@ in [04-arrange.md](04-arrange.md).
 A shop list is a view of `Compra`, not a list in the data. The rules of the list
 apply in it.
 
-- **SHOP-16** `Compra` has a row of chips below the header: **Todas**, then each
+- **SHOP-16** From 600px wide `Compra` has a row of chips below the header: **Todas**, then each
   shop of the view in name order (SHOP-6), then **Sin tienda**. A tap on a chip shows that list.
-  The chip of the list in view is pressed.
+  The chip of the list in view is pressed. Below 600px the dock holds the shop lists instead
+  (SHOP-26).
 - **SHOP-17** The row shows when an item of the view has a shop. **Sin tienda** shows when an item
   of the view has no shop. The row scrolls horizontally, and a slide on it does not change the
   section (NAV-4). `Izquierda` does not change the row.
@@ -67,6 +68,18 @@ apply in it.
   brings (SHOP-4), so the row shows in the list. An item that the sheet finds in its list already
   gets the shop too, with the message and `Deshacer` of ADD-6. From **Todas** and **Sin tienda**
   the add puts no shop.
+- **SHOP-26** Below 600px wide a dock stands above the bottom bar while `Compra` has an item, in
+  thumb reach. It holds `‹`, a chip with the name of the list in view, its count of items to buy
+  (`✓` for none) and `▾`, then `›`, then the search button (LIST-37). `›` shows the next list after
+  the one in view, in chip order and from the start after the end, that has an item to buy
+  (`nextShop`); `‹` the one before it (`previousShop`). An arrow with no such list is off. With no
+  chip (SHOP-17) or with the row hidden (SHOP-25) the dock holds only the search button. A slide on
+  the dock does not change the section (NAV-4). With `Izquierda` the search button is at the left,
+  and `‹` stays before the chip.
+- **SHOP-27** A tap on the chip of the dock opens the shop picker, a sheet with the title `Listas
+  por tienda` and one entry for each chip of SHOP-16, with `Quedan N artículos` or `Todo comprado`
+  below its name. The entry of the list in view is pressed. A tap on an entry shows that list and
+  closes the sheet; the focus goes back to the chip. The sheet closes as each sheet does (NAV-8).
 - **SHOP-25** The arrange sheet has the choice **Listas por tienda**, **Mostrar** or **Ocultar**,
   when the view has the row of SHOP-17. **Ocultar** hides the row in `Compra` and shows
   **Todas**. The choice is a preference of the device, stored in `shopping.shopLists`;

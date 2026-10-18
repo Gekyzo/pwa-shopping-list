@@ -5,12 +5,15 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/ui/`, `src/swipe.js` and
 ## Layout
 
 From top to bottom: the header (ring, title, subtitle, search button, arrange button, trip
-button), the content of the section, the `+` button above the bottom bar, and the bottom bar. The message shows below the top
+button), the content of the section, the `+` button above the bottom bar, and the bottom bar.
+Below 600px wide the dock of `Compra` stands between the `+` button and the bottom bar (SHOP-26),
+and the header has no search button while the dock shows. The title keeps one line, with an
+ellipsis. The message shows below the top
 edge. A sheet comes up from the bottom, over a veil. The walkthrough of the first start covers all
 of it.
 
 From 600px wide (a tablet, an unfolded phone, a phone on its side) the bottom bar is a rail at the
-side of the hand (NAV-13), and the header and the content form one centred column (DSV-5). The rules below name it
+side of the hand (NAV-13), and the header and the content form one centred column (DSV-8). The rules below name it
 the bottom bar at each width.
 
 ## Sections
@@ -24,7 +27,7 @@ the bottom bar at each width.
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
   vertical part at least. It stops at `Compra` and at `Ajustes`.
 - **NAV-4** The slide starts on the header or on the content, but not on an item row, not on the
-  row of shop lists (SHOP-17) and not on a text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
+  row of shop lists (SHOP-17), not on the dock (SHOP-26) and not on a text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
@@ -136,8 +139,9 @@ the bottom bar at each width.
 
 ## Sheets
 
-- **NAV-8** There are seven sheets: add, arrange (with the choice of shop lists, SHOP-25), trip,
-  meal, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33). One is open at a time. A tap on the
+- **NAV-8** There are nine sheets: add, arrange (with the choice of shop lists, SHOP-25), shop
+  picker (SHOP-27), trip, meal, menu options, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33).
+  One is open at a time. A tap on the
   veil, **Listo** or `Escape` closes it. The `+` button does not show while a sheet is open.
 - **NAV-22** Each sheet has a head: the grab, a title on one line and the button **Listo**. The
   title of the edit sheet is the name of the item, of the recipe sheet the name of the recipe, of
@@ -157,6 +161,14 @@ the bottom bar at each width.
 - **NAV-10** The trip sheet closes as each sheet does (NAV-8). The open puts the focus on
   **Terminar compra**, and the close puts it back on the trip button.
 
+- **NAV-24** The `+` button collapses to a square of the tap size (48 px) after a scroll of the
+  list of more than 24 px down, and opens again on any scroll up and at the top of the list
+  (`fabState`).
+- **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an open sheet,
+  then an open row, then the search of a list. While a layer is open, one entry of the history
+  stands for it, so the back closes the layer and not the app. A back with nothing to close goes
+  back as the browser does.
+
 ## Hand
 
 - **NAV-11** **Mano** of `Ajustes` has two values: `Derecha` and `Izquierda`. An app with no
@@ -168,7 +180,8 @@ the bottom bar at each width.
   | Part | `Derecha` | `Izquierda` |
   |---|---|---|
   | `+` button | Bottom right | Bottom left |
-  | Rail, from 600px wide (DSV-5) | Right | Left |
+  | Rail, from 600px wide (DSV-8) | Right | Left |
+  | Dock, below 600px wide (SHOP-26) | Search at the right | Search at the left |
   | Basket behind a list (NAV-18) | Bottom left | Bottom right |
   | Header | Ring, text, buttons | Buttons, text, ring |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
@@ -190,10 +203,11 @@ the bottom bar at each width.
 
 - **NAV-19** **Densidad** of `Ajustes` has two values: `Normal` and `Compacta`. An app with no
   choice uses `Normal`.
-- **NAV-20** `Compacta` makes the rows of `Compra` and of `Recetas` 44 px high at the least, the
-  size of a tap target, in place of 56 px, so more rows fit on one screen. In `Menú` the name of
-  each day stands beside its meals at any width, and a meal is 44 px high at the least. The
-  sheets, `Ajustes` and the bottom bar do not change. A change shows at once, with no restart.
+- **NAV-20** `Compacta` is the compact token set of the design system: the rows of `Compra` and of
+  `Recetas` and the `+` button are 48 px high in place of 56 px, the bottom bar 56 px in place of
+  64 px and the dock 48 px in place of 56 px, so more rows fit on one screen. A tap target stays
+  48 px at the least. In `Menú` the head of each day is shorter, and a meal is 48 px high at the
+  least. The sheets and `Ajustes` do not change. A change shows at once, with no restart.
 - **NAV-21** The choice is stored in `shopping.density`. `Normal` removes the key. It is a
   preference of the device, not a part of the state: `Deshacer` and an import do not change it.
 

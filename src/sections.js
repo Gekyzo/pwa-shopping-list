@@ -21,6 +21,16 @@ export const slideTo = (view, dx, dy, sections = SECTIONS) => {
   return sections[index + way] ?? null;
 };
 
+// The scroll down after which the add button collapses.
+const FAB_COLLAPSE = 24;
+
+// The state of the add button after a scroll of the list from `prevY` to `y` px: `open` at the top
+// and on any scroll up, `collapsed` after a scroll down of more than 24 px, else `state`.
+export const fabState = (prevY, y, state) => {
+  if (y <= 0 || y < prevY) return 'open';
+  return y - prevY > FAB_COLLAPSE ? 'collapsed' : state;
+};
+
 // The way from `from` to `to` in the order of `sections`: 1 towards a later section, -1 towards
 // an earlier one, 0 when there is no way.
 export const direction = (from, to, sections = SECTIONS) => {

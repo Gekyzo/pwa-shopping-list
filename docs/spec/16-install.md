@@ -12,7 +12,7 @@ Rules of `src/install.js`, `src/ui/install.js` and the `orientation` of `manifes
   `appinstalled` also makes it `installed`, whoever started the install.
 - **INS-4** The installed app turns with the device (`orientation: any` in `manifest.webmanifest`),
   so a tablet or an unfolded phone shows it the right way up on its side. The layout of each width
-  is in DSV-5.
+  is in DSV-8.
 
 ## Limits
 
