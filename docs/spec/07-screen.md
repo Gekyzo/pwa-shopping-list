@@ -157,8 +157,9 @@ the bottom bar at each width.
 - **NAV-19** **Densidad** of `Ajustes` has two values: `Normal` and `Compacta`. An app with no
   choice uses `Normal`.
 - **NAV-20** `Compacta` makes the rows of `Compra` and of `Recetas` 44 px high at the least, the
-  size of a tap target, in place of 56 px, so more rows fit on one screen. The sheets, `Ajustes`
-  and the bottom bar do not change. A change shows at once, with no restart.
+  size of a tap target, in place of 56 px, so more rows fit on one screen. In `Menú` the name of
+  each day stands beside its meals at any width, and a meal is 44 px high at the least. The
+  sheets, `Ajustes` and the bottom bar do not change. A change shows at once, with no restart.
 - **NAV-21** The choice is stored in `shopping.density`. `Normal` removes the key. It is a
   preference of the device, not a part of the state: `Deshacer` and an import do not change it.
 

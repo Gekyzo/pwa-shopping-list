@@ -380,6 +380,31 @@
     }
   }
 
+  /* Densidad Compacta (NAV-20): the name of the day stands beside its meals at any width, as on a
+     tablet, and the meals keep only the least tap target. */
+  :root[data-density="compact"] .item-list:has(> .day) {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+  }
+
+  :root[data-density="compact"] .day {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+    column-gap: var(--space-3);
+    padding-block: var(--space-1);
+  }
+
+  :root[data-density="compact"] .day-title {
+    margin: 0;
+  }
+
+  :root[data-density="compact"] .meal {
+    min-height: var(--tap);
+    padding-block: var(--space-1);
+  }
+
   /* @component meal
      @scope menu
      @summary One meal of a day: its label, then its recipe or the call to choose one.
