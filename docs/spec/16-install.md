@@ -1,6 +1,6 @@
 # Install
 
-Rules of `src/install.js` and `src/ui/install.js`.
+Rules of `src/install.js`, `src/ui/install.js` and the `orientation` of `manifest.webmanifest`.
 
 - **INS-1** The install offer has three states: `idle` (no offer), `available` (Chrome gave
   `beforeinstallprompt`) and `installed`. `installNext` moves among them: `prompt` makes it
@@ -10,6 +10,9 @@ Rules of `src/install.js` and `src/ui/install.js`.
   makes it `idle`.
 - **INS-3** An app that starts in `display-mode: standalone` starts `installed`. The event
   `appinstalled` also makes it `installed`, whoever started the install.
+- **INS-4** The installed app turns with the device (`orientation: any` in `manifest.webmanifest`),
+  so a tablet or an unfolded phone shows it the right way up on its side. The layout of each width
+  is in DSV-5.
 
 ## Limits
 
