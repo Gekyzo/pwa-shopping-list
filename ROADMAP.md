@@ -6,8 +6,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 - **Reset setting**. Reset app data, with confirmation.
 - **Optional reagents**. Make reagents optional.
-- **Density mode.** A compact choice in `Ajustes` that shows more rows on one
-  screen, with less space in each row.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
 - **Buy me a coffee.** Add support link

@@ -175,6 +175,16 @@
     text-decoration: line-through;
   }
 
+  /* Densidad Compacta (NAV-20): a row of a list keeps only the least tap target, so more rows fit on
+     one screen. */
+  :root[data-density="compact"] .item-list {
+    --tap-l: var(--tap);
+  }
+
+  :root[data-density="compact"] .item-row-check {
+    margin-block: var(--space-2);
+  }
+
   /* @extends group-head
      @part group-head-button  The full-width button that closes and opens the group, with aria-expanded.
      @part group-head-end     The count and the chevron, at the end of the button. */

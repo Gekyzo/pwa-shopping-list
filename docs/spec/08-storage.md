@@ -11,6 +11,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.lang` | The language that the user chose ([09-languages.md](09-languages.md)) |
 | `localStorage` | `shopping.hand` | `left` when the user chose **Izquierda** ([07-screen.md](07-screen.md), NAV-12) |
 | `localStorage` | `shopping.theme` | `light` or `dark` when the user chose **Claro** or **Oscuro** ([07-screen.md](07-screen.md), NAV-17) |
+| `localStorage` | `shopping.density` | `compact` when the user chose **Compacta** ([07-screen.md](07-screen.md), NAV-21) |
 | `localStorage` | `shopping.tripEnd` | `save` when the user chose **Descartar** ([03-lists.md](03-lists.md), TRIP-8) |
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
@@ -80,7 +81,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   that it was not saved (MSG-8).
 - **STORE-10** When `localStorage` is not available, the app works in memory and says so at the
   start: `El almacenamiento no está disponible: los cambios no se guardan.` A choice of language,
-  of hand, of theme or of **Al terminar la compra** then lasts until the app closes, and the walkthrough shows only from `Ajustes`
+  of hand, of theme, of density or of **Al terminar la compra** then lasts until the app closes, and the walkthrough shows only from `Ajustes`
   (ONB-8).
 - **STORE-11** The app does not read a change that another tab makes. The last tab that writes
   wins.
@@ -91,7 +92,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   local date and time. Two exports of one day get two names.
   Its content is the state, as JSON with an indent of 2 spaces.
 - **BACKUP-2** The backup holds the items with their shops, the recipes, `sent`, `group`,
-  `sort` and the menu. It does not hold the language, the hand, the theme, **Al terminar la compra** or the flag of the
+  `sort` and the menu. It does not hold the language, the hand, the theme, the density, **Al terminar la compra** or the flag of the
   walkthrough.
 - **BACKUP-3** **Importar** opens a file choice for a JSON file. A file that is not JSON
   gives `error.invalidJson`. A JSON that is not a valid state (STORE-6) gives `error.notBackup`.

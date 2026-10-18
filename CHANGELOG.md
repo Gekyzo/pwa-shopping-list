@@ -9,6 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- **Densidad** in `Ajustes`: `Compacta` makes the rows of the lists and of `Recetas` lower, so
+  more of them fit on one screen.
 - On a tablet, an unfolded phone or a phone on its side, the bottom bar becomes a rail at the side
   of the hand chosen in **Mano**, and the lists, the sheets and the introduction form one centred
   column. A phone on its side gives more height to the list. On a phone held upright nothing

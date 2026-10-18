@@ -327,6 +327,30 @@ export const saveTheme = (storage, theme) => {
   }
 };
 
+// The space of the rows: `compact` shows more rows on one screen, `normal` is the default. A
+// preference of the device, as the hand is.
+export const DENSITY_KEY = 'shopping.density';
+
+// The stored density when it is `compact`, else `normal`.
+export const loadDensity = (storage) => {
+  try {
+    return storage.getItem(DENSITY_KEY) === 'compact' ? 'compact' : 'normal';
+  } catch {
+    return 'normal';
+  }
+};
+
+// `normal` is the density of an app with no choice: it removes the key.
+export const saveDensity = (storage, density) => {
+  try {
+    if (density === 'compact') storage.setItem(DENSITY_KEY, density);
+    else storage.removeItem(DENSITY_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // Set after the walkthrough of the first start closed. It is a preference of the device, as the
 // hand is.
 export const ONBOARDED_KEY = 'shopping.onboarded';
