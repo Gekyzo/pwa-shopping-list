@@ -14,10 +14,25 @@
     display: flex;
     flex-direction: column;
     height: 100dvh;
+    /* The page keeps out of a cutout on either side (LAY-4); from 600px the rail takes the start. */
+    padding-inline-start: env(safe-area-inset-left);
+    padding-inline-end: env(safe-area-inset-right);
     background: var(--bg);
     color: var(--text);
     font: var(--text-m)/1.4 var(--font);
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* From 600px (LAY-1): the fixed rail takes the start side, and the content is one column of at most
+     --content-max, centred in the space beside the rail. */
+  @media (min-width: 600px) {
+    body {
+      padding-inline-start: calc(var(--rail-width) + env(safe-area-inset-left));
+    }
+
+    main {
+      padding-inline: max(0%, (100% - var(--content-max)) / 2);
+    }
   }
 
   button,
@@ -53,53 +68,42 @@
     transform: rotate(-30deg);
   }
 
-  /* @extends nav-bar */
-  /* The bar stays at the bottom at each width: this resets the rail of the shared nav-bar. */
+  /* From 600px the rail stands at the start side, so the basket stands beside it. */
   @media (min-width: 600px) {
-    .nav-bar {
-      position: static;
-      inset-block: auto;
-      inset-inline-start: auto;
-      z-index: auto;
-      flex-direction: row;
-      justify-content: normal;
-      width: auto;
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-inline-start: 0;
-      border-top: 1px solid var(--line);
-      border-inline-end: 0;
-    }
-
-    .nav-item {
-      flex: 1;
+    .icon.corner {
+      left: calc(var(--rail-width) + env(safe-area-inset-left) + var(--corner-out));
+      bottom: calc(env(safe-area-inset-bottom) + var(--corner-out));
     }
   }
 
-  /* @extends toast */
-  .toast {
-    position: fixed;
-    /* Above the add button, in reach of the thumb. */
-    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--tap-l) + var(--space-6));
-    left: var(--space-3);
-    right: var(--space-3);
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    min-height: 48px;
-    padding: var(--space-1) var(--space-1) var(--space-1) var(--space-4);
-    border-radius: var(--radius-m);
-    background: var(--toast-bg);
-    color: var(--toast-text);
-    box-shadow: var(--shadow-l);
-    transition: opacity var(--motion) ease-out, transform var(--motion) ease-out, display var(--motion) allow-discrete;
+  /* @extends app-header */
+  /* From 600px the content of the header lines up with the column of main. */
+  @media (min-width: 600px) {
+    .app-header {
+      padding-inline: max(var(--space-4), (100% - var(--content-max)) / 2 + var(--space-4));
+    }
   }
 
-  /* The bar stays at the bottom, so the toast keeps its place above it at each width. */
+  /* A short window, such as a phone on its side, gives more of its height to the list. */
+  @media (max-height: 480px) {
+    .app-header {
+      padding-top: calc(var(--space-2) + env(safe-area-inset-top));
+      padding-bottom: var(--space-2);
+    }
+  }
+
+  /* @extends sheet */
+  /* From 600px a sheet keeps the width of the column and stands below it, so a tablet does not show
+     it as wide as the screen. The veil still covers the rail. */
   @media (min-width: 600px) {
-    .toast {
-      bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--tap-l) + var(--space-6));
-      left: var(--space-3);
+    .sheet-layer {
+      padding-inline-start: calc(var(--rail-width) + env(safe-area-inset-left));
+    }
+
+    .sheet {
+      width: 100%;
+      max-width: var(--content-max);
+      margin-inline: auto;
     }
   }
 
@@ -149,39 +153,6 @@
     gap: var(--space-2);
   }
 
-  /* @extends fab */
-  .fab {
-    position: fixed;
-    right: var(--space-4);
-    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--space-4));
-    z-index: 5;
-    width: 56px;
-    height: 56px;
-    border-radius: var(--radius-l);
-    background: var(--accent);
-    color: var(--accent-text);
-    font-size: var(--text-xl);
-    line-height: 1;
-    box-shadow: var(--shadow-l);
-  }
-
-  /* Left hand: the controls change side. Text stays aligned to the left, and a row slides as before. */
-
-  [data-hand="left"] .fab {
-    right: auto;
-    left: var(--space-4);
-  }
-
-  /* The bar stays at the bottom, so the button keeps its place above it at each width. */
-  @media (min-width: 600px) {
-    .fab {
-      bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--space-4));
-    }
-
-    [data-hand="left"] .fab {
-      left: var(--space-4);
-    }
-  }
 }
 
 @layer screens {
@@ -489,6 +460,21 @@
     /* A horizontal slide changes the page, so the browser must not take it. */
     touch-action: pan-y;
     overflow: hidden auto;
+  }
+
+  /* From 600px the walkthrough keeps the width of the column, centred. */
+  @media (min-width: 600px) {
+    .onboarding {
+      padding-left: max(var(--space-5) + env(safe-area-inset-left), (100% - var(--content-max)) / 2);
+      padding-right: max(var(--space-5) + env(safe-area-inset-right), (100% - var(--content-max)) / 2);
+    }
+  }
+
+  /* A short window, such as a phone on its side, has no room for the logo above the drawing. */
+  @media (max-height: 480px) {
+    .onboarding-logo {
+      display: none;
+    }
   }
 
   /* The free space of the layer is three equal margins: above the logo, below it and below the

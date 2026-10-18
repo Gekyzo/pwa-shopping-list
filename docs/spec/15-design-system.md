@@ -25,19 +25,24 @@ This document holds the rules of the app only.
   in the same layer, so that it wins; the block documents the parts, variants and states that the
   app adds. A version holds only the rules that differ from the shared ones, so that a change of
   the shared sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
-  app has its own versions of `icon`, `nav-bar`, `toast`, `item-row`, `group-head` and `fab`.
+  app has its own versions of `icon`, `app-header`, `sheet`, `item-row` and `group-head`.
 - **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
   Nothing edits `vendor/` by hand.
 
 ## Exceptions
 
-- **DSV-5** The app has one layout at each width: the bar stays at the bottom, with no rail and no
-  `pane` layout. So the app does not meet LAY-1 and LAY-2; the design system has no check of
-  them, so no test reports it. Its versions of `nav-bar`, `toast` and `fab` reset the rules of the
-  shared sheet for `min-width: 600px`. LAY-3 runs and passes: it checks the `pane` block of the
-  shared sheet, and the app has no list and detail section. The app does not pad the page, the
-  toast or the add button for a cutout of the phone (LAY-4); a change to that would show on the
-  screen, and it is left to the user. `tests/design.test.js` skips the check of LAY-4 only.
+- **DSV-5** The app follows LAY-1, LAY-2 and LAY-4, and the shared `nav-bar`, `toast` and `fab`
+  apply unchanged. Below 600px the bar is at the bottom. From 600px the bar is the rail at the
+  start side, and `body` pads the start side by `--rail-width`. The header content and the
+  content of `main` form one column of at most `--content-max`, centred beside the rail. The
+  basket in the corner stands beside the rail. The expanded class (840px and up) keeps this
+  layout: the app has no list and detail section, so it has no `pane` layout. LAY-3 runs and
+  passes, because it checks the `pane` block of the shared sheet. `body` pads both sides by the
+  safe-area insets, and `tests/design.test.js` skips no rule.
+- **DSV-6** From 600px a sheet is at most `--content-max` wide and stands below the column. Its
+  veil covers the rail. The walkthrough content also keeps the width of the column.
+- **DSV-7** A window of at most 480px height (a phone on its side) gives more height to the
+  content. The header has less padding, and the walkthrough has no logo.
 
 ## Parts of the app
 
@@ -45,5 +50,5 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 
 | Layer | Parts |
 |---|---|
-| components | versions of `icon`, `nav-bar`, `toast`, `item-row`, `group-head`, `fab` (DSV-3) |
+| components | versions of `icon`, `app-header`, `sheet`, `item-row`, `group-head` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal`, `menu-actions` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |

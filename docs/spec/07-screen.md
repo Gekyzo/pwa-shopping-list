@@ -9,6 +9,10 @@ button), the content of the section, the `+` button above the bottom bar, and th
 edge. A sheet comes up from the bottom, over a veil. The walkthrough of the first start covers all
 of it.
 
+From 600px wide (a tablet, an unfolded phone, a phone on its side) the bottom bar is a rail at the
+left side, and the header and the content form one centred column (DSV-5). The rules below name it
+the bottom bar at each width.
+
 ## Sections
 
 - **NAV-1** The bottom bar has four sections, in this order: `Compra`, `Recetas`, `Menú`,
@@ -33,7 +37,7 @@ of it.
   para planificar el menú.`
 - **NAV-18** `Compra` and `Recetas` show a line drawing of the basket of the app icon
   behind the content, in the bottom corner on the other side of the `+` button (NAV-13). It is
-  tilted 30° and at 6 % opacity, and the corner and the bottom bar cut part of it. It takes the
+  tilted 30° and at 6 % opacity, and the corner and the bottom bar (the rail from 600px) cut part of it. It takes the
   colour of the text, takes no tap and does not move with the scroll.
 
 ## Item rows
