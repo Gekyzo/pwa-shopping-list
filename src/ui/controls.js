@@ -1,5 +1,5 @@
-import { SAVED_MS, savedChange } from '#sheets';
-import { el } from '#ui/context';
+import { SAVED_MS, changedState, savedChange } from '#sheets';
+import { el, state, apply } from '#ui/context';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -29,6 +29,23 @@ export const flashSaved = (sheet) => {
   clearTimeout(savedTimers.get(note));
   note.classList.add('on');
   savedTimers.set(note, setTimeout(() => note.classList.remove('on'), SAVED_MS));
+};
+
+// A closed sheet shows no Guardado: a reopen within SAVED_MS starts clean.
+export const clearSaved = (sheet) => {
+  const note = sheet.querySelector('.sheet-saved');
+  if (!note) return;
+  clearTimeout(savedTimers.get(note));
+  savedTimers.delete(note);
+  note.classList.remove('on');
+};
+
+// Applies an operation of a sheet, as `apply`, and shows Guardado when it changed the state.
+export const applySaved = (sheet, result, options) => {
+  const changed = changedState(state, result);
+  const applied = apply(result, options);
+  if (applied && changed) flashSaved(sheet);
+  return applied;
 };
 
 // A field of a sheet saves when it loses the focus. `read` gives the stored value, or undefined

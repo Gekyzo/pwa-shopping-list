@@ -120,8 +120,9 @@ the bottom bar at each width.
   the add sheet `Añadir artículo a la lista` or `Nombre de la receta` by the section. Only the body
   below the head scrolls. The edit and recipe sheets have a foot: **Eliminar** deletes the item or
   the recipe with `Deshacer` (the message of a delete from the row) and closes the sheet; `Guardado`
-  shows for 1.2 s after a field save that changed the value, and not after a loss of focus with no
-  change or an error.
+  shows for 1.2 s after each save that changed the item or the recipe (a field, a shop, the aisle,
+  a product), and not after a loss of focus with no change or an error. A closed sheet shows no
+  `Guardado`.
 - **NAV-23** A drag down of the grab or the head of a sheet closes it when the drag passes 30 % of
   the height of the sheet, or when the release is faster than 0.5 px/ms. A shorter, slower drag
   puts the sheet back. A drag that starts on a button or a field of the head does nothing.

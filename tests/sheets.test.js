@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { SAVED_MS, savedChange } from '#sheets';
+import { SAVED_MS, changedState, savedChange } from '#sheets';
 
 test('a write that leaves the value as it was is not a save', () => {
   assert.equal(savedChange('Leche', 'Leche', false), false);
@@ -26,4 +26,20 @@ test('a value that is gone after the write is not a save', () => {
 
 test('Guardado shows for 1.2 s', () => {
   assert.equal(SAVED_MS, 1200);
+});
+
+test('an operation that returns a new state is a save', () => {
+  const before = { items: [] };
+  assert.equal(changedState(before, { state: { items: [{ id: 'a' }] } }), true);
+});
+
+test('an operation that returns the same state object is not a save', () => {
+  const before = { items: [] };
+  assert.equal(changedState(before, { state: before }), false);
+});
+
+test('an operation with an error is not a save', () => {
+  const before = { items: [] };
+  assert.equal(changedState(before, { state: before, error: { key: 'error.x' } }), false);
+  assert.equal(changedState(before, { state: { items: [] }, error: { key: 'error.x' } }), false);
 });
