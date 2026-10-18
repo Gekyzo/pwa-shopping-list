@@ -30,6 +30,9 @@ their products in one action.
   recipe, or `Elegir receta`. A meal with a recipe has a solid `--accent` border and an
   `--accent` label; a meal with no recipe has a dashed `--muted` border. A day with a recipe in
   both meals has an `--accent` name.
+  Below 600px wide the name stands above the meals; from 600px it stands at the start of the row,
+  with the width of the longest name, so the week fits on the screen of a tablet or an unfolded
+  phone.
 - **MENU-10** The header shows `Menú` and `N comidas planificadas`, or `Sin comidas
   planificadas`. The ring shows the number of planned meals.
 - **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each

@@ -337,6 +337,29 @@
     gap: var(--space-2);
   }
 
+  /* From 600px the name of the day stands at the start of its row, so the week fits on the screen
+     of a tablet or an unfolded phone. A subgrid gives each name the width of the longest one, in
+     any language. */
+  @media (min-width: 600px) {
+    .item-list:has(> .day) {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+    }
+
+    .day {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+      align-items: center;
+      column-gap: var(--space-3);
+      padding-block: var(--space-2);
+    }
+
+    .day-title {
+      margin: 0;
+    }
+  }
+
   /* @component meal
      @scope menu
      @summary One meal of a day: its label, then its recipe or the call to choose one.
