@@ -9,6 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- In `Menú`, **Llenar cesta** stays at the bottom of the list. **Vaciar menú** moved to the `⋮` button of the header. In the compact density the days show a short name above their meals, and a meal name takes two lines.
 - The buttons and rows are larger, the corners are softer, and the hint in Ajustes no longer stretches its lines.
 - Each sheet has a head with its title and **Listo**, and a drag down closes it. The edit and recipe sheets show **Eliminar** at the bottom, and **Guardado** after a change.
 - The add input stays at the bottom with the suggestions above it, and **Crear** sits next to it. A name that is on the list already shows a note under the input, not a toast.

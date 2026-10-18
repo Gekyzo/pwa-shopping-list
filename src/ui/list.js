@@ -154,7 +154,6 @@ export const renderList = (summary) => {
   $('empty-text').textContent = emptyText();
 
   $('menu-actions').hidden = !(ui.view === 'menu' && state.recipes.length > 0);
-  $('menu-clear').disabled = menu.mealCount(state) === 0;
 
   $('finish').hidden = !(ui.view === 'active' && ui.shop === null && summary.total > 0 && summary.left === 0);
   renderShopDone(summary);
@@ -164,9 +163,13 @@ export const renderList = (summary) => {
 // The trip button of the header and its sheet.
 export const renderTrip = () => {
   if (ui.view !== 'active') ui.tripOpen = false;
-  $('trip-button').hidden = ui.view !== 'active';
+  const inMenu = ui.view === 'menu';
+  $('trip-button').hidden = ui.view !== 'active' && !(inMenu && state.recipes.length > 0);
+  // One button, two sheets: the trip options in Compra, the menu options in Menú.
+  $('trip-button').setAttribute('aria-label', t(inMenu ? 'menu.more' : 'trip.menu'));
+  $('trip-button').setAttribute('aria-controls', inMenu ? 'menu-more' : 'trip');
   $('finish-menu').disabled = !store.canStartNewShopping(state);
-  $('trip-button').setAttribute('aria-expanded', String(ui.tripOpen));
+  $('trip-button').setAttribute('aria-expanded', String(inMenu ? ui.menuMoreOpen : ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
   const outcome = store.tripOutcome(state, keptItems());
   // One part for each place an item goes, in this order; a part with no item does not show (TRIP-4).
@@ -232,6 +235,12 @@ export const bind = () => {
     if (ui.searchOpen && !ui.query.trim()) closeSearch();
   });
   $('trip-button').addEventListener('click', () => {
+    if (ui.view === 'menu') {
+      ui.menuMoreOpen = true;
+      render();
+      $('menu-clear').focus();
+      return;
+    }
     Object.assign(ui, { tripOpen: true, openId: null });
     render();
     $('finish-menu').focus();

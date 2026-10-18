@@ -345,8 +345,10 @@
      @scope menu
      @summary One day of the menu: its name, then its two meals side by side.
      @part day-title  The name of the day.
+     @part day-long   The long name of the day.
+     @part day-short  The short name of the day: it shows instead of the long one in the compact density below 600px.
      @part meals      The two meals.
-     @example <ul class="item-list" style="width: 100%"><li class="day"><h3 class="day-title">Lunes</h3><div class="meals"><button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button><button class="meal free" type="button"><small class="meal-label">Cena</small><span class="meal-name">Elegir receta</span></button></div></li></ul> */
+     @example <ul class="item-list" style="width: 100%"><li class="day"><h3 class="day-title"><span class="day-long">Lunes</span><span class="day-short">lun</span></h3><div class="meals"><button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button><button class="meal free" type="button"><small class="meal-label">Cena</small><span class="meal-name">Elegir receta</span></button></div></li></ul> */
   .day {
     padding: var(--space-2) var(--space-3) var(--space-3);
     border-bottom: 1px solid var(--line);
@@ -367,7 +369,7 @@
 
   .meals {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-2);
   }
 
@@ -394,29 +396,61 @@
     }
   }
 
-  /* Densidad Compacta (NAV-20): the name of the day stands beside its meals at any width, as on a
-     tablet, and the meals keep only the least tap target. */
-  :root[data-density="compact"] .item-list:has(> .day) {
-    display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
+  /* Densidad Compacta (NAV-20), below 600px: the day head stays above its meals, with the short name
+     of the day, and the name of a meal takes two lines. From 600px the long name stands beside the
+     meals again. */
+  .day-short {
+    display: none;
   }
 
   :root[data-density="compact"] .day {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-    align-items: center;
-    column-gap: var(--space-3);
-    padding-block: var(--space-1);
+    padding-block: var(--space-1) var(--space-2);
+  }
+
+  :root[data-density="compact"] .day-long {
+    display: none;
+  }
+
+  :root[data-density="compact"] .day-short {
+    display: inline;
   }
 
   :root[data-density="compact"] .day-title {
-    margin: 0;
+    margin-bottom: var(--space-1);
+    text-transform: none;
   }
 
   :root[data-density="compact"] .meal {
     min-height: var(--tap);
     padding-block: var(--space-1);
+  }
+
+  :root[data-density="compact"] .meal-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.25;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 600px) {
+    :root[data-density="compact"] .day {
+      padding-block: var(--space-1);
+    }
+
+    :root[data-density="compact"] .day-long {
+      display: inline;
+    }
+
+    :root[data-density="compact"] .day-short {
+      display: none;
+    }
+
+    :root[data-density="compact"] .day-title {
+      margin-bottom: 0;
+      text-transform: uppercase;
+    }
   }
 
   /* @component meal
@@ -462,12 +496,10 @@
     color: var(--muted);
   }
 
-  /* @component menu-actions
-     @scope menu
-     @summary The two buttons below the menu. Llenar la cesta is at the side of the hand.
-     @example <div class="split menu-actions" style="width: 100%"><button class="button primary hand-side" type="button">Llenar la cesta</button><button class="button outline" type="button">Vaciar menú</button></div> */
-  .menu-actions {
-    margin: var(--space-4) var(--space-3);
+  /* The bar of Menú sticks to the bottom edge of `main`, below its bottom padding (the room that
+     the add button takes in the other sections). */
+  .item-list ~ .action-bar {
+    bottom: calc((var(--tap-l) + var(--space-4) * 2) * -1);
   }
 
   /* @component products

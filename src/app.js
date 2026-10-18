@@ -27,7 +27,7 @@ import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { endReorder, bind as bindDrag } from '#ui/drag';
 import { moveRow } from '#ui/rows';
 import { renderRecipe, closeRecipe, bind as bindRecipe } from '#ui/recipes';
-import { renderMeal, closeMeal, bind as bindMenu } from '#ui/menu';
+import { renderMeal, renderMenuMore, closeMeal, closeMenuMore, bind as bindMenu } from '#ui/menu';
 import { renderArrange, closeArrange, bind as bindArrange } from '#ui/arrange';
 import {
   headerOf,
@@ -83,9 +83,10 @@ const renderAll = () => {
   renderSample();
   renderInstall();
   renderTrip();
+  renderMenuMore();
 
   $('fab').hidden =
-    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.aislesOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
+    ['settings', 'menu'].includes(ui.view) || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.menuMoreOpen || ui.aislesOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   document.querySelectorAll('.nav-item').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
@@ -162,6 +163,7 @@ document.addEventListener('keydown', (event) => {
   if (ui.mealOpen !== null) closeMeal();
   if (ui.searchOpen) closeSearch();
   if (ui.tripOpen) closeTrip();
+  if (ui.menuMoreOpen) closeMenuMore();
   if (ui.aislesOpen) closeAisles();
 });
 
@@ -188,6 +190,7 @@ const SHEET_CLOSE = {
   arrange: closeArrange,
   trip: closeTrip,
   meal: closeMeal,
+  'menu-more': closeMenuMore,
   edit: closeEdit,
   aisles: closeAisles,
   recipe: closeRecipe,

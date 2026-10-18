@@ -35,7 +35,7 @@ export const bind = () => {
   let sectionSlide = null;
   document.addEventListener('pointerdown', (event) => {
     sectionSlide = null;
-    const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
+    const sheet = ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.menuMoreOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
     if (!event.isPrimary || event.button !== 0 || reorder || sheet) return;
     if (!event.target.closest('.app-header, main') || event.target.closest('.item-row-swipe, .shop-lists, input, textarea')) return;
     sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };

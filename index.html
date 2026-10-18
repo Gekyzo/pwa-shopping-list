@@ -56,9 +56,8 @@
       </div>
 
 
-      <div id="menu-actions" class="split menu-actions" hidden>
-        <button id="menu-fill" class="button primary hand-side" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg><span data-i18n="menu.fill"></span></button>
-        <button id="menu-clear" class="button outline" type="button" data-i18n="menu.clear"></button>
+      <div id="menu-actions" class="action-bar" hidden>
+        <button id="menu-fill" class="button primary wide" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg><span data-i18n="menu.fill"></span></button>
       </div>
 
       <section id="finish" class="banner" hidden>
@@ -210,6 +209,17 @@
           <p id="meal-empty" class="empty-state inline" hidden></p>
           <div id="meal-chips" class="cluster"></div>
           <button id="meal-remove" class="button outline danger wide" type="button" data-i18n="menu.remove" hidden></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="menu-more" class="sheet-layer" hidden>
+      <div id="menu-more-veil" class="sheet-veil"></div>
+      <div id="menu-more-sheet" class="sheet" role="dialog" data-i18n-attr="aria-label:menu.more">
+        <div class="sheet-grab"></div>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="nav.menu"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <button id="menu-clear" class="button outline entry" type="button"><span data-i18n="menu.clear"></span><small class="entry-note" data-i18n="menu.clearNote"></small></button>
         </div>
       </div>
     </div>

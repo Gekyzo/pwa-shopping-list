@@ -15,7 +15,7 @@ their products in one action.
 
 ## Fill the basket
 
-- **MENU-5** **Llenar la cesta** sends each recipe of the menu to `Compra`, one time, in day
+- **MENU-5** **Llenar cesta** sends each recipe of the menu to `Compra`, one time, in day
   and meal order of its first meal. Each send follows REC-18 and REC-19.
 - **MENU-6** A recipe with no product is skipped. A menu with no meal gives
   `error.menuEmpty`. A menu whose recipes have no product gives `error.recipeEmpty`.
@@ -32,21 +32,24 @@ their products in one action.
   both meals has an `--accent` name.
   Below 600px wide the name stands above the meals; from 600px it stands at the start of the row,
   with the width of the longest name, so the week fits on the screen of a tablet or an unfolded
-  phone.
+  phone. In the compact density below 600px the name above the meals is the short weekday of
+  the language (`lun`), and the name of a meal takes up to two lines.
 - **MENU-10** The header shows `Menú` and `N comidas planificadas`, or `Sin comidas
   planificadas`. The ring shows the number of planned meals.
 - **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each
   recipe, in the order of the recipes; the chip of the recipe of the meal is on. A tap on a chip
   puts that recipe in the meal and closes the sheet. A meal with a recipe also has **Quitar**,
   with `Deshacer` and the message `Quitada del menú: «name».`
-- **MENU-12** Below the week, **Llenar la cesta** fills `Compra` (MENU-5). It has the icon
-  `cart-add`, the cart with a plus, before its text. It is at the side of the hand: at the
-  right of **Vaciar menú** with `Derecha`, at the left with `Izquierda` (NAV-13). The two
-  buttons are on one line, each half of its width; a long text wraps in its button. Its message is
+- **MENU-12** An action bar stays at the bottom of the list of `Menú`, above the bottom bar.
+  Its one button, **Llenar cesta**, fills `Compra` (MENU-5). It has the icon `cart-add`, the
+  cart with a plus, before its text, and the full width of the bar. Its message is
   `Menú: N añadidos, N ya estaban.` with `Deshacer`. A fill that changes nothing shows `Menú:
   todo estaba ya en la lista.` and keeps the `Deshacer` that is still on the screen.
-- **MENU-13** **Vaciar menú** empties the menu, with `Deshacer` and the message `Menú vaciado.`
-  It is disabled while the menu is empty.
+- **MENU-13** The button `⋮` of the header shows in `Menú` and opens the sheet `Menú`, with
+  **Listo** and one entry, **Vaciar menú**, and the note `Quita todas las comidas de la
+  semana. Puedes deshacerlo.` The entry empties the menu, closes the sheet and shows
+  `Deshacer` with the message `Menú vaciado.` It is disabled while the menu is empty. The
+  label of the button is `Opciones del menú`.
 - **MENU-14** With no recipe, `Menú` shows its empty text (NAV-7) and no week. The `+` button
   does not show in `Menú`.
 - **MENU-15** **Terminar compra** does not change the menu.

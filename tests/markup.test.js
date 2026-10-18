@@ -68,9 +68,9 @@ const sheetParts = () => {
   return opens.map((open, i) => ({ id: open[2] ?? null, part: body.slice(open.index, opens[i + 1]?.index ?? body.length) }));
 };
 
-test('each of the seven sheets has the grab, then a head with its title and Listo, then a body', () => {
+test('each of the eight sheets has the grab, then a head with its title and Listo, then a body', () => {
   const parts = sheetParts();
-  assert.equal(parts.length, 7);
+  assert.equal(parts.length, 8);
   for (const { id, part } of parts) {
     assert.match(
       part,
@@ -100,6 +100,7 @@ test('the sheets with a title of their own give it an id; the others a fixed tex
     ' data-i18n="arrange.label"',
     ' data-i18n="trip.menu"',
     'id="meal-title" ',
+    ' data-i18n="nav.menu"',
     'id="edit-title" ',
     ' data-i18n="aisles.title"',
     'id="recipe-title" ',
@@ -131,4 +132,17 @@ test('the meal sheet has a recipe search between the title and the chips, and a 
   assert.deepEqual(ids, ['meal', 'meal-veil', 'meal-sheet', 'meal-title', 'meal-query', 'meal-empty', 'meal-chips', 'meal-remove']);
   assert.match(layer, /<input id="meal-query" class="input" type="search"[^>]*data-i18n-attr="placeholder:recipes.search,aria-label:recipes.search"/);
   assert.match(layer, /<p id="meal-empty"[^>]*hidden><\/p>/);
+});
+
+test('Llenar cesta stands in an action bar; Vaciar menú is an entry of the menu sheet', () => {
+  assert.match(body, /<div id="menu-actions" class="action-bar" hidden>\s*<button id="menu-fill" class="button primary wide"/);
+  const { part } = sheetParts().find((sheet) => sheet.id === 'menu-more-sheet');
+  assert.match(part, /<button id="menu-clear" class="button outline entry"[^>]*>[\s\S]*?<small class="entry-note" data-i18n="menu.clearNote"><\/small>/);
+  assert.doesNotMatch(body, /class="split menu-actions"/);
+  assert.match(body, /<button id="trip-button"[^>]*data-i18n-attr="aria-label:trip.menu"/);
+});
+
+test('the es text of menu.fill is Llenar cesta', async () => {
+  const { default: es } = await import('../src/locales/es.js');
+  assert.equal(es['menu.fill'], 'Llenar cesta');
 });
