@@ -204,6 +204,7 @@ export default {
   'error.noStorage': 'L’emmagatzematge no està disponible: els canvis no es desen.',
   'error.updateFailed': 'No s’ha pogut actualitzar.',
   'error.nameRequired': 'Escriu un nom.',
+  'error.invalidCode': 'Aquest codi de barres no és vàlid.',
   'error.duplicateItem': '«{name}» ja és a {list}.',
   'error.itemNotFound': 'Article no trobat.',
   'error.onlyActiveTick': 'Només es poden marcar els articles de {list}.',

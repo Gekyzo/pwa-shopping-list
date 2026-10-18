@@ -6,7 +6,7 @@ The app has one state object. Each operation returns a new object and never chan
 
 ```js
 {
-  version: 8,
+  version: 9,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
   sent: [string],     // ids of the recipes sent to Compra in this trip, in send order
@@ -14,10 +14,11 @@ The app has one state object. Each operation returns a new object and never chan
   sort: 'custom',     // 'custom' | 'name'
   menu: [Meal],       // the planned meals of the week, in day and meal order
   aisles: [string],   // the sections of the store, in the order of the walk
+  codes: { [code]: string }, // the item name of each scanned barcode
 }
 ```
 
-The empty state is `{ version: 8, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] }`.
+The empty state is `{ version: 9, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [], codes: {} }`.
 
 ## Item
 
@@ -115,3 +116,6 @@ where each one goes (TRIP-4): `recurrent` come back; `kept`, open items kept wit
 - The section that is open, an open row, the text of a search and each other state of the screen.
   A start of the app shows `Compra` with all rows closed.
 - The state before the last change, which `Deshacer` uses. It lives only while its message shows.
+- **DATA-16** A key of `codes` is a barcode (CODE-1). Its value is a trimmed name, not empty. A code
+  matches an item by name with no case distinction, as a product does (DATA-11), except that a rename
+  of the item also renames its codes (CODE-5). See [18-barcode.md](18-barcode.md).

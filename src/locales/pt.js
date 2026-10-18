@@ -204,6 +204,7 @@ export default {
   'error.noStorage': 'O armazenamento não está disponível: as alterações não são guardadas.',
   'error.updateFailed': 'Não foi possível atualizar.',
   'error.nameRequired': 'Escreva um nome.',
+  'error.invalidCode': 'Este código de barras não é válido.',
   'error.duplicateItem': '«{name}» já está em {list}.',
   'error.itemNotFound': 'Artigo não encontrado.',
   'error.onlyActiveTick': 'Só os artigos de {list} podem ser marcados.',

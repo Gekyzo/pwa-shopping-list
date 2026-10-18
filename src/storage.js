@@ -1,6 +1,7 @@
 import { emptyState, GROUPS, SORTS } from '#store';
 import { isWebUrl } from '#recipes';
 import { DAYS, MEALS } from '#menu';
+import { isBarcode } from '#barcode';
 
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
@@ -126,9 +127,20 @@ const normalizeMenu = (rawMenu, known) => {
     .sort((a, b) => a.day - b.day || MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
 };
 
-const VERSIONS = [1, 2, 3, 4, 5, 6, 7, 8];
+// `codes` only saves a scan, so a bad entry is dropped and the state stays valid. Versions 1 to 8
+// have no codes.
+const normalizeCodes = (codes) => {
+  if (typeof codes !== 'object' || codes === null || Array.isArray(codes)) return {};
+  return Object.fromEntries(
+    Object.entries(codes)
+      .filter(([code, name]) => isBarcode(code) && typeof name === 'string' && name.trim() !== '')
+      .map(([code, name]) => [code, name.trim()]),
+  );
+};
 
-// Returns a clean version 8 state, or null when the data is not a known state.
+const VERSIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+// Returns a clean version 9 state, or null when the data is not a known state.
 const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
@@ -149,7 +161,7 @@ const normalizeState = (data) => {
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
   const aisles = normalizeAisles(data.aisles);
   return {
-    version: 8,
+    version: 9,
     items: knownAisles(oneSpelling(items), aisles),
     recipes,
     sent,
@@ -157,6 +169,7 @@ const normalizeState = (data) => {
     sort: SORTS.includes(data.sort) ? data.sort : 'custom',
     menu: normalizeMenu(data.menu, known),
     aisles,
+    codes: normalizeCodes(data.codes),
   };
 };
 
