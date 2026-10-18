@@ -22,7 +22,7 @@
 | `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
-| `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and its `Guardado` | `sheets`, `ui/context` |
+| `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and the `Guardado` of a sheet save | `sheets`, `ui/context` |
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `shops`, `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `store`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/rows.js` | The item rows, their side menus and their swipe | `store`, `swipe`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
@@ -99,7 +99,7 @@
 | `tests/sections.test.js` | The slide between sections; the start of each shortcut and its place in the manifest (SHORT-1, SHORT-2) |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
-| `tests/sheets.test.js` | When a field save of a sheet shows `Guardado` (NAV-22) |
+| `tests/sheets.test.js` | When a save of a sheet shows `Guardado` (NAV-22) |
 | `tests/version.test.js` | Version rules |
 | `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |

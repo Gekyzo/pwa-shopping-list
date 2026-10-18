@@ -2,7 +2,7 @@ import * as store from '#store';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
 import { $, el, state, ui, t, apply, render } from '#ui/context';
-import { bindField, flashSaved } from '#ui/controls';
+import { bindField, flashSaved, applySaved, clearSaved } from '#ui/controls';
 
 export const openEdit = (item) => {
   Object.assign(ui, { editId: item.id, openId: null });
@@ -22,14 +22,17 @@ const toggleShop = (shop) => {
   const item = state.items.find((entry) => entry.id === ui.editId);
   if (!item) return;
   const has = item.shops.some((own) => own.toLowerCase() === shop.toLowerCase());
-  apply((has ? shops.removeItemShop : shops.addItemShop)(state, item.id, shop));
+  applySaved($('edit-form'), (has ? shops.removeItemShop : shops.addItemShop)(state, item.id, shop));
 };
 
 // The edit sheet of one item: its name, and each shop in use as a chip, pressed when the item has it.
 export const renderEdit = () => {
   const item = state.items.find((entry) => entry.id === ui.editId);
   $('edit').hidden = !item;
-  if (!item) return;
+  if (!item) {
+    clearSaved($('edit-form'));
+    return;
+  }
   $('edit-title').textContent = item.name;
   $('edit-form').setAttribute('aria-label', t('edit.title'));
   if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
@@ -52,7 +55,7 @@ export const renderEdit = () => {
 // A tap on the chip of the aisle of the item clears it; a tap on another chip sets that aisle.
 const pickAisle = (aisle) => {
   const item = state.items.find((entry) => entry.id === ui.editId);
-  if (item) apply(aisles.setItemAisle(state, item.id, item.aisle === aisle ? '' : aisle));
+  if (item) applySaved($('edit-form'), aisles.setItemAisle(state, item.id, item.aisle === aisle ? '' : aisle));
 };
 
 // One chip for each aisle, in the order of the walk, as the shop chips stay through a blur.
@@ -67,7 +70,7 @@ const renderAisleChips = (item) => {
 
 // The sheet stays open after a new shop, so that an item gets two shops in one visit.
 const submitShop = () => {
-  if (apply(shops.addItemShop(state, ui.editId, $('edit-shop').value))) $('edit-shop').value = '';
+  if (applySaved($('edit-form'), shops.addItemShop(state, ui.editId, $('edit-shop').value))) $('edit-shop').value = '';
 };
 const editItem = () => state.items.find((entry) => entry.id === ui.editId);
 
@@ -75,8 +78,8 @@ const editItem = () => state.items.find((entry) => entry.id === ui.editId);
 const deleteItem = () => {
   const item = editItem();
   if (!item) return;
-  ui.editId = null;
-  apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) });
+  // The render of the delete closes the sheet: its item is gone.
+  if (apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) })) ui.editId = null;
 };
 
 export const bind = () => {

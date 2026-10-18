@@ -1,7 +1,7 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import { $, el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
-import { icon, iconButton, bindField, flashSaved } from '#ui/controls';
+import { icon, iconButton, bindField, flashSaved, applySaved, clearSaved } from '#ui/controls';
 import { leaveNode } from '#ui/motion';
 import { swipeBox } from '#ui/rows';
 
@@ -29,7 +29,7 @@ const productNode = (recipe, product) => {
     textContent: '✕',
     onclick: () =>
       leaveNode(key, [node], () =>
-        apply(recipes.removeRecipeProduct(state, recipe.id, product), {
+        applySaved($('recipe-sheet'), recipes.removeRecipeProduct(state, recipe.id, product), {
           undoText: t('toast.productRemoved', { product, name: recipe.name }),
         }),
       ),
@@ -56,7 +56,7 @@ const productForm = (recipe) => {
   // The field stays through the renders of the sheet: it is empty and keeps the focus after an add.
   const add = (name) => {
     ui.bringKeys.add(`product:${recipe.id}:${name.trim().toLowerCase()}`);
-    if (apply(recipes.addRecipeProduct(state, recipe.id, name))) {
+    if (applySaved($('recipe-sheet'), recipes.addRecipeProduct(state, recipe.id, name))) {
       input.value = '';
       suggestions.replaceChildren();
     } else ui.bringKeys.clear();
@@ -147,6 +147,7 @@ export const renderRecipe = () => {
   $('recipe').hidden = !recipe;
   if (!recipe) {
     shown = null;
+    clearSaved($('recipe-sheet'));
     return;
   }
   $('recipe-sheet').setAttribute('aria-label', recipe.name);
@@ -166,8 +167,8 @@ export const renderRecipe = () => {
 const deleteOpenRecipe = () => {
   const recipe = openRecipeOf();
   if (!recipe) return;
-  ui.recipeId = null;
-  apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) });
+  // The render of the delete closes the sheet: its recipe is gone.
+  if (apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) })) ui.recipeId = null;
 };
 
 export const bind = () => {
