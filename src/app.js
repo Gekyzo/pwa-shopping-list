@@ -1,10 +1,11 @@
 import * as store from '#store';
 import * as shops from '#shops';
 import { bindSheetDrag } from '#ds/sheet';
-import { shortcutStart } from '#sections';
+import { shortcutStart, fabState } from '#sections';
 import {
   ARRIVAL_MS,
   $,
+  scroller,
   storage,
   t,
   shopLists,
@@ -20,6 +21,8 @@ import {
   render,
   commit,
   debugLog,
+  sheetOpen,
+  closeTop,
 } from '#ui/context';
 import { inList, viewState } from '#ui/view';
 import { rowKeys, bringIn, flash, snapshotRows, animateRows } from '#ui/motion';
@@ -33,6 +36,10 @@ import {
   headerOf,
   shopLabel,
   renderShopChips,
+  renderDock,
+  renderShopPick,
+  showDockMatches,
+  closeShopPick,
   renderList,
   renderTrip,
   closeSearch,
@@ -47,6 +54,15 @@ import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
 import { bind as bindNav } from '#ui/nav';
 
 // Screen
+
+// While a layer is open, one entry of the history stands for it, so the back of the phone closes the
+// layer and not the app. A back with no layer to close (an entry left by a close of another kind) goes on.
+let backEntry = false;
+const holdBack = () => {
+  if (backEntry || closeTop(ui) === null) return;
+  history.pushState({ layer: true }, '');
+  backEntry = true;
+};
 
 let debugView = null;
 const renderAll = () => {
@@ -70,9 +86,11 @@ const renderAll = () => {
   renderShopChips();
   $('title').textContent = header.title;
   $('subtitle').textContent = header.subtitle;
-  $('ring-text').textContent = header.ring;
+  $('ring').hidden = header.ring === null;
+  $('ring-text').textContent = header.ring ?? '';
   $('ring').style.setProperty('--pct', `${header.pct}%`);
 
+  renderDock();
   renderList(summary);
   // Before the focus and the effects below: they also reach the rows of the recipe sheet.
   renderRecipe();
@@ -86,8 +104,7 @@ const renderAll = () => {
   renderMenuMore();
 
   // An action in the empty state replaces the add button.
-  $('fab').hidden =
-    ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || ui.sheetOpen || ui.arrangeOpen || ui.tripOpen || ui.menuMoreOpen || ui.aislesOpen || ui.editId !== null || ui.mealOpen !== null || ui.recipeId !== null;
+  $('fab').hidden = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || sheetOpen(ui);
   $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
   document.querySelectorAll('.nav-item').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
@@ -107,6 +124,9 @@ const renderAll = () => {
   renderEdit();
   renderMeal();
   renderAisles();
+  renderShopPick();
+  showDockMatches();
+  holdBack();
 };
 setRender(renderAll);
 
@@ -148,6 +168,54 @@ bindArrange();
 bindEdit();
 bindRecipe();
 
+// The open sheet closes by its own close; one sheet is open at a time.
+const closeSheets = () => {
+  if (ui.sheetOpen) closeSheet();
+  if (ui.arrangeOpen) closeArrange();
+  if (ui.editId !== null) closeEdit();
+  if (ui.recipeId !== null) closeRecipe();
+  if (ui.mealOpen !== null) closeMeal();
+  if (ui.tripOpen) closeTrip();
+  if (ui.menuMoreOpen) closeMenuMore();
+  if (ui.aislesOpen) closeAisles();
+  if (ui.shopPickOpen) closeShopPick();
+};
+
+// Closes the top layer (closeTop): a sheet, an open row, then the search. Gives what it closed.
+const closeLayer = () => {
+  const top = closeTop(ui);
+  if (top === 'sheet') closeSheets();
+  else if (top === 'row') {
+    Object.assign(ui, { openId: null, openSide: null });
+    render();
+  } else if (top === 'search') closeSearch();
+  return top;
+};
+
+// The back of the phone closes the top layer first (popstate below).
+window.addEventListener('popstate', () => {
+  backEntry = false;
+  if (ui.onboarding !== null) return;
+  endReorder(false);
+  if (closeLayer() === null) history.back();
+});
+
+// The add button collapses while the list scrolls down, and opens on a scroll up or at the top.
+let fab = 'open';
+let fabFrom = 0;
+let lastY = 0;
+scroller.addEventListener(
+  'scroll',
+  () => {
+    const y = scroller.scrollTop;
+    if (y < lastY) fabFrom = y;
+    fab = fabState(y < lastY ? lastY : fabFrom, y, fab);
+    lastY = y;
+    $('fab').classList.toggle('collapsed', fab === 'collapsed');
+  },
+  { passive: true },
+);
+
 document.addEventListener('keydown', (event) => {
   if (ui.onboarding !== null) {
     if (event.key === 'Escape') closeOnboarding();
@@ -157,15 +225,7 @@ document.addEventListener('keydown', (event) => {
   }
   if (event.key !== 'Escape') return;
   endReorder(false);
-  if (ui.sheetOpen) closeSheet();
-  if (ui.arrangeOpen) closeArrange();
-  if (ui.editId !== null) closeEdit();
-  if (ui.recipeId !== null) closeRecipe();
-  if (ui.mealOpen !== null) closeMeal();
-  if (ui.searchOpen) closeSearch();
-  if (ui.tripOpen) closeTrip();
-  if (ui.menuMoreOpen) closeMenuMore();
-  if (ui.aislesOpen) closeAisles();
+  closeLayer();
 });
 
 $('toast-undo').addEventListener('click', () => {
@@ -195,6 +255,7 @@ const SHEET_CLOSE = {
   edit: closeEdit,
   aisles: closeAisles,
   recipe: closeRecipe,
+  'shop-pick': closeShopPick,
 };
 for (const [id, close] of Object.entries(SHEET_CLOSE)) {
   $(id).querySelector('.sheet-head .button').addEventListener('click', close);

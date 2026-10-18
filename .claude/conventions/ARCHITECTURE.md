@@ -25,7 +25,7 @@ repository root.
 | `src/shops.js` | Pure shop operations and the list by shop | `store.js` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store.js` |
 | `src/swipe.js` | The rule that settles the swipe of an item row | nothing |
-| `src/sections.js` | The order of the sections, the rule of the slide that changes the section, the start of a launcher shortcut, and what an empty section says and offers | nothing |
+| `src/sections.js` | The order of the sections, the rule of the slide that changes the section, the start of a launcher shortcut, and what an empty section says and offers, the collapse of the `+` button on a scroll | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The rules of a row move: drop place, gap, new order | nothing |
 | `src/sheets.js` | The rules of a sheet: when a field save shows `Guardado`, and for how long | nothing |
@@ -34,7 +34,7 @@ repository root.
 | `src/version.js` | Pure version rules: validation, comparison, the next version | nothing |
 | `src/i18n.js` | The language to show (`resolveLanguage`) and the function `t(key, params)` of one language (`translator`) | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language: a flat object from key to a text or to `{ one, other }` | nothing |
-| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
+| `src/ui/context.js` | The values that the views share, their setters, the open sheet and the top layer to close (`closeTop`), the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, the rename field and its `Guardado`, the more button | `sheets`, `store`, `ui/context`, `ui/view` |
@@ -44,7 +44,7 @@ repository root.
 | `src/ui/recipes.js` | The section `Recetas` | `store`, `recipes`, `ui/context`, `ui/controls`, `ui/motion` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
+| `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, the dock and its shop picker, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
@@ -71,7 +71,7 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
   state and not part of the backup.
 - **`localStorage`**, key `shopping.swipeHint`: `1` after `Compra` showed the slide of a row one
   time (ROW-14). It is not part of the state and not part of the backup.
-- **Cache API**, cache `shopping-shell-v15`: the app shell, served
+- **Cache API**, cache `shopping-shell-v16`: the app shell, served
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers
   `{ ok }` on the message port.

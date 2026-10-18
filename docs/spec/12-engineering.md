@@ -10,7 +10,7 @@
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store` |
 | `src/menu.js` | Pure menu operations and the fill of `Compra` | `recipes` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
-| `src/sections.js` | The order of the sections, the rule of the slide between them, the start of a shortcut and what an empty section says and offers | nothing |
+| `src/sections.js` | The order of the sections, the rule of the slide between them, the start of a shortcut and what an empty section says and offers, the collapse of the `+` button on a scroll | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The geometry of a row move: drop place, gap, new order | nothing |
 | `src/sheets.js` | The rules of a sheet: when a field save shows `Guardado`, and for how long | nothing |
@@ -20,7 +20,7 @@
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
-| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
+| `src/ui/context.js` | The values that the views share, their setters, the open sheet and the top layer to close (`closeTop`), the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and the `Guardado` of a sheet save | `sheets`, `ui/context` |
@@ -30,7 +30,7 @@
 | `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `store`, `recipes`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/list.js` | The list `Compra`: rows, search, shop lists, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
+| `src/ui/list.js` | The list `Compra`: rows, search, shop lists, the dock and its shop picker, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
@@ -108,7 +108,7 @@
 | `tests/markup.test.js` | `index.html` holds no text of its own |
 | `tests/aliases.test.js` | The import map against `package.json`; each `#ds/` alias names a vendored module |
 | `tests/layers.test.js` | The layer rules: no import of `src/app.js`, no view in a pure module, no cycle among `src/ui/`, one owner for each shared value, `SHELL` (ENG-16) |
-| `tests/design.test.js` | Each rule of `vendor/design-system/rules.js` over the two stylesheets, `index.html`, `icons.svg`, `src/ui/` and `designs/` (DSV-5); the classes of the item rows |
+| `tests/design.test.js` | Each rule of `vendor/design-system/rules.js` over the two stylesheets, `index.html`, `icons.svg`, `src/ui/` and `designs/` (DSV-8); the classes of the item rows |
 | `tests/vendor.test.js` | The copy of the design system: its files and hashes, its place in `index.html`, `designs/index.html` and `SHELL`, no copied rule in `styles.css` (DSV-1 to DSV-3) |
 | `tests/png.test.js` | The PNG encoder and decoder of `scripts/png.mjs`, which `npm run icons` uses |
 | `tests/glyph.test.js` | The segments of a line icon of `scripts/glyph.mjs`, which `npm run icons` draws for the shortcut icons |

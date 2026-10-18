@@ -38,6 +38,9 @@ export const bindSheetDrag = (layer, { close }) => {
 
   const onDown = (event) => {
     if (drag || (event.pointerType === 'mouse' && event.button !== 0) || !event.target.closest(GRIP) || event.target.closest(CONTROL)) return;
+    // A side sheet hides its grab and does not drag.
+    const grab = sheet.querySelector('.sheet-grab');
+    if (grab && globalThis.getComputedStyle?.(grab).display === 'none') return;
     drag = { id: event.pointerId, y: event.clientY, height: sheet.offsetHeight || 1, moves: [] };
     sheet.setPointerCapture?.(event.pointerId);
     sheet.style.transition = 'none';
@@ -59,7 +62,7 @@ export const bindSheetDrag = (layer, { close }) => {
     const last = moves[moves.length - 1];
     const dy = last ? last.dy : 0;
     const velocity = velocityOf(moves, event.timeStamp);
-    const cancelled = event.type === 'pointercancel';
+    const cancelled = event.type !== 'pointerup';
     reset();
     if (!cancelled && dismissed(dy, velocity, height)) close();
   };
@@ -68,11 +71,14 @@ export const bindSheetDrag = (layer, { close }) => {
   layer.addEventListener('pointermove', onMove);
   layer.addEventListener('pointerup', onEnd);
   layer.addEventListener('pointercancel', onEnd);
+  layer.addEventListener('lostpointercapture', onEnd);
   return () => {
     layer.removeEventListener('pointerdown', onDown);
     layer.removeEventListener('pointermove', onMove);
     layer.removeEventListener('pointerup', onEnd);
     layer.removeEventListener('pointercancel', onEnd);
+    layer.removeEventListener('lostpointercapture', onEnd);
+    drag = null;
     reset();
   };
 };

@@ -12,6 +12,7 @@ import {
   shopState,
   validShop,
   nextShop,
+  previousShop,
   withShop,
 } from '#shops';
 
@@ -270,4 +271,36 @@ test('withShop adds the shop to the item of the result and leaves Todas, Sin tie
   const failed = { state: start, error: { key: 'error.nameRequired' } };
   assert.equal(withShop(failed, id, 'Lidl'), failed);
   assert.equal(withShop({ state: start, changed: false }, id, 'Lidl').changed, false);
+});
+
+test('previousShop gives the shop before with an item to buy, in chip order, wrapping', () => {
+  const state = build(
+    ['Milk', 'active', { shops: ['Aldi'] }],
+    ['Salt', 'active', { shops: ['Lidl'], bought: true }],
+    ['Rice', 'active', { shops: ['Market'] }],
+    ['Bread', 'active'],
+  );
+  assert.deepEqual(previousShop(state, 'Market'), { shop: 'Aldi', count: 1 });
+  assert.deepEqual(previousShop(state, 'Aldi'), { shop: '', count: 1 });
+  assert.deepEqual(previousShop(state, ''), { shop: 'Market', count: 1 });
+});
+
+test('previousShop from Todas or from a shop that is gone gives the last shop with an item to buy', () => {
+  const state = build(['Milk', 'active', { shops: ['Aldi'] }], ['Rice', 'active', { shops: ['Lidl'] }]);
+  assert.deepEqual(previousShop(state, null), { shop: 'Lidl', count: 1 });
+  assert.deepEqual(previousShop(state, 'Gone'), { shop: 'Lidl', count: 1 });
+});
+
+test('previousShop gives null when every other shop is done', () => {
+  const only = build(['Milk', 'active', { shops: ['Aldi'] }], ['Salt', 'active', { shops: ['Lidl'], bought: true }]);
+  assert.equal(previousShop(only, 'Aldi'), null);
+  assert.deepEqual(previousShop(only, 'Lidl'), { shop: 'Aldi', count: 1 });
+  assert.equal(previousShop(emptyState(), 'Lidl'), null);
+});
+
+test('previousShop does not change the state', () => {
+  const state = build(['Milk', 'active', { shops: ['Aldi'] }], ['Rice', 'active', { shops: ['Lidl'] }]);
+  const copy = structuredClone(state);
+  previousShop(state, 'Lidl');
+  assert.deepEqual(state, copy);
 });

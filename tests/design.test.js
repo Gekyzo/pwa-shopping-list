@@ -48,3 +48,9 @@ test('a recipe row has one send button in the end slot and no mark', () => {
   assert.ok(!read('styles.css').includes('recipe-mark'));
   for (const name of ['item-row-end', 'item-row-label']) assert.ok(classesInScript(script).includes(name), name);
 });
+
+test('styles.css leaves the rail to the design system (LAY-2)', () => {
+  const app = read('styles.css');
+  assert.doesNotMatch(app, /\.nav-bar\s*[{,]/);
+  assert.doesNotMatch(app, /@extends nav-bar/);
+});

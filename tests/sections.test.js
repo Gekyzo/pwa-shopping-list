@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SECTIONS, SHORTCUTS, direction, emptyAction, slideDirection, slideTo, shortcutStart } from '#sections';
+import { SECTIONS, SHORTCUTS, direction, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
 
 test('SECTIONS has the order of the bottom bar', () => {
   assert.deepEqual(SECTIONS, ['active', 'recipes', 'menu', 'settings']);
@@ -145,4 +145,31 @@ test('emptyAction of an empty list without the sample leaves the add button as t
 
 test('emptyAction of a section with nothing to say is empty', () => {
   assert.deepEqual(emptyAction('settings', NO_QUERY), { title: null, text: null, action: null });
+});
+
+test('fabState collapses the add button after a scroll down of more than 24 px', () => {
+  assert.equal(fabState(0, 30, 'open'), 'collapsed');
+  assert.equal(fabState(100, 125, 'open'), 'collapsed');
+  assert.equal(fabState(100, 124, 'open'), 'open');
+});
+
+test('fabState opens the add button on any scroll up', () => {
+  assert.equal(fabState(31, 30, 'collapsed'), 'open');
+  assert.equal(fabState(200, 199, 'open'), 'open');
+});
+
+test('fabState opens the add button at the top of the list', () => {
+  assert.equal(fabState(10, 0, 'collapsed'), 'open');
+  assert.equal(fabState(0, 0, 'collapsed'), 'open');
+});
+
+test('fabState keeps the state on a short scroll down', () => {
+  assert.equal(fabState(0, 10, 'collapsed'), 'collapsed');
+  assert.equal(fabState(0, 10, 'open'), 'open');
+});
+
+test('the section slide does not start on the dock', () => {
+  const nav = readFileSync(new URL('../src/ui/nav.js', import.meta.url), 'utf8');
+  const [exclusion = ''] = nav.match(/event\.target\.closest\('\.item-row-swipe[^']*'\)/) ?? [];
+  assert.match(exclusion, /\.dock\b/);
 });

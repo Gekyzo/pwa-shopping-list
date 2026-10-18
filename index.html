@@ -135,6 +135,25 @@
       </section>
     </main>
 
+    <div id="dock" class="dock" hidden>
+      <button id="dock-prev" class="button icon" type="button" data-i18n-attr="aria-label:dock.previous">
+        <svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg>
+      </button>
+      <button id="dock-shop" class="chip" type="button" aria-haspopup="dialog" aria-controls="shop-pick"></button>
+      <button id="dock-next" class="button icon" type="button" data-i18n-attr="aria-label:dock.next">
+        <svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+      </button>
+      <button id="dock-search" class="button icon" type="button" data-i18n-attr="aria-label:search.label" aria-controls="dock-field">
+        <svg class="icon" aria-hidden="true"><use href="icons.svg#search"/></svg>
+      </button>
+      <label id="dock-field" class="dock-field" hidden>
+        <svg class="icon small" aria-hidden="true"><use href="icons.svg#search"/></svg>
+        <input id="dock-query" class="dock-input" type="search" maxlength="80" autocomplete="off" enterkeyhint="search" data-i18n-attr="placeholder:search.items,aria-label:search.items">
+        <button id="dock-clear" class="dock-clear" type="button" data-i18n-attr="aria-label:search.clear"><svg class="icon small" aria-hidden="true"><use href="icons.svg#close"/></svg></button>
+      </label>
+      <button id="dock-cancel" class="button accent" type="button" data-i18n="search.cancel" hidden></button>
+    </div>
+
     <button id="fab" class="fab" type="button">+</button>
 
     <nav class="nav-bar" data-i18n-attr="aria-label:nav.label">
@@ -202,6 +221,15 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div id="shop-pick" class="sheet-layer" hidden>
+      <div id="shop-pick-veil" class="sheet-veil"></div>
+      <div class="sheet" role="dialog" data-i18n-attr="aria-label:shops.lists">
+        <div class="sheet-grab"></div>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="shops.lists"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body"></div>
       </div>
     </div>
 

@@ -14,7 +14,7 @@
     display: flex;
     flex-direction: column;
     height: 100dvh;
-    /* The page keeps out of a cutout on either side (LAY-4); from 600px the rail takes the start. */
+    /* The page keeps out of a cutout on either side (LAY-4); from 600px the rail takes its side. */
     padding-inline-start: env(safe-area-inset-left);
     padding-inline-end: env(safe-area-inset-right);
     background: var(--bg);
@@ -23,8 +23,8 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* From 600px (LAY-1): the fixed rail takes the side of the hand (DSV-5), and the content is one
-     column of at most --content-max, centred in the space beside the rail. */
+  /* From 600px (LAY-1): the fixed rail stands at the side of the hand (LAY-2), the body pads that
+     side (LAY-4), and the content is one column of at most --content-max, centred beside the rail. */
   @media (min-width: 600px) {
     body {
       padding-right: calc(var(--rail-width) + env(safe-area-inset-right));
@@ -91,43 +91,22 @@
     }
   }
 
-  /* @extends nav-bar */
-  /* From 600px the rail stands at the side of the hand, as the + button does (DSV-5). The shared
-     rail stands at the start side, which is the side of the left hand. */
-  @media (min-width: 600px) {
-    :root:not([data-hand="left"]) .nav-bar {
-      inset-inline-start: auto;
-      right: 0;
-      width: calc(var(--rail-width) + env(safe-area-inset-right));
-      padding-inline-start: 0;
-      padding-right: env(safe-area-inset-right);
-      border-inline-end: 0;
-      border-left: 1px solid var(--line);
-    }
-  }
-
-  /* @extends toast */
-  /* The toast clears the rail at the side of the hand. */
-  @media (min-width: 600px) {
-    :root:not([data-hand="left"]) .toast {
-      left: calc(var(--space-3) + env(safe-area-inset-left));
-      right: calc(var(--rail-width) + env(safe-area-inset-right) + var(--space-3));
-    }
-  }
-
-  /* @extends fab */
-  /* The button stands beside the rail, at the side of the hand. */
-  @media (min-width: 600px) {
-    .fab {
-      right: calc(var(--rail-width) + env(safe-area-inset-right) + var(--space-4));
-    }
-  }
-
   /* @extends app-header */
   /* From 600px the content of the header lines up with the column of main. */
   @media (min-width: 600px) {
     .app-header {
       padding-inline: max(var(--space-4), (100% - var(--content-max)) / 2 + var(--space-4));
+    }
+  }
+
+  /* Below 600px the dock of Compra holds the search, so the header has no search button. */
+  body:has(.dock:not([hidden])) .app-header .button.icon[aria-controls="search"] {
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    body:has(.dock:not([hidden])) .app-header .button.icon[aria-controls="search"] {
+      display: inline-flex;
     }
   }
 
@@ -141,7 +120,8 @@
 
   /* @extends sheet */
   /* From 600px a sheet keeps the width of the column and stands below it, so a tablet does not show
-     it as wide as the screen. The veil still covers the rail. */
+     it as wide as the screen. The veil still covers the rail. From 840px a sheet with a head is the
+     side sheet of the design system, at the side of the hand. */
   @media (min-width: 600px) {
     .sheet-layer {
       padding-right: calc(var(--rail-width) + env(safe-area-inset-right));
@@ -159,10 +139,66 @@
     }
   }
 
-  /* A headed sheet without a foot ends at the screen edge, so its body clears the bottom inset
-     (A11Y-7). Design system 0.5.0 has this rule; its adoption removes this copy. */
-  .sheet:has(.sheet-head):not(:has(.sheet-foot)) .sheet-body {
-    padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  @media (min-width: 840px) {
+    .sheet-layer:has(.sheet-head) .sheet {
+      margin-inline: 0;
+    }
+  }
+
+  /* @extends dock
+     @state searching  The search is open: the field and Cancelar take the dock, and the list ends
+                       at the dock, so the nearest match is next to the field. */
+  /* The search button stays at the end of the dock, also with no shop list. */
+  .dock {
+    justify-content: flex-end;
+  }
+
+  /* With the left hand the search button comes to the start side, and the arrows keep the order
+     that they point to: ‹ before the shop, › after it. The search mode mirrors as the shared dock. */
+  [data-hand="left"] .dock {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  [data-hand="left"] .dock > .button.icon[aria-controls="dock-field"] {
+    order: -1;
+  }
+
+  [data-hand="left"] .dock.searching {
+    flex-direction: row-reverse;
+  }
+
+  .dock-field > .icon {
+    flex: none;
+    margin-inline-start: var(--space-3);
+    color: var(--muted);
+  }
+
+  .dock-field > .icon + .dock-input {
+    padding-inline-start: var(--space-2);
+  }
+
+  .dock .chip .chevron {
+    margin-inline-start: var(--space-2);
+  }
+
+  body:has(.dock.searching:not([hidden])) main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  body:has(.dock.searching:not([hidden])) .item-list {
+    margin-top: auto;
+  }
+
+  @media (min-width: 600px) {
+    body:has(.dock.searching:not([hidden])) main {
+      display: block;
+    }
+
+    body:has(.dock.searching:not([hidden])) .item-list {
+      margin-top: 0;
+    }
   }
 
   /* A field beside a button, as the link of a recipe beside its open button, takes the room that is left. */
@@ -185,9 +221,9 @@
      @variant recipe              A recipe: its name and its meta line, then its send button.
      @state bought    A ticked item of Actual. */
 
-  /* From 600px the recipes stand in two columns, so more of them fit on the screen of a tablet or an
-     unfolded phone. The gap shows the page between the columns. */
-  @media (min-width: 600px) {
+  /* From 840px the recipes stand in two columns, so more of them fit on the screen of a tablet. An
+     unfolded phone keeps one column. The gap shows the page between the columns. */
+  @media (min-width: 840px) {
     .item-list:has(> .item-row.recipe) {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -200,12 +236,8 @@
     text-decoration: line-through;
   }
 
-  /* Densidad Compacta (NAV-20): a row of a list keeps only the least tap target, so more rows fit on
-     one screen. */
-  :root[data-density="compact"] .item-list {
-    --tap-l: var(--tap);
-  }
-
+  /* Densidad Compacta (NAV-20): the token set of the design system makes a row --tap-l (48px) high;
+     the check takes less room around it. */
   :root[data-density="compact"] .item-row-check {
     margin-block: var(--space-2);
   }
@@ -233,6 +265,11 @@
     text-transform: inherit;
   }
 
+  /* A search shows each group open and disables its head (GROUP-16); the head keeps its colour. */
+  .group-head-button:disabled {
+    opacity: 1;
+  }
+
   .group-head-end {
     display: flex;
     align-items: center;
@@ -250,6 +287,22 @@
     margin: 0;
     padding: var(--space-2) var(--space-3);
     border-bottom: 1px solid var(--line);
+  }
+
+  /* Below 600px the dock of Compra holds the shop list and the search. */
+  body:has(.dock:not([hidden])) .shop-lists,
+  body:has(.dock:not([hidden])) .search {
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    body:has(.dock:not([hidden])) .shop-lists {
+      display: flex;
+    }
+
+    body:has(.dock:not([hidden])) .search {
+      display: block;
+    }
   }
 
   /* @component trip-open

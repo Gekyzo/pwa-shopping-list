@@ -233,6 +233,12 @@ export const RULES = [
     ];
   }),
 
+  define('LAY-2', 'a rail at the start side has a rail at the end side for the right hand (LAY-2)', ['css'], ({ rules }) => {
+    const rail = rules.some((rule) => rule.selector === '.nav-bar' && rule.declarations.some((d) => d.property === 'inset-inline-start'));
+    const end = rules.some((rule) => rule.selector === ':root[data-hand="right"] .nav-bar');
+    return rail && !end ? ['no [data-hand="right"] .nav-bar'] : [];
+  }),
+
   define('LAY-3', 'the pane layout is documented with its parts (LAY-3)', ['css'], ({ catalog }) => {
     const pane = catalog.components.find((component) => component.name === 'pane');
     if (!pane) return ['pane is not documented'];
@@ -293,7 +299,7 @@ export const RULES = [
     const outlines = rules.flatMap((rule) => rule.declarations.filter((d) => d.property === 'outline').map((d) => ({ rule, d })));
     const visible = ({ d }) => !/^(none|0)$/.test(d.value.replace(/\s*!important$/, '').trim());
     const lastCompound = (selector) => selector.split(',').map((part) => part.trim().split(/[\s>+~]+/).pop() ?? '');
-    const isInput = (compound) => /\.(input|field-input)(?![\w-])/.test(compound);
+    const isInput = (compound) => /\.(input|field-input|dock-input)(?![\w-])/.test(compound);
     const focus = /:focus(-visible)?(?![\w-])/;
     const onInput = ({ rule }) => lastCompound(rule.selector).some((compound) => isInput(compound) && focus.test(compound));
     const global = outlines.filter((o) => visible(o) && /:focus-visible(?![\w-])/.test(o.rule.selector) && !onInput(o));

@@ -131,6 +131,8 @@ export const ui = {
   // True while the sheet of the trip button of Compra is open.
   tripOpen: false,
   menuMoreOpen: false,
+  // True while the shop picker of the dock is open.
+  shopPickOpen: false,
   // True while the sheet of the aisles of Ajustes is open.
   aislesOpen: false,
   // The item whose edit sheet is open, or null.
@@ -168,6 +170,19 @@ export const ui = {
   // `running` is the version of the cached shell; `latest` is the deployed one, read when Ajustes opens.
   version: { running: null, latest: null, checking: false },
 };
+// True while a sheet is open. One sheet is open at a time.
+export const sheetOpen = (view) =>
+  view.sheetOpen || view.arrangeOpen || view.tripOpen || view.menuMoreOpen || view.aislesOpen || view.shopPickOpen ||
+  view.editId !== null || view.mealOpen !== null || view.recipeId !== null;
+
+// The layer that `Escape` and the back of the phone close first: an open sheet, then an open row,
+// then the search of a list. Null when nothing is open.
+export const closeTop = (view) => {
+  if (sheetOpen(view)) return 'sheet';
+  if (view.openId !== null) return 'row';
+  return view.searchOpen ? 'search' : null;
+};
+
 let toastTimer = null;
 export let undoState = null;
 
