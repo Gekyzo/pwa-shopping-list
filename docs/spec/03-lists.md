@@ -13,7 +13,9 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 - **LIST-5** A rename has the rules LIST-1 and LIST-2. The item keeps its own name without an
   error. A rename to the same text changes nothing.
 - **LIST-6** A name field of the screen takes 80 characters at most. The store has no limit.
-- **LIST-7** The recurrent mark `↻` shows on each row of `Compra`. A tap changes `recurrent`.
+- **LIST-7** A recurrent item of `Compra` shows `↻ cada compra` below its name. The action
+  **Repetir** of the slide to the left (ROW-3) changes `recurrent`; on a recurrent item it is
+  `No repetir`.
 - **LIST-8** A delete removes the item. Its shops go with it.
 - **LIST-9** Removed: `Compra` is the only list, so an item has no other list to move to.
 
@@ -28,12 +30,12 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 ## Tick
 
 - **LIST-10** Only an item of `Compra` can be ticked. A saved item gives `error.onlyActiveTick`.
-- **LIST-11** A tap on the checkbox or a slide to the right (ROW-11) of a row of `Compra` changes
-  `bought`.
+- **LIST-11** A tap on the body of a row of `Compra` (ROW-1) or a slide to the right (ROW-11)
+  changes `bought`. A ticked row in `Comprados (N)` unticks the same way.
 - **LIST-12** A tick does not delete the item. The item goes to the section `Comprados (N)` at the
   end of `Compra`, which is closed at first. A tap on that row opens and closes it.
 - **LIST-13** A tick has `Deshacer`, because the row leaves the place where the finger is. A tap
-  on the checkbox of a ticked item removes the tick with no `Deshacer`.
+  on a ticked item removes the tick with no `Deshacer`.
 - **LIST-14** Removed: a ticked one-time item has no mark that keeps it for the next trip. `↻`
   and `Aplazar` do that.
 

@@ -1,54 +1,72 @@
 import * as store from '#store';
 import { reached, settle } from '#swipe';
-import { SIDE_BUTTON, DRAG_START, el, state, ui, t, apply, render, guardClick } from '#ui/context';
+import { loadSwipeHint, saveSwipeHint } from '#storage';
+import { SIDE_BUTTON, DRAG_START, HINT_WAIT_MS, HINT_SHIFT, el, storage, state, ui, t, apply, render, guardClick } from '#ui/context';
 import { isOpen, searching, shownGroup } from '#ui/view';
 import { leave, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
 import { reorder, bindReorder } from '#ui/drag';
 
-// The name of a row, with its quantity after it and the shops of the item below it when the list
-// is not by shop.
+// The name of a row, with its quantity after it, and below it the shops of the item when the list
+// is not by shop and the mark of a recurrent item.
 const nameParts = (item) => {
   const quantity = item.quantity ? [' ', el('span', { className: 'item-row-qty', textContent: item.quantity })] : [];
-  const parts = [el('span', {}, [item.name, ...quantity])];
-  if (item.shops.length && shownGroup() !== 'shop') parts.push(el('small', { className: 'item-row-meta', textContent: item.shops.join(' · ') }));
+  const parts = [el('span', { className: 'item-row-label' }, [item.name, ...quantity])];
+  const meta = [
+    ...(item.shops.length && shownGroup() !== 'shop' ? [item.shops.join(' · ')] : []),
+    ...(item.recurrent ? [t('row.repeats')] : []),
+  ];
+  if (meta.length) parts.push(el('small', { className: 'item-row-meta', textContent: meta.join(' · ') }));
   return parts;
 };
 
-// The recurrent mark of a row. It shows on each item and a tap changes it.
-const recurrentToggle = (item) => {
-  const button = el('button', { type: 'button', className: 'button icon toggle', onclick: () => apply(store.toggleRecurrent(state, item.id)) }, [
-    icon('repeat'),
-  ]);
-  button.setAttribute('aria-pressed', String(item.recurrent));
-  button.setAttribute('aria-label', t('row.always', { name: item.name }));
-  return button;
-};
+const editAction = (item) => iconButton('edit', t('row.edit'), () => openEdit(item), { variant: 'neutral', labelled: true });
+
+const repeatAction = (item) =>
+  iconButton('repeat', t(item.recurrent ? 'row.noRepeat' : 'row.repeat'), () => apply(store.toggleRecurrent(state, item.id)), { labelled: true });
 
 const deleteAction = (item) =>
   iconButton(
     'trash',
-    t('row.delete', { name: item.name }),
+    t('sheet.delete'),
     () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
-    { variant: 'danger' },
+    { variant: 'danger', labelled: true },
   );
 
+// The edit button at the end of a row. It is out of the name, so a tap on it does not tick.
+const editButton = (item) => {
+  const button = el('button', { type: 'button', className: 'button icon', title: t('row.edit'), onclick: () => openEdit(item) }, [icon('edit')]);
+  button.setAttribute('aria-label', t('row.edit'));
+  button.setAttribute('aria-haspopup', 'dialog');
+  return button;
+};
+
+// A row of Compra: a tap on its body ticks the item (D1), the check only shows the state, and the
+// edit button stays at the end. The name is the checkbox for the keyboard and a screen reader: a
+// button gives it Space and Enter, and its click reaches the body like a tap.
 const itemRow = (item) => {
   const toggle = () => {
     if (item.bought) {
       apply(store.toggleBought(state, item.id));
       return;
     }
-    checkbox.checked = true;
+    check.checked = true;
     // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
     leave(item, () => apply(store.toggleBought(state, item.id), { undoText: t('toast.bought', { name: item.name }) }));
   };
-  const checkbox = el('input', { type: 'checkbox', className: 'item-row-check', checked: item.bought, onchange: toggle });
-  checkbox.setAttribute('aria-label', t('row.bought', { name: item.name }));
-  const name = el('button', { type: 'button', className: 'item-row-name', tabIndex: -1, onclick: () => openEdit(item) }, nameParts(item));
-  const row = [checkbox, name, recurrentToggle(item)];
-  return { row, end: [deleteAction(item)], right: { run: toggle, icon: item.bought ? 'undo' : 'check' } };
+  const check = el('input', { type: 'checkbox', className: 'item-row-check', checked: item.bought, tabIndex: -1 });
+  check.setAttribute('aria-hidden', 'true');
+  const name = el('button', { type: 'button', className: 'item-row-name' }, nameParts(item));
+  name.setAttribute('role', 'checkbox');
+  name.setAttribute('aria-checked', String(item.bought));
+  const row = [check, name, el('div', { className: 'item-row-end' }, [editButton(item)])];
+  return {
+    row,
+    end: [editAction(item), repeatAction(item), deleteAction(item)],
+    right: { run: toggle, icon: item.bought ? 'undo' : 'check' },
+    tap: toggle,
+  };
 };
 
 const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
@@ -81,7 +99,10 @@ const bindSwipe = (row, widths, id, groupId, right) => {
     const max = right && drag.base === 0 ? row.offsetWidth : 0;
     drag.at = Math.max(-widths.end, Math.min(max, drag.base + dx));
     moveRow(row, drag.at);
-    row.parentNode.classList.toggle('armed', drag.at > 0 && reached(drag.at, row.offsetWidth));
+    const armed = drag.at > 0 && reached(drag.at, row.offsetWidth);
+    // A short buzz when the slide becomes long enough to run its action.
+    if (armed && !row.parentNode.classList.contains('armed')) navigator.vibrate?.(10);
+    row.parentNode.classList.toggle('armed', armed);
   });
   const finish = (event) => {
     if (!drag) return;
@@ -109,6 +130,30 @@ const bindSwipe = (row, widths, id, groupId, right) => {
   row.addEventListener('pointercancel', finish);
 };
 
+// The first time Compra shows a row, its body slides a little to the left and back, so the user
+// sees that it slides (ROW-14). It plays one time; with no storage, one time for each start.
+let hinted = false;
+export const hintSwipe = () => {
+  if (hinted || (storage && loadSwipeHint(storage)) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!document.querySelector('#items .item-row-body.tick')) return;
+  hinted = true;
+  setTimeout(() => {
+    // A render in the wait builds the rows again: take the first row of now.
+    const body = document.querySelector('#items .item-row-swipe:not(.open) > .item-row-body.tick');
+    if (!body || ui.view !== 'active') {
+      hinted = false;
+      return;
+    }
+    body.style.transition = 'transform var(--motion) var(--ease)';
+    moveRow(body, -HINT_SHIFT);
+    body.addEventListener('transitionend', () => {
+      moveRow(body, 0);
+      body.addEventListener('transitionend', () => body.style.removeProperty('transition'), { once: true });
+    }, { once: true });
+    if (storage) saveSwipeHint(storage);
+  }, HINT_WAIT_MS);
+};
+
 // The rows that a row can move among: its group, or the rows to buy of a flat list.
 // Null for a row that does not move.
 const scopeOf = (item, groupId) => (item.bought ? null : groupId ?? 'rest');
@@ -123,12 +168,26 @@ const closing = (button) => {
   return button;
 };
 
+// A tap on the body of a row runs `tap`, except on its end slot. A tap on an open row only closes
+// it (ROW-6). The click that follows a drag, a hold or a slide never comes here (ROW-8).
+const tapBody = (event, body, tap) => {
+  if (event.target.closest('.item-row-end')) return;
+  if (body.parentNode.classList.contains('open')) {
+    Object.assign(ui, { openId: null, openSide: null });
+    render();
+    return;
+  }
+  tap();
+};
+
 // The box of a row that slides: the action of the slide to the right below it, the side actions
-// (`end`) behind its right end, and the body with `row`. `right` is { run, icon } or null.
-export const swipeBox = ({ id, groupId = null, row, end, right }) => {
+// (`end`) behind its right end, and the body with `row`. `right` is { run, icon } or null. `tap`,
+// when given, makes the whole body the tick target.
+export const swipeBox = ({ id, groupId = null, row, end, right, tap = null }) => {
   const open = isOpen(id, groupId) ? ui.openSide : null;
   const widths = { start: 0, end: end.length * SIDE_BUTTON };
-  const body = el('div', { className: 'item-row-body' }, row);
+  const body = el('div', { className: tap ? 'item-row-body tick' : 'item-row-body' }, row);
+  if (tap) body.addEventListener('click', (event) => tapBody(event, body, tap));
   const layers = [el('div', { className: 'item-row-actions', inert: open !== 'end' }, end.map(closing))];
   // The slide to the right shows its action below the row.
   if (right) layers.unshift(el('div', { className: 'item-row-backdrop' }, [icon(right.icon)]));
@@ -144,8 +203,8 @@ export const swipeBox = ({ id, groupId = null, row, end, right }) => {
 };
 
 export const itemNode = (item, groupId = null) => {
-  const { row, end, right } = itemRow(item);
-  const { box, body } = swipeBox({ id: item.id, groupId, row, end, right });
+  const { row, end, right, tap } = itemRow(item);
+  const { box, body } = swipeBox({ id: item.id, groupId, row, end, right, tap });
   const node = el('li', {
     className: [
       'item-row',

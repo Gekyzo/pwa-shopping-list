@@ -14,10 +14,12 @@ export const icon = (name, variant = '') => {
   return svg;
 };
 
-// A button of a side menu: an icon, with the name of the action for a screen reader.
-export const iconButton = (name, label, onClick, { variant = '' } = {}) => {
-  const button = el('button', { type: 'button', className: ['swipe-action', variant].join(' '), title: label, onclick: onClick }, [icon(name)]);
-  button.setAttribute('aria-label', label);
+// A button of a side menu: an icon, with the name of the action for a screen reader. `labelled`
+// also shows the name below the icon.
+export const iconButton = (name, label, onClick, { variant = '', labelled = false } = {}) => {
+  const children = [icon(name), ...(labelled ? [el('span', { className: 'swipe-action-label', textContent: label })] : [])];
+  const button = el('button', { type: 'button', className: ['swipe-action', variant].join(' '), title: label, onclick: onClick }, children);
+  if (!labelled) button.setAttribute('aria-label', label);
   return button;
 };
 

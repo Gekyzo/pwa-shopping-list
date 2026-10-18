@@ -5,7 +5,7 @@ import * as aisles from '#aisles';
 import * as menu from '#menu';
 import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
-import { itemNode, boughtSection, groupHead, groupNodes } from '#ui/rows';
+import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
 import { recipeNode } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
 
@@ -148,6 +148,7 @@ export const renderList = (summary) => {
   const nodes = nodesOf(items);
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
+  if (ui.view === 'active') hintSwipe();
 
   $('empty').hidden = ui.view === 'settings' || nodes.length > 0;
   $('empty-text').textContent = emptyText();

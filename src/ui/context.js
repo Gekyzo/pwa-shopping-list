@@ -27,9 +27,12 @@ export const UNDO_MS = 5000;
 export const MESSAGE_MS = 3000;
 // The app opens by itself at an arrival, so its message stays longer.
 export const ARRIVAL_MS = 10000;
-// Width of one swipe-action of a row, the same as in styles.css.
-export const SIDE_BUTTON = 64;
+// Width of one swipe-action of a row, the same as in design-system.css.
+export const SIDE_BUTTON = 72;
 export const DRAG_START = 10;
+// The wait before the first row of Compra shows that it slides, and the length of that slide (ROW-14).
+export const HINT_WAIT_MS = 600;
+export const HINT_SHIFT = 24;
 export const CLICK_GUARD_MS = 350;
 // The hold of a finger that lifts a row for a manual order.
 export const HOLD_MS = 400;
