@@ -527,7 +527,8 @@
   /* @component meal
      @scope menu
      @summary One meal of a day: its label, then its recipe or the call to choose one.
-     @variant free   A meal with no recipe.
+     @variant free   A meal with no recipe and no dish.
+     @variant dish   A meal with a dish that has no recipe.
      @part meal-label  Comida or Cena.
      @part meal-name   The recipe, cut with an ellipsis.
      @example <button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button> */
@@ -547,6 +548,10 @@
     border: 1px dashed var(--muted);
   }
 
+  .meal.dish {
+    border-color: var(--muted);
+  }
+
   .meal-label {
     color: var(--muted);
     font-size: var(--text-xs);
@@ -559,7 +564,7 @@
     white-space: nowrap;
   }
 
-  .meal:not(.free) .meal-label {
+  .meal:not(.free, .dish) .meal-label {
     color: var(--accent);
   }
 
