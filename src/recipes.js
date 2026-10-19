@@ -194,3 +194,12 @@ export const addSample = (state, { name: rawName, products: rawProducts }) => {
     .filter((product, index, all) => product && all.findIndex((other) => other.toLowerCase() === product.toLowerCase()) === index);
   return { state: { ...state, recipes: [...state.recipes, { id: SAMPLE_ID, name, products, url: '' }] } };
 };
+
+// Adds the sample recipe and sends its products to Active, as Empezar of the walkthrough does. It
+// returns the same state when addSample adds nothing.
+export const loadSample = (state, text, newId) => {
+  const { state: added } = addSample(state, text);
+  if (added === state) return { state };
+  const sent = sendRecipe(added, SAMPLE_ID, newId);
+  return sent.error ? { state: added } : { state: sent.state };
+};

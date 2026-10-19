@@ -169,7 +169,7 @@ export default {
   'onboarding.recipes.text': 'Notez vos recettes une fois et envoyez leurs ingrédients dans `{active}` avec `#cart-add`.\nDans `#menu Menu`, organisez la semaine et remplissez le panier d’un coup.',
   'onboarding.icon.cart-add': 'Envoyer à la liste',
   'onboarding.sample.title': 'Une recette pour commencer',
-  'onboarding.sample.text': 'Nous ajoutons « {name} » pour que vous voyiez comment ça marche.\nVous pouvez la supprimer dans `Réglages`.',
+  'onboarding.sample.text': 'Nous ajoutons « {name} » et ses ingrédients aux `{active}` pour que vous voyiez comment ça marche.\nVous pouvez la supprimer dans `Réglages`.',
   'onboarding.sample.switch': 'Ajouter la recette d’exemple',
   'sample.name': 'Pâtes à la sauce tomate',
   'sample.tomatoSauce': 'Sauce tomate',

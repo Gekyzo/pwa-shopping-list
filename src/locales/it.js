@@ -169,7 +169,7 @@ export default {
   'onboarding.recipes.text': 'Scrivi le tue ricette una volta e invia i loro ingredienti in `{active}` con `#cart-add`.\nIn `#menu Menù` organizzi la settimana e riempi il cestino in un colpo.',
   'onboarding.icon.cart-add': 'Invia alla lista',
   'onboarding.sample.title': 'Una ricetta per iniziare',
-  'onboarding.sample.text': 'Aggiungiamo «{name}» per farti vedere come funziona.\nPuoi eliminarla in `Impostazioni`.',
+  'onboarding.sample.text': 'Aggiungiamo «{name}» e i suoi ingredienti alla `{active}` per farti vedere come funziona.\nPuoi eliminarla in `Impostazioni`.',
   'onboarding.sample.switch': 'Aggiungi la ricetta di esempio',
   'sample.name': 'Pasta al sugo di pomodoro',
   'sample.tomatoSauce': 'Sugo di pomodoro',

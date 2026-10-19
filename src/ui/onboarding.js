@@ -1,5 +1,5 @@
 import { PAGES, hasBack, isLast, step, textParts } from '#onboarding';
-import { hasSample, addSample } from '#recipes';
+import { hasSample, loadSample } from '#recipes';
 import { slideDirection } from '#sections';
 import { saveOnboarded } from '#storage';
 import { $, el, storage, state, ui, t, apply, guardClick } from '#ui/context';
@@ -91,8 +91,8 @@ export const bind = () => {
       turnOnboarding(1);
       return;
     }
-    // Only Empezar loads the sample; Saltar and Escape do not (ONB-13).
-    if (offersSample() && $('sample-switch').checked) apply(addSample(state, sampleText()));
+    // Only Empezar loads the sample and its products; Saltar and Escape do not (ONB-13).
+    if (offersSample() && $('sample-switch').checked) apply(loadSample(state, sampleText()));
     closeOnboarding();
   });
   $('onboarding-back').addEventListener('click', () => turnOnboarding(-1));

@@ -88,8 +88,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-27** The sample recipe has the fixed id `sample-pasta`, so it stays the sample after a
   rename or an edit. Its name and products are in the language of the screen at the time it is
   added: `Pasta con salsa de tomate`, with `Salsa de tomate`, `Pasta`, `Ajo`, `Aceite de oliva`
-  and `Sal`. It has no link, goes last in `recipes`, and is not sent to `Compra` or put in the
-  menu.
+  and `Sal`. It has no link, goes last in `recipes`, and is not put in the menu. The walkthrough sends
+  it to `Compra` as REC-18 and REC-19 do (ONB-13).
 - **REC-28** The add of the sample changes nothing when the sample exists, or when a recipe has
   its name with no case distinction (DATA-4).
 

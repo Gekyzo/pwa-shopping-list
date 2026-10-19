@@ -169,7 +169,7 @@ export default {
   'onboarding.recipes.text': 'Guarde as suas receitas uma vez e envie os ingredientes para `{active}` com `#cart-add`.\nNo `#menu Menu` organiza a semana e enche o cesto de uma vez.',
   'onboarding.icon.cart-add': 'Enviar para a lista',
   'onboarding.sample.title': 'Uma receita para começar',
-  'onboarding.sample.text': 'Adicionamos «{name}» para que veja como funciona.\nPode apagá-la nas `Definições`.',
+  'onboarding.sample.text': 'Adicionamos «{name}» e os seus ingredientes às `{active}` para que veja como funciona.\nPode apagá-la nas `Definições`.',
   'onboarding.sample.switch': 'Adicionar a receita de exemplo',
   'sample.name': 'Massa com molho de tomate',
   'sample.tomatoSauce': 'Molho de tomate',
