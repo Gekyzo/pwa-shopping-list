@@ -4,7 +4,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 
 ## Planned
 
-- **Reset setting**. Reset app data, with confirmation.
 - **Optional reagents**. Make reagents optional.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.

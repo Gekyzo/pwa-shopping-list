@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { emptyState, GROUPS, SORTS } from '#store';
-import { STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY, SWIPE_HINT_KEY } from '#storage';
+import { STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY, SWIPE_HINT_KEY, APP_KEYS } from '#storage';
 import { CATALOGS, FALLBACK, LANGUAGES } from '#i18n';
 
 // The facts of docs/spec/ that the code can prove. A rule of behaviour has no check here.
@@ -69,6 +69,12 @@ test('the storage document has the keys of the storage and the name of the cache
   const [, manifest] = read('sw.js').match(/const MANIFEST = '([^']+)'/);
   for (const key of [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SHOP_LISTS_KEY, SWIPE_HINT_KEY, cache, manifest]) assert.ok(storage.includes(`\`${key}\``), key);
   for (const name of [cache, manifest]) assert.ok(docs['10-offline-version.md'].includes(`\`${name}\``), name);
+});
+
+test('each key that Borrar todos los datos removes is a localStorage key of the storage document', () => {
+  const table = section('08-storage.md', 'Keys');
+  const stored = [...table.matchAll(/^\| `localStorage` \| `([^`]+)`/gm)].map(([, key]) => key);
+  assert.deepEqual([...APP_KEYS].sort(), stored.sort());
 });
 
 test('the language document has each language and the fallback', () => {

@@ -404,3 +404,28 @@ export const saveSwipeHint = (storage) => {
     return false;
   }
 };
+
+// Every key that the app writes to the storage: the state, its corrupt copy and each preference of the
+// device. Borrar todos los datos removes them all (BACKUP-7).
+export const APP_KEYS = [
+  STORAGE_KEY,
+  CORRUPT_KEY,
+  LANGUAGE_KEY,
+  HAND_KEY,
+  SHOP_LISTS_KEY,
+  TRIP_END_KEY,
+  THEME_KEY,
+  DENSITY_KEY,
+  ONBOARDED_KEY,
+  SWIPE_HINT_KEY,
+];
+
+// After it, the install counts as new: the next start shows the walkthrough.
+export const resetAll = (storage) => {
+  try {
+    APP_KEYS.forEach((key) => storage.removeItem(key));
+    return true;
+  } catch {
+    return false;
+  }
+};
