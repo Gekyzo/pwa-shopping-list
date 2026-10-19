@@ -62,7 +62,7 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
 ## Boundaries
 
 - **`localStorage`**, key `shopping.v1`: the only data store. The state is
-  `{ version: 7, items, recipes, sent, group, sort, menu, aisles }`; a state of version 1 to 6 is migrated when it is read. Invalid content is
+  `{ version: 9, items, recipes, sent, group, sort, menu, aisles }`; a state of version 1 to 8 is migrated when it is read. Invalid content is
   kept under `shopping.v1.corrupt`.
 - **`localStorage`**, key `shopping.lang`: the language that the user chose in `Ajustes`, one of
   `ca`, `de`, `en`, `es`, `fr`, `it`, `pt`. No key means that the app follows `navigator.languages`,
@@ -72,7 +72,7 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
   state and not part of the backup.
 - **`localStorage`**, key `shopping.swipeHint`: `1` after `Compra` showed the slide of a row one
   time (ROW-14). It is not part of the state and not part of the backup.
-- **Cache API**, cache `shopping-shell-v16`: the app shell, served
+- **Cache API**, cache `shopping-shell-v17`: the app shell, served
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers
   `{ ok }` on the message port.

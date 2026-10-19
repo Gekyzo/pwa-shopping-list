@@ -16,7 +16,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.swipeHint` | `1` after `Compra` showed the slide of a row one time ([07-screen.md](07-screen.md), ROW-14) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
-| Cache API | `shopping-shell-v16` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-shell-v17` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 | Cache API | `shopping-manifest` | The name, the description and the shortcut names of the manifest in the language of the screen (SW-13) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
@@ -37,8 +37,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   to `shopping.v1.corrupt` and starts with the empty state. The first change then replaces
   `shopping.v1`.
 - **STORE-6** A state is not valid when one of these is true:
-  - it is not an object, its `version` is not 1 to 8, or `items` is not a list;
-  - `recipes` is not a list, in version 2 to 8;
+  - it is not an object, its `version` is not 1 to 9, or `items` is not a list;
+  - `recipes` is not a list, in version 2 to 9;
   - an item has no string `id`, no name, a `list` that is not `active`, `saved` or the
     old `next` (STORE-8), a flag (`recurrent`, `bought`) that is not a boolean, or an `again` that
     is present and not a boolean;
@@ -58,12 +58,12 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Shop spellings | Each shop gets the spelling of its first use |
   | `url` of a recipe | Not a valid link (REC-14): `''` |
   | `sent` | An id that is not text, is unknown or is a duplicate: dropped |
-  | `menu` | Not a list: empty. A meal with an unknown day, meal or recipe, or a second record of one meal: dropped. The rest in day and meal order |
+  | `menu` | Not a list: empty. A meal with an unknown day, meal or recipe, a dish that is not text, is empty, is longer than 80 characters or comes with a recipe, or a second record of one meal: dropped. A dish trimmed. The rest in day and meal order |
   | `group` | Unknown: from `grouped` (STORE-8) |
   | `sort` | Unknown: `custom` |
   | Unknown fields | Dropped |
 
-- **STORE-8** An older state is migrated when it is read, and saved as version 8 at the next
+- **STORE-8** An older state is migrated when it is read, and saved as version 9 at the next
   change:
 
   | From | Change |
@@ -75,6 +75,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Version 1 to 5 | No change of the data: version 6 adds `list: 'saved'` |
   | Version 1 to 6 | `aisles: []`, and each item gets `aisle: ''` |
   | Version 1 to 7 | An item of `list: 'next'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. Each item loses `again` |
+  | Version 1 to 8 | No change of the data: version 9 adds the dish of a meal |
 
 ## Failures
 
