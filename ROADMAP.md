@@ -8,6 +8,12 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
 - **Buy me a coffee.** Add support link
+- **Direct add on first open.** On the first open, the empty `Compra` list
+  offers only to add the ingredients of the sample recipe. Show a button to add
+  an item directly, as the main action.
+- **Dishes in Menú without a recipe.** Add a dish to `Menú` by name, with no
+  saved recipe. Later, turn the dish into a recipe in `Recetas` and add its
+  ingredients.
 
 ### Deferred
 
@@ -45,7 +51,8 @@ link, with no login. The features below need its server.
 - **Live shared list.** Share a list with a contact so that both edit the same
   list. The link is the access: a random list id and an encryption key in the
   link fragment, with no login. The server stores only encrypted changes; the
-  phones merge them item by item.
+  phones merge them item by item. Recipes are shared the same way. User
+  feedback: a family needs the same list on several devices every day.
 
 ### AI integration
 
