@@ -140,9 +140,9 @@ test('the edit sheet has a veil, a dialog, the name and quantity fields and the 
 test('the meal sheet has a recipe search between the title and the chips, a no-match text and the dish buttons', () => {
   const [layer = ''] = body.match(/<div id="meal" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>/) ?? [];
   const ids = [...layer.matchAll(/ id="([^"]+)"/g)].map(([, id]) => id);
-  assert.deepEqual(ids, ['meal', 'meal-veil', 'meal-sheet', 'meal-title', 'meal-query', 'meal-empty', 'meal-chips', 'meal-dish', 'meal-recipe', 'meal-remove']);
+  assert.deepEqual(ids, ['meal', 'meal-veil', 'meal-sheet', 'meal-title', 'meal-query', 'meal-empty', 'meal-chips', 'meal-dish', 'meal-actions', 'meal-recipe', 'meal-remove']);
   assert.match(layer, /<input id="meal-query" class="input" type="search"[^>]*data-i18n-attr="placeholder:menu.search,aria-label:menu.search"/);
-  assert.match(layer, /<button id="meal-recipe"[^>]*data-i18n="menu.toRecipe" hidden><\/button>/);
+  assert.match(layer, /<div id="meal-actions" class="split meal-actions" hidden>\s*<button id="meal-recipe" class="button primary hand-side"[^>]*data-i18n="menu.toRecipe" hidden><\/button>\s*<button id="meal-remove" class="button outline danger"/);
   assert.match(layer, /<p id="meal-empty"[^>]*hidden><\/p>/);
 });
 
