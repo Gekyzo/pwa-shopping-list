@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.2.2 - 2026-10-19
+
 - The update no longer deletes the offline copy of another app of the same site, such as Stash.
 
 ## 1.2.1 - 2026-10-19
