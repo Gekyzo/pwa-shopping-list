@@ -139,6 +139,16 @@ export const recipeGroups = (state) => {
   return { groups, rest };
 };
 
+// The items to buy that show in two recipe groups or more, from their id to the names of those
+// recipes in group order. One row of each shows the other names, so it reads as one product.
+export const sharedItems = ({ groups }) => {
+  const byItem = new Map();
+  for (const { recipe, items } of groups) {
+    for (const item of items) byItem.set(item.id, [...(byItem.get(item.id) ?? []), recipe.name]);
+  }
+  return new Map([...byItem].filter(([, names]) => names.length > 1));
+};
+
 // The recipes whose name, or one of whose products, contains the query. All recipes for no query.
 export const searchRecipes = (state, query) => {
   const key = fold(query);

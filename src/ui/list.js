@@ -57,10 +57,14 @@ const pendingNodes = () => {
   if (group === 'none') {
     return store.activeItems(viewState()).filter((item) => !item.bought && found(item)).map((item) => itemNode(item));
   }
-  const { groups, rest } = store.filterGroups(recipes.recipeGroups(viewState()), ui.query);
+  const view = recipes.recipeGroups(viewState());
+  // The shared items come from the groups before the search, so a search keeps the mark.
+  const shared = recipes.sharedItems(view);
+  const also = (item, recipe) => (shared.get(item.id) ?? []).filter((name) => name !== recipe.name);
+  const { groups, rest } = store.filterGroups(view, ui.query);
   const grouped = groups.flatMap(({ recipe, items, total, left }) => [
     groupHead(recipe.name, groupCount({ left, total }), recipe.id),
-    ...groupNodes(recipe.id, items.map((item) => itemNode(item, recipe.id))),
+    ...groupNodes(recipe.id, items.map((item) => itemNode(item, recipe.id, also(item, recipe)))),
   ]);
   const others = rest.length ? [groupHead(t('group.others'), '', 'others'), ...groupNodes('others', rest.map((item) => itemNode(item)))] : [];
   return [...grouped, ...others];

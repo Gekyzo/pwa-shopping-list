@@ -11,6 +11,7 @@ import {
   isWebUrl,
   sendRecipe,
   recipeGroups,
+  sharedItems,
   inList,
   searchRecipes,
   SAMPLE_ID,
@@ -325,6 +326,22 @@ test('recipeGroups does not change the state', () => {
   const copy = structuredClone(state);
   recipeGroups(state);
   assert.deepEqual(state, copy);
+});
+
+test('sharedItems names the recipes of each item to buy in two groups or more', () => {
+  const { state } = twoSent();
+  const eggs = find(state, 'Eggs');
+  assert.deepEqual([...sharedItems(recipeGroups(state))], [[eggs.id, ['Omelette', 'Flan']]]);
+});
+
+test('sharedItems leaves out a shared item that is ticked', () => {
+  const { state } = twoSent();
+  const ticked = toggleBought(state, find(state, 'Eggs').id).state;
+  assert.equal(sharedItems(recipeGroups(ticked)).size, 0);
+});
+
+test('sharedItems is empty with no group', () => {
+  assert.equal(sharedItems(recipeGroups(emptyState())).size, 0);
 });
 
 const LINK = 'https://bonviveur.com/es/recetas/garbanzos-con-chorizo';

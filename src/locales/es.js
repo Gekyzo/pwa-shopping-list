@@ -41,6 +41,7 @@ export default {
   'row.repeat': 'Repetir',
   'row.noRepeat': 'No repetir',
   'row.repeats': '↻ cada compra',
+  'row.alsoIn': 'También en {recipes}',
   'edit.title': 'Editar',
   'edit.done': 'Listo',
   'edit.name': 'Nombre',

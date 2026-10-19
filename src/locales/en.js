@@ -41,6 +41,7 @@ export default {
   'row.repeat': 'Repeat',
   'row.noRepeat': 'Don’t repeat',
   'row.repeats': '↻ every trip',
+  'row.alsoIn': 'Also in {recipes}',
   'edit.title': 'Edit',
   'edit.done': 'Done',
   'edit.name': 'Name',

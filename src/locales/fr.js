@@ -41,6 +41,7 @@ export default {
   'row.repeat': 'Répéter',
   'row.noRepeat': 'Ne pas répéter',
   'row.repeats': '↻ à chaque course',
+  'row.alsoIn': 'Aussi dans {recipes}',
   'edit.title': 'Modifier',
   'edit.done': 'OK',
   'edit.name': 'Nom',

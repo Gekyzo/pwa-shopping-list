@@ -61,7 +61,8 @@ the bottom bar at each width.
 ## Item rows
 
 - **ROW-1** A row of `Compra` has a check mark, the name with its quantity after it in a muted
-  colour, a line below it with the shops and `↻ cada compra` for a recurrent item (LIST-7), and an
+  colour, a line below it with the shops, `También en «recipes»` for an item of two recipe groups
+  (GROUP-20) and `↻ cada compra` for a recurrent item (LIST-7), joined by ` · `, and an
   edit button **Editar** at its end. The name keeps two lines, then ends with an ellipsis. A tap on
   the body of the row ticks or unticks the item (LIST-11); the check mark only shows the state. A
   tap on the edit button opens the edit sheet (ROW-7) and does not tick. With **Izquierda**

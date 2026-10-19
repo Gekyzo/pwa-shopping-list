@@ -9,12 +9,14 @@ import { openEdit } from '#ui/edit';
 import { reorder, bindReorder } from '#ui/drag';
 
 // The name of a row, with its quantity after it, and below it the shops of the item when the list
-// is not by shop and the mark of a recurrent item.
-const nameParts = (item) => {
+// is not by shop, the other recipes of an item of two recipe groups (`also`) and the mark of a
+// recurrent item.
+const nameParts = (item, also) => {
   const quantity = item.quantity ? [' ', el('span', { className: 'item-row-qty', textContent: item.quantity })] : [];
   const parts = [el('span', { className: 'item-row-label' }, [item.name, ...quantity])];
   const meta = [
     ...(item.shops.length && shownGroup() !== 'shop' ? [item.shops.join(' · ')] : []),
+    ...(also.length ? [t('row.alsoIn', { recipes: also.join(', ') })] : []),
     ...(item.recurrent ? [t('row.repeats')] : []),
   ];
   if (meta.length) parts.push(el('small', { className: 'item-row-meta', textContent: meta.join(' · ') }));
@@ -54,7 +56,7 @@ const editButton = (item) => {
 // A row of Compra: a tap on its body ticks the item (D1), the check only shows the state, and the
 // edit button stays at the end. The name is the checkbox for the keyboard and a screen reader: a
 // button gives it Space and Enter, and its click reaches the body like a tap.
-const itemRow = (item) => {
+const itemRow = (item, also) => {
   const toggle = () => {
     if (item.bought) {
       apply(store.toggleBought(state, item.id));
@@ -66,7 +68,7 @@ const itemRow = (item) => {
   };
   const check = el('input', { type: 'checkbox', className: 'item-row-check', checked: item.bought, tabIndex: -1 });
   check.setAttribute('aria-hidden', 'true');
-  const name = el('button', { type: 'button', className: 'item-row-name' }, nameParts(item));
+  const name = el('button', { type: 'button', className: 'item-row-name' }, nameParts(item, also));
   name.setAttribute('role', 'checkbox');
   name.setAttribute('aria-checked', String(item.bought));
   const row = [check, name, el('div', { className: 'item-row-end' }, [editButton(item)])];
@@ -214,8 +216,9 @@ export const swipeBox = ({ id, groupId = null, row, end, right, tap = null }) =>
   return { box, body };
 };
 
-export const itemNode = (item, groupId = null) => {
-  const { row, end, right, tap } = itemRow(item);
+// `also` names the other recipe groups that show the item (GROUP-20).
+export const itemNode = (item, groupId = null, also = []) => {
+  const { row, end, right, tap } = itemRow(item, also);
   const { box, body } = swipeBox({ id: item.id, groupId, row, end, right, tap });
   const node = el('li', {
     className: [
