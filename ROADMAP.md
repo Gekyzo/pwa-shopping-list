@@ -8,9 +8,6 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
 - **Buy me a coffee.** Add support link
-- **Direct add on first open.** On the first open, the empty `Compra` list
-  offers only to add the ingredients of the sample recipe. Show a button to add
-  an item directly, as the main action.
 - **Dishes in Menú without a recipe.** Add a dish to `Menú` by name, with no
   saved recipe. Later, turn the dish into a recipe in `Recetas` and add its
   ingredients.

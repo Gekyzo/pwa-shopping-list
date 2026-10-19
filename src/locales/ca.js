@@ -56,8 +56,9 @@ export default {
 
   'empty.active': 'Toca + per afegir un article.',
   'empty.activeTitle': 'La llista és buida',
-  'empty.sample': 'Tens la recepta «{recipe}». Envia’n els productes a Compra.',
+  'empty.sample': 'Toca «Afegeix un article», o envia a Compra els productes de la recepta «{recipe}».',
   'empty.addSample': 'Afegeix els ingredients de «{recipe}»',
+  'empty.addItem': '+ Afegeix un article',
   'empty.recipes': 'Desa una recepta i envia’n els productes a Compra amb un toc.',
   'empty.recipesTitle': 'Encara no hi ha receptes',
   'empty.createRecipe': '+ Crea una recepta',

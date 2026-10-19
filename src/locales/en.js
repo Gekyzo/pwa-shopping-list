@@ -56,8 +56,9 @@ export default {
 
   'empty.active': 'Tap + to add an item.',
   'empty.activeTitle': 'The list is empty',
-  'empty.sample': 'You have the recipe “{recipe}”. Send its products to Shopping.',
+  'empty.sample': 'Tap “Add item”, or send the products of the recipe “{recipe}” to Shopping.',
   'empty.addSample': 'Add the ingredients of “{recipe}”',
+  'empty.addItem': '+ Add item',
   'empty.recipes': 'Save a recipe and send its products to Shopping with one tap.',
   'empty.recipesTitle': 'No recipes yet',
   'empty.createRecipe': '+ Create recipe',

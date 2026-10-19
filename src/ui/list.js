@@ -113,28 +113,34 @@ export const headerOf = (summary) => {
 };
 
 // The button text of each action of an empty section.
-const ACTION_KEYS = { 'create-recipe': 'empty.createRecipe', 'go-recipes': 'empty.goRecipes', 'add-query': 'empty.addQuery', 'add-sample': 'empty.addSample' };
+const ACTION_KEYS = { 'create-recipe': 'empty.createRecipe', 'go-recipes': 'empty.goRecipes', 'add-query': 'empty.addQuery', 'add-item': 'empty.addItem', 'add-sample': 'empty.addSample' };
 
 let emptyRun = null;
+let secondaryRun = null;
 
-// The title, the text and the action button of an empty section (STATE-1). With no action the add
-// button of the screen is the action, and the button of the state stays hidden.
+// The title, the text and the action buttons of an empty section (STATE-1). With no action the add
+// button of the screen is the action, and the buttons of the state stay hidden.
 const renderEmpty = (shown) => {
   $('empty').hidden = !shown;
   const sample = state.recipes.find((recipe) => recipe.id === recipes.SAMPLE_ID);
-  const { title, text, action } = emptyAction(ui.view, { query: ui.query, hasRecipes: state.recipes.length > 0, sample: Boolean(sample) });
+  const { title, text, action, secondary } = emptyAction(ui.view, { query: ui.query, hasRecipes: state.recipes.length > 0, sample: Boolean(sample) });
   const params = { query: ui.query.trim(), recipe: sample?.name ?? '' };
   $('empty-title').hidden = !title;
   $('empty-title').textContent = title ? t(title) : '';
   $('empty-text').textContent = text ? t(text, params) : '';
   $('empty-action').hidden = !shown || !action;
   $('empty-action').textContent = action ? t(ACTION_KEYS[action], params) : '';
-  emptyRun = {
+  $('empty-secondary').hidden = !shown || !secondary;
+  $('empty-secondary').textContent = secondary ? t(ACTION_KEYS[secondary], params) : '';
+  const runs = {
     'create-recipe': openSheet,
     'go-recipes': () => showView('recipes'),
     'add-query': addQuery,
+    'add-item': openSheet,
     'add-sample': () => sendToList(sample),
-  }[action] ?? null;
+  };
+  emptyRun = runs[action] ?? null;
+  secondaryRun = runs[secondary] ?? null;
 };
 
 // One field serves the three sections: Recetas shows it when it has a recipe, and a list shows it
@@ -335,6 +341,7 @@ export const closeTrip = () => {
 
 export const bind = () => {
   $('empty-action').addEventListener('click', () => emptyRun?.());
+  $('empty-secondary').addEventListener('click', () => secondaryRun?.());
   $('query').addEventListener('input', (event) => {
     Object.assign(ui, { query: event.target.value, openId: null });
     render();

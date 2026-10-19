@@ -56,8 +56,9 @@ export default {
 
   'empty.active': 'Touchez + pour ajouter un article.',
   'empty.activeTitle': 'La liste est vide',
-  'empty.sample': 'Vous avez la recette « {recipe} ». Envoyez ses produits aux Courses.',
+  'empty.sample': 'Touchez « Ajouter un article », ou envoyez aux Courses les produits de la recette « {recipe} ».',
   'empty.addSample': 'Ajouter les ingrédients de « {recipe} »',
+  'empty.addItem': '+ Ajouter un article',
   'empty.recipes': 'Enregistrez une recette et envoyez ses produits aux Courses d’un geste.',
   'empty.recipesTitle': 'Pas encore de recettes',
   'empty.createRecipe': '+ Créer une recette',
