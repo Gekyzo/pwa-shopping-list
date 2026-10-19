@@ -9,6 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- A slide of a row to the left shows **Editar**, **Repetir** and **Eliminar** while the finger moves, not only after the release.
 - The product field of a recipe also suggests the products of the other recipes, not only the items of the lists.
 - In **Compra** by recipe, an item of two recipes shows **También en «recipe»** below its name in each group, so the two rows read as one product.
 - **Ajustes** has **Borrar todos los datos** in **Copia de seguridad**. After a confirmation, it deletes the lists, the recipes, the menu, the sections and the preferences, and the app starts again with the introduction.
