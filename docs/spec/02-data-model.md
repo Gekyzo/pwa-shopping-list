@@ -6,7 +6,7 @@ The app has one state object. Each operation returns a new object and never chan
 
 ```js
 {
-  version: 8,
+  version: 9,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
   sent: [string],     // ids of the recipes sent to Compra in this trip, in send order
@@ -17,7 +17,7 @@ The app has one state object. Each operation returns a new object and never chan
 }
 ```
 
-The empty state is `{ version: 8, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] }`.
+The empty state is `{ version: 9, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] }`.
 
 ## Item
 
@@ -51,11 +51,12 @@ The empty state is `{ version: 8, items: [], recipes: [], sent: [], group: 'reci
 {
   day: number,        // 0 (Monday) to 6
   meal: 'lunch' | 'dinner',
-  recipe: string,     // the id of a recipe
+  recipe: string,     // the id of a recipe, or absent with a dish
+  dish: string,       // a name with no recipe, trimmed, 1 to 80 characters; absent with a recipe
 }
 ```
 
-A meal with no recipe has no record. See [13-menu.md](13-menu.md).
+A meal has a `recipe` or a `dish`, never both. A meal with no recipe and no dish has no record. See [13-menu.md](13-menu.md).
 
 ## Invariants
 

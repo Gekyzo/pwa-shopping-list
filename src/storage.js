@@ -108,27 +108,38 @@ const normalizeRecipe = (recipe) => {
   return { id, name: name.trim(), products: trimmed, url: link };
 };
 
+// The longest dish name, the limit of the field of the meal sheet.
+const DISH_LENGTH = 80;
+
+// A meal holds a known recipe or a dish name, never both.
+const mealOf = ({ day, meal, recipe, dish }, known) => {
+  if (!Number.isInteger(day) || day < 0 || day >= DAYS || !MEALS.includes(meal)) return null;
+  if (dish === undefined) return known.has(recipe) ? { day, meal, recipe } : null;
+  const name = typeof dish === 'string' ? dish.trim() : '';
+  return recipe === undefined && name && name.length <= DISH_LENGTH ? { day, meal, dish: name } : null;
+};
+
 // The menu only plans a fill, so a bad entry is dropped and the state stays valid: an entry with
-// no known day, meal or recipe, and the second entry of one meal. Versions 1 to 3 have no menu.
+// no known day, meal or recipe, a bad dish, and the second entry of one meal. Versions 1 to 3 have
+// no menu; versions 1 to 8 have no dish.
 const normalizeMenu = (rawMenu, known) => {
   if (!Array.isArray(rawMenu)) return [];
   const seen = new Set();
   return rawMenu
     .filter((entry) => typeof entry === 'object' && entry !== null)
-    .map(({ day, meal, recipe }) => ({ day, meal, recipe }))
-    .filter(({ day, meal, recipe }) => {
-      const valid = Number.isInteger(day) && day >= 0 && day < DAYS && MEALS.includes(meal) && known.has(recipe);
-      const key = `${day}-${meal}`;
-      if (!valid || seen.has(key)) return false;
+    .map((entry) => mealOf(entry, known))
+    .filter((entry) => {
+      const key = `${entry?.day}-${entry?.meal}`;
+      if (!entry || seen.has(key)) return false;
       seen.add(key);
       return true;
     })
     .sort((a, b) => a.day - b.day || MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
 };
 
-const VERSIONS = [1, 2, 3, 4, 5, 6, 7, 8];
+const VERSIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// Returns a clean version 8 state, or null when the data is not a known state.
+// Returns a clean version 9 state, or null when the data is not a known state.
 const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
@@ -149,7 +160,7 @@ const normalizeState = (data) => {
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
   const aisles = normalizeAisles(data.aisles);
   return {
-    version: 8,
+    version: 9,
     items: knownAisles(oneSpelling(items), aisles),
     recipes,
     sent,
