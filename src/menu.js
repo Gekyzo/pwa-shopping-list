@@ -1,3 +1,4 @@
+import { fold } from '#store';
 import { addRecipe, sendRecipe } from '#recipes';
 
 // A week of 7 days, Monday first (day 0), with two meals a day.
@@ -36,12 +37,12 @@ export const setDish = (state, day, meal, rawName) => {
   return put(state, { day, meal, dish });
 };
 
-// Turns the dish of the meal into a recipe of that name, or takes the recipe of that name, and puts
-// it in each meal of that dish. `id` is the recipe.
-export const dishToRecipe = (state, day, meal, newId) => {
-  const dish = findEntry(state, day, meal)?.dish;
+// Turns the dish of that name into a recipe of that name, or takes the recipe of that name, and puts
+// it in each meal of that dish, with no case distinction. `id` is the recipe.
+export const dishRecipe = (state, rawName, newId) => {
+  const key = String(rawName ?? '').trim().toLowerCase();
+  const dish = state.menu.find((entry) => entry.dish?.toLowerCase() === key)?.dish;
   if (!dish) return reject(state, 'error.dishNotFound');
-  const key = dish.toLowerCase();
   const existing = state.recipes.find((recipe) => recipe.name.toLowerCase() === key);
   const created = existing ? { state, id: existing.id } : addRecipe(state, dish, newId);
   const id = created.id;
@@ -49,7 +50,19 @@ export const dishToRecipe = (state, day, meal, newId) => {
   return { state: { ...created.state, menu }, id };
 };
 
-// An empty meal returns the same state object.
+// The dishes of the menu whose name contains the query, one time each with the spelling of its first
+// meal, in menu order, with the number of their meals. All dishes for no query.
+export const menuDishes = (state, query = '') => {
+  const search = fold(query);
+  const byName = new Map();
+  for (const { dish } of state.menu.filter((entry) => entry.dish)) {
+    const key = dish.toLowerCase();
+    const found = byName.get(key);
+    byName.set(key, found ? { ...found, meals: found.meals + 1 } : { name: dish, meals: 1 });
+  }
+  return [...byName.values()].filter(({ name }) => fold(name).includes(search));
+};
+
 export const clearMeal = (state, day, meal) => {
   const menu = without(state.menu, day, meal);
   return { state: menu.length === state.menu.length ? state : { ...state, menu } };

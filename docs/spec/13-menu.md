@@ -29,8 +29,8 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
 
 - **MENU-17** A dish turns into a recipe of its name, with no product and no link. Each meal with a
   dish of that name, with no case distinction, then holds the recipe. When a recipe of that name
-  exists, the meals take it and no recipe is created. A meal with no dish gives
-  `error.dishNotFound`.
+  exists, the meals take it and no recipe is created. A name that is no dish of the menu gives
+  `error.dishNotFound`. `Recetas` lists the dishes (REC-36).
 
 ## Screen
 

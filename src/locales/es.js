@@ -39,9 +39,11 @@ export default {
   'count.items': { one: '{count} artículo', other: '{count} artículos' },
   'count.recipes': { one: '{count} receta', other: '{count} recetas' },
   'count.products': { one: '{count} producto', other: '{count} productos' },
+  'count.menuMeals': { one: 'En {count} comida del menú', other: 'En {count} comidas del menú' },
   'count.bought': { one: 'Comprados ({count})', other: 'Comprados ({count})' },
 
   'row.delete': 'Eliminar {name}',
+  'row.createRecipe': 'Crear la receta de «{name}»',
   'row.edit': 'Editar',
   'row.repeat': 'Repetir',
   'row.noRepeat': 'No repetir',
@@ -84,6 +86,7 @@ export default {
   'trip.continue': 'Seguir comprando',
 
   'recipes.search': 'Buscar receta o producto',
+  'recipes.dishes': 'Platos sin receta',
   'search.label': 'Buscar en la lista',
   'search.items': 'Buscar artículo o tienda',
   'search.clear': 'Borrar la búsqueda',

@@ -74,12 +74,23 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-22** `sent` lasts until **Terminar compra** (TRIP-3). The row of a recipe has no "sent"
   mark.
 
+## Dishes with no recipe
+
+- **REC-36** Below the recipes, `Recetas` shows the dishes of the menu (MENU-2) under the head
+  `Platos sin receta` with their number. Each dish shows one time, with the spelling of its first
+  meal, in menu order. With no dish the head does not show.
+- **REC-37** A dish row shows the name and the meta line `En N comidas del menú`. It has no slide.
+  A tap on the name or on the book button at the end turns the dish into a recipe (MENU-17) and
+  opens its sheet (REC-33), with `Deshacer` and the message `Receta creada: «name».` The text of
+  the book button for a screen reader is `Crear la receta de «name»`.
+
 ## Search
 
-- **REC-23** The field **Buscar receta o producto** shows when one recipe exists at least. It
-  filters the list while the user types.
+- **REC-23** The field **Buscar receta o producto** shows when one recipe or one dish of the menu
+  (REC-36) exists at least. It filters the list while the user types.
 - **REC-24** A recipe matches when its name or one of its products contains the text, with no case
-  and no accent distinction. An empty text shows all recipes.
+  and no accent distinction. A dish matches when its name contains the text. An empty text shows
+  all recipes and all dishes.
 - **REC-25** With no match the list shows `Ninguna receta coincide con «text».`
 - **REC-26** The text of the search is not stored. A change of section clears it.
 
