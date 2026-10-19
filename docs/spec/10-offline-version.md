@@ -13,8 +13,10 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   first start.
 - **SW-3** At its install the worker downloads the full shell past the HTTP cache, so the shell is
   never a mix of two deploys. It then takes control at once (`skipWaiting`, `clients.claim`).
-- **SW-4** At its activation the worker deletes each cache that is not the current one or
-  `shopping-manifest` (SW-13). The cache name is `shopping-shell-v17`.
+- **SW-4** At its activation the worker deletes each cache whose name starts with `shopping-`
+  and is not the current one or `shopping-manifest` (SW-13). The cache name is
+  `shopping-shell-v17`. A cache of another app of the same origin stays, such as those of Stash
+  (`lists-`).
 - **SW-5** The worker answers only `GET` requests of its own origin.
 - **SW-6** A request is answered stale-while-revalidate: the cached copy at once, and a fresh copy
   goes into the cache in the background for the next start. The query of the URL is ignored for
