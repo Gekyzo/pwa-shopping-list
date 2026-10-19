@@ -55,9 +55,8 @@ export default {
   'group.noAisle': 'Sans rayon',
 
   'empty.active': 'Touchez + pour ajouter un article.',
-  'empty.activeTitle': 'La liste est vide',
-  'empty.sample': 'Touchez « Ajouter un article », ou envoyez aux Courses les produits de la recette « {recipe} ».',
-  'empty.addSample': 'Ajouter les ingrédients de « {recipe} »',
+  'empty.sample': 'Ajoutez votre premier article, ou commencez par la recette « {recipe} ».',
+  'empty.addSample': 'Ajouter la recette d’exemple',
   'empty.addItem': '+ Ajouter un article',
   'empty.recipes': 'Enregistrez une recette et envoyez ses produits aux Courses d’un geste.',
   'empty.recipesTitle': 'Pas encore de recettes',
