@@ -139,6 +139,29 @@ export const recipeGroups = (state) => {
   return { groups, rest };
 };
 
+// The names that the product field of a recipe offers for the query: the items, then the products
+// of the recipes, one time each with no case distinction, less the products of the recipe. The
+// exact match goes first, then the names that start with the query, as in `searchItems`.
+export const productSuggestions = (state, id, query, limit = 5) => {
+  const key = fold(query);
+  if (!key) return [];
+  const taken = new Set((findRecipe(state, id)?.products ?? []).map((product) => product.toLowerCase()));
+  const names = new Map();
+  for (const name of [...state.items.map((item) => item.name), ...state.recipes.flatMap((recipe) => recipe.products)]) {
+    const lower = name.toLowerCase();
+    if (!taken.has(lower) && !names.has(lower)) names.set(lower, name);
+  }
+  const rank = (name) => {
+    const folded = fold(name);
+    if (folded === key) return 0;
+    return folded.startsWith(key) ? 1 : 2;
+  };
+  return [...names.values()]
+    .filter((name) => fold(name).includes(key))
+    .sort((a, b) => rank(a) - rank(b))
+    .slice(0, limit);
+};
+
 // The items to buy that show in two recipe groups or more, from their id to the names of those
 // recipes in group order. One row of each shows the other names, so it reads as one product.
 export const sharedItems = ({ groups }) => {

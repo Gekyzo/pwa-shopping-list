@@ -1,4 +1,3 @@
-import * as store from '#store';
 import * as recipes from '#recipes';
 import { $, el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
 import { icon, iconButton, bindField, flashSaved, applySaved, clearSaved } from '#ui/controls';
@@ -40,7 +39,8 @@ const productNode = (recipe, product) => {
   return node;
 };
 
-// The product field with the items that match the text below it. A tap on one adds it.
+// The product field with the items and the products of the recipes that match the text below it
+// (REC-10). A tap on one adds it.
 const productForm = (recipe) => {
   const input = el('input', {
     type: 'text',
@@ -63,12 +63,9 @@ const productForm = (recipe) => {
     input.focus();
   };
   input.addEventListener('input', () => {
-    const taken = new Set((openRecipeOf()?.products ?? []).map((product) => product.toLowerCase()));
-    const rows = store
-      .searchItems(state, input.value, Infinity)
-      .filter((item) => !taken.has(item.name.toLowerCase()))
-      .slice(0, 5)
-      .map((item) => el('li', {}, [el('button', { type: 'button', className: 'list-row', textContent: item.name, onclick: () => add(item.name) })]));
+    const rows = recipes
+      .productSuggestions(state, recipe.id, input.value)
+      .map((name) => el('li', {}, [el('button', { type: 'button', className: 'list-row', textContent: name, onclick: () => add(name) })]));
     suggestions.replaceChildren(...rows);
   });
   const form = el('form', { className: 'input-row product-form', autocomplete: 'off' }, [

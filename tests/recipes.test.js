@@ -12,6 +12,7 @@ import {
   sendRecipe,
   recipeGroups,
   sharedItems,
+  productSuggestions,
   inList,
   searchRecipes,
   SAMPLE_ID,
@@ -326,6 +327,37 @@ test('recipeGroups does not change the state', () => {
   const copy = structuredClone(state);
   recipeGroups(state);
   assert.deepEqual(state, copy);
+});
+
+test('productSuggestions offers a product of another recipe that is no item', () => {
+  const tortilla = withRecipe(emptyState(), 'Tortilla', ['Huevos', 'Patatas']);
+  const flan = withRecipe(tortilla.state, 'Flan');
+  assert.deepEqual(productSuggestions(flan.state, flan.id, 'hue'), ['Huevos']);
+});
+
+test('productSuggestions offers an item and a product of the same name one time, with the name of the item', () => {
+  const tortilla = withRecipe(withItem(emptyState(), 'HUEVOS', 'saved'), 'Tortilla', ['Huevos']);
+  const flan = withRecipe(tortilla.state, 'Flan');
+  assert.deepEqual(productSuggestions(flan.state, flan.id, 'huevos'), ['HUEVOS']);
+});
+
+test('productSuggestions leaves out the products of the recipe, without case distinction', () => {
+  const tortilla = withRecipe(withItem(emptyState(), 'Leche', 'active'), 'Tortilla', ['Huevos']);
+  const flan = withRecipe(tortilla.state, 'Flan', ['huevos']);
+  assert.deepEqual(productSuggestions(flan.state, flan.id, 'e'), ['Leche']);
+});
+
+test('productSuggestions ranks the exact match, then the prefix, without accent distinction, five at most', () => {
+  const many = withRecipe(emptyState(), 'Many', ['Pan rallado', 'Azúcar', 'Pan', 'Sopa de pan', 'Panela', 'Pan de molde', 'Panceta']);
+  const other = withRecipe(many.state, 'Other');
+  assert.deepEqual(productSuggestions(other.state, other.id, 'pan'), ['Pan', 'Pan rallado', 'Panela', 'Pan de molde', 'Panceta']);
+  assert.deepEqual(productSuggestions(other.state, other.id, 'azucar'), ['Azúcar']);
+});
+
+test('productSuggestions returns nothing for an empty query or an unknown recipe', () => {
+  const { state, id } = withRecipe(emptyState(), 'Tortilla', ['Huevos']);
+  assert.deepEqual(productSuggestions(state, id, '  '), []);
+  assert.deepEqual(productSuggestions(state, 'gone', 'hue'), ['Huevos']);
 });
 
 test('sharedItems names the recipes of each item to buy in two groups or more', () => {
