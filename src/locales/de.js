@@ -55,9 +55,8 @@ export default {
   'group.noAisle': 'Ohne Abteilung',
 
   'empty.active': 'Tippe auf +, um einen Artikel hinzuzufügen.',
-  'empty.activeTitle': 'Die Liste ist leer',
-  'empty.sample': 'Tippe auf „Artikel hinzufügen“ oder sende die Produkte des Rezepts „{recipe}“ zum Einkauf.',
-  'empty.addSample': 'Zutaten von „{recipe}“ hinzufügen',
+  'empty.sample': 'Füge deinen ersten Artikel hinzu oder beginne mit dem Rezept „{recipe}“.',
+  'empty.addSample': 'Beispielrezept hinzufügen',
   'empty.addItem': '+ Artikel hinzufügen',
   'empty.recipes': 'Speichere ein Rezept und sende seine Produkte mit einem Tipp zum Einkauf.',
   'empty.recipesTitle': 'Noch keine Rezepte',

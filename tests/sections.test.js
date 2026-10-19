@@ -125,7 +125,7 @@ test('emptyAction of a list search with no match adds the searched name', () => 
 });
 
 test('emptyAction of a search that is only spaces is the empty list', () => {
-  assert.equal(emptyAction('active', { ...NO_QUERY, query: '   ' }).title, 'empty.activeTitle');
+  assert.equal(emptyAction('active', { ...NO_QUERY, query: '   ' }).text, 'empty.active');
 });
 
 test('emptyAction of a recipe search with no match has no action', () => {
@@ -133,14 +133,14 @@ test('emptyAction of a recipe search with no match has no action', () => {
   assert.deepEqual(result, { title: null, text: 'empty.noMatch', action: null, secondary: null });
 });
 
-test('emptyAction of an empty list with the sample recipe adds an item, and its ingredients second', () => {
+test('emptyAction of an empty list has no title, as the header says it is empty; with the sample recipe it adds an item, and its ingredients second', () => {
   const result = emptyAction('active', { ...NO_QUERY, hasRecipes: true, sample: true });
-  assert.deepEqual(result, { title: 'empty.activeTitle', text: 'empty.sample', action: 'add-item', secondary: 'add-sample' });
+  assert.deepEqual(result, { title: null, text: 'empty.sample', action: 'add-item', secondary: 'add-sample' });
 });
 
 test('emptyAction of an empty list without the sample leaves the add button as the action', () => {
   const result = emptyAction('active', { ...NO_QUERY, hasRecipes: true });
-  assert.deepEqual(result, { title: 'empty.activeTitle', text: 'empty.active', action: null, secondary: null });
+  assert.deepEqual(result, { title: null, text: 'empty.active', action: null, secondary: null });
 });
 
 test('emptyAction of a section with nothing to say is empty', () => {

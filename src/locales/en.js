@@ -55,9 +55,8 @@ export default {
   'group.noAisle': 'No section',
 
   'empty.active': 'Tap + to add an item.',
-  'empty.activeTitle': 'The list is empty',
-  'empty.sample': 'Tap “Add item”, or send the products of the recipe “{recipe}” to Shopping.',
-  'empty.addSample': 'Add the ingredients of “{recipe}”',
+  'empty.sample': 'Add your first item, or start with the recipe “{recipe}”.',
+  'empty.addSample': 'Add the sample recipe',
   'empty.addItem': '+ Add item',
   'empty.recipes': 'Save a recipe and send its products to Shopping with one tap.',
   'empty.recipesTitle': 'No recipes yet',
