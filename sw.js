@@ -95,11 +95,14 @@ self.addEventListener('install', (event) => {
   event.waitUntil(fill().then(() => self.skipWaiting()));
 });
 
+// The caches of an older shell. Another app on the same origin keeps its own caches.
+const staleCaches = (keys) => keys.filter((key) => key.startsWith('shopping-') && key !== CACHE && key !== MANIFEST);
+
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE && key !== MANIFEST).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(staleCaches(keys).map((key) => caches.delete(key))))
       .then(() => self.clients.claim()),
   );
 });
