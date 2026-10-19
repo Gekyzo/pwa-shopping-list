@@ -50,8 +50,8 @@ the bottom bar at each width.
   is the action. With the sample recipe in the state it says `Añade tu primer artículo, o empieza
   con la receta «name».`; the button **+ Añadir artículo** opens the add sheet, and a second,
   outline button **Añadir la receta de ejemplo** below it sends that recipe to `Compra`. `Recetas` says `Aún no hay
-  recetas` and the button **+ Crear receta** opens the add sheet. `Menú` says `Aún no hay recetas`
-  and the button **Ir a Recetas** shows `Recetas`. A search with no match says `Ningún artículo
+  recetas` and the button **+ Crear receta** opens the add sheet. `Menú` always shows its week
+  (MENU-14). A search with no match says `Ningún artículo
   coincide con «text».` in `Compra`, with the button **+ Añadir «text»**, which adds the name as
   the add sheet does and ends the search; in `Recetas` it says `Ninguna receta coincide con
   «text».` with no button. While the button shows, the `+` button hides.

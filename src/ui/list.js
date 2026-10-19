@@ -113,7 +113,7 @@ export const headerOf = (summary) => {
 };
 
 // The button text of each action of an empty section.
-const ACTION_KEYS = { 'create-recipe': 'empty.createRecipe', 'go-recipes': 'empty.goRecipes', 'add-query': 'empty.addQuery', 'add-item': 'empty.addItem', 'add-sample': 'empty.addSample' };
+const ACTION_KEYS = { 'create-recipe': 'empty.createRecipe', 'add-query': 'empty.addQuery', 'add-item': 'empty.addItem', 'add-sample': 'empty.addSample' };
 
 let emptyRun = null;
 let secondaryRun = null;
@@ -134,7 +134,6 @@ const renderEmpty = (shown) => {
   $('empty-secondary').textContent = secondary ? t(ACTION_KEYS[secondary], params) : '';
   const runs = {
     'create-recipe': openSheet,
-    'go-recipes': () => showView('recipes'),
     'add-query': addQuery,
     'add-item': openSheet,
     'add-sample': () => sendToList(sample),
@@ -162,8 +161,8 @@ const renderSearch = (items, searchable) => {
 
 const nodesOf = (items) => {
   if (ui.view === 'settings') return [];
-  // With no recipe there is nothing to plan: the empty text says where to create one.
-  if (ui.view === 'menu') return state.recipes.length ? menu.menuWeek(state).map(dayNode) : [];
+  // With no recipe the week still shows: a meal can hold a dish.
+  if (ui.view === 'menu') return menu.menuWeek(state).map(dayNode);
   return ui.view === 'recipes' ? recipes.searchRecipes(state, ui.query).map(recipeNode) : listNodes(items);
 };
 
@@ -201,7 +200,7 @@ export const renderList = (summary) => {
 
   renderEmpty(ui.view !== 'settings' && nodes.length === 0);
 
-  $('menu-actions').hidden = !(ui.view === 'menu' && state.recipes.length > 0);
+  $('menu-actions').hidden = ui.view !== 'menu';
 
   $('finish').hidden = !(ui.view === 'active' && ui.shop === null && summary.total > 0 && summary.left === 0);
   renderShopDone(summary);
@@ -212,7 +211,7 @@ export const renderList = (summary) => {
 export const renderTrip = () => {
   if (ui.view !== 'active') ui.tripOpen = false;
   const inMenu = ui.view === 'menu';
-  $('trip-button').hidden = ui.view !== 'active' && !(inMenu && state.recipes.length > 0);
+  $('trip-button').hidden = ui.view !== 'active' && !inMenu;
   // One button, two sheets: the trip options in Compra, the menu options in Menú.
   $('trip-button').setAttribute('aria-label', t(inMenu ? 'menu.more' : 'trip.menu'));
   $('trip-button').setAttribute('aria-controls', inMenu ? 'menu-more' : 'trip');

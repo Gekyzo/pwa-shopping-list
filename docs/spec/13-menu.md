@@ -36,8 +36,9 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
 
 - **MENU-9** `Menú` shows one row for each day, with the name of the day in the language of the
   screen, and its two meals side by side. A meal shows `Comida` or `Cena` and the name of its
-  recipe, or `Elegir receta`. A meal with a recipe has a solid `--accent` border and an
-  `--accent` label; a meal with no recipe has a dashed `--muted` border. A day with a recipe in
+  recipe or its dish, or `Elegir receta`. A meal with a recipe has a solid `--accent` border and an
+  `--accent` label. A meal with a dish has a solid `--muted` border and the label `Comida · sin
+  receta`. A meal with neither has a dashed `--muted` border. A day with a recipe or a dish in
   both meals has an `--accent` name.
   Below 600px wide the name stands above the meals; from 600px it stands at the start of the row,
   with the width of the longest name, so the week fits on the screen of a tablet or an unfolded
@@ -47,8 +48,8 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   planificadas`. The ring shows the number of planned meals.
 - **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each
   recipe, in the order of the recipes; the chip of the recipe of the meal is on. A tap on a chip
-  puts that recipe in the meal and closes the sheet. A meal with a recipe also has **Quitar**,
-  with `Deshacer` and the message `Quitada del menú: «name».`
+  puts that recipe in the meal and closes the sheet. A meal with a recipe or a dish also has
+  **Quitar**, with `Deshacer` and the message `Quitada del menú: «name».`
 - **MENU-12** An action bar stays at the bottom of the list of `Menú`, above the bottom bar.
   Its one button, **Llenar cesta**, fills `Compra` (MENU-5). It has the icon `cart-add`, the
   cart with a plus, before its text, and the full width of the bar. Its message is
@@ -59,13 +60,22 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   semana. Puedes deshacerlo.` The entry empties the menu, closes the sheet and shows
   `Deshacer` with the message `Menú vaciado.` It is disabled while the menu is empty. The
   label of the button is `Opciones del menú`.
-- **MENU-14** With no recipe, `Menú` shows its empty text (NAV-7) and no week. The `+` button
-  does not show in `Menú`.
+- **MENU-14** `Menú` shows the week also with no recipe, so that a meal can hold a dish. It has no
+  empty text. The `+` button does not show in `Menú`.
 - **MENU-15** **Terminar compra** does not change the menu.
-- **MENU-16** The meal sheet has the field **Buscar receta o producto** above the chips. It
-  filters the chips while the user types, with the match of REC-24. With no match the sheet
-  shows `Ninguna receta coincide con «text».` The text is empty each time the sheet opens. The sheet keeps the height of its first render while
+- **MENU-16** The meal sheet has the field **Busca una receta o escribe un plato** above the
+  chips. It filters the chips while the user types, with the match of REC-24. With no match the
+  sheet shows `Ninguna receta coincide con «text».` With no recipe and no text it shows `Escribe
+  el nombre de un plato.` The text is empty each time the sheet opens. The sheet keeps the height of its first render while
   it is open, so that the sheet does not shrink as the matches fall.
+
+- **MENU-18** When the text of the field is not empty and no recipe has that name, with no case
+  distinction, the meal sheet shows **Añadir «text» sin receta** below the chips. A tap on it, or
+  `Enter` in the field, puts the text as a dish in the meal (MENU-3) and closes the sheet. With a
+  recipe of that name `Enter` does nothing.
+- **MENU-19** The meal sheet of a dish has **Crear receta** above **Quitar**. A tap turns the dish
+  into a recipe (MENU-17), closes the sheet, shows `Recetas` and opens the sheet of the recipe,
+  with `Deshacer` and the message `Receta creada: «name».`
 
 ## Limits
 

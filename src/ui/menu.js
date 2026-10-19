@@ -2,7 +2,8 @@ import * as recipes from '#recipes';
 import * as menu from '#menu';
 import { intlTag } from '#i18n';
 import { $, el, state, ui, t, lang, undoState, showToast, apply, render } from '#ui/context';
-import { sendText } from '#ui/recipes';
+import { sendText, openRecipe } from '#ui/recipes';
+import { showView } from '#ui/nav';
 
 // The name of a day of the week in the language of the screen. 1 January 2024 is a Monday.
 const dayName = (day, weekday = 'long') => new Intl.DateTimeFormat(intlTag(lang), { weekday }).format(new Date(2024, 0, 1 + day));
@@ -31,13 +32,21 @@ export const closeMeal = () => {
   render();
 };
 
-const mealNode = (day, { meal, recipe }) => {
+// The recipe or the dish of a meal, or null.
+const plannedOf = ({ day, meal }) => {
+  const entry = menu.menuWeek(state)[day].meals.find((candidate) => candidate.meal === meal);
+  return { recipe: entry.recipe, dish: entry.dish };
+};
+
+const mealNode = (day, { meal, recipe, dish }) => {
+  const name = recipe?.name ?? dish ?? t('menu.choose');
+  const label = dish ? `${t(`meal.${meal}`)} · ${t('menu.noRecipe')}` : t(`meal.${meal}`);
   const button = el(
     'button',
-    { type: 'button', className: recipe ? 'meal' : 'meal free', onclick: () => openMeal(day, meal) },
-    [el('small', { className: 'meal-label', textContent: t(`meal.${meal}`) }), el('span', { className: 'meal-name', textContent: recipe ? recipe.name : t('menu.choose') })],
+    { type: 'button', className: recipe ? 'meal' : dish ? 'meal dish' : 'meal free', onclick: () => openMeal(day, meal) },
+    [el('small', { className: 'meal-label', textContent: label }), el('span', { className: 'meal-name', textContent: name })],
   );
-  button.setAttribute('aria-label', `${mealTitle(day, meal)}: ${recipe ? recipe.name : t('menu.choose')}`);
+  button.setAttribute('aria-label', `${mealTitle(day, meal)}: ${dish ? `${dish}, ${t('menu.noRecipe')}` : name}`);
   button.setAttribute('aria-haspopup', 'dialog');
   return button;
 };
@@ -79,11 +88,17 @@ export const renderMeal = () => {
   const title = mealTitle(day, meal);
   $('meal-title').textContent = title;
   $('meal-sheet').setAttribute('aria-label', title);
-  const current = menu.menuWeek(state)[day].meals.find((entry) => entry.meal === meal).recipe;
+  const { recipe: current, dish } = plannedOf(open);
   if ($('meal-query').value !== ui.mealQuery) $('meal-query').value = ui.mealQuery;
   const matches = recipes.searchRecipes(state, ui.mealQuery);
-  $('meal-empty').hidden = matches.length > 0;
-  $('meal-empty').textContent = matches.length ? '' : t('empty.noMatch', { query: ui.mealQuery.trim() });
+  const query = ui.mealQuery.trim();
+  // With no recipe at all the field only takes a dish.
+  const hint = !state.recipes.length && !query ? t('menu.typeDish') : matches.length ? '' : t('empty.noMatch', { query });
+  $('meal-empty').hidden = !hint;
+  $('meal-empty').textContent = hint;
+  const newDish = dishOf(query);
+  $('meal-dish').hidden = !newDish;
+  $('meal-dish').textContent = newDish ? t('menu.addDish', { name: newDish }) : '';
   const chips = matches.map((recipe) => {
     const chip = el('button', {
       type: 'button',
@@ -98,9 +113,35 @@ export const renderMeal = () => {
     return chip;
   });
   $('meal-chips').replaceChildren(...chips);
-  $('meal-remove').hidden = !current;
+  $('meal-recipe').hidden = !dish;
+  $('meal-remove').hidden = !current && !dish;
   mealHeight ??= $('meal-sheet').offsetHeight;
   $('meal-sheet').style.minHeight = `${mealHeight}px`;
+};
+
+// The text of the field as a new dish: not empty and not the name of a recipe, or null.
+const dishOf = (query) => {
+  const key = query.toLowerCase();
+  return query && !state.recipes.some((recipe) => recipe.name.toLowerCase() === key) ? query : null;
+};
+
+const addDish = () => {
+  const name = dishOf(ui.mealQuery.trim());
+  if (!name) return;
+  const { day, meal } = ui.mealOpen;
+  ui.mealOpen = null;
+  apply(menu.setDish(state, day, meal, name));
+};
+
+// The dish becomes a recipe, and its sheet opens in Recetas for the products.
+const dishToRecipe = () => {
+  const { day, meal } = ui.mealOpen;
+  const { dish } = plannedOf(ui.mealOpen);
+  const result = menu.dishToRecipe(state, day, meal);
+  ui.mealOpen = null;
+  if (!apply(result, { undoText: t('toast.recipeCreated', { name: dish }) })) return;
+  showView('recipes');
+  openRecipe(state.recipes.find((recipe) => recipe.id === result.id));
 };
 
 export const bind = () => {
@@ -115,9 +156,17 @@ export const bind = () => {
     ui.mealQuery = event.target.value;
     renderMeal();
   });
+  $('meal-query').addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' || event.isComposing) return;
+    event.preventDefault();
+    addDish();
+  });
+  $('meal-dish').addEventListener('click', addDish);
+  $('meal-recipe').addEventListener('click', dishToRecipe);
   $('meal-remove').addEventListener('click', () => {
     const { day, meal } = ui.mealOpen;
-    const name = menu.menuWeek(state)[day].meals.find((entry) => entry.meal === meal).recipe?.name ?? '';
+    const { recipe, dish } = plannedOf(ui.mealOpen);
+    const name = recipe?.name ?? dish ?? '';
     ui.mealOpen = null;
     apply(menu.clearMeal(state, day, meal), { undoText: t('toast.mealCleared', { name }) });
   });

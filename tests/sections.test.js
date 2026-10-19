@@ -115,8 +115,9 @@ test('emptyAction of Recetas with no recipe creates one', () => {
   assert.deepEqual(emptyAction('recipes', NO_QUERY), { title: 'empty.recipesTitle', text: 'empty.recipes', action: 'create-recipe', secondary: null });
 });
 
-test('emptyAction of Menu with no recipe goes to Recetas', () => {
-  assert.deepEqual(emptyAction('menu', NO_QUERY), { title: 'empty.recipesTitle', text: 'empty.menu', action: 'go-recipes', secondary: null });
+test('emptyAction of Menu has no empty text', () => {
+  // Menú always shows its week (MENU-14).
+  assert.deepEqual(emptyAction('menu', NO_QUERY), { title: null, text: null, action: null, secondary: null });
 });
 
 test('emptyAction of a list search with no match adds the searched name', () => {
