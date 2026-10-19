@@ -34,8 +34,11 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   recipe with no case distinction (`error.duplicateProduct`).
 - **REC-9** The sheet of a recipe lists its products under **Productos**, with no line above
   it, each with a `✕` button, and the field **Añadir producto**. The removal of a product has `Deshacer`; the add does not.
-- **REC-10** While the user types a product, the recipe lists up to 5 items whose name contains
-  the text and that the recipe does not have. A tap adds the name of that item.
+- **REC-10** While the user types a product, the recipe lists up to 5 names that contain the text,
+  with no case and no accent distinction: the names of the items, then the products of the
+  recipes, each name one time with no case distinction, with the spelling of the item first. The
+  products of the recipe do not show. The exact match goes first, then the names that start with
+  the text. A tap adds that name.
 - **REC-11** After an add the product field is empty and keeps the focus, for the next product.
 - **REC-12** A product is text. It does not create an item, and a later rename of an item does not
   change it (DATA-11).
