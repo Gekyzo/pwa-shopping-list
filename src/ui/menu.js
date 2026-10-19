@@ -115,6 +115,7 @@ export const renderMeal = () => {
   $('meal-chips').replaceChildren(...chips);
   $('meal-recipe').hidden = !dish;
   $('meal-remove').hidden = !current && !dish;
+  $('meal-actions').hidden = !current && !dish;
   mealHeight ??= $('meal-sheet').offsetHeight;
   $('meal-sheet').style.minHeight = `${mealHeight}px`;
 };

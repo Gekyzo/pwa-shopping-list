@@ -73,7 +73,9 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   distinction, the meal sheet shows **Añadir «text» sin receta** below the chips. A tap on it, or
   `Enter` in the field, puts the text as a dish in the meal (MENU-3) and closes the sheet. With a
   recipe of that name `Enter` does nothing.
-- **MENU-19** The meal sheet of a dish has **Crear receta** above **Quitar**. A tap turns the dish
+- **MENU-19** The meal sheet of a dish has **Crear receta** and **Quitar** side by side, each
+  half of the line, with **Crear receta**, a primary button, at the side of the hand (NAV-12). The **Quitar** of a
+  meal with a recipe takes the full line. A tap turns the dish
   into a recipe (MENU-17), closes the sheet, shows `Recetas` and opens the sheet of the recipe,
   with `Deshacer` and the message `Receta creada: «name».`
 

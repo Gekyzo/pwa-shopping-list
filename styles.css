@@ -552,6 +552,15 @@
     border-color: var(--muted);
   }
 
+  /* @component meal-actions
+     @scope menu
+     @summary The buttons of the meal sheet, on a split: Crear receta and Quitar side by side, or
+              Quitar alone across the full width.
+     @example <div class="split meal-actions" style="width: 100%"><button class="button primary hand-side" type="button">Crear receta</button><button class="button outline danger" type="button">Quitar</button></div> */
+  .meal-actions:has(> [hidden]) > :not([hidden]) {
+    grid-column: 1 / -1;
+  }
+
   .meal-label {
     color: var(--muted);
     font-size: var(--text-xs);
