@@ -1085,7 +1085,7 @@
   }
 
   /* @component empty-state
-     @summary The text of a list or a part with nothing in it. Holds a button, except inline (STATE-1).
+     @summary The text of a list or a part with nothing in it. Holds a button, except inline (STATE-1). A second action is a button outline below the primary.
      @variant inline  In a sheet: aligned with the content, with less space.
      @variant low     At the bottom of its area, in reach of the thumb. The app gives the list area a height, as the percent needs one.
      @part empty-state-title  The short title above the text.
@@ -1100,6 +1100,13 @@
 
   .empty-state .button {
     margin-top: var(--space-2);
+  }
+
+  /* The empty state is on --bg, with art behind it, and its text is muted: a second action is a
+     --surface box with the text colour, like the content of the list. */
+  .empty-state .button.outline {
+    background: var(--surface);
+    color: var(--text);
   }
 
   .empty-state.inline {
