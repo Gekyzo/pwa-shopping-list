@@ -47,8 +47,9 @@ the bottom bar at each width.
 - **NAV-7** An empty section shows a title and a text in the lower half of the list area, and
   one action as a wide button below them. `Compra` says `La lista está vacía` and
   `Toca + para añadir un artículo.`, with no button: the `+` button is the action. With the sample
-  recipe in the state it says `Tienes la receta «name». Envía sus productos a Compra.` and the
-  button **Añadir ingredientes de «name»** sends that recipe to `Compra`. `Recetas` says `Aún no hay
+  recipe in the state it says `Toca «Añadir artículo», o envía a Compra los productos de la receta
+  «name».`; the button **+ Añadir artículo** opens the add sheet, and a second, outline button
+  **Añadir ingredientes de «name»** below it sends that recipe to `Compra`. `Recetas` says `Aún no hay
   recetas` and the button **+ Crear receta** opens the add sheet. `Menú` says `Aún no hay recetas`
   and the button **Ir a Recetas** shows `Recetas`. A search with no match says `Ningún artículo
   coincide con «text».` in `Compra`, with the button **+ Añadir «text»**, which adds the name as

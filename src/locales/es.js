@@ -56,8 +56,9 @@ export default {
 
   'empty.active': 'Toca + para añadir un artículo.',
   'empty.activeTitle': 'La lista está vacía',
-  'empty.sample': 'Tienes la receta «{recipe}». Envía sus productos a Compra.',
+  'empty.sample': 'Toca «Añadir artículo», o envía a Compra los productos de la receta «{recipe}».',
   'empty.addSample': 'Añadir ingredientes de «{recipe}»',
+  'empty.addItem': '+ Añadir artículo',
   'empty.recipes': 'Guarda una receta y envía sus productos a Compra con un toque.',
   'empty.recipesTitle': 'Aún no hay recetas',
   'empty.createRecipe': '+ Crear receta',

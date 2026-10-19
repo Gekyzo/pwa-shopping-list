@@ -119,7 +119,7 @@ test('the sheets with a title of their own give it an id; the others a fixed tex
 });
 
 test('the empty state of a list holds a title, a text and an action button, set by the view', () => {
-  assert.match(body, /<div id="empty" class="empty-state low" hidden>\s*<h2 id="empty-title" class="empty-state-title" hidden><\/h2>\s*<p id="empty-text"><\/p>\s*<button id="empty-action" class="button primary wide" type="button" hidden><\/button>\s*<\/div>/);
+  assert.match(body, /<div id="empty" class="empty-state low" hidden>\s*<h2 id="empty-title" class="empty-state-title" hidden><\/h2>\s*<p id="empty-text"><\/p>\s*<button id="empty-action" class="button primary wide" type="button" hidden><\/button>\s*<button id="empty-secondary" class="button outline wide" type="button" hidden><\/button>\s*<\/div>/);
 });
 
 test('the edit sheet has a veil, a dialog, the name and quantity fields and the shops', () => {

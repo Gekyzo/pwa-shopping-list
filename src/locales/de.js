@@ -56,8 +56,9 @@ export default {
 
   'empty.active': 'Tippe auf +, um einen Artikel hinzuzufügen.',
   'empty.activeTitle': 'Die Liste ist leer',
-  'empty.sample': 'Du hast das Rezept „{recipe}“. Sende seine Produkte zum Einkauf.',
+  'empty.sample': 'Tippe auf „Artikel hinzufügen“ oder sende die Produkte des Rezepts „{recipe}“ zum Einkauf.',
   'empty.addSample': 'Zutaten von „{recipe}“ hinzufügen',
+  'empty.addItem': '+ Artikel hinzufügen',
   'empty.recipes': 'Speichere ein Rezept und sende seine Produkte mit einem Tipp zum Einkauf.',
   'empty.recipesTitle': 'Noch keine Rezepte',
   'empty.createRecipe': '+ Rezept erstellen',
