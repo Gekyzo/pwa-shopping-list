@@ -1,4 +1,4 @@
-import { exportJson, exportFilename, importJson } from '#storage';
+import { exportJson, exportFilename, importJson, resetAll } from '#storage';
 import { parseVersion, versionStatus } from '#version';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
 import { SAMPLE_ID, hasSample, deleteRecipe } from '#recipes';
@@ -10,6 +10,7 @@ import {
   el,
   ui,
   state,
+  storage,
   t,
   lang,
   chosen,
@@ -165,6 +166,16 @@ export const bind = () => {
     // The button goes with the recipe, so the focus goes to the button above it.
     $('show-onboarding').focus();
     apply(deleteRecipe(state, SAMPLE_ID), { undoText: t('toast.sampleDeleted') });
+  });
+  // The app starts again as a new install, with the walkthrough (BACKUP-7). With no storage the data is
+  // only in memory, so the reload alone clears it.
+  $('reset').addEventListener('click', () => {
+    if (!window.confirm(t('reset.confirm'))) return;
+    if (storage && !resetAll(storage)) {
+      showToast(t('error.resetFailed'));
+      return;
+    }
+    location.reload();
   });
   $('language').addEventListener('change', (event) => {
     setLanguage(event.target.value || null);

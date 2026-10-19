@@ -33,6 +33,8 @@ import {
   SWIPE_HINT_KEY,
   loadSwipeHint,
   saveSwipeHint,
+  APP_KEYS,
+  resetAll,
 } from '#storage';
 import { emptyState } from '#store';
 
@@ -731,4 +733,33 @@ test('loadSwipeHint is false for another value', () => {
 test('loadSwipeHint is false and saveSwipeHint fails for a storage that throws', () => {
   assert.equal(loadSwipeHint(brokenStorage()), false);
   assert.equal(saveSwipeHint(brokenStorage()), false);
+});
+
+test('resetAll removes every key of the app and keeps the keys of other apps', () => {
+  const storage = fakeStorage({
+    ...Object.fromEntries(APP_KEYS.map((key) => [key, '1'])),
+    'other.key': 'kept',
+  });
+  assert.equal(resetAll(storage), true);
+  for (const key of APP_KEYS) assert.equal(storage.getItem(key), null, key);
+  assert.equal(storage.getItem('other.key'), 'kept');
+});
+
+test('APP_KEYS holds the state, its corrupt copy and each preference of the device', () => {
+  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY];
+  assert.deepEqual([...APP_KEYS].sort(), [...keys].sort());
+});
+
+test('after resetAll the install counts as new', () => {
+  const storage = fakeStorage();
+  save(storage, sample());
+  saveOnboarded(storage);
+  resetAll(storage);
+  assert.equal(hasStoredState(storage), false);
+  assert.equal(loadOnboarded(storage), false);
+  assert.deepEqual(load(storage), emptyState());
+});
+
+test('resetAll fails for a storage that throws', () => {
+  assert.equal(resetAll(brokenStorage()), false);
 });

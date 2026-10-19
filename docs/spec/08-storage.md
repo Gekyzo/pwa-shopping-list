@@ -102,6 +102,12 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 - **BACKUP-5** Before the import the app asks: `¿Sustituir los datos actuales por los de la copia
   (N artículos y N recetas)?` A yes replaces the full state. It does not merge.
 - **BACKUP-6** The import has `Deshacer`, with the message `Copia importada.`
+- **BACKUP-7** **Borrar todos los datos** asks `¿Borrar todos los datos? Se borran las listas,
+  las recetas, el menú, las secciones y las preferencias. Exporta una copia antes si quieres
+  conservarlos.` A yes removes each `localStorage` key of the table above and loads the app again,
+  which then starts as a new install, with the walkthrough (ONB-7). It has no `Deshacer`. When the
+  removal fails, the message `error.resetFailed` says `No se pudieron borrar los datos.` and nothing
+  else changes. The caches stay.
 
 ## Loss of data
 

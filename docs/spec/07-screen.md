@@ -32,14 +32,15 @@ the bottom bar at each width.
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
 - **NAV-6** `Ajustes` has six groups, each a title above one card of rows: **Copia de seguridad**
-  (**Exportar**, **Importar**), **Preferencias** (**Idioma**, **Mano**, **Tema**, **Densidad**),
+  (**Exportar**, **Importar**, **Borrar todos los datos**), **Preferencias** (**Idioma**, **Mano**, **Tema**, **Densidad**),
   **Al terminar la compra** (TRIP-7), **Secciones**, **Aplicación** (**Instalar la aplicación**) and
   **Ayuda** (**Ver la introducción**, **Borrar la receta de ejemplo**). A row is 56 px high or more.
   It has its name at the start. A row that opens something ends with a `›`; **Exportar**,
   **Importar**, **Secciones de la tienda** and **Ver la introducción** do. A row of **Preferencias**
   also shows its current value before the `›`, and a tap on the row opens the picker of the device
   (a `select` laid over the row). **Secciones de la tienda** shows the number of sections.
-  **Borrar la receta de ejemplo** has the colour of danger and no `›`. **Aplicación** is hidden,
+  **Borrar la receta de ejemplo** and **Borrar todos los datos** (BACKUP-7) have the colour of
+  danger and no `›`. **Aplicación** is hidden,
   with its title, while the install is not offered (INS-1). The version line is at the end of
   `Ajustes`; while a newer version is deployed, a banner above it says `Versión X disponible` and
   `Tienes la Y.` (the version in use), with the button **Actualizar** across the full width.
