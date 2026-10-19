@@ -169,7 +169,7 @@ export default {
   'onboarding.recipes.text': 'Apunta tus recetas una vez y envía sus ingredientes a `{active}` con `#cart-add`.\nEn `#menu Menú` organizas la semana y llenas la cesta de golpe.',
   'onboarding.icon.cart-add': 'Enviar a la lista',
   'onboarding.sample.title': 'Una receta para empezar',
-  'onboarding.sample.text': 'Añadimos «{name}» para que veas cómo funciona.\nPuedes borrarla en `Ajustes`.',
+  'onboarding.sample.text': 'Añadimos «{name}» y sus ingredientes a `{active}` para que veas cómo funciona.\nPuedes borrarla en `Ajustes`.',
   'onboarding.sample.switch': 'Añadir la receta de ejemplo',
   'sample.name': 'Pasta con salsa de tomate',
   'sample.tomatoSauce': 'Salsa de tomate',

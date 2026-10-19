@@ -14,6 +14,7 @@ no change for the user has no entry.
 - **Ajustes** has **Borrar todos los datos** in **Copia de seguridad**. After a confirmation, it deletes the lists, the recipes, the menu, the sections and the preferences, and the app starts again with the introduction.
 - With the sample recipe, the empty **Compra** list offers **+ Añadir artículo** as its main button, which opens the add sheet. **Añadir la receta de ejemplo** becomes a second button below it, on a solid background.
 - The empty **Compra** list no longer repeats `La lista está vacía` below the header.
+- **Empezar** of the introduction, with **Añadir la receta de ejemplo** on, also puts the ingredients of the sample recipe in **Compra**.
 
 ## 1.1.0 - 2026-10-19
 

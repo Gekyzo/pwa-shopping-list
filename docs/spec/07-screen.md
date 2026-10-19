@@ -269,7 +269,7 @@ the bottom bar at each width.
 - **ONB-13** The last page has the switch **Añadir la receta de ejemplo**, on at each open of the
   walkthrough. It shows only while the state has no sample recipe (REC-27); on another page, or
   with the sample there, its room stays empty, so the page does not move. **Empezar** with the
-  switch on adds the sample recipe, with no message. **Saltar**, `Escape` and **Empezar** with the
+  switch on adds the sample recipe and sends its products to `Compra`, with no message. **Saltar**, `Escape` and **Empezar** with the
   switch off add nothing.
 - **ONB-14** `Ajustes` has **Borrar la receta de ejemplo** in the group **Ayuda**, below **Ver la
   introducción**, while the sample recipe exists. It deletes the recipe as REC-6 does, with the

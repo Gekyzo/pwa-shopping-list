@@ -18,6 +18,7 @@ import {
   SAMPLE_ID,
   hasSample,
   addSample,
+  loadSample,
 } from '#recipes';
 
 let counter = 0;
@@ -506,6 +507,29 @@ test('addSample returns the same state when a recipe has its name, with no case 
 test('addSample drops empty and duplicate products', () => {
   const { state } = addSample(emptyState(), { name: ' Pasta ', products: [' Sal ', '', 'sal', 'Ajo'] });
   assert.deepEqual(state.recipes[0], { id: SAMPLE_ID, name: 'Pasta', products: ['Sal', 'Ajo'], url: '' });
+});
+
+test('loadSample adds the sample recipe and sends its products to Active', () => {
+  const start = emptyState();
+  const { state } = loadSample(start, SAMPLE, newId);
+  assert.equal(state.recipes[0].id, SAMPLE_ID);
+  assert.deepEqual(state.items.map(({ name, list }) => [name, list]), SAMPLE.products.map((name) => [name, 'active']));
+  assert.deepEqual(state.sent, [SAMPLE_ID]);
+  assert.deepEqual(start, emptyState());
+});
+
+test('loadSample brings an item that exists instead of a copy', () => {
+  const start = withItem(emptyState(), 'Pasta', 'saved');
+  const { state } = loadSample(start, SAMPLE, newId);
+  assert.equal(state.items.filter((item) => item.name === 'Pasta').length, 1);
+  assert.equal(state.items.find((item) => item.name === 'Pasta').list, 'active');
+});
+
+test('loadSample returns the same state when the sample is not added', () => {
+  const { state: start } = addSample(emptyState(), SAMPLE);
+  assert.equal(loadSample(start, SAMPLE, newId).state, start);
+  const { state: taken } = withRecipe(emptyState(), SAMPLE.name);
+  assert.equal(loadSample(taken, SAMPLE, newId).state, taken);
 });
 
 test('addSample returns the same state for an empty name', () => {

@@ -169,7 +169,7 @@ export default {
   'onboarding.recipes.text': 'Schreib deine Rezepte einmal auf und schick ihre Zutaten mit `#cart-add` zu `{active}`.\nIm `#menu Menü` planst du die Woche und füllst den Korb auf einmal.',
   'onboarding.icon.cart-add': 'An die Liste senden',
   'onboarding.sample.title': 'Ein Rezept zum Start',
-  'onboarding.sample.text': 'Wir fügen „{name}“ hinzu, damit du siehst, wie es geht.\nDu kannst es in den `Optionen` löschen.',
+  'onboarding.sample.text': 'Wir fügen „{name}“ und seine Zutaten zu `{active}` hinzu, damit du siehst, wie es geht.\nDu kannst es in den `Optionen` löschen.',
   'onboarding.sample.switch': 'Beispielrezept hinzufügen',
   'sample.name': 'Pasta mit Tomatensoße',
   'sample.tomatoSauce': 'Tomatensoße',
