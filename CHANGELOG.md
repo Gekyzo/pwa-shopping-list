@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.2.1 - 2026-10-19
+
 - In the sheet of a meal with a dish, **Crear receta** and **Quitar** stand side by side, and **Crear receta** is a primary button at the side of the hand.
 
 ## 1.2.0 - 2026-10-19
