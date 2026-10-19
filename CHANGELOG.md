@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.2.0 - 2026-10-19
+
 - In `Menú`, a meal can hold a dish with no recipe: type its name in the sheet of the meal and tap **Añadir «name» sin receta**. **Crear receta** in the sheet of the dish turns it into a recipe of `Recetas` and opens it, to add its products. **Llenar cesta** skips a dish. `Menú` shows the week also with no recipe.
 - `Recetas` lists the dishes of `Menú` with no recipe under **Platos sin receta**. A tap on one creates its recipe and opens it.
 - A slide of a row to the left shows **Editar**, **Repetir** and **Eliminar** while the finger moves, not only after the release.
