@@ -110,6 +110,8 @@ const bindSwipe = (row, widths, id, groupId, right) => {
     const max = right && drag.base === 0 ? row.offsetWidth : 0;
     drag.at = Math.max(-widths.end, Math.min(max, drag.base + dx));
     moveRow(row, drag.at);
+    // The side actions show while the row is left of its place, not only after the settle (ROW-5).
+    row.parentNode.classList.toggle('open', drag.at < 0);
     const armed = drag.at > 0 && reached(drag.at, row.offsetWidth);
     // A short buzz when the slide becomes long enough to run its action.
     if (armed && !row.parentNode.classList.contains('armed')) navigator.vibrate?.(10);

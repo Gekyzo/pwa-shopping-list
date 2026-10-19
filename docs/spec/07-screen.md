@@ -82,6 +82,7 @@ the bottom bar at each width.
   scrolls the list.
 - **ROW-5** The left side opens when the drag passes 40 % of the width of that side, 40 px at least. An
   open side closes with a drag back of the same length. If not, the row goes back to where it was.
+  The actions of the side show behind the row during the drag, from its first pixel to the left.
 - **ROW-6** One row is open at a time. A tap out of the open row closes it, and that tap still
   does its own work. A tap on the body of the open row only closes it. An action closes the row,
   then runs.
