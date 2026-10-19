@@ -2,7 +2,7 @@ import * as recipes from '#recipes';
 import * as menu from '#menu';
 import { intlTag } from '#i18n';
 import { $, el, state, ui, t, lang, undoState, showToast, apply, render } from '#ui/context';
-import { sendText, openRecipe } from '#ui/recipes';
+import { sendText, recipeFromDish } from '#ui/recipes';
 import { showView } from '#ui/nav';
 
 // The name of a day of the week in the language of the screen. 1 January 2024 is a Monday.
@@ -135,13 +135,9 @@ const addDish = () => {
 
 // The dish becomes a recipe, and its sheet opens in Recetas for the products.
 const dishToRecipe = () => {
-  const { day, meal } = ui.mealOpen;
   const { dish } = plannedOf(ui.mealOpen);
-  const result = menu.dishToRecipe(state, day, meal);
   ui.mealOpen = null;
-  if (!apply(result, { undoText: t('toast.recipeCreated', { name: dish }) })) return;
-  showView('recipes');
-  openRecipe(state.recipes.find((recipe) => recipe.id === result.id));
+  recipeFromDish(dish, () => showView('recipes'));
 };
 
 export const bind = () => {

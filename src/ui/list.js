@@ -8,7 +8,7 @@ import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/cont
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { icon } from '#ui/controls';
 import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
-import { recipeNode, sendToList } from '#ui/recipes';
+import { recipeNode, dishNode, sendToList } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
 import { openSheet, addQuery } from '#ui/add';
 import { showView } from '#ui/nav';
@@ -123,7 +123,7 @@ let secondaryRun = null;
 const renderEmpty = (shown) => {
   $('empty').hidden = !shown;
   const sample = state.recipes.find((recipe) => recipe.id === recipes.SAMPLE_ID);
-  const { title, text, action, secondary } = emptyAction(ui.view, { query: ui.query, hasRecipes: state.recipes.length > 0, sample: Boolean(sample) });
+  const { title, text, action, secondary } = emptyAction(ui.view, { query: ui.query, hasRecipes: state.recipes.length > 0 || menu.menuDishes(state).length > 0, sample: Boolean(sample) });
   const params = { query: ui.query.trim(), recipe: sample?.name ?? '' };
   $('empty-title').hidden = !title;
   $('empty-title').textContent = title ? t(title) : '';
@@ -159,11 +159,18 @@ const renderSearch = (items, searchable) => {
   if ($('query').value !== ui.query) $('query').value = ui.query;
 };
 
+// The recipes, then the dishes of the menu with no recipe under their head.
+const recipeNodes = () => {
+  const dishes = menu.menuDishes(state, ui.query);
+  const head = dishes.length ? [groupHead(t('recipes.dishes'), String(dishes.length))] : [];
+  return [...recipes.searchRecipes(state, ui.query).map(recipeNode), ...head, ...dishes.map(dishNode)];
+};
+
 const nodesOf = (items) => {
   if (ui.view === 'settings') return [];
   // With no recipe the week still shows: a meal can hold a dish.
   if (ui.view === 'menu') return menu.menuWeek(state).map(dayNode);
-  return ui.view === 'recipes' ? recipes.searchRecipes(state, ui.query).map(recipeNode) : listNodes(items);
+  return ui.view === 'recipes' ? recipeNodes() : listNodes(items);
 };
 
 // A shop list of Compra with nothing to buy, while other items are still to buy, points to the
@@ -191,7 +198,7 @@ const renderShopDone = (summary) => {
 export const renderList = (summary) => {
   const scoped = viewState();
   const items = ui.view === 'active' ? store.activeItems(scoped) : [];
-  const searchable = ui.view === 'recipes' && state.recipes.length > 0;
+  const searchable = ui.view === 'recipes' && (state.recipes.length > 0 || menu.menuDishes(state).length > 0);
   renderSearch(items, searchable);
   const nodes = nodesOf(items);
   $('items').hidden = ui.view === 'settings';

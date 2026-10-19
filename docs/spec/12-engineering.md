@@ -8,7 +8,7 @@
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store` |
-| `src/menu.js` | Pure menu operations and the fill of `Compra` | `recipes` |
+| `src/menu.js` | Pure menu operations and the fill of `Compra` | `store`, `recipes` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
 | `src/sections.js` | The order of the sections, the rule of the slide between them, the start of a shortcut and what an empty section says and offers, the collapse of the `+` button on a scroll | nothing |
 | `src/layers.js` | The layers over a section: whether a sheet is open, and the top layer that `Escape` and the back close (`closeTop`) | nothing |
@@ -28,7 +28,7 @@
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `shops`, `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `store`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
-| `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `store`, `recipes`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows` |
+| `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `store`, `recipes`, `menu`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes`, `ui/nav` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The list `Compra`: rows, search, shop lists, the dock and its shop picker, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |

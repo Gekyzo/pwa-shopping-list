@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem } from '#store';
 import { addRecipe, addRecipeProduct } from '#recipes';
-import { DAYS, MEALS, setMeal, setDish, dishToRecipe, clearMeal, clearMenu, mealCount, menuWeek, fillMenu } from '#menu';
+import { DAYS, MEALS, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, menuWeek, fillMenu } from '#menu';
 
 let counter = 0;
 const newId = () => `id-${++counter}`;
@@ -227,14 +227,14 @@ test('fillMenu rejects a menu of dishes only', () => {
   assert.equal(result.state, planned);
 });
 
-test('dishToRecipe creates the recipe and puts it in each meal of that dish', () => {
+test('dishRecipe creates the recipe and puts it in each meal of that dish', () => {
   const { state: start, lentils } = kitchen();
   const planned = [[0, 'lunch', 'Paella'], [3, 'dinner', 'paella'], [4, 'lunch', 'Gazpacho']].reduce(
     (current, [day, meal, name]) => setDish(current, day, meal, name).state,
     plan(start, [[1, 'lunch', lentils]]),
   );
   const before = structuredClone(planned);
-  const { state, id, error } = dishToRecipe(planned, 0, 'lunch', () => 'paella-id');
+  const { state, id, error } = dishRecipe(planned, 'Paella', () => 'paella-id');
   assert.equal(error, undefined);
   assert.equal(id, 'paella-id');
   assert.deepEqual(state.recipes.at(-1), { id: 'paella-id', name: 'Paella', products: [], url: '' });
@@ -247,21 +247,49 @@ test('dishToRecipe creates the recipe and puts it in each meal of that dish', ()
   assert.deepEqual(planned, before);
 });
 
-test('dishToRecipe takes the recipe of the same name when it exists', () => {
+test('dishRecipe takes the recipe of the same name when it exists', () => {
   const { state: start, lentils } = kitchen();
   const planned = setDish(start, 5, 'dinner', 'LENTILS').state;
-  const { state, id } = dishToRecipe(planned, 5, 'dinner', newId);
+  const { state, id } = dishRecipe(planned, 'LENTILS', newId);
   assert.equal(id, lentils);
   assert.equal(state.recipes, planned.recipes);
   assert.deepEqual(state.menu, [{ day: 5, meal: 'dinner', recipe: lentils }]);
 });
 
-test('dishToRecipe rejects a meal with no dish', () => {
+const withDishes = (state, entries) => entries.reduce((current, [day, meal, name]) => setDish(current, day, meal, name).state, state);
+
+test('menuDishes gives each dish of the menu one time, in menu order, with its number of meals', () => {
   const { state: start, lentils } = kitchen();
-  const planned = plan(start, [[0, 'lunch', lentils]]);
-  for (const [day, meal] of [[0, 'lunch'], [0, 'dinner']]) {
-    const result = dishToRecipe(planned, day, meal, newId);
-    assert.deepEqual(result.error, { key: 'error.dishNotFound' }, `${day} ${meal}`);
-    assert.equal(result.state, planned);
-  }
+  const state = withDishes(plan(start, [[0, 'lunch', lentils]]), [[4, 'lunch', 'Pisto'], [1, 'dinner', 'Paella'], [5, 'lunch', 'PAELLA']]);
+  assert.deepEqual(menuDishes(state), [
+    { name: 'Paella', meals: 2 },
+    { name: 'Pisto', meals: 1 },
+  ]);
+});
+
+test('menuDishes keeps the dishes whose name contains the query, with no case or accent distinction', () => {
+  const { state: start } = kitchen();
+  const state = withDishes(start, [[0, 'lunch', 'Paella'], [0, 'dinner', 'Crema de calabacín']]);
+  assert.deepEqual(menuDishes(state, ' CALABACIN ').map(({ name }) => name), ['Crema de calabacín']);
+  assert.deepEqual(menuDishes(state, 'xyz'), []);
+  assert.deepEqual(menuDishes(kitchen().state), []);
+});
+
+test('dishRecipe turns a dish into a recipe by its name', () => {
+  const { state: start } = kitchen();
+  const planned = withDishes(start, [[0, 'lunch', 'Paella'], [2, 'dinner', 'paella']]);
+  const { state, id } = dishRecipe(planned, 'PAELLA', () => 'paella-id');
+  assert.equal(id, 'paella-id');
+  assert.equal(state.recipes.at(-1).name, 'Paella');
+  assert.deepEqual(state.menu, [
+    { day: 0, meal: 'lunch', recipe: 'paella-id' },
+    { day: 2, meal: 'dinner', recipe: 'paella-id' },
+  ]);
+});
+
+test('dishRecipe rejects a name that is no dish of the menu', () => {
+  const { state: start } = kitchen();
+  const result = dishRecipe(start, 'Paella', newId);
+  assert.deepEqual(result.error, { key: 'error.dishNotFound' });
+  assert.equal(result.state, start);
 });

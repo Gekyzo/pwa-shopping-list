@@ -1,4 +1,5 @@
 import * as recipes from '#recipes';
+import * as menu from '#menu';
 import { $, el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
 import { icon, iconButton, bindField, flashSaved, applySaved, clearSaved } from '#ui/controls';
 import { leaveNode } from '#ui/motion';
@@ -120,6 +121,33 @@ export const recipeNode = (recipe) => {
   node.dataset.key = `recipe:${recipe.id}`;
   const right = { run: () => sendToList(recipe), icon: 'cart-add' };
   node.append(swipeBox({ id: recipe.id, row, end: [deleteAction(recipe, node)], right }).box);
+  return node;
+};
+
+// A dish of the menu with no recipe becomes a recipe, and its sheet opens for the products. `show`
+// runs between the two, to change the section.
+export const recipeFromDish = (name, show = () => {}) => {
+  const result = menu.dishRecipe(state, name);
+  if (!apply(result, { undoText: t('toast.recipeCreated', { name }) })) return;
+  show();
+  openRecipe(state.recipes.find((recipe) => recipe.id === result.id));
+};
+
+// A row of a dish of the menu with no recipe: a tap on the name or on the end button creates its
+// recipe.
+export const dishNode = ({ name, meals }) => {
+  const label = t('row.createRecipe', { name });
+  const create = () => recipeFromDish(name);
+  const nameButton = el('button', { type: 'button', className: 'item-row-name', onclick: create }, [
+    el('span', { className: 'item-row-label', textContent: name }),
+    el('small', { className: 'item-row-meta', textContent: t('count.menuMeals', { count: meals }) }),
+  ]);
+  const end = el('button', { type: 'button', className: 'button icon', title: t('menu.toRecipe'), onclick: create }, [icon('book')]);
+  end.setAttribute('aria-label', label);
+  // The layers of a recipe row with no side menu: the dish has no slide.
+  const body = el('div', { className: 'item-row-body' }, [nameButton, el('div', { className: 'item-row-end' }, [end])]);
+  const node = el('li', { className: 'item-row dish' }, [el('div', { className: 'item-row-swipe' }, [body])]);
+  node.dataset.key = `dish:${name.toLowerCase()}`;
   return node;
 };
 
