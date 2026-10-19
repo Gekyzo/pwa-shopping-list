@@ -9,7 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- In **Compra** by recipe, an item of two recipes shows **También en «recipe»** below its name in each group, so the two rows read as one product.
 
 ## 1.1.0 - 2026-10-19
 

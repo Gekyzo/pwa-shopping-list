@@ -41,6 +41,7 @@ export default {
   'row.repeat': 'Ripeti',
   'row.noRepeat': 'Non ripetere',
   'row.repeats': '↻ a ogni spesa',
+  'row.alsoIn': 'Anche in {recipes}',
   'edit.title': 'Modifica',
   'edit.done': 'Fatto',
   'edit.name': 'Nome',

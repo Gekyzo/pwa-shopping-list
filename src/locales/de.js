@@ -41,6 +41,7 @@ export default {
   'row.repeat': 'Wiederholen',
   'row.noRepeat': 'Nicht wiederholen',
   'row.repeats': '↻ bei jedem Einkauf',
+  'row.alsoIn': 'Auch in {recipes}',
   'edit.title': 'Bearbeiten',
   'edit.done': 'Fertig',
   'edit.name': 'Name',

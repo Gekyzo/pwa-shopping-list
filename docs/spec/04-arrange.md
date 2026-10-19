@@ -53,6 +53,10 @@ the arrange sheet in `src/ui/arrange.js`.
 - **GROUP-6** The members of a group are the items of `Compra` whose name is a product of the
   recipe, with no case distinction. A group with no member does not show.
 - **GROUP-7** An item of two recipes shows in the two groups. One tick takes it out of both.
+- **GROUP-20** A row of an item to buy that shows in two recipe groups or more adds
+  `También en «recipes»` below its name: the names of the other groups, in group order, joined by
+  `, `. So two rows read as one product. The groups count before a search, so a search keeps the
+  text.
 - **GROUP-8** The head of a group shows the name of the recipe and `ticked/total`, or `✓` when all
   its members are ticked. The group lists only the members to buy.
 - **GROUP-9** The items to buy that are in no group show below the head `Otros`.
