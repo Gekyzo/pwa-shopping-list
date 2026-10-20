@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.2.3 - 2026-10-20
+
 - The bottom bar shows the icon of each section with no name.
 - The icon of `Ajustes` is a gear.
 - The search of `Recetas` opens from a search button, as the search of `Compra`: in the bar
