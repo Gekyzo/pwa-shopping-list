@@ -10,6 +10,7 @@ no change for the user has no entry.
 ## Unreleased
 
 - The bottom bar shows the icon of each section with no name.
+- The icon of `Ajustes` is a gear.
 
 ## 1.2.2 - 2026-10-19
 
