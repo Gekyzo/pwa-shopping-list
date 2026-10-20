@@ -99,7 +99,7 @@
     }
   }
 
-  /* Below 600px the dock of Compra holds the search, so the header has no search button. */
+  /* Below 600px the dock holds the search, so the header has no search button. */
   body:has(.dock:not([hidden])) .app-header .button.icon[aria-controls="search"] {
     display: none;
   }
@@ -290,7 +290,7 @@
     border-bottom: 1px solid var(--line);
   }
 
-  /* Below 600px the dock of Compra holds the shop list and the search. */
+  /* Below 600px the dock holds the shop list of Compra and the search. */
   body:has(.dock:not([hidden])) .shop-lists,
   body:has(.dock:not([hidden])) .search {
     display: none;

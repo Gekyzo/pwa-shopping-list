@@ -49,6 +49,11 @@ export const shortcutStart = (name) => {
   return name === 'add' ? { view: 'active', add: true } : { view: name, add: false };
 };
 
+// True for a section that has a search: Compra with an item, Recetas with a recipe or a dish of
+// the menu. `items` counts the items of Compra, `recipes` the recipes and the dishes.
+export const canSearch = (view, { items, recipes }) =>
+  (view === 'active' && items > 0) || (view === 'recipes' && recipes > 0);
+
 // What an empty section says and offers. `title` and `text` are keys of the catalog, `title` null for
 // a search with no match and for Compra, whose header already says that it is empty. `action` is the next step as a button: `create-recipe`,
 // `add-query` or `add-item`; null when the add button of the screen is the action (or nothing is).

@@ -6,7 +6,7 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/ui/`, `src/swipe.js` and
 
 From top to bottom: the header (ring, title, subtitle, search button, arrange button, trip
 button), the content of the section, the `+` button above the bottom bar, and the bottom bar.
-Below 600px wide the dock of `Compra` stands between the `+` button and the bottom bar (SHOP-26),
+Below 600px wide the dock of `Compra` and `Recetas` stands between the `+` button and the bottom bar (SHOP-26),
 and the header has no search button while the dock shows. The title keeps one line, with an
 ellipsis. The message shows below the top
 edge. A sheet comes up from the bottom, over a veil. The walkthrough of the first start covers all
@@ -23,7 +23,7 @@ the bottom bar at each width.
   section shows its icon with no name, and no count. Its name is the label of its button for a
   screen reader.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
-  edit, clears the recipe search and closes the search of a list (LIST-24).
+  edit, and closes the search (LIST-24, REC-26).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
   vertical part at least. It stops at `Compra` and at `Ajustes`.

@@ -11,7 +11,7 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   with no case distinction (`error.duplicateRecipe`).
 - **REC-3** The `+` button in `Recetas` opens the add sheet with the field `Nombre de la receta`
   and the button **Crear**, with no target choice. The new recipe opens its sheet (REC-33), with
-  the cursor in its product field, and the search is cleared.
+  the cursor in its product field, and the search closes.
 - **REC-4** A recipe row shows the name and, below it, the meta line `N productos`, then
   `en la lista` when REC-35 applies and `con enlace` when the recipe has a link (REC-15), joined by
   ` · `. A tap on the name opens the sheet of the recipe (REC-33). The send button of REC-17 stays at the
@@ -86,13 +86,16 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 
 ## Search
 
-- **REC-23** The field **Buscar receta o producto** shows when one recipe or one dish of the menu
-  (REC-36) exists at least. It filters the list while the user types.
+- **REC-23** `Recetas` has a search when one recipe or one dish of the menu (REC-36) exists at
+  least. It opens and closes as the search of `Compra`: from 600px wide with the search button of
+  the header (LIST-20, LIST-21), below 600px with the search button of the dock (SHOP-26, LIST-37).
+  The field is **Buscar receta o producto**. It filters the list while the user types.
 - **REC-24** A recipe matches when its name or one of its products contains the text, with no case
   and no accent distinction. A dish matches when its name contains the text. An empty text shows
   all recipes and all dishes.
 - **REC-25** With no match the list shows `Ninguna receta coincide con «text».`
-- **REC-26** The text of the search is not stored. A change of section clears it.
+- **REC-26** The text of the search is not stored. A change of section closes the search and
+  clears its text.
 
 ## Sample recipe
 
