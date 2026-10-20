@@ -173,7 +173,7 @@ export default {
   'settings.tripEnd': 'Ao terminar a compra',
   'settings.tripEndHint': 'Escolhe o que acontece aos artigos não comprados: descartá-los ou adiá-los para a próxima compra.',
   'onboarding.recipes.title': 'O que comemos esta semana?',
-  'onboarding.recipes.text': 'Guarde as suas receitas uma vez e envie os ingredientes para `{active}` com `#cart-add`.\nNo `#menu Menu` organiza a semana e enche o cesto de uma vez.',
+  'onboarding.recipes.text': 'Guarde as suas receitas uma vez e envie os ingredientes para `{active}` com `#cart-add`.\nNo `Menu` organiza a semana e enche o cesto de uma vez.',
   'onboarding.icon.cart-add': 'Enviar para a lista',
   'onboarding.sample.title': 'Uma receita para começar',
   'onboarding.sample.text': 'Adicionamos «{name}» e os seus ingredientes às `{active}` para que veja como funciona.\nPode apagá-la nas `Definições`.',
