@@ -20,7 +20,7 @@ the bottom bar at each width.
 
 - **NAV-1** The bottom bar has four sections, in this order: `Compra`, `Recetas`, `Menú`,
   `Ajustes`. The app starts in `Compra`. A
-  section shows no count.
+  section shows its name with no icon, and no count. The current section has a pill behind its name.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
   edit, clears the recipe search and closes the search of a list (LIST-24).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for

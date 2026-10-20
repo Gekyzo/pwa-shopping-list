@@ -173,7 +173,7 @@ export default {
   'settings.tripEnd': 'Alla fine della spesa',
   'settings.tripEndHint': 'Scegli cosa succede agli articoli non comprati: scartarli o rimandarli alla prossima spesa.',
   'onboarding.recipes.title': 'Cosa mangiamo questa settimana?',
-  'onboarding.recipes.text': 'Scrivi le tue ricette una volta e invia i loro ingredienti in `{active}` con `#cart-add`.\nIn `#menu Menù` organizzi la settimana e riempi il cestino in un colpo.',
+  'onboarding.recipes.text': 'Scrivi le tue ricette una volta e invia i loro ingredienti in `{active}` con `#cart-add`.\nIn `Menù` organizzi la settimana e riempi il cestino in un colpo.',
   'onboarding.icon.cart-add': 'Invia alla lista',
   'onboarding.sample.title': 'Una ricetta per iniziare',
   'onboarding.sample.text': 'Aggiungiamo «{name}» e i suoi ingredienti alla `{active}` per farti vedere come funziona.\nPuoi eliminarla in `Impostazioni`.',

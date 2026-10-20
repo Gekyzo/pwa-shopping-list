@@ -9,7 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- The bottom bar shows the name of each section with no icon. The pill of the current section is behind its name.
 
 ## 1.2.2 - 2026-10-19
 
