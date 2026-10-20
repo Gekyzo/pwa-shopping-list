@@ -299,11 +299,13 @@ test('recipeGroups drops a ticked item from each group and keeps it in the total
   assert.deepEqual(names(rest), ['Bread']);
 });
 
-test('recipeGroups keeps a group whose items are all ticked', () => {
-  const { state, id } = withRecipe(emptyState(), 'Toast', ['Bread']);
-  const sent = sendRecipe(state, id, newId).state;
-  const ticked = toggleBought(sent, sent.items[0].id).state;
-  assert.deepEqual(recipeGroups(ticked).groups.map(({ items, total }) => [items, total]), [[[], 1]]);
+test('recipeGroups drops a group whose items are all ticked, sent or not', () => {
+  const toast = withRecipe(emptyState(), 'Toast', ['Bread']);
+  const sent = sendRecipe(toast.state, toast.id, newId).state;
+  const { state } = withRecipe(sent, 'Sandwich', ['Bread']);
+  const ticked = toggleBought(state, state.items[0].id).state;
+  assert.deepEqual(recipeGroups(ticked), { groups: [], rest: [] });
+  assert.deepEqual(groupNames(toggleBought(ticked, state.items[0].id).state), ['Toast', 'Sandwich']);
 });
 
 test('recipeGroups matches an item added by hand without case distinction', () => {

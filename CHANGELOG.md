@@ -13,6 +13,7 @@ no change for the user has no entry.
 - The icon of `Ajustes` is a gear.
 - The search of `Recetas` opens from a search button, as the search of `Compra`: in the bar
   above the bottom bar on a phone, in the header on a wider screen.
+- In `Compra` by recipe, a recipe whose products are all ticked no longer shows its group.
 
 ## 1.2.2 - 2026-10-19
 

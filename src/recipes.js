@@ -119,7 +119,7 @@ export const inList = (state, recipe) => allIn(recipe, activeNames(state.items))
 // The Active list by recipe: the sent recipes in send order, then each other recipe whose
 // products are all in Active. An item of two recipes is in the two groups. `items` are the
 // members still to buy, `total` counts the ticked members too, and `rest` holds the items
-// to buy that are in no group.
+// to buy that are in no group. A group with nothing left to buy does not show.
 export const recipeGroups = (state) => {
   const active = sortItems(state, state.items.filter((item) => item.list === 'active'));
   const inActive = activeNames(active);
@@ -134,7 +134,7 @@ export const recipeGroups = (state) => {
       members.forEach((item) => grouped.add(item.id));
       return { recipe, items: members.filter((item) => !item.bought), total: members.length };
     })
-    .filter((group) => group.total > 0);
+    .filter((group) => group.items.length > 0);
   const rest = active.filter((item) => !item.bought && !grouped.has(item.id));
   return { groups, rest };
 };
