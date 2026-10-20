@@ -277,31 +277,6 @@
     gap: var(--space-2);
   }
 
-  /* @component nav-label
-     @summary The name of a section of the bottom bar, with no icon (NAV-1). In the current section the pill is behind it.
-     @example <nav class="nav-bar" style="width: 100%"><button class="nav-item" type="button" aria-current="page"><span class="nav-label">Compra</span></button><button class="nav-item" type="button"><span class="nav-label">Recetas</span></button></nav> */
-  .nav-label {
-    font-size: var(--text-s);
-  }
-
-  .nav-item[aria-current="page"] .nav-label {
-    padding: var(--space-1) var(--space-4);
-    border-radius: var(--radius-pill);
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
-
-  /* The rail is narrower than a section of the bottom bar. */
-  @media (min-width: 600px) {
-    .nav-label {
-      font-size: var(--text-xs);
-    }
-
-    .nav-item[aria-current="page"] .nav-label {
-      padding-inline: var(--space-2);
-    }
-  }
-
 }
 
 @layer screens {

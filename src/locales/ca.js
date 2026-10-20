@@ -173,7 +173,7 @@ export default {
   'settings.tripEnd': 'En acabar la compra',
   'settings.tripEndHint': 'Tria què passa amb els articles no comprats: descartar-los o ajornar-los a la propera compra.',
   'onboarding.recipes.title': 'Què mengem aquesta setmana?',
-  'onboarding.recipes.text': 'Apunta les teves receptes un cop i envia’n els ingredients a `{active}` amb `#cart-add`.\nA `Menú` organitzes la setmana i omples la cistella de cop.',
+  'onboarding.recipes.text': 'Apunta les teves receptes un cop i envia’n els ingredients a `{active}` amb `#cart-add`.\nA `#menu Menú` organitzes la setmana i omples la cistella de cop.',
   'onboarding.icon.cart-add': 'Enviar a la llista',
   'onboarding.sample.title': 'Una recepta per començar',
   'onboarding.sample.text': 'Afegim «{name}» i els seus ingredients a `{active}` perquè vegis com funciona.\nLa pots esborrar a `Configuració`.',
