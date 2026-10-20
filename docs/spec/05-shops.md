@@ -75,7 +75,8 @@ apply in it.
   (`nextShop`); `‹` the one before it (`previousShop`). An arrow with no such list is off. With no
   chip (SHOP-17) or with the row hidden (SHOP-25) the dock holds only the search button. A slide on
   the dock does not change the section (NAV-4). With `Izquierda` the search button is at the left,
-  and `‹` stays before the chip.
+  and `‹` stays before the chip. In `Recetas` the dock holds only the search button, while the
+  section has a search (REC-23).
 - **SHOP-27** A tap on the chip of the dock opens the shop picker, a sheet with the title `Listas
   por tienda` and one entry for each chip of SHOP-16, with `Quedan N artículos` or `Todo comprado`
   below its name. The entry of the list in view is pressed. A tap on an entry shows that list and

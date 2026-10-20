@@ -94,7 +94,7 @@ const submitRecipe = () => {
     return;
   }
   // The new recipe opens its sheet, with the cursor in its product field.
-  Object.assign(ui, { sheetOpen: false, recipeId: result.id, focusProduct: true, query: '' });
+  Object.assign(ui, { sheetOpen: false, recipeId: result.id, focusProduct: true, query: '', searchOpen: false });
   ui.bringKeys.add(`recipe:${result.id}`);
   apply(result);
 };

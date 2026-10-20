@@ -11,6 +11,8 @@ no change for the user has no entry.
 
 - The bottom bar shows the icon of each section with no name.
 - The icon of `Ajustes` is a gear.
+- The search of `Recetas` opens from a search button, as the search of `Compra`: in the bar
+  above the bottom bar on a phone, in the header on a wider screen.
 
 ## 1.2.2 - 2026-10-19
 

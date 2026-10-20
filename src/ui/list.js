@@ -3,7 +3,7 @@ import * as recipes from '#recipes';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
-import { emptyAction } from '#sections';
+import { canSearch, emptyAction } from '#sections';
 import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { icon } from '#ui/controls';
@@ -142,19 +142,23 @@ const renderEmpty = (shown) => {
   secondaryRun = runs[secondary] ?? null;
 };
 
-// One field serves the three sections: Recetas shows it when it has a recipe, and a list shows it
-// after a tap on the search button, which a list with no item does not have.
-const renderSearch = (items, searchable) => {
-  const canOpen = inList() && items.length > 0;
-  if (!canOpen) ui.searchOpen = false;
-  const shown = searchable || ui.searchOpen;
-  if (!shown) ui.query = '';
+// The search of Compra and Recetas: a tap on the search button opens it, in the header from 600px
+// and in the dock below. A section with nothing to search has no search button.
+const searchable = () => canSearch(ui.view, {
+  items: store.activeItems(viewState()).length,
+  recipes: state.recipes.length + menu.menuDishes(state).length,
+});
+
+const searchLabel = () => t(inList() ? 'search.items' : 'recipes.search');
+
+const renderSearch = () => {
+  const canOpen = searchable();
+  if (!canOpen) Object.assign(ui, { searchOpen: false, query: '' });
   $('search-button').hidden = !canOpen;
   $('search-button').setAttribute('aria-expanded', String(ui.searchOpen));
-  $('search').hidden = !shown;
-  const label = t(inList() ? 'search.items' : 'recipes.search');
-  $('query').placeholder = label;
-  $('query').setAttribute('aria-label', label);
+  $('search').hidden = !ui.searchOpen;
+  $('query').placeholder = searchLabel();
+  $('query').setAttribute('aria-label', searchLabel());
   // The field is not built again by a render, so it keeps the cursor. Write it only after a reset.
   if ($('query').value !== ui.query) $('query').value = ui.query;
 };
@@ -198,8 +202,7 @@ const renderShopDone = (summary) => {
 export const renderList = (summary) => {
   const scoped = viewState();
   const items = ui.view === 'active' ? store.activeItems(scoped) : [];
-  const searchable = ui.view === 'recipes' && (state.recipes.length > 0 || menu.menuDishes(state).length > 0);
-  renderSearch(items, searchable);
+  renderSearch();
   const nodes = nodesOf(items);
   $('items').hidden = ui.view === 'settings';
   $('items').replaceChildren(...nodes);
@@ -265,14 +268,14 @@ const pickShop = (shop) => {
   render();
 };
 
-// The dock of Compra below 600px (styles.css hides it from 600px): the shop list in view between the
+// The dock below 600px (styles.css hides it from 600px): in Compra the shop list in view between the
 // arrows of the previous and the next list, and the search button; while the search is open, the
-// search field and Cancelar. It shows while Compra has an item.
+// search field and Cancelar. It shows while the section has a search; Recetas has no shop list.
 export const renderDock = () => {
-  const shown = inList() && store.activeItems(state).length > 0;
+  const shown = inList() ? store.activeItems(state).length > 0 : searchable();
   $('dock').hidden = !shown;
   if (!shown) return;
-  const chips = shopLists === 'show' ? shops.shopChips(state) : [];
+  const chips = inList() && shopLists === 'show' ? shops.shopChips(state) : [];
   const search = ui.searchOpen;
   $('dock').classList.toggle('searching', search);
   for (const id of ['dock-prev', 'dock-shop', 'dock-next']) $(id).hidden = search || chips.length === 0;
@@ -281,6 +284,8 @@ export const renderDock = () => {
   $('dock-field').hidden = !search;
   $('dock-cancel').hidden = !search;
   $('dock-clear').hidden = ui.query === '';
+  $('dock-query').placeholder = searchLabel();
+  $('dock-query').setAttribute('aria-label', searchLabel());
   if ($('dock-query').value !== ui.query) $('dock-query').value = ui.query;
   if (!chips.length) return;
   const current = chips.find((chip) => chip.shop === ui.shop) ?? chips[0];
@@ -364,7 +369,7 @@ export const bind = () => {
     render();
     $('query').focus();
   });
-  // An empty field of a list that loses the focus closes. The field of Recetas stays.
+  // An empty field that loses the focus closes.
   $('query').addEventListener('blur', () => {
     if (ui.searchOpen && !ui.query.trim()) closeSearch();
   });

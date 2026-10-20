@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SECTIONS, SHORTCUTS, direction, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
+import { SECTIONS, SHORTCUTS, canSearch, direction, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
 
 test('SECTIONS has the order of the bottom bar', () => {
   assert.deepEqual(SECTIONS, ['active', 'recipes', 'menu', 'settings']);
@@ -132,6 +132,18 @@ test('emptyAction of a search that is only spaces is the empty list', () => {
 test('emptyAction of a recipe search with no match has no action', () => {
   const result = emptyAction('recipes', { query: 'xyz', hasRecipes: true, sample: false });
   assert.deepEqual(result, { title: null, text: 'empty.noMatch', action: null, secondary: null });
+});
+
+test('canSearch is true for Compra with an item and for Recetas with a recipe or a dish', () => {
+  assert.equal(canSearch('active', { items: 1, recipes: 0 }), true);
+  assert.equal(canSearch('recipes', { items: 0, recipes: 1 }), true);
+});
+
+test('canSearch is false for an empty Compra, an empty Recetas, Menú and Ajustes', () => {
+  assert.equal(canSearch('active', { items: 0, recipes: 3 }), false);
+  assert.equal(canSearch('recipes', { items: 3, recipes: 0 }), false);
+  assert.equal(canSearch('menu', { items: 3, recipes: 3 }), false);
+  assert.equal(canSearch('settings', { items: 3, recipes: 3 }), false);
 });
 
 test('emptyAction of an empty list has no title, as the header says it is empty; with the sample recipe it adds an item, and its ingredients second', () => {
