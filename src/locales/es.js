@@ -223,6 +223,7 @@ export default {
   'toast.finished': 'Compra terminada.',
   'toast.deleted': '"{name}" eliminado.',
   'toast.bought': '"{name}" comprado.',
+  'toast.recipeBought': { one: '«{name}»: {count} producto comprado.', other: '«{name}»: {count} productos comprados.' },
   'toast.order': 'Orden cambiado.',
   'toast.orderCustom': 'Orden cambiado a «Personalizado».',
   'toast.sent': '«{name}»: {summary}.',

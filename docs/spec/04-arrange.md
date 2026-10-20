@@ -60,6 +60,11 @@ the arrange sheet in `src/ui/arrange.js`.
 - **GROUP-8** The head of a group shows the name of the recipe and `ticked/total`, or `✓` when all
   its members are ticked. The group lists only the members to buy. A recipe group whose members are
   all ticked does not show; a member that loses its tick shows it again.
+- **GROUP-21** A slide of the head of a recipe group to the right ticks each member of the group
+  that is still to buy, with the rules and the backdrop of ROW-11 and the icon `check`. In a shop
+  list it ticks only the members of that list. The rows close, then the group goes (GROUP-8). The
+  message is `«name»: N productos comprados.` with `Deshacer`. A search stops the slide. A tap on
+  the head still closes and opens the group (GROUP-16).
 - **GROUP-9** The items to buy that are in no group show below the head `Otros`.
 - **GROUP-10** The ticked items show one time each in `Comprados (N)`, with no group.
 

@@ -266,6 +266,17 @@
     text-transform: inherit;
   }
 
+  /* A recipe head slides to the right as a row does (GROUP-21): the button fills the sliding body. */
+  .group-head:has(> .item-row-swipe) {
+    display: block;
+    padding: 0;
+  }
+
+  .group-head .item-row-swipe .item-row-body {
+    min-height: var(--tap);
+    padding: 0;
+  }
+
   /* A search shows each group open and disables its head (GROUP-16); the head keeps its colour. */
   .group-head-button:disabled {
     opacity: 1;

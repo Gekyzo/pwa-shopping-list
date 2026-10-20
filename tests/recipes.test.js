@@ -11,6 +11,7 @@ import {
   isWebUrl,
   sendRecipe,
   recipeGroups,
+  buyRecipe,
   sharedItems,
   productSuggestions,
   inList,
@@ -306,6 +307,43 @@ test('recipeGroups drops a group whose items are all ticked, sent or not', () =>
   const ticked = toggleBought(state, state.items[0].id).state;
   assert.deepEqual(recipeGroups(ticked), { groups: [], rest: [] });
   assert.deepEqual(groupNames(toggleBought(ticked, state.items[0].id).state), ['Toast', 'Sandwich']);
+});
+
+test('buyRecipe ticks each item of the recipe still to buy, and only those', () => {
+  const { state, omelette } = twoSent();
+  const potatoes = find(state, 'Potatoes');
+  const ticked = toggleBought(state, potatoes.id).state;
+  const result = buyRecipe(ticked, omelette);
+  assert.equal(result.count, 1);
+  const bought = (name) => find(result.state, name).bought;
+  assert.deepEqual(['Eggs', 'Potatoes', 'Milk', 'Bread'].map(bought), [true, true, false, false]);
+  assert.deepEqual(groupNames(result.state), ['Flan']);
+});
+
+test('buyRecipe matches the items without case distinction and skips a saved item', () => {
+  const items = withItem(withItem(emptyState(), 'EGGS', 'active'), 'Potatoes', 'saved');
+  const { state, id } = withRecipe(items, 'Omelette', ['Eggs', 'Potatoes']);
+  const result = buyRecipe(state, id);
+  assert.equal(result.count, 1);
+  assert.deepEqual(result.state.items.map(({ name, bought }) => [name, bought]), [['EGGS', true], ['Potatoes', false]]);
+});
+
+test('buyRecipe ticks only the items of the scope', () => {
+  const { state, omelette } = twoSent();
+  const scope = { ...state, items: state.items.filter((item) => item.name !== 'Potatoes') };
+  const result = buyRecipe(state, omelette, scope);
+  assert.equal(result.count, 1);
+  assert.deepEqual([find(result.state, 'Eggs').bought, find(result.state, 'Potatoes').bought], [true, false]);
+});
+
+test('buyRecipe with nothing to buy returns the same state', () => {
+  const { state, id } = withRecipe(emptyState(), 'Toast', ['Bread']);
+  assert.deepEqual(buyRecipe(state, id), { state, count: 0 });
+});
+
+test('buyRecipe rejects an unknown recipe', () => {
+  const state = emptyState();
+  assert.deepEqual(buyRecipe(state, 'nope'), { state, error: { key: 'error.recipeNotFound' } });
 });
 
 test('recipeGroups matches an item added by hand without case distinction', () => {

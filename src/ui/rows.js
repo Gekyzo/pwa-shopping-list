@@ -262,7 +262,9 @@ const groupRows = (key) => [...document.querySelectorAll('#items .item-row')].fi
 
 // The head of a group: its title, its count and a chevron. A tap closes the rows of the group, and a
 // second tap opens them. A search shows each group open. With no key the head does not close.
-export const groupHead = (title, count, key = null) => {
+// `right` is { run, icon } for a head that slides to the right, as a row does (GROUP-21); a search
+// stops the slide.
+export const groupHead = (title, count, key = null, right = null) => {
   if (key === null) return el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
   const id = `${ui.view}:${key}`;
   const open = !ui.closedGroups.has(id) || searching();
@@ -287,7 +289,9 @@ export const groupHead = (title, count, key = null) => {
     el('span', { className: 'group-head-end' }, [el('span', { textContent: count }), el('span', { className: 'chevron', textContent: open ? '▾' : '▸' })]),
   ]);
   button.setAttribute('aria-expanded', String(open));
-  return el('li', { className: 'group-head' }, [button]);
+  if (!right || searching()) return el('li', { className: 'group-head' }, [button]);
+  const { box } = swipeBox({ id: `head:${key}`, row: [button], end: [], right });
+  return el('li', { className: 'group-head' }, [box]);
 };
 
 // The rows of a group under its head, or none while the group is closed.
