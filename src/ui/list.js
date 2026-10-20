@@ -10,6 +10,7 @@ import { icon } from '#ui/controls';
 import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
 import { recipeNode, dishNode, sendToList } from '#ui/recipes';
 import { dayNode } from '#ui/menu';
+import { leaveNode } from '#ui/motion';
 import { openSheet, addQuery } from '#ui/add';
 import { showView } from '#ui/nav';
 
@@ -48,6 +49,16 @@ const aisleNodes = () => {
   return [...grouped, ...others];
 };
 
+// The slide of a recipe head ticks the items of the group still to buy: their rows close, then the
+// group goes (GROUP-21).
+const buyGroup = (recipe) => {
+  const rows = [...$('items').querySelectorAll('.item-row')].filter((node) => node.dataset.group === recipe.id);
+  leaveNode(`head:${recipe.id}`, rows, () => {
+    const result = recipes.buyRecipe(state, recipe.id, viewState());
+    apply(result, { undoText: t('toast.recipeBought', { name: recipe.name, count: result.count }) });
+  });
+};
+
 // The items of Compra still to buy: flat, below the recipe that asks for each one, below the shop
 // of each one, or below the aisle of each one.
 const pendingNodes = () => {
@@ -63,7 +74,7 @@ const pendingNodes = () => {
   const also = (item, recipe) => (shared.get(item.id) ?? []).filter((name) => name !== recipe.name);
   const { groups, rest } = store.filterGroups(view, ui.query);
   const grouped = groups.flatMap(({ recipe, items, total, left }) => [
-    groupHead(recipe.name, groupCount({ left, total }), recipe.id),
+    groupHead(recipe.name, groupCount({ left, total }), recipe.id, { run: () => buyGroup(recipe), icon: 'check' }),
     ...groupNodes(recipe.id, items.map((item) => itemNode(item, recipe.id, also(item, recipe)))),
   ]);
   const others = rest.length ? [groupHead(t('group.others'), '', 'others'), ...groupNodes('others', rest.map((item) => itemNode(item)))] : [];

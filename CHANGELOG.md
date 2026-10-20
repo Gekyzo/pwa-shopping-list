@@ -9,7 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- In `Compra` by recipe, a slide of the head of a recipe to the right ticks all its products.
 
 ## 1.2.3 - 2026-10-20
 

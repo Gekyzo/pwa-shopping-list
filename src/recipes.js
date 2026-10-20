@@ -139,6 +139,19 @@ export const recipeGroups = (state) => {
   return { groups, rest };
 };
 
+// Ticks each item of Active that is a product of the recipe and is still to buy, as the slide of
+// its group head does. `scope` is the state of the list on the screen, such as a shop list: only
+// its items are ticked. `count` is the number of ticked items; with none it returns the same state.
+export const buyRecipe = (state, id, scope = state) => {
+  const recipe = findRecipe(state, id);
+  if (!recipe) return reject(state, NOT_FOUND);
+  const products = new Set(recipe.products.map((product) => product.toLowerCase()));
+  const toBuy = (item) => item.list === 'active' && !item.bought && products.has(item.name.toLowerCase());
+  const ids = new Set(scope.items.filter(toBuy).map((item) => item.id));
+  if (!ids.size) return { state, count: 0 };
+  return { state: { ...state, items: state.items.map((item) => (ids.has(item.id) ? { ...item, bought: true } : item)) }, count: ids.size };
+};
+
 // The names that the product field of a recipe offers for the query: the items, then the products
 // of the recipes, one time each with no case distinction, less the products of the recipe. The
 // exact match goes first, then the names that start with the query, as in `searchItems`.
