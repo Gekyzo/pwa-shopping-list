@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.2.5 - 2026-10-21
+
 - In **Ajustes**, **Al terminar la compra** looks like a switch: a track, and a green knob that slides to **Descartar** or **Aplazar**.
 - In **Ajustes**, the ring of a focused first or last row follows the round corners of its group. Before, the ring of **Idioma** was cut at the top and square at the bottom.
 
