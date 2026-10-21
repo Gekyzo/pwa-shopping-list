@@ -345,26 +345,63 @@
   }
 
   /* @component segmented
-     @summary One choice of two or three, side by side. The chosen segment has aria-pressed="true".
+     @summary One choice of two or three, side by side, drawn as a switch: a track, and a knob that slides to the chosen segment. The chosen segment has aria-pressed="true".
      @part segment  One choice.
      @example <div class="segmented"><button class="segment" type="button" aria-pressed="true">For today</button><button class="segment" type="button" aria-pressed="false">For later</button></div> */
   .segmented {
+    --segment-count: 2;
+    --segment-index: 0;
+    position: relative;
+    isolation: isolate;
     display: flex;
-    gap: var(--space-2);
     margin: var(--space-3) 0 var(--space-1);
+    padding: var(--space-1);
+    border-radius: var(--radius-pill);
+    background: var(--surface-2);
+  }
+
+  .segmented:has(> .segment:nth-child(3)) {
+    --segment-count: 3;
+  }
+
+  .segmented:has(> .segment:nth-child(2)[aria-pressed="true"]) {
+    --segment-index: 1;
+  }
+
+  .segmented:has(> .segment:nth-child(3)[aria-pressed="true"]) {
+    --segment-index: 2;
+  }
+
+  /* The knob: one segment wide, moved by whole segments. It sits under the labels. */
+  .segmented::before {
+    content: '';
+    position: absolute;
+    top: var(--space-1);
+    bottom: var(--space-1);
+    left: var(--space-1);
+    z-index: -1;
+    width: calc((100% - 2 * var(--space-1)) / var(--segment-count));
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    box-shadow: var(--shadow-s);
+    transform: translateX(calc(var(--segment-index) * 100%));
+    transition: transform var(--motion);
+  }
+
+  .segmented:not(:has(> .segment[aria-pressed="true"]))::before {
+    opacity: 0;
   }
 
   .segmented .segment {
     flex: 1;
     min-height: var(--tap);
-    border-radius: var(--radius-m);
-    background: var(--bg);
+    border-radius: var(--radius-pill);
     font-size: var(--text-s);
+    transition: color var(--motion);
   }
 
   .segmented .segment[aria-pressed="true"] {
-    background: var(--accent-soft);
-    color: var(--accent);
+    color: var(--accent-text);
     font-weight: var(--weight-strong);
   }
 
@@ -1460,6 +1497,33 @@
   .list-group.pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+
+  /* The group clips its rows, so a row draws its focus ring inside itself. An end row takes the
+     corners of the group (the radius less the 1px border), so any ring of the row bends with them,
+     also one an app draws on the row for a control inside it. */
+  .list-group > :focus-visible {
+    outline-offset: -2px;
+  }
+
+  .list-group:not(.plain, .pair) > :is(.list-row, .settings-row):first-child {
+    border-start-start-radius: calc(var(--radius-l) - 1px);
+    border-start-end-radius: calc(var(--radius-l) - 1px);
+  }
+
+  .list-group:not(.plain, .pair) > :is(.list-row, .settings-row):last-child {
+    border-end-start-radius: calc(var(--radius-l) - 1px);
+    border-end-end-radius: calc(var(--radius-l) - 1px);
+  }
+
+  .list-group.pair > :is(.list-row, .settings-row):first-child {
+    border-start-start-radius: calc(var(--radius-l) - 1px);
+    border-end-start-radius: calc(var(--radius-l) - 1px);
+  }
+
+  .list-group.pair > :is(.list-row, .settings-row):last-child {
+    border-start-end-radius: calc(var(--radius-l) - 1px);
+    border-end-end-radius: calc(var(--radius-l) - 1px);
   }
 
   .list-group.plain {
