@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.3.4 - 2026-10-23
+
 - In `Secciones de la tienda`, a new name for a section is saved again when the field loses the focus or on `Enter`, and `Escape` puts the old name back.
 
 ## 1.3.3 - 2026-10-23
