@@ -8,14 +8,14 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **SW-1** `src/app.js` registers `sw.js` at each start. With no service worker the app works with
   a connection only.
 - **SW-2** The app shell is the list `SHELL` of `sw.js`: the page, the two stylesheets (DSV-2),
-  the manifest, each module of `src/`, each catalog, `version.json`, the icons of the app and the
+  the font of the design system (`geist.woff2`), the manifest, each module of `src/`, each catalog, `version.json`, the icons of the app and the
   icon sprite `icons.svg`. A file that the app loads and that is not in `SHELL` does not work offline at the
   first start.
 - **SW-3** At its install the worker downloads the full shell past the HTTP cache, so the shell is
   never a mix of two deploys. It then takes control at once (`skipWaiting`, `clients.claim`).
 - **SW-4** At its activation the worker deletes each cache whose name starts with `shopping-`
   and is not the current one or `shopping-manifest` (SW-13). The cache name is
-  `shopping-shell-v17`. A cache of another app of the same origin stays, such as those of Stash
+  `shopping-shell-v18`. A cache of another app of the same origin stays, such as those of Stash
   (`lists-`).
 - **SW-5** The worker answers only `GET` requests of its own origin.
 - **SW-6** A request is answered stale-while-revalidate: the cached copy at once, and a fresh copy
@@ -66,7 +66,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   |---|---|---|---|---|
   | The check runs (VER-5) | Turning arrow, spins | Muted | `Comprobando…` | Hidden |
   | The deployed version is newer than the running one | Down arrow in a circle | Amber | `Versión X.Y.Z disponible` | Shows |
-  | It is the same or older | Check in a circle | Green (accent) | `Al día` | Hidden |
+  | It is the same or older | Check in a circle | Green (`--done`) | `Al día` | Hidden |
   | One of the two is not known | Struck-out cloud | Red (danger) | `Sin conexión` | Hidden |
 
 - **VER-7** Two versions compare by number, part by part: `1.10.0` is newer than `1.9.0`.

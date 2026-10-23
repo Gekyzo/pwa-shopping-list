@@ -1,10 +1,11 @@
-const CACHE = 'shopping-shell-v17';
+const CACHE = 'shopping-shell-v18';
 
 const SHELL = [
   './',
   './index.html',
   './vendor/design-system/design-system.css',
   './vendor/design-system/sheet.js',
+  './vendor/design-system/geist.woff2',
   './styles.css',
   './icons.svg',
   './manifest.webmanifest',

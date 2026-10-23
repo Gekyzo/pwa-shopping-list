@@ -2,6 +2,11 @@
 
 @layer tokens {
   :root {
+    /* The colours of Bodega: terracotta for the one main action, green for progress and the checked state. */
+    --primary: light-dark(#b5451b, #f0905f);
+    --on-primary: light-dark(#ffffff, #1a0f0a);
+    --done: light-dark(#1f7a4d, #5fc491);
+    --on-done: light-dark(#ffffff, #0c1a12);
     --corner-art: 260px; /* the basket in the corner of a list */
     --corner-out: -50px; /* how far the basket goes out of the corner */
     --corner-opacity: 0.06;
@@ -402,7 +407,7 @@
   }
 
   .version-status[data-status='current'] {
-    color: var(--accent);
+    color: var(--done);
   }
 
   .version-status[data-status='outdated'] {
@@ -682,7 +687,7 @@
 
   /* The select is invisible: the row shows the ring when the select has the keyboard focus. */
   .settings .settings-row:has(> .select:focus-visible) {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--text);
     outline-offset: -2px;
   }
 
@@ -728,7 +733,7 @@
      @part onboarding-page     The page in view: on the first page the app icon, then its drawing, its title and its text.
      @part onboarding-title    The title of a page.
      @part onboarding-text     The text of a page.
-     @part onboarding-key      A control named in a text, such as + or an icon: its icon and its name in bold accent text, with no box.
+     @part onboarding-key      A control named in a text, such as + or an icon: its icon and its name in bold --primary text, with no box.
      @part onboarding-dots     One dot for each page.
      @part onboarding-dot      One dot.
      @part onboarding-switch   The switch of the sample data on the last page. It keeps its room on each page.
@@ -843,7 +848,7 @@
   }
 
   .onboarding-key {
-    color: var(--accent);
+    color: var(--primary);
     font-weight: var(--weight-strong);
     white-space: nowrap;
   }
@@ -881,7 +886,7 @@
   }
 
   .onboarding-dot.on {
-    background: var(--accent);
+    background: var(--ink);
   }
 
   .onboarding > .button.wide {
@@ -893,9 +898,9 @@
      @scope onboarding
      @summary The line drawing of a walkthrough page, inline in the page. Its shapes take these parts.
      @part art-card     A card shape, filled with --surface.
-     @part art-accent   An accent stroke.
-     @part art-soft     A soft accent fill.
-     @part art-solid    A solid accent fill.
+     @part art-accent   A --done stroke.
+     @part art-soft     A --done-soft fill with a --done stroke.
+     @part art-solid    A solid --done fill.
      @part art-on-solid A stroke on a solid fill.
      @example <div class="onboarding-art"><svg viewBox="0 0 240 160" aria-hidden="true"><rect class="art-card art-accent" x="20" y="20" width="90" height="120" rx="10"/><circle class="art-solid" cx="160" cy="80" r="13"/><path class="art-on-solid" d="M160 74v12M154 80h12"/></svg></div> */
   .onboarding-art > svg {
@@ -914,20 +919,20 @@
   }
 
   .art-accent {
-    stroke: var(--accent);
+    stroke: var(--done);
   }
 
   .art-soft {
-    fill: var(--accent-soft);
-    stroke: var(--accent);
+    fill: var(--done-soft);
+    stroke: var(--done);
   }
 
   .art-solid {
-    fill: var(--accent);
+    fill: var(--done);
     stroke: none;
   }
 
   .art-on-solid {
-    stroke: var(--accent-text);
+    stroke: var(--on-done);
   }
 }

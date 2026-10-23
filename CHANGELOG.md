@@ -9,6 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- A new look: a stone ground, white lists and the font Geist. The add button is terracotta; the
+  progress, a bought item and `Al día` in **Ajustes** stay green. The head of a group is no longer
+  in capitals. The bar of the phone takes the colour of the ground.
 - `Menú`: **Vaciar menú** stands again beside **Llenar cesta**, at the bottom of the list. The
   header of `Menú` has no `⋮` button and no sheet `Menú`.
 - An empty `Compra` looks like an empty `Recetas`: the title `Aún no hay artículos`, a text and the

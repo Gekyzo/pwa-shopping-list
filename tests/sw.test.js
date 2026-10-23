@@ -88,6 +88,6 @@ test('localizeManifest does not change the shortcuts of its input', () => {
 });
 
 test('the activate keeps the caches of another app', () => {
-  const keys = ['shopping-shell-v16', 'shopping-shell-v17', 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
-  assert.deepEqual(plain(staleCaches(keys)), ['shopping-shell-v16']);
+  const keys = ['shopping-shell-v17', 'shopping-shell-v18', 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
+  assert.deepEqual(plain(staleCaches(keys)), ['shopping-shell-v17']);
 });
