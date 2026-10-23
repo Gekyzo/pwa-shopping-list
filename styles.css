@@ -675,9 +675,9 @@
 
   /* @component settings
      @scope settings
-     @summary The Ajustes section: groups of settings rows (list-group card) under a list-group-head. A row of Preferencias holds a real select laid over it, so a tap opens the native picker.
+     @summary The Ajustes section: full-width groups of settings rows (list-group) under a list-group-head. A row of Preferencias holds a real select laid over it, so a tap opens the native picker.
      @part settings-hint    A line of help below a group head, on a hint.
-     @example <section class="settings" style="width: 100%"><h2 class="list-group-head">Preferencias</h2><div class="list-group card"><div class="settings-row"><span class="settings-row-label">Idioma</span><span class="settings-row-value">Español</span><span class="chevron" aria-hidden="true">›</span><select class="select" aria-label="Idioma"><option>Español</option></select></div></div></section> */
+     @example <section class="settings" style="width: 100%"><h2 class="list-group-head">Preferencias</h2><div class="list-group"><div class="settings-row"><span class="settings-row-label">Idioma</span><span class="settings-row-value">Español</span><span class="chevron" aria-hidden="true">›</span><select class="select" aria-label="Idioma"><option>Español</option></select></div></div></section> */
   .settings-hint {
     padding: 0 var(--space-4) var(--space-2);
     text-align: start;

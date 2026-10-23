@@ -33,7 +33,7 @@ the bottom bar at each width.
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has six groups, each a title above one card of rows: **Copia de seguridad**
+- **NAV-6** `Ajustes` has six groups, each a title above one full-width group of rows: **Copia de seguridad**
   (**Exportar**, **Importar**, **Borrar todos los datos**), **Preferencias** (**Idioma**, **Mano**, **Tema**, **Densidad**),
   **Al terminar la compra** (TRIP-7), **Secciones**, **Aplicación** (**Instalar la aplicación**) and
   **Ayuda** (**Ver la introducción**, **Borrar la receta de ejemplo**). A row is 56 px high or more.
