@@ -29,7 +29,7 @@ import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { endReorder, bind as bindDrag } from '#ui/drag';
 import { moveRow } from '#ui/rows';
 import { renderRecipe, closeRecipe, bind as bindRecipe } from '#ui/recipes';
-import { renderMeal, renderMenuMore, closeMeal, closeMenuMore, bind as bindMenu } from '#ui/menu';
+import { renderMeal, renderMenuActions, closeMeal, bind as bindMenu } from '#ui/menu';
 import { renderArrange, closeArrange, bind as bindArrange } from '#ui/arrange';
 import {
   headerOf,
@@ -109,7 +109,7 @@ const renderAll = () => {
   renderSample();
   renderInstall();
   renderTrip();
-  renderMenuMore();
+  renderMenuActions();
 
   // An action in the empty state replaces the add button.
   $('fab').hidden = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || sheetOpen(ui);
@@ -185,7 +185,6 @@ const closeSheets = () => {
   if (ui.recipeId !== null) closeRecipe();
   if (ui.mealOpen !== null) closeMeal();
   if (ui.tripOpen) closeTrip();
-  if (ui.menuMoreOpen) closeMenuMore();
   if (ui.aislesOpen) closeAisles();
   if (ui.shopPickOpen) closeShopPick();
 };
@@ -266,7 +265,6 @@ const SHEET_CLOSE = {
   arrange: closeArrange,
   trip: closeTrip,
   meal: closeMeal,
-  'menu-more': closeMenuMore,
   edit: closeEdit,
   aisles: closeAisles,
   recipe: closeRecipe,

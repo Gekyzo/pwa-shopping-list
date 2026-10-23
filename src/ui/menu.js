@@ -21,12 +21,6 @@ const openMeal = (day, meal) => {
   render();
 };
 
-export const closeMenuMore = () => {
-  ui.menuMoreOpen = false;
-  render();
-  $('trip-button').focus();
-};
-
 export const closeMeal = () => {
   ui.mealOpen = null;
   render();
@@ -67,9 +61,7 @@ const fillBasket = () => {
   else showToast(t('toast.menuNothing'), { undo: undoState });
 };
 
-export const renderMenuMore = () => {
-  if (ui.view !== 'menu') ui.menuMoreOpen = false;
-  $('menu-more').hidden = !ui.menuMoreOpen;
+export const renderMenuActions = () => {
   $('menu-clear').disabled = menu.mealCount(state) === 0;
 };
 
@@ -143,11 +135,7 @@ const dishToRecipe = () => {
 
 export const bind = () => {
   $('menu-fill').addEventListener('click', fillBasket);
-  $('menu-clear').addEventListener('click', () => {
-    ui.menuMoreOpen = false;
-    apply(menu.clearMenu(state), { undoText: t('toast.menuCleared') });
-  });
-  $('menu-more-veil').addEventListener('click', closeMenuMore);
+  $('menu-clear').addEventListener('click', () => apply(menu.clearMenu(state), { undoText: t('toast.menuCleared') }));
   $('meal-veil').addEventListener('click', closeMeal);
   $('meal-query').addEventListener('input', (event) => {
     ui.mealQuery = event.target.value;

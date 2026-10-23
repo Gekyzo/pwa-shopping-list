@@ -12,8 +12,6 @@ export default {
   'menu.title': '{meal} del {day}',
   'menu.choose': 'Tria una recepta',
   'menu.fill': 'Omple cistella',
-  'menu.more': 'Opcions del menú',
-  'menu.clearNote': 'Treu tots els àpats de la setmana. Ho pots desfer.',
   'menu.clear': 'Buida el menú',
   'menu.remove': 'Treu',
   'menu.noRecipe': 'sense recepta',
