@@ -9,6 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- **Ajustes** shows its rows across the full width of the screen, under grey bands, in place of
+  white cards.
 - **Seguir comprando**, **Añadir la receta de ejemplo** and the other second buttons are grey
   buttons; only a button that deletes keeps a frame.
 - Text is a little smaller, as in the new look. A sheet title is smaller and keeps to one line;

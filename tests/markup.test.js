@@ -166,10 +166,10 @@ test('the es text of menu.fill is Llenar cesta', async () => {
 const settings = body.match(/<section id="settings"[\s\S]*?<\/section>/)?.[0] ?? '';
 const groups = settings.split('<h2 ').slice(1).map((part) => [part, part.split('</h2>')[1]]);
 
-test('each group of Ajustes is a list-group-head and one list-group card', () => {
+test('each group of Ajustes is a list-group-head and one full-width list-group', () => {
   assert.equal(groups.length, 6);
   assert.equal([...settings.matchAll(/<h2 /g)].length, 6);
-  assert.equal([...settings.matchAll(/class="list-group card"/g)].length, 6);
+  assert.equal([...settings.matchAll(/class="list-group"/g)].length, 6);
   assert.doesNotMatch(settings, /settings-title/);
 });
 
