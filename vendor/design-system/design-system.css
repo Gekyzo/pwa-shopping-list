@@ -41,7 +41,7 @@
     --font: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --font-mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; /* keys of the walkthrough */
     --text-xs: 0.75rem; /* labels, badges, captions */
-    --text-s: 0.8125rem; /* second text, chips: 13px */
+    --text-s: 0.8125rem; /* second text: 13px */
     --text-label: 0.875rem; /* group and section heads, chips, segments: 14px */
     --text-m: 0.9375rem; /* body: 15px */
     --text-h: 1.25rem; /* the title of a sheet or of an empty state */
@@ -316,7 +316,7 @@
 
   /* @component chip
      @summary A choice among several, such as a tag or a filter. Selected with aria-pressed="true": an --ink fill.
-     @variant surface  On a --bg background: the chip takes --surface.
+     @variant surface  Kept for older markup: the chip takes --surface, as the base does.
      @part count  A number after the label, in muted text.
      @example <button class="chip" type="button">Home</button>
      @example <button class="chip" type="button" aria-pressed="true">Work</button>

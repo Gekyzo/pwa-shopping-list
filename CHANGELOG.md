@@ -9,12 +9,16 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- On a phone, **Llenar cesta** in `Menú` shows its full name.
+- In the sheet `¿Terminar la compra?`, **Ajustes** is an underlined word inside the sentence.
+- In `Compra`, the head of a recipe group has the same grey band as the other heads, and its
+  count is grey and lighter.
 - **Ajustes** shows its rows across the full width of the screen, under grey bands, in place of
   white cards.
 - **Seguir comprando**, **Añadir la receta de ejemplo** and the other second buttons are grey
   buttons; only a button that deletes keeps a frame.
 - Text is a little smaller, as in the new look. A sheet title is smaller and keeps to one line;
-  **Llenar cesta** shows its full name. A check is a square, chips and fields are white boxes
+  button labels are less bold. A check is a square, chips and fields are white boxes
   with a grey border, and the bottom bar and the bar above it take the colour of the ground.
 - `Compra` and `Recetas` no longer show the basket behind the list. In `Menú` the name of a day
   is a plain head, a planned meal is a white tile and a free meal has a dashed grey frame; a full
