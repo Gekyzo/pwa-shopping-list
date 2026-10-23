@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.3.0 - 2026-10-23
+
 - A screen reader names the bar below the title of `Compra` with its subtitle, such as
   `3 de 5 comprados`.
 - **Terminar compra** in the banner `¿Has terminado?` and **Siguiente** in the card of a shop with
