@@ -41,8 +41,9 @@
     --font: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --font-mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; /* keys of the walkthrough */
     --text-xs: 0.75rem; /* labels, badges, captions */
-    --text-s: 0.875rem; /* second text, chips */
-    --text-m: 1rem; /* body */
+    --text-s: 0.8125rem; /* second text, chips: 13px */
+    --text-m: 0.9375rem; /* body: 15px */
+    --text-h: 1.25rem; /* the title of a sheet or of an empty state */
     --text-l: 1.5rem; /* screen title */
     --text-xl: 2rem; /* the + of the add button */
     --weight-normal: 400;
@@ -59,7 +60,8 @@
     --space-7: 32px;
 
     --radius-s: 4px;
-    --radius-m: 8px; /* buttons, inputs */
+    --radius-control: 6px; /* inputs, chips */
+    --radius-m: 8px; /* buttons */
     --radius-l: 8px; /* groups, banner, add button */
     --radius-xl: 14px; /* top of a sheet */
     --radius-pill: 999px;
@@ -256,7 +258,7 @@
   .button.primary {
     background: var(--primary);
     color: var(--on-primary);
-    font-weight: var(--weight-strong);
+    font-weight: var(--weight-medium);
   }
 
   .button.tonal {
@@ -275,7 +277,7 @@
 
   .button.accent {
     color: var(--primary);
-    font-weight: var(--weight-strong);
+    font-weight: var(--weight-medium);
   }
 
   .button.danger {
@@ -283,7 +285,7 @@
   }
 
   .button.strong {
-    font-weight: var(--weight-strong);
+    font-weight: var(--weight-medium);
   }
 
   .button.icon {
@@ -321,8 +323,9 @@
   .chip {
     min-height: var(--tap);
     padding: 0 var(--space-4);
-    border-radius: var(--radius-pill);
-    background: var(--bg);
+    border: 1px solid var(--control);
+    border-radius: var(--radius-control);
+    background: var(--surface);
     font-size: var(--text-s);
   }
 
@@ -332,9 +335,10 @@
   }
 
   .chip[aria-pressed="true"] {
+    border-color: var(--ink);
     background: var(--ink);
     color: var(--on-ink);
-    font-weight: var(--weight-strong);
+    font-weight: var(--weight-medium);
   }
 
   .chip .count {
@@ -485,8 +489,8 @@
   }
 
   /* @component input
-     @summary A one-line text box. Height --tap, on --bg, with a --control border that takes --text on focus.
-     @variant raised  On a --bg page: the box takes --surface.
+     @summary A one-line text box. Height --tap, on --surface, with a --control border that takes --text on focus.
+     @variant raised  Kept for older markup: the box takes --surface, as the base does.
      @variant strong  The main box of a sheet, with a --text border.
      @example <input class="input" type="text" placeholder="New tag">
      @example <input class="input raised" type="search" placeholder="Search">
@@ -501,8 +505,8 @@
     height: var(--tap);
     padding: 0 var(--space-3);
     border: 1px solid var(--control);
-    border-radius: var(--radius-m);
-    background: var(--bg);
+    border-radius: var(--radius-control);
+    background: var(--surface);
   }
 
   .input.raised {
@@ -590,7 +594,7 @@
     left: var(--space-3);
     padding: 0 var(--space-1);
     border-radius: var(--radius-s);
-    background: var(--bg);
+    background: var(--surface);
     color: var(--muted);
     line-height: 1;
     pointer-events: none;
@@ -601,7 +605,7 @@
   .field-input:focus + .field-label,
   .field-input:not(:placeholder-shown) + .field-label {
     top: 0;
-    background: linear-gradient(var(--surface) 50%, var(--bg) 50%);
+    background: var(--surface);
     font-size: var(--text-xs);
   }
 
@@ -721,7 +725,7 @@
     flex: none;
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid var(--line);
-    background: var(--surface);
+    background: var(--bg);
   }
 
   .nav-item {
@@ -980,8 +984,8 @@
     margin: 0;
     overflow: hidden;
     color: var(--text);
-    font-size: var(--text-l);
-    font-weight: var(--weight-strong);
+    font-size: var(--text-h);
+    font-weight: var(--weight-medium);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -1208,8 +1212,8 @@
   .empty-state-title {
     margin: 0;
     color: var(--text);
-    font-size: var(--text-l);
-    font-weight: var(--weight-strong);
+    font-size: var(--text-h);
+    font-weight: var(--weight-medium);
   }
 
   /* @component item-list
@@ -1346,7 +1350,7 @@
     height: var(--icon);
     margin: var(--space-3) var(--space-1) var(--space-3) var(--space-2);
     border: 2px solid var(--muted);
-    border-radius: var(--radius-round);
+    border-radius: var(--radius-s);
     background: none;
     appearance: none;
     cursor: pointer;
@@ -1807,16 +1811,12 @@
     height: var(--dock-height);
     padding-inline: calc(var(--space-4) + env(safe-area-inset-left)) calc(var(--space-4) + env(safe-area-inset-right));
     border-top: 1px solid var(--line);
-    background: var(--surface);
+    background: var(--bg);
   }
 
   .dock .chip {
     flex: 1;
     justify-content: center;
-  }
-
-  .dock .chip:not([aria-pressed="true"]) {
-    background: var(--surface-2);
   }
 
   .dock-field {
