@@ -7,7 +7,7 @@ none is resolved here. **Weight** is how much the question blocks the port.
 
 | Question | Why it blocks |
 |---|---|
-| | **Decided on 2026-10-23:** Q-domain-6 (a), Q-dsv-1 (b), Q-platform-4 (a), Q-platform-8 (b). See each entry. |
+| | **Decided on 2026-10-23:** Q-data-1 (1), Q-domain-6 (a), Q-dsv-1 (b), Q-platform-4 (a), Q-platform-8 (b). See each entry. |
 | [Q-data-1](#q-data-1-where-the-state-lives-on-android) | The storage of the state (one JSON document, DataStore or Room) shapes the data layer and the import of an old backup. |
 | [Q-domain-6](#q-domain-6-the-rename-of-an-aisle-in-secciones-de-la-tienda-is-broken) | The source has a defect in AISLE-12. Parity with the defect or with the rule. |
 | [Q-dsv-1](#q-dsv-1-material-3-or-a-custom-theme) | Material 3 or a custom theme decides how every component of `15-design-system.md` is built. |
@@ -34,6 +34,8 @@ Related entries that one answer settles together:
 **Blocks:** STORE-1, STORE-2, STORE-5, STORE-16, BACKUP-1, BACKUP-5, BACKUP-7.
 
 **Weight:** high
+
+**Decision (2026-10-23):** option 1. The state is one JSON document in a typed DataStore, with the text of section 2 of `data-contract.md`. The preferences are a Preferences DataStore. App id: `io.github.gekyzo.bodega`.
 
 ### Q-data-2 Where the preferences live
 
@@ -598,7 +600,7 @@ Related entries that one answer settles together:
 **Blocks**: ARR-1, ARR-2, ARR-4, ARR-5.
 **Weight**: high
 
-**Decision (2026-10-23):** (b). In-app geofences: `GeofencingClient`, `ACCESS_FINE_LOCATION` and `ACCESS_BACKGROUND_LOCATION`, and a notification with the ARR-1 text that opens `Compra`. The port needs the place of each shop, which the state does not hold today (a new field; see `data-contract.md`).
+**Decision (2026-10-23):** (b). In-app geofences: `GeofencingClient`, `ACCESS_FINE_LOCATION` and `ACCESS_BACKGROUND_LOCATION`, and a notification with the ARR-1 text that opens `Compra`. Each shop's place is a new optional root field `places` of the state (`[{ shop, lat, lng, radius }]`, written only when not empty). The version stays 9: the PWA drops the field with no error, so a round trip through the PWA loses the places.
 
 ### Q-platform-9 A shortcut or an arrival while the app runs
 **Evidence**: on the web each shortcut or `?arrival` is a new page load, so the start code (`src/app.js:281-305`) runs on a fresh screen. On Android a running activity gets `onNewIntent` with an open sheet, a search or a walkthrough on screen.

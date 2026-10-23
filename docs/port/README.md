@@ -90,6 +90,6 @@ The total counts each rule one time. `removed` rules have the class `dropped`.
 ## Before the port starts
 
 - Read the "Most blocking" table of [open-questions.md](open-questions.md).
-- Decided on 2026-10-23: Q-domain-6, Q-dsv-1, Q-platform-4, Q-platform-8. The arrival reminder
-  becomes an in-app geofence, which needs a place for each shop: a new field of the state.
+- Decided on 2026-10-23: Q-data-1, Q-domain-6, Q-dsv-1, Q-platform-4, Q-platform-8. The arrival reminder
+  becomes an in-app geofence; the place of each shop is the new optional root field `places`.
 - The VOICE rules describe the branch `voice-commands`, not `main` (Q-platform-10).
