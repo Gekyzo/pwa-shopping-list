@@ -13,7 +13,7 @@ const attrKeys = [...body.matchAll(/data-i18n-attr="([^"]+)"/g)].flatMap(([, pai
 
 test('the header has a progress bar and no ring', () => {
   const header = body.slice(body.indexOf('<header'), body.indexOf('</header>'));
-  assert.match(header, /<div id="progress" class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" hidden><\/div>/);
+  assert.match(header, /<div id="progress" class="progress" role="progressbar" aria-labelledby="subtitle" aria-valuemin="0" aria-valuemax="100" hidden><\/div>/);
   assert.ok(header.indexOf('app-header-text') < header.indexOf('id="progress"'));
   assert.ok(!body.includes('id="ring"') && !body.includes('ring-text'));
 });
