@@ -435,7 +435,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="shell">Paquete de la app</h3>
-<p>La app registra <code>sw.js</code> en cada arranque. Sin service worker, la app funciona solo con conexión (SW-1). El paquete es la lista <code>SHELL</code> de <code>sw.js</code>: la página, las dos hojas de estilo, el manifiesto, cada módulo de <code>src/</code>, cada catálogo de idioma, <code>version.json</code>, los iconos y <code>icons.svg</code> (SW-2). Al instalarse, el worker descarga el paquete entero sin pasar por la caché HTTP, y toma el control al momento (SW-3). Al activarse, borra cada caché que empieza por <code>shopping-</code> salvo la actual y <code>shopping-manifest</code>. Las cachés de otra app del mismo origen se quedan (SW-4). Un cambio del estado guardado que un módulo antiguo no sabe leer lleva un nombre de caché nuevo, para que el worker descargue el paquete entero otra vez (SW-10).</p>
+<p>La app registra <code>sw.js</code> en cada arranque. Sin service worker, la app funciona solo con conexión (SW-1). El paquete es la lista <code>SHELL</code> de <code>sw.js</code>: la página, las dos hojas de estilo, la fuente del sistema de diseño (<code>geist.woff2</code>), el manifiesto, cada módulo de <code>src/</code>, cada catálogo de idioma, <code>version.json</code>, los iconos y <code>icons.svg</code> (SW-2). Al instalarse, el worker descarga el paquete entero sin pasar por la caché HTTP, y toma el control al momento (SW-3). Al activarse, borra cada caché que empieza por <code>shopping-</code> salvo la actual y <code>shopping-manifest</code>. Las cachés de otra app del mismo origen se quedan (SW-4). Un cambio del estado guardado que un módulo antiguo no sabe leer lleva un nombre de caché nuevo, para que el worker descargue el paquete entero otra vez (SW-10).</p>
 
 <h3 id="requests">Respuestas sin conexión</h3>
 <p>Cada petición recibe la copia de la caché al momento, y una copia nueva entra en la caché en segundo plano para el siguiente arranque. La comparación ignora la query de la URL (SW-6). Sin copia en caché, la petición va a la red. Si falla una navegación, el worker responde con el <code>index.html</code> de la caché (SW-7). Una petición con el parámetro <code>latest</code> va solo a la red (SW-8). Así, una versión publicada se ve en el segundo arranque después de publicarla: el primero descarga los archivos nuevos en segundo plano (SW-11, SW-12).</p>
@@ -449,7 +449,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <ul>
   <li>flecha que gira, atenuada: <code>Comprobando…</code>;</li>
   <li>flecha hacia abajo, ámbar: <code>Versión X.Y.Z disponible</code>, el único texto visible;</li>
-  <li>check verde: <code>Al día</code>, cuando la publicada es igual o más antigua;</li>
+  <li>check verde (<code>--done</code>): <code>Al día</code>, cuando la publicada es igual o más antigua;</li>
   <li>nube tachada, roja: <code>Sin conexión</code>, cuando falta una de las dos.</li>
 </ul>
 <p>Las versiones se comparan por número, parte a parte: <code>1.10.0</code> es más nueva que <code>1.9.0</code> (VER-7).</p>
@@ -507,6 +507,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <tbody>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
     <tr><td>2026-10-23</td><td>Caché del paquete <code>shopping-shell-v18</code>; el paquete guarda la fuente del sistema de diseño</td><td>Sistema de diseño 0.7.0</td></tr>
+    <tr><td>2026-10-23</td><td>El estado <code>Al día</code> usa el color <code>--done</code> (VER-6)</td><td>Aspecto Ledger (sistema de diseño 0.7.0)</td></tr>
   </tbody>
 </table></div>
 

@@ -108,7 +108,7 @@ the bottom bar at each width.
 - **ROW-11** A slide of a row to the right runs an action at the release: in `Compra` it ticks or
   unticks the item (LIST-11), with `Deshacer` for a tick (LIST-13). It runs when the slide passed 35 % of the width of the row, 80 px at least; a
   shorter slide puts the row back. The row slides over a backdrop with the icon of the action,
-  which fills with the accent colour once the slide is long enough. At that moment the phone
+  which fills with the done colour (`--done`) once the slide is long enough. At that moment the phone
   vibrates for 10 ms, for a tick and for an untick. A row with its left side open closes it.
 - **ROW-12** A recipe row of `Recetas` slides with the same rules (REC-5).
 - **ROW-13** Removed: a saved item has no row (LIST-35).
@@ -244,7 +244,7 @@ the bottom bar at each width.
   of two lines and the text the room of five lines, the longest title and text of a page in any
   language, so the drawing is at the same place on pages 2 to 6.
 - **ONB-3** The top bar has **Atrás** at the start and **Saltar** at the end, both without a border
-  or a fill. **Atrás** is in accent colour and shows on pages 2 to 6; a tap shows the previous
+  or a fill. **Atrás** is in the main action colour (`--primary`) and shows on pages 2 to 6; a tap shows the previous
   page. **Saltar** does not show on the last page. The bar keeps out of the top safe-area inset
   and does not follow **Mano**. **Siguiente** takes the full width at the bottom, 56 px high
   (`--tap-l`); on the last page it reads **Empezar**. One dot for each page shows the place of the

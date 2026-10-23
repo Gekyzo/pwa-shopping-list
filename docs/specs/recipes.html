@@ -458,7 +458,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <p>Debajo de las recetas, <code>Recetas</code> muestra los platos del menú bajo la cabecera <code>Platos sin receta</code>, con su número. Cada plato sale una vez, con la grafía de su primera comida, en el orden del menú. Sin platos, la cabecera no aparece (REC-36). La fila de un plato muestra el nombre y <code>En N comidas del menú</code>, y no se desliza. Un toque en el nombre o en el botón del libro convierte el plato en receta, abre su hoja y muestra <code>Receta creada: «name».</code> con <code>Deshacer</code>. Un lector de pantalla oye <code>Crear la receta de «name»</code> en ese botón (REC-37, MENU-17).</p>
 
 <h3 id="search">Búsqueda</h3>
-<p><code>Recetas</code> tiene búsqueda cuando existe al menos una receta o un plato del menú (REC-23). Desde 600px se abre con el botón de búsqueda de la cabecera; por debajo de 600px, con el botón de búsqueda del dock, que en <code>Recetas</code> solo tiene ese botón (REC-23, SHOP-26). El campo es <strong>Buscar receta o producto</strong> y filtra la lista mientras se escribe. Una receta coincide cuando su nombre o uno de sus productos contiene el texto, sin distinguir mayúsculas ni acentos; un plato coincide por su nombre. Un texto vacío muestra todo (REC-24). Sin coincidencias, la lista muestra <code>Ninguna receta coincide con «text».</code> (REC-25). El texto no se guarda: cambiar de sección cierra la búsqueda y borra el texto (REC-26).</p>
+<p><code>Recetas</code> tiene búsqueda cuando existe al menos una receta o un plato del menú (REC-23). Desde 600px se abre con el botón de búsqueda de la cabecera; por debajo de 600px, con el botón de búsqueda del dock. Por debajo de 600px el dock se ve también sin búsqueda, por su botón <code>+</code>, mientras <code>Recetas</code> no tiene un texto vacío con botón (REC-23, SHOP-26). El campo es <strong>Buscar receta o producto</strong> y filtra la lista mientras se escribe. Una receta coincide cuando su nombre o uno de sus productos contiene el texto, sin distinguir mayúsculas ni acentos; un plato coincide por su nombre. Un texto vacío muestra todo (REC-24). Sin coincidencias, la lista muestra <code>Ninguna receta coincide con «text».</code> (REC-25). El texto no se guarda: cambiar de sección cierra la búsqueda y borra el texto (REC-26).</p>
 
 <h3 id="sample">Receta de ejemplo</h3>
 <p>La receta de ejemplo tiene el id fijo <code>sample-pasta</code>, así que sigue siendo la de ejemplo tras renombrarla o editarla. Su nombre y sus productos están en el idioma de la pantalla al añadirla: <code>Pasta con salsa de tomate</code>, con <code>Salsa de tomate</code>, <code>Pasta</code>, <code>Ajo</code>, <code>Aceite de oliva</code> y <code>Sal</code>. No tiene enlace, va la última y no entra en el menú. La guía de inicio la envía a <code>Compra</code> como cualquier envío (REC-27). Añadirla no hace nada si ya existe o si otra receta tiene su nombre sin distinguir mayúsculas (REC-28).</p>
@@ -496,6 +496,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
+    <tr><td>2026-10-23</td><td>El dock de <code>Recetas</code> se ve siempre por debajo de 600px, por su botón <code>+</code> (REC-23); la cabecera no muestra anillo</td><td>Aspecto Ledger (sistema de diseño 0.7.0)</td></tr>
   </tbody>
 </table></div>
 
@@ -510,7 +511,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     <ul>
       <li><strong>Columnas.</strong> REC-7 dice dos columnas desde 600px. El código las pone desde 840px y deja una columna en un móvil desplegado (<code>styles.css:227</code>), como pide el plan de la revisión móvil.</li>
       <li><strong>Mensaje del envío.</strong> REC-20 da siempre las dos partes. El código omite la parte con 0 (<code>sendText</code>, <code>src/ui/recipes.js:8</code>).</li>
-      <li><strong>Cabecera de <code>Recetas</code>.</strong> Muestra <code>N recetas</code> o <code>Sin recetas</code> y el número de recetas en el anillo (<code>src/ui/list.js:116</code>). La tabla de 03-lists.md lo describe, pero sin ID de regla.</li>
+      <li><strong>Cabecera de <code>Recetas</code>.</strong> Muestra <code>N recetas</code> o <code>Sin recetas</code> y no muestra barra de progreso (<code>src/ui/list.js:116</code>). La tabla de 03-lists.md lo describe, pero sin ID de regla.</li>
       <li><strong>Campo de producto.</strong> El límite de 80 caracteres (<code>src/ui/recipes.js:49</code>) no tiene ID de regla; REC-8 no lo menciona.</li>
       <li><strong>Cabecera de platos en dos columnas.</strong> Desde 840px la lista es una rejilla de dos columnas, y <code>.group-head</code> no ocupa las dos (<code>styles.css:228</code>). <code>Platos sin receta</code> parece quedar en una sola celda. Sin confirmar en el navegador.</li>
     </ul>
