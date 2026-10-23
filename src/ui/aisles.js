@@ -30,7 +30,7 @@ const step = (index, by) => {
 const aisleNode = (_, index) => {
   const input = el('input', { type: 'text', className: 'input', maxLength: 40, enterKeyHint: 'done' });
   input.setAttribute('autocapitalize', 'sentences');
-  bindField(input, () => state.aisles[index], (value) => apply(aisles.renameAisle(state, state.aisles[index], value)));
+  bindField(input, { read: () => state.aisles[index], write: (value) => apply(aisles.renameAisle(state, state.aisles[index], value)) });
   const remove = el('button', { type: 'button', className: 'button icon', textContent: '✕' });
   remove.addEventListener('click', () => {
     const name = state.aisles[index];
