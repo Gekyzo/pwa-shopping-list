@@ -237,6 +237,9 @@ export const itemNode = (item, groupId = null, also = []) => {
   return node;
 };
 
+// The sign of a head that closes and opens its rows: down while open, right while closed.
+const chevron = (open) => icon(open ? 'chevron-down' : 'chevron-right', 'small chevron');
+
 // The ticked items of Compra, behind one row that opens and closes them. A search keeps them open,
 // so that a ticked match is in view.
 export const boughtSection = (bought) => {
@@ -251,7 +254,7 @@ export const boughtSection = (bought) => {
     },
   }, [
     el('span', { textContent: t('count.bought', { count: bought.length }) }),
-    el('span', { className: 'chevron', textContent: open ? '▾' : '▸' }),
+    chevron(open),
   ]);
   button.setAttribute('aria-expanded', String(open));
   return [el('li', { className: 'section-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
@@ -286,7 +289,7 @@ export const groupHead = (title, count, key = null, right = null) => {
     },
   }, [
     el('span', { textContent: title }),
-    el('span', { className: 'group-head-end' }, [el('span', { textContent: count }), el('span', { className: 'chevron', textContent: open ? '▾' : '▸' })]),
+    el('span', { className: 'group-head-end' }, [el('span', { textContent: count }), chevron(open)]),
   ]);
   button.setAttribute('aria-expanded', String(open));
   if (!right || searching()) return el('li', { className: 'group-head' }, [button]);

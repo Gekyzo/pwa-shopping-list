@@ -24,7 +24,7 @@ const finishTrip = (undoText = t('toast.finished'), keep = []) => {
 // The ids of the open items that stay in Compra with the choice of Ajustes (TRIP-6, TRIP-7).
 const keptItems = () => (tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : []);
 
-const groupCount = ({ left, total }) => (left ? `${total - left}/${total}` : '✓');
+const groupCount = ({ left, total }) => (left ? t('count.ticked', { done: total - left, count: total }) : '✓');
 
 // The rows of the list below the shop of each item. A row of a shop has the group id `shop:<name>`.
 const shopNodes = () => {

@@ -39,6 +39,7 @@ export default {
   'count.products': { one: '{count} producto', other: '{count} productos' },
   'count.menuMeals': { one: 'En {count} comida del menú', other: 'En {count} comidas del menú' },
   'count.bought': { one: 'Comprados ({count})', other: 'Comprados ({count})' },
+  'count.ticked': '{done} de {count}',
 
   'row.delete': 'Eliminar {name}',
   'row.createRecipe': 'Crear la receta de «{name}»',

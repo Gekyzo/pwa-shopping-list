@@ -57,8 +57,8 @@ the arrange sheet in `src/ui/arrange.js`.
   `También en «recipes»` below its name: the names of the other groups, in group order, joined by
   `, `. So two rows read as one product. The groups count before a search, so a search keeps the
   text.
-- **GROUP-8** The head of a group shows the name of the recipe and `ticked/total`, or `✓` when all
-  its members are ticked. The group lists only the members to buy. A recipe group whose members are
+- **GROUP-8** The head of a group shows the name of the recipe and `ticked de total`
+  (`count.ticked`), or `✓` when all its members are ticked, then the icon `chevron-down`. The group lists only the members to buy. A recipe group whose members are
   all ticked does not show; a member that loses its tick shows it again.
 - **GROUP-21** A slide of the head of a recipe group to the right ticks each member of the group
   that is still to buy, with the rules and the backdrop of ROW-11 and the icon `check`. In a shop
@@ -91,7 +91,7 @@ the arrange sheet in `src/ui/arrange.js`.
   When the choice goes to **Nada**, the groups close first and then the list becomes flat. A tap
   on a grouping while the groups close keeps them.
 - **GROUP-16** A tap on the head of a group (a recipe, `Otros`, a shop, `Sin tienda`, an aisle or `Sin sección`) closes the
-  rows of the group in 200 ms. The head stays, with its count and the chevron `▸`; a second tap opens
+  rows of the group in 200 ms. The head stays, with its count and the icon `chevron-right`; a second tap opens
   the rows again in 200 ms. The list keeps its closed groups until the app starts again. A search
   shows each group open and disables its head (LIST-25).
 

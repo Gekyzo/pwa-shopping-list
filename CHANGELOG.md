@@ -9,7 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- The head of a group shows its count as `1 de 4` and ends with a chevron icon: down while the group is open, right while it is closed. `Comprados (N)` has the same chevron.
 
 ## 1.3.0 - 2026-10-23
 
