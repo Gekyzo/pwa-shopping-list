@@ -91,7 +91,7 @@ test('each of the eight sheets has the grab, then a head with its title and List
   for (const { id, part } of parts) {
     assert.match(
       part,
-      /^<(div|form)[^>]*>\s*<div class="sheet-grab"><\/div>\s*<header class="sheet-head"><h2 [^>]*class="sheet-title main"[^>]*><\/h2><button class="button primary" type="button" data-i18n="edit.done"><\/button><\/header>\s*<div class="sheet-body">/,
+      /^<(div|form)[^>]*>\s*<div class="sheet-grab"><\/div>\s*<header class="sheet-head"><h2 [^>]*class="sheet-title main"[^>]*><\/h2><button class="button tonal" type="button" data-i18n="edit.done"><\/button><\/header>\s*<div class="sheet-body">/,
       id ?? part.slice(0, 60),
     );
   }
@@ -223,6 +223,17 @@ test('the shop chip of the dock opens the shop picker, a sheet with a head', () 
   assert.match(body, /<button id="dock-shop" class="chip" type="button" aria-haspopup="dialog" aria-controls="shop-pick"/);
   const [layer = ''] = body.match(/<div id="shop-pick" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/) ?? [];
   assert.match(layer, /<div id="shop-pick-veil" class="sheet-veil">/);
-  assert.match(layer, /<div class="sheet-grab"><\/div>\s*<header class="sheet-head"><h2 class="sheet-title main" data-i18n="shops.lists"><\/h2><button class="button primary" type="button" data-i18n="edit.done"><\/button><\/header>/);
+  assert.match(layer, /<div class="sheet-grab"><\/div>\s*<header class="sheet-head"><h2 class="sheet-title main" data-i18n="shops.lists"><\/h2><button class="button tonal" type="button" data-i18n="edit.done"><\/button><\/header>/);
   assert.match(layer, /<div class="sheet-body"><\/div>/);
+});
+
+test('each nav item shows its name', () => {
+  const [nav = ''] = body.match(/<nav class="nav-bar"[\s\S]*?<\/nav>/) ?? [];
+  const items = [...nav.matchAll(/<button class="nav-item"[^>]*>([\s\S]*?)<\/button>/g)];
+  assert.equal(items.length, 4);
+  assert.deepEqual(
+    items.map(([, inner]) => inner.match(/<span data-i18n="([^"]+)"><\/span>/)?.[1]),
+    ['list.active', 'nav.recipes', 'nav.menu', 'nav.settings'],
+  );
+  assert.doesNotMatch(nav, /nav-item[^>]*aria-label/);
 });

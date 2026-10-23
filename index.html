@@ -163,17 +163,21 @@
     <button id="fab" class="fab" type="button">+</button>
 
     <nav class="nav-bar" data-i18n-attr="aria-label:nav.label">
-      <button class="nav-item" type="button" data-view="active" data-i18n-attr="aria-label:list.active">
+      <button class="nav-item" type="button" data-view="active">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#cart"/></svg>
+        <span data-i18n="list.active"></span>
       </button>
-      <button class="nav-item" type="button" data-view="recipes" data-i18n-attr="aria-label:nav.recipes">
+      <button class="nav-item" type="button" data-view="recipes">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#book"/></svg>
+        <span data-i18n="nav.recipes"></span>
       </button>
-      <button class="nav-item" type="button" data-view="menu" data-i18n-attr="aria-label:nav.menu">
+      <button class="nav-item" type="button" data-view="menu">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#menu"/></svg>
+        <span data-i18n="nav.menu"></span>
       </button>
-      <button class="nav-item" type="button" data-view="settings" data-i18n-attr="aria-label:nav.settings">
+      <button class="nav-item" type="button" data-view="settings">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg>
+        <span data-i18n="nav.settings"></span>
       </button>
     </nav>
 
@@ -181,7 +185,7 @@
       <div id="veil" class="sheet-veil"></div>
       <form id="add" class="sheet" autocomplete="off">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 id="add-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 id="add-title" class="sheet-title main"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
           <ul id="suggestions" class="list-group plain" data-i18n-attr="aria-label:add.existing"></ul>
           <p id="add-help" class="input-help danger" role="alert" hidden></p>
@@ -197,7 +201,7 @@
       <div id="arrange-veil" class="sheet-veil"></div>
       <div class="sheet" role="dialog" data-i18n-attr="aria-label:arrange.label">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="arrange.label"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="arrange.label"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
           <div id="arrange-group">
             <h2 class="sheet-title" data-i18n="arrange.groupBy"></h2>
@@ -230,7 +234,7 @@
       <div id="shop-pick-veil" class="sheet-veil"></div>
       <div class="sheet" role="dialog" data-i18n-attr="aria-label:shops.lists">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="shops.lists"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="shops.lists"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body"></div>
       </div>
     </div>
@@ -239,7 +243,7 @@
       <div id="trip-veil" class="sheet-veil"></div>
       <div class="sheet" role="dialog" data-i18n-attr="aria-label:trip.menu">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.question"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.question"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
           <ul id="trip-outcomes" class="list-group plain"></ul>
           <p id="trip-open" class="hint trip-open" hidden><span data-i18n="trip.hint"></span> <button id="trip-settings" class="button accent" type="button" data-i18n="nav.settings"></button></p>
@@ -253,7 +257,7 @@
       <div id="meal-veil" class="sheet-veil"></div>
       <div id="meal-sheet" class="sheet" role="dialog">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 id="meal-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 id="meal-title" class="sheet-title main"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
           <input id="meal-query" class="input" type="search" maxlength="80" autocomplete="off" enterkeyhint="done" data-i18n-attr="placeholder:menu.search,aria-label:menu.search">
           <p id="meal-empty" class="empty-state inline" hidden></p>
@@ -271,7 +275,7 @@
       <div id="edit-veil" class="sheet-veil"></div>
       <form id="edit-form" class="sheet" role="dialog" autocomplete="off">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 id="edit-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 id="edit-title" class="sheet-title main"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
           <label class="field"><input id="edit-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
           <label class="field"><input id="edit-quantity" class="input field-input" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span class="field-label" data-i18n="edit.quantity"></span></label>
@@ -296,7 +300,7 @@
       <div id="aisles-veil" class="sheet-veil"></div>
       <form id="aisles-form" class="sheet" role="dialog" autocomplete="off" data-i18n-attr="aria-label:aisles.title">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="aisles.title"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="aisles.title"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
           <p id="aisles-empty" class="empty-state inline" data-i18n="aisles.empty" hidden></p>
           <button id="aisles-usual" class="button outline wide" type="button" data-i18n="aisles.usual" hidden></button>
@@ -313,7 +317,7 @@
       <div id="recipe-veil" class="sheet-veil"></div>
       <div id="recipe-sheet" class="sheet" role="dialog">
         <div class="sheet-grab"></div>
-        <header class="sheet-head"><h2 id="recipe-title" class="sheet-title main"></h2><button class="button primary" type="button" data-i18n="edit.done"></button></header>
+        <header class="sheet-head"><h2 id="recipe-title" class="sheet-title main"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
           <label class="field"><input id="recipe-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" autocapitalize="sentences" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
           <div class="input-row"><label class="field"><input id="recipe-url" class="input field-input" type="url" inputmode="url" enterkeyhint="done" autocapitalize="off" data-i18n-attr="aria-label:recipe.link,placeholder:recipe.link"><span class="field-label" data-i18n="recipe.link"></span></label><a id="recipe-open" class="button icon accent" href="#" target="_blank" rel="noopener noreferrer" hidden><svg class="icon small" aria-hidden="true"><use href="icons.svg#link"/></svg></a></div>

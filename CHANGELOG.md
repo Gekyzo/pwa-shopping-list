@@ -9,6 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- The bottom bar shows the name of each section under its icon, with new icons. **Listo** in the head of a sheet is now a grey button.
 - On a phone the `+` button is the last button of the bar above the bottom bar, in place of the
   round button over the list. The bar shows in `Recetas` also with no search; its `+` creates a
   recipe. With **Izquierda** the `+` is at the left end. On a wider screen nothing changes.

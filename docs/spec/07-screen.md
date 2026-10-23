@@ -21,7 +21,7 @@ the bottom bar at each width.
 
 - **NAV-1** The bottom bar has four sections, in this order: `Compra`, `Recetas`, `Menú`,
   `Ajustes`. The app starts in `Compra`. A
-  section shows its icon with no name, and no count. Its name is the label of its button for a
+  section shows its icon and its name, and no count. Its name is also the name of its button for a
   screen reader.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
   edit, and closes the search (LIST-24, REC-26).
@@ -152,7 +152,7 @@ the bottom bar at each width.
   One is open at a time. A tap on the
   veil, **Listo** or `Escape` closes it. The `+` button, also the one of the dock, does not show
   while a sheet is open.
-- **NAV-22** Each sheet has a head: the grab, a title on one line and the button **Listo**. The
+- **NAV-22** Each sheet has a head: the grab, a title on one line and the button **Listo**, a tonal button. The
   title of the edit sheet is the name of the item, of the recipe sheet the name of the recipe, of
   the add sheet `Añadir artículo a la lista` or `Nombre de la receta` by the section. Only the body
   below the head scrolls. The edit and recipe sheets have a foot: **Eliminar** deletes the item or
