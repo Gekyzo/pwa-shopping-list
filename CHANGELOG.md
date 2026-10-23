@@ -9,6 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- Text is a little smaller, as in the new look. A sheet title is smaller and keeps to one line;
+  **Llenar cesta** shows its full name. A check is a square, chips and fields are white boxes
+  with a grey border, and the bottom bar and the bar above it take the colour of the ground.
 - `Compra` and `Recetas` no longer show the basket behind the list. In `Menú` the name of a day
   is a plain head, a planned meal is a white tile and a free meal has a dashed grey frame; a full
   day no longer changes colour. A control named in the walkthrough is bold, in the colour of the
