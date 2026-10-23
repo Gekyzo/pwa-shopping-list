@@ -28,7 +28,9 @@ bottom bar (NAV-1).
   count of the aisles. A tap opens the sheet of the aisles. A tap out of the sheet or `Escape`
   closes it.
 - **AISLE-11** The sheet lists each aisle in its order, as a name field, `↑`, `↓` and `✕`. The `↑`
-  of the first aisle and the `↓` of the last are disabled.
+  of the first aisle and the `↓` of the last are disabled. The rows go across the sheet, as the rows
+  of a list: the name field has no box, and one line below each row runs from the start of the name
+  to the end.
 - **AISLE-12** The name field renames the aisle when it loses the focus or on `Enter` (AISLE-4).
   `Escape` puts the name back. An error keeps the old name.
 - **AISLE-13** The field **Nueva sección** with **Añadir** adds an aisle (AISLE-3). The field takes
