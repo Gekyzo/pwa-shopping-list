@@ -1,6 +1,6 @@
 {
   "name": "shopping",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Shopping list app with an active list and a next list, recipes, a weekly menu, synced and shared lists, AI item entry, purchase history and a pantry",
   "private": true,
   "type": "module",
