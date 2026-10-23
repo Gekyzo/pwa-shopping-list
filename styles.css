@@ -7,9 +7,6 @@
     --on-primary: light-dark(#ffffff, #1a0f0a);
     --done: light-dark(#1f7a4d, #5fc491);
     --on-done: light-dark(#ffffff, #0c1a12);
-    --corner-art: 260px; /* the basket in the corner of a list */
-    --corner-out: -50px; /* how far the basket goes out of the corner */
-    --corner-opacity: 0.06;
   }
 }
 
@@ -64,38 +61,6 @@
 }
 
 @layer components {
-  /* @extends icon
-     @variant corner    The basket behind a list, in the bottom corner on the other side of the +
-     button. Tilted, cut by the corner, nearly transparent. One in the page. */
-
-  /* Behind the content (z-index -1): the rows, the + button and the bottom bar cover it. Its bottom
-     edge is measured from the top of the bottom bar. */
-  .icon.corner {
-    position: fixed;
-    z-index: -1;
-    left: var(--corner-out);
-    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--corner-out));
-    width: var(--corner-art);
-    height: var(--corner-art);
-    stroke-width: 0.75;
-    opacity: var(--corner-opacity);
-    transform: rotate(30deg);
-    pointer-events: none;
-  }
-
-  [data-hand="left"] .icon.corner {
-    left: auto;
-    right: var(--corner-out);
-    transform: rotate(-30deg);
-  }
-
-  /* From 600px there is no bar at the bottom; the rail stands on the other side of the basket. */
-  @media (min-width: 600px) {
-    .icon.corner {
-      bottom: calc(env(safe-area-inset-bottom) + var(--corner-out));
-    }
-  }
-
   /* @extends app-header */
   /* From 600px the content of the header lines up with the column of main. The progress bar of
      Compra is the last child and takes a full line below the title and the buttons. */
@@ -299,8 +264,6 @@
     border-radius: 0;
     color: inherit;
     font: inherit;
-    letter-spacing: inherit;
-    text-transform: inherit;
   }
 
   /* A recipe head slides to the right as a row does (GROUP-21): the button fills the sliding body. */
@@ -475,22 +438,21 @@
      @part day-short  The short name of the day: it shows instead of the long one in the compact density below 600px.
      @part meals      The two meals.
      @example <ul class="item-list" style="width: 100%"><li class="day"><h3 class="day-title"><span class="day-long">Lunes</span><span class="day-short">lun</span></h3><div class="meals"><button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button><button class="meal free" type="button"><small class="meal-label">Cena</small><span class="meal-name">Elegir receta</span></button></div></li></ul> */
+  /* A day stands on the ground of the page: its name is a quiet head, its meals are the tiles. */
   .day {
-    padding: var(--space-2) var(--space-3) var(--space-3);
-    border-bottom: 1px solid var(--line);
-    background: var(--surface);
+    padding: var(--space-2) var(--space-4);
   }
 
   .day-title {
     margin: 0 0 var(--space-2);
-    color: var(--muted);
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    color: var(--text);
+    font-size: var(--text-s);
+    font-weight: var(--weight-medium);
   }
 
-  .day:not(:has(.meal.free)) .day-title {
-    color: var(--accent);
+  /* Sentence case: the browser writes a weekday in lower case in some languages (`lunes`). */
+  .day-title::first-letter {
+    text-transform: uppercase;
   }
 
   .meals {
@@ -539,12 +501,10 @@
 
   :root[data-density="compact"] .day-short {
     display: inline;
-    text-transform: uppercase;
   }
 
   :root[data-density="compact"] .day-title {
     margin-bottom: var(--space-1);
-    text-transform: none;
   }
 
   :root[data-density="compact"] .meal {
@@ -576,7 +536,6 @@
 
     :root[data-density="compact"] .day-title {
       margin-bottom: 0;
-      text-transform: uppercase;
     }
   }
 
@@ -595,13 +554,14 @@
     justify-content: center;
     min-width: 0;
     padding: var(--space-2) var(--space-3);
-    border: 1px solid var(--accent);
-    background: var(--bg);
+    border: 1px solid var(--line);
+    background: var(--surface);
     text-align: left;
   }
 
   .meal.free {
-    border: 1px dashed var(--muted);
+    border: 1px dashed var(--control);
+    background: none;
   }
 
   .meal.dish {
@@ -629,18 +589,14 @@
     white-space: nowrap;
   }
 
-  .meal:not(.free, .dish) .meal-label {
-    color: var(--accent);
-  }
-
   .meal.free .meal-name {
     color: var(--muted);
   }
 
-  /* The bar of Menú sticks to the bottom edge of `main`, below its bottom padding (the room that
-     the add button takes in the other sections). */
-  .item-list ~ .action-bar {
-    bottom: calc((var(--tap-l) + var(--space-4) * 2) * -1);
+  /* Menú shows no add button (MENU-14), so `main` keeps no room for one at its end: the bar of Menú
+     sticks to the bottom edge of `main` and ends the scroll. */
+  main:has(> .action-bar:not([hidden])) {
+    padding-bottom: 0;
   }
 
   /* Llenar cesta and Vaciar menú share the bar: the split takes its full width. */
@@ -765,7 +721,7 @@
      @part onboarding-page     The page in view: on the first page the app icon, then its drawing, its title and its text.
      @part onboarding-title    The title of a page.
      @part onboarding-text     The text of a page.
-     @part onboarding-key      A control named in a text, such as + or an icon: its icon and its name in bold --primary text, with no box.
+     @part onboarding-key      A control named in a text, such as + or an icon: its icon and its name in bold --text, with no box.
      @part onboarding-dots     One dot for each page.
      @part onboarding-dot      One dot.
      @part onboarding-switch   The switch of the sample data on the last page. It keeps its room on each page.
@@ -880,7 +836,7 @@
   }
 
   .onboarding-key {
-    color: var(--primary);
+    color: var(--text);
     font-weight: var(--weight-strong);
     white-space: nowrap;
   }

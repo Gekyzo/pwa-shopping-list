@@ -36,10 +36,11 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
 
 - **MENU-9** `Menú` shows one row for each day, with the name of the day in the language of the
   screen, and its two meals side by side. A meal shows `Comida` or `Cena` and the name of its
-  recipe or its dish, or `Elegir receta`. A meal with a recipe has a solid `--accent` border and an
-  `--accent` label. A meal with a dish has a solid `--muted` border and the label `Comida · sin
-  receta`. A meal with neither has a dashed `--muted` border. A day with a recipe or a dish in
-  both meals has an `--accent` name.
+  recipe or its dish, or `Elegir receta`. The name of the day is a head in sentence case, in the
+  colour of the text. A meal with a recipe is a `--surface` tile with a `--line` border and a
+  `--muted` label. A meal with a dish has a solid `--muted` border and the label `Comida · sin
+  receta`. A meal with neither has a dashed `--control` border on the ground and a `--muted`
+  `Elegir receta`. A full day looks the same as the other days.
   Below 600px wide the name stands above the meals; from 600px it stands at the start of the row,
   with the width of the longest name, so the week fits on the screen of a tablet or an unfolded
   phone. In the compact density below 600px the name above the meals is the short weekday of

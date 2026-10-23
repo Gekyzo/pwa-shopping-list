@@ -59,10 +59,8 @@ the bottom bar at each width.
   coincide con «text».` in `Compra`, with the button **+ Añadir «text»**, which adds the name as
   the add sheet does and ends the search; in `Recetas` it says `Ninguna receta coincide con
   «text».` with no button. While the button shows, the `+` button hides.
-- **NAV-18** `Compra` and `Recetas` show a line drawing of the basket of the app icon
-  behind the content, in the bottom corner on the other side of the `+` button (NAV-13). It is
-  tilted 30° and at 6 % opacity, and the corner and the bottom bar (the rail from 600px) cut part of it. It takes the
-  colour of the text, takes no tap and does not move with the scroll.
+- **NAV-18** Retired: the Ledger look of design system 0.7.0 keeps the ground of a list plain,
+  so no section shows a drawing behind its content.
 
 ## Item rows
 
@@ -193,7 +191,6 @@ the bottom bar at each width.
   | `+` button | Dock, at its end; from 600px bottom right | Dock, at its start; from 600px bottom left |
   | Rail, from 600px wide (DSV-8) | Right | Left |
   | Dock, below 600px wide (SHOP-26) | Search, then `+`, at the right | `+`, then search, at the left |
-  | Basket behind a list (NAV-18) | Bottom left | Bottom right |
   | Header | Text, buttons | Buttons, text |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
@@ -206,7 +203,9 @@ the bottom bar at each width.
 - **NAV-15** **Tema** of `Ajustes` has three values: `Automático`, `Claro` and `Oscuro`. An app
   with no choice uses `Automático`.
 - **NAV-16** `Automático` follows the phone (A11Y-6). `Claro` shows the light colours and `Oscuro`
-  the dark colours, whatever the phone uses. A change shows at once, with no restart.
+  the dark colours, whatever the phone uses. A change shows at once, with no restart. The bar of
+  the phone takes the colour of the ground and follows the phone only: light, or dark when the
+  phone uses dark colours.
 - **NAV-17** The choice is stored in `shopping.theme`. `Automático` removes the key. It is a
   preference of the device, not a part of the state: `Deshacer` and an import do not change it.
 
@@ -237,7 +236,7 @@ the bottom bar at each width.
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
   A line break in the text of a catalog starts a new line. A text between two backticks, such as
-  `↻` or `+`, names a control and shows as a key: its icon and its text in bold accent colour, with no border, box or monospace font.
+  `↻` or `+`, names a control and shows as a key: its icon and its text in bold, in the colour of the text, with no border, box or monospace font.
   A key that starts with `#name` shows the icon `name` of `icons.svg`, then the rest of its text.
   A key with an icon and no text has the label `onboarding.icon.<name>`.
   The app icon shows on page 1 only, above the drawing and inside the page group, 96 px wide, with

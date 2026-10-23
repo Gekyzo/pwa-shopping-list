@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- `Compra` and `Recetas` no longer show the basket behind the list. In `Menú` the name of a day
+  is a plain head, a planned meal is a white tile and a free meal has a dashed grey frame; a full
+  day no longer changes colour. A control named in the walkthrough is bold, in the colour of the
+  text. When the phone uses dark colours, the bar of the phone is dark.
 - The bottom bar shows the name of each section under its icon, with new icons. **Listo** in the head of a sheet is now a grey button.
 - On a phone the `+` button is the last button of the bar above the bottom bar, in place of the
   round button over the list. The bar shows in `Recetas` also with no search; its `+` creates a

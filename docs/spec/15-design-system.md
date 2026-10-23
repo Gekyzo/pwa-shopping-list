@@ -26,7 +26,8 @@ This document holds the rules of the app only.
   in the same layer, so that it wins; the block documents the parts, variants and states that the
   app adds. A version holds only the rules that differ from the shared ones, so that a change of
   the shared sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
-  app has its own versions of `icon`, `app-header`, `sheet`, `dock`, `item-row` and `group-head`.
+  app has its own versions of `app-header`, `sheet`, `dock`, `item-row`, `group-head`, `empty-state`
+  and `list-group`.
 - **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
   Nothing edits `vendor/` by hand.
 
@@ -48,7 +49,7 @@ This document holds the rules of the app only.
   so LAY-2 puts the rail at the right with `Derecha` and at the left with `Izquierda`; the toast and
   the `+` button clear it. `body` pads the side of the rail and both safe-area insets (LAY-4). The
   header content and the content of `main` form one column of at most `--content-max`, centred
-  beside the rail. The basket in the corner stands beside the rail. From 840px the recipes of
+  beside the rail. From 840px the recipes of
   `Recetas` stand in two columns; the app has no list and detail section, so it has no `pane`
   layout. LAY-3 runs and passes, because it checks the `pane` block of the shared sheet.
 
@@ -58,5 +59,5 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 
 | Layer | Parts |
 |---|---|
-| components | versions of `icon`, `app-header`, `sheet`, `dock`, `item-row`, `group-head` (DSV-3) |
+| components | versions of `app-header`, `sheet`, `dock`, `item-row`, `group-head`, `empty-state`, `list-group` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |
