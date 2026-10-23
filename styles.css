@@ -454,7 +454,7 @@
      @part day-short  The short name of the day: it shows instead of the long one in the compact density below 600px.
      @part meals      The two meals.
      @example <ul class="item-list" style="width: 100%"><li class="day"><h3 class="day-title"><span class="day-long">Lunes</span><span class="day-short">lun</span></h3><div class="meals"><button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button><button class="meal free" type="button"><small class="meal-label">Cena</small><span class="meal-name">Elegir receta</span></button></div></li></ul> */
-  /* A day stands on the ground of the page: its name is a quiet head, its meals are the tiles. */
+  /* A day stands on the ground of the page: its name is a head, its meals are the tiles. */
   .day {
     padding: var(--space-2) var(--space-4);
   }
@@ -462,7 +462,7 @@
   .day-title {
     margin: 0 0 var(--space-2);
     color: var(--text);
-    font-size: var(--text-s);
+    font-size: var(--text-label);
     font-weight: var(--weight-medium);
   }
 
