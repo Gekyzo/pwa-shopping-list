@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.3.1 - 2026-10-23
+
 - The head of a group shows its count as `1 de 4` and ends with a chevron icon: down while the group is open, right while it is closed. `Comprados (N)` has the same chevron.
 - The name of a day in `Menú` is 14px, as the other heads.
 - The names of the fields of a sheet stand above their boxes, and the titles `Tiendas` and `Sección` of the edit sheet look the same. `Repetir en cada compra` lines up with the fields.
