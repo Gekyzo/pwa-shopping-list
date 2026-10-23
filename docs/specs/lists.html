@@ -1,0 +1,1318 @@
+<!doctype html>
+<html lang="es" data-repo-root="/home/ciro/code/personal/pwa-shopping-list" data-kind="spec" data-layout="spec">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listas</title>
+<meta name="description" content="Qué hace hoy la lista Compra: artículos, marcas, cantidad, hoja de añadir, búsqueda, artículos guardados y fin de la compra.">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --surface: #fffdf8;
+  --sunk: #efece4;
+  --ink: #1f1d1a;
+  --muted: #5d5850;
+  --faint: #8f887c;
+  --rule: #e2ddd2;
+  --rule-strong: #cbc4b5;
+  --accent: #2f6f8f;
+  --accent-soft: #e3eef3;
+  --red: #b3372b;    --red-soft: #f8e5e1;
+  --amber: #9a6410;  --amber-soft: #f7ecd6;
+  --green: #2e7a45;  --green-soft: #e2f1e5;
+  --code-bg: #fbf9f4;
+  --line-mark: #fdf3cf;
+  --tk-kw: #8b3fa8;  --tk-str: #2e7a45;  --tk-com: #948d80;
+  --tk-num: #b0521b; --tk-fn: #2f5fa8;   --tk-type: #9a6410;
+  --tk-var: #b3372b; --tk-prop: #2f6f8f;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "SF Mono", "SFMono-Regular", "SF Mono Ligaturized", ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--sans); }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+code, pre, kbd { font-family: var(--mono); font-size: 0.86em; }
+:not(pre) > code { background: var(--sunk); padding: 0.08em 0.35em; border-radius: 4px; }
+/* long identifiers and paths break instead of widening the page on narrow screens */
+:not(pre) > code, article.finding > header .where { overflow-wrap: anywhere; }
+
+/* ── layout ─────────────────────────────────────────────── */
+.shell { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2.5rem; max-width: 84rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+nav.toc { position: sticky; top: 1.5rem; align-self: start; max-height: calc(100vh - 3rem); overflow: auto; font-size: 0.85rem; }
+nav.toc .toc-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin: 0 0 0.5rem; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; }
+nav.toc li a { display: block; padding: 0.2rem 0.6rem; border-left: 2px solid var(--rule); color: var(--muted); text-decoration: none; }
+nav.toc li.sub a { padding-left: 1.4rem; font-size: 0.8rem; }
+nav.toc li a:hover { color: var(--ink); }
+nav.toc li a[aria-current="true"] { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+main { min-width: 0; }
+
+/* ── masthead ───────────────────────────────────────────── */
+.kicker { font: 600 0.72rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); margin: 0 0 0.4rem; }
+h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 0.6rem; letter-spacing: -0.01em; }
+.meta { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; color: var(--muted); font-size: 0.85rem; margin: 0 0 1.5rem; padding: 0 0 1rem; border-bottom: 1px solid var(--rule); }
+.meta b { color: var(--ink); font-weight: 600; }
+
+h2 { font-size: 1.3rem; margin: 2.8rem 0 0.8rem; padding-top: 0.2rem; border-top: 1px solid var(--rule); padding-top: 1.2rem; }
+h3 { font-size: 1.05rem; margin: 1.8rem 0 0.5rem; }
+h2 .n, h3 .n { font-family: var(--mono); color: var(--faint); font-weight: 500; margin-right: 0.4rem; }
+
+/* ── TL;DR ──────────────────────────────────────────────── */
+.tldr { background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 0.9rem 1.2rem; margin: 0 0 1.5rem; }
+.tldr .label { font: 700 0.7rem var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.3rem; }
+.tldr ul { margin: 0; padding-left: 1.1rem; }
+.tldr li + li { margin-top: 0.25rem; }
+
+/* ── code excerpts ──────────────────────────────────────── */
+figure.code { margin: 1rem 0 1.4rem; border: 1px solid var(--rule); border-radius: 8px; background: var(--code-bg); overflow: hidden; }
+.code-head { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.5rem 0.35rem 0.8rem; border-bottom: 1px solid var(--rule); background: var(--sunk); font: 0.76rem var(--mono); color: var(--muted); }
+.code-head .path { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.code-head a.path { color: var(--accent); text-decoration: none; }
+.code-head a.path:hover { text-decoration: underline; }
+.code-head .lang { margin-left: auto; color: var(--faint); text-transform: lowercase; }
+.code-head .role, .code-head .sketch { font: 700 0.65rem var(--sans); letter-spacing: 0.06em; text-transform: uppercase; padding: 0.1rem 0.45rem; border-radius: 999px; }
+.code-head .sketch { background: var(--amber-soft); color: var(--amber); }
+.code-head .copy { font: 600 0.7rem var(--sans); color: var(--muted); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 5px; padding: 0.12rem 0.5rem; cursor: pointer; }
+.code-head .copy:hover { color: var(--ink); }
+figure.code pre { margin: 0; padding: 0.6rem 0; overflow-x: auto; line-height: 1.55; tab-size: 4; }
+figure.code pre > code { display: block; min-width: max-content; font-size: 0.82rem; }
+figure.code .ln { display: block; padding: 0 1rem 0 0.9rem; border-left: 3px solid transparent; }
+figure.code.numbered .ln::before { content: attr(data-n); display: inline-block; width: var(--gutter, 3ch); margin-right: 1.1rem; text-align: right; color: var(--faint); user-select: none; }
+figure.code .ln.mark { background: var(--line-mark); border-left-color: var(--amber); }
+figure.code .ln.add { background: var(--accent-soft); border-left-color: var(--accent); }
+figure.code .ln.del { background: var(--red-soft); border-left-color: var(--red); }
+figure.code figcaption { padding: 0.45rem 0.9rem; border-top: 1px solid var(--rule); font-size: 0.84rem; color: var(--muted); background: var(--surface); }
+.tk-kw { color: var(--tk-kw); } .tk-str { color: var(--tk-str); } .tk-com { color: var(--tk-com); font-style: italic; }
+.tk-num { color: var(--tk-num); } .tk-fn { color: var(--tk-fn); } .tk-type { color: var(--tk-type); }
+.tk-var { color: var(--tk-var); } .tk-prop { color: var(--tk-prop); }
+
+.diff { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; margin: 1rem 0 1.4rem; }
+.diff figure.code { margin: 0; }
+figure.code[data-role="before"] { border-color: color-mix(in srgb, var(--red) 45%, var(--rule)); }
+figure.code[data-role="after"]  { border-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); }
+.code-head .role { background: var(--accent-soft); color: var(--accent); }
+figure.code[data-role="before"] .role { background: var(--red-soft); color: var(--red); }
+figure.code[data-role="after"] .role  { background: var(--accent-soft); color: var(--accent); }
+
+/* ── flow ───────────────────────────────────────────────── */
+ol.flow { list-style: none; counter-reset: step; margin: 1rem 0 1.4rem; padding: 0; max-width: none; }
+ol.flow > li { counter-increment: step; position: relative; padding: 0 0 0.9rem 2.4rem; }
+ol.flow > li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; border-radius: 50%; background: var(--surface); border: 1px solid var(--rule-strong); font: 600 0.75rem var(--mono); color: var(--muted); }
+ol.flow > li:not(:last-child)::after { content: ""; position: absolute; left: 0.8rem; top: 1.7rem; bottom: 0.1rem; width: 1px; background: var(--rule-strong); }
+ol.flow .step-what { font-weight: 600; }
+ol.flow .step-why { color: var(--muted); }
+
+/* ── findings ───────────────────────────────────────────── */
+article.finding { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 0.3rem 1.2rem 0.6rem; margin: 1rem 0 1.4rem; }
+article.finding > header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; margin: 0.8rem 0 0.4rem; }
+article.finding > header h3 { margin: 0; }
+article.finding > header .where { margin-left: auto; font: 0.78rem var(--mono); color: var(--faint); }
+.sev { font: 700 0.66rem var(--sans); letter-spacing: 0.06em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+.sev.high { background: var(--red-soft); color: var(--red); }
+.sev.med  { background: var(--amber-soft); color: var(--amber); }
+.sev.low  { background: var(--green-soft); color: var(--green); }
+.sev.info { background: var(--accent-soft); color: var(--accent); }
+.fix { border-left: 3px solid var(--green); padding-left: 0.8rem; }
+
+/* ── tags ───────────────────────────────────────────────── */
+.tag { display: inline-block; font: 600 0.7rem var(--sans); padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--sunk); color: var(--muted); border: 1px solid var(--rule); white-space: nowrap; vertical-align: 0.1em; }
+.tag.green { background: var(--green-soft); color: var(--green); border-color: transparent; }
+.tag.amber { background: var(--amber-soft); color: var(--amber); border-color: transparent; }
+.tag.red   { background: var(--red-soft);   color: var(--red);   border-color: transparent; }
+.tag.blue  { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0 0 0.6rem; }
+
+/* ── collapsible ───────────────────────────────────────── */
+details.more { margin: 0.9rem 0 1rem; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+details.more > summary { cursor: pointer; list-style: none; padding: 0.45rem 0.9rem; font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform 0.15s; }
+details.more[open] > summary { color: var(--ink); border-bottom: 1px solid var(--rule); }
+details.more[open] > summary::before { transform: rotate(90deg); }
+details.more > summary:hover { color: var(--ink); }
+details.more > :not(summary) { margin-left: 0.9rem; margin-right: 0.9rem; }
+details.more > .diff, details.more > figure.code { margin-left: 0.9rem; margin-right: 0.9rem; }
+
+/* ── collapsible sections + contents groups ─────────────── */
+main > h2.foldable { cursor: pointer; }
+.fold, .toc-fold { background: none; border: 0; padding: 0; font: inherit; color: var(--faint); cursor: pointer; }
+.fold { margin-right: 0.35rem; }
+.fold::before, .toc-fold::before { content: "▾"; display: inline-block; transition: transform 0.15s; }
+.fold[aria-expanded="false"]::before, .toc-fold[aria-expanded="false"]::before { transform: rotate(-90deg); }
+main > h2.foldable:hover .fold, .toc-fold:hover { color: var(--ink); }
+nav.toc li.has-subs { display: flex; }
+nav.toc li.has-subs > a { flex: 1; min-width: 0; }
+.toc-fold { flex: none; padding: 0 0.5rem; font-size: 0.8rem; }
+nav.toc .toc-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin: 0 0 0.5rem; }
+nav.toc .toc-head .toc-title { margin: 0; }
+.toc-toggle { flex: none; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; padding: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 5px; color: var(--faint); font: 0.9rem/1 var(--sans); cursor: pointer; }
+.toc-toggle::before { content: "«"; }
+.toc-toggle[aria-expanded="false"]::before { content: "»"; }
+.toc-toggle:hover { color: var(--ink); border-color: var(--rule-strong); }
+.shell.toc-hidden { grid-template-columns: 1.6rem minmax(0, 1fr); }
+.shell.toc-hidden nav.toc { overflow: visible; }
+.shell.toc-hidden nav.toc .toc-title, .shell.toc-hidden nav.toc ol { display: none; }
+.shell.toc-hidden nav.toc .toc-head { margin: 0; }
+
+/* ── callouts, questions, tables ────────────────────────── */
+aside.note, aside.warn, aside.ok { border-radius: 0 8px 8px 0; padding: 0.6rem 1rem; margin: 1rem 0; border-left: 3px solid; }
+aside.note { background: var(--accent-soft); border-color: var(--accent); }
+aside.warn { background: var(--amber-soft); border-color: var(--amber); }
+aside.ok   { background: var(--green-soft); border-color: var(--green); }
+aside > :first-child { margin-top: 0; } aside > :last-child { margin-bottom: 0; }
+ul.questions { list-style: none; padding: 0; }
+ul.questions li { position: relative; padding: 0.35rem 0 0.35rem 1.6rem; border-bottom: 1px dashed var(--rule); }
+ul.questions li::before { content: "?"; position: absolute; left: 0.2rem; top: 0.35rem; font: 700 0.9rem var(--mono); color: var(--amber); }
+.tablewrap { overflow-x: auto; margin: 1rem 0 1.4rem; border: 1px solid var(--rule); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+th, td { text-align: left; padding: 0.45rem 0.8rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { background: var(--sunk); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+th.sortable:hover { color: var(--ink); }
+th.sortable::after { content: "↕"; margin-left: 0.35rem; color: var(--faint); font-size: 0.8em; }
+th.sortable[aria-sort="ascending"]::after { content: "↑"; color: var(--accent); }
+th.sortable[aria-sort="descending"]::after { content: "↓"; color: var(--accent); }
+tr.filter-row th { background: var(--surface); padding: 0.3rem 0.4rem; text-transform: none; letter-spacing: 0; }
+tr.filter-row input[type="search"], tr.filter-row .ms-btn { width: 100%; min-width: 5rem; font: 0.78rem var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--rule-strong); border-radius: 5px; padding: 0.2rem 0.35rem; }
+tr.filter-row .active { border-color: var(--accent); background: var(--accent-soft); }
+.ms-btn { text-align: left; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 1.2rem !important; position: relative; }
+.ms-btn::after { content: "▾"; position: absolute; right: 0.4rem; color: var(--faint); }
+.ms-panel { position: fixed; z-index: 20; max-height: 50vh; overflow: auto; background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 6px; box-shadow: 0 6px 20px rgb(0 0 0 / 0.12); padding: 0.3rem 0; font: 0.8rem var(--sans); text-transform: none; letter-spacing: 0; color: var(--ink); }
+.ms-panel label { display: flex; justify-content: flex-start; align-items: center; gap: 0.45rem; padding: 0.2rem 0.7rem; cursor: pointer; white-space: nowrap; font-weight: 400; }
+.ms-panel label:hover { background: var(--sunk); }
+.ms-actions { display: flex; gap: 0.3rem; padding: 0.15rem 0.5rem 0.35rem; margin-bottom: 0.2rem; border-bottom: 1px solid var(--rule); }
+.ms-actions button { font: 600 0.7rem var(--sans); color: var(--accent); background: none; border: 0; padding: 0.1rem 0.25rem; cursor: pointer; }
+.ms-actions button:hover { text-decoration: underline; }
+.table-count { margin: -0.9rem 0 1.4rem; font-size: 0.75rem; color: var(--faint); text-align: right; }
+.table-count[hidden] { display: none; }
+footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.8rem; color: var(--faint); }
+
+/* ── architecture diagram: a JSON spec the script draws as one SVG ── */
+figure.arch { margin: 1rem 0 1.4rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--bg); overflow: hidden; }
+figure.arch > script { display: none; }
+.arch-canvas { overflow-x: auto; padding: 1.1rem 1rem 0.8rem; }
+.arch-canvas svg { display: block; width: 100%; min-width: 760px; height: auto; font-family: var(--sans); }
+.arch-canvas .an rect.box { fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1; }
+.arch-canvas .an .label { fill: var(--ink); font-weight: 600; }
+.arch-canvas .an .sub { fill: var(--muted); }
+.arch-canvas .an.accent rect.box { fill: var(--accent-soft); stroke: var(--accent); }
+.arch-canvas .an.red rect.box    { fill: var(--red-soft);    stroke: var(--red); }
+.arch-canvas .an.amber rect.box  { fill: var(--amber-soft);  stroke: var(--amber); }
+.arch-canvas .an.green rect.box  { fill: var(--green-soft);  stroke: var(--green); }
+.arch-canvas .an.ghost rect.box  { fill: none; stroke: var(--faint); stroke-dasharray: 5 4; }
+.arch-canvas .an.ghost .label    { fill: var(--muted); }
+.arch-canvas .an .tag rect { fill: var(--ink); }
+.arch-canvas .an .tag text { fill: var(--surface); font: 700 10px var(--mono); letter-spacing: 0.04em; }
+.arch-canvas .an.red .tag rect { fill: var(--red); } .arch-canvas .an.amber .tag rect { fill: var(--amber); }
+.arch-canvas .an.green .tag rect { fill: var(--green); } .arch-canvas .an.accent .tag rect { fill: var(--accent); }
+.arch-canvas a .an rect.box { cursor: pointer; }
+.arch-canvas a:hover .an rect.box { stroke-width: 2; }
+.arch-canvas .ag rect { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 6 4; }
+.arch-canvas .ag.tint rect { fill: color-mix(in srgb, var(--accent-soft) 45%, transparent); }
+.arch-canvas .ag.bare rect { stroke: none; }
+.arch-canvas .ag.muted rect { stroke: var(--faint); }
+.arch-canvas .ag text { fill: var(--accent); font: 600 11px var(--mono); letter-spacing: 0.14em; }
+.arch-canvas .ag rect.plate { fill: var(--bg); stroke: none; }
+.arch-canvas .ag.muted text { fill: var(--faint); }
+.arch-canvas .halo { paint-order: stroke; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+.arch-canvas .ae path { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-linejoin: round; }
+.arch-canvas .ae.dashed path { stroke-dasharray: 6 4; }
+.arch-canvas .ae.red path { stroke: var(--red); }   .arch-canvas .ae.amber path { stroke: var(--amber); }
+.arch-canvas .ae.green path { stroke: var(--green); } .arch-canvas .ae.faint path { stroke: var(--faint); }
+.arch-canvas text.el { fill: var(--muted); font-size: 12px; }
+.arch-canvas marker path { stroke: none; }
+.arch-canvas .am-accent path { fill: var(--accent); } .arch-canvas .am-red path { fill: var(--red); }
+.arch-canvas .am-amber path { fill: var(--amber); }   .arch-canvas .am-green path { fill: var(--green); }
+.arch-canvas .am-faint path { fill: var(--faint); }
+.arch-canvas .ae, .arch-canvas text.el, .arch-canvas .an { transition: opacity 0.15s; }
+figure.arch.focus .ae:not(.on), figure.arch.focus text.el:not(.on) { opacity: 0.12; }
+figure.arch.focus .an.dim { opacity: 0.35; }
+.arch-foot { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; align-items: center; padding: 0 1rem 0.8rem; font-size: 0.76rem; color: var(--muted); }
+.arch-foot .sw { display: inline-flex; align-items: center; gap: 0.4rem; }
+.arch-foot .sw::before { content: ""; width: 1.1rem; height: 0.75rem; border-radius: 3px; border: 1px solid var(--rule-strong); background: var(--surface); }
+.arch-foot .sw.accent::before { background: var(--accent-soft); border-color: var(--accent); }
+.arch-foot .sw.red::before { background: var(--red-soft); border-color: var(--red); }
+.arch-foot .sw.amber::before { background: var(--amber-soft); border-color: var(--amber); }
+.arch-foot .sw.green::before { background: var(--green-soft); border-color: var(--green); }
+.arch-foot .sw.ghost::before { background: none; border: 1px dashed var(--faint); }
+.arch-foot .sw.line::before, .arch-foot .sw.dashed::before { height: 0; border: 0; border-top: 1.5px solid var(--accent); border-radius: 0; background: none; }
+.arch-foot .sw.dashed::before { border-top-style: dashed; }
+.arch-note { margin: 0 1rem 0.9rem; padding: 0.55rem 0.9rem; border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; background: var(--surface); font-size: 0.86rem; }
+.arch-note b { margin-right: 0.7rem; font: 600 0.68rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.arch-error { margin: 0.8rem 1rem; color: var(--red); font: 0.8rem var(--mono); white-space: pre-wrap; }
+figure.arch > figcaption { padding: 0.45rem 0.9rem; border-top: 1px solid var(--rule); font-size: 0.84rem; color: var(--muted); background: var(--surface); }
+
+/* ── responsive + print ─────────────────────────────────── */
+@media (max-width: 62rem) {
+  .shell { grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 3rem 1rem 3rem; }
+  nav.toc { position: static; max-height: none; border: 1px solid var(--rule); border-radius: 8px; padding: 0.8rem; background: var(--surface); }
+  nav.toc ol { columns: 2; column-gap: 1rem; }
+  nav.toc li.sub { display: none; }
+  .toc-fold { display: none; }
+  .shell.toc-hidden { grid-template-columns: minmax(0, 1fr); }
+  .shell.toc-hidden nav.toc { justify-self: start; padding: 0.4rem; }
+}
+@media (max-width: 45rem) {
+  .diff { grid-template-columns: minmax(0, 1fr); }
+  nav.toc ol { columns: 1; }
+  h1 { font-size: 1.5rem; }
+}
+/* ── plan: task slips (a <details>, so links and printing open it) ── */
+details.task { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; margin: 1rem 0 1.2rem; }
+details.task > summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; padding: 0.7rem 1.2rem; }
+details.task > summary::-webkit-details-marker { display: none; }
+details.task > summary::before { content: "▸"; color: var(--faint); transition: transform 0.15s; }
+details.task[open] > summary::before { transform: rotate(90deg); }
+details.task[open] > summary { border-bottom: 1px solid var(--rule); }
+details.task > summary .n { font-family: var(--mono); color: var(--faint); }
+details.task > summary .files { margin-left: auto; font: 0.78rem var(--mono); color: var(--faint); overflow-wrap: anywhere; }
+details.task > :not(summary) { margin-left: 1.2rem; margin-right: 1.2rem; }
+details.task dl.iface { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.2rem 0.9rem; font-size: 0.88rem; }
+details.task dl.iface dt { color: var(--muted); font-weight: 600; }
+details.task dl.iface dd { margin: 0; }
+
+/* ── recap: trail of stations ── */
+ol.trail { list-style: none; margin: 1rem 0 1.4rem; padding: 0; display: grid; gap: 0.6rem; }
+ol.trail > li.station { padding: 0.55rem 0.9rem 0.6rem 1rem; border: 1px solid var(--rule); border-left: 4px solid var(--rule-strong); border-radius: 0 8px 8px 0; background: var(--surface); }
+ol.trail > li.station::before { content: attr(data-label); display: block; font: 700 0.65rem var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); margin-bottom: 0.15rem; }
+li.station.ask, li.station.built, li.station.fix { border-left-color: var(--accent); }
+li.station.symptom { border-left-color: var(--amber); }
+li.station.cause { border-left-color: var(--red); }
+li.station.proof { border-left-color: var(--green); }
+li.station.proof[data-verdict="fail"] { border-left-color: var(--red); }
+li.station.proof[data-verdict="not-run"] { border-left-color: var(--faint); }
+li.station.deadend { opacity: 0.6; text-decoration: line-through; text-decoration-color: var(--faint); }
+li.station.deadend .why { text-decoration: none; display: block; margin: 0.2rem 0 0; font-size: 0.85rem; color: var(--muted); }
+
+/* ── recap: verdict chip on command evidence ── */
+.code-head .verdict { font: 700 0.65rem var(--sans); letter-spacing: 0.06em; text-transform: uppercase; padding: 0.1rem 0.45rem; border-radius: 999px; }
+.code-head .verdict.pass { background: var(--green-soft); color: var(--green); }
+.code-head .verdict.fail { background: var(--red-soft); color: var(--red); }
+.code-head .verdict.not-run { background: var(--sunk); color: var(--muted); }
+
+/* ── recap: diffstat ── */
+table.diffstat td:nth-child(2), table.diffstat td:nth-child(3) { text-align: right; font-family: var(--mono); }
+table.diffstat td:nth-child(2) { color: var(--accent); }
+table.diffstat td:nth-child(3) { color: var(--red); }
+table.diffstat td.bar { width: 40%; white-space: nowrap; }
+table.diffstat td.bar span { display: inline-block; height: 0.6rem; vertical-align: middle; }
+table.diffstat td.bar .a { background: var(--accent); }
+table.diffstat td.bar .d { background: var(--red); }
+
+/* ── plan and recap: done ledger ── */
+ul.done { list-style: none; padding: 0; margin: 1rem 0 1.4rem; }
+ul.done > li { position: relative; padding: 0.15rem 0 0.15rem 1.7rem; }
+ul.done > li::before { content: "☐"; position: absolute; left: 0; color: var(--faint); }
+ul.done > li.closed::before { content: "☑"; color: var(--green); }
+
+@media print {
+  :root { --bg: #fff; --surface: #fff; }
+  th.sortable::after { content: none !important; }
+  body { font-size: 11pt; }
+  nav.toc, .toc-toggle, .code-head .copy, tr.filter-row, .table-count, .fold { display: none !important; }
+  .shell { display: block; padding: 0; max-width: none; }
+  figure.code, article.finding, aside { break-inside: avoid; }
+  figure.code pre { white-space: pre-wrap; overflow: visible; }
+  figure.code pre > code { min-width: 0; }
+  a { color: inherit; }
+}
+
+/* ══ spec layout: a living feature spec drawn as one sheet on paper ═════════
+   A layer on engine.css. The contents sidebar stays; the main element becomes the sheet. */
+html[data-layout="spec"] {
+  --bg: #e3e8eb; --surface: #fcfcfb; --sunk: #edf1f3; --ink: #0f1a21; --muted: #5d6c74; --faint: #7d8b92;
+  --rule: #dce3e6; --rule-strong: #c9d2d7; --code-bg: #f7f9f9;
+  --stamp: #a8321f; --tint: rgba(168, 50, 31, .06);
+  --serif: "Iowan Old Style", Charter, Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-layout="spec"] {
+    --bg: #0e151a; --surface: #161e23; --sunk: #1d272d; --ink: #e2e8ea; --muted: #8b9ba3; --faint: #6f7f87;
+    --rule: #232d33; --rule-strong: #2c373e; --code-bg: #121a1f; --line-mark: #3a3418;
+    --accent: #6fb3d2; --accent-soft: #17303b;
+    --red: #e4664b; --red-soft: #3a1f1a; --amber: #d9a24a; --amber-soft: #352a15; --green: #6cc08a; --green-soft: #17301f;
+    --stamp: #e4664b; --tint: rgba(228, 102, 75, .09);
+  }
+}
+
+html[data-layout="spec"] body { font: 16.5px/1.62 var(--serif); font-kerning: normal; }
+html[data-layout="spec"] main {
+  position: relative; max-width: 44rem; background: var(--surface); border: 1px solid var(--rule);
+  padding: 2.8rem clamp(1.25rem, 4vw, 3rem) 3rem;
+  box-shadow: 0 1px 2px rgba(15, 26, 33, .05), 0 14px 40px -22px rgba(15, 26, 33, .3);
+  animation: spec-rise .7s cubic-bezier(.2, .7, .3, 1) both;
+}
+@keyframes spec-rise { from { opacity: 0; transform: translateY(14px); } }
+
+/* ── masthead ── */
+html[data-layout="spec"] .kicker { color: var(--stamp); letter-spacing: .15em; font-size: .7rem; }
+html[data-layout="spec"] h1 { font: 600 1.45rem/1.2 var(--mono); letter-spacing: -.015em; max-width: 24ch; }
+html[data-layout="spec"] main .meta { flex-direction: column; gap: 0; font: .74rem/1.85 var(--mono); max-width: none; }
+html[data-layout="spec"] main > .meta + h2 { border-top: 0; padding-top: 0; margin-top: 2rem; }
+
+.stamp {
+  position: absolute; top: -1.05rem; right: -1.05rem; z-index: 3; text-align: center; line-height: 1.35;
+  font: .62rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--stamp);
+  background: var(--surface); border: 2px solid var(--stamp); border-radius: 3px; padding: .5rem .7rem .45rem;
+  transform: rotate(-6deg); animation: spec-land .55s cubic-bezier(.3, 1.5, .5, 1) .55s both;
+}
+.stamp time { display: block; font-size: .82rem; letter-spacing: .06em; }
+.stamp .age { display: block; font-size: .58rem; letter-spacing: .08em; }
+.stamp.stale { --stamp: var(--amber); border-style: dashed; }
+@keyframes spec-land { from { opacity: 0; transform: rotate(-16deg) scale(1.35); } }
+
+/* ── sections: mono kicker headings, as the sheet's .sec / .sub ── */
+html[data-layout="spec"] main > h2 {
+  font: 600 .76rem var(--mono); letter-spacing: .15em; text-transform: uppercase; color: var(--stamp);
+  border-top: 1px solid var(--rule); margin: 2.4rem 0 .9rem; padding-top: 1.4rem;
+}
+html[data-layout="spec"] main > h2 .fold { color: var(--stamp); opacity: .6; }
+html[data-layout="spec"] main h3 { font: 600 .86rem var(--mono); letter-spacing: .01em; margin: 1.7rem 0 .5rem; }
+html[data-layout="spec"] main p, html[data-layout="spec"] main li { max-width: 62ch; }
+html[data-layout="spec"] main li + li { margin-top: .5rem; }
+html[data-layout="spec"] :not(pre) > code { background: var(--tint); border-radius: 2px; }
+html[data-layout="spec"] main a { color: inherit; text-decoration-color: var(--stamp); text-underline-offset: .18em; }
+html[data-layout="spec"] main a:hover { color: var(--stamp); }
+html[data-layout="spec"] nav.toc li a[aria-current="true"] { color: var(--stamp); border-left-color: var(--stamp); }
+
+/* ── decisions index and change log ── */
+html[data-layout="spec"] .tablewrap { border: 0; border-radius: 0; }
+html[data-layout="spec"] th { background: none; font: 600 .64rem var(--mono); letter-spacing: .11em; border-bottom-color: var(--rule-strong); padding-left: 0; }
+html[data-layout="spec"] td { padding-left: 0; }
+/* The engine lets inline code break anywhere; in a narrow table that splits a name mid-word. */
+html[data-layout="spec"] td :not(pre) > code, html[data-layout="spec"] td > code { overflow-wrap: break-word; }
+table.decisions td:first-child { width: 70%; }
+table.changelog td:first-child { font: .78rem var(--mono); color: var(--muted); white-space: nowrap; }
+
+/* ── sources: the closing evidence list, set small like the meta lines ── */
+html[data-layout="spec"] #fuentes-body > ul, html[data-layout="spec"] #fuentes + ul { font: .74rem/1.85 var(--mono); list-style: none; padding-left: 0; }
+html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #fuentes + ul li + li { margin-top: 0; }
+
+@media (min-width: 40rem) { table.changelog td:nth-child(2) { min-width: 12rem; } }
+/* The index keeps page, description and open items on a phone; status, rules and date need the width. */
+@media (max-width: 40rem) { table.pages :is(th, td):is(:nth-child(3), :nth-child(4), :nth-child(5)) { display: none; } }
+@media (max-width: 62rem) {
+  html[data-layout="spec"] main { max-width: none; }
+  .stamp { right: .75rem; top: -.9rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-layout="spec"] main, .stamp { animation: none; }
+}
+@media print {
+  html[data-layout="spec"] main { box-shadow: none; border: 0; animation: none; }
+  .stamp { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
+<main>
+<div class="stamp">Verificado<time datetime="2026-10-23">2026-10-23</time></div>
+<p class="kicker">Especificación de funcionalidad</p>
+<h1>Listas</h1>
+<p class="meta">
+  <span><b>Estado</b> en uso</span>
+  <span><b>Responsable</b> Ciro</span>
+  <span><b>Código</b> <code>src/store.js</code>, <code>src/suggest.js</code>, <code>src/ui/add.js</code>, <code>src/ui/rows.js</code>, <code>src/ui/list.js</code>, <code>src/ui/edit.js</code>, <code>tests/store.test.js</code></span>
+  <span><b>Reglas</b> <a href="../spec/03-lists.md">LIST, ADD y TRIP</a></span>
+</p>
+
+<h2 id="proposito">Propósito</h2>
+<p><code>Compra</code> es la única lista de la app: lo que hay que comprar en este viaje a la tienda. El usuario añade artículos, los marca al comprarlos y, al acabar, toca <strong>Terminar compra</strong>. Los artículos con <code>↻</code> vuelven sin marcar; los demás se guardan y la hoja de añadir los encuentra otra vez. Las reglas, con sus identificadores, están en <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a>. Si esta página y ese archivo no coinciden, manda el archivo.</p>
+
+<h2 id="fuera-de-alcance">Fuera de alcance</h2>
+<ul>
+  <li>No hay segunda lista para la próxima compra, ni una marca que guarde un artículo para el viaje siguiente: solo <code>↻</code> y <code>Aplazar</code> lo hacen (LIST-14 a LIST-19).</li>
+  <li>La cantidad es texto libre: sin unidades, sin cálculos y sin cantidad en los productos de una receta (LIST-27).</li>
+  <li>Un artículo no tiene nota, y un texto no añade varios artículos a la vez.</li>
+  <li>La búsqueda no ordena los resultados por relevancia, no busca por la receta de un artículo y no encuentra los artículos guardados (LIST-36).</li>
+  <li>Los artículos guardados no tienen fila ni sección en la pantalla; la hoja de añadir es el único acceso (LIST-34).</li>
+</ul>
+
+<h2 id="comportamiento">Comportamiento</h2>
+<h3 id="items">Artículos</h3>
+<p>Un artículo nuevo tiene un nombre sin espacios al principio ni al final. Un nombre vacío da <code>Escribe un nombre.</code> (LIST-1). Los nombres son únicos sin distinguir mayúsculas, en <code>Compra</code> y entre los guardados: un nombre repetido da <code>"Leche" ya está en Compra.</code> o <code>"Leche" ya está en artículos guardados.</code>, con el nombre y la lista del artículo que ya existe (LIST-2, DATA-3). Un artículo nuevo es puntual, va a <code>Compra</code> y queda al final de la lista, sin tienda, sin cantidad y sin marcar (LIST-3, LIST-4).</p>
+<p>Un cambio de nombre en <strong>Nombre</strong> de la hoja <code>Editar</code> sigue las mismas reglas. El artículo puede mantener su propio nombre, también con otras mayúsculas, sin error. El mismo texto no cambia nada (LIST-5). Un error muestra su mensaje y el campo vuelve al nombre anterior. Un campo de nombre admite 80 caracteres como máximo; el almacén no tiene límite (LIST-6).</p>
+<p>Un artículo recurrente muestra <code>↻ cada compra</code> debajo del nombre. La acción <strong>Repetir</strong> del deslizamiento a la izquierda lo hace recurrente; en un artículo recurrente se llama <strong>No repetir</strong>. El interruptor <strong>Repetir en cada compra</strong> de <code>Editar</code> hace lo mismo y muestra <code>Guardado</code> (LIST-7). <strong>Eliminar</strong> borra el artículo con sus tiendas y muestra <code>"Leche" eliminado.</code> con <code>Deshacer</code> (LIST-8).</p>
+
+<h3 id="quantity">Cantidad</h3>
+<p>Un artículo tiene una cantidad en texto libre, como <code>2</code>, <code>1 kg</code> o <code>3 latas</code>, o ninguna (LIST-27). Se escribe en <strong>Cantidad</strong> de <code>Editar</code>, con 20 caracteres como máximo (ROW-7). El texto se recorta, un texto vacío borra la cantidad y el mismo texto no cambia nada. La fila muestra la cantidad después del nombre. Marcar, <strong>Terminar compra</strong> y recuperar un artículo guardado mantienen la cantidad; eliminar el artículo la borra (LIST-28). La búsqueda no mira la cantidad (LIST-29).</p>
+
+<h3 id="tick">Marcar</h3>
+<p>Solo se marcan los artículos de <code>Compra</code>; un artículo guardado da <code>Solo se pueden marcar los artículos de Compra.</code> (LIST-10). Un toque en el cuerpo de la fila, o un deslizamiento a la derecha, marca el artículo (LIST-11). El artículo no se borra: pasa a la sección <code>Comprados (N)</code> al final de <code>Compra</code>, que empieza cerrada. Un toque en esa fila la abre y la cierra (LIST-12). Marcar muestra <code>"Leche" comprado.</code> con <code>Deshacer</code>, porque la fila sale de debajo del dedo. Desmarcar una fila de <code>Comprados (N)</code>, con un toque o un deslizamiento, no muestra <code>Deshacer</code> (LIST-13).</p>
+
+<h3 id="add-sheet">Hoja de añadir</h3>
+<p>El botón <code>+</code> de <code>Compra</code> abre la hoja <strong>Añadir artículo a la lista</strong>, con un campo de nombre y el botón <strong>Añadir</strong>. Todo lo que se añade va a <code>Compra</code> (ADD-1). <strong>Añadir</strong> está desactivado mientras el campo está vacío. Mientras el usuario escribe, la hoja muestra hasta 6 filas encima del campo, que queda fijo abajo. La primera es <code>+ Crear «nombre»</code> si ningún artículo tiene ese nombre; después vienen los artículos cuyo nombre contiene el texto, sin distinguir mayúsculas ni acentos: primero el nombre exacto, luego los que empiezan por el texto, luego los demás. La lista va al revés, para que la primera fila quede junto al campo (ADD-2, ADD-4).</p>
+<p>Cada artículo de la lista dice dónde está y qué hace un toque (ADD-3): <code>ya comprado · repetir</code> lo desmarca, <code>ya en la lista</code> no hace nada y <code>comprado antes · añadir</code> lo recupera en <code>Compra</code> sin marcar. <strong>Añadir</strong> con el nombre de un artículo que existe hace lo mismo y nunca crea un duplicado. Si no cambia nada, el texto se queda, el campo se marca como erróneo y debajo aparece <code>«Leche» ya está en la lista</code> hasta la siguiente pulsación (ADD-5). Un cambio muestra <code>"Leche" ya existe. Ahora está en Compra.</code> con <code>Deshacer</code> (ADD-6). Un artículo nuevo muestra <code>"Leche" añadido a Compra.</code> sin <code>Deshacer</code> (ADD-7). La hoja sigue abierta con el campo vacío y el foco en él; un toque fuera o <code>Escape</code> la cierra (ADD-8). La fila del artículo recuperado parpadea y se desplaza hasta quedar a la vista (ADD-9).</p>
+
+<h3 id="search">Búsqueda</h3>
+<p>El botón de búsqueda aparece cuando la lista en pantalla tiene al menos un artículo. Desde 600px está en la cabecera, a la izquierda del botón de ordenar; por debajo de 600px está en el dock (LIST-20). En la cabecera, un toque abre el campo <strong>Buscar artículo o tienda</strong> con el foco. Un segundo toque, <code>Escape</code> o perder el foco con el campo vacío lo cierra y borra el texto (LIST-21). En el dock, un toque convierte el dock en el campo, con un botón para borrar el texto mientras lo hay y el botón <strong>Cancelar</strong>. <strong>Cancelar</strong>, <code>Escape</code>, el botón atrás del teléfono o perder el foco con el campo vacío lo cierran. Los resultados llenan la lista desde abajo, para que el más cercano quede junto al campo (LIST-37).</p>
+<p>La lista muestra los artículos cuyo nombre, una de sus tiendas o su sección contiene el texto, sin distinguir mayúsculas ni acentos (LIST-22, AISLE-9). El orden y los grupos se mantienen. Un grupo sin coincidencias por comprar no aparece. Las cifras de la cabecera y de cada grupo siguen siendo las de la lista completa (LIST-23). El texto no se guarda: cambiar de sección o añadir desde la hoja de añadir cierra la búsqueda (LIST-24). La búsqueda también filtra los marcados: <code>Comprados (N)</code> cuenta las coincidencias, se muestra abierta y no se puede cerrar mientras hay texto; sin coincidencias marcadas no aparece (LIST-25). Sin ninguna coincidencia, la lista dice <code>Ningún artículo coincide con «texto».</code> (LIST-26) y ofrece <strong>+ Añadir «texto»</strong>, que añade el nombre como la hoja de añadir y cierra la búsqueda (NAV-7).</p>
+
+<h3 id="saved">Artículos guardados</h3>
+<p><strong>Terminar compra</strong> guarda cada artículo puntual marcado de <code>Compra</code> y, con <code>Descartar</code>, cada artículo sin comprar (LIST-30). Un artículo guardado sale de <code>Compra</code> y mantiene su nombre, sus tiendas y su cantidad. La pantalla no lo muestra y no tiene forma de borrarlo: para eso hay que recuperarlo y usar <strong>Eliminar</strong>. Su nombre sigue ocupado: la hoja de añadir lo encuentra, añadir su nombre lo recupera y una receta enviada a <code>Compra</code> recupera un producto guardado (LIST-31). Recuperar lo pone en <code>Compra</code> sin marcar, sin cambiar <code>↻</code> (LIST-32). Un artículo guardado no cuenta en ninguna cifra de la cabecera ni del fin de la compra (LIST-33).</p>
+
+<h3 id="trip">Terminar compra</h3>
+<p><strong>Terminar compra</strong> está disponible cuando hay un artículo marcado o un artículo sin comprar; si no, da <code>Nada que terminar: marca un artículo o añade uno.</code> (TRIP-1). Un artículo sin comprar es un artículo de <code>Compra</code> sin marcar y sin <code>↻</code> (TRIP-6). Al terminar, cada artículo va a un sitio (TRIP-2):</p>
+<div class="tablewrap"><table data-plain>
+  <thead><tr><th>Artículo</th><th>Resultado</th></tr></thead>
+  <tbody>
+    <tr><td>Marcado, con <code>↻</code></td><td>Se queda en <code>Compra</code>, sin marcar</td></tr>
+    <tr><td>Marcado, puntual</td><td>Se guarda, sin marcar</td></tr>
+    <tr><td>Sin marcar, con <code>↻</code></td><td>Se queda</td></tr>
+    <tr><td>Sin comprar</td><td>Se queda sin marcar con <code>Aplazar</code>; se guarda con <code>Descartar</code></td></tr>
+    <tr><td>Guardado</td><td>No cambia</td></tr>
+  </tbody>
+</table></div>
+<p>La lista de recetas enviadas se vacía. Los grupos, el orden y el orden relativo de los artículos que se quedan no cambian (TRIP-3). Después la pantalla muestra <code>Compra</code> con <code>Compra terminada.</code> y <code>Deshacer</code>, que devuelve todo el estado anterior (TRIP-5).</p>
+<p>El control está en dos sitios (TRIP-4). El banner <code>¿Has terminado?</code> aparece en <code>Compra</code> cuando la lista tiene artículos y todos están marcados; nunca tiene un artículo sin comprar. El botón <code>⋮</code> abre la hoja <code>¿Terminar la compra?</code>, con una fila por destino, su icono y su recuento: <code>2 con ↻ vuelven</code>, <code>1 sin comprar se aplaza</code>, <code>1 sin comprar se guarda</code> y <code>4 comprados salen de la lista</code>. Un destino sin artículos no tiene fila. El banner une los mismos textos con <code>·</code>. Debajo están <strong>Terminar compra</strong>, desactivado si no se cumple TRIP-1, y <strong>Seguir comprando</strong>, que cierra la hoja. Con un artículo sin comprar, una línea dice <code>Puedes cambiar qué pasa con lo no comprado en Ajustes</code>; <code>Ajustes</code> es un botón que cierra la hoja y abre <code>Ajustes</code>. La hoja tiene un solo paso, sin elección por artículo; un toque en el velo la cierra sin cambiar nada (TRIP-6).</p>
+<p><strong>Al terminar la compra</strong> de <code>Ajustes</code> tiene dos botones, <code>Descartar</code> y <code>Aplazar</code>, y el elegido aparece pulsado. La elección vale para todos los artículos sin comprar, y la hoja los cuenta con ella. Sin elección, la app usa <code>Aplazar</code> (TRIP-7). La elección se guarda en <code>shopping.tripEnd</code> como <code>save</code> para <code>Descartar</code>; <code>Aplazar</code> borra la clave, y cualquier otro valor se lee como <code>Aplazar</code>. Es una preferencia del dispositivo: <code>Deshacer</code> y una importación no la cambian (TRIP-8).</p>
+
+<h3 id="header">Cabecera</h3>
+<p>En <code>Compra</code> la cabecera tiene el título <code>Compra de hoy</code>, y el subtítulo <code>La lista está vacía</code>, <code>Todo comprado</code> o <code>3 de 5 comprados</code> (<code>src/ui/list.js:100</code>, tabla «Header figures» de las reglas). El anillo muestra los artículos por comprar, o <code>✓</code> cuando todo está comprado, y se llena con la parte marcada (<code>src/ui/list.js:106</code>). En una lista de tienda, el título es el nombre de la tienda y las cifras son las de esa lista (SHOP-20).</p>
+
+<h2 id="casos-limite">Casos límite</h2>
+<ul>
+  <li><strong>Un nombre con otras mayúsculas.</strong> <code>leche</code> encuentra <code>Leche</code>: la hoja de añadir no crea un duplicado y el error de LIST-2 nombra el artículo que ya existe (DATA-3).</li>
+  <li><strong>Añadir el nombre de un artículo guardado.</strong> No hay error: el artículo vuelve a <code>Compra</code> con sus tiendas y su cantidad (LIST-31, ADD-5).</li>
+  <li><strong>Desmarcar sin querer.</strong> Un toque en una fila de <code>Comprados (N)</code> no tiene <code>Deshacer</code>; la fila vuelve a la lista por comprar, y un toque en ella la marca otra vez (LIST-13).</li>
+  <li><strong>Un artículo que se queda por <code>Aplazar</code>.</strong> No cambia nada en él: el siguiente <strong>Terminar compra</strong> lo vuelve a tratar como artículo sin comprar (TRIP-6).</li>
+  <li><strong>Banner en una lista de tienda.</strong> El banner <code>¿Has terminado?</code> solo aparece en <strong>Todas</strong>, aunque la tienda en pantalla esté completa (SHOP-21).</li>
+  <li><strong>Un artículo guardado que nadie busca.</strong> Se queda en el estado para siempre: la pantalla no lo muestra y no lo borra (LIST-30).</li>
+</ul>
+
+<h2 id="dependencias">Dependencias</h2>
+<p>Desde una lista de tienda, la hoja de añadir pone esa tienda en el artículo que crea o recupera (SHOP-24, <code>src/shops.js</code>). Los grupos por receta, tienda o sección vienen de <code>src/recipes.js</code>, <code>src/shops.js</code> y <code>src/aisles.js</code> (04-arrange.md). Las filas, sus deslizamientos y la hoja <code>Editar</code> siguen ROW-1 a ROW-14. El estado se guarda en la versión 9 de <code>src/storage.js</code>; la elección de <code>Ajustes</code> va aparte, en <code>shopping.tripEnd</code>.</p>
+
+<h2 id="decisiones">Decisiones</h2>
+<div class="tablewrap"><table class="decisions" data-plain>
+  <thead><tr><th>Decisión</th><th>Registro</th></tr></thead>
+  <tbody>
+    <tr><td>Una sola lista, <code>Compra</code>, sin lista ni marca para un viaje posterior</td><td><a href="../spec/03-lists.md">03-lists.md, Limits</a></td></tr>
+    <tr><td>Marcar nunca borra un artículo; sigue en <code>Compra</code> hasta <strong>Terminar compra</strong></td><td><a href="../superpowers/specs/2026-10-12-shopping-list-pwa-design.md">Shopping list PWA — design</a></td></tr>
+    <tr><td><strong>Terminar compra</strong> guarda los artículos puntuales en lugar de borrarlos</td><td><a href="../superpowers/specs/2026-10-16-saved-items-design.md">Saved items — design</a></td></tr>
+    <tr><td>Lo no comprado sigue una elección de <code>Ajustes</code>, guardada como preferencia del dispositivo</td><td><a href="../superpowers/specs/2026-10-16-trip-end-choice-design.md">Trip end choice — design</a></td></tr>
+    <tr><td>La hoja de fin de compra tiene un solo paso, sin elección por artículo</td><td><a href="../spec/03-lists.md">03-lists.md, TRIP-6</a></td></tr>
+    <tr><td>La cantidad es texto libre de hasta 20 caracteres</td><td><a href="../superpowers/specs/2026-10-14-quantities-design.md">Quantities — design</a></td></tr>
+    <tr><td>Con búsqueda, las cifras son las de la lista completa, y añadir cierra la búsqueda</td><td><a href="../superpowers/specs/2026-10-13-list-search-design.md">List search — design</a></td></tr>
+    <tr><td>Añadir un nombre que existe nunca crea un duplicado</td><td><a href="../spec/03-lists.md">03-lists.md, ADD-5</a></td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="cambios">Registro de cambios</h2>
+<div class="tablewrap"><table class="changelog" data-plain>
+  <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
+  <tbody>
+    <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="fuentes">Fuentes</h2>
+<ul>
+  <li><b>Reglas</b> <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (LIST-1 a LIST-37, ADD-1 a ADD-9, TRIP-1 a TRIP-8, tabla «Header figures»), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (ROW-7, NAV-7, NAV-9), <a href="../spec/05-shops.md"><code>docs/spec/05-shops.md</code></a> (SHOP-20, SHOP-21, SHOP-24), <a href="../spec/17-aisles.md"><code>docs/spec/17-aisles.md</code></a> (AISLE-9), <a href="../spec/02-data-model.md"><code>docs/spec/02-data-model.md</code></a> (DATA-3)</li>
+  <li><b>Código</b> <code>src/store.js</code>, <code>src/suggest.js</code>, <code>src/sections.js</code>, <code>src/recipes.js</code>, <code>src/storage.js</code>, <code>src/ui/add.js</code>, <code>src/ui/rows.js</code>, <code>src/ui/list.js</code>, <code>src/ui/edit.js</code>, <code>src/ui/view.js</code>, <code>src/ui/nav.js</code>, <code>src/ui/controls.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
+  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-shopping-list-pwa-design.md"><code>2026-10-12-shopping-list-pwa-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-saved-items-design.md"><code>2026-10-16-saved-items-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-trip-end-choice-design.md"><code>2026-10-16-trip-end-choice-design.md</code></a>, <a href="../superpowers/specs/2026-10-14-quantities-design.md"><code>2026-10-14-quantities-design.md</code></a>, <a href="../superpowers/specs/2026-10-13-list-search-design.md"><code>2026-10-13-list-search-design.md</code></a>, todos en <code>docs/superpowers/specs/</code></li>
+  <li><b>Commit</b> <code>main</code> @ <code>892bbee</code>, leído el 2026-10-23</li>
+  <li><b>Ejecutado</b> <code>node --test tests/store.test.js tests/suggest.test.js</code> (87 pruebas, todas pasan); la pantalla no se ha probado en el navegador</li>
+  <li><b>Abierto</b>
+    <ul>
+      <li>NAV-9 da a la hoja de fin de compra el título <code>Opciones de la compra</code>; el código muestra <code>¿Terminar la compra?</code> (TRIP-4) y usa <code>Opciones de la compra</code> solo como nombre accesible. NAV-9 tampoco nombra <strong>Seguir comprando</strong>.</li>
+      <li>La cabecera de <code>Compra</code> (tabla «Header figures») no tiene identificador de regla; esta página cita <code>src/ui/list.js</code>.</li>
+    </ul>
+  </li>
+</ul>
+</main>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const root = document.documentElement;
+  const I18N = {
+    es: { contents: 'Contenido', copy: 'Copiar', copied: 'Copiado', filter: 'Filtrar…', all: 'Todos', none: 'Ninguno', picked: (n, m) => `${n} de ${m}`, shown: (n, m) => `${n} de ${m} filas`, before: 'Antes', after: 'Después', sketch: 'boceto', fold: 'Plegar o desplegar', tocToggle: 'Mostrar u ocultar el índice', station: { ask: 'Petición', symptom: 'Síntoma', deadend: 'Vía muerta', cause: 'Causa', fix: 'Arreglo', built: 'Construido', proof: 'Prueba' }, verdict: { pass: 'pasa', fail: 'falla', 'not-run': 'sin ejecutar' } },
+    en: { contents: 'Contents', copy: 'Copy', copied: 'Copied', filter: 'Filter…', all: 'All', none: 'None', picked: (n, m) => `${n} of ${m}`, shown: (n, m) => `${n} of ${m} rows`, before: 'Before', after: 'After', sketch: 'sketch', fold: 'Collapse or expand', tocToggle: 'Show or hide the contents', station: { ask: 'Ask', symptom: 'Symptom', deadend: 'Dead end', cause: 'Cause', fix: 'Fix', built: 'Built', proof: 'Proof' }, verdict: { pass: 'pass', fail: 'fail', 'not-run': 'not run' } },
+  };
+  const t = I18N[(root.lang || 'es').slice(0, 2)] ?? I18N.en;
+
+
+  /* ── syntax highlighting ───────────────────────────────── */
+  const words = (s) => new Set(s.split(/\s+/));
+  const JS_KW = 'async await break case catch class const continue default delete do else export extends false finally for from function if import in instanceof let new null of return static super switch this throw true try typeof undefined var void while yield';
+  const C_BLOCK = /\/\*[\s\S]*?\*\//y;
+  const DQ = /"(?:\\.|[^"\\])*"/y;
+  const SQ = /'(?:\\.|[^'\\])*'/y;
+  const LANGS = {
+    php: {
+      kw: words('abstract and array as break case catch class clone const continue declare default do echo else elseif empty enum extends false final finally fn for foreach function global if implements include instanceof interface isset list match namespace new null or parent private protected public readonly require require_once return self static switch throw trait true try unset use var while yield'),
+      com: [C_BLOCK, /(?:\/\/|#)[^\n]*/y], str: [DQ, SQ], vari: [/\$\w+/y],
+    },
+    js: { kw: words(JS_KW), com: [C_BLOCK, /\/\/[^\n]*/y], str: [DQ, SQ, /`(?:\\.|[^`\\])*`/y] },
+    ts: {
+      kw: words(`${JS_KW} abstract any as boolean declare enum implements interface keyof namespace never number private protected public readonly string type unknown`),
+      com: [C_BLOCK, /\/\/[^\n]*/y], str: [DQ, SQ, /`(?:\\.|[^`\\])*`/y],
+    },
+    sql: {
+      kw: words('all alter and as asc between by case create delete desc distinct drop else end exists fetch first from group having in index inner insert into is join left like limit not null offset on only or order outer right rows select set table then union update values when where with'),
+      com: [C_BLOCK, /--[^\n]*/y], str: [/'(?:''|[^'])*'/y], vari: [/:\w+/y], ci: true,
+    },
+    bash: {
+      kw: words('case do done elif else esac exit export fi for function if in local return set then while'),
+      com: [/(?<![\w$])#[^\n]*/y], str: [/"(?:\\.|[^"\\])*"/y, /'[^']*'/y], vari: [/\$\{[^}]*\}|\$\w+/y],
+    },
+    json: { kw: words('true false null'), com: [], prop: [/"(?:\\.|[^"\\])*"(?=\s*:)/y], str: [DQ] },
+    yaml: { kw: words('true false null yes no'), com: [/#[^\n]*/y], prop: [/[\w.-]+(?=\s*:(?:\s|$))/y], str: [DQ, SQ] },
+  };
+
+  const tokenize = (src, lang) => {
+    const rules = LANGS[lang];
+    if (!rules) return [['', src]];
+    const out = [];
+    let plain = '';
+    let i = 0;
+    const flush = () => { if (plain) { out.push(['', plain]); plain = ''; } };
+    const emit = (cls, text) => { flush(); out.push([cls, text]); i += text.length; };
+    const at = (re) => { re.lastIndex = i; const m = re.exec(src); return m && m[0] ? m[0] : null; };
+    const groups = [['com', rules.com], ['str', rules.str], ['prop', rules.prop], ['var', rules.vari]];
+
+    scan: while (i < src.length) {
+      for (const [cls, list] of groups) {
+        for (const re of list ?? []) {
+          const m = at(re);
+          if (m) { emit(cls, m); continue scan; }
+        }
+      }
+      const num = at(/\d[\w.]*/y);
+      if (num && !/\w/.test(src[i - 1] ?? '')) { emit('num', num); continue; }
+      const word = at(/[A-Za-z_]\w*/y);
+      if (word) {
+        const key = rules.ci ? word.toLowerCase() : word;
+        const next = src.slice(i + word.length).match(/^\s*\(/);
+        const cls = rules.kw.has(key) ? 'kw'
+          : next ? 'fn'
+          : !rules.ci && /^[A-Z]/.test(word) ? 'type'
+          : '';
+        if (cls) emit(cls, word); else { plain += word; i += word.length; }
+        continue;
+      }
+      plain += src[i++];
+    }
+    flush();
+    return out;
+  };
+
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  const dedent = (src) => {
+    const lines = src.replace(/^\n+|\s+$/g, '').split('\n');
+    const indents = lines.filter((l) => l.trim()).map((l) => l.match(/^[ \t]*/)[0].length);
+    const cut = indents.length ? Math.min(...indents) : 0;
+    return lines.map((l) => l.slice(cut)).join('\n');
+  };
+
+  /** "3,5-7" → Set{3,5,6,7} */
+  const parseLines = (spec) => new Set((spec ?? '').split(',').flatMap((part) => {
+    const [a, b] = part.trim().split('-').map(Number);
+    if (!Number.isFinite(a)) return [];
+    return Array.from({ length: (Number.isFinite(b) ? b : a) - a + 1 }, (_, k) => a + k);
+  }));
+
+  const toLines = (tokens) => {
+    const lines = [[]];
+    for (const [cls, text] of tokens) {
+      text.split('\n').forEach((part, k) => {
+        if (k) lines.push([]);
+        if (part) lines.at(-1).push(cls ? `<span class="tk-${cls}">${esc(part)}</span>` : esc(part));
+      });
+    }
+    return lines;
+  };
+
+  const repoRoot = (root.dataset.repoRoot ?? '').replace(/\/$/, '');
+  // An absolute data-src (a file outside the repo) links on its own; a relative one needs the root.
+  const pathLink = (src, line) => {
+    const abs = src.startsWith('/') ? src : repoRoot ? `${repoRoot}/${src}` : null;
+    return abs && `vscode://vscode-remote/wsl+Ubuntu-24.04${abs}:${line}`;
+  };
+
+  const renderFigure = (fig) => {
+    const code = fig.querySelector('pre > code');
+    if (!code) return;
+    const raw = dedent(code.textContent);
+    const lang = (fig.dataset.lang ?? 'text').toLowerCase();
+    const numbered = 'start' in fig.dataset;
+    const start = numbered ? Number(fig.dataset.start) || 1 : 1;
+    const marks = { mark: parseLines(fig.dataset.mark), add: parseLines(fig.dataset.add), del: parseLines(fig.dataset.del) };
+    const lines = toLines(tokenize(raw, lang));
+    const end = start + lines.length - 1;
+
+    code.innerHTML = lines.map((parts, k) => {
+      const n = start + k;
+      const cls = ['ln', ...Object.keys(marks).filter((m) => marks[m].has(n))].join(' ');
+      return `<span class="${cls}" data-n="${n}">${parts.join('') || ' '}</span>`;
+    }).join('');
+    if (numbered) {
+      fig.classList.add('numbered');
+      fig.style.setProperty('--gutter', `${String(end).length}ch`);
+    }
+
+    const head = document.createElement('div');
+    head.className = 'code-head';
+    const role = fig.dataset.role;
+    const label = fig.dataset.label ?? (role === 'before' || role === 'after' ? t[role] : null);
+    if (label) head.insertAdjacentHTML('beforeend', `<span class="role">${esc(label)}</span>`);
+    if (fig.dataset.src) {
+      const label = numbered ? `${fig.dataset.src}:${start}${end > start ? `–${end}` : ''}` : fig.dataset.src;
+      const href = pathLink(fig.dataset.src, start);
+      head.insertAdjacentHTML('beforeend', href
+        ? `<a class="path" href="${esc(href)}" title="${esc(label)}">${esc(label)}</a>`
+        : `<span class="path" title="${esc(label)}">${esc(label)}</span>`);
+    }
+    if (fig.dataset.cmd) head.insertAdjacentHTML('beforeend', `<span class="path" title="${esc(fig.dataset.cmd)}">$ ${esc(fig.dataset.cmd)}</span>`);
+    if (fig.dataset.verdict) head.insertAdjacentHTML('beforeend', `<span class="verdict ${esc(fig.dataset.verdict)}">${esc(t.verdict[fig.dataset.verdict] ?? fig.dataset.verdict)}</span>`);
+    if ('sketch' in fig.dataset) head.insertAdjacentHTML('beforeend', `<span class="sketch">${t.sketch}</span>`);
+    head.insertAdjacentHTML('beforeend', `<span class="lang">${esc(lang)}</span><button class="copy" type="button">${t.copy}</button>`);
+    head.querySelector('.copy').addEventListener('click', async (ev) => {
+      const btn = ev.currentTarget;
+      try {
+        await navigator.clipboard.writeText(raw);
+        btn.textContent = t.copied;
+      } catch {
+        btn.textContent = '✗';
+      }
+      setTimeout(() => { btn.textContent = t.copy; }, 1200);
+    });
+    fig.prepend(head);
+  };
+
+  document.querySelectorAll('figure.code').forEach(renderFigure);
+
+  // ── recap: station labels, diffstat bars ──
+  document.querySelectorAll('ol.trail > li.station').forEach((li) => {
+    const kind = Object.keys(t.station).find((k) => li.classList.contains(k));
+    if (kind && !li.dataset.label) li.dataset.label = t.station[kind];
+    // A border colour alone does not carry the verdict (colour-blindness, print, screen readers).
+    if (li.classList.contains('proof') && li.dataset.verdict) {
+      li.dataset.label = `${li.dataset.label ?? ''} · ${t.verdict[li.dataset.verdict] ?? li.dataset.verdict}`;
+    }
+  });
+  document.querySelectorAll('table.diffstat').forEach((table) => {
+    const rows = [...table.tBodies[0].rows].map((r) => ({ bar: r.querySelector('td.bar'), add: Number(r.cells[1].textContent) || 0, del: Number(r.cells[2].textContent) || 0 }));
+    const max = Math.max(1, ...rows.map((r) => r.add + r.del));
+    for (const r of rows) {
+      if (!r.bar) continue;
+      r.bar.innerHTML = `<span class="a" style="width: ${Math.round((r.add / max) * 100)}%"></span><span class="d" style="width: ${Math.round((r.del / max) * 100)}%"></span>`;
+    }
+  });
+
+  /* ── architecture diagrams: figure.arch holds a JSON spec, drawn here as one SVG ── */
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const svgEl = (tag, attrs = {}, text) => {
+    const el = document.createElementNS(SVG_NS, tag);
+    for (const [k, v] of Object.entries(attrs)) if (v != null && v !== false) el.setAttribute(k, v);
+    if (text != null) el.textContent = text;
+    return el;
+  };
+  const EDGE_TONES = ['accent', 'red', 'amber', 'green', 'faint'];
+  const NODE_TONES = ['plain', 'accent', 'red', 'amber', 'green', 'ghost'];
+  // Canvas measuring works inside folded sections, where the SVG's own layout is zero.
+  const measure = (() => {
+    const ctx = document.createElement('canvas').getContext('2d');
+    return (text, px, weight = 400, mono = false) => {
+      const cs = getComputedStyle(document.body);
+      ctx.font = `${weight} ${px}px ${mono ? cs.getPropertyValue('--mono') : cs.fontFamily}`;
+      return ctx.measureText(text).width;
+    };
+  })();
+  /** Shrink to 80% of the size, then cut with an ellipsis. */
+  const fit = (text, max, px, weight) => {
+    let size = px;
+    while (size > px * 0.8 && measure(text, size, weight) > max) size -= 0.5;
+    let out = text;
+    if (measure(out, size, weight) > max) {
+      while (out.length > 1 && measure(`${out}…`, size, weight) > max) out = out.slice(0, -1);
+      out = `${out.trimEnd()}…`;
+    }
+    return { text: out, size, cut: out !== text };
+  };
+  /** Greedy word wrap into at most `lines` lines; whatever does not fit goes into the last, fitted. */
+  const wrap = (text, max, px, weight, lines) => {
+    if (lines < 1) return [];
+    const out = [];
+    for (const word of text.split(/\s+/).filter(Boolean)) {
+      const cur = out.at(-1);
+      if (cur != null && measure(`${cur} ${word}`, px, weight) <= max) out[out.length - 1] = `${cur} ${word}`;
+      else out.push(word);
+    }
+    const kept = out.length > lines ? [...out.slice(0, lines - 1), out.slice(lines - 1).join(' ')] : out;
+    return kept.map((ln) => fit(ln, max, px, weight));
+  };
+  const tracks = (spec, total, gap) => {
+    const gaps = spec.map((_, i) => (Array.isArray(gap) ? gap[i] ?? gap.at(-1) : gap)).slice(0, -1);
+    const isFr = (v) => typeof v === 'string' && /fr$/.test(v);
+    const fixed = spec.reduce((s, v) => s + (isFr(v) ? 0 : Number(v) || 0), 0) + gaps.reduce((a, b) => a + b, 0);
+    const frs = spec.reduce((s, v) => s + (isFr(v) ? parseFloat(v) || 1 : 0), 0);
+    const sizes = spec.map((v) => (isFr(v) ? Math.max(0, total - fixed) * (parseFloat(v) || 1) / frs : Number(v) || 0));
+    const starts = [];
+    sizes.reduce((x, s, i) => { starts.push(x); return x + s + (gaps[i] ?? 0); }, 0);
+    return { starts, sizes };
+  };
+  const range = (v) => (Array.isArray(v) ? [v[0], v[1] ?? v[0]] : [v, v]);
+
+  const drawArch = (fig) => {
+    const spec = JSON.parse(fig.querySelector(':scope > script[type="application/json"]').textContent);
+    const W = spec.width ?? 1000;
+    const nodes = spec.nodes ?? [];
+    const groups = spec.groups ?? [];
+    const cells = [...nodes, ...groups];
+    const colCount = spec.cols?.length ?? Math.max(...cells.map((c) => range(c.col)[1])) + 1;
+    const rowCount = Math.max(spec.rows?.length ?? 0, ...cells.map((c) => range(c.row)[1] + 1));
+    const cols = tracks(spec.cols ?? Array(colCount).fill('1fr'), W, spec.colGap ?? 28);
+    const rows = tracks(Array.from({ length: rowCount }, (_, i) => spec.rows?.[i] ?? spec.rowHeight ?? 64), 0, spec.rowGap ?? 48);
+
+    const bounds = { l: 0, t: Infinity, r: W, b: -Infinity };
+    const grow = (l, t, r, b) => {
+      bounds.l = Math.min(bounds.l, l); bounds.t = Math.min(bounds.t, t);
+      bounds.r = Math.max(bounds.r, r); bounds.b = Math.max(bounds.b, b);
+    };
+    const place = (c, pad = 0) => {
+      const [c0, c1] = range(c.col);
+      const [r0, r1] = range(c.row);
+      const l = cols.starts[c0] - pad;
+      const r = cols.starts[c1] + cols.sizes[c1] + pad;
+      const t = rows.starts[r0] - pad;
+      const b = rows.starts[r1] + rows.sizes[r1] + pad;
+      return { l, r, t, b, cx: (l + r) / 2, cy: (t + b) / 2 };
+    };
+    const boxes = new Map();
+    for (const g of groups) boxes.set(g.id, place(g, g.pad ?? 16));
+    for (const n of nodes) boxes.set(n.id, place(n));
+
+    const svg = svgEl('svg', { role: 'img', 'aria-label': spec.alt ?? '' });
+    const uid = `arch${[...document.querySelectorAll('figure.arch')].indexOf(fig)}`;
+    const defs = svgEl('defs');
+    for (const tone of EDGE_TONES) {
+      const m = svgEl('marker', { id: `${uid}-${tone}`, class: `am-${tone}`, viewBox: '0 0 10 10', refX: 9.5, refY: 5,
+        markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' });
+      m.append(svgEl('path', { d: 'M0,0 L10,5 L0,10 z' }));
+      defs.append(m);
+    }
+    const layer = () => svgEl('g');
+    const [lGroups, lEdges, lNodes, lLabels] = [layer(), layer(), layer(), layer()];
+    svg.append(defs, lGroups, lEdges, lNodes, lLabels);
+
+    // Frames: a dashed boundary with its name sitting on the top border.
+    for (const g of groups) {
+      const b = boxes.get(g.id);
+      const el = svgEl('g', { class: ['ag', g.style].filter(Boolean).join(' ') });
+      el.append(svgEl('rect', { x: b.l, y: b.t, width: b.r - b.l, height: b.b - b.t, rx: 12 }));
+      // A framed group is named on its border; a bare one (a column heading) above its cells.
+      const bare = (g.style ?? '').split(' ').includes('bare');
+      const ly = bare ? b.t - 10 : b.t + 4;
+      lGroups.append(el);
+      // On the top layer, so the halo cuts any wire that crosses the frame's name.
+      if (g.label) {
+        const text = g.label.toUpperCase();
+        const x = bare ? b.l : b.l + 14;
+        const name = svgEl('g', { class: el.getAttribute('class') });
+        // A plate, not a halo: letter-spacing leaves gaps a halo does not close.
+        const w = measure(text, 11, 600, true) + text.length * 11 * 0.14;
+        if (!bare) name.append(svgEl('rect', { class: 'plate', x: x - 5, y: ly - 10, width: w + 10, height: 14, rx: 3 }));
+        name.append(svgEl('text', { x, y: ly }, text));
+        lLabels.append(name);
+      }
+      grow(b.l, ly - 12, b.r, b.b);
+    }
+
+    // Edges. Each end is a node or a frame; an array on one side is gathered on a spine.
+    const label = (text, x, y, anchor, ends) => {
+      if (!text) return;
+      lLabels.append(svgEl('text', { x, y, 'text-anchor': anchor, class: 'el halo', 'data-ends': ends }, text));
+      const w = measure(text, 12);
+      const l = anchor === 'middle' ? x - w / 2 : x;
+      grow(l, y - 12, l + w, y + 4);
+    };
+    const route = (A, B, at) => {
+      const ox = [Math.max(A.l, B.l), Math.min(A.r, B.r)];
+      const oy = [Math.max(A.t, B.t), Math.min(A.b, B.b)];
+      if (ox[1] - ox[0] > 8 && (A.b <= B.t || B.b <= A.t)) {
+        const x = ox[0] + (ox[1] - ox[0]) * at;
+        const [y1, y2] = A.b <= B.t ? [A.b, B.t] : [A.t, B.b];
+        return { d: `M${x},${y1} V${y2}`, lx: x + 9, ly: (y1 + y2) / 2 + 4, anchor: 'start' };
+      }
+      if (oy[1] - oy[0] > 8 && (A.r <= B.l || B.r <= A.l)) {
+        const y = oy[0] + (oy[1] - oy[0]) * at;
+        const [x1, x2] = A.r <= B.l ? [A.r, B.l] : [A.l, B.r];
+        return { d: `M${x1},${y} H${x2}`, lx: (x1 + x2) / 2, ly: y - 8, anchor: 'middle' };
+      }
+      // Neither shares a band with the other: leave vertically, turn once in the gap, arrive vertically.
+      const down = A.cy < B.cy;
+      const [y1, y2] = down ? [A.b, B.t] : [A.t, B.b];
+      const ym = y1 + (y2 - y1) * at;
+      return { d: `M${A.cx},${y1} V${ym} H${B.cx} V${y2}`, lx: (A.cx + B.cx) / 2, ly: ym - 8, anchor: 'middle' };
+    };
+    const spine = (many, one, fanIn, at) => {
+      const bs = many.map((id) => boxes.get(id));
+      const T = boxes.get(one);
+      const L = Math.min(...bs.map((b) => b.l)); const R = Math.max(...bs.map((b) => b.r));
+      const Tp = Math.min(...bs.map((b) => b.t)); const Bt = Math.max(...bs.map((b) => b.b));
+      const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
+      const horizontal = T.l >= R || T.r <= L;
+      const stubs = [];
+      let main;
+      if (horizontal) {
+        const right = T.l >= R;
+        const sx = right ? R + 16 : L - 16;
+        const ys = bs.map((b) => b.cy);
+        bs.forEach((b) => stubs.push(`M${right ? b.r : b.l},${b.cy} H${sx}`));
+        const mid = ys.length > 1 ? (Math.min(...ys) + Math.max(...ys)) / 2 : ys[0];
+        const y = mid >= T.t && mid <= T.b ? mid : clamp(T.cy, Math.min(...ys), Math.max(...ys));
+        const spineD = `M${sx},${Math.min(...ys, y)} V${Math.max(...ys, y)}`;
+        const x2 = right ? T.l : T.r;
+        main = { d: `M${sx},${y} H${x2}`, spineD, lx: sx + (x2 - sx) * at, ly: y - 8, anchor: 'middle' };
+      } else {
+        const below = T.t >= Bt;
+        const sy = below ? Bt + 16 : Tp - 16;
+        const xs = bs.map((b) => b.cx);
+        bs.forEach((b) => stubs.push(`M${b.cx},${below ? b.b : b.t} V${sy}`));
+        const mid = (Math.min(...xs) + Math.max(...xs)) / 2;
+        const x = mid >= T.l && mid <= T.r ? mid : clamp(T.cx, Math.min(...xs), Math.max(...xs));
+        const spineD = `M${Math.min(...xs, x)},${sy} H${Math.max(...xs, x)}`;
+        const y2 = below ? T.t : T.b;
+        main = { d: `M${x},${sy} V${y2}`, spineD, lx: x + 9, ly: sy + (y2 - sy) * at + 4, anchor: 'start' };
+      }
+      // Fan-in points the main run at the target; fan-out points every stub back at its box.
+      return fanIn
+        ? [{ d: `${stubs.join(' ')} ${main.spineD}` }, { d: main.d, arrow: true }, main]
+        : [{ d: main.d }, { d: `${main.spineD}` }, ...stubs.map((d) => ({ d: reverseStub(d), arrow: true })), main];
+    };
+    // "M x,y H x2" → "M x2,y H x" so a fan-out stub's arrowhead lands on the box.
+    const reverseStub = (d) => {
+      const [, x, y, axis, v] = d.match(/M([\d.-]+),([\d.-]+) ([HV])([\d.-]+)/);
+      return axis === 'H' ? `M${v},${y} H${x}` : `M${x},${v} V${y}`;
+    };
+
+    for (const e of spec.edges ?? []) {
+      const froms = [].concat(e.from);
+      const tos = [].concat(e.to);
+      const ids = [...froms, ...tos];
+      if (!ids.every((id) => boxes.has(id))) continue;
+      const tone = EDGE_TONES.includes(e.tone) ? e.tone : 'accent';
+      const g = svgEl('g', { class: ['ae', tone, e.dashed && 'dashed'].filter(Boolean).join(' '), 'data-ends': ids.join(' ') });
+      const marker = `url(#${uid}-${tone})`;
+      const at = e.at ?? 0.5;
+      let lab;
+      if (froms.length > 1 || tos.length > 1) {
+        const parts = froms.length > 1 ? spine(froms, tos[0], true, at) : spine(tos, froms[0], false, at);
+        lab = parts.pop();
+        for (const p of parts) g.append(svgEl('path', { d: p.d, 'marker-end': p.arrow && marker }));
+      } else {
+        lab = route(boxes.get(froms[0]), boxes.get(tos[0]), at);
+        g.append(svgEl('path', { d: lab.d, 'marker-end': marker, 'marker-start': e.both && marker }));
+      }
+      lEdges.append(g);
+      label(e.label, lab.lx, lab.ly, lab.anchor, ids.join(' '));
+    }
+
+    // Nodes: name, up to three sub-lines, an optional corner tag, an optional link.
+    for (const n of nodes) {
+      const b = boxes.get(n.id);
+      const tone = NODE_TONES.includes(n.tone) ? n.tone : 'plain';
+      const el = svgEl('g', { class: `an ${tone}`, 'data-id': n.id });
+      el.append(svgEl('rect', { class: 'box', x: b.l, y: b.t, width: b.r - b.l, height: b.b - b.t, rx: 8 }));
+      const max = b.r - b.l - 16;
+      // Name first (up to two lines), then as many sub-lines as the box has height for.
+      const head = wrap(n.label ?? n.id, max, 14.5, 600, 2);
+      let room = Math.floor((b.b - b.t - 12 - head.length * 18) / 15);
+      const subs = [].concat(n.sub ?? []).flatMap((line) => {
+        const got = wrap(line, max, 12, 400, room);
+        room -= got.length;
+        return got;
+      });
+      const lines = [...head.map((l) => ({ ...l, cls: 'label', step: 18 })), ...subs.map((l) => ({ ...l, cls: 'sub', step: 15 }))];
+      const height = lines.reduce((h, l) => h + l.step, 0) - 3;
+      let y = b.cy - height / 2 + 11;
+      for (const ln of lines) {
+        const t = svgEl('text', { x: b.cx, y, 'text-anchor': 'middle', class: ln.cls, 'font-size': ln.size }, ln.text);
+        el.append(t);
+        y += ln.step;
+      }
+      if (lines.some((l) => l.cut)) el.append(svgEl('title', {}, [n.label, ...[].concat(n.sub ?? [])].join(' — ')));
+      if (n.tag) {
+        const tw = measure(n.tag, 10, 700, true) + 12;
+        const tag = svgEl('g', { class: 'tag' });
+        tag.append(svgEl('rect', { x: b.r - tw - 8, y: b.t - 8, width: tw, height: 16, rx: 8 }),
+          svgEl('text', { x: b.r - 8 - tw / 2, y: b.t + 3.5, 'text-anchor': 'middle' }, n.tag));
+        el.append(tag);
+      }
+      if (n.href) {
+        const a = svgEl('a', { href: n.href });
+        a.append(el);
+        lNodes.append(a);
+      } else lNodes.append(el);
+      grow(b.l, b.t - 10, b.r, b.b);
+    }
+
+    const pad = 6;
+    svg.setAttribute('viewBox', `${bounds.l - pad} ${bounds.t - pad} ${bounds.r - bounds.l + 2 * pad} ${bounds.b - bounds.t + 2 * pad}`);
+    const canvas = document.createElement('div');
+    canvas.className = 'arch-canvas';
+    canvas.append(svg);
+    fig.querySelector(':scope > script').after(canvas);
+
+    // Legend and transversal note, both optional, as HTML under the drawing.
+    if (spec.legend?.length) {
+      const foot = document.createElement('div');
+      foot.className = 'arch-foot';
+      for (const item of spec.legend) {
+        const sw = document.createElement('span');
+        sw.className = `sw ${item.line ? (item.line === 'dashed' ? 'dashed' : 'line') : item.tone ?? ''}`;
+        sw.textContent = item.label;
+        foot.append(sw);
+      }
+      canvas.after(foot);
+    }
+    if (spec.note) {
+      const note = document.createElement('p');
+      note.className = 'arch-note';
+      note.innerHTML = `<b>${esc(spec.note.label ?? '')}</b>${esc(spec.note.text ?? '')}`;
+      (fig.querySelector(':scope > .arch-foot') ?? canvas).after(note);
+    }
+
+    // Hovering a node lights its wires and dims whatever is not connected to it.
+    const focus = (id) => {
+      fig.classList.toggle('focus', !!id);
+      const linked = new Set(id ? [id] : []);
+      svg.querySelectorAll('[data-ends]').forEach((el) => {
+        const on = !!id && el.dataset.ends.split(' ').includes(id);
+        el.classList.toggle('on', on);
+        if (on) el.dataset.ends.split(' ').forEach((x) => linked.add(x));
+      });
+      svg.querySelectorAll('.an').forEach((el) => el.classList.toggle('dim', !!id && !linked.has(el.dataset.id)));
+    };
+    svg.addEventListener('pointerover', (ev) => focus(ev.target.closest('.an')?.dataset.id));
+    svg.addEventListener('pointerleave', () => focus(null));
+  };
+
+  document.querySelectorAll('figure.arch').forEach((fig) => {
+    try {
+      drawArch(fig);
+    } catch (e) {
+      fig.insertAdjacentHTML('afterbegin', `<p class="arch-error">figure.arch: ${esc(String(e.message ?? e))}</p>`);
+    }
+  });
+
+  /* ── tables: sort + filter on every column ─────────────── */
+  const collator = new Intl.Collator(root.lang || undefined, { numeric: true, sensitivity: 'base' });
+  const cellKey = (cell) => (cell?.dataset.sort ?? cell?.textContent ?? '').trim();
+  const MAX_CHOICES = 12;
+  /* "Modelo, Repositorio" is two values. Only a comma followed by a space splits, so a
+     decimal like "1,5" stays whole. */
+  const cellParts = (cell) => cellKey(cell).toLowerCase().split(/,\s+/).filter(Boolean);
+
+  /* Checkbox dropdown. Everything checked = no filter; the panel is position:fixed so the
+     table's overflow wrapper cannot clip it. */
+  let openPanel = null;
+  const closePanel = () => {
+    if (!openPanel) return;
+    openPanel.hidden = true;
+    openPanel.previousElementSibling.setAttribute('aria-expanded', 'false');
+    openPanel = null;
+  };
+  document.addEventListener('click', (ev) => { if (openPanel && !ev.target.closest('.ms')) closePanel(); });
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closePanel(); });
+  addEventListener('scroll', (ev) => { if (openPanel && !openPanel.contains(ev.target)) closePanel(); }, true);
+  addEventListener('resize', closePanel);
+
+  const multiSelect = (values, onChange) => {
+    const box = document.createElement('div');
+    box.className = 'ms';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ms-btn';
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    const panel = document.createElement('div');
+    panel.className = 'ms-panel';
+    panel.hidden = true;
+    panel.insertAdjacentHTML('beforeend', `<div class="ms-actions"><button type="button" data-set="all">${t.all}</button><button type="button" data-set="none">${t.none}</button></div>`);
+    const boxes = values.map((v) => {
+      const label = document.createElement('label');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = true;
+      cb.value = v.toLowerCase();
+      label.append(cb, document.createTextNode(v));
+      panel.append(label);
+      return cb;
+    });
+
+    const update = () => {
+      const on = boxes.filter((b) => b.checked);
+      const all = on.length === boxes.length;
+      btn.textContent = all ? t.all
+        : on.length === 0 ? t.none
+        : on.length <= 2 ? on.map((b) => b.parentElement.textContent).join(', ')
+        : t.picked(on.length, boxes.length);
+      btn.classList.toggle('active', !all);
+      onChange(all ? '' : { set: new Set(on.map((b) => b.value)) });
+    };
+    panel.addEventListener('change', update);
+    panel.querySelectorAll('[data-set]').forEach((b) => b.addEventListener('click', () => {
+      boxes.forEach((cb) => { cb.checked = b.dataset.set === 'all'; });
+      update();
+    }));
+    btn.addEventListener('click', () => {
+      const wasOpen = openPanel === panel;
+      closePanel();
+      if (wasOpen) return;
+      const r = btn.getBoundingClientRect();
+      Object.assign(panel.style, { top: `${r.bottom + 4}px`, left: `${r.left}px`, minWidth: `${r.width}px` });
+      panel.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      openPanel = panel;
+      const overflow = panel.getBoundingClientRect().right - innerWidth + 8;
+      if (overflow > 0) panel.style.left = `${Math.max(8, r.left - overflow)}px`;
+    });
+
+    box.append(btn, panel);
+    update();
+    return box;
+  };
+
+  const enhanceTable = (table) => {
+    const headRow = table.tHead?.rows[0];
+    const body = table.tBodies[0];
+    if (!headRow || !body) return;
+    const rows = [...body.rows];
+    const original = rows.slice();
+    const cols = [...headRow.cells];
+    const filters = cols.map(() => '');
+    const state = { col: -1, dir: 0 };
+
+    const wrap = table.closest('.tablewrap') ?? table;
+    const count = document.createElement('p');
+    count.className = 'table-count';
+    count.hidden = true;
+    wrap.after(count);
+
+    const apply = () => {
+      let visible = 0;
+      for (const row of rows) {
+        const show = filters.every((f, i) => {
+          if (!f) return true;
+          if (f.set) return cellParts(row.cells[i]).some((part) => f.set.has(part));
+          return cellKey(row.cells[i]).toLowerCase().includes(f.value);
+        });
+        row.hidden = !show;
+        if (show) visible += 1;
+      }
+      count.hidden = visible === rows.length;
+      count.textContent = t.shown(visible, rows.length);
+    };
+
+    const sortBy = (i) => {
+      state.dir = state.col === i ? (state.dir + 1) % 3 : 1;
+      state.col = state.dir ? i : -1;
+      cols.forEach((th, k) => th.setAttribute('aria-sort', k === state.col ? (state.dir === 1 ? 'ascending' : 'descending') : 'none'));
+      const ordered = state.dir
+        ? original.slice().sort((a, b) => collator.compare(cellKey(a.cells[i]), cellKey(b.cells[i])) * (state.dir === 1 ? 1 : -1))
+        : original;
+      body.append(...ordered);
+    };
+
+    const filterRow = document.createElement('tr');
+    filterRow.className = 'filter-row';
+    cols.forEach((th, i) => {
+      th.classList.add('sortable');
+      th.setAttribute('aria-sort', 'none');
+      th.tabIndex = 0;
+      th.addEventListener('click', () => sortBy(i));
+      th.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); sortBy(i); } });
+
+      const byLower = new Map();
+      rows.forEach((r) => cellKey(r.cells[i]).split(/,\s+/).filter(Boolean).forEach((v) => { if (!byLower.has(v.toLowerCase())) byLower.set(v.toLowerCase(), v); }));
+      const values = [...byLower.values()].sort(collator.compare);
+      const cell = document.createElement('th');
+      let control;
+      if (values.length && values.length <= MAX_CHOICES) {
+        control = multiSelect(values, (filter) => { filters[i] = filter; apply(); });
+      } else {
+        control = document.createElement('input');
+        control.type = 'search';
+        control.placeholder = t.filter;
+        control.addEventListener('input', () => {
+          const value = control.value.trim().toLowerCase();
+          filters[i] = value && { value, exact: false };
+          control.classList.toggle('active', !!value);
+          apply();
+        });
+      }
+      (control.querySelector('.ms-btn') ?? control).setAttribute('aria-label', `${t.filter} ${th.textContent.trim()}`);
+      cell.append(control);
+      filterRow.append(cell);
+    });
+    table.tHead.append(filterRow);
+  };
+
+  document.querySelectorAll('main table:not([data-plain])').forEach(enhanceTable);
+
+  /* ── sections: every main > h2 folds its content up to the next h2 ── */
+  const sectionBody = new Map();
+  const setSection = (h, open) => {
+    sectionBody.get(h).hidden = !open;
+    h.querySelector('.fold').setAttribute('aria-expanded', String(open));
+  };
+  for (const h of document.querySelectorAll('main > h2[id]')) {
+    const body = document.createElement('div');
+    body.className = 'section-body';
+    body.id = `${h.id}-body`;
+    const stop = (n) => n.nodeType === 1 && (n.tagName === 'H2' || n.tagName === 'FOOTER');
+    while (h.nextSibling && !stop(h.nextSibling)) body.append(h.nextSibling);
+    h.after(body);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'fold';
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-controls', body.id);
+    btn.setAttribute('aria-label', t.fold);
+    h.prepend(btn);
+    h.classList.add('foldable');
+    sectionBody.set(h, body);
+    h.addEventListener('click', (ev) => { if (!ev.target.closest('a')) setSection(h, body.hidden); });
+  }
+
+  /* ── table of contents + scroll spy ────────────────────── */
+  const toc = document.querySelector('nav.toc ol');
+  const tocTitle = document.querySelector('nav.toc .toc-title');
+  tocTitle.textContent = t.contents;
+  // The whole sidebar collapses to its toggle; the choice is remembered per browser, across reports.
+  const shell = document.querySelector('.shell');
+  const tocHead = document.createElement('div');
+  tocHead.className = 'toc-head';
+  tocTitle.before(tocHead);
+  const tocToggle = document.createElement('button');
+  tocToggle.type = 'button';
+  tocToggle.className = 'toc-toggle';
+  tocToggle.setAttribute('aria-controls', 'toc-list');
+  tocToggle.setAttribute('aria-label', t.tocToggle);
+  tocToggle.title = t.tocToggle;
+  tocHead.append(tocTitle, tocToggle);
+  toc.id = 'toc-list';
+  const TOC_KEY = 'report:toc-hidden';
+  const setToc = (open, remember) => {
+    shell.classList.toggle('toc-hidden', !open);
+    tocToggle.setAttribute('aria-expanded', String(open));
+    if (remember) try { localStorage.setItem(TOC_KEY, open ? '0' : '1'); } catch { /* storage blocked: session-only */ }
+  };
+  let tocHidden = false;
+  try { tocHidden = localStorage.getItem(TOC_KEY) === '1'; } catch { /* storage blocked */ }
+  setToc(!tocHidden, false);
+  tocToggle.addEventListener('click', () => setToc(shell.classList.contains('toc-hidden'), true));
+  const heads = [...document.querySelectorAll('main h2[id], main h3[id]')].filter((h) => !h.closest('details'));
+  const links = new Map();
+  const groupOf = new Map(); // sub li → its section's group
+  const setGroup = (g, open) => {
+    g.subs.forEach((li) => { li.hidden = !open; });
+    g.btn.setAttribute('aria-expanded', String(open));
+  };
+  let group = null;
+  for (const h of heads) {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = `#${h.id}`;
+    a.textContent = [...h.childNodes].map((n) => n.textContent.trim()).filter(Boolean).join(' ');
+    li.append(a);
+    toc.append(li);
+    links.set(h, a);
+    if (h.tagName === 'H3') {
+      li.className = 'sub';
+      if (group) { group.subs.push(li); groupOf.set(li, group); }
+    } else {
+      group = { li, subs: [] };
+    }
+  }
+  // A section's h3 entries start collapsed behind a toggle on the section's own entry.
+  new Set(groupOf.values()).forEach((g) => {
+    g.btn = document.createElement('button');
+    g.btn.type = 'button';
+    g.btn.className = 'toc-fold';
+    g.btn.setAttribute('aria-label', t.fold);
+    g.btn.addEventListener('click', () => setGroup(g, g.subs[0].hidden));
+    g.li.classList.add('has-subs');
+    g.li.append(g.btn);
+    setGroup(g, false);
+  });
+  const spy = new IntersectionObserver((entries) => {
+    const visible = entries.filter((e) => e.isIntersecting);
+    if (!visible.length) return;
+    const top = visible.reduce((a, b) => (a.boundingClientRect.top < b.boundingClientRect.top ? a : b));
+    links.forEach((a) => a.removeAttribute('aria-current'));
+    const current = links.get(top.target);
+    current?.setAttribute('aria-current', 'true');
+    const g = current && groupOf.get(current.parentElement);
+    if (g && current.parentElement.hidden) setGroup(g, true);
+  }, { rootMargin: '0px 0px -70% 0px' });
+  heads.forEach((h) => spy.observe(h));
+
+  /* ── collapsibles: open on #hash, open all when printing ── */
+  const revealHash = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = id && document.getElementById(id);
+    if (!target) return;
+    for (let d = target.closest('details'); d; d = d.parentElement.closest('details')) d.open = true;
+    if (sectionBody.has(target)) setSection(target, true);
+    const body = target.closest('.section-body');
+    if (body?.hidden) setSection(body.previousElementSibling, true);
+    target.scrollIntoView();
+  };
+  addEventListener('hashchange', revealHash);
+  // Following a link to the hash already in the URL fires no hashchange, but may still need to unfold.
+  document.addEventListener('click', (ev) => {
+    const a = ev.target.closest('a[href^="#"]');
+    if (a && a.hash === location.hash) revealHash();
+  });
+  revealHash();
+  const openedForPrint = [];
+  const foldedForPrint = [];
+  addEventListener('beforeprint', () => {
+    document.querySelectorAll('details:not([open])').forEach((d) => { d.open = true; openedForPrint.push(d); });
+    sectionBody.forEach((body, h) => { if (body.hidden) { setSection(h, true); foldedForPrint.push(h); } });
+  });
+  addEventListener('afterprint', () => {
+    openedForPrint.forEach((d) => { d.open = false; });
+    foldedForPrint.forEach((h) => setSection(h, false));
+    openedForPrint.length = 0;
+    foldedForPrint.length = 0;
+  });
+})();
+
+// ══ spec layout: a layer on engine.js (runs after it, same page) ═══════════
+(() => {
+  'use strict';
+
+  /* ── the stamp goes stale: past STALE_DAYS it says how old it is, so nobody trusts it blindly ── */
+  const STALE_DAYS = 90;
+  const lang = (document.documentElement.lang || 'es').slice(0, 2);
+  const ago = lang === 'en' ? (n) => `${n} days ago` : (n) => `hace ${n} días`;
+  const stamp = document.querySelector('main .stamp');
+  const time = stamp?.querySelector('time[datetime]');
+  const at = Date.parse(`${time?.getAttribute('datetime')}T00:00:00Z`);
+  if (!stamp || Number.isNaN(at)) return;
+  const now = new Date();
+  const days = Math.floor((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - at) / 864e5);
+  if (days <= STALE_DAYS) return;
+  stamp.classList.add('stale');
+  const age = document.createElement('span');
+  age.className = 'age';
+  age.textContent = ago(days);
+  stamp.append(age);
+})();
+</script>
+</body>
+</html>
