@@ -11,6 +11,7 @@ no change for the user has no entry.
 
 - The head of a group shows its count as `1 de 4` and ends with a chevron icon: down while the group is open, right while it is closed. `Comprados (N)` has the same chevron.
 - The name of a day in `Menú` is 14px, as the other heads.
+- New app icon: an orange shopping bag with bread, greens, a tomato and milk. The logo of the walkthrough is the same art.
 
 ## 1.3.0 - 2026-10-23
 
