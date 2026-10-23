@@ -33,8 +33,8 @@
     --accent-soft: var(--done-soft); /* deprecated: use --done-soft */
     --danger: light-dark(#b3261e, #f08a9b);
     --warning: light-dark(#9a5b00, #f2b65c);
-    --toast-bg: light-dark(#17201b, #e8ede9);
-    --toast-text: light-dark(#ffffff, #17201b);
+    --toast-bg: var(--ink); /* the toast is an --ink box */
+    --toast-text: var(--on-ink);
     --knob: #ffffff; /* the knob of a switch, in both themes */
     --scrim: rgb(0 0 0 / 0.45); /* veil behind a sheet */
 
@@ -168,8 +168,19 @@
     padding-bottom: calc(var(--tap-l) + var(--space-4) * 2 + var(--dock-height));
   }
 
+  /* Below 600px the add button of a visible dock replaces the floating one, so the content clears
+     the dock only. */
+  body:has(.dock:not([hidden]) > .dock-add:not([hidden])) main {
+    padding-bottom: calc(var(--dock-height) + var(--space-4));
+  }
+
+  /* No dock from 600px: the floating button is back, and the content clears it. */
   @media (min-width: 600px) {
     body:has(.dock:not([hidden])) main {
+      padding-bottom: calc(var(--tap-l) + var(--space-4) * 2);
+    }
+
+    body:has(.dock:not([hidden]) > .dock-add:not([hidden])) main {
       padding-bottom: calc(var(--tap-l) + var(--space-4) * 2);
     }
   }
@@ -1149,13 +1160,20 @@
   }
 
   /* @component banner
-     @summary A message in the flow of a list, on --done-soft, with its action below it.
+     @summary A message in the flow of a list, on --surface-2 with the --text colour, with its action below it.
+     @variant done  A message about work that is done, on --done-soft.
      @part banner-text  The text below the title.
-     @example <section class="banner"><strong>Done?</strong><p class="banner-text">All done.</p><button class="button primary wide" type="button">Finish</button></section> */
+     @example <section class="banner"><strong>Version 2 is ready</strong><p class="banner-text">Open it again to use it.</p><button class="button tonal wide" type="button">Update</button></section>
+     @example <section class="banner done"><strong>Done?</strong><p class="banner-text">All done.</p><button class="button tonal wide" type="button">Finish</button></section> */
   .banner {
     margin: var(--space-4) var(--space-3);
     padding: var(--space-4) var(--space-4);
     border-radius: var(--radius-l);
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .banner.done {
     background: var(--done-soft);
   }
 
@@ -1165,12 +1183,12 @@
   }
 
   /* @component empty-state
-     @summary The text of a list or a part with nothing in it. Holds a button, except inline (STATE-1). A second action is a button outline below the primary.
+     @summary The text of a list or a part with nothing in it. Holds a button, except inline (STATE-1). A second action is a button tonal below the primary.
      @variant inline  In a sheet: aligned with the content, with less space.
      @variant low     At the bottom of its area, in reach of the thumb. The app gives the list area a height, as the percent needs one.
      @part empty-state-title  The short title above the text.
      @example <div class="empty-state"><p>The list is empty.</p><button class="button primary" type="button">Bring from Later</button></div>
-     @example <div class="empty-state low" style="height: 240px"><h2 class="empty-state-title">Nothing here</h2><p>Add the first note.</p><button class="button primary" type="button">Add a note</button></div>
+     @example <div class="empty-state low" style="height: 240px"><h2 class="empty-state-title">Nothing here</h2><p>Add the first note.</p><button class="button primary" type="button">Add a note</button><button class="button tonal" type="button">Import notes</button></div>
      @example <p class="empty-state inline">No note matches.</p> */
   .empty-state {
     margin: calc(var(--space-6) * 2) var(--space-6);
@@ -1182,8 +1200,8 @@
     margin-top: var(--space-2);
   }
 
-  /* The empty state is on --bg, with art behind it, and its text is muted: a second action is a
-     --surface box with the text colour, like the content of the list. */
+  /* Kept for the markup of 0.6.0, where the second action was an outline button: on --bg, with art
+     behind it, it is a --surface box with the text colour. A new second action is tonal (STATE-1). */
   .empty-state .button.outline {
     background: var(--surface);
     color: var(--text);
@@ -1235,10 +1253,10 @@
   }
 
   /* @component item-row
-     @summary One entry of a list, as a row. Its body slides over its actions.
+     @summary One entry of a list, as a row. Its body slides over its actions. With a check, its divider starts at the text.
      @part item-row-swipe         The box that clips the sliding body.
      @part item-row-body          The row itself: check, name, then buttons.
-     @part item-row-check         The round checkbox of an entry that can be done. --done when checked.
+     @part item-row-check         The square checkbox of an entry that can be done. --done when checked.
      @part item-row-name          The name button, with its quantity and its meta line.
      @part item-row-qty           The quantity after the name.
      @part item-row-label         The text of the name. It keeps two lines, then ends with an ellipsis.
@@ -1265,6 +1283,12 @@
     background: var(--surface);
     /* The rows of a scope open a gap for a lifted row. `placeLifted` in drag.js sets the transform. */
     transition: transform var(--motion-fast) var(--ease);
+  }
+
+  /* With a check, the divider starts where the text starts: after the body padding, the check and
+     its margins, the gap and the name padding. It runs to the end of the row. */
+  .item-row:has(.item-row-check) {
+    border-image: linear-gradient(to right, transparent calc(var(--space-2) * 3 + var(--space-1) * 2 + var(--icon)), var(--line) 0) 0 0 1 0 / 0 0 1px 0;
   }
 
   .item-row.lifted {
@@ -1757,6 +1781,11 @@
   [data-hand="left"] .item-row-check {
     order: 1;
     margin: var(--space-3) var(--space-2) var(--space-3) var(--space-1);
+  }
+
+  /* The check is at the end, so the divider starts at the text, at --space-4. */
+  [data-hand="left"] .item-row:has(.item-row-check) {
+    border-image: linear-gradient(to right, transparent var(--space-4), var(--line) 0) 0 0 1 0 / 0 0 1px 0;
   }
 
   [data-hand="left"] .item-row-end {
