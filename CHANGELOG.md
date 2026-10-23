@@ -10,6 +10,7 @@ no change for the user has no entry.
 ## Unreleased
 
 - In `Agrupar y ordenar`, the knob of `Agrupar por` covers the whole chosen option, also when the view shows only two of the four groupings.
+- In `Secciones de la tienda`, the up arrow of the first section and the down arrow of the last one look disabled, in place of a grey fill that looked pressed.
 
 ## 1.3.2 - 2026-10-23
 

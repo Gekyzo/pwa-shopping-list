@@ -676,6 +676,13 @@
     animation: flash var(--motion-slow) ease-out;
   }
 
+  /* The fill of a disabled submit (input-row) is not for the moves of an aisle: the first up and
+     the last down fade as any disabled button. */
+  .product .input-row > .button.icon:disabled {
+    background: none;
+    opacity: 0.4;
+  }
+
   /* @component settings
      @scope settings
      @summary The Ajustes section: full-width groups of settings rows (list-group) under a list-group-head. A row of Preferencias holds a real select laid over it, so a tap opens the native picker.
