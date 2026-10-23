@@ -55,8 +55,8 @@ export const canSearch = (view, { items, recipes }) =>
   (view === 'active' && items > 0) || (view === 'recipes' && recipes > 0);
 
 // What an empty section says and offers. `title` and `text` are keys of the catalog, `title` null for
-// a search with no match and for Compra, whose header already says that it is empty. `action` is the next step as a button: `create-recipe`,
-// `add-query` or `add-item`; null when the add button of the screen is the action (or nothing is).
+// a search with no match. `action` is the next step as a button: `create-recipe`, `add-query` or
+// `add-item`; null when nothing is.
 // `secondary` is a second, lesser step: `add-sample`, or null.
 // `query` is the search text, `hasRecipes` is true with a recipe, `sample` with the sample recipe.
 export const emptyAction = (view, { query, hasRecipes, sample }) => {
@@ -68,6 +68,6 @@ export const emptyAction = (view, { query, hasRecipes, sample }) => {
   }
   if (view !== 'active') return none;
   if (searching) return { ...none, text: 'empty.noItemMatch', action: 'add-query' };
-  if (sample) return { title: null, text: 'empty.sample', action: 'add-item', secondary: 'add-sample' };
-  return { ...none, text: 'empty.active' };
+  if (sample) return { title: 'empty.activeTitle', text: 'empty.sample', action: 'add-item', secondary: 'add-sample' };
+  return { ...none, title: 'empty.activeTitle', text: 'empty.active', action: 'add-item' };
 };

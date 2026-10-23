@@ -59,7 +59,8 @@ export default {
   'group.noShop': 'No shop',
   'group.noAisle': 'No section',
 
-  'empty.active': 'Tap + to add an item.',
+  'empty.activeTitle': 'No items yet',
+  'empty.active': 'Add what you need to buy and tick it off in the shop.',
   'empty.sample': 'Add your first item, or start with the recipe “{recipe}”.',
   'empty.addSample': 'Add the sample recipe',
   'empty.addItem': '+ Add item',
