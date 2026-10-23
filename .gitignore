@@ -3,3 +3,5 @@ docs/superpowers/
 .claude/settings.local.json
 .superpowers/
 ux-audit/
+.taste-skill/
+shopping-sample.json
