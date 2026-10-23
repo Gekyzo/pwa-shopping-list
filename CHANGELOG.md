@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.3.3 - 2026-10-23
+
 - In `Agrupar y ordenar`, the knob of `Agrupar por` covers the whole chosen option, also when the view shows only two of the four groupings.
 - In `Secciones de la tienda`, the up arrow of the first section and the down arrow of the last one look disabled, in place of a grey fill that looked pressed.
 - The sections of `Secciones de la tienda` look like the rows of a list: across the sheet, the name with no box and one line below each row. The line of the section in edit is dark.
