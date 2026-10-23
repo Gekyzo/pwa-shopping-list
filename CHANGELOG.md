@@ -12,6 +12,7 @@ no change for the user has no entry.
 - In `Agrupar y ordenar`, the knob of `Agrupar por` covers the whole chosen option, also when the view shows only two of the four groupings.
 - In `Secciones de la tienda`, the up arrow of the first section and the down arrow of the last one look disabled, in place of a grey fill that looked pressed.
 - The sections of `Secciones de la tienda` look like the rows of a list: across the sheet, the name with no box and one line below each row. The line of the section in edit is dark.
+- In `¿Terminar la compra?`, a space separates `Seguir comprando` from `Terminar compra`.
 
 ## 1.3.2 - 2026-10-23
 
