@@ -146,14 +146,14 @@ test('canSearch is false for an empty Compra, an empty Recetas, Menú and Ajuste
   assert.equal(canSearch('settings', { items: 3, recipes: 3 }), false);
 });
 
-test('emptyAction of an empty list has no title, as the header says it is empty; with the sample recipe it adds an item, and its ingredients second', () => {
+test('emptyAction of an empty list with the sample recipe has a title, adds an item, and its ingredients second', () => {
   const result = emptyAction('active', { ...NO_QUERY, hasRecipes: true, sample: true });
-  assert.deepEqual(result, { title: null, text: 'empty.sample', action: 'add-item', secondary: 'add-sample' });
+  assert.deepEqual(result, { title: 'empty.activeTitle', text: 'empty.sample', action: 'add-item', secondary: 'add-sample' });
 });
 
-test('emptyAction of an empty list without the sample leaves the add button as the action', () => {
+test('emptyAction of an empty list without the sample has a title and adds an item, as Recetas creates a recipe', () => {
   const result = emptyAction('active', { ...NO_QUERY, hasRecipes: true });
-  assert.deepEqual(result, { title: null, text: 'empty.active', action: null, secondary: null });
+  assert.deepEqual(result, { title: 'empty.activeTitle', text: 'empty.active', action: 'add-item', secondary: null });
 });
 
 test('emptyAction of a section with nothing to say is empty', () => {

@@ -59,7 +59,8 @@ export default {
   'group.noShop': 'Sense botiga',
   'group.noAisle': 'Sense secció',
 
-  'empty.active': 'Toca + per afegir un article.',
+  'empty.activeTitle': 'Encara no hi ha articles',
+  'empty.active': 'Afegeix el que has de comprar i marca-ho a la botiga.',
   'empty.sample': 'Afegeix el teu primer article, o comença amb la recepta «{recipe}».',
   'empty.addSample': 'Afegeix la recepta d’exemple',
   'empty.addItem': '+ Afegeix un article',
