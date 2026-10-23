@@ -44,7 +44,7 @@ the bottom bar at each width.
   **Borrar la receta de ejemplo** and **Borrar todos los datos** (BACKUP-7) have the colour of
   danger and no `›`. **Aplicación** is hidden,
   with its title, while the install is not offered (INS-1). The version line is at the end of
-  `Ajustes`; while a newer version is deployed, a banner above it says `Versión X disponible` and
+  `Ajustes`; while a newer version is deployed, a grey banner above it says `Versión X disponible` and
   `Tienes la Y.` (the version in use), with the button **Actualizar** across the full width.
 - **NAV-7** An empty section shows a title and a text in the lower half of the list area, and
   one action as a wide button below them. `Compra` has the title `Aún no hay artículos`, the

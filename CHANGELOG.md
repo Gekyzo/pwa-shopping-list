@@ -9,6 +9,11 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- On a phone, the end of the list in `Compra` and `Recetas` stops just above the bar with the `+`,
+  with no empty room below it.
+- In a list with checks, the line between two items starts at the text, after the check.
+- A message at the bottom of the screen is black (white with dark colours), no longer dark green.
+- The banner `Versión X disponible` in **Ajustes** is grey; the banner `¿Has terminado?` stays green.
 - On a phone, **Llenar cesta** in `Menú` shows its full name.
 - In the sheet `¿Terminar la compra?`, **Ajustes** is an underlined word inside the sentence.
 - In `Compra`, the head of a recipe group has the same grey band as the other heads, and its

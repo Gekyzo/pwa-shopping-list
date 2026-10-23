@@ -196,6 +196,11 @@ test('the rows that open something end with a chevron', () => {
   }
 });
 
+test('the finish banner is a done banner and the update notice a plain one', () => {
+  assert.match(html, /<section id="finish" class="banner done" hidden>/);
+  assert.match(html, /<div id="update-banner" class="banner" hidden>/);
+});
+
 test('the update notice is a banner with a wide primary button above the version line', () => {
   const [banner = ''] = settings.match(/<div id="update-banner"[\s\S]*?<\/div>/) ?? [];
   assert.match(banner, /class="banner"[^>]* hidden/);
