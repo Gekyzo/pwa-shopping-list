@@ -9,6 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- A screen reader names the bar below the title of `Compra` with its subtitle, such as
+  `3 de 5 comprados`.
 - **Terminar compra** in the banner `¿Has terminado?` and **Siguiente** in the card of a shop with
   everything bought are grey buttons: the `+` stays the one terracotta button.
 - On a phone, the end of the list in `Compra` and `Recetas` stops just above the bar with the `+`,
@@ -30,7 +32,7 @@ no change for the user has no entry.
 - `Compra` and `Recetas` no longer show the basket behind the list. In `Menú` the name of a day
   is a plain head, a planned meal is a white tile and a free meal has a dashed grey frame; a full
   day no longer changes colour. A control named in the walkthrough is bold, in the colour of the
-  text. When the phone uses dark colours, the bar of the phone is dark.
+  text.
 - The bottom bar shows the name of each section under its icon, with new icons. **Listo** in the head of a sheet is now a grey button.
 - On a phone the `+` button is the last button of the bar above the bottom bar, in place of the
   round button over the list. The bar shows in `Recetas` also with no search; its `+` creates a
