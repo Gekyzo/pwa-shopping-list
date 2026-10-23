@@ -42,6 +42,7 @@
     --font-mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; /* keys of the walkthrough */
     --text-xs: 0.75rem; /* labels, badges, captions */
     --text-s: 0.8125rem; /* second text, chips: 13px */
+    --text-label: 0.875rem; /* group and section heads, chips, segments: 14px */
     --text-m: 0.9375rem; /* body: 15px */
     --text-h: 1.25rem; /* the title of a sheet or of an empty state */
     --text-l: 1.5rem; /* screen title */
@@ -326,7 +327,7 @@
     border: 1px solid var(--control);
     border-radius: var(--radius-control);
     background: var(--surface);
-    font-size: var(--text-s);
+    font-size: var(--text-label);
   }
 
   .chip.surface {
@@ -426,7 +427,7 @@
     flex: 1;
     min-height: var(--tap);
     border-radius: var(--radius-pill);
-    font-size: var(--text-s);
+    font-size: var(--text-label);
     transition: color var(--motion);
   }
 
@@ -1481,7 +1482,7 @@
     border-radius: 0;
     border-bottom: 1px solid var(--line);
     color: var(--muted);
-    font-size: var(--text-s);
+    font-size: var(--text-label);
     font-weight: var(--weight-strong);
     letter-spacing: normal;
     text-transform: none;
@@ -1507,7 +1508,7 @@
     border-bottom: 1px solid var(--line);
     background: var(--bg);
     color: var(--text);
-    font-size: var(--text-s);
+    font-size: var(--text-label);
     font-weight: var(--weight-medium);
     letter-spacing: normal;
     text-transform: none;
@@ -1639,7 +1640,7 @@
   .list-group-head {
     margin: var(--space-5) var(--space-4) var(--space-2);
     color: var(--muted);
-    font-size: var(--text-s);
+    font-size: var(--text-label);
     font-weight: var(--weight-medium);
   }
 
