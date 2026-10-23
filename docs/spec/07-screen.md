@@ -235,6 +235,7 @@ the bottom bar at each width.
   | 6 | `Una receta para empezar` | The switch that adds the sample recipe (ONB-13) |
 
 - **ONB-2** A page has a drawing, a title and a text. A drawing has no text and does not move.
+  A drawing is in the main action colour (`--primary`), its ticked boxes too.
   A line break in the text of a catalog starts a new line. A text between two backticks, such as
   `↻` or `+`, names a control and shows as a key: its icon and its text in bold, in the colour of the text, with no border, box or monospace font.
   A key that starts with `#name` shows the icon `name` of `icons.svg`, then the rest of its text.

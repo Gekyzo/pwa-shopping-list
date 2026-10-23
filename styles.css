@@ -2,11 +2,12 @@
 
 @layer tokens {
   :root {
-    /* The colours of Bodega: terracotta for the one main action, green for progress and the checked state. */
-    --primary: light-dark(#b5451b, #f0905f);
-    --on-primary: light-dark(#ffffff, #1a0f0a);
+    /* The colour of Bodega: one green for the main action, progress and the checked state. */
     --done: light-dark(#1f7a4d, #5fc491);
     --on-done: light-dark(#ffffff, #0c1a12);
+    --primary: var(--done);
+    --on-primary: var(--on-done);
+    --primary-soft: var(--done-soft);
   }
 }
 
@@ -904,9 +905,9 @@
      @scope onboarding
      @summary The line drawing of a walkthrough page, inline in the page. Its shapes take these parts.
      @part art-card     A card shape, filled with --surface.
-     @part art-accent   A --done stroke.
-     @part art-soft     A --done-soft fill with a --done stroke.
-     @part art-solid    A solid --done fill.
+     @part art-accent   A --primary stroke.
+     @part art-soft     A --primary-soft fill with a --primary stroke.
+     @part art-solid    A solid --primary fill.
      @part art-on-solid A stroke on a solid fill.
      @example <div class="onboarding-art"><svg viewBox="0 0 240 160" aria-hidden="true"><rect class="art-card art-accent" x="20" y="20" width="90" height="120" rx="10"/><circle class="art-solid" cx="160" cy="80" r="13"/><path class="art-on-solid" d="M160 74v12M154 80h12"/></svg></div> */
   .onboarding-art > svg {
@@ -925,20 +926,20 @@
   }
 
   .art-accent {
-    stroke: var(--done);
+    stroke: var(--primary);
   }
 
   .art-soft {
-    fill: var(--done-soft);
-    stroke: var(--done);
+    fill: var(--primary-soft);
+    stroke: var(--primary);
   }
 
   .art-solid {
-    fill: var(--done);
+    fill: var(--primary);
     stroke: none;
   }
 
   .art-on-solid {
-    stroke: var(--on-done);
+    stroke: var(--on-primary);
   }
 }
