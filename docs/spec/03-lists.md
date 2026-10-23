@@ -67,6 +67,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 - **TRIP-4** The control shows in two places:
   1. A banner `¿Has terminado?` in `Compra`, on the green ground of done work, when the list has
      items and all are ticked. Its text is the outcome parts of the trip sheet, joined by ` · `.
+     Its button **Terminar compra** is a tonal button across its width: the `+` of the dock stays
+     the one primary button of the view.
   2. The trip sheet of `Compra` (NAV-9). Its title is the question `¿Terminar la compra?`. It lists
      the items of `Compra` by where each one goes, one row for each outcome with an icon and its
      count: recurrent items that come back (icon `repeat`, `2 con ↻ vuelven`), open items kept with

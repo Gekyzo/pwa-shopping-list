@@ -245,7 +245,7 @@ test('each nav item shows its name', () => {
 
 test('an outline button is only a destructive one; other secondary actions are tonal', () => {
   for (const [, classes] of html.matchAll(/<button[^>]*class="(button outline[^"]*)"/g)) assert.match(classes, /\bdanger\b/, classes);
-  for (const id of ['shop-done-all', 'empty-secondary', 'trip-continue', 'meal-dish', 'aisles-usual']) {
+  for (const id of ['shop-done-all', 'shop-done-next', 'finish-button', 'empty-secondary', 'trip-continue', 'meal-dish', 'aisles-usual']) {
     assert.match(html, new RegExp(`<button id="${id}" class="button tonal`), id);
   }
 });

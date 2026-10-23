@@ -59,10 +59,11 @@ apply in it.
   example by a removal of a shop, `Deshacer`, **Terminar compra** or an import, goes back to
   **Todas**.
 - **SHOP-23** A shop list of `Compra` with no item to buy, while items of `Compra` are still to
-  buy, shows an end card: the title `<shop>: todo comprado`, the primary button `Siguiente: <shop>
-  (<count>) →` and the button `Ver todas las tiendas`. The next list is the one after the shop in
+  buy, shows an end card: the title `<shop>: todo comprado`, the tonal button `Siguiente: <shop>
+  (<count>) →` and the tonal button `Ver todas las tiendas`. The `+` of the dock stays the one
+  primary button of the view. The next list is the one after the shop in
   chip order, from the start after the end, that has an item to buy (`nextShop`); its count is the
-  items to buy there. With no such list the primary button does not show. A tap on it shows the
+  items to buy there. With no such list the button `Siguiente` does not show. A tap on it shows the
   next list. A tap on `Ver todas las tiendas` shows **Todas**. A search hides the card.
 - **SHOP-24** The add sheet opened from a shop list puts that shop on the item that it creates or
   brings (SHOP-4), so the row shows in the list. An item that the sheet finds in its list already
