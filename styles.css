@@ -598,6 +598,26 @@
     bottom: calc((var(--tap-l) + var(--space-4) * 2) * -1);
   }
 
+  /* Llenar cesta and Vaciar menú share the bar: the split takes its full width. */
+  .action-bar > .split {
+    flex: 1;
+  }
+
+  /* @component action-label
+     @scope menu
+     @summary The text of a button with an icon in a split action bar. Half the bar each: below
+       about 390px a long label (`Riempi cestino`) ends in an ellipsis instead of crossing the border.
+     @example <div class="split" style="width: 160px"><button class="button primary" type="button" style="min-width: 0"><span class="action-label">Riempi cestino</span></button><button class="button outline danger" type="button">Svuota</button></div> */
+  .action-bar > .split > .button {
+    min-width: 0;
+  }
+
+  .action-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   /* @component products
      @scope recipes
      @summary The products of a recipe in the recipe sheet, each with its remove button.

@@ -51,15 +51,14 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   puts that recipe in the meal and closes the sheet. A meal with a recipe or a dish also has
   **Quitar**, with `Deshacer` and the message `Quitada del menú: «name».`
 - **MENU-12** An action bar stays at the bottom of the list of `Menú`, above the bottom bar.
-  Its one button, **Llenar cesta**, fills `Compra` (MENU-5). It has the icon `cart-add`, the
-  cart with a plus, before its text, and the full width of the bar. Its message is
-  `Menú: N añadidos, N ya estaban.` with `Deshacer`. A fill that changes nothing shows `Menú:
-  todo estaba ya en la lista.` and keeps the `Deshacer` that is still on the screen.
-- **MENU-13** The button `⋮` of the header shows in `Menú` and opens the sheet `Menú`, with
-  **Listo** and one entry, **Vaciar menú**, and the note `Quita todas las comidas de la
-  semana. Puedes deshacerlo.` The entry empties the menu, closes the sheet and shows
-  `Deshacer` with the message `Menú vaciado.` It is disabled while the menu is empty. The
-  label of the button is `Opciones del menú`.
+  It has two buttons of equal width: **Llenar cesta** on the side of the hand and **Vaciar
+  menú** beside it. **Llenar cesta** fills `Compra` (MENU-5). It has the icon `cart-add`, the
+  cart with a plus, before its text. Its message is `Menú: N añadidos, N ya estaban.` with
+  `Deshacer`. A fill that changes nothing shows `Menú: todo estaba ya en la lista.` and keeps
+  the `Deshacer` that is still on the screen.
+- **MENU-13** **Vaciar menú** is an outline button in the danger color. It empties the menu and
+  shows `Deshacer` with the message `Menú vaciado.` It is disabled while the menu is empty. The
+  header of `Menú` has no `⋮` button.
 - **MENU-14** `Menú` shows the week also with no recipe, so that a meal can hold a dish. It has no
   empty text. The `+` button does not show in `Menú`.
 - **MENU-15** **Terminar compra** does not change the menu.

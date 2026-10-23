@@ -12,8 +12,6 @@ export default {
   'menu.title': '{meal} am {day}',
   'menu.choose': 'Rezept wählen',
   'menu.fill': 'Korb füllen',
-  'menu.more': 'Menüoptionen',
-  'menu.clearNote': 'Entfernt alle Mahlzeiten der Woche. Du kannst es rückgängig machen.',
   'menu.clear': 'Menü leeren',
   'menu.remove': 'Entfernen',
   'menu.noRecipe': 'ohne Rezept',
