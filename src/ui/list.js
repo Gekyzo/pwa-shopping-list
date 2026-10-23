@@ -135,6 +135,7 @@ const renderEmpty = (shown) => {
   $('empty').hidden = !shown;
   const sample = state.recipes.find((recipe) => recipe.id === recipes.SAMPLE_ID);
   const { title, text, action, secondary } = emptyAction(ui.view, { query: ui.query, hasRecipes: state.recipes.length > 0 || menu.menuDishes(state).length > 0, sample: Boolean(sample) });
+  $('empty').classList.toggle('apart', Boolean(title && action));
   const params = { query: ui.query.trim(), recipe: sample?.name ?? '' };
   $('empty-title').hidden = !title;
   $('empty-title').textContent = title ? t(title) : '';

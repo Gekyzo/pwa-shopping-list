@@ -59,7 +59,8 @@ export default {
   'group.noShop': 'Senza negozio',
   'group.noAisle': 'Senza reparto',
 
-  'empty.active': 'Tocca + per aggiungere un articolo.',
+  'empty.activeTitle': 'Ancora nessun articolo',
+  'empty.active': 'Aggiungi ciò che devi comprare e spuntalo al negozio.',
   'empty.sample': 'Aggiungi il tuo primo articolo, o inizia con la ricetta «{recipe}».',
   'empty.addSample': 'Aggiungi la ricetta di esempio',
   'empty.addItem': '+ Aggiungi articolo',
