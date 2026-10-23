@@ -12,8 +12,6 @@ export default {
   'menu.title': '{meal} on {day}',
   'menu.choose': 'Choose a recipe',
   'menu.fill': 'Fill basket',
-  'menu.more': 'Menu options',
-  'menu.clearNote': 'Removes all meals of the week. You can undo it.',
   'menu.clear': 'Clear the menu',
   'menu.remove': 'Remove',
   'menu.noRecipe': 'no recipe',

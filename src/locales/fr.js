@@ -12,8 +12,6 @@ export default {
   'menu.title': '{meal} du {day}',
   'menu.choose': 'Choisir une recette',
   'menu.fill': 'Remplir panier',
-  'menu.more': 'Options du menu',
-  'menu.clearNote': 'Retire tous les repas de la semaine. Vous pouvez annuler.',
   'menu.clear': 'Vider le menu',
   'menu.remove': 'Retirer',
   'menu.noRecipe': 'sans recette',

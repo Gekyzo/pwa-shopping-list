@@ -12,8 +12,6 @@ export default {
   'menu.title': '{meal} del {day}',
   'menu.choose': 'Elegir receta',
   'menu.fill': 'Llenar cesta',
-  'menu.more': 'Opciones del menú',
-  'menu.clearNote': 'Quita todas las comidas de la semana. Puedes deshacerlo.',
   'menu.clear': 'Vaciar menú',
   'menu.remove': 'Quitar',
   'menu.noRecipe': 'sin receta',

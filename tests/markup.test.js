@@ -78,9 +78,9 @@ const sheetParts = () => {
   return opens.map((open, i) => ({ id: open[2] ?? null, part: body.slice(open.index, opens[i + 1]?.index ?? body.length) }));
 };
 
-test('each of the nine sheets has the grab, then a head with its title and Listo, then a body', () => {
+test('each of the eight sheets has the grab, then a head with its title and Listo, then a body', () => {
   const parts = sheetParts();
-  assert.equal(parts.length, 9);
+  assert.equal(parts.length, 8);
   for (const { id, part } of parts) {
     assert.match(
       part,
@@ -111,7 +111,6 @@ test('the sheets with a title of their own give it an id; the others a fixed tex
     ' data-i18n="shops.lists"',
     ' data-i18n="trip.question"',
     'id="meal-title" ',
-    ' data-i18n="nav.menu"',
     'id="edit-title" ',
     ' data-i18n="aisles.title"',
     'id="recipe-title" ',
@@ -146,11 +145,9 @@ test('the meal sheet has a recipe search between the title and the chips, a no-m
   assert.match(layer, /<p id="meal-empty"[^>]*hidden><\/p>/);
 });
 
-test('Llenar cesta stands in an action bar; Vaciar menú is an entry of the menu sheet', () => {
-  assert.match(body, /<div id="menu-actions" class="action-bar" hidden>\s*<button id="menu-fill" class="button primary wide"/);
-  const { part } = sheetParts().find((sheet) => sheet.id === 'menu-more-sheet');
-  assert.match(part, /<button id="menu-clear" class="button outline entry"[^>]*>[\s\S]*?<small class="entry-note" data-i18n="menu.clearNote"><\/small>/);
-  assert.doesNotMatch(body, /class="split menu-actions"/);
+test('Llenar cesta and Vaciar menú stand together in the action bar of Menú', () => {
+  assert.match(body, /<div id="menu-actions" class="action-bar" hidden>\s*<div class="split">\s*<button id="menu-fill" class="button primary hand-side"[\s\S]*?<\/button>\s*<button id="menu-clear" class="button outline danger"[^>]*data-i18n="menu.clear"><\/button>\s*<\/div>/);
+  assert.doesNotMatch(body, /id="menu-more"/);
   assert.match(body, /<button id="trip-button"[^>]*data-i18n-attr="aria-label:trip.menu"/);
 });
 
