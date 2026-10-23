@@ -9,6 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- **Terminar compra** in the banner `¿Has terminado?` and **Siguiente** in the card of a shop with
+  everything bought are grey buttons: the `+` stays the one terracotta button.
 - On a phone, the end of the list in `Compra` and `Recetas` stops just above the bar with the `+`,
   with no empty room below it.
 - In a list with checks, the line between two items starts at the text, after the check.
