@@ -11,6 +11,10 @@ no change for the user has no entry.
 
 - The head of a group shows its count as `1 de 4` and ends with a chevron icon: down while the group is open, right while it is closed. `Comprados (N)` has the same chevron.
 - The name of a day in `Menú` is 14px, as the other heads.
+- The names of the fields of a sheet stand above their boxes, and the titles `Tiendas` and `Sección` of the edit sheet look the same. `Repetir en cada compra` lines up with the fields.
+- `Terminar compra` on the green banner is a white button, so it no longer looks disabled.
+- The heads of `Ajustes` and `Comprados (N)` are in the colour of the text.
+- With the left hand, the line below a row starts at the name, no longer under the pencil.
 - New app icon: an orange shopping bag with bread, greens, a tomato and milk. The logo of the walkthrough is the same art.
 
 ## 1.3.0 - 2026-10-23

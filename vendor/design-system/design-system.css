@@ -464,6 +464,11 @@
     border-top: 1px solid var(--line);
   }
 
+  /* The body of a sheet pads its content, so a switch there lines up with the fields above it. */
+  .sheet-body > .switch {
+    padding-inline: 0;
+  }
+
   .switch-input {
     appearance: none;
     position: relative;
@@ -576,15 +581,15 @@
   }
 
   /* @component field
-     @summary An input with its name as a label: inside the box while it is empty, on its top border
-       once it has a value or the focus. The placeholder only marks the empty box.
+     @summary An input with its name as a label above the box. The label follows the input in the
+       markup; the field reverses its column. The placeholder only marks the empty box.
      @part field-input  The input, with the classes input field-input and a placeholder.
      @part field-label  The name, after the input.
      @example <label class="field"><input class="input field-input" type="text" placeholder="Text" value="Call Ana"><span class="field-label">Name</span></label>
      @example <label class="field"><input class="input field-input" type="text" placeholder="Cantidad"><span class="field-label">Amount</span></label> */
   .field {
-    position: relative;
-    display: block;
+    display: flex;
+    flex-direction: column-reverse;
     margin-top: var(--space-4);
   }
 
@@ -601,28 +606,10 @@
   }
 
   .field-label {
-    position: absolute;
-    top: 50%;
-    left: var(--space-3);
-    padding: 0 var(--space-1);
-    border-radius: var(--radius-s);
-    background: var(--surface);
-    color: var(--muted);
-    line-height: 1;
-    pointer-events: none;
-    transform: translateY(-50%);
-    transition: top var(--motion-fast) var(--ease), font-size var(--motion-fast) var(--ease), color var(--motion-fast) var(--ease);
-  }
-
-  .field-input:focus + .field-label,
-  .field-input:not(:placeholder-shown) + .field-label {
-    top: 0;
-    background: var(--surface);
-    font-size: var(--text-xs);
-  }
-
-  .field-input:focus + .field-label {
+    margin-bottom: var(--space-2);
     color: var(--text);
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
   }
 
   /* @component select
@@ -982,11 +969,12 @@
     flex-direction: row-reverse;
   }
 
+  /* The title of a part of a sheet is a head in --text, as the label of a field. */
   .sheet-title {
     margin: var(--space-2) 0 0;
-    color: var(--muted);
-    font-size: var(--text-s);
-    font-weight: var(--weight-strong);
+    color: var(--text);
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
   }
 
   /* The title of the head: it takes the free width and keeps to one line. */
@@ -1160,7 +1148,7 @@
   }
 
   /* @component banner
-     @summary A message in the flow of a list, on --surface-2 with the --text colour, with its action below it.
+     @summary A message in the flow of a list, on --surface-2 with the --text colour, with its action below it. A button tonal in it stands on --surface.
      @variant done  A message about work that is done, on --done-soft.
      @part banner-text  The text below the title.
      @example <section class="banner"><strong>Version 2 is ready</strong><p class="banner-text">Open it again to use it.</p><button class="button tonal wide" type="button">Update</button></section>
@@ -1175,6 +1163,11 @@
 
   .banner.done {
     background: var(--done-soft);
+  }
+
+  /* The --secondary fill is close to the ground of a banner, so its tonal button stands on --surface. */
+  .banner .button.tonal {
+    background: var(--surface);
   }
 
   .banner-text {
@@ -1494,7 +1487,7 @@
   /* @component section-head
      @summary The row that opens and closes a part of a list, such as the done entries.
      @part section-head-button  The full-width button, with aria-expanded.
-     @part chevron              The open or closed sign at its end.
+     @part chevron              The open or closed sign at its end, in --muted: a glyph or an icon.
      @example <ul class="item-list" style="width: 100%"><li class="section-head"><button class="section-head-button" type="button" aria-expanded="false"><span>2 done</span><span class="chevron">▸</span></button></li></ul> */
   .section-head-button {
     display: flex;
@@ -1505,15 +1498,19 @@
     padding: 0 var(--space-4);
     border-radius: 0;
     border-bottom: 1px solid var(--line);
-    color: var(--muted);
+    color: var(--text);
     font-size: var(--text-label);
-    font-weight: var(--weight-strong);
+    font-weight: var(--weight-medium);
     letter-spacing: normal;
     text-transform: none;
   }
 
   .chevron {
     font-size: var(--text-m);
+  }
+
+  .section-head-button .chevron {
+    color: var(--muted);
   }
 
   /* @component group-head
@@ -1547,7 +1544,7 @@
      @part list-row-meta  A muted text at the end of a row.
      @variant accent      On list-row: the row that makes a new thing, in --primary text.
      @variant card        An inset box with a border and rounded corners, without a shadow.
-     @part list-group-head      The quiet title above a group.
+     @part list-group-head      The title above a group, in --text.
      @part settings-row         A tall row of a group: a label, a value and a chevron.
      @part settings-row-label   The text of a settings row.
      @part settings-row-value   The muted value at the end of a settings row.
@@ -1663,7 +1660,7 @@
 
   .list-group-head {
     margin: var(--space-5) var(--space-4) var(--space-2);
-    color: var(--muted);
+    color: var(--text);
     font-size: var(--text-label);
     font-weight: var(--weight-medium);
   }
@@ -1786,6 +1783,12 @@
   /* The check is at the end, so the divider starts at the text, at --space-4. */
   [data-hand="left"] .item-row:has(.item-row-check) {
     border-image: linear-gradient(to right, transparent var(--space-4), var(--line) 0) 0 0 1 0 / 0 0 1px 0;
+  }
+
+  /* A trailing slot comes first: the text starts after the body padding, the slot, the gap and the
+     name padding. */
+  [data-hand="left"] .item-row:has(.item-row-check):has(.item-row-end) {
+    border-image: linear-gradient(to right, transparent calc(var(--space-4) + var(--space-2) + var(--tap) * 2), var(--line) 0) 0 0 1 0 / 0 0 1px 0;
   }
 
   [data-hand="left"] .item-row-end {
