@@ -99,7 +99,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 | Section | Title | Subtitle | Bar |
 |---|---|---|---|
-| `Compra` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `T de N comprados` (ticked of total) | The share ticked, in `Compra` only |
+| `Compra` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `T de N comprados` (ticked of total) | The share ticked, in `Compra` only; a screen reader names it with the subtitle |
 | `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | None |
 | `Ajustes` | `Ajustes` | `Bodega` | None |
 
