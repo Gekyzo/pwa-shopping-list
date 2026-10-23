@@ -98,8 +98,8 @@ const renderAll = () => {
   $('progress').style.setProperty('--pct', `${header.pct ?? 0}%`);
   $('progress').setAttribute('aria-valuenow', String(header.pct ?? 0));
 
-  renderDock();
   renderList(summary);
+  renderDock();
   // Before the focus and the effects below: they also reach the rows of the recipe sheet.
   renderRecipe();
 
@@ -111,9 +111,13 @@ const renderAll = () => {
   renderTrip();
   renderMenuActions();
 
-  // An action in the empty state replaces the add button.
-  $('fab').hidden = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || sheetOpen(ui);
-  $('fab').setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
+  // An action in the empty state replaces the add button. Below 600px the add button of the dock
+  // takes the place of the fab (design-system.css), with the same label and the same conditions.
+  const noAdd = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || sheetOpen(ui);
+  for (const id of ['fab', 'dock-add']) {
+    $(id).hidden = noAdd;
+    $(id).setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
+  }
   document.querySelectorAll('.nav-item').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');

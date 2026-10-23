@@ -104,7 +104,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 ## Add sheet
 
 The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it creates a recipe (see
-[06-recipes.md](06-recipes.md)). The button does not show in `Ajustes` or while a sheet is open.
+[06-recipes.md](06-recipes.md)). Below 600px it is the last button of the dock (SHOP-26), from
+600px it floats above the list (NAV-24). The button does not show in `Ajustes` or while a sheet is open.
 
 - **ADD-1** The sheet has a name field and the button **Añadir**. It has no target choice: an add
   always goes to `Compra`.

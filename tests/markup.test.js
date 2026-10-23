@@ -212,6 +212,13 @@ test('the dock stands before the add button with the shop arrows, the shop chip 
   assert.match(dock, /<button id="dock-cancel" class="button accent" type="button" data-i18n="search.cancel"/);
 });
 
+test('the dock ends with the add button', () => {
+  const [dock = ''] = body.match(/<div id="dock" class="dock"[\s\S]*?<button id="fab"/) ?? [];
+  const ids = [...dock.matchAll(/<(?:button|label) id="([^"]+)"/g)].map(([, id]) => id).filter((id) => id !== 'dock-clear');
+  assert.deepEqual(ids, ['dock-prev', 'dock-shop', 'dock-next', 'dock-search', 'dock-field', 'dock-cancel', 'dock-add', 'fab']);
+  assert.match(dock, /<button id="dock-add" class="button primary icon dock-add" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#plus"\/><\/svg><\/button>\s*<\/div>\s*<button id="fab"/);
+});
+
 test('the shop chip of the dock opens the shop picker, a sheet with a head', () => {
   assert.match(body, /<button id="dock-shop" class="chip" type="button" aria-haspopup="dialog" aria-controls="shop-pick"/);
   const [layer = ''] = body.match(/<div id="shop-pick" class="sheet-layer"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/) ?? [];

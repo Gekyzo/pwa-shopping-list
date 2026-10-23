@@ -89,6 +89,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-23** `Recetas` has a search when one recipe or one dish of the menu (REC-36) exists at
   least. It opens and closes as the search of `Compra`: from 600px wide with the search button of
   the header (LIST-20, LIST-21), below 600px with the search button of the dock (SHOP-26, LIST-37).
+  Below 600px the dock shows also with no search, for its `+` button, while `Recetas` has no empty
+  text with a button (NAV-7).
   The field is **Buscar receta o producto**. It filters the list while the user types.
 - **REC-24** A recipe matches when its name or one of its products contains the text, with no case
   and no accent distinction. A dish matches when its name contains the text. An empty text shows

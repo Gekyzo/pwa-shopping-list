@@ -6,8 +6,9 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/ui/`, `src/swipe.js` and
 
 From top to bottom: the header (title, subtitle, search button, arrange button, trip
 button, and the bar of `Compra`), the content of the section, the `+` button above the bottom bar, and the bottom bar.
-Below 600px wide the dock of `Compra` and `Recetas` stands between the `+` button and the bottom bar (SHOP-26),
-and the header has no search button while the dock shows. The title keeps one line, with an
+Below 600px wide the dock of `Compra` and `Recetas` stands above the bottom bar (SHOP-26) and holds
+the `+` button at its end, and no `+` button floats over the list. The header has no search button
+while the dock shows. The title keeps one line, with an
 ellipsis. The message shows below the top
 edge. A sheet comes up from the bottom, over a veil. The walkthrough of the first start covers all
 of it.
@@ -149,7 +150,8 @@ the bottom bar at each width.
 - **NAV-8** There are eight sheets: add, arrange (with the choice of shop lists, SHOP-25), shop
   picker (SHOP-27), trip, meal, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33).
   One is open at a time. A tap on the
-  veil, **Listo** or `Escape` closes it. The `+` button does not show while a sheet is open.
+  veil, **Listo** or `Escape` closes it. The `+` button, also the one of the dock, does not show
+  while a sheet is open.
 - **NAV-22** Each sheet has a head: the grab, a title on one line and the button **Listo**. The
   title of the edit sheet is the name of the item, of the recipe sheet the name of the recipe, of
   the add sheet `Añadir artículo a la lista` or `Nombre de la receta` by the section. Only the body
@@ -168,9 +170,10 @@ the bottom bar at each width.
 - **NAV-10** The trip sheet closes as each sheet does (NAV-8). The open puts the focus on
   **Terminar compra**, and the close puts it back on the trip button.
 
-- **NAV-24** The `+` button collapses to a square of the tap size (48 px) after a scroll of the
-  list of more than 24 px down, and opens again on any scroll up and at the top of the list
-  (`fabState`).
+- **NAV-24** From 600px the `+` button floats above the bottom right of the list. It collapses to a
+  square of the tap size (48 px) after a scroll of the list of more than 24 px down, and opens
+  again on any scroll up and at the top of the list (`fabState`). Below 600px the `+` is the last
+  button of the dock, with no collapse; it floats as from 600px only while the dock does not show.
 - **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an open sheet,
   then an open row, then the search of a list (`closeTop`). While a layer is open, one entry of the
   history stands for it, so the back closes the layer and not the app. A layer closed in another
@@ -187,9 +190,9 @@ the bottom bar at each width.
 
   | Part | `Derecha` | `Izquierda` |
   |---|---|---|
-  | `+` button | Bottom right | Bottom left |
+  | `+` button | Dock, at its end; from 600px bottom right | Dock, at its start; from 600px bottom left |
   | Rail, from 600px wide (DSV-8) | Right | Left |
-  | Dock, below 600px wide (SHOP-26) | Search at the right | Search at the left |
+  | Dock, below 600px wide (SHOP-26) | Search, then `+`, at the right | `+`, then search, at the left |
   | Basket behind a list (NAV-18) | Bottom left | Bottom right |
   | Header | Text, buttons | Buttons, text |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |

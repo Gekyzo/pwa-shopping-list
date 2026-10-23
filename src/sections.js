@@ -54,6 +54,12 @@ export const shortcutStart = (name) => {
 export const canSearch = (view, { items, recipes }) =>
   (view === 'active' && items > 0) || (view === 'recipes' && recipes > 0);
 
+// True while the dock shows below 600px (it carries the add button): in Compra with an item, in
+// Recetas while the action of the empty state does not show. `activeCount` counts the items of
+// Compra, `emptyAction` is true while the button of the empty state shows.
+export const dockShown = ({ view, activeCount, emptyAction }) =>
+  (view === 'active' && activeCount > 0) || (view === 'recipes' && !emptyAction);
+
 // What an empty section says and offers. `title` and `text` are keys of the catalog, `title` null for
 // a search with no match. `action` is the next step as a button: `create-recipe`, `add-query` or
 // `add-item`; null when nothing is.
