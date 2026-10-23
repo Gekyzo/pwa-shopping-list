@@ -355,6 +355,11 @@
     text-decoration: none;
   }
 
+  /* Two wide buttons of a sheet stand apart, as Seguir comprando below Terminar compra. */
+  .sheet-body > .button.wide + .button.wide {
+    margin-top: var(--space-2);
+  }
+
   /* @component search
      @scope list
      @summary The search box of Actual and Recetas, below the header.
