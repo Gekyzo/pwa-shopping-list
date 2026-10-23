@@ -80,9 +80,9 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   `Platos sin receta` with their number. Each dish shows one time, with the spelling of its first
   meal, in menu order. With no dish the head does not show.
 - **REC-37** A dish row shows the name and the meta line `En N comidas del menú`. It has no slide.
-  A tap on the name or on the book button at the end turns the dish into a recipe (MENU-17) and
-  opens its sheet (REC-33), with `Deshacer` and the message `Receta creada: «name».` The text of
-  the book button for a screen reader is `Crear la receta de «name»`.
+  A tap on the name or on the button with a chef's hat at the end turns the dish into a recipe
+  (MENU-17) and opens its sheet (REC-33), with `Deshacer` and the message `Receta creada: «name».`
+  The text of that button for a screen reader is `Crear la receta de «name»`.
 
 ## Search
 
