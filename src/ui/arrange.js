@@ -7,6 +7,16 @@ import { collapse, expand, rowTops, slide, groupOnlyRows } from '#ui/motion';
 // True while the groups of Compra close, before the list becomes flat.
 let ungrouping = false;
 
+// The design system sizes and moves the knob by child position, hidden choices included:
+// count only the choices that show.
+const placeGroupKnob = () => {
+  const choices = [...document.querySelectorAll('#arrange-group button')].filter((button) => !button.hidden);
+  const index = choices.findIndex((button) => button.getAttribute('aria-pressed') === 'true');
+  const segmented = document.querySelector('#arrange-group .segmented');
+  segmented.style.setProperty('--segment-count', String(choices.length));
+  segmented.style.setProperty('--segment-index', String(Math.max(0, index)));
+};
+
 export const renderArrange = () => {
   const { recipe, shop, aisle, sort } = arrangeChoices();
   const group = recipe || shop || aisle;
@@ -29,6 +39,7 @@ export const renderArrange = () => {
     button.hidden = !shows[button.dataset.group];
     button.setAttribute('aria-pressed', String(button.dataset.group === pressed));
   });
+  placeGroupKnob();
   document.querySelectorAll('#arrange-sort button').forEach((button) => {
     button.setAttribute('aria-pressed', String(button.dataset.sort === state.sort));
   });
@@ -110,6 +121,7 @@ export const bind = () => {
       document.querySelectorAll('#arrange-group button').forEach((other) => {
         other.setAttribute('aria-pressed', String(other === button));
       });
+      placeGroupKnob();
       // The groups close before the list becomes flat.
       collapse(groupOnlyRows(), () => {
         if (!ungrouping) return;
