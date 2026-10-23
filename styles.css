@@ -339,9 +339,19 @@
     padding: var(--space-1) 0 var(--space-3);
   }
 
-  /* The Ajustes button ends the sentence of the hint. */
+  /* The Ajustes button is a link inside the sentence: no side padding and no gap before the
+     full stop, underlined in the colour of the text. It keeps the tap height (TAP-1). */
+  .hint.trip-open .button {
+    gap: 0;
+    padding-inline: 0;
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   .hint.trip-open .button::after {
     content: ".";
+    text-decoration: none;
   }
 
   /* @component search
