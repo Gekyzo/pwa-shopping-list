@@ -11,6 +11,10 @@ no change for the user has no entry.
 
 - `Menú`: **Vaciar menú** stands again beside **Llenar cesta**, at the bottom of the list. The
   header of `Menú` has no `⋮` button and no sheet `Menú`.
+- An empty `Compra` looks like an empty `Recetas`: the title `Aún no hay artículos`, a text and the
+  button **+ Añadir artículo** in place of `Toca + para añadir un artículo.`
+- An empty `Compra` or `Recetas` shows its title and its text in the middle of the list; its buttons
+  stay at the bottom.
 
 ## 1.2.5 - 2026-10-21
 
