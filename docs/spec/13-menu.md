@@ -45,7 +45,7 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   phone. In the compact density below 600px the name above the meals is the short weekday of
   the language (`LUN`), and the name of a meal takes up to two lines.
 - **MENU-10** The header shows `Menú` and `N comidas planificadas`, or `Sin comidas
-  planificadas`. The ring shows the number of planned meals.
+  planificadas`.
 - **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each
   recipe, in the order of the recipes; the chip of the recipe of the meal is on. A tap on a chip
   puts that recipe in the meal and closes the sheet. A meal with a recipe or a dish also has

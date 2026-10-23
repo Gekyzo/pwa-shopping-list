@@ -4,8 +4,8 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/ui/`, `src/swipe.js` and
 
 ## Layout
 
-From top to bottom: the header (ring, title, subtitle, search button, arrange button, trip
-button), the content of the section, the `+` button above the bottom bar, and the bottom bar.
+From top to bottom: the header (title, subtitle, search button, arrange button, trip
+button, and the bar of `Compra`), the content of the section, the `+` button above the bottom bar, and the bottom bar.
 Below 600px wide the dock of `Compra` and `Recetas` stands between the `+` button and the bottom bar (SHOP-26),
 and the header has no search button while the dock shows. The title keeps one line, with an
 ellipsis. The message shows below the top
@@ -191,7 +191,7 @@ the bottom bar at each width.
   | Rail, from 600px wide (DSV-8) | Right | Left |
   | Dock, below 600px wide (SHOP-26) | Search at the right | Search at the left |
   | Basket behind a list (NAV-18) | Bottom left | Bottom right |
-  | Header | Ring, text, buttons | Buttons, text, ring |
+  | Header | Text, buttons | Buttons, text |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
 

@@ -9,6 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- `Compra` shows a thin green bar below its title, with the share bought, in place of the ring. The
+  other sections show no bar.
 - A new look: a stone ground, white lists and the font Geist. The add button is terracotta; the
   progress, a bought item and `Al día` in **Ajustes** stay green. The head of a group is no longer
   in capitals. The bar of the phone takes the colour of the ground.

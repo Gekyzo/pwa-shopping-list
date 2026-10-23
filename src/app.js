@@ -94,9 +94,9 @@ const renderAll = () => {
   renderShopChips();
   $('title').textContent = header.title;
   $('subtitle').textContent = header.subtitle;
-  $('ring').hidden = header.ring === null;
-  $('ring-text').textContent = header.ring ?? '';
-  $('ring').style.setProperty('--pct', `${header.pct}%`);
+  $('progress').hidden = header.pct === null;
+  $('progress').style.setProperty('--pct', `${header.pct ?? 0}%`);
+  $('progress').setAttribute('aria-valuenow', String(header.pct ?? 0));
 
   renderDock();
   renderList(summary);

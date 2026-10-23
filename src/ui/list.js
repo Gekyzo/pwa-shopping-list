@@ -96,31 +96,29 @@ const outcomeRows = () => {
 
 const finishText = () => outcomeRows().map(({ text }) => text).join(' · ');
 
-// The subtitle of Compra holds the full figures; the ring holds the count left.
+// The subtitle of Compra holds the full figures; the bar holds the share ticked.
 const activeSubtitle = ({ total, left }) => {
   if (!total) return t('header.empty');
   if (!left) return t('header.allBought');
   return t('header.bought', { done: total - left, count: total });
 };
 
-const activeRing = ({ total, left }) => (total && !left ? '✓' : String(left));
-
 export const headerOf = (summary) => {
-  // Ajustes has no figure: its ring does not show.
-  if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), ring: null, pct: 0 };
+  // Only Compra has a bar: `pct` is null in the other sections.
+  if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), pct: null };
   if (ui.view === 'menu') {
     const count = menu.mealCount(state);
     const subtitle = count ? t('header.menuMeals', { count }) : t('header.noMeals');
-    return { title: t('nav.menu'), subtitle, ring: String(count), pct: 0 };
+    return { title: t('nav.menu'), subtitle, pct: null };
   }
   if (ui.view === 'recipes') {
     const count = state.recipes.length;
     const subtitle = count ? t('count.recipes', { count }) : t('header.noRecipes');
-    return { title: t('nav.recipes'), subtitle, ring: String(count), pct: 0 };
+    return { title: t('nav.recipes'), subtitle, pct: null };
   }
   const { total, left } = summary;
   const pct = total ? Math.round(((total - left) / total) * 100) : 0;
-  return { title: t('header.today'), subtitle: activeSubtitle(summary), ring: activeRing(summary), pct };
+  return { title: t('header.today'), subtitle: activeSubtitle(summary), pct };
 };
 
 // The button text of each action of an empty section.

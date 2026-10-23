@@ -50,7 +50,7 @@ apply in it.
   no shop. An item of two shops shows in the two lists, and one tick is a tick in each. The search,
   the order and the groups by recipe apply in the list. **Tiendas** is not a choice there
   (GROUP-2).
-- **SHOP-20** The header shows the name of the list as its title. Its subtitle and its ring are
+- **SHOP-20** The header shows the name of the list as its title. Its subtitle and its bar are
   those of the items of the list.
 - **SHOP-21** **Terminar compra** stays one operation on the full state (TRIP-2). The banner
   `¿Has terminado?` shows only in **Todas**.

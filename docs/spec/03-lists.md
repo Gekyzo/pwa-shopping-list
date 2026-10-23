@@ -95,11 +95,11 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 ## Header figures
 
-| Section | Title | Subtitle | Ring |
+| Section | Title | Subtitle | Bar |
 |---|---|---|---|
-| `Compra` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `T de N comprados` (ticked of total) | The count of items to buy, or `✓` when all are bought, filled to the share ticked |
-| `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | The count of recipes |
-| `Ajustes` | `Ajustes` | `Bodega` | None: the ring does not show |
+| `Compra` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `T de N comprados` (ticked of total) | The share ticked, in `Compra` only |
+| `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | None |
+| `Ajustes` | `Ajustes` | `Bodega` | None |
 
 ## Add sheet
 

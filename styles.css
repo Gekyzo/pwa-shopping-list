@@ -97,7 +97,16 @@
   }
 
   /* @extends app-header */
-  /* From 600px the content of the header lines up with the column of main. */
+  /* From 600px the content of the header lines up with the column of main. The progress bar of
+     Compra is the last child and takes a full line below the title and the buttons. */
+  .app-header {
+    flex-wrap: wrap;
+  }
+
+  .app-header .progress {
+    flex: none;
+  }
+
   @media (min-width: 600px) {
     .app-header {
       padding-inline: max(var(--space-4), (100% - var(--content-max)) / 2 + var(--space-4));
