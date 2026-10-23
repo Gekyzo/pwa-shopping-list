@@ -231,13 +231,9 @@ export const renderList = (summary) => {
 // The trip button of the header and its sheet.
 export const renderTrip = () => {
   if (ui.view !== 'active') ui.tripOpen = false;
-  const inMenu = ui.view === 'menu';
-  $('trip-button').hidden = ui.view !== 'active' && !inMenu;
-  // One button, two sheets: the trip options in Compra, the menu options in Menú.
-  $('trip-button').setAttribute('aria-label', t(inMenu ? 'menu.more' : 'trip.menu'));
-  $('trip-button').setAttribute('aria-controls', inMenu ? 'menu-more' : 'trip');
+  $('trip-button').hidden = ui.view !== 'active';
   $('finish-menu').disabled = !store.canStartNewShopping(state);
-  $('trip-button').setAttribute('aria-expanded', String(inMenu ? ui.menuMoreOpen : ui.tripOpen));
+  $('trip-button').setAttribute('aria-expanded', String(ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
   $('trip-outcomes').replaceChildren(...outcomeRows().map(({ icon: name, text }) => el('li', { className: 'list-row' }, [
     icon(name),
@@ -385,13 +381,6 @@ export const bind = () => {
     if (ui.searchOpen && !ui.query.trim()) closeSearch();
   });
   $('trip-button').addEventListener('click', () => {
-    if (ui.view === 'menu') {
-      ui.menuMoreOpen = true;
-      render();
-      // An empty menu disables Vaciar menú: Listo takes the focus then.
-      ($('menu-clear').disabled ? $('menu-more-sheet').querySelector('.sheet-head .button') : $('menu-clear')).focus();
-      return;
-    }
     Object.assign(ui, { tripOpen: true, openId: null });
     render();
     $('finish-menu').focus();

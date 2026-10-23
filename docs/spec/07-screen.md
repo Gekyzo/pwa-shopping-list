@@ -144,8 +144,8 @@ the bottom bar at each width.
 
 ## Sheets
 
-- **NAV-8** There are nine sheets: add, arrange (with the choice of shop lists, SHOP-25), shop
-  picker (SHOP-27), trip, meal, menu options, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33).
+- **NAV-8** There are eight sheets: add, arrange (with the choice of shop lists, SHOP-25), shop
+  picker (SHOP-27), trip, meal, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33).
   One is open at a time. A tap on the
   veil, **Listo** or `Escape` closes it. The `+` button does not show while a sheet is open.
 - **NAV-22** Each sheet has a head: the grab, a title on one line and the button **Listo**. The

@@ -9,7 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- `Menú`: **Vaciar menú** stands again beside **Llenar cesta**, at the bottom of the list. The
+  header of `Menú` has no `⋮` button and no sheet `Menú`.
 
 ## 1.2.5 - 2026-10-21
 
