@@ -137,7 +137,7 @@ export const addQuery = () => {
 };
 
 export const bind = () => {
-  $('fab').addEventListener('click', openSheet);
+  for (const id of ['fab', 'dock-add']) $(id).addEventListener('click', openSheet);
   $('veil').addEventListener('click', closeSheet);
   $('add-name').addEventListener('input', () => {
     setHelp('');

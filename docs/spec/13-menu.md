@@ -60,7 +60,7 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   shows `Deshacer` with the message `Menú vaciado.` It is disabled while the menu is empty. The
   header of `Menú` has no `⋮` button.
 - **MENU-14** `Menú` shows the week also with no recipe, so that a meal can hold a dish. It has no
-  empty text. The `+` button does not show in `Menú`.
+  empty text. The `+` button does not show in `Menú`, and below 600px `Menú` shows no dock.
 - **MENU-15** **Terminar compra** does not change the menu.
 - **MENU-16** The meal sheet has the field **Busca una receta o escribe un plato** above the
   chips. It filters the chips while the user types, with the match of REC-24. With no match the

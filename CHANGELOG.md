@@ -9,6 +9,9 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- On a phone the `+` button is the last button of the bar above the bottom bar, in place of the
+  round button over the list. The bar shows in `Recetas` also with no search; its `+` creates a
+  recipe. With **Izquierda** the `+` is at the left end. On a wider screen nothing changes.
 - `Compra` shows a thin green bar below its title, with the share bought, in place of the ring. The
   other sections show no bar.
 - A new look: a stone ground, white lists and the font Geist. The add button is terracotta; the

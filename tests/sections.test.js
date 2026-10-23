@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SECTIONS, SHORTCUTS, canSearch, direction, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
+import { SECTIONS, SHORTCUTS, canSearch, direction, dockShown, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
 
 // headerOf reads the state of the views; a stub of the page lets node load them.
 const stub = () => new Proxy(function () {}, { get: (_, key) => (key === Symbol.toPrimitive ? () => '' : stub()), apply: () => stub(), set: () => true });
@@ -193,6 +193,24 @@ test('fabState collapses the add button after a scroll down of more than 24 px',
 test('fabState opens the add button on any scroll up', () => {
   assert.equal(fabState(31, 30, 'collapsed'), 'open');
   assert.equal(fabState(200, 199, 'open'), 'open');
+});
+
+test('dockShown shows the dock in Compra with an item', () => {
+  assert.equal(dockShown({ view: 'active', activeCount: 3, emptyAction: false }), true);
+  assert.equal(dockShown({ view: 'active', activeCount: 0, emptyAction: true }), false);
+  assert.equal(dockShown({ view: 'active', activeCount: 0, emptyAction: false }), false);
+});
+
+test('dockShown shows the dock in Recetas while the empty action does not show', () => {
+  assert.equal(dockShown({ view: 'recipes', activeCount: 0, emptyAction: false }), true);
+  assert.equal(dockShown({ view: 'recipes', activeCount: 3, emptyAction: false }), true);
+  assert.equal(dockShown({ view: 'recipes', activeCount: 0, emptyAction: true }), false);
+});
+
+test('dockShown hides the dock in Menú and in Ajustes', () => {
+  for (const view of ['menu', 'settings']) {
+    assert.equal(dockShown({ view, activeCount: 3, emptyAction: false }), false, view);
+  }
 });
 
 test('fabState opens the add button at the top of the list', () => {

@@ -70,13 +70,16 @@ apply in it.
   the add puts no shop.
 - **SHOP-26** Below 600px wide a dock stands above the bottom bar while `Compra` has an item, in
   thumb reach. It holds `‹`, a chip with the name of the list in view, its count of items to buy
-  (`✓` for none) and `▾`, then `›`, then the search button (LIST-37). `›` shows the next list after
+  (`✓` for none) and `▾`, then `›`, then the search button (LIST-37) and the `+` button, at the end.
+  `›` shows the next list after
   the one in view, in chip order and from the start after the end, that has an item to buy
   (`nextShop`); `‹` the one before it (`previousShop`). An arrow with no such list is off. With no
-  chip (SHOP-17) or with the row hidden (SHOP-25) the dock holds only the search button. A slide on
-  the dock does not change the section (NAV-4). With `Izquierda` the search button is at the left,
-  and `‹` stays before the chip. In `Recetas` the dock holds only the search button, while the
-  section has a search (REC-23).
+  chip (SHOP-17) or with the row hidden (SHOP-25) the dock holds only the search button and the `+`
+  button. A slide on the dock does not change the section (NAV-4). With `Izquierda` the `+` button
+  is at the left end, the search button follows it, and `‹` stays before the chip. In
+  `Recetas` the dock shows while `Recetas` has no empty text with a button (NAV-7); it holds the `+`
+  and, while the section has a search, the search button (REC-23). The `+` button of the dock
+  shows and does not show as the `+` button of NAV-24.
 - **SHOP-27** A tap on the chip of the dock opens the shop picker, a sheet with the title `Listas
   por tienda` and one entry for each chip of SHOP-16, with `Quedan N artículos` or `Todo comprado`
   below its name. The entry of the list in view is pressed. A tap on an entry shows that list and

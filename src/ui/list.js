@@ -3,7 +3,7 @@ import * as recipes from '#recipes';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
-import { canSearch, emptyAction } from '#sections';
+import { canSearch, dockShown, emptyAction } from '#sections';
 import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { icon } from '#ui/controls';
@@ -275,17 +275,19 @@ const pickShop = (shop) => {
 };
 
 // The dock below 600px (styles.css hides it from 600px): in Compra the shop list in view between the
-// arrows of the previous and the next list, and the search button; while the search is open, the
-// search field and Cancelar. It shows while the section has a search; Recetas has no shop list.
+// arrows of the previous and the next list, the search button and the add button at the end; while
+// the search is open, the search field, Cancelar and the add button. It shows in Compra with an item
+// and in Recetas while the action of the empty state does not show (`dockShown`), so after the empty
+// state (renderList); Recetas has no shop list. The app shows and labels the add button as the fab.
 export const renderDock = () => {
-  const shown = inList() ? store.activeItems(state).length > 0 : searchable();
+  const shown = dockShown({ view: ui.view, activeCount: store.activeItems(state).length, emptyAction: !$('empty-action').hidden });
   $('dock').hidden = !shown;
   if (!shown) return;
   const chips = inList() && shopLists === 'show' ? shops.shopChips(state) : [];
   const search = ui.searchOpen;
   $('dock').classList.toggle('searching', search);
   for (const id of ['dock-prev', 'dock-shop', 'dock-next']) $(id).hidden = search || chips.length === 0;
-  $('dock-search').hidden = search;
+  $('dock-search').hidden = search || !searchable();
   $('dock-search').setAttribute('aria-expanded', String(search));
   $('dock-field').hidden = !search;
   $('dock-cancel').hidden = !search;
@@ -296,7 +298,7 @@ export const renderDock = () => {
   if (!chips.length) return;
   const current = chips.find((chip) => chip.shop === ui.shop) ?? chips[0];
   $('dock-shop').replaceChildren(
-    el('span', { textContent: shopLabel(current.shop) }),
+    el('span', { className: 'dock-shop-name', textContent: shopLabel(current.shop) }),
     el('span', { className: 'count', textContent: current.count === 0 ? '✓' : String(current.count) }),
     el('span', { className: 'chevron', textContent: '▾', ariaHidden: 'true' }),
   );

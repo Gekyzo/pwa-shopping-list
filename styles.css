@@ -161,15 +161,22 @@
 
   /* @extends dock
      @state searching  The search is open: the field and Cancelar take the dock, and the list ends
-                       at the dock, so the nearest match is next to the field. */
-  /* The search button stays at the end of the dock, also with no shop list. */
+                       at the dock, so the nearest match is next to the field.
+     @part dock-shop-name  The name of the list in the chip of the dock, cut with an ellipsis. */
+  /* The search button and the add button stay at the end of the dock, also with no shop list:
+     the add button keeps no auto margin, so it closes the group beside the search button. */
   .dock {
     justify-content: flex-end;
   }
 
+  .dock > .dock-add {
+    margin-inline: 0;
+  }
+
   /* @extends dock */
   /* Left hand: the shared mirror would read the arrows backwards, so ‹ chip › keep their order and
-     only the search button moves to the start side. The search mode mirrors as the shared dock. */
+     only the search button and the add button move to the start side, the add button first. The
+     search mode mirrors as the shared dock. */
   [data-hand="left"] .dock {
     flex-direction: row;
     justify-content: flex-start;
@@ -177,6 +184,10 @@
 
   [data-hand="left"] .dock > .button.icon[aria-controls="dock-field"] {
     order: -1;
+  }
+
+  [data-hand="left"] .dock:not(.searching) > .dock-add {
+    order: -2;
   }
 
   [data-hand="left"] .dock.searching {
@@ -191,6 +202,18 @@
 
   .dock-field > .icon + .dock-input {
     padding-inline-start: var(--space-2);
+  }
+
+  /* The dock holds five controls below 600px: the chip shrinks, and a long name ends in an ellipsis. */
+  .dock .chip {
+    min-width: 0;
+  }
+
+  .dock-shop-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .dock .chip .chevron {
