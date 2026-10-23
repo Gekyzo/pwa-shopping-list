@@ -3,6 +3,30 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { SECTIONS, SHORTCUTS, canSearch, direction, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
 
+// headerOf reads the state of the views; a stub of the page lets node load them.
+const stub = () => new Proxy(function () {}, { get: (_, key) => (key === Symbol.toPrimitive ? () => '' : stub()), apply: () => stub(), set: () => true });
+Object.assign(globalThis, { document: stub(), window: stub(), location: { search: '' } });
+globalThis.localStorage ??= { getItem: () => null, setItem() {}, removeItem() {} };
+const { headerOf } = await import('#ui/list');
+const { ui } = await import('#ui/context');
+
+test('headerOf gives the ticked share in Compra only', () => {
+  const summary = { total: 15, left: 12 };
+  const view = ui.view;
+  try {
+    ui.view = 'active';
+    assert.equal(headerOf(summary).pct, 20);
+    assert.equal(headerOf({ total: 0, left: 0 }).pct, 0);
+    for (const other of ['recipes', 'menu', 'settings']) {
+      ui.view = other;
+      assert.equal(headerOf(summary).pct, null, other);
+      assert.ok(!('ring' in headerOf(summary)), other);
+    }
+  } finally {
+    ui.view = view;
+  }
+});
+
 test('SECTIONS has the order of the bottom bar', () => {
   assert.deepEqual(SECTIONS, ['active', 'recipes', 'menu', 'settings']);
 });

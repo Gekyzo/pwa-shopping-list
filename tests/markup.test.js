@@ -11,6 +11,13 @@ const textKeys = [...body.matchAll(/data-i18n="([^"]+)"/g)].map(([, key]) => key
 const attrKeys = [...body.matchAll(/data-i18n-attr="([^"]+)"/g)].flatMap(([, pairs]) =>
   pairs.split(',').map((pair) => pair.split(':')[1]));
 
+test('the header has a progress bar and no ring', () => {
+  const header = body.slice(body.indexOf('<header'), body.indexOf('</header>'));
+  assert.match(header, /<div id="progress" class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" hidden><\/div>/);
+  assert.ok(header.indexOf('app-header-text') < header.indexOf('id="progress"'));
+  assert.ok(!body.includes('id="ring"') && !body.includes('ring-text'));
+});
+
 test('the page has translated text and translated attributes', () => {
   assert.ok(textKeys.length > 0);
   assert.ok(attrKeys.length > 0);
