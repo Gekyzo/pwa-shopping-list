@@ -104,7 +104,6 @@ const renderAll = () => {
   renderRecipe();
 
   $('settings').hidden = ui.view !== 'settings';
-  document.querySelector('.icon.corner').hidden = !['active', 'recipes'].includes(ui.view);
   renderVersion();
   renderSample();
   renderInstall();

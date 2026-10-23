@@ -24,5 +24,4 @@
   <symbol id="chevron-right" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
   <symbol id="plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
   <symbol id="close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
-  <symbol id="basket" viewBox="0 0 24 24"><path d="M7.2 10.8C7.2 4.8 16.8 4.8 16.8 10.8M9.6 7.68l.48-1.2M9.6 7.68l-.72-.96M12.96 7.2q1.92-.72 2.88 1.68q-1.2 1.68-2.88.72q-.96-1.2 0-2.4zM3.6 11.4h16.8l-1.92 9.6H5.52zM4.8 14.4h14.4M5.52 17.76h12.96M8.4 11.4l-.72 9.6M12 11.4v9.6M15.6 11.4l.72 9.6"/><circle cx="9.6" cy="9.84" r="2.16"/></symbol>
 </svg>
