@@ -73,7 +73,7 @@ test('the trip button opens a sheet from the bottom, with a veil, and the header
   assert.match(layer, /<div id="trip-veil" class="sheet-veil">/);
   assert.match(layer, /<div class="sheet" role="dialog"/);
   assert.match(layer, /<header class="sheet-head"><h2 class="sheet-title main" data-i18n="trip.question"><\/h2>/);
-  assert.match(layer, /<div class="sheet-body">\s*<ul id="trip-outcomes"[^>]*><\/ul>\s*<p id="trip-open" class="hint trip-open" hidden>[\s\S]*<button id="trip-settings"[\s\S]*<button id="finish-menu" class="button primary wide"[\s\S]*<button id="trip-continue" class="button outline wide"[^>]*data-i18n="trip.continue"/);
+  assert.match(layer, /<div class="sheet-body">\s*<ul id="trip-outcomes"[^>]*><\/ul>\s*<p id="trip-open" class="hint trip-open" hidden>[\s\S]*<button id="trip-settings"[\s\S]*<button id="finish-menu" class="button primary wide"[\s\S]*<button id="trip-continue" class="button tonal wide"[^>]*data-i18n="trip.continue"/);
   assert.doesNotMatch(layer, /trip-open-list|trip-confirm/);
   assert.match(body, /<button id="trip-button"[^>]*aria-haspopup="dialog"[^>]*aria-controls="trip"/);
   assert.doesNotMatch(body, /trip-menu|role="menu"/);
@@ -125,7 +125,7 @@ test('the sheets with a title of their own give it an id; the others a fixed tex
 });
 
 test('the empty state of a list holds a title, a text and an action button, set by the view', () => {
-  assert.match(body, /<div id="empty" class="empty-state low" hidden>\s*<h2 id="empty-title" class="empty-state-title" hidden><\/h2>\s*<p id="empty-text"><\/p>\s*<button id="empty-action" class="button primary wide" type="button" hidden><\/button>\s*<button id="empty-secondary" class="button outline wide" type="button" hidden><\/button>\s*<\/div>/);
+  assert.match(body, /<div id="empty" class="empty-state low" hidden>\s*<h2 id="empty-title" class="empty-state-title" hidden><\/h2>\s*<p id="empty-text"><\/p>\s*<button id="empty-action" class="button primary wide" type="button" hidden><\/button>\s*<button id="empty-secondary" class="button tonal wide" type="button" hidden><\/button>\s*<\/div>/);
 });
 
 test('the edit sheet has a veil, a dialog, the name and quantity fields and the shops', () => {
@@ -236,4 +236,11 @@ test('each nav item shows its name', () => {
     ['list.active', 'nav.recipes', 'nav.menu', 'nav.settings'],
   );
   assert.doesNotMatch(nav, /nav-item[^>]*aria-label/);
+});
+
+test('an outline button is only a destructive one; other secondary actions are tonal', () => {
+  for (const [, classes] of html.matchAll(/<button[^>]*class="(button outline[^"]*)"/g)) assert.match(classes, /\bdanger\b/, classes);
+  for (const id of ['shop-done-all', 'empty-secondary', 'trip-continue', 'meal-dish', 'aisles-usual']) {
+    assert.match(html, new RegExp(`<button id="${id}" class="button tonal`), id);
+  }
 });

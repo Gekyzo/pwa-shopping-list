@@ -52,7 +52,7 @@ the bottom bar at each width.
   artículo**, which opens the add sheet. As in `Recetas`, the title and the text stand in the
   middle of the room above the buttons, and the buttons at the bottom. With the sample recipe in
   the state it says `Añade tu primer artículo, o empieza con la receta «name».`; the button **+ Añadir artículo** opens the add sheet, and a second,
-  outline button **Añadir la receta de ejemplo** below it sends that recipe to `Compra`. `Recetas` says `Aún no hay
+  tonal button **Añadir la receta de ejemplo** below it sends that recipe to `Compra`. `Recetas` says `Aún no hay
   recetas` in the middle of the room above its button, and the button **+ Crear receta**, at the
   bottom, opens the add sheet. `Menú` always shows its week
   (MENU-14). A search with no match says `Ningún artículo

@@ -73,7 +73,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
      `Aplazar` (`cart`, `1 sin comprar se aplaza`), open items saved with `Descartar` (`download`,
      `1 sin comprar se guarda`) and ticked one-time items (`check`, `4 comprados salen de la lista`). An outcome with no item has no row.
      The banner and the sheet use the same text for each outcome. Below the rows, the primary
-     button **Terminar compra** is disabled when TRIP-1 does not hold, and the secondary button
+     button **Terminar compra** is disabled when TRIP-1 does not hold, and the tonal button
      **Seguir comprando** closes the sheet.
 - **TRIP-5** After **Terminar compra** the screen shows `Compra`. `Deshacer` restores the full
   state of before.
