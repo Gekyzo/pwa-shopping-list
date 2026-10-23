@@ -645,6 +645,8 @@
      @part product-text  Its name.
      @state leaving  On product: a row that closes before it leaves.
      @state flash    On product: a row that has just come: it flashes.
+     @variant flush  On products: rows across the sheet, as the rows of a list. A name field with no box,
+       one line below each row, from the start of the name to the end. The aisles of Ajustes.
      @example <ul class="products" style="width: 100%"><li class="product"><span class="product-text">Patatas</span><button class="button icon" type="button" aria-label="Quitar">✕</button></li></ul> */
   .products {
     margin: var(--space-2) 0 0;
@@ -676,9 +678,37 @@
     animation: flash var(--motion-slow) ease-out;
   }
 
+  .products.flush {
+    margin-inline: calc(-1 * var(--space-4));
+  }
+
+  .products.flush > .product {
+    border-top: 0;
+    border-bottom: 1px solid var(--line);
+    border-image: linear-gradient(to right, transparent var(--space-4), var(--line) 0) 0 0 1 0 / 0 0 1px 0;
+  }
+
+  /* The line of the row in edit is the colour of the text, as the border of a box in focus. */
+  .products.flush > .product:focus-within {
+    border-image-source: linear-gradient(to right, transparent var(--space-4), var(--text) 0);
+  }
+
+  .products.flush .input-row {
+    flex: 1;
+    gap: 0;
+    padding-inline-end: var(--space-2);
+  }
+
+  .products.flush .input-row > .input {
+    padding-inline: var(--space-4) var(--space-2);
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
   /* The fill of a disabled submit (input-row) is not for the moves of an aisle: the first up and
      the last down fade as any disabled button. */
-  .product .input-row > .button.icon:disabled {
+  .products.flush .input-row > .button.icon:disabled {
     background: none;
     opacity: 0.4;
   }
