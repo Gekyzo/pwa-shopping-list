@@ -9,7 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- In `Agrupar y ordenar`, the knob of `Agrupar por` covers the whole chosen option, also when the view shows only two of the four groupings.
 
 ## 1.3.2 - 2026-10-23
 
