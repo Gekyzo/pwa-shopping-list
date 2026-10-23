@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.3.2 - 2026-10-23
+
 - The main action colour is green again, as before 1.3.0: the `+`, the main buttons and **Atrás** are green in place of terracotta. The drawings of the introduction take the same colour.
 
 ## 1.3.1 - 2026-10-23
