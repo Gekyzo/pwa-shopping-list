@@ -624,9 +624,11 @@
      @scope menu
      @summary The text of a button with an icon in a split action bar. Half the bar each: below
        about 390px a long label (`Riempi cestino`) ends in an ellipsis instead of crossing the border.
+       The buttons pad 12px at the sides, so `Llenar cesta` keeps its words at 360px.
      @example <div class="split" style="width: 160px"><button class="button primary" type="button" style="min-width: 0"><span class="action-label">Riempi cestino</span></button><button class="button outline danger" type="button">Svuota</button></div> */
   .action-bar > .split > .button {
     min-width: 0;
+    padding-inline: var(--space-3);
   }
 
   .action-label {
