@@ -108,6 +108,7 @@
 | `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own |
+| `tests/controls.test.js` | Each call of `bindField` in `src/ui/` passes `read` and `write` as one object (AISLE-12) |
 | `tests/aliases.test.js` | The import map against `package.json`; each `#ds/` alias names a vendored module |
 | `tests/layers.test.js` | The layer rules: no import of `src/app.js`, no view in a pure module, no cycle among `src/ui/`, one owner for each shared value, `SHELL` (ENG-16) |
 | `tests/design.test.js` | Each rule of `vendor/design-system/rules.js` over the two stylesheets, `index.html`, `icons.svg`, `src/ui/` and `designs/` (DSV-8); the classes of the item rows |
