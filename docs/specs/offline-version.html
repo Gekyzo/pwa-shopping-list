@@ -462,7 +462,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <p>En <code>CHANGELOG.md</code>, <code>## Unreleased</code> pasa a <code>## X.Y.Z - AAAA-MM-DD</code> y encima aparece un <code>## Unreleased</code> nuevo con <code>No change.</code> Sin cambios bajo <code>Unreleased</code>, el archivo se queda igual (VER-17). El hook <code>.githooks/pre-push</code>, activado con <code>npm run hooks</code>, para el push de una etiqueta <code>vX.Y.Z</code> cuyo commit no tiene la versión <code>X.Y.Z</code> en <code>version.json</code> (VER-13).</p>
 
 <h3 id="install">Instalación</h3>
-<p>Chrome puede instalar la app con <strong>Añadir a pantalla de inicio</strong> o con <strong>Instalar la aplicación</strong> de <code>Ajustes</code> (VER-14, INS-2). La app instalada se abre en <code>standalone</code>, con <code>start_url</code> y <code>scope</code> <code>./</code> e <code>id</code> <code>/shopping-list/</code> (VER-14). Gira con el dispositivo (<code>orientation: any</code>, INS-4). Los iconos son <code>icon-192.png</code>, <code>icon-512.png</code> e <code>icon-maskable-512.png</code>, escritos por <code>npm run icons</code>; cada atajo tiene su icono <code>shortcut-&lt;nombre&gt;.png</code> (VER-15). La app instalada y el sitio en Chrome comparten el almacenamiento. <strong>Clear site data</strong> o desinstalar la app borra los datos (VER-16).</p>
+<p>Chrome puede instalar la app con <strong>Añadir a pantalla de inicio</strong> o con <strong>Instalar la aplicación</strong> de <code>Ajustes</code> (VER-14, INS-2). La app instalada se abre en <code>standalone</code>, con <code>start_url</code> y <code>scope</code> <code>./</code> e <code>id</code> <code>/shopping-list/</code> (VER-14). Gira con el dispositivo (<code>orientation: any</code>, INS-4). Los iconos son <code>icon-192.png</code>, <code>icon-512.png</code> e <code>icon-maskable-512.png</code>, escritos por <code>npm run icons</code> desde <code>icons/source.png</code>: una bolsa de la compra naranja con pan, hojas verdes, un tomate y leche, sobre blanco; cada atajo tiene su icono <code>shortcut-&lt;nombre&gt;.png</code> (VER-15). La app instalada y el sitio en Chrome comparten el almacenamiento. <strong>Clear site data</strong> o desinstalar la app borra los datos (VER-16).</p>
 
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
@@ -478,7 +478,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="limites-operativos">Límites operativos</h2>
 <ul>
-  <li>Caché del paquete: <code>shopping-shell-v18</code> (SW-4). Cada nombre nuevo descarga el paquete entero.</li>
+  <li>Caché del paquete: <code>shopping-shell-v19</code> (SW-4). Cada nombre nuevo descarga el paquete entero.</li>
   <li>Comprobación de la versión publicada: 8 segundos como mucho (<code>CHECK_MS</code>, VER-5).</li>
   <li>Espera de <strong>Actualizar</strong>: 15 segundos como mucho (<code>REFRESH_MS</code>, VER-8).</li>
   <li>Una versión publicada llega al usuario en el segundo arranque, o al momento con <strong>Actualizar</strong> (SW-12).</li>
@@ -508,6 +508,8 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
     <tr><td>2026-10-23</td><td>Caché del paquete <code>shopping-shell-v18</code>; el paquete guarda la fuente del sistema de diseño</td><td>Sistema de diseño 0.7.0</td></tr>
     <tr><td>2026-10-23</td><td>El estado <code>Al día</code> usa el color <code>--done</code> (VER-6)</td><td>Aspecto Ledger (sistema de diseño 0.7.0)</td></tr>
+    <tr><td>2026-10-23</td><td>Caché del paquete <code>shopping-shell-v19</code></td><td>Sistema de diseño 0.7.1 y el icono nuevo</td></tr>
+    <tr><td>2026-10-23</td><td>Icono nuevo: una bolsa de la compra naranja en vez de la cesta verde y naranja (VER-15)</td><td>Arte nuevo del propietario</td></tr>
   </tbody>
 </table></div>
 
