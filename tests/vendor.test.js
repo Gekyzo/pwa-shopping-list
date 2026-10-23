@@ -18,7 +18,7 @@ test('vendor/design-system/ has SOURCE.json with the version, the commit and the
   assert.ok(vendored, 'run npm run ds');
   assert.match(source.version ?? '', /^\d+\.\d+\.\d+$/);
   assert.match(source.commit ?? '', /^[0-9a-f]{40}$/);
-  assert.deepEqual(Object.keys(source.files).sort(), ['catalog.js', 'design-system.css', 'rules.js', 'sheet.js']);
+  assert.deepEqual(Object.keys(source.files).sort(), ['catalog.js', 'design-system.css', 'geist.woff2', 'rules.js', 'sheet.js']);
 });
 
 test('vendor/design-system/ holds the files of SOURCE.json and SOURCE.json only', () => {
@@ -41,6 +41,10 @@ test('SHELL of sw.js has each vendored stylesheet', () => {
 test('SHELL of sw.js has each vendored file that the page loads', () => {
   const sw = read('sw.js');
   for (const file of loaded) assert.ok(sw.includes(`'./${VENDOR}${file}'`), file);
+});
+
+test('SHELL caches the font of the design system', () => {
+  assert.ok(read('sw.js').includes(`'./${VENDOR}geist.woff2'`));
 });
 
 const stylesheets = (html, prefix) =>

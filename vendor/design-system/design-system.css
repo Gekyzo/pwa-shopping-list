@@ -1,31 +1,49 @@
 @layer tokens, base, components, layouts, screens;
 
 @layer tokens {
+  @font-face {
+    font-family: "Geist";
+    src: url("geist.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: swap;
+  }
+
   :root {
     /* `light-dark()` takes its value from `color-scheme`: the phone, or Theme in Settings. */
     color-scheme: light dark;
-    --bg: light-dark(#f6f7f5, #111613); /* page */
-    --surface: light-dark(#ffffff, #1d2621); /* rows, header, sheets */
-    --surface-2: light-dark(#eef2ef, #26302a); /* a field or a row set on --surface */
-    --text: light-dark(#17201b, #e8ede9);
-    --muted: light-dark(#667069, #98a39c); /* second text, idle icons */
-    --line: light-dark(#dfe4e0, #2c3530); /* borders and separators */
-    --accent: light-dark(#1f7a4d, #5fc491); /* main action, selection */
-    --accent-text: light-dark(#ffffff, #0c1a12); /* text on --accent */
-    --accent-soft: light-dark(#e2f2ea, #1d3327); /* selected chip, swipe action */
-    --danger: light-dark(#b3261e, #f2b8b5);
+    --bg: light-dark(#f4f3f1, #0f0f0e); /* page */
+    --surface: light-dark(#ffffff, #191918); /* rows, header, sheets */
+    --surface-2: light-dark(#eeedea, #232321); /* raised: a field, a track or a row set on --surface */
+    --text: light-dark(#0a0a0a, #ffffff);
+    --muted: light-dark(#5f5f5f, #b4b4b4); /* second text, idle icons */
+    --line: light-dark(#e6e5e2, #232321); /* borders and separators */
+    --control: light-dark(#d4d3cf, #3d3d3a); /* the border of an input or an outline button */
+    /* Colour roles. An app sets --primary and --done to its brand in its own tokens layer. */
+    --primary: light-dark(#141414, #ffffff); /* the one main action of a view */
+    --on-primary: light-dark(#ffffff, #0a0a0a); /* text on --primary */
+    --done: light-dark(#1f7a4d, #5fc491); /* progress and the checked state */
+    --on-done: light-dark(#ffffff, #0c1a12); /* text on --done */
+    --done-soft: light-dark(#e2f2ea, #1d3327); /* a soft --done ground: swipe action, flash */
+    --ink: light-dark(#141414, #ffffff); /* a selected fill: pressed chip or toggle */
+    --on-ink: light-dark(#ffffff, #0a0a0a); /* text on --ink */
+    --secondary: light-dark(#e5e3de, #2a2a28); /* a tonal fill: the current nav item */
+    /* Deprecated aliases, for one release. No shared component reads them. */
+    --accent: var(--primary); /* deprecated: use --primary */
+    --accent-text: var(--on-primary); /* deprecated: use --on-primary */
+    --accent-soft: var(--done-soft); /* deprecated: use --done-soft */
+    --danger: light-dark(#b3261e, #f08a9b);
     --warning: light-dark(#9a5b00, #f2b65c);
     --toast-bg: light-dark(#17201b, #e8ede9);
     --toast-text: light-dark(#ffffff, #17201b);
     --knob: #ffffff; /* the knob of a switch, in both themes */
     --scrim: rgb(0 0 0 / 0.45); /* veil behind a sheet */
 
-    --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --font-mono: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; /* keys of the walkthrough */
     --text-xs: 0.75rem; /* labels, badges, captions */
     --text-s: 0.875rem; /* second text, chips */
     --text-m: 1rem; /* body */
-    --text-l: 1.375rem; /* screen title */
+    --text-l: 1.5rem; /* screen title */
     --text-xl: 2rem; /* the + of the add button */
     --weight-normal: 400;
     --weight-medium: 600; /* titles, selected labels */
@@ -41,9 +59,9 @@
     --space-7: 32px;
 
     --radius-s: 4px;
-    --radius-m: 12px; /* buttons, inputs */
-    --radius-l: 20px; /* groups, banner, add button */
-    --radius-xl: 28px; /* top of a sheet */
+    --radius-m: 8px; /* buttons, inputs */
+    --radius-l: 8px; /* groups, banner, add button */
+    --radius-xl: 14px; /* top of a sheet */
     --radius-pill: 999px;
     --radius-round: 50%;
 
@@ -123,7 +141,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--text);
     outline-offset: 2px;
   }
 
@@ -200,17 +218,19 @@
 
   /* @component button
      @summary Tap target for one action. Min height --tap. The base look has no fill.
-     @variant primary  Main action of a view or a sheet. One for each view.
-     @variant outline  Second action beside a primary, or an action of a row.
+     @variant primary  The one main action of a view or a sheet, in --primary. One for each view.
+     @variant tonal    Every other action, in the --secondary fill. The button of a sheet head is tonal.
+     @variant outline  An action of a row, or a destructive action when combined with danger. A --control border.
      @variant quiet    Muted text, for an action that steps back, such as Saltar.
-     @variant accent   Accent text and no fill, for an action that is not the main one.
-     @variant danger   Removes data. Combine with outline.
+     @variant accent   --primary text and no fill, for an action that is not the main one.
+     @variant danger   Removes data. Only combined with outline.
      @variant strong   Strong text, for the action of a toast.
      @variant icon     Square, icon or one sign only. Needs an aria-label.
-     @variant toggle   An icon button that is on with aria-pressed="true": the icon takes the accent over a soft accent shape.
+     @variant toggle   An icon button that is on with aria-pressed="true": the icon takes --on-ink over an --ink shape.
      @variant wide     Takes the full width of its box.
      @example <button class="button primary" type="button">Add</button>
-     @example <button class="button outline" type="button">Clear menu</button>
+     @example <button class="button tonal" type="button">Clear menu</button>
+     @example <button class="button outline" type="button">Edit</button>
      @example <button class="button outline danger" type="button">Delete</button>
      @example <button class="button outline quiet" type="button">Skip</button>
      @example <button class="button accent" type="button">Update</button>
@@ -234,13 +254,19 @@
   }
 
   .button.primary {
-    background: var(--accent);
-    color: var(--accent-text);
+    background: var(--primary);
+    color: var(--on-primary);
     font-weight: var(--weight-strong);
   }
 
+  .button.tonal {
+    background: var(--secondary);
+    color: var(--text);
+    border: 0;
+  }
+
   .button.outline {
-    border-color: var(--line);
+    border-color: var(--control);
   }
 
   .button.quiet {
@@ -248,7 +274,7 @@
   }
 
   .button.accent {
-    color: var(--accent);
+    color: var(--primary);
     font-weight: var(--weight-strong);
   }
 
@@ -277,8 +303,8 @@
   }
 
   .button.toggle[aria-pressed="true"] {
-    color: var(--accent);
-    background: var(--accent-soft);
+    color: var(--on-ink);
+    background: var(--ink);
   }
 
   .button.wide {
@@ -286,7 +312,7 @@
   }
 
   /* @component chip
-     @summary A choice among several, such as a tag or a filter. Selected with aria-pressed="true".
+     @summary A choice among several, such as a tag or a filter. Selected with aria-pressed="true": an --ink fill.
      @variant surface  On a --bg background: the chip takes --surface.
      @part count  A number after the label, in muted text.
      @example <button class="chip" type="button">Home</button>
@@ -306,8 +332,8 @@
   }
 
   .chip[aria-pressed="true"] {
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--ink);
+    color: var(--on-ink);
     font-weight: var(--weight-strong);
   }
 
@@ -318,7 +344,7 @@
   }
 
   /* @component pill
-     @summary A small tag beside a name. It is below the tap size: a button pill is a second way to an action.
+     @summary A small tag beside a name, in --done on --done-soft. It is below the tap size: a button pill is a second way to an action.
      @variant ghost  A dashed outline, for a state that is off.
      @example <span class="pill">Done today</span>
      @example <button class="pill ghost" type="button">+ Later</button> */
@@ -328,8 +354,8 @@
     padding: var(--space-1) var(--space-3);
     border: 1px solid transparent;
     border-radius: var(--radius-pill);
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--done-soft);
+    color: var(--done);
     font-size: var(--text-xs);
     white-space: nowrap;
   }
@@ -345,7 +371,7 @@
   }
 
   /* @component segmented
-     @summary One choice of two or three, side by side, drawn as a switch: a track, and a knob that slides to the chosen segment. The chosen segment has aria-pressed="true".
+     @summary One choice of two or three, side by side, drawn as a switch: a --surface-2 track, and a --surface knob that slides to the chosen segment. The chosen segment has aria-pressed="true".
      @part segment  One choice.
      @example <div class="segmented"><button class="segment" type="button" aria-pressed="true">For today</button><button class="segment" type="button" aria-pressed="false">For later</button></div> */
   .segmented {
@@ -382,7 +408,7 @@
     z-index: -1;
     width: calc((100% - 2 * var(--space-1)) / var(--segment-count));
     border-radius: var(--radius-pill);
-    background: var(--accent);
+    background: var(--surface);
     box-shadow: var(--shadow-s);
     transform: translateX(calc(var(--segment-index) * 100%));
     transition: transform var(--motion);
@@ -401,12 +427,12 @@
   }
 
   .segmented .segment[aria-pressed="true"] {
-    color: var(--accent-text);
+    color: var(--text);
     font-weight: var(--weight-strong);
   }
 
   /* @component switch
-     @summary A setting that is on or off: its name, then the switch.
+     @summary A setting that is on or off: its name, then the switch. The track is --done when on.
      @part switch-input  The checkbox with role="switch".
      @example <label class="switch"><span>Later</span><input class="switch-input" type="checkbox" role="switch" checked></label> */
   .switch {
@@ -451,7 +477,7 @@
   }
 
   .switch-input:checked {
-    background: var(--accent);
+    background: var(--done);
   }
 
   .switch-input:checked::after {
@@ -459,9 +485,9 @@
   }
 
   /* @component input
-     @summary A one-line text box. Height --tap, on --bg.
+     @summary A one-line text box. Height --tap, on --bg, with a --control border that takes --text on focus.
      @variant raised  On a --bg page: the box takes --surface.
-     @variant strong  The main box of a sheet, with an accent border.
+     @variant strong  The main box of a sheet, with a --text border.
      @example <input class="input" type="text" placeholder="New tag">
      @example <input class="input raised" type="search" placeholder="Search">
      @example <input class="input strong" type="text" placeholder="Añadir artículo a la lista">
@@ -474,7 +500,7 @@
     min-width: 0;
     height: var(--tap);
     padding: 0 var(--space-3);
-    border: 1px solid var(--line);
+    border: 1px solid var(--control);
     border-radius: var(--radius-m);
     background: var(--bg);
   }
@@ -485,7 +511,7 @@
 
   .input:focus-visible {
     outline: none;
-    border-color: var(--accent);
+    border-color: var(--text);
   }
 
   .input::-webkit-search-cancel-button {
@@ -507,7 +533,7 @@
   }
 
   .input.strong {
-    border: 1px solid var(--accent);
+    border: 1px solid var(--text);
   }
 
   /* The border grows by 1px on each side, so the padding shrinks by 1px and the text stays still. */
@@ -547,11 +573,11 @@
   }
 
   .field-input {
-    border: 2px solid var(--line);
+    border: 2px solid var(--control);
   }
 
   .field-input:focus {
-    border-color: var(--accent);
+    border-color: var(--text);
   }
 
   .field-input::placeholder {
@@ -580,7 +606,7 @@
   }
 
   .field-input:focus + .field-label {
-    color: var(--accent);
+    color: var(--text);
   }
 
   /* @component select
@@ -629,12 +655,13 @@
   }
 
   .app-header .button.icon[aria-expanded="true"] {
-    color: var(--accent);
+    color: var(--text);
   }
 
   .app-header-title {
     margin: 0;
     font-size: var(--text-l);
+    font-weight: var(--weight-strong);
     line-height: 1.2;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -648,7 +675,7 @@
   }
 
   /* @component ring
-     @summary The progress of a section, as a ring around a short text. --pct sets the arc.
+     @summary The progress of a section, as a ring around a short text. --pct sets the --done arc.
      @part ring-text  The text in the middle.
      @example <div class="ring" style="--pct: 66%"><span class="ring-text">4/6</span></div> */
   .ring {
@@ -659,7 +686,7 @@
     width: 48px;
     height: 48px;
     border-radius: var(--radius-round);
-    background: conic-gradient(var(--accent) var(--pct), var(--line) 0);
+    background: conic-gradient(var(--done) var(--pct), var(--line) 0);
   }
 
   .ring-text {
@@ -672,6 +699,17 @@
     font-size: var(--text-xs);
     font-variant-numeric: tabular-nums;
     font-weight: var(--weight-strong);
+  }
+
+  /* @component progress
+     @summary The progress of a section, as a thin bar the full width of its box. --pct sets the --done part.
+     @example <div class="progress" style="--pct: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div> */
+  .progress {
+    --pct: 0%;
+    width: 100%;
+    height: 4px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(to right, var(--done) var(--pct), var(--line) 0);
   }
 
   /* @component nav-bar
@@ -700,7 +738,7 @@
     font-size: var(--text-xs);
   }
 
-  /* The current section is a pill behind its icon; its label stays plain. */
+  /* The current section is a --secondary pill behind its icon; its icon and label take --text. */
   .nav-item[aria-current="page"] {
     color: var(--text);
     font-weight: var(--weight-medium);
@@ -710,8 +748,8 @@
     box-sizing: content-box;
     padding: var(--space-1) var(--space-5);
     border-radius: var(--radius-pill);
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--secondary);
+    color: var(--text);
   }
 
   /* From 600px the bar is a rail at the start side, so a tablet or a phone on its side keeps its
@@ -751,7 +789,7 @@
   }
 
   /* @component badge
-     @summary A count on a nav item. It is hidden while it is empty.
+     @summary A count on a nav item, in --primary. It is hidden while it is empty.
      @example <span style="position: relative; display: inline-block; width: 48px; height: 32px"><em class="badge">2</em></span> */
   .badge {
     position: absolute;
@@ -759,8 +797,8 @@
     left: calc(50% + var(--space-2));
     padding: 0 var(--space-2);
     border-radius: var(--radius-pill);
-    background: var(--accent);
-    color: var(--accent-text);
+    background: var(--primary);
+    color: var(--on-primary);
     font-size: var(--text-xs);
     font-style: normal;
     font-weight: var(--weight-strong);
@@ -1106,14 +1144,14 @@
   }
 
   /* @component banner
-     @summary A message in the flow of a list, with its action below it.
+     @summary A message in the flow of a list, on --done-soft, with its action below it.
      @part banner-text  The text below the title.
      @example <section class="banner"><strong>Done?</strong><p class="banner-text">All done.</p><button class="button primary wide" type="button">Finish</button></section> */
   .banner {
     margin: var(--space-4) var(--space-3);
     padding: var(--space-4) var(--space-4);
     border-radius: var(--radius-l);
-    background: var(--accent-soft);
+    background: var(--done-soft);
   }
 
   .banner-text {
@@ -1195,7 +1233,7 @@
      @summary One entry of a list, as a row. Its body slides over its actions.
      @part item-row-swipe         The box that clips the sliding body.
      @part item-row-body          The row itself: check, name, then buttons.
-     @part item-row-check         The round checkbox of an entry that can be done.
+     @part item-row-check         The round checkbox of an entry that can be done. --done when checked.
      @part item-row-name          The name button, with its quantity and its meta line.
      @part item-row-qty           The quantity after the name.
      @part item-row-label         The text of the name. It keeps two lines, then ends with an ellipsis.
@@ -1204,9 +1242,9 @@
                                   mirrors as a whole for the left hand.
      @part item-row-actions       The swipe actions behind the right end. Hidden while the row is closed, so a
                                   fractional pixel ratio shows no edge of them. The drag code adds open on settle.
-     @part item-row-backdrop      The action under a slide to the right.
+     @part item-row-backdrop      The action under a slide to the right: --done-soft, then --done once armed.
      @state done      A ticked entry: its name is struck out.
-     @state flash     A row that has just come back: its body flashes.
+     @state flash     A row that has just come back: its body flashes in --done-soft.
      @state gone      A row that the motion code hides at once.
      @state lifted    A row that the drag code lifts.
      @state leaving   A row that closes before it leaves.
@@ -1241,7 +1279,7 @@
 
   @keyframes flash {
     from {
-      background: var(--accent-soft);
+      background: var(--done-soft);
     }
   }
 
@@ -1269,14 +1307,14 @@
     display: flex;
     align-items: center;
     padding-left: var(--space-5);
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--done-soft);
+    color: var(--done);
     transition: background var(--motion-fast), color var(--motion-fast);
   }
 
   .item-row-swipe.armed .item-row-backdrop {
-    background: var(--accent);
-    color: var(--accent-text);
+    background: var(--done);
+    color: var(--on-done);
   }
 
   .item-row-body {
@@ -1315,8 +1353,8 @@
   }
 
   .item-row-check:checked {
-    border-color: var(--accent);
-    background: var(--accent);
+    border-color: var(--done);
+    background: var(--done);
   }
 
   /* The tick: two sides of a small box, turned. */
@@ -1325,7 +1363,7 @@
     width: 10px;
     height: 5px;
     margin-top: calc(var(--space-half) * -1);
-    border: solid var(--accent-text);
+    border: solid var(--on-done);
     border-width: 0 0 2px 2px;
     transform: rotate(-45deg);
   }
@@ -1391,7 +1429,7 @@
   }
 
   /* @component swipe-action
-     @summary An action behind the right end of a row, shown by a slide to the left.
+     @summary An action behind the right end of a row, shown by a slide to the left. In --done on --done-soft by default.
      @variant neutral  A plain action, such as edit, in the surface colour.
      @variant danger   Removes the item.
      @part swipe-action-label  The word below the icon.
@@ -1406,8 +1444,8 @@
     height: 100%;
     border-radius: 0;
     font-size: var(--text-xs);
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--done-soft);
+    color: var(--done);
   }
 
   .swipe-action + .swipe-action {
@@ -1441,8 +1479,8 @@
     color: var(--muted);
     font-size: var(--text-s);
     font-weight: var(--weight-strong);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: normal;
+    text-transform: none;
   }
 
   .chevron {
@@ -1450,7 +1488,7 @@
   }
 
   /* @component group-head
-     @summary The title of a group of a list, such as a tag, with its count.
+     @summary The title of a group of a list, such as a tag, with its count: a sentence-case band that sticks to the top of the scroll area on a --bg ground.
      @example <ul class="item-list" style="width: 100%"><li class="group-head"><span>Work</span><span>2</span></li></ul> */
   .group-head {
     display: flex;
@@ -1458,24 +1496,28 @@
     justify-content: space-between;
     gap: var(--space-2);
     min-height: var(--tap);
+    position: sticky;
+    top: 0;
+    z-index: 1;
     padding: 0 var(--space-4);
     border-bottom: 1px solid var(--line);
-    color: var(--accent);
+    background: var(--bg);
+    color: var(--text);
     font-size: var(--text-s);
-    font-weight: var(--weight-strong);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-weight: var(--weight-medium);
+    letter-spacing: normal;
+    text-transform: none;
   }
 
   /* @component list-group
-     @summary A box of rows on a --bg page, as in Settings.
+     @summary A full-width block of rows on a --bg page, as in Settings.
      @variant pair   Two rows side by side.
      @variant plain  No box: rows split by lines, as the suggestions of a search.
      @part list-row       A row: an icon and a text, or a control.
      @part list-row-text  The main text of a row that has two.
      @part list-row-meta  A muted text at the end of a row.
-     @variant accent      On list-row: the row that makes a new thing.
-     @variant card        No border: a soft shadow lifts the box.
+     @variant accent      On list-row: the row that makes a new thing, in --primary text.
+     @variant card        An inset box with a border and rounded corners, without a shadow.
      @part list-group-head      The quiet title above a group.
      @part settings-row         A tall row of a group: a label, a value and a chevron.
      @part settings-row-label   The text of a settings row.
@@ -1487,9 +1529,10 @@
      @example <ul class="list-group plain" style="width: 100%"><li><button class="list-row" type="button"><span class="list-row-text">Buy milk</span><span class="list-row-meta">In Notes</span></button></li><li><button class="list-row accent" type="button">Create «Buy»</button></li></ul>
      @example <h3 class="list-group-head">Data</h3><div class="list-group card" style="width: 100%"><button class="settings-row" type="button"><span class="settings-row-label">Language</span><span class="settings-row-value">English</span><span class="chevron">›</span></button><button class="settings-row danger" type="button"><span class="settings-row-label">Delete all</span></button></div> */
   .list-group {
-    margin: 0 var(--space-3);
+    margin: 0;
     border: 1px solid var(--line);
-    border-radius: var(--radius-l);
+    border-inline: 0;
+    border-radius: 0;
     background: var(--surface);
     overflow: hidden;
   }
@@ -1499,29 +1542,29 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  /* The group clips its rows, so a row draws its focus ring inside itself. An end row takes the
-     corners of the group (the radius less the 1px border), so any ring of the row bends with them,
+  /* The group clips its rows, so a row draws its focus ring inside itself. In a card, an end row takes
+     the corners of the group (the radius less the 1px border), so any ring of the row bends with them,
      also one an app draws on the row for a control inside it. */
   .list-group > :focus-visible {
     outline-offset: -2px;
   }
 
-  .list-group:not(.plain, .pair) > :is(.list-row, .settings-row):first-child {
+  .list-group.card:not(.plain, .pair) > :is(.list-row, .settings-row):first-child {
     border-start-start-radius: calc(var(--radius-l) - 1px);
     border-start-end-radius: calc(var(--radius-l) - 1px);
   }
 
-  .list-group:not(.plain, .pair) > :is(.list-row, .settings-row):last-child {
+  .list-group.card:not(.plain, .pair) > :is(.list-row, .settings-row):last-child {
     border-end-start-radius: calc(var(--radius-l) - 1px);
     border-end-end-radius: calc(var(--radius-l) - 1px);
   }
 
-  .list-group.pair > :is(.list-row, .settings-row):first-child {
+  .list-group.card.pair > :is(.list-row, .settings-row):first-child {
     border-start-start-radius: calc(var(--radius-l) - 1px);
     border-end-start-radius: calc(var(--radius-l) - 1px);
   }
 
-  .list-group.pair > :is(.list-row, .settings-row):last-child {
+  .list-group.card.pair > :is(.list-row, .settings-row):last-child {
     border-start-end-radius: calc(var(--radius-l) - 1px);
     border-end-end-radius: calc(var(--radius-l) - 1px);
   }
@@ -1566,7 +1609,7 @@
   }
 
   .list-row.accent {
-    color: var(--accent);
+    color: var(--primary);
     font-weight: var(--weight-strong);
   }
 
@@ -1583,8 +1626,10 @@
   }
 
   .list-group.card {
-    border: 0;
-    box-shadow: var(--shadow-s);
+    margin: 0 var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    box-shadow: none;
   }
 
   .list-group-head {
@@ -1631,7 +1676,7 @@
   }
 
   /* @component fab
-     @summary The add button, fixed above the bottom bar at the side of the hand.
+     @summary The add button, in --primary, fixed above the bottom bar at the side of the hand.
      @state collapsed  A square of the tap size with the icon only, for example while a list scrolls.
      @example <button class="fab" type="button" style="position: static">+</button>
      @example <button class="fab collapsed" type="button" style="position: static">+</button> */
@@ -1643,8 +1688,8 @@
     width: 56px;
     height: 56px;
     border-radius: var(--radius-l);
-    background: var(--accent);
-    color: var(--accent-text);
+    background: var(--primary);
+    color: var(--on-primary);
     font-size: var(--text-xl);
     line-height: 1;
     box-shadow: var(--shadow-l);
@@ -1659,6 +1704,11 @@
   /* Below 600px a dock stands between the button and the bottom bar. */
   body:has(.dock:not([hidden])) .fab {
     bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--dock-height) + var(--space-4));
+  }
+
+  /* Below 600px the add button of a visible dock replaces the floating one. */
+  body:has(.dock:not([hidden]) > .dock-add:not([hidden])) .fab {
+    display: none;
   }
 
   /* @component action-bar
@@ -1731,13 +1781,19 @@
     body:has(.dock:not([hidden])) .fab {
       bottom: calc(env(safe-area-inset-bottom) + var(--space-4));
     }
+
+    /* The dock does not show from 600px, so the floating button is the add button again. */
+    body:has(.dock:not([hidden]) > .dock-add:not([hidden])) .fab {
+      display: block;
+    }
   }
 
   /* @component dock
      @summary The filter and the search of a list, in thumb reach below 600px. From 600px the app shows them in the header.
-     @part dock-field  A search box in the dock: an input and a clear button.
+     @part dock-field  A search box in the dock: an input and a clear button. A --control border that takes --text on focus.
      @part dock-input  The input in the field. The field draws the border.
      @part dock-clear  The button that empties the field.
+     @part dock-add  The add button of the view, a "button primary icon", the last direct child of the dock. While it shows, the fab does not show below 600px.
      @example <div class="dock" style="position: static"><button class="chip" type="button" aria-pressed="true">All 4</button><button class="chip" type="button">Filter</button><label class="dock-field"><input class="dock-input" type="search" aria-label="Filter"><button class="dock-clear" type="button" aria-label="Clear">x</button></label></div> */
   .dock {
     position: fixed;
@@ -1757,6 +1813,9 @@
   .dock .chip {
     flex: 1;
     justify-content: center;
+  }
+
+  .dock .chip:not([aria-pressed="true"]) {
     background: var(--surface-2);
   }
 
@@ -1767,13 +1826,13 @@
     min-width: 0;
     min-height: 0;
     height: calc(var(--dock-height) - var(--space-2));
-    border: 2px solid var(--line);
+    border: 2px solid var(--control);
     border-radius: var(--radius-pill);
     background: var(--surface-2);
   }
 
   .dock-field:focus-within {
-    border-color: var(--accent);
+    border-color: var(--text);
   }
 
   .dock-input {
@@ -1807,8 +1866,21 @@
     color: var(--muted);
   }
 
+  .dock-add {
+    width: var(--tap);
+    height: var(--tap);
+    border-radius: var(--radius-m);
+    margin-inline-start: auto;
+  }
+
   [data-hand="left"] .dock {
     flex-direction: row-reverse;
+  }
+
+  /* The row is reversed, so the auto margin changes side to keep the add button at the far left. */
+  [data-hand="left"] .dock-add {
+    margin-inline-start: 0;
+    margin-inline-end: auto;
   }
 
   /* No bar at the bottom from 600px, and the app shows the filter in the header. */

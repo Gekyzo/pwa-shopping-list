@@ -71,6 +71,12 @@ test('the storage document has the keys of the storage and the name of the cache
   for (const name of [cache, manifest]) assert.ok(docs['10-offline-version.md'].includes(`\`${name}\``), name);
 });
 
+test('DSV-1 names each file of vendor/design-system/ (SOURCE.json)', () => {
+  const rule = docs['15-design-system.md'].split('**DSV-1**')[1].split('- **DSV-2**')[0];
+  const { files: vendored } = JSON.parse(read('vendor/design-system/SOURCE.json'));
+  for (const file of [...Object.keys(vendored), 'SOURCE.json']) assert.ok(rule.includes(`\`${file}\``), file);
+});
+
 test('each key that Borrar todos los datos removes is a localStorage key of the storage document', () => {
   const table = section('08-storage.md', 'Keys');
   const stored = [...table.matchAll(/^\| `localStorage` \| `([^`]+)`/gm)].map(([, key]) => key);
