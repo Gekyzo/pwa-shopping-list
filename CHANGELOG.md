@@ -9,6 +9,8 @@ no change for the user has no entry.
 
 ## Unreleased
 
+- **Seguir comprando**, **Añadir la receta de ejemplo** and the other second buttons are grey
+  buttons; only a button that deletes keeps a frame.
 - Text is a little smaller, as in the new look. A sheet title is smaller and keeps to one line;
   **Llenar cesta** shows its full name. A check is a square, chips and fields are white boxes
   with a grey border, and the bottom bar and the bar above it take the colour of the ground.
