@@ -19,7 +19,7 @@ device; the backup file and the reset. Source modules: `src/storage.js`, its use
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) | Preference |
 | `localStorage` | `shopping.swipeHint` | `1` after `Compra` showed the slide of a row one time ([07-screen.md](07-screen.md), ROW-14) | Flag |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) | Flag |
-| Cache API | `shopping-shell-v19` | The app shell ([10-offline-version.md](10-offline-version.md)) | Dropped |
+| Cache API | `shopping-shell-v20` | The app shell ([10-offline-version.md](10-offline-version.md)) | Dropped |
 | Cache API | `shopping-manifest` | The name, the description and the shortcut names of the manifest in the language of the screen (SW-13) | Dropped |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.

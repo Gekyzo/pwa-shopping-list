@@ -419,7 +419,7 @@ New install: the walkthrough shows only when `shopping.onboarded` is not `1` **a
 `src/onboarding.js:5`, `src/ui/context.js:95`; tests "hasStoredState is true for a stored text
 that is not a valid state", `tests/onboarding.test.js` "shouldShow is false for a stored state").
 
-Not `localStorage` (web only, not removed by reset): Cache API `shopping-shell-v19` (app shell)
+Not `localStorage` (web only, not removed by reset): Cache API `shopping-shell-v20` (app shell)
 and `shopping-manifest` (localised manifest text) (`sw.js:1,66`). See 10-offline-version.
 
 Not stored anywhere: the open section, open rows, search text, the undo snapshot
