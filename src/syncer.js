@@ -89,9 +89,11 @@ export const createSyncer = ({
   // ACC-7: after an auth stop no sync makes a request until a login, so the rate limit of the auth
   // endpoints stays free for that login.
   let authStopped = false;
+  // SYNC-11: counts the runs after which the server had answered (ok, a rate limit, an auth error).
+  let reached = 0;
 
   // `auth` is true after an auth stop, until the next login (ACC-7): the app then shows Iniciar sesión.
-  const status = () => ({ online, pending: queue.length, lastSync: sync.lastSync ?? null, auth: authStopped });
+  const status = () => ({ online, pending: queue.length, lastSync: sync.lastSync ?? null, auth: authStopped, reached });
   const report = () => onStatus(status());
   const persist = () => {
     saveQueue(storage, queue);
@@ -261,6 +263,7 @@ export const createSyncer = ({
       // SYNC-11: only a stop at the network or at a server error counts as offline; a rate limit keeps
       // the queue and the online status.
       online = result !== 'offline';
+      if (online) reached += 1;
       if (retry) scheduleRetry();
       else {
         cancelRetry();

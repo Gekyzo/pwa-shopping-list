@@ -121,8 +121,9 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   sync before the pull and keeps the changes not sent: the changes go in the order of the saves,
   and a pull on the same connection fails too. The next sync starts again at the first change
   not sent. A change that the server refuses as bad data (a 400 with field errors) leaves the
-  queue and stays local; the next changes go on. An error that is not of the server or of the
-  network is logged, and the sync stops as offline.
+  queue and stays local; the next changes go on. A rate limit (a 429) stops the sync and keeps
+  the sync online (SYNC-3). An error that is not of the server or of the network is logged, and the
+  sync stops as offline.
 - **SYNC-5** A change that is queued wins over a pulled record of the same `kind` and `key`.
 - **SYNC-6** A delete is a record with `deleted: true`, so that the delete reaches the other devices.
   The delete changes only that flag: the record keeps its `data`. A pulled record with `deleted`
@@ -167,7 +168,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   at the network or at a server error, and goes at the `online` event or after a sync that reached
   the server. A stop at the rate limit (a 429) is not offline: the note does not show, and the
   retry of SYNC-3 sends the queue.
-  A sync that reached the server (its `lastSync` moved) also clears the note and opens the stream
+  A sync that reached the server (the server answered it: ok, a rate limit or an auth error) also clears the note and opens the stream
   again, even when the browser sent no `online` event, as some phones do after airplane mode.
   When the app shows again (`visibilitychange` to visible) and the browser says it is online, the
   note goes and a sync starts. A sync that stops as offline keeps the note.

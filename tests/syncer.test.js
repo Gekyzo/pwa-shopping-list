@@ -140,7 +140,7 @@ test('a tick is queued, pushed, and the queue is empty after run', async () => {
   assert.deepEqual(loadQueue(a.storage), []);
   assert.equal(server.live('u1').find((row) => row.key === 'i1').data.bought, true);
   const status = a.box.statuses.at(-1);
-  assert.deepEqual(status, { online: true, pending: 0, lastSync: '2026-10-24T08:00:00.000Z', auth: false });
+  assert.deepEqual(status, { online: true, pending: 0, lastSync: '2026-10-24T08:00:00.000Z', auth: false, reached: 2 });
 });
 
 test('the debounce timer runs the sync', async () => {
@@ -869,17 +869,23 @@ test('a server error goes offline and also schedules a retry; a network error do
   assert.equal(a.box.statuses.at(-1).online, true);
 });
 
-test('the status reports a new lastSync only after a run that reached the server (SYNC-11)', async () => {
+test('the status counts a run only when the server answered it (SYNC-11)', async () => {
   const server = fakeServer();
   const a = device({ server });
+  const reached = () => a.box.statuses.at(-1).reached;
   a.client.failPull = new PocketBaseError('network');
   a.change(withItems([item('i1', 'Leche')]));
-  assert.equal(a.box.statuses.at(-1).lastSync, null);
   await a.syncer.run();
   assert.equal(a.box.statuses.at(-1).online, false);
-  assert.equal(a.box.statuses.at(-1).lastSync, null);
+  assert.equal(reached(), 0);
+  a.client.failPull = new PocketBaseError('server', 503);
+  await a.syncer.run();
+  assert.equal(reached(), 0);
+  a.client.failPull = new PocketBaseError('rate', 429);
+  await a.syncer.run();
+  assert.equal(reached(), 1);
   a.client.failPull = null;
   await a.syncer.run();
-  assert.equal(a.box.statuses.at(-1).online, true);
+  assert.equal(reached(), 2);
   assert.equal(a.box.statuses.at(-1).lastSync, '2026-10-24T08:00:00.000Z');
 });
