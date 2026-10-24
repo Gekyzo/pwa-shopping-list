@@ -120,6 +120,7 @@
 | `tests/suggest.test.js` | The rows above the add input: create first, the cap of 6, which are in the list (ADD-2) |
 | `tests/version.test.js` | Version rules |
 | `tests/whatsnew.test.js` | The parse of the release notes and the unseen versions |
+| `tests/release-notes-files.test.js` | One release-notes file for each language, with the same versions (VER-18) |
 | `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own |
@@ -130,8 +131,8 @@
 | `tests/vendor.test.js` | The copy of the design system: its files and hashes, its place in `index.html`, `designs/index.html` and `SHELL`, no copied rule in `styles.css` (DSV-1 to DSV-3) |
 | `tests/png.test.js` | The PNG encoder and decoder of `scripts/png.mjs`, which `npm run icons` uses |
 | `tests/glyph.test.js` | The segments of a line icon of `scripts/glyph.mjs`, which `npm run icons` draws for the shortcut icons |
-| `tests/release.test.js` | The release of `scripts/release.mjs`: the bump commit, the tag and the refusals, also a `main` behind `origin` (VER-10 to VER-12) |
-| `tests/changelog.test.js` | The release of `CHANGELOG.md` by `scripts/changelog.mjs`, which the version bump uses (VER-17) |
+| `tests/release.test.js` | The release of `scripts/release.mjs`: the bump commit, the tag and the refusals, also a `main` behind `origin` and release notes that differ between languages (VER-10 to VER-12, VER-19) |
+| `tests/changelog.test.js` | The release of `CHANGELOG.md` and of the release notes by `scripts/changelog.mjs`, which the version bump uses (VER-17, VER-19) |
 | `tests/spec.test.js` | The facts of this specification that the code can prove (ENG-12) |
 
 A unit test uses `node:test` with `node:assert/strict`, one behaviour for each test, and checks
