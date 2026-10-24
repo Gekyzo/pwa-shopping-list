@@ -230,10 +230,10 @@ window.addEventListener('popstate', () => {
     return;
   }
   backEntry = false;
-  if (isAccountOpen()) {
+  // A screen that can go back to the list closes first. One that cannot close has no entry: the
+  // back closes the layer below it, so the back never loops.
+  if (accountClosable()) {
     closeAccount();
-    // A screen that cannot close keeps the entry of the layer below it.
-    holdBack();
     return;
   }
   if (ui.onboarding !== null) return;

@@ -16,6 +16,9 @@ export const isLast = (index) => index === PAGES.length - 1;
 // the walkthrough after a login that brought the data of an account adds nothing to that account.
 export const offersSample = ({ page, items, recipes }) => page === 'sample' && items === 0 && recipes === 0;
 
+// The text key of a page. With no offer the last page says nothing about the sample (ONB-13).
+export const pageTextKey = (page, offer) => (page === 'sample' && !offer ? 'onboarding.sample.textNoSample' : `onboarding.${page}.text`);
+
 // A key that starts with `#name` shows the icon `name` of the sprite, then the rest of its text.
 const keyPart = (text) => {
   const match = text.match(/^#([a-z][\w-]*)(?: (.*))?$/s);

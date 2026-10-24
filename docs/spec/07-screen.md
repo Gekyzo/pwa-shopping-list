@@ -277,7 +277,8 @@ the bottom bar at each width.
 - **ONB-13** The last page has the switch **Añadir la receta de ejemplo**, on at each open of the
   walkthrough. It shows only while the state has no items and no recipes, so the walkthrough after
   a login that brought the data of an account adds nothing to that account (SYNC-8); a new empty
-  account still gets the offer. On another page, or when the switch does not show, its room stays
+  account still gets the offer. With no offer the text of the page is
+  `onboarding.sample.textNoSample`, which says what a recipe is and adds nothing. On another page, or when the switch does not show, its room stays
   empty, so the page does not move. **Empezar** with the
   switch on adds the sample recipe and sends its products to `Compra`, with no message. **Saltar**, `Escape` and **Empezar** with the
   switch off add nothing.

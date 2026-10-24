@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { PAGES, hasBack, isLast, offersSample, shouldShow, step, textParts } from '#onboarding';
+import { PAGES, hasBack, isLast, offersSample, pageTextKey, shouldShow, step, textParts } from '#onboarding';
+import { CATALOGS, LANGUAGES } from '#i18n';
 
 test('PAGES has the six pages in their order, each one time', () => {
   assert.deepEqual(PAGES, ['lists', 'trip', 'row', 'sections', 'recipes', 'sample']);
@@ -102,4 +103,15 @@ test('offersSample is true on the last page while the state has no items and no 
 test('offersSample is false when the state has items or recipes, such as after a login with account data', () => {
   assert.equal(offersSample({ page: 'sample', items: 3, recipes: 0 }), false);
   assert.equal(offersSample({ page: 'sample', items: 0, recipes: 1 }), false);
+});
+
+test('the last page says nothing about the sample when it does not offer it (ONB-13)', () => {
+  assert.equal(pageTextKey('sample', true), 'onboarding.sample.text');
+  assert.equal(pageTextKey('sample', false), 'onboarding.sample.textNoSample');
+  assert.equal(pageTextKey('lists', false), 'onboarding.lists.text');
+  for (const lang of LANGUAGES) {
+    const text = CATALOGS[lang]['onboarding.sample.textNoSample'];
+    assert.ok(text, lang);
+    assert.doesNotMatch(text, /\{name\}/, lang);
+  }
 });
