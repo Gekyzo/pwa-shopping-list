@@ -1,11 +1,12 @@
 # Changelog
 
-The changes of the app that a user sees, by deployed version. The newest version is first. The
-names of the screen are the Spanish ones, as in [`docs/spec/`](docs/spec/README.md).
+Technical changes of the app, by deployed version. The newest version is first. What a user sees
+of a version goes to [`release-notes/`](release-notes/), in each language of the app. The names of
+the screen are the Spanish ones, as in [`docs/spec/`](docs/spec/README.md).
 
 A change that is not deployed goes under `Unreleased`, in the commit that makes the change. The
 commit `Bump version to X.Y.Z` gives its version and its date to those changes. A version with
-no change for the user has no entry.
+no change has no entry.
 
 ## Unreleased
 
