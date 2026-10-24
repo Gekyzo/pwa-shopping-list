@@ -31,10 +31,16 @@ export const mergePulled = ({ local, server, queue, pulled }) => {
   return { local: nextLocal, server: nextServer };
 };
 
-// The same comparison as the validation of `normalizeState` (STORE-6).
-const nameOf = (rec) => rec.data.name.toLowerCase();
+// The same comparison as the validation of `normalizeState`, which trims the name first (STORE-6).
+const nameOf = (rec) => rec.data.name.trim().toLowerCase();
 
-// A record that is not on the server yet counts as the newest. Equal ages: the greater record key wins.
+// SYNC-7: a record that `normalizeState` would refuse is dropped here with no tombstone, so dedupe never throws.
+const wellFormed = (rec) => typeof rec.data?.name === 'string' && rec.data.id === rec.key;
+
+// Greater than any `updated` string: a record that is not on the server yet counts as the newest.
+const NOT_ON_SERVER = '\uffff';
+
+// Equal ages: the greater record key wins.
 const newer = (a, b, server) => {
   const ageA = server.get(recordKey(a.kind, a.key))?.updated ?? '￿';
   const ageB = server.get(recordKey(b.kind, b.key))?.updated ?? '￿';
@@ -48,7 +54,9 @@ export const dedupe = (local, server) => {
   const removed = [];
   for (const kind of ['item', 'recipe']) {
     const winners = new Map();
-    for (const rec of [...local.values()].filter((r) => r.kind === kind)) {
+    const ofKind = [...local.values()].filter((r) => r.kind === kind);
+    for (const rec of ofKind.filter((r) => !wellFormed(r))) nextLocal.delete(recordKey(kind, rec.key));
+    for (const rec of ofKind.filter(wellFormed)) {
       const name = nameOf(rec);
       const other = winners.get(name);
       const winner = other ? newer(other, rec, server) : rec;

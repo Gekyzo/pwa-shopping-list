@@ -109,3 +109,62 @@ test('cursorOf gives the greatest updated, or the previous cursor when nothing w
   assert.equal(cursorOf(pulled, '2026-10-25 00:00:00.000Z'), '2026-10-25 00:00:00.000Z');
   assert.equal(cursorOf([], '2026-10-24 07:00:00.000Z'), '2026-10-24 07:00:00.000Z');
 });
+
+test('dedupe settles names as normalizeState does, trimmed and without case', () => {
+  const a = itemRec('a', 'Leche ');
+  const b = itemRec('b', 'leche');
+  const server = mapOf([serverRec(a, '2026-10-24 08:00:00.000Z'), serverRec(b, '2026-10-24 07:00:00.000Z')]);
+  const result = dedupe(mapOf([a, b]), server);
+  assert.deepEqual(result.removed, [{ kind: 'item', key: 'b', op: 'delete' }]);
+  assert.notEqual(normalizeState(fromRecords(result.local)), null);
+});
+
+test('dedupe drops a record without a name, with no tombstone, and does not throw', () => {
+  const nameless = rec('item', 'x', { id: 'x', position: 0 });
+  const result = dedupe(mapOf([nameless, itemRec('a', 'Pasta')]), new Map());
+  assert.deepEqual([...result.local.keys()], ['item:a']);
+  assert.deepEqual(result.removed, []);
+});
+
+test('dedupe drops a record whose data.id differs from its key, with no tombstone', () => {
+  const odd = rec('recipe', 'r9', { ...recipeRec('r1', 'Sopa').data });
+  const result = dedupe(mapOf([odd, recipeRec('r2', 'Caldo')]), new Map());
+  assert.deepEqual([...result.local.keys()], ['recipe:r2']);
+  assert.deepEqual(result.removed, []);
+});
+
+test('dedupe of three items with one name keeps only the newest', () => {
+  const [a, b, c] = [itemRec('a', 'Leche'), itemRec('b', 'leche'), itemRec('c', 'LECHE')];
+  const server = mapOf([
+    serverRec(a, '2026-10-24 07:00:00.000Z'),
+    serverRec(b, '2026-10-24 09:00:00.000Z'),
+    serverRec(c, '2026-10-24 08:00:00.000Z'),
+  ]);
+  const result = dedupe(mapOf([a, b, c]), server);
+  assert.deepEqual([...result.local.keys()], ['item:b']);
+  assert.deepEqual(result.removed.map((x) => x.key).sort(), ['a', 'c']);
+});
+
+test('mergePulled keeps a queued local delete against a pulled upsert', () => {
+  const queue = [{ kind: 'item', key: 'a', op: 'delete' }];
+  const pulled = [serverRec(itemRec('a', 'Pasta'), '2026-10-24 07:00:00.000Z')];
+  const merged = mergePulled({ local: new Map(), server: new Map(), queue, pulled });
+  assert.equal(merged.local.size, 0);
+  assert.equal(merged.server.get('item:a').deleted, false);
+});
+
+test('mergePulled keeps a queued local upsert against a pulled tombstone', () => {
+  const mine = itemRec('a', 'Mine');
+  const queue = [{ kind: 'item', key: 'a', op: 'upsert', data: mine.data }];
+  const pulled = [serverRec(itemRec('a', 'Mine'), '2026-10-24 07:00:00.000Z', true)];
+  const merged = mergePulled({ local: mapOf([mine]), server: new Map(), queue, pulled });
+  assert.equal(merged.local.get('item:a').data.name, 'Mine');
+  assert.equal(merged.server.get('item:a').deleted, true);
+});
+
+test('mergePulled gives the same result when a record is pulled twice', () => {
+  const pulled = [serverRec(itemRec('a', 'Pasta'), '2026-10-24 07:00:00.000Z')];
+  const once = mergePulled({ local: new Map(), server: new Map(), queue: [], pulled });
+  const twice = mergePulled({ ...once, queue: [], pulled });
+  assert.deepEqual(twice, once);
+});
