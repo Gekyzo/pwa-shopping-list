@@ -5,6 +5,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 ## Unreleased
 
 - Si el servidor pide esperar unos segundos al subir una lista larga, la app ya no muestra «Sin conexión» y lo reintenta sola.
+- En `Ajustes` › `Cuenta`, el correo y la hora de la última sincronización ya no se superponen en un teléfono: la hora va debajo del correo, y un correo largo se parte en varias líneas.
 
 ## 1.4.0 - 2026-10-24
 

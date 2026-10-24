@@ -5,6 +5,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 ## Unreleased
 
 - Se il server chiede di aspettare qualche secondo durante il caricamento di una lista lunga, l’app non mostra più «Offline» e riprova da sola.
+- In `Impostazioni` › `Account`, l’e-mail e l’ora dell’ultima sincronizzazione non si sovrappongono più su un telefono: l’ora sta sotto l’e-mail e un’e-mail lunga va a capo.
 
 ## 1.4.0 - 2026-10-24
 

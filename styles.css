@@ -734,6 +734,29 @@
     position: relative;
   }
 
+  /* @component account-row
+     @scope settings
+     @summary The row Cuenta (ACC-10): the email, and the last sync under it in the muted style. A long email breaks anywhere, not at a hyphen.
+     @example <div class="settings-row account-row" style="width: 100%"><span class="settings-row-label">ciro@example.test</span><span class="settings-row-value">Última sincronización: 24 oct, 18:37</span></div> */
+  .settings .settings-row.account-row {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: var(--space-1);
+    padding-block: var(--space-2);
+  }
+
+  .settings .settings-row.account-row > .settings-row-label,
+  .settings .settings-row.account-row > .settings-row-value {
+    flex: none;
+    overflow-wrap: anywhere;
+    hyphens: none;
+  }
+
+  .settings .settings-row.account-row > .settings-row-value {
+    font-size: var(--text-s);
+  }
+
   /* The select is invisible: the row shows the ring when the select has the keyboard focus. */
   .settings .settings-row:has(> .select:focus-visible) {
     outline: 2px solid var(--text);
