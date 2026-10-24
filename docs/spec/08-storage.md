@@ -105,16 +105,20 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 - **BACKUP-4** A valid file is cleaned and migrated as a stored state is (STORE-7, STORE-8). A
   backup of version 1, 2 or 3 is thus accepted.
 - **BACKUP-5** Before the import the app asks: `¿Sustituir los datos actuales por los de la copia
-  (N artículos y N recetas)?` A yes replaces the full state. It does not merge. With a session, it replaces the
-  data of the account on every device (SYNC-9, [18-account-sync.md](18-account-sync.md)).
+  (N artículos y N recetas)?` A yes replaces the full state. It does not merge. With a session the
+  question is `import.confirmAccount`: `¿Sustituir los datos de tu cuenta por los de la copia (N
+  artículos y N recetas)? Se sustituyen en todos tus dispositivos.` A yes then replaces the data of
+  the account on every device (SYNC-9, [18-account-sync.md](18-account-sync.md)).
 - **BACKUP-6** The import has `Deshacer`, with the message `Copia importada.`
 - **BACKUP-7** **Borrar todos los datos** asks `¿Borrar todos los datos? Se borran las listas,
   las recetas, el menú, las secciones y las preferencias. Exporta una copia antes si quieres
   conservarlos.` A yes removes each `localStorage` key of the table above and loads the app again,
   which then starts as a new install, with the walkthrough (ONB-7). It has no `Deshacer`. When the
   removal fails, the message `error.resetFailed` says `No se pudieron borrar los datos.` and nothing
-  else changes. The caches stay. It also logs out, and the data of the account stays on the server (SYNC-10,
-  [18-account-sync.md](18-account-sync.md)).
+  else changes. The caches stay. With a session the question is `reset.confirmLocal`: `¿Borrar los datos de
+  este dispositivo? Se borran las listas, las recetas, el menú, las secciones y las preferencias, y
+  se cierra la sesión. Los datos de tu cuenta se conservan en el servidor.` A yes also logs out
+  (SYNC-10, [18-account-sync.md](18-account-sync.md)).
 
 ## Loss of data
 
@@ -123,5 +127,6 @@ that is the only protection.
 
 ## Limits
 
-No automatic backup. No merge of two states. No sync between tabs. The sync between devices is in [18-account-sync.md](18-account-sync.md). The state is in
+No automatic backup. No merge of two states. No sync between tabs. The sync between devices is in
+[18-account-sync.md](18-account-sync.md). The state is in
 `localStorage`; a move to IndexedDB is an open item.
