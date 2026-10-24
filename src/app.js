@@ -19,6 +19,7 @@ import {
   showToast,
   hideToast,
   setRender,
+  setAfterCommit,
   render,
   commit,
   debugLog,
@@ -52,6 +53,17 @@ import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSe
 import { renderInstall, bind as bindInstall } from '#ui/install';
 import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
 import { bind as bindNav } from '#ui/nav';
+import {
+  syncer,
+  renderSync,
+  startAccount,
+  finishOAuth,
+  goOnline,
+  goOffline,
+  isAccountOpen,
+  closeAccount,
+  bind as bindAccount,
+} from '#ui/account';
 
 // Screen
 
@@ -110,6 +122,7 @@ const renderAll = () => {
   renderInstall();
   renderTrip();
   renderMenuActions();
+  renderSync();
 
   // An action in the empty state replaces the add button. Below 600px the add button of the dock
   // takes the place of the fab (design-system.css), with the same label and the same conditions.
@@ -237,6 +250,11 @@ scroller.addEventListener(
 );
 
 document.addEventListener('keydown', (event) => {
+  // The account screens cover the app, the walkthrough too.
+  if (isAccountOpen()) {
+    if (event.key === 'Escape') closeAccount();
+    return;
+  }
   if (ui.onboarding !== null) {
     if (event.key === 'Escape') closeOnboarding();
     else if (event.key === 'ArrowRight') turnOnboarding(1);
@@ -263,6 +281,7 @@ bindMenu();
 bindSettings();
 bindInstall();
 bindAisles();
+bindAccount();
 
 // Each sheet closes by Listo of its head and by a drag down of its grab or head. Each close
 // hides the layer at once, so the closing transition starts where the drag left the sheet.
@@ -292,12 +311,14 @@ if (params.has('arrival')) {
 // A shortcut of the launcher opens `?open=<name>`. The walkthrough of a first start stays on top
 // and gets no sheet below it.
 const start = shortcutStart(params.get('open'));
+// The return of the Google sign-in (ACC-5): `code` and `state` leave the URL at once, with the query below.
+const oauthReturn = params.has('code') && params.has('state') ? { code: params.get('code'), state: params.get('state') } : null;
 // The query goes before a sheet opens: the entry of the sheet (holdBack) then comes after an address
 // with no query, and a reload opens nothing.
-if (params.has('arrival') || params.has('open')) {
+const used = ['arrival', 'open', ...(oauthReturn ? ['code', 'state'] : [])];
+if (used.some((name) => params.has(name))) {
   const rest = new URLSearchParams(params);
-  rest.delete('arrival');
-  rest.delete('open');
+  for (const name of used) rest.delete(name);
   const query = rest.toString();
   history.replaceState(null, '', `${location.pathname}${query ? `?${query}` : ''}${location.hash}`);
 }
@@ -307,6 +328,15 @@ if (start) {
   else render();
 }
 if (!storage) showToast(t('error.noStorage'));
+// The account and the sync (ACC-1, SYNC-3): each save queues its change, and the sync runs at the start,
+// at `online` and at a change of the account.
+if (syncer) {
+  setAfterCommit((saved) => syncer.notify(saved));
+  window.addEventListener('online', goOnline);
+  window.addEventListener('offline', goOffline);
+  if (oauthReturn) finishOAuth(oauthReturn);
+  else startAccount();
+}
 navigator.storage?.persist?.().catch(() => {});
 navigator.serviceWorker?.register('./sw.js').catch(() => {});
 // Read once at the start: the worker answers from the cache, then stores the file of the next deploy.

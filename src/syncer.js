@@ -63,7 +63,8 @@ export const createSyncer = ({
   // endpoints stays free for that login.
   let authStopped = false;
 
-  const status = () => ({ online, pending: queue.length, lastSync: sync.lastSync ?? null });
+  // `auth` is true after an auth stop, until the next login (ACC-7): the app then shows Iniciar sesión.
+  const status = () => ({ online, pending: queue.length, lastSync: sync.lastSync ?? null, auth: authStopped });
   const report = () => onStatus(status());
   const persist = () => {
     saveQueue(storage, queue);

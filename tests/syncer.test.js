@@ -134,7 +134,7 @@ test('a tick is queued, pushed, and the queue is empty after run', async () => {
   assert.deepEqual(loadQueue(a.storage), []);
   assert.equal(server.live('u1').find((row) => row.key === 'i1').data.bought, true);
   const status = a.box.statuses.at(-1);
-  assert.deepEqual(status, { online: true, pending: 0, lastSync: '2026-10-24T08:00:00.000Z' });
+  assert.deepEqual(status, { online: true, pending: 0, lastSync: '2026-10-24T08:00:00.000Z', auth: false });
 });
 
 test('the debounce timer runs the sync', async () => {
@@ -530,6 +530,18 @@ test('after an auth stop a save makes no request until a login', async () => {
   assert.equal(await a.syncer.login(sessionOf('u1')), 'synced');
   assert.deepEqual(loadQueue(a.storage), []);
   assert.equal(server.live('u1').length, 4);
+});
+
+test('the status tells an auth stop, so that the app shows Iniciar sesión, until a login (ACC-7)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  assert.equal(a.syncer.status().auth, false);
+  a.client.failRefresh = new PocketBaseError('auth', 401);
+  assert.equal(await a.syncer.run(), 'auth');
+  assert.equal(a.syncer.status().auth, true);
+  a.client.failRefresh = null;
+  await a.syncer.login(sessionOf('u1'));
+  assert.equal(a.syncer.status().auth, false);
 });
 
 test('a pulled record that the validation refuses changes no state, no queue and no cursor', async () => {

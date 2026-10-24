@@ -89,8 +89,8 @@ test('localizeManifest does not change the shortcuts of its input', () => {
 });
 
 test('the activate keeps the caches of another app', () => {
-  const keys = ['shopping-shell-v20', 'shopping-shell-v21', 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
-  assert.deepEqual(plain(staleCaches(keys)), ['shopping-shell-v20']);
+  const keys = ['shopping-shell-v21', 'shopping-shell-v22', 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
+  assert.deepEqual(plain(staleCaches(keys)), ['shopping-shell-v21']);
 });
 
 test('SHELL has the release notes of each language, so they show offline (VER-20)', () => {

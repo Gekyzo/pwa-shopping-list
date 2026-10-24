@@ -803,6 +803,131 @@
     margin: 0;
   }
 
+  /* @component account
+     @scope account
+     @summary The screens of the account over the full app (ACC-2): Iniciar sesión, Solicitar acceso and
+       Esperando aprobación. One page shows at a time, in the width of the column, centred.
+     @part account-top     The top bar: Volver a la lista, only when the device has a list.
+     @part account-page    One screen: a form, or the box of Esperando aprobación.
+     @part account-logo    The app icon, at the top of Iniciar sesión.
+     @part account-title   The name of the screen.
+     @part account-text    The line below the title.
+     @part account-or      The divider between Google and the email form.
+     @part account-switch  The question and the link to the other screen, at the bottom.
+     @part account-wait    The large icon of Esperando aprobación.
+     @example <div class="account-page" style="width: 100%"><h2 class="account-title">Solicitar acceso</h2><p class="account-text">Ciro aprueba cada cuenta nueva.</p><button class="button tonal wide" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"/></svg>Continuar con Google</button><p class="account-or">o</p><button class="button primary wide" type="button">Enviar solicitud</button><p class="account-switch"><span>¿Ya tienes cuenta?</span><button class="button accent" type="button">Iniciar sesión</button></p></div> */
+  .account {
+    position: fixed;
+    inset: 0;
+    /* Over the walkthrough: the login of a first start comes first. */
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: calc(var(--space-5) + env(safe-area-inset-top)) calc(var(--space-5) + env(safe-area-inset-right))
+      calc(var(--space-5) + env(safe-area-inset-bottom)) calc(var(--space-5) + env(safe-area-inset-left));
+    background: var(--bg);
+    overflow: hidden auto;
+  }
+
+  @media (min-width: 600px) {
+    .account {
+      padding-left: max(var(--space-5) + env(safe-area-inset-left), (100% - var(--content-max)) / 2);
+      padding-right: max(var(--space-5) + env(safe-area-inset-right), (100% - var(--content-max)) / 2);
+    }
+  }
+
+  .account-top {
+    display: flex;
+    flex: none;
+    min-height: var(--tap);
+  }
+
+  .account-page {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .account-logo {
+    align-self: center;
+    width: var(--logo);
+    height: var(--logo);
+  }
+
+  .account-title {
+    margin: 0;
+    font-size: var(--text-l);
+    text-align: center;
+  }
+
+  .account-title:focus {
+    outline: none;
+  }
+
+  .account-text {
+    margin: 0 0 var(--space-2);
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* A line on each side of the word. */
+  .account-or {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
+  .account-or::before,
+  .account-or::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--line);
+  }
+
+  /* The link to the other screen stays at the bottom of the page. */
+  .account-switch {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    margin: auto 0 0;
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
+  .account-wait {
+    align-self: center;
+    width: var(--logo);
+    height: var(--logo);
+    margin-top: var(--space-6);
+    color: var(--muted);
+  }
+
+  .account-page > .button.accent {
+    align-self: center;
+  }
+
+  /* @component sync-note
+     @scope list
+     @summary The note over the list while the device is offline (SYNC-11): the changes stay saved.
+     @example <p class="sync-note"><svg class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span>Sin conexión · cambios guardados</span></p> */
+  .sync-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin: 0;
+    padding: var(--space-2) var(--space-4);
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
   /* @component onboarding
      @scope onboarding
      @summary The walkthrough of the first start, over the full app: a page, the dots, the buttons.
