@@ -16,6 +16,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.swipeHint` | `1` after `Compra` showed the slide of a row one time ([07-screen.md](07-screen.md), ROW-14) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
+| `localStorage` | `shopping.seen-version` | The newest version whose release notes the user saw ([10-offline-version.md](10-offline-version.md), VER-20) |
 | `localStorage` | `shopping.session` | The token and the user of the account ([18-account-sync.md](18-account-sync.md), ACC-6) |
 | `localStorage` | `shopping.sync` | The last cursor and the last known server state (SYNC-2, SYNC-4) |
 | `localStorage` | `shopping.queue` | The changes not sent to the server (SYNC-2) |

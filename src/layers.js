@@ -3,7 +3,7 @@
 
 // True while a sheet is open. One sheet is open at a time.
 export const sheetOpen = (view) =>
-  view.sheetOpen || view.arrangeOpen || view.tripOpen || view.aislesOpen || view.shopPickOpen ||
+  view.sheetOpen || view.arrangeOpen || view.tripOpen || view.aislesOpen || view.shopPickOpen || view.whatsNewOpen ||
   view.editId !== null || view.mealOpen !== null || view.recipeId !== null;
 
 // The layer that `Escape` and the back of the phone close first: an open sheet, then an open row,

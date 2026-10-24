@@ -41,6 +41,7 @@
 | `src/ui/list.js` | The list `Compra`: rows, search, shop lists, the dock and its shop picker, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
+| `src/ui/whatsnew.js` | The release notes sheet, its row in `Ajustes` and the seen version (VER-20 to VER-22) | `whatsnew`, `onboarding`, `i18n`, `storage`, `ds/sheet`, `ui/context` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |
@@ -111,7 +112,7 @@
 | `tests/config.test.js` | The API URL for each host |
 | `tests/sync.test.js` | The queue, the merge of pulled records, the duplicates and the cursor |
 | `tests/swipe.test.js` | The settle rule of a row slide |
-| `tests/sw.test.js` | The manifest text that the worker puts in place, with the names of the shortcuts (SW-13) |
+| `tests/sw.test.js` | The manifest text that the worker puts in place, with the names of the shortcuts (SW-13); the release notes of each language in `SHELL` (VER-20) |
 | `tests/layer-order.test.js` | The open sheet and the order of the layers that `Escape` and the back close (NAV-25) |
 | `tests/sections.test.js` | The slide between sections; the start of each shortcut and its place in the manifest (SHORT-1, SHORT-2) |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
@@ -123,7 +124,7 @@
 | `tests/release-notes-files.test.js` | One release-notes file for each language, with the same versions (VER-18) |
 | `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
-| `tests/markup.test.js` | `index.html` holds no text of its own |
+| `tests/markup.test.js` | `index.html` holds no text of its own; the sheets, `Ajustes` and the walkthrough markup, also the **Novedades** sheet and its row (VER-21, VER-22) |
 | `tests/controls.test.js` | Each call of `bindField` in `src/ui/` passes `read` and `write` as one object (AISLE-12) |
 | `tests/aliases.test.js` | The import map against `package.json`; each `#ds/` alias names a vendored module |
 | `tests/layers.test.js` | The layer rules: no import of `src/app.js`, no view in a pure module, no cycle among `src/ui/`, one owner for each shared value, `SHELL` (ENG-16) |

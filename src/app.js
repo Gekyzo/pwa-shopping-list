@@ -47,6 +47,7 @@ import {
 } from '#ui/list';
 import { renderSheet, openSheet, closeSheet, bind as bindAdd } from '#ui/add';
 import { closeOnboarding, turnOnboarding, bind as bindOnboarding } from '#ui/onboarding';
+import { startWhatsNew, isWhatsNewOpen, closeWhatsNew, bind as bindWhatsNew } from '#ui/whatsnew';
 import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
 import { renderInstall, bind as bindInstall } from '#ui/install';
 import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
@@ -145,6 +146,7 @@ setRender(renderAll);
 
 bindNav();
 bindOnboarding();
+bindWhatsNew();
 bindAdd();
 
 // A tap out of the open row closes it, without a render, so that the tap still does its work.
@@ -190,6 +192,7 @@ const closeSheets = () => {
   if (ui.tripOpen) closeTrip();
   if (ui.aislesOpen) closeAisles();
   if (ui.shopPickOpen) closeShopPick();
+  if (isWhatsNewOpen()) closeWhatsNew();
 };
 
 // Closes the top layer (closeTop): a sheet, an open row, then the search. Gives what it closed.
@@ -310,4 +313,6 @@ navigator.serviceWorker?.register('./sw.js').catch(() => {});
 readVersion('./version.json').then((running) => {
   ui.version.running = running;
   renderVersion();
+  // The release notes of an update, once, after the running version is known (VER-20).
+  startWhatsNew(running);
 });

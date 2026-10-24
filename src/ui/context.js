@@ -137,6 +137,8 @@ export const ui = {
   shopPickOpen: false,
   // True while the sheet of the aisles of Ajustes is open.
   aislesOpen: false,
+  // True while the sheet of the release notes is open (VER-21).
+  whatsNewOpen: false,
   // The item whose edit sheet is open, or null.
   editId: null,
   // The meal whose sheet is open, as { day, meal }, or null.
