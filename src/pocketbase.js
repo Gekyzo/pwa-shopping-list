@@ -18,6 +18,8 @@ export class PocketBaseError extends Error {
 const typeOf = (status) => {
   if (status === 401 || status === 403) return 'auth';
   if (status === 400 || status === 404) return 'invalid';
+  // The server limits the rate of requests: the request is fine, and it is worth a retry soon.
+  if (status === 429) return 'rate';
   return 'server';
 };
 

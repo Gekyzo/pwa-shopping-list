@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Si el servidor pide esperar unos segundos al subir una lista larga, la app ya no muestra «Sin conexión» y lo reintenta sola.
 
 ## 1.4.0 - 2026-10-24
 

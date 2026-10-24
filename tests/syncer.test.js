@@ -818,3 +818,53 @@ test('a delete that the server answers as gone after a good refresh leaves the q
   assert.equal(a.client.calls.filter((c) => c === 'refresh').length, refreshes + 1);
   assert.deepEqual(loadQueue(a.storage), []);
 });
+
+const retryTimers = (box) => box.timers.filter(({ ms }) => ms !== 1500);
+
+test('a rate limit mid-push keeps the queue, stays online and the retry sends the rest (SYNC-3)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.client.failPush = (n) => (n === 4 ? new PocketBaseError('rate', 429) : null);
+  a.change(withItems(Array.from({ length: 9 }, (_, n) => item(`i${n}`, `Item ${n}`))));
+  assert.equal(await a.syncer.run(), 'rate');
+  assert.equal(loadQueue(a.storage).length, 7);
+  assert.equal(a.box.statuses.at(-1).online, true);
+  assert.equal(a.box.statuses.at(-1).pending, 7);
+  assert.deepEqual(retryTimers(a.box).map(({ ms }) => ms), [5000]);
+  assert.equal(await retryTimers(a.box)[0].fn(), 'ok');
+  assert.equal(server.rows.length, 10);
+  assert.deepEqual(loadQueue(a.storage), []);
+  assert.equal(a.box.statuses.at(-1).online, true);
+});
+
+test('the retry delay grows with each stop and starts again after a good run (SYNC-3)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.client.failPull = new PocketBaseError('rate', 429);
+  const delays = [];
+  for (let n = 0; n < 6; n += 1) {
+    await a.syncer.run();
+    delays.push(retryTimers(a.box).at(-1).ms);
+  }
+  assert.deepEqual(delays, [5000, 15000, 30000, 60000, 60000, 60000]);
+  a.client.failPull = null;
+  assert.equal(await a.syncer.run(), 'ok');
+  a.client.failPull = new PocketBaseError('rate', 429);
+  await a.syncer.run();
+  assert.equal(retryTimers(a.box).at(-1).ms, 5000);
+});
+
+test('a server error goes offline and also schedules a retry; a network error does not (SYNC-3, SYNC-11)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.client.failPull = new PocketBaseError('server', 503);
+  assert.equal(await a.syncer.run(), 'offline');
+  assert.equal(a.box.statuses.at(-1).online, false);
+  assert.deepEqual(retryTimers(a.box).map(({ ms }) => ms), [5000]);
+  a.client.failPull = new PocketBaseError('network');
+  assert.equal(await a.syncer.run(), 'offline');
+  assert.equal(retryTimers(a.box).length, 1);
+  a.client.failPull = null;
+  assert.equal(await retryTimers(a.box)[0].fn(), 'ok');
+  assert.equal(a.box.statuses.at(-1).online, true);
+});

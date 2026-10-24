@@ -280,3 +280,10 @@ test('subscribe reads the token at each PB_CONNECT and calls onReconnect at each
   assert.deepEqual(tokens, ['first', 'second']);
   assert.equal(reconnects, 1);
 });
+
+test('a 429 is a rate error, a 5xx is a server error', async () => {
+  const { client } = fake(reply(429, { message: 'Too Many Requests.' }), reply(503, {}));
+  const change = { kind: 'item', key: 'a', op: 'upsert', data: {} };
+  await assert.rejects(client.push(TOKEN, change, new Map([[recordKey('item', 'a'), 'r1']])), { type: 'rate', status: 429 });
+  await assert.rejects(client.pull(TOKEN, ''), { type: 'server', status: 503 });
+});

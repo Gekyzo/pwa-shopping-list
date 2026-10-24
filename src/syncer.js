@@ -13,6 +13,9 @@ import { emptyState } from '#store';
 
 // SYNC-3: a save starts a sync after this delay; a new save in that time starts the delay again.
 const DEBOUNCE_MS = 1500;
+// SYNC-3: after a stop at the rate limit or at a server error, the next run starts after these delays
+// in turn (the last one repeats); a run that reaches the server ends the series.
+const RETRY_MS = [5_000, 15_000, 30_000, 60_000];
 // ACC-7: a token is refreshed at least this often, so that a lost approval stops the sync.
 const REFRESH_MS = 10 * 60_000;
 
@@ -23,6 +26,9 @@ const emptySync = () => ({ owner: null, cursor: '', server: new Map(), local: ne
 const stopOf = (error) => {
   if (error?.type === 'auth') return 'auth';
   if (error?.type === 'invalid' && Object.keys(error.fields ?? {}).length === 0) return 'auth';
+  // SYNC-3, SYNC-11: a rate limit is not offline, and a server error is retried; both name their stop.
+  if (error?.type === 'rate') return 'rate';
+  if (error?.type === 'server') return 'server';
   return 'offline';
 };
 
@@ -75,6 +81,9 @@ export const createSyncer = ({
   let lastRefresh = null;
   let running = null;
   let timer = null;
+  // SYNC-3: the timer of the retry after a rate limit or a server error, and the delays used in a row.
+  let retryTimer = null;
+  let retries = 0;
   // A reset (a logout, or a login that clears) starts a new generation: a run of an older one is stale.
   let generation = 0;
   // ACC-7: after an auth stop no sync makes a request until a login, so the rate limit of the auth
@@ -243,11 +252,20 @@ export const createSyncer = ({
       } finally {
         if (running === mine) running = null;
       }
-      const { result, followUp } = outcome;
+      let { result } = outcome;
+      const { followUp } = outcome;
       if (result === STALE || !live()) return 'ok';
       if (result === 'auth') authStopped = true;
-      // SYNC-11: only a stop at the network or at a server error counts as offline.
+      const retry = result === 'rate' || result === 'server';
+      if (result === 'server') result = 'offline';
+      // SYNC-11: only a stop at the network or at a server error counts as offline; a rate limit keeps
+      // the queue and the online status.
       online = result !== 'offline';
+      if (retry) scheduleRetry();
+      else {
+        cancelRetry();
+        if (result === 'ok') retries = 0;
+      }
       // The merge can queue a tombstone (SYNC-7) or a fix of the validation: a sync soon sends it.
       if (followUp) schedule();
       report();
@@ -263,6 +281,21 @@ export const createSyncer = ({
       timer = null;
       return run();
     }, DEBOUNCE_MS);
+  };
+
+  const cancelRetry = () => {
+    if (retryTimer !== null) clearTimer(retryTimer);
+    retryTimer = null;
+  };
+
+  const scheduleRetry = () => {
+    cancelRetry();
+    const delay = RETRY_MS[Math.min(retries, RETRY_MS.length - 1)];
+    retries += 1;
+    retryTimer = setTimer(() => {
+      retryTimer = null;
+      return run();
+    }, delay);
   };
 
   // SYNC-2: the changes of a save against the last state that the syncer knows. The syncer never calls it
@@ -285,6 +318,8 @@ export const createSyncer = ({
     generation += 1;
     if (timer !== null) clearTimer(timer);
     timer = null;
+    cancelRetry();
+    retries = 0;
     sync = emptySync();
     queue = [];
     lastRefresh = null;

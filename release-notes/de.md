@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Wenn der Server beim Hochladen einer langen Liste um ein paar Sekunden Geduld bittet, zeigt die App nicht „Offline“ an und versucht es von selbst erneut.
 
 ## 1.4.0 - 2026-10-24
 
