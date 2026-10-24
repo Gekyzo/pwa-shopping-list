@@ -38,6 +38,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   **Cerrar sesión**.
 - **ACC-11** With no session and with `shopping.v1` data, the list shows the banner
   **Inicia sesión para sincronizar**. The device works local-only until the user logs in.
+- **ACC-12** The API URL is one config value. When the app is served from `localhost`, `127.0.0.1` or
+  `[::1]`, it is `http://localhost:8090`. Else it is `https://artisandevs.duckdns.org`.
 
 ## Sync
 
@@ -67,10 +69,12 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
     `shopping.v1.beforeLogin`. The app offers it as an export file. It never merges two lists.
 - **SYNC-9** The import (BACKUP-5) replaces the data of the account, so on every device. The next sync
   sends a tombstone for each record of the server that the import does not hold, and an upsert for the
-  others. The question of the import says it.
+  others. With a session the question of the import is
+  `import.confirmAccount` (BACKUP-5), which says so.
 - **SYNC-10** **Borrar todos los datos** (BACKUP-7) clears this device only: the state, the queue,
   the last known server state and the token. It logs out and sends nothing. The data of the account
-  stays on the server. The question says it.
+  stays on the server. With a session the question of the reset is
+  `reset.confirmLocal` (BACKUP-7), which says so.
 - **SYNC-11** While the device is offline, a note over the list says **Sin conexión · cambios
   guardados**.
 

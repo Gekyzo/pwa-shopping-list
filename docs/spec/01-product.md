@@ -21,13 +21,13 @@ next trip is almost ready.
 - **PROD-4** The data lives on the device first, in the `localStorage` of the origin. It then syncs to
   the account of the user (SYNC-1). A device with no session sends nothing.
 - **PROD-5** The network requests are the static files of the same origin and the API of the
-  account, at `https://artisandevs.duckdns.org` (SYNC-3).
+  account, at `https://artisandevs.duckdns.org` (ACC-12).
 - **PROD-6** Each function works with no connection after the first load, except the check of the
   deployed version and the update.
 - **PROD-7** The app is plain HTML, CSS and ES modules. It has no build step and no dependency, at
   run time or for development.
 - **PROD-8** All URLs are relative, so the app works below a subpath of its host. The one absolute
-  URL is the API, `https://artisandevs.duckdns.org`.
+  URL is the API (ACC-12).
 - **PROD-9** A destructive action has no confirmation. `Deshacer` restores the state for 5 seconds
   instead. The import of a backup is the exception: it asks first, and it also has `Deshacer`.
 
