@@ -148,9 +148,9 @@ test('push of an upsert whose known id answers 404 patches the record found by k
   assert.equal(rec.id, 'r7');
 });
 
-test('push of a delete whose known id answers 404 and has no record resolves null', async () => {
+test('push of a delete whose known id answers 404 and has no record throws gone, so the token is checked', async () => {
   const { calls, client } = fake(reply(404, {}), reply(200, { items: [], totalPages: 0 }));
-  assert.equal(await client.push(TOKEN, { kind: 'item', key: 'a', op: 'delete' }, new Map([['item:a', 'r1']])), null);
+  await assert.rejects(client.push(TOKEN, { kind: 'item', key: 'a', op: 'delete' }, new Map([['item:a', 'r1']])), { type: 'gone', status: 404 });
   assert.equal(calls.length, 2);
 });
 
@@ -182,10 +182,11 @@ test('a 400 with no field error is not a unique violation', async () => {
 });
 
 test('a delete is a patch with deleted true', async () => {
-  const { calls, client } = fake(reply(200, serverRow({ deleted: true, data: null })));
+  const { calls, client } = fake(reply(200, serverRow({ deleted: true })));
   const rec = await client.push(TOKEN, { kind: 'item', key: 'a', op: 'delete' }, new Map([['item:a', 'r1']]));
   assert.equal(calls[0].method, 'PATCH');
-  assert.deepEqual(calls[0].body, { deleted: true, data: null });
+  // SYNC-6: the tombstone keeps its data.
+  assert.deepEqual(calls[0].body, { deleted: true });
   assert.equal(rec.deleted, true);
 });
 

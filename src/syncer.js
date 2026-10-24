@@ -38,6 +38,14 @@ const plain = ({ kind, key, data }) => ({ kind, key, data });
 
 const hasData = (state) => diffRecords(toRecords(emptyState()), toRecords(state)).length > 0;
 
+const listed = (rec) => rec.kind === 'item' || rec.kind === 'recipe';
+
+// SYNC-2: `records` hold none of the items and recipes of `local`, and `local` holds some.
+const holdsNone = (local, records) => {
+  const known = [...local.values()].filter(listed);
+  return known.length > 0 && known.every((rec) => !records.has(recordKey(rec.kind, rec.key)));
+};
+
 // Returned by a run that a reset made stale: it stops with no save and no change of the state.
 const STALE = Symbol('stale');
 
@@ -50,9 +58,19 @@ export const createSyncer = ({
   onStatus = () => {},
   setTimer = setTimeout,
   clearTimer = clearTimeout,
+  // ACC-1: true when the start could not read `shopping.v1` and fell back to the empty state.
+  lost = false,
 }) => {
   let sync = loadSyncState(storage);
   let queue = loadQueue(storage);
+  // ACC-1: the account is pulled again in full, with the empty state as the base, so the lost
+  // state deletes nothing.
+  if (lost && sync.owner !== null) {
+    sync = { ...sync, local: toRecords(emptyState()), cursor: '' };
+    saveSyncState(storage, sync);
+  }
+  // The records of the last state that the syncer saw: at the start, of a save, or that it put in place.
+  let seen = toRecords(getState());
   let online = true;
   let lastRefresh = null;
   let running = null;
@@ -71,6 +89,20 @@ export const createSyncer = ({
     saveSyncState(storage, sync);
   };
 
+  const put = (next) => {
+    seen = toRecords(next);
+    setState(next);
+  };
+
+  // SYNC-2: a state that never held the items and recipes of the account since the start (a state
+  // that fell back to the empty one) does not delete them. A user who deletes them one by one, or an
+  // import (`explicit`, SYNC-9), still does.
+  const refused = (records, explicit) => {
+    if (explicit || !holdsNone(sync.local, records) || !holdsNone(sync.local, seen)) return false;
+    console.error('sync: a state with none of the items and recipes of the account is not sent');
+    return true;
+  };
+
   // The run only syncs for the user that a finished login made the owner of the stored data.
   const activeSession = () => {
     const session = loadSession(storage);
@@ -82,6 +114,8 @@ export const createSyncer = ({
   // login set (SYNC-8), so the default settings of a device with no data are no change.
   const catchUp = () => {
     const records = toRecords(getState());
+    if (refused(records, false)) return;
+    seen = records;
     const changes = diffRecords(sync.local, records);
     if (changes.length === 0) return;
     queue = enqueue(queue, changes);
@@ -91,8 +125,9 @@ export const createSyncer = ({
 
   // ACC-7: refresh an expired token, and any token after REFRESH_MS. The answer carries `approved`.
   // Resolves to a token, or to the result of the run when there is none to use.
-  const freshToken = async (session, live) => {
-    if (!tokenExpired(session.token, now()) && lastRefresh !== null && now() - lastRefresh <= REFRESH_MS) return { token: session.token };
+  // `force` refreshes any token (SYNC-6).
+  const freshToken = async (session, live, { force = false } = {}) => {
+    if (!force && !tokenExpired(session.token, now()) && lastRefresh !== null && now() - lastRefresh <= REFRESH_MS) return { token: session.token };
     let fresh;
     try {
       fresh = await client.refresh(session.token);
@@ -108,14 +143,22 @@ export const createSyncer = ({
 
   // SYNC-4: each change in order. A change leaves the queue only after the server took it, and the queue
   // is saved at once, so a run that stops resends nothing as a new record.
-  const pushAll = async (token, live) => {
+  const pushAll = async (session, firstToken, live) => {
+    let token = firstToken;
     for (let change = queue[0]; change; change = queue[0]) {
       let rec;
       try {
         rec = await client.push(token, change, sync.ids);
       } catch (error) {
         if (!live()) return STALE;
-        if (!badData(known(error))) return stopOf(error);
+        if (known(error).type === 'gone') {
+          // SYNC-6: a token that is not valid also finds no record. Only after a good refresh is
+          // the record gone for real; else the delete stays queued.
+          const fresh = await freshToken(loadSession(storage) ?? session, live, { force: true });
+          if (fresh.stop) return fresh.stop;
+          token = fresh.token;
+          rec = null;
+        } else if (!badData(error)) return stopOf(error);
         // The server refuses this data (`rec` stays undefined): the change stays local and the next
         // changes go on.
       }
@@ -151,7 +194,8 @@ export const createSyncer = ({
     for (const rec of pulled) ids.set(recordKey(rec.kind, rec.key), rec.id);
     queue = enqueue(queue, deduped.removed);
     const nextRecords = toRecords(next);
-    if (diffRecords(toRecords(getState()), nextRecords).length > 0) setState(next);
+    if (diffRecords(toRecords(getState()), nextRecords).length > 0) put(next);
+    else seen = nextRecords;
     // The validation can drop a meal or a `sent` id of a removed recipe: the server gets that too.
     queue = enqueue(queue, diffRecords(deduped.local, nextRecords));
     sync = { ...sync, server: merged.server, ids, local: nextRecords, cursor: cursorOf(pulled, sync.cursor) };
@@ -165,7 +209,7 @@ export const createSyncer = ({
     catchUp();
     const { token, stop } = await freshToken(session, live);
     if (stop) return { result: stop };
-    const stopped = await pushAll(token, live);
+    const stopped = await pushAll(session, token, live);
     if (stopped) return { result: stopped };
     let pulled;
     try {
@@ -224,9 +268,11 @@ export const createSyncer = ({
   // SYNC-2: the changes of a save against the last state that the syncer knows. The syncer never calls it
   // for its own setState. A device with no account keeps no queue. After an auth stop the change waits
   // in the queue for the login (ACC-7).
-  const notify = (state) => {
+  const notify = (state, { explicit = false } = {}) => {
     if (!activeSession()) return;
     const records = toRecords(state);
+    if (refused(records, explicit)) return;
+    seen = records;
     queue = enqueue(queue, diffRecords(sync.local, records));
     sync = { ...sync, local: records };
     persist();
@@ -244,13 +290,13 @@ export const createSyncer = ({
     lastRefresh = null;
     authStopped = false;
     clearAccountData(storage);
-    setState(emptyState());
+    put(emptyState());
   };
 
-  // The login is not finished: remove its session, so that it can start again.
-  const abandon = (error) => {
+  // The login is not finished: remove its session, so that it can start again. `keys` are removed too.
+  const abandon = (error, keys = []) => {
     try {
-      storage.removeItem(SESSION_KEY);
+      [SESSION_KEY, ...keys].forEach((key) => storage.removeItem(key));
     } catch {
       // Storage is not available: nothing is saved either.
     }
@@ -291,6 +337,7 @@ export const createSyncer = ({
         const records = toRecords(state);
         queue = enqueue(queue, diffRecords(new Map(), records));
         sync = { ...sync, local: records };
+        seen = records;
       } else if (plan === 'take-account') {
         // SYNC-8: the old list is saved first; with no copy of it the account does not replace it.
         try {
@@ -298,16 +345,23 @@ export const createSyncer = ({
         } catch (error) {
           abandon(error);
         }
-        const local = new Map(live.map((rec) => [recordKey(rec.kind, rec.key), plain(rec)]));
+        // The same path as a merge (SYNC-7): duplicates and malformed records go first. A state that
+        // the validation still refuses stops the login, and the local list stays.
         const server = new Map(pulled.map((rec) => [recordKey(rec.kind, rec.key), rec]));
+        const deduped = dedupe(new Map(live.map((rec) => [recordKey(rec.kind, rec.key), plain(rec)])), server);
+        const next = normalizeState(fromRecords(deduped.local));
+        if (next === null) abandon(new Error('sync: the validation refuses the data of the account'), [BEFORE_LOGIN_KEY]);
+        const local = toRecords(next);
         const ids = new Map(pulled.map((rec) => [recordKey(rec.kind, rec.key), rec.id]));
+        queue = enqueue(queue, [...deduped.removed, ...diffRecords(deduped.local, local)]);
         sync = { ...sync, local, server, ids, cursor: cursorOf(pulled, '') };
-        setState(normalizeState(fromRecords(local)) ?? emptyState());
+        put(next);
       }
     } else if (previousOwner === null) {
       // SYNC-8: a device with no local data takes the account. The state at the login is the base of
       // the first sync, so its default settings are not a change that would overwrite the account.
       sync = { ...sync, local: toRecords(state) };
+      seen = sync.local;
     }
     sync = { ...sync, owner: userId };
     persist();
