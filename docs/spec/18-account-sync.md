@@ -62,6 +62,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 - **SYNC-7** The merge removes a duplicate before the validation (STORE-6). Of two items or of two
   recipes with one name, with no regard to case, the record with the newer `updated` stays and the other
   gets a tombstone that the app sends. A meal or a `sent` id of a removed recipe is dropped.
+  The name is compared after a trim, as the validation does. The merge drops, with no tombstone, an item or
+  a recipe record whose `data.name` is not a string or whose `data.id` is not its `key`.
   The merge never gives a state that the validation refuses.
 - **SYNC-8** At the first login on a device with `shopping.v1` data:
   - an account with no data gets the local state as records;
