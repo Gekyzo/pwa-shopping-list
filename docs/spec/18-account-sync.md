@@ -24,7 +24,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   the password, **Entrar**, **¿Olvidaste la contraseña?** and the link to **Solicitar acceso**.
   **Solicitar acceso** has the Google button, the name, the email, the password (8 characters or more),
   **Enviar solicitud** and the link back to **Iniciar sesión**. **Esperando aprobación** has
-  **Comprobar de nuevo** and **Cerrar sesión**. The screens cover the app, the walkthrough too.
+  **Comprobar de nuevo** and **Cerrar sesión**. Their texts name the one who approves as the
+  administrator, never by a person's name. The screens cover the app, the walkthrough too.
   When the device has a list, **Iniciar sesión** and **Solicitar acceso** also have **Volver a la
   lista**; `Escape` and the back of the phone close them too, as a layer of NAV-25. A screen that
   cannot close is not a layer: the back closes the layer below it. An error shows below the fields: `account.error.wrongPassword`,
