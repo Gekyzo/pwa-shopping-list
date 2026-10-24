@@ -8,6 +8,7 @@ import {
   SHOP_LISTS_KEY,
   TRIP_END_KEY,
   load,
+  loadState,
   save,
   exportJson,
   exportFilename,
@@ -132,6 +133,14 @@ test('load treats valid JSON with an invalid shape as corrupt', () => {
   const storage = fakeStorage({ [STORAGE_KEY]: text });
   assert.deepEqual(load(storage), emptyState());
   assert.equal(storage.getItem(CORRUPT_KEY), text);
+});
+
+test('loadState says when the start fell back to the empty state from a stored state that cannot be read (ACC-1)', () => {
+  assert.deepEqual(loadState(fakeStorage({ [STORAGE_KEY]: '{not json' })), { state: emptyState(), lost: true });
+  assert.deepEqual(loadState(fakeStorage()), { state: emptyState(), lost: false });
+  const storage = fakeStorage();
+  save(storage, sample());
+  assert.deepEqual(loadState(storage), { state: sample(), lost: false });
 });
 
 test('load and save survive a storage that throws', () => {

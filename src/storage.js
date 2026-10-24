@@ -179,18 +179,24 @@ const parse = (text) => {
   }
 };
 
-export const load = (storage) => {
+// `lost` is true when a stored state cannot be read: the start falls back to the empty state, and
+// the sync must not take that for a change of the user (ACC-1).
+export const loadState = (storage) => {
+  let lost = false;
   try {
     const text = storage.getItem(STORAGE_KEY);
-    if (text === null) return emptyState();
+    if (text === null) return { state: emptyState(), lost };
     const state = normalizeState(parse(text).data);
-    if (state) return state;
+    if (state) return { state, lost };
+    lost = true;
     storage.setItem(CORRUPT_KEY, text);
   } catch {
     // Storage is not available: the app works in memory.
   }
-  return emptyState();
+  return { state: emptyState(), lost };
 };
+
+export const load = (storage) => loadState(storage).state;
 
 export const save = (storage, state) => {
   try {

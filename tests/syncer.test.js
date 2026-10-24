@@ -78,7 +78,8 @@ const fakeClient = (server, { approved = true } = {}) => {
       const failure = client.failPush?.(client.pushes, change, token);
       if (failure) throw failure;
       const owner = ownerOf(token);
-      const body = change.op === 'delete' ? { deleted: true, data: null } : { deleted: false, data: change.data };
+      // SYNC-6: a tombstone keeps its data, as the server does.
+      const body = change.op === 'delete' ? { deleted: true } : { deleted: false, data: change.data };
       const id = ids.get(recordKey(change.kind, change.key));
       let row = id ? server.rows.find((r) => r.id === id) : null;
       if (!row && change.op === 'delete') {
@@ -98,11 +99,11 @@ const fakeClient = (server, { approved = true } = {}) => {
 };
 
 // A device: its storage, its state and the syncer. The timer only runs when the test says so.
-const device = ({ server, user = 'u1', state = emptyState(), session = sessionOf(user), synced = true, approved } = {}) => {
-  const storage = fakeStorage();
+const device = ({ server, user = 'u1', state = emptyState(), session = sessionOf(user), synced = true, approved, storage: given, lost } = {}) => {
+  const storage = given ?? fakeStorage();
   const client = fakeClient(server, { approved });
-  if (session) saveSession(storage, session);
-  if (session && synced) saveSyncState(storage, { owner: session.user.id, cursor: '', server: new Map(), local: new Map(), ids: new Map() });
+  if (session && !given) saveSession(storage, session);
+  if (session && synced && !given) saveSyncState(storage, { owner: session.user.id, cursor: '', server: new Map(), local: new Map(), ids: new Map() });
   const box = { state, statuses: [], timers: [] };
   const syncer = createSyncer({
     client,
@@ -118,8 +119,13 @@ const device = ({ server, user = 'u1', state = emptyState(), session = sessionOf
       return box.timers.length;
     },
     clearTimer: () => {},
+    lost,
   });
-  return { storage, client, syncer, box, change: (next) => { box.state = next; syncer.notify(next); } };
+  const change = (next, options) => {
+    box.state = next;
+    syncer.notify(next, options);
+  };
+  return { storage, client, syncer, box, change };
 };
 
 test('a tick is queued, pushed, and the queue is empty after run', async () => {
@@ -674,4 +680,141 @@ test('a save before the first pull, while the account waits for approval, is kep
   await a.syncer.run();
   assert.deepEqual(a.box.state.items.map((i) => i.name), ['Pan']);
   assert.ok(server.live('u1').some((row) => row.key === 'i2'));
+});
+
+test('take-account with two items of one name keeps the account and sends one tombstone (SYNC-8, SYNC-7)', async () => {
+  const server = fakeServer();
+  server.add('u1', 'item', 'k1', { ...item('k1', 'Leche'), position: 0 });
+  server.add('u1', 'item', 'k2', { ...item('k2', 'leche'), position: 1 });
+  server.add('u1', 'item', 'k3', { ...item('k3', 'Pan'), position: 2 });
+  const local = withItems([item('i1', 'Huevos')]);
+  const b = device({ server, session: null, state: local });
+  assert.equal(await b.syncer.login(sessionOf('u1')), 'synced');
+  // The newer of the two stays.
+  assert.deepEqual(b.box.state.items.map((i) => i.name), ['leche', 'Pan']);
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['k2', 'k3', 'settings']);
+  assert.deepEqual(server.rows.filter((row) => row.deleted).map((row) => row.key), ['k1']);
+  assert.deepEqual(JSON.parse(b.storage.getItem(BEFORE_LOGIN_KEY)), local);
+  // A later run sends no delete of the account.
+  await b.syncer.run();
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['k2', 'k3', 'settings']);
+});
+
+test('take-account drops a malformed record and keeps the rest of the account (SYNC-8)', async () => {
+  const server = fakeServer();
+  server.add('u1', 'item', 'k1', { ...item('k1', 'Leche'), position: 0 });
+  server.add('u1', 'item', 'k2', { id: 'other', name: 'Pan', position: 1 });
+  const b = device({ server, session: null, state: withItems([item('i1', 'Huevos')]) });
+  assert.equal(await b.syncer.login(sessionOf('u1')), 'synced');
+  assert.deepEqual(b.box.state.items.map((i) => i.name), ['Leche']);
+  await b.syncer.run();
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['k1', 'k2', 'settings']);
+});
+
+test('take-account that the validation refuses stops the login and keeps the local list (SYNC-8)', async (t) => {
+  t.mock.method(console, 'error', () => {});
+  const server = fakeServer();
+  server.add('u1', 'item', 'k1', { ...item('k1', 'Leche'), position: 0 });
+  server.add('u1', 'item', 'k2', { ...item('k2', '   '), position: 1 });
+  const local = withItems([item('i1', 'Huevos')]);
+  const b = device({ server, session: null, state: local });
+  await assert.rejects(b.syncer.login(sessionOf('u1')));
+  assert.equal(b.box.state, local);
+  assert.equal(loadSession(b.storage), null);
+  assert.equal(b.storage.getItem(BEFORE_LOGIN_KEY), null);
+  assert.equal(loadSyncState(b.storage).owner, null);
+  assert.deepEqual(loadQueue(b.storage), []);
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['k1', 'k2']);
+});
+
+// A start whose `shopping.v1` could not be read: the same storage, and the empty state of load().
+const restart = (a, server, { lost } = {}) => device({ server, storage: a.storage, state: emptyState(), lost });
+
+test('a start whose state was lost pulls the account again and deletes nothing (ACC-1, I1)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan')]));
+  await a.syncer.run();
+  const again = restart(a, server, { lost: true });
+  assert.equal(loadSyncState(again.storage).cursor, '');
+  await again.syncer.run();
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['i1', 'i2', 'settings']);
+  assert.deepEqual(again.box.state.items.map((i) => i.name), ['Leche', 'Pan']);
+});
+
+test('a sync whose state holds none of the items and recipes of the account deletes nothing (SYNC-2)', async (t) => {
+  t.mock.method(console, 'error', () => {});
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan')]));
+  await a.syncer.run();
+  const again = restart(a, server);
+  await again.syncer.run();
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['i1', 'i2', 'settings']);
+  assert.ok(console.error.mock.callCount() >= 1);
+  // The merge puts the account back in place.
+  assert.deepEqual(again.box.state.items.map((i) => i.name), ['Leche', 'Pan']);
+});
+
+test('a save on a state that lost the account queues no delete of it (SYNC-2)', async (t) => {
+  t.mock.method(console, 'error', () => {});
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan')]));
+  await a.syncer.run();
+  const again = restart(a, server);
+  again.change(withItems([item('i9', 'Café')]));
+  assert.deepEqual(loadQueue(again.storage).filter((c) => c.op === 'delete'), []);
+  await again.syncer.run();
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['i1', 'i2', 'settings']);
+});
+
+test('the user can still delete every item, and an import can replace the account (SYNC-2, SYNC-9)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  await a.syncer.run();
+  a.change(withItems([]));
+  await a.syncer.run();
+  assert.deepEqual(server.live('u1').map((row) => row.key), ['settings']);
+  const b = restart(a, server);
+  b.change(withItems([item('i5', 'Café')]), { explicit: true });
+  await b.syncer.run();
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['i5', 'settings']);
+});
+
+test('an import marked explicit replaces an account that the state never held (SYNC-9)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan')]));
+  await a.syncer.run();
+  const b = restart(a, server);
+  b.change(withItems([item('i5', 'Café')]), { explicit: true });
+  await b.syncer.run();
+  assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['i5', 'settings']);
+});
+
+test('a delete that the server answers as gone checks the token: a refused refresh keeps it queued (SYNC-6, ACC-7)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  await a.syncer.run();
+  a.client.failPush = (_, change) => (change.op === 'delete' ? new PocketBaseError('gone', 404) : null);
+  a.client.failRefresh = new PocketBaseError('auth', 401);
+  a.change(withItems([]));
+  assert.equal(await a.syncer.run(), 'auth');
+  assert.deepEqual(loadQueue(a.storage).map((c) => [c.key, c.op]), [['i1', 'delete']]);
+});
+
+test('a delete that the server answers as gone after a good refresh leaves the queue (SYNC-6)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  await a.syncer.run();
+  a.client.failPush = (_, change) => (change.op === 'delete' ? new PocketBaseError('gone', 404) : null);
+  a.change(withItems([]));
+  const refreshes = a.client.calls.filter((c) => c === 'refresh').length;
+  assert.equal(await a.syncer.run(), 'ok');
+  assert.equal(a.client.calls.filter((c) => c === 'refresh').length, refreshes + 1);
+  assert.deepEqual(loadQueue(a.storage), []);
 });

@@ -89,7 +89,8 @@ export const createClient = ({ url, fetch, EventSource }) => {
 
   const patch = async (token, id, body) => serverRecOf(await call('PATCH', `${RECORDS}/${id}`, { token, body }));
 
-  const bodyOf = ({ op, data }) => (op === 'delete' ? { deleted: true, data: null } : { deleted: false, data });
+  // SYNC-6: a tombstone keeps its data, so only the flag changes.
+  const bodyOf = ({ op, data }) => (op === 'delete' ? { deleted: true } : { deleted: false, data });
 
   // SYNC-6: a delete never creates a record; with no record on the server it resolves to null.
   const patchFound = async (token, change) => {
@@ -160,7 +161,9 @@ export const createClient = ({ url, fetch, EventSource }) => {
     },
 
     // `ids` is keyed by recordKey(kind, key). Resolves to the server record, or null for a delete of
-    // a record that the server does not hold.
+    // a record that the server does not hold. A delete of a known record that the server does not
+    // find throws `gone`: a token that is not valid gets the same answers, so the syncer checks the
+    // token first (SYNC-6, ACC-7).
     push: async (token, change, ids) => {
       const id = ids.get(recordKey(change.kind, change.key));
       if (id) {
@@ -169,7 +172,11 @@ export const createClient = ({ url, fetch, EventSource }) => {
         } catch (error) {
           if (error.status !== 404) throw error;
           // The record is gone from the server: a delete has nothing left to do, an upsert creates it again.
-          if (change.op === 'delete') return patchFound(token, change);
+          if (change.op === 'delete') {
+            const found = await patchFound(token, change);
+            if (found === null) throw new PocketBaseError('gone', 404);
+            return found;
+          }
         }
       } else if (change.op === 'delete') {
         return patchFound(token, change);

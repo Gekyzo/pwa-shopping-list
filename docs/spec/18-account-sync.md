@@ -14,7 +14,12 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   The route never reads the clock: an expired token does not change it (ACC-6, ACC-7). The device has
   `shopping.v1` data when the state differs from the state of a new install, the settings too. So
   the empty list that a logout leaves opens **Iniciar sesión**, and a device with a list is never
-  locked out of it.
+  locked out of it. When `shopping.v1` cannot be read at the start (STORE-5), the app
+  starts with the empty state; with a session it then takes the empty state as the base of the sync
+  and pulls the whole account again, so the lost state deletes nothing on the server. A saved
+  session whose login is not finished (the question of ACC-8) refreshes its token before that
+  login goes on: an auth error opens **Iniciar sesión**, a network error keeps the list, and the next
+  start or `online` event tries again.
 - **ACC-2** Three screens cover the list. **Iniciar sesión** has the Google button, the email,
   the password, **Entrar**, **¿Olvidaste la contraseña?** and the link to **Solicitar acceso**.
   **Solicitar acceso** has the Google button, the name, the email, the password (8 characters or more),
@@ -86,7 +91,11 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   walkthrough.
 - **SYNC-2** Each save of the state is compared with the last state that the sync knows: the
   state of the last save or of the last merge. The upserts and the deletes go into the queue in
-  `shopping.queue`. The state, `Deshacer` and the pure modules do not change. A device with no
+  `shopping.queue`. The state, `Deshacer` and the pure modules do not change. A state that held
+  none of the items and recipes of the account since the start (a state that fell back to the
+  empty one) does not delete them: the app logs the refusal, queues nothing, and the next merge
+  puts the account back in place. The user who deletes them, one by one or all at once, and an
+  import (SYNC-9) still delete them. A device with no
   session, or whose login is not finished, keeps no queue. The state that a merge puts in place
   is not a save: it queues nothing by itself. Each sync first compares the state with the last
   state that the sync knows, so a save that was not queued (no approval, the question of ACC-8)
@@ -111,7 +120,11 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   network is logged, and the sync stops as offline.
 - **SYNC-5** A change that is queued wins over a pulled record of the same `kind` and `key`.
 - **SYNC-6** A delete is a record with `deleted: true`, so that the delete reaches the other devices.
-  A delete of a record that the server does not hold creates nothing. An upsert whose record is gone from the server creates it again.
+  The delete changes only that flag: the record keeps its `data`. A pulled record with `deleted`
+  counts as absent. A delete of a record that the server does not hold creates nothing. An upsert whose record is gone from the server creates it again.
+  A token that is not valid also finds no record, so a delete of a known record that the server
+  does not find refreshes the token first: after a good refresh the record is gone and the delete
+  leaves the queue; an auth error is an auth stop (ACC-7) and the delete stays queued.
 - **SYNC-7** The merge removes a duplicate before the validation (STORE-6). Of two items or of two
   recipes with one name, with no regard to case, the record with the newer `updated` stays and the other
   gets a tombstone that the app sends. A meal or a `sent` id of a removed recipe is dropped.
@@ -124,7 +137,11 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   - an account with no data gets the local state as records;
   - an account with data replaces the local state, and the old local state stays in
     `shopping.v1.beforeLogin`. The app offers it as an export file. It never merges two lists.
-    When the app cannot save that copy, the login stops and the local state stays.
+    When the app cannot save that copy, the login stops and the local state stays. The records of
+    the account go through the same steps as a merge (SYNC-7): a duplicate gets a tombstone and a
+    malformed record is dropped. When the validation still refuses them, the login stops, the
+    local state stays and `shopping.v1.beforeLogin` is removed again. The device never takes an
+    empty state in place of the account.
   - a device with no local data takes the data of the account, its settings too: the state at the
     login is the base of the first sync, so the default settings of the device are not a change
     and the sync does not send them.
@@ -133,10 +150,11 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   stop it.
 - **SYNC-9** The import (BACKUP-5) replaces the data of the account, so on every device. The next sync
   sends a tombstone for each record of the server that the import does not hold, and an upsert for the
-  others. With a session the question of the import is
+  others. The import is the one save that can replace the whole account with no regard to SYNC-2. With a session the question of the import is
   `import.confirmAccount` (BACKUP-5), which says so.
 - **SYNC-10** **Borrar todos los datos** (BACKUP-7) clears this device only: the state, the queue,
-  the last known server state and the token. It logs out and sends nothing. The data of the account
+  the last known server state and the token. It logs out and sends nothing. The sync stops first: a
+  sync in progress becomes stale and saves nothing, and the queue is dropped. The data of the account
   stays on the server. With a session the question of the reset is
   `reset.confirmLocal` (BACKUP-7), which says so.
 - **SYNC-11** While the device is offline, a note over the list says **Sin conexión · cambios
