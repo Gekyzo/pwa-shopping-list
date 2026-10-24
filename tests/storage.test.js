@@ -31,6 +31,10 @@ import {
   saveOnboarded,
   hasStoredState,
   SWIPE_HINT_KEY,
+  SESSION_KEY,
+  SYNC_KEY,
+  QUEUE_KEY,
+  BEFORE_LOGIN_KEY,
   loadSwipeHint,
   saveSwipeHint,
   APP_KEYS,
@@ -766,7 +770,7 @@ test('resetAll removes every key of the app and keeps the keys of other apps', (
 });
 
 test('APP_KEYS holds the state, its corrupt copy and each preference of the device', () => {
-  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY];
+  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY, SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY];
   assert.deepEqual([...APP_KEYS].sort(), [...keys].sort());
 });
 
