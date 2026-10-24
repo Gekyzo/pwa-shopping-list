@@ -98,8 +98,9 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   - an account with data replaces the local state, and the old local state stays in
     `shopping.v1.beforeLogin`. The app offers it as an export file. It never merges two lists.
     When the app cannot save that copy, the login stops and the local state stays.
-  - a device with no local data takes the data of the account, its settings too: the default
-    settings of the device are not a change, so the first sync sends nothing before its pull.
+  - a device with no local data takes the data of the account, its settings too: the state at the
+    login is the base of the first sync, so the default settings of the device are not a change
+    and the sync does not send them.
 
   A login starts a sync of its own; a sync in progress with the token of before the login cannot
   stop it.

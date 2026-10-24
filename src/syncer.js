@@ -77,10 +77,9 @@ export const createSyncer = ({
   };
 
   // SYNC-2: a save that notify did not queue (no approval, the question of ACC-8, a login in progress)
-  // is queued at the next run, so that the merge cannot overwrite it. Before the first pull there is no
-  // base to compare with: the pull decides, so default settings never overwrite the account (SYNC-8).
+  // is queued at the next run, so that the merge cannot overwrite it. The base is the state that the
+  // login set (SYNC-8), so the default settings of a device with no data are no change.
   const catchUp = () => {
-    if (sync.cursor === '') return;
     const records = toRecords(getState());
     const changes = diffRecords(sync.local, records);
     if (changes.length === 0) return;
