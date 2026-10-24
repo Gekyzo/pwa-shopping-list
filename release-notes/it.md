@@ -4,4 +4,4 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- `Impostazioni` › `Aiuto` › `Novità` mostra cosa cambia in ogni versione. Dopo un aggiornamento si apre da sola una volta.
