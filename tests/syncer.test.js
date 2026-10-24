@@ -868,3 +868,18 @@ test('a server error goes offline and also schedules a retry; a network error do
   assert.equal(await retryTimers(a.box)[0].fn(), 'ok');
   assert.equal(a.box.statuses.at(-1).online, true);
 });
+
+test('the status reports a new lastSync only after a run that reached the server (SYNC-11)', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.client.failPull = new PocketBaseError('network');
+  a.change(withItems([item('i1', 'Leche')]));
+  assert.equal(a.box.statuses.at(-1).lastSync, null);
+  await a.syncer.run();
+  assert.equal(a.box.statuses.at(-1).online, false);
+  assert.equal(a.box.statuses.at(-1).lastSync, null);
+  a.client.failPull = null;
+  await a.syncer.run();
+  assert.equal(a.box.statuses.at(-1).online, true);
+  assert.equal(a.box.statuses.at(-1).lastSync, '2026-10-24T08:00:00.000Z');
+});

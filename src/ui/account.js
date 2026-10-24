@@ -49,7 +49,14 @@ const close = () => {
 
 const onStatus = (next) => {
   const stopped = next.auth && !status.auth;
+  // SYNC-11: a sync that reached the server (its `lastSync` moved, online) proves the device is online,
+  // also when the browser sent no `online` event. The stream closed at the `offline` event opens again.
+  const reached = offline && next.online && next.lastSync !== status.lastSync;
   status = next;
+  if (reached) {
+    offline = false;
+    if (!stopped) connect();
+  }
   // ACC-7: an auth error shows Iniciar sesión over the list; the state and the queue stay.
   if (stopped) {
     disconnect();
@@ -417,6 +424,11 @@ export const goOnline = () => {
   const session = sessionNow();
   if (loginPending(session)) resumeLogin(session);
   else runAndConnect();
+};
+
+// SYNC-11: a device that shows again re-checks the browser, as some phones send no `online` event.
+export const goVisible = () => {
+  if (document.visibilityState === 'visible' && navigator.onLine) goOnline();
 };
 
 export const goOffline = () => {
