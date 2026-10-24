@@ -28,16 +28,21 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 - **ACC-6** A saved session opens the app at once, with no connection. The token and the user are
   stored on the device.
 - **ACC-7** A token counts as expired 60 s before its `exp` claim, or when the app cannot read it.
-  When online, the app refreshes the token. If the refresh fails with an auth error, the app
-  shows **Iniciar sesión**. It keeps the local state and the queue. A login of the same user
-  continues the sync.
+  Before the first request for data of a sync, the app refreshes the token when it is expired or
+  when the last refresh is more than 10 minutes old. The answer of the refresh carries `approved`:
+  an account that is no longer approved makes no request for data (ACC-4). The server answers a
+  token that is not valid as a guest, so a push refused with a 400 and no field error also counts
+  as an auth error. After an auth error the app shows **Iniciar sesión**. It keeps the local state
+  and the queue. A login of the same user continues the sync.
 - **ACC-8** A login of another user than the one of the stored data first clears the local data and
   the queue of the previous user. This clears `shopping.v1`, the session and the sync state, never
   a device preference. A device with no stored owner clears nothing. When the queue is not empty, the app first offers an export
-  (BACKUP-1).
+  (BACKUP-1). A queue with no stored owner counts as the queue of another user. After the export,
+  or when the user declines it, the login clears and continues.
 - **ACC-9** **Cerrar sesión** when online sends the queue first, then clears the local data, the
-  queue and the token. When offline with a queue that is not empty, the app warns that the
-  changes not sent are lost and offers an export first.
+  queue and the token. When the queue is still not empty after that (offline, or the sync
+  stopped), the app warns that the changes not sent are lost and offers an export first. After
+  the export, or when the user declines it, the logout clears the same data.
 - **ACC-10** `Ajustes` has the row **Cuenta**: the email, the time of the last sync and
   **Cerrar sesión**.
 - **ACC-11** With no session and with `shopping.v1` data, the list shows the banner
@@ -53,14 +58,24 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   the settings. A device preference does not sync: the language, the hand, the theme, the density,
   **Al terminar la compra**, the row of shop lists, the hint of the swipe and the flag of the
   walkthrough.
-- **SYNC-2** Each save of the state is compared with the last state that the server is known to
-  hold. The upserts and the deletes go into the queue in `shopping.queue`. The state, `Deshacer` and the
-  pure modules do not change.
-- **SYNC-3** A sync starts at the start of the app, at the `online` event, after a save (with a
-  delay) and at a realtime event of the server.
+- **SYNC-2** Each save of the state is compared with the last state that the sync knows: the
+  state of the last save or of the last merge. The upserts and the deletes go into the queue in
+  `shopping.queue`. The state, `Deshacer` and the pure modules do not change. A device with no
+  session, or whose login is not finished, keeps no queue. The state that a merge puts in place
+  is not a save: it queues nothing by itself.
+- **SYNC-3** A sync starts at the start of the app, at the `online` event, after a save (1.5 s
+  after the last save of a burst) and at a realtime event of the server. A sync that starts while
+  one runs is that same sync. When a merge queues changes (a tombstone of SYNC-7, a fix of the
+  validation), a sync starts 1.5 s later to send them.
 - **SYNC-4** A sync is online only and runs in this order: the app sends the queue in order,
   pulls each record with `updated` at or after the last cursor (a record pulled twice is harmless),
   merges the records into the state, and applies again the changes that are still queued.
+  A change leaves the queue, and the queue is saved, only after the server took it, so a sync that
+  stops sends no change twice as a new record. A network error or a server error (5xx) stops the
+  sync before the pull and keeps the changes not sent: the changes go in the order of the saves,
+  and a pull on the same connection fails too. The next sync starts again at the first change
+  not sent. A change that the server refuses as bad data (a 400 with field errors) leaves the
+  queue and stays local; the next changes go on.
 - **SYNC-5** A change that is queued wins over a pulled record of the same `kind` and `key`.
 - **SYNC-6** A delete is a record with `deleted: true`, so that the delete reaches the other devices.
   A delete of a record that the server does not hold creates nothing. An upsert whose record is gone from the server creates it again.
@@ -89,7 +104,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 
 The keys `shopping.session`, `shopping.sync`, `shopping.queue` and `shopping.v1.beforeLogin` are in
 the table of [08-storage.md](08-storage.md). `shopping.session` holds the token and the user.
-`shopping.sync` holds the last cursor and the last known server state. `shopping.queue` holds the
+`shopping.sync` holds the owner of the data, the last cursor, the last known server state, the
+records of the last state that the sync knows and the time of the last sync. `shopping.queue` holds the
 changes not sent.
 
 Limits: no sharing between users, and no merge of two lists. Two devices of one user can differ for

@@ -93,6 +93,9 @@ test('the queue and the sync state survive a save and a load', () => {
   const loaded = loadSyncState(storage);
   assert.ok(loaded.server instanceof Map && loaded.local instanceof Map && loaded.ids instanceof Map);
   assert.deepEqual(loaded, state);
+  const synced = { ...state, lastSync: '2026-10-24T08:00:00.000Z' };
+  saveSyncState(storage, synced);
+  assert.deepEqual(loadSyncState(storage), synced);
 });
 
 test('a corrupt or missing value loads as the empty one', () => {
