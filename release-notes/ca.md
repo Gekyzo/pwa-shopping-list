@@ -5,6 +5,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 ## Unreleased
 
 - Si el servidor demana esperar uns segons en pujar una llista llarga, l’app no mostra «Sense connexió» i torna a provar-ho sola.
+- A `Ajustes` › `Cuenta`, el correu i l’hora de l’última sincronització ja no se sobreposen en un telèfon: l’hora va sota el correu, i un correu llarg es trenca en diverses línies.
 
 ## 1.4.0 - 2026-10-24
 

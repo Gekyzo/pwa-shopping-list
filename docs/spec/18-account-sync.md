@@ -74,7 +74,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   After the export, or when the user declines it, the logout clears the same data. A sync that is in
   progress at the logout, or at a login that clears, saves nothing and changes no state after it.
 - **ACC-10** `Ajustes` has the row **Cuenta**: the email, the time of the last sync and
-  **Cerrar sesión**. With no session the group has **Inicia sesión para sincronizar**, which opens
+  **Cerrar sesión**. The time of the last sync is under the email, in the muted style, and a long
+  email wraps inside the row. With no session the group has **Inicia sesión para sincronizar**, which opens
   **Iniciar sesión** with **Volver a la lista**.
 - **ACC-11** With no session and with `shopping.v1` data, the list shows the banner
   **Inicia sesión para sincronizar**. The device works local-only until the user logs in. Its button
