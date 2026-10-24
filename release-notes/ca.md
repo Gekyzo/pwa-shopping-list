@@ -8,5 +8,5 @@ No change.
 
 ## 1.4.0 - 2026-10-24
 
-- Inicia la sessió per tenir les llistes a tots els dispositius. Sol·licita accés amb el teu correu o amb Google; en Ciro aprova cada compte. Un canvi en un dispositiu arriba als altres en segons, i sense connexió els canvis es desen i s’envien després. Si ja tens una llista, continua al dispositiu, i l’avís `Inicia la sessió per sincronitzar` et porta a iniciar la sessió.
+- Inicia la sessió per tenir les llistes a tots els dispositius. Sol·licita accés amb el teu correu o amb Google; l’administrador aprova cada compte. Un canvi en un dispositiu arriba als altres en segons, i sense connexió els canvis es desen i s’envien després. Si ja tens una llista, continua al dispositiu, i l’avís `Inicia la sessió per sincronitzar` et porta a iniciar la sessió.
 - `Configuració` › `Ajuda` › `Novetats` mostra què canvia en cada versió. Després d’una actualització, s’obre sola una vegada.

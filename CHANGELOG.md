@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- `Solicitar acceso` and `Esperando aprobación` name the administrator, not Ciro, as the one who approves an account; the 1.4.0 release notes say the same.
 
 ## 1.4.0 - 2026-10-24
 
