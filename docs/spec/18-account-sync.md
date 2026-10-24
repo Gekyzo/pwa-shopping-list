@@ -59,6 +59,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   merges the records into the state, and applies again the changes that are still queued.
 - **SYNC-5** A change that is queued wins over a pulled record of the same `kind` and `key`.
 - **SYNC-6** A delete is a record with `deleted: true`, so that the delete reaches the other devices.
+  A delete of a record that the server does not hold creates nothing.
 - **SYNC-7** The merge removes a duplicate before the validation (STORE-6). Of two items or of two
   recipes with one name, with no regard to case, the record with the newer `updated` stays and the other
   gets a tombstone that the app sends. A meal or a `sent` id of a removed recipe is dropped.
