@@ -10,6 +10,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   - a saved session, not approved: **Esperando aprobación**;
   - no session and no `shopping.v1` data: **Iniciar sesión**;
   - no session and `shopping.v1` data: the list as before, with the banner of ACC-11.
+
+  The route never reads the clock: an expired token does not change it (ACC-6, ACC-7).
 - **ACC-2** Three screens cover the list. **Iniciar sesión** has the Google button, the email,
   the password, **Entrar**, **¿Olvidaste la contraseña?** and the link to **Solicitar acceso**.
   **Solicitar acceso** has the Google button, the name, the email, the password (8 characters or more),
@@ -25,11 +27,13 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   `state` from the URL at once and keeps each other parameter, as ARR-4.
 - **ACC-6** A saved session opens the app at once, with no connection. The token and the user are
   stored on the device.
-- **ACC-7** When online, the app refreshes the token. If the refresh fails with an auth error, the app
+- **ACC-7** A token counts as expired 60 s before its `exp` claim, or when the app cannot read it.
+  When online, the app refreshes the token. If the refresh fails with an auth error, the app
   shows **Iniciar sesión**. It keeps the local state and the queue. A login of the same user
   continues the sync.
 - **ACC-8** A login of another user than the one of the stored data first clears the local data and
-  the queue of the previous user. When the queue is not empty, the app first offers an export
+  the queue of the previous user. This clears `shopping.v1`, the session and the sync state, never
+  a device preference. A device with no stored owner clears nothing. When the queue is not empty, the app first offers an export
   (BACKUP-1).
 - **ACC-9** **Cerrar sesión** when online sends the queue first, then clears the local data, the
   queue and the token. When offline with a queue that is not empty, the app warns that the

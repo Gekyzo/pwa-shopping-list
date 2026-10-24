@@ -20,6 +20,8 @@
 | `src/records.js` | The state as one record for each item, recipe, meal and the settings, and the diff of two sets of records (SYNC-1, SYNC-2) | nothing |
 | `src/sync.js` | The queue of record changes, the merge of pulled records and the duplicates (SYNC-5, SYNC-6, SYNC-7) | `records` |
 | `src/pocketbase.js` | The client of the PocketBase server: sign-in, token refresh, pull, push and the realtime stream (ACC-12, SYNC-4, SYNC-6) | `records` |
+| `src/session.js` | The session, the sync state and the queue in the storage, the token expiry, the start route and the login rules (ACC-1, ACC-7, ACC-8, SYNC-8) | `storage` |
+| `src/config.js` | The API URL for the host that serves the app (ACC-12) | nothing |
 | `src/version.js` | Pure version rules | nothing |
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
@@ -101,6 +103,8 @@
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key and the device preferences |
 | `tests/records.test.js` | The state to records and back, the diff of two sets of records |
 | `tests/pocketbase.test.js` | The PocketBase client against a fake `fetch` and a fake `EventSource` |
+| `tests/session.test.js` | The session storage, the token expiry, the start route and the login rules |
+| `tests/config.test.js` | The API URL for each host |
 | `tests/sync.test.js` | The queue, the merge of pulled records, the duplicates and the cursor |
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sw.test.js` | The manifest text that the worker puts in place, with the names of the shortcuts (SW-13) |

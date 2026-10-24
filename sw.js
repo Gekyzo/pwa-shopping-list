@@ -44,6 +44,8 @@ const SHELL = [
   './src/records.js',
   './src/sync.js',
   './src/pocketbase.js',
+  './src/session.js',
+  './src/config.js',
   './src/version.js',
   './src/i18n.js',
   './src/locales/ca.js',
