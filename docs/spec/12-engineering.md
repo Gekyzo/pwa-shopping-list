@@ -18,6 +18,7 @@
 | `src/suggest.js` | The rows above the add input: create first, then the matching items, and which are in the list | `store` |
 | `src/storage.js` | Load, save, export, import, validation, the language key and the device preferences | `store`, `recipes`, `menu` |
 | `src/records.js` | The state as one record for each item, recipe, meal and the settings, and the diff of two sets of records (SYNC-1, SYNC-2) | nothing |
+| `src/sync.js` | The queue of record changes, the merge of pulled records and the duplicates (SYNC-5, SYNC-6, SYNC-7) | `records` |
 | `src/version.js` | Pure version rules | nothing |
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
@@ -98,6 +99,7 @@
 | `tests/menu.test.js` | The meals of the week and the fill |
 | `tests/storage.test.js` | Load, save, validation, migration, export, import, the language key and the device preferences |
 | `tests/records.test.js` | The state to records and back, the diff of two sets of records |
+| `tests/sync.test.js` | The queue, the merge of pulled records, the duplicates and the cursor |
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sw.test.js` | The manifest text that the worker puts in place, with the names of the shortcuts (SW-13) |
 | `tests/layer-order.test.js` | The open sheet and the order of the layers that `Escape` and the back close (NAV-25) |
