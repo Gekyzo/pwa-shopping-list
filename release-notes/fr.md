@@ -4,6 +4,10 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+No change.
+
+## 1.4.1 - 2026-10-24
+
 - Quand le serveur demande d’attendre quelques secondes pendant l’envoi d’une longue liste, l’app n’affiche plus « Hors ligne » et réessaie toute seule.
 - Dans `Réglages` › `Compte`, l’e-mail et l’heure de la dernière synchronisation ne se chevauchent plus sur un téléphone : l’heure est sous l’e-mail, et un long e-mail passe à la ligne.
 - La note « Hors ligne » disparaît maintenant d’elle-même quand une synchronisation atteint le serveur, même si le téléphone ne signale pas le retour du réseau, et quand vous revenez dans l’app.

@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.4.1 - 2026-10-24
+
 - Si el servidor pide esperar unos segundos al subir una lista larga, la app ya no muestra «Sin conexión» y lo reintenta sola.
 - En `Ajustes` › `Cuenta`, el correo y la hora de la última sincronización ya no se superponen en un teléfono: la hora va debajo del correo, y un correo largo se parte en varias líneas.
 - La nota «Sin conexión» ahora se quita sola cuando una sincronización llega al servidor, también si el teléfono no avisa de que volvió la red, y al volver a la app.

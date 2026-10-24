@@ -4,6 +4,10 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+No change.
+
+## 1.4.1 - 2026-10-24
+
 - Se o servidor pedir para esperar alguns segundos ao enviar uma lista longa, a app já não mostra «Sem ligação» e tenta de novo sozinha.
 - Em `Definições` › `Conta`, o e-mail e a hora da última sincronização já não se sobrepõem num telemóvel: a hora fica por baixo do e-mail, e um e-mail longo passa para várias linhas.
 - A nota «Sem ligação» agora desaparece sozinha quando uma sincronização chega ao servidor, mesmo que o telemóvel não avise que a rede voltou, e ao voltar à app.
