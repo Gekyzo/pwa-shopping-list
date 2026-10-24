@@ -26,7 +26,7 @@ const client = storage
 // The screen in view, or null; and whether it can close back to the list (the device has a list).
 let screen = null;
 let closable = false;
-let status = { online: true, pending: 0, lastSync: null, auth: false };
+let status = { online: true, pending: 0, lastSync: null, auth: false, reached: 0 };
 let offline = !navigator.onLine;
 // The close function of the realtime stream (SYNC-3), or null.
 let stream = null;
@@ -49,9 +49,9 @@ const close = () => {
 
 const onStatus = (next) => {
   const stopped = next.auth && !status.auth;
-  // SYNC-11: a sync that reached the server (its `lastSync` moved, online) proves the device is online,
+  // SYNC-11: a sync that reached the server (its `reached` counter grew) proves the device is online,
   // also when the browser sent no `online` event. The stream closed at the `offline` event opens again.
-  const reached = offline && next.online && next.lastSync !== status.lastSync;
+  const reached = offline && next.online && next.reached !== status.reached;
   status = next;
   if (reached) {
     offline = false;
@@ -282,7 +282,7 @@ const google = (name) =>
       sessionStorage.setItem(OAUTH_KEY, JSON.stringify(pending));
       location.assign(url);
     } catch (error) {
-      showError(name, error?.type === 'network' || error?.type === 'server' ? errorKey(error) : 'account.error.google');
+      showError(name, error?.type === 'network' || error?.type === 'server' || error?.type === 'rate' ? errorKey(error) : 'account.error.google');
     }
   });
 
@@ -308,7 +308,7 @@ export const finishOAuth = async ({ code, state: returned }) => {
     try {
       session = await client.oauthFinish({ code, state: returned }, pending, redirectUrl());
     } catch (error) {
-      showError('login', error?.type === 'network' || error?.type === 'server' ? errorKey(error) : 'account.error.google');
+      showError('login', error?.type === 'network' || error?.type === 'server' || error?.type === 'rate' ? errorKey(error) : 'account.error.google');
       return;
     }
     await enter(session);
