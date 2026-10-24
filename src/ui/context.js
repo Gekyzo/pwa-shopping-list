@@ -198,6 +198,12 @@ export const setRender = (fn) => {
 };
 export const render = () => renderer();
 
+// The function that a save calls, with the saved state: the sync queues the change (SYNC-2, SYNC-3).
+let afterCommit = null;
+export const setAfterCommit = (fn) => {
+  afterCommit = fn;
+};
+
 export const commit = (next) => {
   if (DEV) {
     const lines = debugDiff(state, next);
@@ -206,6 +212,7 @@ export const commit = (next) => {
   state = next;
   ui.animate = true;
   const saved = storage !== null && save(storage, state);
+  if (saved && afterCommit) afterCommit(state);
   render();
   return saved;
 };

@@ -54,7 +54,13 @@ export const loadSyncState = (storage) => {
     typeof data.cursor === 'string' &&
     MAPS.every((name) => Array.isArray(data[name]) && data[name].every((entry) => Array.isArray(entry) && entry.length === 2));
   if (!valid) return emptySyncState();
-  return { owner: data.owner, cursor: data.cursor, ...Object.fromEntries(MAPS.map((name) => [name, new Map(data[name])])) };
+  return {
+    owner: data.owner,
+    cursor: data.cursor,
+    ...Object.fromEntries(MAPS.map((name) => [name, new Map(data[name])])),
+    // The time of the last sync, for the row Cuenta (ACC-10). Absent until a first sync.
+    ...(typeof data.lastSync === 'string' ? { lastSync: data.lastSync } : {}),
+  };
 };
 
 export const saveSyncState = (storage, state) =>
@@ -62,6 +68,7 @@ export const saveSyncState = (storage, state) =>
     owner: state.owner,
     cursor: state.cursor,
     ...Object.fromEntries(MAPS.map((name) => [name, [...state[name]]])),
+    lastSync: state.lastSync ?? null,
   });
 
 export const loadQueue = (storage) => {

@@ -21,12 +21,13 @@
 | `src/sync.js` | The queue of record changes, the merge of pulled records and the duplicates (SYNC-5, SYNC-6, SYNC-7) | `records` |
 | `src/pocketbase.js` | The client of the PocketBase server: sign-in, token refresh, pull, push and the realtime stream (ACC-12, SYNC-4, SYNC-6) | `records` |
 | `src/session.js` | The session, the sync state and the queue in the storage, the token expiry, the start route and the login rules (ACC-1, ACC-7, ACC-8, SYNC-8) | `storage` |
+| `src/syncer.js` | The sync driver: it queues each save, sends the queue, pulls and merges the account, and runs the login and the logout of the account (ACC-4, ACC-7 to ACC-9, SYNC-2 to SYNC-9) | `records`, `sync`, `session`, `storage`, `store` |
 | `src/config.js` | The API URL for the host that serves the app (ACC-12) | nothing |
 | `src/version.js` | Pure version rules | nothing |
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
-| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
+| `src/ui/context.js` | The values that the views share, their setters, the toast, the save, the function called after a save (`setAfterCommit`) and `render` | `store`, `storage`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and the `Guardado` of a sheet save | `sheets`, `ui/context` |
@@ -104,6 +105,8 @@
 | `tests/records.test.js` | The state to records and back, the diff of two sets of records |
 | `tests/pocketbase.test.js` | The PocketBase client against a fake `fetch` and a fake `EventSource` |
 | `tests/session.test.js` | The session storage, the token expiry, the start route and the login rules |
+| `tests/syncer.test.js` | The sync driver against a fake server: the queue, the push and the pull, two devices, the errors, the token refresh, the login and the logout, the import |
+| `tests/context.test.js` | The save of `commit` and the function that it calls after a save |
 | `tests/config.test.js` | The API URL for each host |
 | `tests/sync.test.js` | The queue, the merge of pulled records, the duplicates and the cursor |
 | `tests/swipe.test.js` | The settle rule of a row slide |
