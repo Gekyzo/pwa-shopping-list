@@ -43,6 +43,7 @@ const SHELL = [
   './src/storage.js',
   './src/records.js',
   './src/sync.js',
+  './src/pocketbase.js',
   './src/version.js',
   './src/i18n.js',
   './src/locales/ca.js',
