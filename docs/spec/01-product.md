@@ -30,6 +30,8 @@ next trip is almost ready.
   URL is the API (ACC-12).
 - **PROD-9** A destructive action has no confirmation. `Deshacer` restores the state for 5 seconds
   instead. The import of a backup is the exception: it asks first, and it also has `Deshacer`.
+  A state that the sync puts in place (SYNC-4) removes the message and its `Deshacer`: the old
+  state would undo the change of the other device and send that as a change of the user.
 
 ## Functions
 

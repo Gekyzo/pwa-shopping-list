@@ -30,7 +30,7 @@ import {
   download,
 } from '#ui/context';
 import { renderOnboarding } from '#ui/onboarding';
-import { signedIn } from '#ui/account';
+import { signedIn, stopSync } from '#ui/account';
 
 // The value of a row of Preferencias is the text of the option that the select has.
 const renderValues = () => {
@@ -165,9 +165,11 @@ export const bind = () => {
   });
   // The app starts again as a new install, with the walkthrough (BACKUP-7). With no storage the data is
   // only in memory, so the reload alone clears it. With a session it clears this device only and logs
-  // out: the account keys are in APP_KEYS, so the reload opens Iniciar sesión (SYNC-10).
-  $('reset').addEventListener('click', () => {
+  // out: the account keys are in APP_KEYS, so the reload opens Iniciar sesión (SYNC-10). The sync stops
+  // first, so that a sync in progress cannot save its keys again after the reset.
+  $('reset').addEventListener('click', async () => {
     if (!window.confirm(t(signedIn() ? 'reset.confirmLocal' : 'reset.confirm'))) return;
+    await stopSync();
     if (storage && !resetAll(storage)) {
       showToast(t('error.resetFailed'));
       return;
@@ -219,6 +221,6 @@ export const bind = () => {
     };
     // SYNC-9: with a session the import replaces the data of the account, on every device.
     if (!window.confirm(t(signedIn() ? 'import.confirmAccount' : 'import.confirm', found))) return;
-    apply(result, { undoText: t('toast.imported') });
+    apply(result, { undoText: t('toast.imported'), explicit: true });
   });
 };

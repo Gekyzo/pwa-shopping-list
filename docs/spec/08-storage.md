@@ -40,7 +40,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 
 - **STORE-5** A stored state is used only when it is valid. If not, the app copies the stored text
   to `shopping.v1.corrupt` and starts with the empty state. The first change then replaces
-  `shopping.v1`.
+  `shopping.v1`. With a session the sync then pulls the account again (ACC-1).
 - **STORE-6** A state is not valid when one of these is true:
   - it is not an object, its `version` is not 1 to 9, or `items` is not a list;
   - `recipes` is not a list, in version 2 to 9;
@@ -119,7 +119,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   else changes. The caches stay. With a session the question is `reset.confirmLocal`: `¿Borrar los datos de
   este dispositivo? Se borran las listas, las recetas, el menú, las secciones y las preferencias, y
   se cierra la sesión. Los datos de tu cuenta se conservan en el servidor.` A yes also logs out
-  (SYNC-10, [18-account-sync.md](18-account-sync.md)).
+  (SYNC-10, [18-account-sync.md](18-account-sync.md)). A yes first stops the sync, so that a sync in
+  progress cannot save the keys of the account again after the removal.
 
 ## Loss of data
 

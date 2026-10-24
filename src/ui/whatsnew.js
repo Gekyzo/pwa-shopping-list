@@ -61,8 +61,8 @@ export const startWhatsNew = async (running) => {
   const entries = await loadNotes();
   $('show-whatsnew').hidden = !entries?.length;
   if (!storage || !running) return;
-  // The walkthrough or another sheet covers the screen: the notes wait for the next start.
-  const blocked = ui.onboarding !== null || document.querySelector('.sheet-layer:not([hidden])') !== null;
+  // The walkthrough, an account screen or another sheet covers the screen: the notes wait for the next start.
+  const blocked = ui.onboarding !== null || !$('auth').hidden || document.querySelector('.sheet-layer:not([hidden])') !== null;
   const { show, store } = nextSeen({ entries: entries ?? [], seen: loadSeen(storage), running: running.version, loaded: entries !== null, blocked });
   const save = () => store && saveSeen(storage, store);
   if (show.length) openWhatsNew(show, { done: save });

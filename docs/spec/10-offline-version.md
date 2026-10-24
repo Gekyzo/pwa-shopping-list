@@ -119,7 +119,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   (`shopping.seen-version`) and the running version (`nextSeen`):
   - nothing stored (a first start, or a start from before this rule): it stores the running
     version and shows nothing;
-  - no notes could be read, or the walkthrough or another sheet covers the screen: it shows and
+  - no notes could be read, or the walkthrough, an account screen (ACC-2) or another sheet covers the screen: it shows and
     stores nothing, and the next start tries again;
   - the notes have versions after the seen one and not after the running one: the **Novedades**
     sheet shows them (VER-21), and its close stores the newest of them. A running version whose
