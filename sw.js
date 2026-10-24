@@ -41,6 +41,7 @@ const SHELL = [
   './src/sheets.js',
   './src/suggest.js',
   './src/storage.js',
+  './src/records.js',
   './src/version.js',
   './src/i18n.js',
   './src/locales/ca.js',
