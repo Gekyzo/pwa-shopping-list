@@ -1,4 +1,4 @@
-import { test } from 'node:test';
+import { test, mock } from 'node:test';
 import assert from 'node:assert/strict';
 import { createSyncer } from '#syncer';
 import { PocketBaseError } from '#pocketbase';
@@ -63,6 +63,7 @@ const fakeClient = (server, { approved = true } = {}) => {
     },
     pull: async (token, since) => {
       calls.push('pull');
+      if (client.hold) await client.hold('pull');
       if (client.failPull) throw client.failPull;
       const owner = ownerOf(token);
       return server.rows
@@ -72,6 +73,7 @@ const fakeClient = (server, { approved = true } = {}) => {
     },
     push: async (token, change, ids) => {
       calls.push('push');
+      if (client.hold) await client.hold('push');
       client.pushes += 1;
       const failure = client.failPush?.(client.pushes, change);
       if (failure) throw failure;
@@ -207,15 +209,15 @@ test('the token is refreshed before the data requests, and again after 10 minute
   saveSession(storage, sessionOf('u1'));
   saveSyncState(storage, { owner: 'u1', cursor: '', server: new Map(), local: new Map(), ids: new Map() });
   const syncer = createSyncer({ client, storage, getState: emptyState, setState() {}, now: () => clock, setTimer() {}, clearTimer() {} });
-  // The first pull of an empty account gives default settings, which the second run sends.
+  // The empty state differs from the empty account by its settings record, which the first run sends.
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'push', 'pull']);
   assert.notEqual(loadSession(storage).token, sessionOf('u1').token);
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'pull', 'push', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'pull']);
   clock += 10 * 60_000 + 1;
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'pull', 'push', 'pull', 'refresh', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'pull', 'refresh', 'pull']);
 });
 
 test('an expired token is refreshed even right after a refresh', async () => {
@@ -232,7 +234,7 @@ test('an expired token is refreshed even right after a refresh', async () => {
   const syncer = createSyncer({ client, storage, getState: emptyState, setState() {}, now: () => Date.now(), setTimer() {}, clearTimer() {} });
   await syncer.run();
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'pull', 'refresh', 'push', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'refresh', 'pull']);
 });
 
 test('a refresh that says the user is no longer approved makes no data request (ACC-4)', async () => {
@@ -311,6 +313,8 @@ test('a duplicate name from another device gets a tombstone (SYNC-7)', async () 
   assert.equal(a.box.timers.length, timers + 1);
   await a.box.timers.at(-1).fn();
   assert.deepEqual(server.live('u1').filter((row) => row.kind === 'item').map((row) => row.key), ['i9']);
+  assert.deepEqual(loadQueue(a.storage), []);
+  assert.equal(a.box.timers.length, timers + 1);
 });
 
 test('login with local data and an empty account uploads it', async () => {
@@ -330,7 +334,8 @@ test('login with local data and an account with data takes the account and keeps
   assert.equal(await a.syncer.login(sessionOf('u1')), 'synced');
   assert.deepEqual(a.box.state.items.map((i) => i.name), ['Café']);
   assert.deepEqual(JSON.parse(a.storage.getItem(BEFORE_LOGIN_KEY)), local);
-  assert.deepEqual(server.live('u1').map((row) => row.key), ['k1']);
+  // The local list is not uploaded: only the settings of the normalized account state are new.
+  assert.deepEqual(server.live('u1').map((row) => row.key), ['k1', 'settings']);
 });
 
 test('login of an account that is not approved returns waiting and makes no request', async () => {
@@ -362,7 +367,7 @@ test('login with discard clears the other user and continues', async () => {
   a.change(withItems([item('i1', 'Leche')]));
   assert.equal(await a.syncer.login(sessionOf('u2'), { discard: true }), 'synced');
   assert.deepEqual(a.box.state.items.map((i) => i.name), ['Café']);
-  assert.deepEqual(loadQueue(a.storage).map((change) => change.kind), ['settings']);
+  assert.deepEqual(loadQueue(a.storage), []);
   assert.equal(loadSession(a.storage).user.id, 'u2');
   assert.equal(server.live('u1').length, 0);
 });
@@ -420,4 +425,158 @@ test('an import replaces the account', async () => {
   await a.syncer.run();
   assert.deepEqual(server.live('u1').map((row) => row.key).sort(), ['i3', 'settings']);
   assert.deepEqual(server.rows.filter((row) => row.deleted).map((row) => row.key).sort(), ['i1', 'i2']);
+});
+
+// Holds the next request of `op` until the test releases it; `entered` resolves when it is waiting.
+const holdOnce = (client, op) => {
+  let release;
+  let entered;
+  const gate = new Promise((resolve) => (release = resolve));
+  const waiting = new Promise((resolve) => (entered = resolve));
+  client.hold = (name) => {
+    if (name !== op) return null;
+    client.hold = null;
+    entered();
+    return gate;
+  };
+  return { release, waiting };
+};
+
+test('a save during a push in progress is kept and sent', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  const held = holdOnce(a.client, 'push');
+  const running = a.syncer.run();
+  await held.waiting;
+  a.change(withItems([item('i1', 'Leche', { bought: true })]));
+  held.release();
+  assert.equal(await running, 'ok');
+  assert.deepEqual(loadQueue(a.storage), []);
+  assert.equal(server.live('u1').find((row) => row.key === 'i1').data.bought, true);
+  assert.equal(a.box.state.items[0].bought, true);
+});
+
+test('a save during a pull in progress is kept and sent', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  await a.syncer.run();
+  const held = holdOnce(a.client, 'pull');
+  const running = a.syncer.run();
+  await held.waiting;
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan')]));
+  held.release();
+  assert.equal(await running, 'ok');
+  assert.deepEqual(a.box.state.items.map((i) => i.name), ['Leche', 'Pan']);
+  await a.box.timers.at(-1).fn();
+  assert.deepEqual(loadQueue(a.storage), []);
+  assert.ok(server.live('u1').some((row) => row.key === 'i2'));
+});
+
+test('a logout during a run in progress leaves the storage cleared, and the next login syncs in full', async () => {
+  const server = fakeServer();
+  server.add('u2', 'item', 'k1', { ...item('k1', 'Café'), position: 0 });
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  const held = holdOnce(a.client, 'push');
+  const running = a.syncer.run();
+  await held.waiting;
+  assert.equal(await a.syncer.logout({ online: false, discard: true }), 'done');
+  held.release();
+  await running;
+  assert.deepEqual(a.storage.keys(), []);
+  assert.deepEqual(a.box.state, emptyState());
+  assert.equal(await a.syncer.login(sessionOf('u2')), 'synced');
+  assert.deepEqual(a.box.state.items.map((i) => i.name), ['Café']);
+  assert.equal(loadSyncState(a.storage).owner, 'u2');
+  // The push in flight at the logout reached the server; the stale run sent nothing after it.
+  assert.deepEqual(server.live('u1').map((row) => row.key), ['i1']);
+});
+
+test('a save made while the account waits for approval is kept at the next login', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  await a.syncer.run();
+  a.client.approved = false;
+  a.client.calls.length = 0;
+  // The refresh after 10 minutes is forced by an expired token.
+  saveSession(a.storage, { ...sessionOf('u1'), token: `${base64url({})}.${base64url({ id: 'u1', exp: 1 })}.sig` });
+  assert.equal(await a.syncer.run(), 'ok');
+  assert.equal(loadSession(a.storage).user.approved, false);
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan')]));
+  assert.deepEqual(loadQueue(a.storage), []);
+  a.client.approved = true;
+  assert.equal(await a.syncer.login(sessionOf('u1')), 'synced');
+  assert.deepEqual(a.box.state.items.map((i) => i.name), ['Leche', 'Pan']);
+  assert.ok(server.live('u1').some((row) => row.key === 'i2'));
+});
+
+test('after an auth stop a save makes no request until a login', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  a.client.failRefresh = new PocketBaseError('auth', 401);
+  assert.equal(await a.syncer.run(), 'auth');
+  a.client.failRefresh = null;
+  const timers = a.box.timers.length;
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan')]));
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan'), item('i3', 'Sal')]));
+  assert.equal(a.box.timers.length, timers);
+  assert.equal(await a.syncer.run(), 'auth');
+  assert.deepEqual(a.client.calls, ['refresh']);
+  assert.equal(loadQueue(a.storage).length, 4);
+  assert.equal(await a.syncer.login(sessionOf('u1')), 'synced');
+  assert.deepEqual(loadQueue(a.storage), []);
+  assert.equal(server.live('u1').length, 4);
+});
+
+test('a pulled record that the validation refuses changes no state, no queue and no cursor', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  await a.syncer.run();
+  const state = a.box.state;
+  const cursor = loadSyncState(a.storage).cursor;
+  const timers = a.box.timers.length;
+  server.add('u1', 'item', 'i5', { ...item('i5', 'Bad'), list: 'bogus', position: 1 });
+  assert.equal(await a.syncer.run(), 'ok');
+  assert.equal(a.box.state, state);
+  assert.deepEqual(loadQueue(a.storage), []);
+  assert.equal(loadSyncState(a.storage).cursor, cursor);
+  assert.equal(a.box.timers.length, timers);
+});
+
+test('a failed save of the old list stops the login and keeps the local list', async () => {
+  const server = fakeServer();
+  server.add('u1', 'item', 'k1', { ...item('k1', 'Café'), position: 0 });
+  const local = withItems([item('i1', 'Leche')]);
+  const a = device({ server, session: null, state: local });
+  const setItem = a.storage.setItem;
+  a.storage.setItem = (key, value) => {
+    if (key === BEFORE_LOGIN_KEY) throw new Error('quota');
+    return setItem(key, value);
+  };
+  await assert.rejects(a.syncer.login(sessionOf('u1')), /quota/);
+  assert.equal(a.box.state, local);
+  assert.equal(loadSession(a.storage), null);
+  assert.equal(loadSyncState(a.storage).owner, null);
+  assert.deepEqual(loadQueue(a.storage), []);
+});
+
+test('an error that is not of the client is logged and the run stops as offline', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  const logged = mock.method(console, 'error', () => {});
+  try {
+    a.client.pull = async () => {
+      throw new TypeError('bug');
+    };
+    assert.equal(await a.syncer.run(), 'offline');
+    assert.equal(logged.mock.callCount(), 1);
+    assert.equal(a.box.statuses.at(-1).online, false);
+  } finally {
+    logged.mock.restore();
+  }
 });

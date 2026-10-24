@@ -212,8 +212,15 @@ export const commit = (next) => {
   state = next;
   ui.animate = true;
   const saved = storage !== null && save(storage, state);
-  if (saved && afterCommit) afterCommit(state);
   render();
+  // After the render: an error of the sync never leaves the screen behind the state.
+  if (saved && afterCommit) {
+    try {
+      afterCommit(state);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return saved;
 };
 
