@@ -132,6 +132,48 @@ test('push of a change refused by the unique index patches the existing record',
   assert.deepEqual(rec.data, { n: 3 });
 });
 
+test('push of an upsert whose known id answers 404 creates the record', async () => {
+  const { calls, client } = fake(reply(404, { data: {} }), reply(200, serverRow({ id: 'r9' })));
+  const rec = await client.push(TOKEN, { kind: 'item', key: 'a', op: 'upsert', data: { n: 1 } }, new Map([['item:a', 'r1']]));
+  assert.deepEqual(calls.map((c) => c.method), ['PATCH', 'POST']);
+  assert.equal(calls[1].body.owner, 'user1');
+  assert.equal(rec.id, 'r9');
+});
+
+test('push of an upsert whose known id answers 404 patches the record found by kind and key', async () => {
+  const { calls, client } = fake(reply(404, {}), unique, reply(200, { items: [serverRow({ id: 'r7' })], totalPages: 1 }), reply(200, serverRow({ id: 'r7' })));
+  const rec = await client.push(TOKEN, { kind: 'item', key: 'a', op: 'upsert', data: { n: 1 } }, new Map([['item:a', 'r1']]));
+  assert.deepEqual(calls.map((c) => c.method), ['PATCH', 'POST', 'GET', 'PATCH']);
+  assert.equal(calls[3].url.pathname, '/api/collections/shopping_records/records/r7');
+  assert.equal(rec.id, 'r7');
+});
+
+test('push of a delete whose known id answers 404 and has no record resolves null', async () => {
+  const { calls, client } = fake(reply(404, {}), reply(200, { items: [], totalPages: 0 }));
+  assert.equal(await client.push(TOKEN, { kind: 'item', key: 'a', op: 'delete' }, new Map([['item:a', 'r1']])), null);
+  assert.equal(calls.length, 2);
+});
+
+test('a token with no readable id is an auth error and sends no create', async () => {
+  const { calls, client } = fake();
+  await assert.rejects(client.push('garbage', { kind: 'item', key: 'a', op: 'upsert', data: {} }, new Map()), { type: 'auth' });
+  assert.equal(calls.length, 0);
+});
+
+test('the id of a token is read from a base64url payload with no padding', async () => {
+  const payload = btoa(JSON.stringify({ id: 'user?>>', exp: 1 })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  assert.ok(/[-_]/.test(payload));
+  const { calls, client } = fake(reply(200, serverRow()));
+  await client.push(`h.${payload}.s`, { kind: 'item', key: 'a', op: 'upsert', data: {} }, new Map());
+  assert.equal(calls[0].body.owner, 'user?>>');
+});
+
+test('pull stops when the answer has no totalPages', async () => {
+  const { calls, client } = fake(reply(200, { items: [serverRow()] }));
+  assert.equal((await client.pull(TOKEN, '')).length, 1);
+  assert.equal(calls.length, 1);
+});
+
 test('a 400 with no field error is not a unique violation', async () => {
   const { calls, client } = fake(reply(400, { data: {}, message: 'Failed to create record.', status: 400 }));
   await assert.rejects(client.push(TOKEN, { kind: 'item', key: 'a', op: 'upsert', data: {} }, new Map()), { type: 'invalid' });
@@ -206,4 +248,16 @@ test('subscribe posts the clientId of PB_CONNECT and passes record events on', a
   assert.deepEqual(seen.map((r) => [r.id, r.deleted]), [['r1', false], ['r2', true]]);
   stop();
   assert.equal(FakeSource.last.closed, true);
+});
+
+test('subscribe drops a malformed event but does not swallow an error of the consumer', () => {
+  const client = createClient({ url: URL_, fetch: async () => reply(204, null), EventSource: FakeSource });
+  const seen = [];
+  client.subscribe(TOKEN, (rec) => {
+    seen.push(rec);
+    throw new Error('consumer');
+  });
+  FakeSource.last.listeners.shopping_records({ data: 'not json' });
+  assert.equal(seen.length, 0);
+  assert.throws(() => FakeSource.last.emit('shopping_records', { action: 'update', record: serverRow() }), /consumer/);
 });
