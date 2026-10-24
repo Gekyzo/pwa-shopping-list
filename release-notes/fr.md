@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Quand le serveur demande d’attendre quelques secondes pendant l’envoi d’une longue liste, l’app n’affiche plus « Hors ligne » et réessaie toute seule.
 
 ## 1.4.0 - 2026-10-24
 

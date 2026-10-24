@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- Se o servidor pedir para esperar alguns segundos ao enviar uma lista longa, a app já não mostra «Sem ligação» e tenta de novo sozinha.
 
 ## 1.4.0 - 2026-10-24
 

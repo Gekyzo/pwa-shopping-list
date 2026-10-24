@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- When the server asks you to wait a few seconds while a long list uploads, the app no longer shows that you are offline. It tries again by itself.
 
 ## 1.4.0 - 2026-10-24
 

@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Se il server chiede di aspettare qualche secondo durante il caricamento di una lista lunga, l’app non mostra più «Offline» e riprova da sola.
 
 ## 1.4.0 - 2026-10-24
 

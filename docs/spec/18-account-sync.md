@@ -108,7 +108,10 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   and each connect after the first starts a sync, for the changes that the stream missed. It
   closes at the `offline` event, at an auth error and at a logout. A sync that starts while
   one runs is that same sync. When a merge queues changes (a tombstone of SYNC-7, a fix of the
-  validation), a sync starts 1.5 s later to send them.
+  validation), a sync starts 1.5 s later to send them. When a sync stops at the rate limit of
+  the server (a 429) or at a server error (a 5xx), the queue stays and a sync starts again after
+  5 s, then 15 s, 30 s and 60 s, and then every 60 s; a sync that reaches the server ends the series.
+  A stop at the network does not start a retry: the `online` event does.
 - **SYNC-4** A sync is online only and runs in this order: the app sends the queue in order,
   pulls each record with `updated` at or after the last cursor (a record pulled twice is harmless),
   merges the records into the state, and applies again the changes that are still queued.
@@ -161,7 +164,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 - **SYNC-11** While the device is offline, a note over the list says **Sin conexión · cambios
   guardados**. With a session, the note shows after the `offline` event or after a sync that stopped
   at the network or at a server error, and goes at the `online` event or after a sync that reached
-  the server.
+  the server. A stop at the rate limit (a 429) is not offline: the note does not show, and the
+  retry of SYNC-3 sends the queue.
 
 ## Keys
 
