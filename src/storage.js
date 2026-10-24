@@ -140,7 +140,7 @@ const normalizeMenu = (rawMenu, known) => {
 const VERSIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 // Returns a clean version 9 state, or null when the data is not a known state.
-const normalizeState = (data) => {
+export const normalizeState = (data) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
   const rawRecipes = data.version === 1 ? [] : data.recipes;
