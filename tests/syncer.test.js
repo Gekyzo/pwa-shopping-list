@@ -209,15 +209,15 @@ test('the token is refreshed before the data requests, and again after 10 minute
   saveSession(storage, sessionOf('u1'));
   saveSyncState(storage, { owner: 'u1', cursor: '', server: new Map(), local: new Map(), ids: new Map() });
   const syncer = createSyncer({ client, storage, getState: emptyState, setState() {}, now: () => clock, setTimer() {}, clearTimer() {} });
-  // The merge of an empty account adds the default settings record, which the second run sends.
+  // The stored sync state has no base records, so the first run sends the settings of the state.
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'push', 'pull']);
   assert.notEqual(loadSession(storage).token, sessionOf('u1').token);
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'pull', 'push', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'pull']);
   clock += 10 * 60_000 + 1;
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'pull', 'push', 'pull', 'refresh', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'pull', 'refresh', 'pull']);
 });
 
 test('an expired token is refreshed even right after a refresh', async () => {
@@ -234,7 +234,7 @@ test('an expired token is refreshed even right after a refresh', async () => {
   const syncer = createSyncer({ client, storage, getState: emptyState, setState() {}, now: () => Date.now(), setTimer() {}, clearTimer() {} });
   await syncer.run();
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'pull', 'refresh', 'push', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'refresh', 'pull']);
 });
 
 test('a refresh that says the user is no longer approved makes no data request (ACC-4)', async () => {
@@ -627,4 +627,39 @@ test('a run in progress with the old token cannot stop the sync after a login', 
   assert.equal(await a.syncer.run(), 'ok');
   assert.deepEqual(loadQueue(a.storage), []);
   assert.ok(server.live('u1').some((row) => row.key === 'i1'));
+});
+
+const expiredToken = (id) => `${base64url({})}.${base64url({ id, exp: 1 })}.sig`;
+
+test('a save during the pull of an upload login is kept and sent', async () => {
+  const server = fakeServer();
+  const a = device({ server, session: null, state: withItems([item('i1', 'Leche')]) });
+  const held = holdOnce(a.client, 'pull');
+  const done = a.syncer.login(sessionOf('u1'));
+  await held.waiting;
+  a.change(withItems([item('i1', 'Leche'), item('i2', 'Pan')]));
+  held.release();
+  assert.equal(await done, 'synced');
+  await a.syncer.run();
+  assert.deepEqual(a.box.state.items.map((i) => i.name), ['Leche', 'Pan']);
+  assert.deepEqual(server.live('u1').filter((row) => row.kind === 'item').map((row) => row.key).sort(), ['i1', 'i2']);
+});
+
+test('a save before the first pull, while the account waits for approval, is kept', async () => {
+  const server = fakeServer();
+  const a = device({ server, session: null });
+  a.client.failPull = new PocketBaseError('network');
+  assert.equal(await a.syncer.login(sessionOf('u1')), 'synced');
+  assert.equal(loadSyncState(a.storage).cursor, '');
+  a.client.failPull = null;
+  a.client.approved = false;
+  saveSession(a.storage, { ...sessionOf('u1'), token: expiredToken('u1') });
+  assert.equal(await a.syncer.run(), 'ok');
+  assert.equal(loadSession(a.storage).user.approved, false);
+  a.change(withItems([item('i2', 'Pan')]));
+  a.client.approved = true;
+  assert.equal(await a.syncer.login(sessionOf('u1')), 'synced');
+  await a.syncer.run();
+  assert.deepEqual(a.box.state.items.map((i) => i.name), ['Pan']);
+  assert.ok(server.live('u1').some((row) => row.key === 'i2'));
 });
