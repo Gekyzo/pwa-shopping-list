@@ -97,6 +97,21 @@ export const createClient = ({ url, fetch, EventSource }) => {
     return found ? patch(token, found.id, bodyOf(change)) : null;
   };
 
+  const create = async (token, change) => {
+    const owner = userIdOf(token);
+    if (!owner) throw new PocketBaseError('auth');
+    try {
+      return serverRecOf(
+        await call('POST', RECORDS, { token, body: { owner, kind: change.kind, key: change.key, ...bodyOf(change) } }),
+      );
+    } catch (error) {
+      if (!isUniqueViolation(error)) throw error;
+      const found = await findRecord(token, change);
+      if (!found) throw error;
+      return patch(token, found.id, bodyOf(change));
+    }
+  };
+
   return {
     authWithPassword,
 
@@ -140,7 +155,7 @@ export const createClient = ({ url, fetch, EventSource }) => {
           query: { ...(since ? { filter: `updated >= ${quoted(since)}` } : {}), sort: 'updated', perPage: String(PAGE), page: String(page) },
         });
         pulled.push(...result.items.map(serverRecOf));
-        if (page >= result.totalPages) return pulled;
+        if (!(result.totalPages > page)) return pulled;
       }
     },
 
@@ -153,23 +168,13 @@ export const createClient = ({ url, fetch, EventSource }) => {
           return await patch(token, id, bodyOf(change));
         } catch (error) {
           if (error.status !== 404) throw error;
-          return patchFound(token, change);
+          // The record is gone from the server: a delete has nothing left to do, an upsert creates it again.
+          if (change.op === 'delete') return patchFound(token, change);
         }
+      } else if (change.op === 'delete') {
+        return patchFound(token, change);
       }
-      if (change.op === 'delete') return patchFound(token, change);
-      try {
-        return serverRecOf(
-          await call('POST', RECORDS, {
-            token,
-            body: { owner: userIdOf(token), kind: change.kind, key: change.key, ...bodyOf(change) },
-          }),
-        );
-      } catch (error) {
-        if (!isUniqueViolation(error)) throw error;
-        const found = await findRecord(token, change);
-        if (!found) throw error;
-        return patch(token, found.id, bodyOf(change));
-      }
+      return create(token, change);
     },
 
     // The returned function closes the stream. A failed subscription is silent: SYNC-3 syncs at the
@@ -185,12 +190,14 @@ export const createClient = ({ url, fetch, EventSource }) => {
         }
       });
       source.addEventListener('shopping_records', (event) => {
+        let rec;
         try {
           const { action, record } = JSON.parse(event.data);
-          onChange(serverRecOf(action === 'delete' ? { ...record, deleted: true } : record));
+          rec = serverRecOf(action === 'delete' ? { ...record, deleted: true } : record);
         } catch {
-          // A malformed event is dropped.
+          return; // A malformed event is dropped.
         }
+        onChange(rec);
       });
       return () => source.close();
     },
