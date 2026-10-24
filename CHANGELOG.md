@@ -9,6 +9,10 @@ no change for the user has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.3.5 - 2026-10-24
+
 - The message that shows after an action, with its `Deshacer`, is a raised card in the colours of the screen. It is no longer a black box in light and a white box in dark.
 - A privacy page, `privacy.html`, says what the app stores on the device and, with an account, on the server, and how to have it deleted.
 
