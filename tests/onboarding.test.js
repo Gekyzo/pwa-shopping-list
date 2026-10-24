@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { PAGES, hasBack, isLast, shouldShow, step, textParts } from '#onboarding';
+import { PAGES, hasBack, isLast, offersSample, shouldShow, step, textParts } from '#onboarding';
 
 test('PAGES has the six pages in their order, each one time', () => {
   assert.deepEqual(PAGES, ['lists', 'trip', 'row', 'sections', 'recipes', 'sample']);
@@ -92,4 +92,14 @@ test('hasBack is false on the first page and true on the others', () => {
   assert.equal(hasBack(0), false);
   assert.equal(hasBack(1), true);
   assert.equal(hasBack(PAGES.length - 1), true);
+});
+
+test('offersSample is true on the last page while the state has no items and no recipes (ONB-13)', () => {
+  assert.equal(offersSample({ page: 'sample', items: 0, recipes: 0 }), true);
+  assert.equal(offersSample({ page: 'recipes', items: 0, recipes: 0 }), false);
+});
+
+test('offersSample is false when the state has items or recipes, such as after a login with account data', () => {
+  assert.equal(offersSample({ page: 'sample', items: 3, recipes: 0 }), false);
+  assert.equal(offersSample({ page: 'sample', items: 0, recipes: 1 }), false);
 });

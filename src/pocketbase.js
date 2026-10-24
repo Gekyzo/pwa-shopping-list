@@ -178,13 +178,20 @@ export const createClient = ({ url, fetch, EventSource }) => {
     },
 
     // The returned function closes the stream. A failed subscription is silent: SYNC-3 syncs at the
-    // start, at `online` and after a save, so the stream only makes a sync sooner.
-    subscribe: (token, onChange) => {
+    // start, at `online` and after a save, so the stream only makes a sync sooner. `token` is a text or
+    // a function that gives the token at each connect: the browser connects again by itself, and by
+    // then the token may be a refreshed one. `onReconnect` runs at each connect after the first, since
+    // the stream missed the changes of the time between (SYNC-3).
+    subscribe: (token, onChange, { onReconnect = () => {} } = {}) => {
+      const tokenOf = typeof token === 'function' ? token : () => token;
       const source = new EventSource(`${base}/api/realtime`);
+      let connects = 0;
       source.addEventListener('PB_CONNECT', async (event) => {
+        connects += 1;
+        if (connects > 1) onReconnect();
         try {
           const { clientId } = JSON.parse(event.data);
-          await call('POST', '/api/realtime', { token, body: { clientId, subscriptions: ['shopping_records'] } });
+          await call('POST', '/api/realtime', { token: tokenOf(), body: { clientId, subscriptions: ['shopping_records'] } });
         } catch {
           // See above.
         }

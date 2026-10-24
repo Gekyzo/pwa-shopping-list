@@ -61,6 +61,7 @@ import {
   goOnline,
   goOffline,
   isAccountOpen,
+  accountClosable,
   closeAccount,
   bind as bindAccount,
 } from '#ui/account';
@@ -74,7 +75,8 @@ let backEntry = false;
 let skipPop = false;
 const holdBack = () => {
   if (skipPop) return;
-  const open = closeTop(ui) !== null;
+  // An account screen that can close back to the list is a layer too, over each other one.
+  const open = accountClosable() || closeTop(ui) !== null;
   if (open && !backEntry) {
     history.pushState({ layer: true }, '');
     backEntry = true;
@@ -228,6 +230,12 @@ window.addEventListener('popstate', () => {
     return;
   }
   backEntry = false;
+  if (isAccountOpen()) {
+    closeAccount();
+    // A screen that cannot close keeps the entry of the layer below it.
+    holdBack();
+    return;
+  }
   if (ui.onboarding !== null) return;
   endReorder(false);
   closeLayer();
@@ -312,10 +320,13 @@ if (params.has('arrival')) {
 // and gets no sheet below it.
 const start = shortcutStart(params.get('open'));
 // The return of the Google sign-in (ACC-5): `code` and `state` leave the URL at once, with the query below.
-const oauthReturn = params.has('code') && params.has('state') ? { code: params.get('code'), state: params.get('state') } : null;
+// A cancel at Google returns `error` and `state` with no `code`.
+const oauthReturn = params.has('state') && (params.has('code') || params.has('error'))
+  ? { code: params.get('code'), state: params.get('state') }
+  : null;
 // The query goes before a sheet opens: the entry of the sheet (holdBack) then comes after an address
 // with no query, and a reload opens nothing.
-const used = ['arrival', 'open', ...(oauthReturn ? ['code', 'state'] : [])];
+const used = ['arrival', 'open', ...(oauthReturn ? ['code', 'state', 'error'] : [])];
 if (used.some((name) => params.has(name))) {
   const rest = new URLSearchParams(params);
   for (const name of used) rest.delete(name);

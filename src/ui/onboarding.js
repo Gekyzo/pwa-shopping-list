@@ -1,5 +1,5 @@
-import { PAGES, hasBack, isLast, step, textParts } from '#onboarding';
-import { hasSample, loadSample } from '#recipes';
+import { PAGES, hasBack, isLast, step, textParts, offersSample as offersSampleOf } from '#onboarding';
+import { loadSample } from '#recipes';
 import { slideDirection } from '#sections';
 import { saveOnboarded } from '#storage';
 import { $, el, storage, state, ui, t, apply, guardClick } from '#ui/context';
@@ -22,8 +22,8 @@ const SAMPLE_PRODUCTS = ['tomatoSauce', 'pasta', 'garlic', 'oliveOil', 'salt'];
 // The sample recipe in the language of the screen.
 const sampleText = () => ({ name: t('sample.name'), products: SAMPLE_PRODUCTS.map((key) => t(`sample.${key}`)) });
 
-// The switch shows on the last page while the state has no sample recipe (ONB-13).
-const offersSample = () => PAGES[ui.onboarding] === 'sample' && !hasSample(state);
+// The switch shows on the last page while the state has no items and no recipes (ONB-13).
+const offersSample = () => offersSampleOf({ page: PAGES[ui.onboarding], items: state.items.length, recipes: state.recipes.length });
 
 export const renderOnboarding = () => {
   const open = ui.onboarding !== null;

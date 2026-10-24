@@ -261,3 +261,21 @@ test('subscribe drops a malformed event but does not swallow an error of the con
   assert.equal(seen.length, 0);
   assert.throws(() => FakeSource.last.emit('shopping_records', { action: 'update', record: serverRow() }), /consumer/);
 });
+
+test('subscribe reads the token at each PB_CONNECT and calls onReconnect at each one after the first', async () => {
+  const tokens = [];
+  const fetch = async (url, init) => {
+    tokens.push(init.headers.Authorization);
+    return reply(204, null);
+  };
+  const client = createClient({ url: URL_, fetch, EventSource: FakeSource });
+  let token = 'first';
+  let reconnects = 0;
+  client.subscribe(() => token, () => {}, { onReconnect: () => { reconnects += 1; } });
+  await FakeSource.last.emit('PB_CONNECT', { clientId: 'a' });
+  assert.equal(reconnects, 0);
+  token = 'second';
+  await FakeSource.last.emit('PB_CONNECT', { clientId: 'b' });
+  assert.deepEqual(tokens, ['first', 'second']);
+  assert.equal(reconnects, 1);
+});
