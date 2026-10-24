@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.4.1 - 2026-10-24
+
 - When the server asks you to wait a few seconds while a long list uploads, the app no longer shows that you are offline. It tries again by itself.
 - In `Settings` › `Account`, the email and the time of the last sync no longer overlap on a phone: the time is under the email, and a long email wraps to more lines.
 - The “Offline” note now goes by itself when a sync reaches the server, also when the phone does not report that the network is back, and when you return to the app.

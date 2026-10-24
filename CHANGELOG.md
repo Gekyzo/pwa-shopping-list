@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.4.1 - 2026-10-24
+
 - `Solicitar acceso` and `Esperando aprobación` name the administrator, not Ciro, as the one who approves an account; the 1.4.0 release notes say the same.
 - A 429 of the server is the client error `rate`, not `server`. The syncer keeps the queue and the online status on it, and retries after 5 s, 15 s, 30 s and then every 60 s; a 5xx also retries, and still shows the offline note (`src/pocketbase.js`, `src/syncer.js`, SYNC-3, SYNC-11).
 - The row `Cuenta` of `Ajustes` stacks the email and the last sync (`account-row`, ACC-10): the two spans overlapped at 390 px; a long email wraps anywhere in the row.

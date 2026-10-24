@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.4.1 - 2026-10-24
+
 - Wenn der Server beim Hochladen einer langen Liste um ein paar Sekunden Geduld bittet, zeigt die App nicht „Offline“ an und versucht es von selbst erneut.
 - In `Einstellungen` › `Konto` überlappen sich E-Mail und Zeit der letzten Synchronisierung auf einem Smartphone nicht mehr: Die Zeit steht unter der E-Mail, und eine lange E-Mail bricht um.
 - Der Hinweis „Offline“ verschwindet jetzt von selbst, sobald eine Synchronisierung den Server erreicht, auch wenn das Handy die Rückkehr des Netzes nicht meldet, und beim Zurückkehren in die App.
