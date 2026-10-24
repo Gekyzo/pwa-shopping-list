@@ -98,6 +98,11 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   - an account with data replaces the local state, and the old local state stays in
     `shopping.v1.beforeLogin`. The app offers it as an export file. It never merges two lists.
     When the app cannot save that copy, the login stops and the local state stays.
+  - a device with no local data takes the data of the account, its settings too: the default
+    settings of the device are not a change, so the first sync sends nothing before its pull.
+
+  A login starts a sync of its own; a sync in progress with the token of before the login cannot
+  stop it.
 - **SYNC-9** The import (BACKUP-5) replaces the data of the account, so on every device. The next sync
   sends a tombstone for each record of the server that the import does not hold, and an upsert for the
   others. With a session the question of the import is
