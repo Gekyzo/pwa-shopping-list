@@ -37,6 +37,9 @@ import {
   BEFORE_LOGIN_KEY,
   loadSwipeHint,
   saveSwipeHint,
+  SEEN_VERSION_KEY,
+  loadSeen,
+  saveSeen,
   APP_KEYS,
   resetAll,
 } from '#storage';
@@ -770,7 +773,7 @@ test('resetAll removes every key of the app and keeps the keys of other apps', (
 });
 
 test('APP_KEYS holds the state, its corrupt copy and each preference of the device', () => {
-  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY, SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY];
+  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY, SEEN_VERSION_KEY, SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY];
   assert.deepEqual([...APP_KEYS].sort(), [...keys].sort());
 });
 
@@ -786,4 +789,21 @@ test('after resetAll the install counts as new', () => {
 
 test('resetAll fails for a storage that throws', () => {
   assert.equal(resetAll(brokenStorage()), false);
+});
+
+test('SEEN_VERSION_KEY is a key of the app', () => {
+  assert.equal(SEEN_VERSION_KEY, 'shopping.seen-version');
+});
+
+test('loadSeen gives the stored version, and null when there is none or the storage throws', () => {
+  assert.equal(loadSeen(fakeStorage({ [SEEN_VERSION_KEY]: '1.2.3' })), '1.2.3');
+  assert.equal(loadSeen(fakeStorage()), null);
+  assert.equal(loadSeen(brokenStorage()), null);
+});
+
+test('saveSeen stores the version, and is false for a storage that throws', () => {
+  const storage = fakeStorage();
+  assert.equal(saveSeen(storage, '1.2.3'), true);
+  assert.equal(loadSeen(storage), '1.2.3');
+  assert.equal(saveSeen(brokenStorage(), '1.2.3'), false);
 });

@@ -126,6 +126,7 @@
         <h2 class="list-group-head" data-i18n="settings.help"></h2>
         <div class="list-group">
           <button id="show-onboarding" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.onboarding"></span><span class="chevron" aria-hidden="true">›</span></button>
+          <button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"></span><span class="chevron" aria-hidden="true">›</span></button>
           <button id="delete-sample" class="settings-row danger" type="button" hidden><span class="settings-row-label" data-i18n="settings.deleteSample"></span></button>
         </div>
         <div id="update-banner" class="banner" hidden>
@@ -179,6 +180,15 @@
         <span data-i18n="nav.settings"></span>
       </button>
     </nav>
+
+    <div id="whatsnew-sheet" class="sheet-layer" hidden>
+      <div id="whatsnew-veil" class="sheet-veil"></div>
+      <section id="whatsnew" class="sheet" role="dialog" aria-modal="true" aria-labelledby="whatsnew-title">
+        <div class="sheet-grab"></div>
+        <header class="sheet-head"><h2 id="whatsnew-title" class="sheet-title main" data-i18n="whatsNew.title"></h2><button id="whatsnew-close" class="button tonal" type="button" data-i18n="whatsNew.close"></button></header>
+        <div id="whatsnew-body" class="sheet-body whatsnew-body"></div>
+      </section>
+    </div>
 
     <div id="sheet" class="sheet-layer" hidden>
       <div id="veil" class="sheet-veil"></div>
@@ -455,6 +465,7 @@
           "#ui/motion": "./src/ui/motion.js",
           "#ui/nav": "./src/ui/nav.js",
           "#ui/onboarding": "./src/ui/onboarding.js",
+          "#ui/whatsnew": "./src/ui/whatsnew.js",
           "#ui/recipes": "./src/ui/recipes.js",
           "#ui/rows": "./src/ui/rows.js",
           "#ui/settings": "./src/ui/settings.js",

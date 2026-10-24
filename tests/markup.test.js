@@ -189,7 +189,7 @@ test('Borrar la receta de ejemplo is a danger row with no chevron', () => {
 });
 
 test('the rows that open something end with a chevron', () => {
-  for (const id of ['export', 'import', 'aisles-open', 'show-onboarding', 'install']) {
+  for (const id of ['export', 'import', 'aisles-open', 'show-onboarding', 'show-whatsnew', 'install']) {
     const [row = ''] = settings.match(new RegExp(`<button id="${id}"[\\s\\S]*?</button>`)) ?? [];
     assert.match(row, /class="settings-row"/, id);
     assert.match(row, /<span class="chevron" aria-hidden="true">[^<]*<\/span>\s*<\/button>$/, id);
@@ -248,4 +248,16 @@ test('an outline button is only a destructive one; other secondary actions are t
   for (const id of ['shop-done-all', 'shop-done-next', 'finish-button', 'empty-secondary', 'trip-continue', 'meal-dish', 'aisles-usual']) {
     assert.match(html, new RegExp(`<button id="${id}" class="button tonal`), id);
   }
+});
+
+test('the What\'s new sheet has a veil, a dialog with its title and Close, and a body (VER-21)', () => {
+  const [layer = ''] = body.match(/<div id="whatsnew-sheet" class="sheet-layer"[\s\S]*?<\/section>\s*<\/div>/) ?? [];
+  assert.match(layer, /<div id="whatsnew-veil" class="sheet-veil">/);
+  assert.match(layer, /<section id="whatsnew" class="sheet" role="dialog" aria-modal="true" aria-labelledby="whatsnew-title">/);
+  assert.match(layer, /<h2 id="whatsnew-title" class="sheet-title main" data-i18n="whatsNew.title"><\/h2><button id="whatsnew-close" class="button tonal" type="button" data-i18n="whatsNew.close"><\/button>/);
+  assert.match(layer, /<div id="whatsnew-body" class="sheet-body whatsnew-body"><\/div>/);
+});
+
+test('Help in Ajustes has the What\'s new row after the introduction, hidden until there are notes (VER-22)', () => {
+  assert.match(settings, /<button id="show-onboarding"[^>]*>[\s\S]*?<\/button>\s*<button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"><\/span><span class="chevron" aria-hidden="true">›<\/span><\/button>/);
 });

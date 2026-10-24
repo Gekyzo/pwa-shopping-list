@@ -2,10 +2,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
+import { LANGUAGES } from '#i18n';
 
 // sw.js is a classic script: run it with a stub `self` and return its pure functions.
 const source = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
-const { localizeManifest, staleCaches } = vm.runInNewContext(`${source}\n;({ localizeManifest, staleCaches })`, {
+const { localizeManifest, staleCaches, SHELL } = vm.runInNewContext(`${source}\n;({ localizeManifest, staleCaches, SHELL })`, {
   self: { addEventListener: () => {} },
 });
 
@@ -90,4 +91,8 @@ test('localizeManifest does not change the shortcuts of its input', () => {
 test('the activate keeps the caches of another app', () => {
   const keys = ['shopping-shell-v20', 'shopping-shell-v21', 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
   assert.deepEqual(plain(staleCaches(keys)), ['shopping-shell-v20']);
+});
+
+test('SHELL has the release notes of each language, so they show offline (VER-20)', () => {
+  for (const lang of LANGUAGES) assert.ok(SHELL.includes(`./release-notes/${lang}.md`), lang);
 });

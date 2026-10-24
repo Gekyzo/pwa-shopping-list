@@ -416,6 +416,28 @@ export const saveSwipeHint = (storage) => {
   }
 };
 
+// The newest version whose release notes the user has seen (VER-20). A preference of the device,
+// as the hand is.
+export const SEEN_VERSION_KEY = 'shopping.seen-version';
+
+// Null when nothing is stored or the storage cannot be read: no notes show.
+export const loadSeen = (storage) => {
+  try {
+    return storage.getItem(SEEN_VERSION_KEY);
+  } catch {
+    return null;
+  }
+};
+
+export const saveSeen = (storage, version) => {
+  try {
+    storage.setItem(SEEN_VERSION_KEY, version);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // The account: the session, the sync cursor, the queue of changes and the list that a first login replaced
 // (ACC-6, SYNC-2, SYNC-4, SYNC-8).
 export const SESSION_KEY = 'shopping.session';
@@ -436,6 +458,7 @@ export const APP_KEYS = [
   DENSITY_KEY,
   ONBOARDED_KEY,
   SWIPE_HINT_KEY,
+  SEEN_VERSION_KEY,
   SESSION_KEY,
   SYNC_KEY,
   QUEUE_KEY,

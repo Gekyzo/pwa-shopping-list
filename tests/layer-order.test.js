@@ -9,6 +9,7 @@ const closed = () => ({
   tripOpen: false,
   aislesOpen: false,
   shopPickOpen: false,
+  whatsNewOpen: false,
   editId: null,
   mealOpen: null,
   recipeId: null,
@@ -21,7 +22,7 @@ test('sheetOpen is false with nothing open', () => {
 });
 
 test('sheetOpen is true for each sheet', () => {
-  for (const flag of ['sheetOpen', 'arrangeOpen', 'tripOpen', 'aislesOpen', 'shopPickOpen']) {
+  for (const flag of ['sheetOpen', 'arrangeOpen', 'tripOpen', 'aislesOpen', 'shopPickOpen', 'whatsNewOpen']) {
     assert.equal(sheetOpen({ ...closed(), [flag]: true }), true, flag);
   }
   assert.equal(sheetOpen({ ...closed(), editId: 'id-1' }), true);
