@@ -77,8 +77,10 @@ export const createSyncer = ({
   };
 
   // SYNC-2: a save that notify did not queue (no approval, the question of ACC-8, a login in progress)
-  // is queued at the next run, so that the merge cannot overwrite it.
+  // is queued at the next run, so that the merge cannot overwrite it. Before the first pull there is no
+  // base to compare with: the pull decides, so default settings never overwrite the account (SYNC-8).
   const catchUp = () => {
+    if (sync.cursor === '') return;
     const records = toRecords(getState());
     const changes = diffRecords(sync.local, records);
     if (changes.length === 0) return;
@@ -302,9 +304,16 @@ export const createSyncer = ({
         sync = { ...sync, local, server, ids, cursor: cursorOf(pulled, '') };
         setState(normalizeState(fromRecords(local)) ?? emptyState());
       }
+    } else if (previousOwner === null) {
+      // SYNC-8: a device with no local data takes the account. The state at the login is the base of
+      // the first sync, so its default settings are not a change that would overwrite the account.
+      sync = { ...sync, local: toRecords(state) };
     }
     sync = { ...sync, owner: userId };
     persist();
+    // A run in progress uses the token of before the login: it becomes stale, so that its auth error
+    // cannot stop the sync of this login, and the login starts a run of its own.
+    generation += 1;
     await run();
     return 'synced';
   };
