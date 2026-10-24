@@ -24,6 +24,7 @@
 | `src/syncer.js` | The sync driver: it queues each save, sends the queue, pulls and merges the account, and runs the login and the logout of the account (ACC-4, ACC-7 to ACC-9, SYNC-2 to SYNC-9) | `records`, `sync`, `session`, `storage`, `store` |
 | `src/config.js` | The API URL for the host that serves the app (ACC-12) | nothing |
 | `src/version.js` | Pure version rules | nothing |
+| `src/whatsnew.js` | The parse of the release notes and the versions that a user has not seen | `version` |
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
@@ -118,6 +119,7 @@
 | `tests/sheets.test.js` | When a save of a sheet shows `Guardado` (NAV-22) |
 | `tests/suggest.test.js` | The rows above the add input: create first, the cap of 6, which are in the list (ADD-2) |
 | `tests/version.test.js` | Version rules |
+| `tests/whatsnew.test.js` | The parse of the release notes and the unseen versions |
 | `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own |
