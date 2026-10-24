@@ -10,6 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
+- Accounts and sync: the screens `Iniciar sesión`, `Solicitar acceso` and `Esperando aprobación` (`src/ui/account.js`), email and Google sign-in against PocketBase, the sync of the list between the devices of one account (queue, pull, realtime stream), the note `Sin conexión · cambios guardados`, the banner `Inicia sesión para sincronizar` of a device with a list and no session, and the row `Cuenta` of `Ajustes`. With a session the import and `Borrar todos los datos` ask `import.confirmAccount` and `reset.confirmLocal`. Cache `shopping-shell-v22`.
 - Release notes: `release-notes/<lang>.md`, one file per catalog, released with the version by `npm run release`, which stops when the languages disagree. The app shows the unseen versions in a What's new sheet after an update (`nextSeen`, seen version in storage) and every version from Settings › Help. This file is now the technical record.
 
 ## 1.3.5 - 2026-10-24

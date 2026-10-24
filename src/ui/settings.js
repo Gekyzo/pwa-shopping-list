@@ -27,8 +27,10 @@ import {
   setTheme,
   setDensity,
   setTripEnd,
+  download,
 } from '#ui/context';
 import { renderOnboarding } from '#ui/onboarding';
+import { signedIn } from '#ui/account';
 
 // The value of a row of Preferencias is the text of the option that the select has.
 const renderValues = () => {
@@ -150,12 +152,6 @@ const renderTripEnd = () => {
   });
 };
 
-const download = (filename, text) => {
-  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
-  el('a', { href: url, download: filename }).click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-};
-
 export const bind = () => {
   $('export').addEventListener('click', () => {
     download(exportFilename(new Date()), exportJson(state));
@@ -168,9 +164,10 @@ export const bind = () => {
     apply(deleteRecipe(state, SAMPLE_ID), { undoText: t('toast.sampleDeleted') });
   });
   // The app starts again as a new install, with the walkthrough (BACKUP-7). With no storage the data is
-  // only in memory, so the reload alone clears it.
+  // only in memory, so the reload alone clears it. With a session it clears this device only and logs
+  // out: the account keys are in APP_KEYS, so the reload opens Iniciar sesión (SYNC-10).
   $('reset').addEventListener('click', () => {
-    if (!window.confirm(t('reset.confirm'))) return;
+    if (!window.confirm(t(signedIn() ? 'reset.confirmLocal' : 'reset.confirm'))) return;
     if (storage && !resetAll(storage)) {
       showToast(t('error.resetFailed'));
       return;
@@ -220,7 +217,8 @@ export const bind = () => {
       items: t('count.items', { count: result.state.items.length }),
       recipes: t('count.recipes', { count: result.state.recipes.length }),
     };
-    if (!window.confirm(t('import.confirm', found))) return;
+    // SYNC-9: with a session the import replaces the data of the account, on every device.
+    if (!window.confirm(t(signedIn() ? 'import.confirmAccount' : 'import.confirm', found))) return;
     apply(result, { undoText: t('toast.imported') });
   });
 };

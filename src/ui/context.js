@@ -226,6 +226,21 @@ export const commit = (next) => {
   return saved;
 };
 
+// The state that the sync puts in place (SYNC-2): saved and rendered, with no after-commit function, so
+// that it queues nothing.
+export const replaceState = (next) => {
+  state = next;
+  if (storage) save(storage, state);
+  render();
+};
+
+// Saves a text as a JSON file of the device.
+export const download = (filename, text) => {
+  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  el('a', { href: url, download: filename }).click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
+
 // Applies a store operation. `undoText` makes the change reversible for a few seconds.
 export const apply = (result, { undoText = null } = {}) => {
   if (result.error) {

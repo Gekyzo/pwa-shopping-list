@@ -11,16 +11,31 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   - no session and no `shopping.v1` data: **Iniciar sesión**;
   - no session and `shopping.v1` data: the list as before, with the banner of ACC-11.
 
-  The route never reads the clock: an expired token does not change it (ACC-6, ACC-7).
+  The route never reads the clock: an expired token does not change it (ACC-6, ACC-7). The device has
+  `shopping.v1` data when the state differs from the state of a new install, the settings too. So
+  the empty list that a logout leaves opens **Iniciar sesión**, and a device with a list is never
+  locked out of it.
 - **ACC-2** Three screens cover the list. **Iniciar sesión** has the Google button, the email,
   the password, **Entrar**, **¿Olvidaste la contraseña?** and the link to **Solicitar acceso**.
   **Solicitar acceso** has the Google button, the name, the email, the password (8 characters or more),
   **Enviar solicitud** and the link back to **Iniciar sesión**. **Esperando aprobación** has
-  **Comprobar de nuevo** and **Cerrar sesión**.
+  **Comprobar de nuevo** and **Cerrar sesión**. The screens cover the app, the walkthrough too.
+  When the device has a list, **Iniciar sesión** and **Solicitar acceso** also have **Volver a la
+  lista** (and `Escape`). An error shows below the fields: `account.error.wrongPassword`,
+  `account.error.network`, `account.error.emailTaken`, `account.error.passwordShort`. A password
+  of less than 8 characters is refused before any request. A sign-up whose email has an account
+  (such as a second try after a login that failed) opens **Iniciar sesión** with that email and
+  `account.error.emailTaken`. **¿Olvidaste la contraseña?** asks the server for a reset email for the
+  address of the field, and then shows `account.resetSent`, the same message whether the address has
+  an account or not. A login that the account replaces (SYNC-8) then offers the old list as an
+  export file, one time.
 - **ACC-3** A sign-up with email and password creates an account that is not approved. The user then
   sees **Esperando aprobación**.
 - **ACC-4** An account that is not approved makes no request for data. A device that holds a list
   before that login keeps it stored, unchanged, until the approval. Then SYNC-8 applies.
+  **Comprobar de nuevo** refreshes the session: an approved account logs in, else the message
+  `account.waiting.still`. **Cerrar sesión** of **Esperando aprobación** removes only the session when
+  the account is not the owner of the stored data, so the list stays; the owner logs out as ACC-9.
 - **ACC-5** Google sign-in is a redirect. The app asks the server for the URL of the provider, sends the
   browser there with the URL of the app as the return address, and exchanges the `code` on return.
   The server creates the account of an OAuth sign-up as not approved. The app removes `code` and
@@ -35,7 +50,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   as an auth error. After an auth error the app shows **Iniciar sesión**. It keeps the local state
   and the queue. Until the next login a save goes into the queue and no sync makes a request, so
   the rate limit of the auth endpoints stays free for that login. A login of the same user
-  continues the sync.
+  continues the sync. **Iniciar sesión** shows over the list with **Volver a la lista**.
 - **ACC-8** A login of another user than the one of the stored data first clears the local data and
   the queue of the previous user. This clears `shopping.v1`, the session and the sync state, never
   a device preference. A device with no stored owner clears nothing. When the queue is not empty, the app first offers an export
@@ -47,9 +62,11 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   the export, or when the user declines it, the logout clears the same data. A sync that is in
   progress at the logout, or at a login that clears, saves nothing and changes no state after it.
 - **ACC-10** `Ajustes` has the row **Cuenta**: the email, the time of the last sync and
-  **Cerrar sesión**.
+  **Cerrar sesión**. With no session the group has **Inicia sesión para sincronizar**, which opens
+  **Iniciar sesión** with **Volver a la lista**.
 - **ACC-11** With no session and with `shopping.v1` data, the list shows the banner
-  **Inicia sesión para sincronizar**. The device works local-only until the user logs in.
+  **Inicia sesión para sincronizar**. The device works local-only until the user logs in. Its button
+  opens **Iniciar sesión** with **Volver a la lista**.
 - **ACC-12** The API URL is one config value. When the app is served from `localhost`, `127.0.0.1` or
   `[::1]`, it is `http://localhost:8090`. Else it is `https://artisandevs.duckdns.org`.
 
@@ -69,7 +86,9 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   state that the sync knows, so a save that was not queued (no approval, the question of ACC-8)
   is queued then and the merge does not lose it.
 - **SYNC-3** A sync starts at the start of the app, at the `online` event, after a save (1.5 s
-  after the last save of a burst) and at a realtime event of the server. A sync that starts while
+  after the last save of a burst) and at a realtime event of the server. The realtime stream opens
+  after the first sync of the start or of the `online` event, so its token is fresh. It closes at
+  the `offline` event, at an auth error and at a logout. A sync that starts while
   one runs is that same sync. When a merge queues changes (a tombstone of SYNC-7, a fix of the
   validation), a sync starts 1.5 s later to send them.
 - **SYNC-4** A sync is online only and runs in this order: the app sends the queue in order,
@@ -113,7 +132,9 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   stays on the server. With a session the question of the reset is
   `reset.confirmLocal` (BACKUP-7), which says so.
 - **SYNC-11** While the device is offline, a note over the list says **Sin conexión · cambios
-  guardados**.
+  guardados**. With a session, the note shows after the `offline` event or after a sync that stopped
+  at the network or at a server error, and goes at the `online` event or after a sync that reached
+  the server.
 
 ## Keys
 

@@ -167,9 +167,9 @@ const settings = body.match(/<section id="settings"[\s\S]*?<\/section>/)?.[0] ??
 const groups = settings.split('<h2 ').slice(1).map((part) => [part, part.split('</h2>')[1]]);
 
 test('each group of Ajustes is a list-group-head and one full-width list-group', () => {
-  assert.equal(groups.length, 6);
-  assert.equal([...settings.matchAll(/<h2 /g)].length, 6);
-  assert.equal([...settings.matchAll(/class="list-group"/g)].length, 6);
+  assert.equal(groups.length, 7);
+  assert.equal([...settings.matchAll(/<h2 /g)].length, 7);
+  assert.equal([...settings.matchAll(/class="list-group"/g)].length, 7);
   assert.doesNotMatch(settings, /settings-title/);
 });
 
@@ -189,7 +189,7 @@ test('Borrar la receta de ejemplo is a danger row with no chevron', () => {
 });
 
 test('the rows that open something end with a chevron', () => {
-  for (const id of ['export', 'import', 'aisles-open', 'show-onboarding', 'show-whatsnew', 'install']) {
+  for (const id of ['export', 'import', 'aisles-open', 'show-onboarding', 'show-whatsnew', 'install', 'account-login']) {
     const [row = ''] = settings.match(new RegExp(`<button id="${id}"[\\s\\S]*?</button>`)) ?? [];
     assert.match(row, /class="settings-row"/, id);
     assert.match(row, /<span class="chevron" aria-hidden="true">[^<]*<\/span>\s*<\/button>$/, id);
@@ -260,4 +260,57 @@ test('the What\'s new sheet has a veil, a dialog with its title and Close, and a
 
 test('Help in Ajustes has the What\'s new row after the introduction, hidden until there are notes (VER-22)', () => {
   assert.match(settings, /<button id="show-onboarding"[^>]*>[\s\S]*?<\/button>\s*<button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"><\/span><span class="chevron" aria-hidden="true">›<\/span><\/button>/);
+});
+
+const auth = body.match(/<section id="auth"[\s\S]*?<\/section>/)?.[0] ?? '';
+const viewOf = (id) => auth.match(new RegExp(`<(?:form|div) id="${id}" class="account-page"[\\s\\S]*?</(?:form|div)>\\s*(?=<(?:form|div) id=|</section>)`))?.[0] ?? '';
+const keysOf = (part) => [...part.matchAll(/data-i18n="([^"]+)"/g)].map(([, key]) => key);
+
+test('the account layer is a modal dialog with a back button and three hidden-by-default views (ACC-2)', () => {
+  assert.match(auth, /^<section id="auth" class="account" role="dialog" aria-modal="true" aria-labelledby="login-title" hidden>/);
+  assert.match(auth, /<div class="account-top">\s*<button id="account-back" class="button accent" type="button" data-i18n="account.back" hidden><\/button>\s*<\/div>/);
+  const views = [...auth.matchAll(/<(form|div) id="([^"]+)" class="account-page"([^>]*)>/g)].map(([, tag, id, rest]) => [tag, id, rest.includes('hidden')]);
+  assert.deepEqual(views, [['form', 'login', false], ['form', 'request', true], ['div', 'waiting', true]]);
+});
+
+test('Iniciar sesión has Google, the divider, email, password, Entrar, the reset and the link to Solicitar acceso (ACC-2)', () => {
+  const login = viewOf('login');
+  assert.deepEqual(keysOf(login), [
+    'account.login.title', 'account.login.text', 'account.google', 'account.or', 'account.email', 'account.password',
+    'account.login.submit', 'account.forgot', 'account.login.noAccount', 'account.request.title',
+  ]);
+  assert.match(login, /<input id="login-email" class="input field-input" type="email" autocomplete="email"/);
+  assert.match(login, /<input id="login-password" class="input field-input" type="password" autocomplete="current-password"/);
+  assert.match(login, /<p id="login-error" class="input-help danger" role="alert" hidden><\/p>\s*<button id="login-submit" class="button primary wide" type="submit"/);
+  assert.match(login, /<button class="button tonal wide" type="button" data-google><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"\/><\/svg>/);
+});
+
+test('Solicitar acceso has Google, the name, the email, a password of 8 or more, Enviar solicitud and the link back (ACC-2)', () => {
+  const request = viewOf('request');
+  assert.deepEqual(keysOf(request), [
+    'account.request.title', 'account.request.text', 'account.google', 'account.or', 'account.name', 'account.email',
+    'account.newPassword', 'account.request.submit', 'account.request.hasAccount', 'account.login.title',
+  ]);
+  assert.match(request, /<input id="request-password" class="input field-input" type="password" autocomplete="new-password"[^>]*minlength="8"/);
+  assert.match(request, /<button id="request-submit" class="button primary wide" type="submit"/);
+});
+
+test('Esperando aprobación has Comprobar de nuevo and Cerrar sesión (ACC-2)', () => {
+  const waiting = viewOf('waiting');
+  assert.deepEqual(keysOf(waiting), ['account.waiting.title', 'account.waiting.text', 'account.waiting.check', 'account.logout']);
+  assert.match(waiting, /<button id="waiting-check" class="button tonal wide"/);
+});
+
+test('the list has the offline note and the banner of a device with no session (SYNC-11, ACC-11)', () => {
+  const main = body.match(/<main>[\s\S]*?<\/main>/)?.[0] ?? '';
+  assert.match(main, /^<main>\s*<p id="sync-offline" class="sync-note" role="status" hidden><svg class="icon small" aria-hidden="true"><use href="icons.svg#offline"\/><\/svg><span data-i18n="sync.offline"><\/span><\/p>/);
+  assert.match(main, /<section id="sync-banner" class="banner" hidden>\s*<strong data-i18n="sync.banner"><\/strong>\s*<p class="banner-text" data-i18n="sync.bannerText"><\/p>\s*<button id="sync-login" class="button tonal wide" type="button" data-i18n="account.login.title"><\/button>/);
+});
+
+test('Ajustes starts with the group Cuenta: the email and the last sync, Cerrar sesión, and the login of a device with no session (ACC-10)', () => {
+  const [first] = groups[0];
+  assert.match(first, /data-i18n="settings.account"/);
+  assert.match(settings, /<div id="account-group" hidden>/);
+  assert.match(first, /<div id="account-row" class="settings-row"><span id="account-email" class="settings-row-label"><\/span><span id="account-sync" class="settings-row-value"><\/span><\/div>/);
+  assert.match(first, /<button id="logout" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="account.logout"><\/span><\/button>/);
 });
