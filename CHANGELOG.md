@@ -9,7 +9,7 @@ no change for the user has no entry.
 
 ## Unreleased
 
-No change.
+- A privacy page, `privacy.html`, says what the app stores on the device and, with an account, on the server, and how to have it deleted.
 
 ## 1.3.4 - 2026-10-23
 
