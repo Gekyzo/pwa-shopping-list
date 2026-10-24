@@ -34,3 +34,18 @@ test('commit calls the after-commit function only when the save succeeded', () =
   assert.deepEqual(calls, [next]);
   assert.equal(context.state, next);
 });
+
+test('commit renders before the after-commit function, and its error skips no render', (t) => {
+  const order = [];
+  t.mock.method(console, 'error', () => {});
+  context.setRender(() => order.push('render'));
+  context.setAfterCommit(() => {
+    order.push('after');
+    throw new Error('sync');
+  });
+  assert.equal(context.commit({ ...context.state, sort: 'custom' }), true);
+  assert.deepEqual(order, ['render', 'after']);
+  assert.equal(console.error.mock.callCount(), 1);
+  context.setAfterCommit(null);
+  context.setRender(() => {});
+});

@@ -21,7 +21,7 @@
 | `src/sync.js` | The queue of record changes, the merge of pulled records and the duplicates (SYNC-5, SYNC-6, SYNC-7) | `records` |
 | `src/pocketbase.js` | The client of the PocketBase server: sign-in, token refresh, pull, push and the realtime stream (ACC-12, SYNC-4, SYNC-6) | `records` |
 | `src/session.js` | The session, the sync state and the queue in the storage, the token expiry, the start route and the login rules (ACC-1, ACC-7, ACC-8, SYNC-8) | `storage` |
-| `src/syncer.js` | The sync driver: it queues each save, sends the queue, pulls and merges the account, and runs the login and the logout of the account (ACC-4, ACC-7 to ACC-9, SYNC-2 to SYNC-9) | `records`, `sync`, `session`, `storage`, `store` |
+| `src/syncer.js` | The sync driver: it queues each save, sends the queue, pulls and merges the account, and runs the login and the logout of the account (ACC-4, ACC-7 to ACC-9, SYNC-2 to SYNC-9) | `records`, `sync`, `pocketbase`, `session`, `storage`, `store` |
 | `src/config.js` | The API URL for the host that serves the app (ACC-12) | nothing |
 | `src/version.js` | Pure version rules | nothing |
 | `src/whatsnew.js` | The parse of the release notes and the versions that a user has not seen | `version` |
