@@ -177,6 +177,7 @@ export default {
   'onboarding.icon.cart-add': 'Send to the list',
   'onboarding.sample.title': 'A recipe to start',
   'onboarding.sample.text': 'We add “{name}” and its ingredients to `{active}` so you can see how it works.\nYou can delete it in `Settings`.',
+  'onboarding.sample.textNoSample': 'A recipe is a name and a list of products. Create one in `{recipes}` and send its products to `{active}` in one tap.',
   'onboarding.sample.switch': 'Add the sample recipe',
   'sample.name': 'Pasta with tomato sauce',
   'sample.tomatoSauce': 'Tomato sauce',

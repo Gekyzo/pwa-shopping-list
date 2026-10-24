@@ -177,6 +177,7 @@ export default {
   'onboarding.icon.cart-add': 'Invia alla lista',
   'onboarding.sample.title': 'Una ricetta per iniziare',
   'onboarding.sample.text': 'Aggiungiamo «{name}» e i suoi ingredienti alla `{active}` per farti vedere come funziona.\nPuoi eliminarla in `Impostazioni`.',
+  'onboarding.sample.textNoSample': 'Una ricetta è un nome e una lista di prodotti. Creane una in `{recipes}` e manda i suoi prodotti alla `{active}` con un tocco.',
   'onboarding.sample.switch': 'Aggiungi la ricetta di esempio',
   'sample.name': 'Pasta al sugo di pomodoro',
   'sample.tomatoSauce': 'Sugo di pomodoro',

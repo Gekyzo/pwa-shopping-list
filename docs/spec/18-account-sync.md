@@ -21,7 +21,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   **Enviar solicitud** and the link back to **Iniciar sesión**. **Esperando aprobación** has
   **Comprobar de nuevo** and **Cerrar sesión**. The screens cover the app, the walkthrough too.
   When the device has a list, **Iniciar sesión** and **Solicitar acceso** also have **Volver a la
-  lista**; `Escape` and the back of the phone close them too, as a layer of NAV-25. An error shows below the fields: `account.error.wrongPassword`,
+  lista**; `Escape` and the back of the phone close them too, as a layer of NAV-25. A screen that
+  cannot close is not a layer: the back closes the layer below it. An error shows below the fields: `account.error.wrongPassword`,
   `account.error.network`, `account.error.emailTaken`, `account.error.passwordShort`. A password
   of less than 8 characters is refused before any request. A sign-up whose email has an account
   (such as a second try after a login that failed) opens **Iniciar sesión** with that email and

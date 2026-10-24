@@ -177,6 +177,7 @@ export default {
   'onboarding.icon.cart-add': 'Enviar a la llista',
   'onboarding.sample.title': 'Una recepta per començar',
   'onboarding.sample.text': 'Afegim «{name}» i els seus ingredients a `{active}` perquè vegis com funciona.\nLa pots esborrar a `Configuració`.',
+  'onboarding.sample.textNoSample': 'Una recepta és un nom i una llista de productes. Crea’n una a `{recipes}` i envia’n els productes a `{active}` amb un toc.',
   'onboarding.sample.switch': 'Afegir la recepta d’exemple',
   'sample.name': 'Pasta amb salsa de tomàquet',
   'sample.tomatoSauce': 'Salsa de tomàquet',
