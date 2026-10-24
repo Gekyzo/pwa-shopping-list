@@ -167,6 +167,10 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   at the network or at a server error, and goes at the `online` event or after a sync that reached
   the server. A stop at the rate limit (a 429) is not offline: the note does not show, and the
   retry of SYNC-3 sends the queue.
+  A sync that reached the server (its `lastSync` moved) also clears the note and opens the stream
+  again, even when the browser sent no `online` event, as some phones do after airplane mode.
+  When the app shows again (`visibilitychange` to visible) and the browser says it is online, the
+  note goes and a sync starts. A sync that stops as offline keeps the note.
 
 ## Keys
 

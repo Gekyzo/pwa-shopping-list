@@ -60,6 +60,7 @@ import {
   finishOAuth,
   goOnline,
   goOffline,
+  goVisible,
   isAccountOpen,
   accountClosable,
   closeAccount,
@@ -345,6 +346,7 @@ if (syncer) {
   setAfterCommit((saved, options) => syncer.notify(saved, options));
   window.addEventListener('online', goOnline);
   window.addEventListener('offline', goOffline);
+  document.addEventListener('visibilitychange', goVisible);
   if (oauthReturn) finishOAuth(oauthReturn);
   else startAccount();
 }
