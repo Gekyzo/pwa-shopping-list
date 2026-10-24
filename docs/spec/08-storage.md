@@ -16,6 +16,10 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.shopLists` | `hide` when the user hid the row of shop lists ([05-shops.md](05-shops.md), SHOP-25) |
 | `localStorage` | `shopping.swipeHint` | `1` after `Compra` showed the slide of a row one time ([07-screen.md](07-screen.md), ROW-14) |
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
+| `localStorage` | `shopping.session` | The token and the user of the account ([18-account-sync.md](18-account-sync.md), ACC-6) |
+| `localStorage` | `shopping.sync` | The last cursor and the last known server state (SYNC-2, SYNC-4) |
+| `localStorage` | `shopping.queue` | The changes not sent to the server (SYNC-2) |
+| `localStorage` | `shopping.v1.beforeLogin` | The local state that a first login replaced (SYNC-8) |
 | Cache API | `shopping-shell-v20` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 | Cache API | `shopping-manifest` | The name, the description and the shortcut names of the manifest in the language of the screen (SW-13) |
 
@@ -101,14 +105,16 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 - **BACKUP-4** A valid file is cleaned and migrated as a stored state is (STORE-7, STORE-8). A
   backup of version 1, 2 or 3 is thus accepted.
 - **BACKUP-5** Before the import the app asks: `¿Sustituir los datos actuales por los de la copia
-  (N artículos y N recetas)?` A yes replaces the full state. It does not merge.
+  (N artículos y N recetas)?` A yes replaces the full state. It does not merge. With a session, it replaces the
+  data of the account on every device (SYNC-9, [18-account-sync.md](18-account-sync.md)).
 - **BACKUP-6** The import has `Deshacer`, with the message `Copia importada.`
 - **BACKUP-7** **Borrar todos los datos** asks `¿Borrar todos los datos? Se borran las listas,
   las recetas, el menú, las secciones y las preferencias. Exporta una copia antes si quieres
   conservarlos.` A yes removes each `localStorage` key of the table above and loads the app again,
   which then starts as a new install, with the walkthrough (ONB-7). It has no `Deshacer`. When the
   removal fails, the message `error.resetFailed` says `No se pudieron borrar los datos.` and nothing
-  else changes. The caches stay.
+  else changes. The caches stay. It also logs out, and the data of the account stays on the server (SYNC-10,
+  [18-account-sync.md](18-account-sync.md)).
 
 ## Loss of data
 
@@ -117,5 +123,5 @@ that is the only protection.
 
 ## Limits
 
-No automatic backup. No merge of two states. No sync between tabs or devices. The state is in
+No automatic backup. No merge of two states. No sync between tabs. The sync between devices is in [18-account-sync.md](18-account-sync.md). The state is in
 `localStorage`; a move to IndexedDB is an open item.

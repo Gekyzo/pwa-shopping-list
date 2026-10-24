@@ -416,6 +416,13 @@ export const saveSwipeHint = (storage) => {
   }
 };
 
+// The account: the session, the sync cursor, the queue of changes and the list that a first login replaced
+// (ACC-6, SYNC-2, SYNC-4, SYNC-8).
+export const SESSION_KEY = 'shopping.session';
+export const SYNC_KEY = 'shopping.sync';
+export const QUEUE_KEY = 'shopping.queue';
+export const BEFORE_LOGIN_KEY = 'shopping.v1.beforeLogin';
+
 // Every key that the app writes to the storage: the state, its corrupt copy and each preference of the
 // device. Borrar todos los datos removes them all (BACKUP-7).
 export const APP_KEYS = [
@@ -429,6 +436,10 @@ export const APP_KEYS = [
   DENSITY_KEY,
   ONBOARDED_KEY,
   SWIPE_HINT_KEY,
+  SESSION_KEY,
+  SYNC_KEY,
+  QUEUE_KEY,
+  BEFORE_LOGIN_KEY,
 ];
 
 // After it, the install counts as new: the next start shows the walkthrough.
