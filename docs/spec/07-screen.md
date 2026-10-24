@@ -172,8 +172,9 @@ the bottom bar at each width.
   square of the tap size (48 px) after a scroll of the list of more than 24 px down, and opens
   again on any scroll up and at the top of the list (`fabState`). Below 600px the `+` is the last
   button of the dock, with no collapse; it floats as from 600px only while the dock does not show.
-- **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an open sheet,
-  then an open row, then the search of a list (`closeTop`). While a layer is open, one entry of the
+- **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an account
+  screen that can go back to the list (ACC-2), then an open sheet, then an open row, then the
+  search of a list (`closeTop`). While a layer is open, one entry of the
   history stands for it, so the back closes the layer and not the app. A layer closed in another
   way takes its entry away, so the next back goes back as the browser does. A start from a
   shortcut or an arrival takes its query out of the address before it opens anything.
@@ -274,8 +275,10 @@ the bottom bar at each width.
 - **ONB-12** With `prefers-reduced-motion: reduce` a page changes with no animation. The
   walkthrough keeps out of the safe-area insets. **Mano** changes nothing in the walkthrough.
 - **ONB-13** The last page has the switch **Añadir la receta de ejemplo**, on at each open of the
-  walkthrough. It shows only while the state has no sample recipe (REC-27); on another page, or
-  with the sample there, its room stays empty, so the page does not move. **Empezar** with the
+  walkthrough. It shows only while the state has no items and no recipes, so the walkthrough after
+  a login that brought the data of an account adds nothing to that account (SYNC-8); a new empty
+  account still gets the offer. On another page, or when the switch does not show, its room stays
+  empty, so the page does not move. **Empezar** with the
   switch on adds the sample recipe and sends its products to `Compra`, with no message. **Saltar**, `Escape` and **Empezar** with the
   switch off add nothing.
 - **ONB-14** `Ajustes` has **Borrar la receta de ejemplo** in the group **Ayuda**, below **Ver la

@@ -35,6 +35,8 @@ const show = (name, { canClose = false } = {}) => {
   screen = name;
   closable = canClose;
   renderAccount(name);
+  // The render gives a screen that can close its entry of the history (holdBack, NAV-25).
+  render();
   $(`${name}-title`).focus();
 };
 
@@ -76,6 +78,14 @@ const sessionNow = () => (syncer ? loadSession(storage) : null);
 
 // Import and Borrar todos los datos ask another question with a session (SYNC-9, SYNC-10).
 export const signedIn = () => sessionNow() !== null;
+
+const dropSession = () => {
+  try {
+    storage.removeItem(SESSION_KEY);
+  } catch {
+    // Nothing more to remove.
+  }
+};
 
 const redirectUrl = () => `${location.origin}${location.pathname}`;
 
@@ -133,7 +143,8 @@ export const connect = () => {
   disconnect();
   const session = sessionNow();
   if (!session?.user.approved || offline || status.auth || loadSyncState(storage).owner !== session.user.id) return;
-  stream = client.subscribe(session.token, () => syncer.run());
+  const run = () => syncer.run();
+  stream = client.subscribe(() => sessionNow()?.token ?? session.token, run, { onReconnect: run });
 };
 
 const disconnect = () => {
@@ -154,7 +165,8 @@ const enter = async (session) => {
       if (window.confirm(t('account.exportAsk'))) exportState(state);
       result = await syncer.login(session, { discard: true });
     }
-  } catch {
+  } catch (error) {
+    if (!(error instanceof PocketBaseError)) console.error(error);
     show('login', { canClose: hasLocalData() });
     showError('login', 'account.error.network');
     return;
@@ -268,6 +280,7 @@ const google = (name) =>
   });
 
 // ACC-5: the return from Google. app.js has removed `code` and `state` from the URL already.
+// A return with `error` and no `code` (the user cancelled at Google) shows the error too.
 export const finishOAuth = async ({ code, state: returned }) => {
   let pending = null;
   try {
@@ -279,7 +292,7 @@ export const finishOAuth = async ({ code, state: returned }) => {
   show('login', { canClose: hasLocalData() });
   renderSync();
   if (!syncer) return;
-  if (!pending) {
+  if (!pending || !code) {
     showError('login', 'account.error.google');
     return;
   }
@@ -311,7 +324,7 @@ const checkAgain = () =>
         showToast(t(errorKey(error)));
         return;
       }
-      storage.removeItem(SESSION_KEY);
+      dropSession();
       show('login', { canClose: hasLocalData() });
       return;
     }
@@ -324,12 +337,17 @@ const checkAgain = () =>
   });
 
 // ACC-9: online the queue goes first; changes still not sent offer an export, then the logout clears.
+// The first question can stop the logout: then nothing changes.
 export const logout = async () => {
   disconnect();
-  let result = await syncer.logout({ online: navigator.onLine });
+  const result = await syncer.logout({ online: navigator.onLine });
   if (result === 'ask-export') {
-    if (window.confirm(t('account.logoutAsk'))) exportState(state);
-    result = await syncer.logout({ online: false, discard: true });
+    if (!window.confirm(t('account.logoutAsk'))) {
+      connect();
+      return;
+    }
+    if (window.confirm(t('account.logoutExport'))) exportState(state);
+    await syncer.logout({ online: false, discard: true });
   }
   ui.view = 'active';
   show('login');
@@ -341,11 +359,7 @@ export const logout = async () => {
 const leaveWaiting = () => {
   const session = sessionNow();
   if (session && loadSyncState(storage).owner === session.user.id) return logout();
-  try {
-    storage.removeItem(SESSION_KEY);
-  } catch {
-    // Nothing more to remove.
-  }
+  dropSession();
   if (hasLocalData()) close();
   else show('login');
   renderSync();
@@ -380,6 +394,9 @@ export const goOffline = () => {
 
 export const isAccountOpen = () => screen !== null;
 
+// The screen can close back to the list, so it is a layer of the back of the phone (NAV-25).
+export const accountClosable = () => screen !== null && closable;
+
 // Volver a la lista, and Escape: only a device with a list goes back to it.
 export const closeAccount = () => {
   if (closable) close();
@@ -404,10 +421,11 @@ export const renderSync = () => {
   if (!syncer) return;
   const session = sessionNow();
   $('sync-offline').hidden = !session || ui.view === 'settings' || !(offline || !status.online);
-  $('sync-banner').hidden = session !== null || !inList() || !hasLocalData();
+  // ACC-7: after an auth stop the banner stays, so that a dismissed Iniciar sesión can open again.
+  $('sync-banner').hidden = !inList() || (session !== null ? !status.auth : !hasLocalData());
   $('account-row').hidden = !session;
   $('logout').hidden = !session;
-  $('account-login').hidden = session !== null;
+  $('account-login').hidden = session !== null && !status.auth;
   $('account-email').textContent = session ? session.user.email || session.user.name : '';
   $('account-sync').textContent = session ? lastSyncText() : '';
 };

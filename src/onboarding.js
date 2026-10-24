@@ -12,6 +12,10 @@ export const hasBack = (index) => index > 0;
 
 export const isLast = (index) => index === PAGES.length - 1;
 
+// ONB-13: the last page offers the sample recipe only while the state has no items and no recipes, so
+// the walkthrough after a login that brought the data of an account adds nothing to that account.
+export const offersSample = ({ page, items, recipes }) => page === 'sample' && items === 0 && recipes === 0;
+
 // A key that starts with `#name` shows the icon `name` of the sprite, then the rest of its text.
 const keyPart = (text) => {
   const match = text.match(/^#([a-z][\w-]*)(?: (.*))?$/s);
