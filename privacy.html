@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0f0e">
+    <meta name="theme-color" content="#f4f3f1">
+    <title>Bodega - Privacy</title>
+    <link rel="icon" href="./icons/icon-192.png" type="image/png">
+    <link rel="stylesheet" href="./vendor/design-system/design-system.css">
+    <style>
+      /* Unlayered, so it wins over the app layout of the design system. */
+      html,
+      body {
+        height: auto;
+      }
+
+      body {
+        display: block;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font);
+        line-height: 1.55;
+      }
+
+      main {
+        overflow: visible;
+        max-width: 42rem;
+        margin: 0 auto;
+        padding: var(--space-6) var(--space-4) var(--space-7);
+      }
+
+      h1 {
+        margin: 0 0 var(--space-2);
+        font-size: 1.75rem;
+        line-height: 1.2;
+      }
+
+      h2 {
+        margin: var(--space-6) 0 var(--space-2);
+        font-size: 1.125rem;
+      }
+
+      p,
+      ul {
+        margin: 0 0 var(--space-3);
+      }
+
+      ul {
+        padding-left: var(--space-5);
+      }
+
+      .updated {
+        color: var(--muted);
+      }
+
+      a {
+        color: var(--ink);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Privacy</h1>
+      <p class="updated">Bodega, the shopping list app. Last updated 24 October 2026.</p>
+
+      <p>
+        Bodega is a personal app. One person runs it for family and friends. It has no
+        advertising, no analytics and no tracking.
+      </p>
+
+      <h2>Without an account</h2>
+      <p>
+        Your lists, recipes, menu and settings stay in the storage of your browser on your
+        device. Nothing is sent to a server.
+      </p>
+
+      <h2>With an account</h2>
+      <p>An account is optional. It keeps your data in sync between your devices. The server stores:</p>
+      <ul>
+        <li>your email address and, if you give one, your name;</li>
+        <li>a hash of your password, if you sign in with a password;</li>
+        <li>
+          if you sign in with Google: your Google account ID, email address and name. Bodega asks
+          Google only for these (the <code>openid</code>, <code>email</code> and
+          <code>profile</code> scopes). It has no access to your Gmail, Drive, contacts or any
+          other Google data;
+        </li>
+        <li>whether the administrator approved your account;</li>
+        <li>your lists, recipes, menu and settings, with the time of each change;</li>
+        <li>
+          a log of requests to the server: time, address, IP address and browser. The log is
+          deleted after 5 days.
+        </li>
+      </ul>
+      <p>
+        The app keeps your sign-in in the storage of your browser. It sets no cookies.
+      </p>
+
+      <h2>Where the data is</h2>
+      <p>
+        The server is a Hetzner machine in Nuremberg, Germany (European Union). A backup is made
+        every night and kept for 14 days.
+      </p>
+
+      <h2>Who can see it</h2>
+      <p>
+        Only you, through the app, and the administrator who runs Bodega. The data is not sold,
+        shared or used for any other purpose.
+      </p>
+
+      <h2>Email</h2>
+      <p>Bodega sends two kinds of email, through Gmail:</p>
+      <ul>
+        <li>to the administrator, when someone asks for an account;</li>
+        <li>to you, when your account is approved.</li>
+      </ul>
+
+      <h2>Delete your data</h2>
+      <p>
+        Reply to any email from Bodega and ask for deletion. Your account and all its data are
+        then deleted from the server. Copies in backups expire within 14 days. Data on your
+        device stays until you clear it with <em>Delete all data</em> in the settings of the app, or in your browser.
+      </p>
+
+      <p><a href="./">Back to Bodega</a></p>
+    </main>
+  </body>
+</html>
