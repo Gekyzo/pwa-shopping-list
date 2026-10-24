@@ -23,7 +23,7 @@ rules are dropped. The version comparison (VER-3, VER-7) is core if the port sho
 - Evidence: `sw.js:89-97,102-109`.
 - Reason: web update atomicity. Replacement: an APK update is atomic.
 
-**SW-4** [dropped] [verified] At activation the worker deletes each cache whose name starts with `shopping-` and is not the current one (`shopping-shell-v19`) or `shopping-manifest`. A cache of another app of the origin (`lists-…`) stays.
+**SW-4** [dropped] [verified] At activation the worker deletes each cache whose name starts with `shopping-` and is not the current one (`shopping-shell-v20`) or `shopping-manifest`. A cache of another app of the origin (`lists-…`) stays.
 - Evidence: `sw.js:1,99-109`; test: `tests/sw.test.js` "the activate keeps the caches of another app".
 - Reason: cache versioning. Replacement: nothing.
 

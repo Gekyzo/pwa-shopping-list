@@ -1,7 +1,7 @@
 # Design system
 
-The look of the app: the shared tokens and components of `pwa-design-system` 0.7.1 (commit
-`f25351445a9d608e579f47cc551c20d87a7d96a3`, copied in `vendor/design-system/`), the tokens and
+The look of the app: the shared tokens and components of `pwa-design-system` 0.7.2 (commit
+`4dd6ea9f0f55180811a0a0af6abcaff7bbf103e2`, copied in `vendor/design-system/`), the tokens and
 the component versions of the app in `styles.css` (at `HEAD`), the icons of `icons.svg` and
 `icons/`. Source: `vendor/design-system/design-system.css`, `vendor/design-system/rules.js`,
 `styles.css`, `icons.svg`, `scripts/make-icons.mjs`, `scripts/png.mjs`, `scripts/glyph.mjs`.
@@ -54,7 +54,7 @@ Material has no slot for) carries the values of the "Theme tokens" section. 1 CS
 | `done` | `#1f7a4d` | `#5fc491` | progress, checked state, switch on, swipe right | app role |
 | `on-done` | `#ffffff` | `#0c1a12` | text and tick on `done` | app role |
 | `done-soft` | `#e2f2ea` | `#1d3327` | swipe action ground, flash, `banner done`, pill | app role |
-| `ink` | `#141414` | `#ffffff` | selected chip or toggle fill, toast, current walkthrough dot | `inverseSurface` |
+| `ink` | `#141414` | `#ffffff` | selected chip or toggle fill, current walkthrough dot | `inverseSurface` |
 | `on-ink` | `#ffffff` | `#0a0a0a` | text on `ink` | `inverseOnSurface` |
 | `secondary` | `#e5e3de` | `#2a2a28` | tonal button fill, current nav item pill | `secondaryContainer` |
 | `danger` | `#b3261e` | `#f08a9b` | destructive text, invalid border, `swipe-action danger` fill | `error` |
@@ -167,7 +167,7 @@ Material has no slot for) carries the values of the "Theme tokens" section. 1 CS
 | nav-bar | `bg`, 1 dp `line` top border, bottom inset padding. Item height 64, 12 sp `muted`, icon-label gap 2. Current: `text`, weight 600, icon on a `secondary` pill padded 4 × 20. Rail from 600 dp: 80 dp + side inset, items centred vertically, 1 dp `line` border on the content side |
 | badge | top 8, left 50 % + 8; padding 0 8, round, `primary` fill, `on-primary`, 12 sp weight 700; hidden while empty |
 | sheet | top corners 14, `surface`, max height 85 %; grab 48 dp tall with a 40 × 4 `muted` bar (radius 4); head padding 0 16 8, gap 12, title 20 sp weight 600, one line; body padding 0 16, scrolls; foot padding 12 16 (12 + bottom inset), gap 12, 1 dp `line` top border; `Guardado` 13 sp `muted`, fades in and out in 250 ms; part title 14 sp weight 600, 20 dp margin and 16 dp padding above a `line`; left hand mirrors head and foot |
-| toast | min height 48, padding 4 4 4 16, gap 8, radius 8, `ink` fill, `on-ink` text, `shadow-l`; side margins 12 + inset; bottom: nav 64 + inset + 56 + 24 (+ dock 56 when the dock shows); from 600 dp: inset + 56 + 24, clear of the rail; with a sheet open it stands at the top, 8 dp + top inset |
+| toast | min height 48, padding 4 4 4 16, gap 8, radius 8, 1 dp `line` border, `surface` fill (`surface-2` in dark), `text` text, `shadow-l`; side margins 12 + inset; bottom: nav 64 + inset + 56 + 24 (+ dock 56 when the dock shows); from 600 dp: inset + 56 + 24, clear of the rail; with a sheet open it stands at the top, 8 dp + top inset |
 | banner | margin 16 × 12, padding 16, radius 8, `surface-2`; `done`: `done-soft`; a tonal button in it takes `surface`; text 13 sp, 4 dp above, 12 dp below |
 | empty-state | margin 48 × 24, `muted`, centred; title 20 sp weight 600 `text`. `low`: column ending at the bottom, gap 8, min height 50 %, margin 0 20 24, buttons full width and 56 tall |
 | item-row | `surface`, 1 dp `line` bottom divider (with a check it starts at the text: 8 × 3 + 4 × 2 + 24 = 56 dp from the start); body min height 56, padding 0 4 0 8 (end 12 with swipe), gap 8; check 24 × 24, 2 dp `muted` border, radius 4, margin 12 4 12 8, checked `done` fill with an `on-done` tick 10 × 5 at −45°; name min height 56, padding 0 4, label clamped to 2 lines; quantity 13 sp `muted`; meta 12 sp `muted`; end slot 96 dp (2 × 48). Left hand: the check and the end slot change side; text starts at 16 dp. Lifted: `shadow-l`, above its neighbours. Flash: body from `done-soft`, 1.2 s |
