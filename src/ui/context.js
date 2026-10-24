@@ -1,6 +1,6 @@
 import * as store from '#store';
 import {
-  load,
+  loadState,
   save,
   loadLanguage,
   saveLanguage,
@@ -94,7 +94,10 @@ export const textOf = ({ key, params }) => say(key, params);
 // Read before the state. A stored state, valid or not, means that the install is not new.
 const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredState(storage) }) : false;
 
-export let state = storage ? load(storage) : store.emptyState();
+const loaded = storage ? loadState(storage) : { state: store.emptyState(), lost: false };
+export let state = loaded.state;
+// ACC-1: the stored state could not be read at this start; the sync pulls the account again.
+export const stateLost = loaded.lost;
 
 // The debug log (ENG-17): each change of the state, to paste a flow into a session. Only on the dev
 // server (`npm run serve`), never on the deployed host.
@@ -206,7 +209,8 @@ export const setAfterCommit = (fn) => {
   afterCommit = fn;
 };
 
-export const commit = (next) => {
+// `options` go to the after-commit function: an import is `explicit` (SYNC-9).
+export const commit = (next, options = {}) => {
   if (DEV) {
     const lines = debugDiff(state, next);
     debugLog(`change (view ${ui.view})${lines.length ? '' : ': no change'}`, lines);
@@ -218,7 +222,7 @@ export const commit = (next) => {
   // After the render: an error of the sync never leaves the screen behind the state.
   if (saved && afterCommit) {
     try {
-      afterCommit(state);
+      afterCommit(state, options);
     } catch (error) {
       console.error(error);
     }
@@ -229,6 +233,8 @@ export const commit = (next) => {
 // The state that the sync puts in place (SYNC-2): saved and rendered, with no after-commit function, so
 // that it queues nothing.
 export const replaceState = (next) => {
+  // Deshacer would put back the state of before the merge, and send it as a change of the user.
+  if (undoState) hideToast();
   state = next;
   if (storage) save(storage, state);
   render();
@@ -242,13 +248,13 @@ export const download = (filename, text) => {
 };
 
 // Applies a store operation. `undoText` makes the change reversible for a few seconds.
-export const apply = (result, { undoText = null } = {}) => {
+export const apply = (result, { undoText = null, explicit = false } = {}) => {
   if (result.error) {
     showToast(textOf(result.error));
     return false;
   }
   const previous = state;
-  const saved = commit(result.state);
+  const saved = commit(result.state, { explicit });
   if (!saved) showToast(t('error.notSaved'));
   else if (undoText) showToast(undoText, { undo: previous });
   else hideToast();

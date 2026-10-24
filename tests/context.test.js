@@ -49,3 +49,10 @@ test('commit renders before the after-commit function, and its error skips no re
   context.setAfterCommit(null);
   context.setRender(() => {});
 });
+
+test('a state that the sync puts in place drops the undo of a change before it', () => {
+  context.showToast('Borrado', { undo: context.state });
+  assert.notEqual(context.undoState, null);
+  context.replaceState({ ...context.state, sort: 'name' });
+  assert.equal(context.undoState, null);
+});

@@ -342,7 +342,7 @@ if (!storage) showToast(t('error.noStorage'));
 // The account and the sync (ACC-1, SYNC-3): each save queues its change, and the sync runs at the start,
 // at `online` and at a change of the account.
 if (syncer) {
-  setAfterCommit((saved) => syncer.notify(saved));
+  setAfterCommit((saved, options) => syncer.notify(saved, options));
   window.addEventListener('online', goOnline);
   window.addEventListener('offline', goOffline);
   if (oauthReturn) finishOAuth(oauthReturn);

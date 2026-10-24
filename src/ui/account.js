@@ -9,7 +9,7 @@ import { exportJson, exportFilename } from '#storage';
 import { emptyState } from '#store';
 import { toRecords, diffRecords } from '#records';
 import { intlTag } from '#i18n';
-import { $, storage, state, ui, t, lang, showToast, render, replaceState, download } from '#ui/context';
+import { $, storage, state, stateLost, ui, t, lang, showToast, render, replaceState, download } from '#ui/context';
 import { inList } from '#ui/view';
 
 // ACC-2: the length that Solicitar acceso asks of a password.
@@ -59,7 +59,7 @@ const onStatus = (next) => {
 };
 
 export const syncer = client
-  ? createSyncer({ client, storage, getState: () => state, setState: replaceState, onStatus })
+  ? createSyncer({ client, storage, getState: () => state, setState: replaceState, onStatus, lost: stateLost })
   : null;
 
 // ACC-1: the state differs from a new install, the settings too (the rule of the syncer). Kept for one
@@ -354,6 +354,14 @@ export const logout = async () => {
   render();
 };
 
+// BACKUP-7: Borrar todos los datos stops the sync before it clears the storage. A sync in progress
+// becomes stale and saves nothing; the queue is dropped, as the reset drops it anyway (SYNC-10).
+export const stopSync = async () => {
+  if (!syncer) return;
+  disconnect();
+  await syncer.logout({ online: false, discard: true });
+};
+
 // Cerrar sesión of Esperando aprobación. ACC-4: an account that waits never owned the list of the
 // device, so only its session goes and the list stays. The owner of the list logs out in full.
 const leaveWaiting = () => {
@@ -366,15 +374,37 @@ const leaveWaiting = () => {
   return null;
 };
 
+// A saved session whose login is not finished (the question of ACC-8, a failed first pull).
+const loginPending = (session) => session?.user.approved === true && loadSyncState(storage).owner !== session.user.id;
+
+// ACC-7: the saved token goes to the server again only after a refresh: a token that is no longer
+// valid counts as a guest, whose pull is empty, and the login would then upload the list into an
+// account with data. An auth error opens Iniciar sesión; at a network error the list stays, and the
+// next start or `online` event tries again.
+const resumeLogin = async (session) => {
+  let fresh;
+  try {
+    fresh = await client.refresh(session.token);
+  } catch (error) {
+    if (error?.type !== 'auth') return;
+    dropSession();
+    show('login', { canClose: hasLocalData() });
+    renderSync();
+    return;
+  }
+  saveSession(storage, fresh);
+  await enter(fresh);
+};
+
 // The start (ACC-1). A saved session opens the list at once, online or not (ACC-6).
 export const startAccount = () => {
   if (!syncer) return;
   const session = sessionNow();
   const route = routeAtStart({ session, hasLocalData: hasLocalData() });
   if (route === 'login' || route === 'waiting') show(route);
-  else if (route === 'list' && loadSyncState(storage).owner !== session.user.id) {
+  else if (route === 'list' && loginPending(session)) {
     // A login that stopped at the question of ACC-8 asks it again.
-    enter(session);
+    resumeLogin(session);
   } else if (route === 'list') runAndConnect();
   renderSync();
 };
@@ -383,7 +413,10 @@ export const startAccount = () => {
 export const goOnline = () => {
   offline = false;
   renderSync();
-  if (syncer && !screen) runAndConnect();
+  if (!syncer || screen) return;
+  const session = sessionNow();
+  if (loginPending(session)) resumeLogin(session);
+  else runAndConnect();
 };
 
 export const goOffline = () => {
