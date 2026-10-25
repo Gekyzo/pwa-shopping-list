@@ -483,32 +483,14 @@
       <div class="account-top">
         <button id="account-back" class="button accent" type="button" data-i18n="account.back" hidden></button>
       </div>
-      <form id="login" class="account-page" novalidate>
+      <div id="login" class="account-page">
         <img class="account-logo" src="./icons/logo.png" alt="">
         <h2 id="login-title" class="account-title" tabindex="-1" data-i18n="account.login.title"></h2>
         <p class="account-text" data-i18n="account.login.text"></p>
         <button class="button tonal wide" type="button" data-google><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"/></svg><span data-i18n="account.google"></span></button>
-        <button id="login-offline" class="button accent" type="button" data-i18n="account.offline" hidden></button>
-        <p class="account-or" data-i18n="account.or"></p>
-        <label class="field"><input id="login-email" class="input field-input" type="email" autocomplete="email" autocapitalize="off" enterkeyhint="next" maxlength="200" data-i18n-attr="placeholder:account.email"><span class="field-label" data-i18n="account.email"></span></label>
-        <label class="field"><input id="login-password" class="input field-input" type="password" autocomplete="current-password" enterkeyhint="go" maxlength="200" data-i18n-attr="placeholder:account.password"><span class="field-label" data-i18n="account.password"></span></label>
         <p id="login-error" class="input-help danger" role="alert" hidden></p>
-        <button id="login-submit" class="button primary wide" type="submit" data-i18n="account.login.submit"></button>
-        <button id="login-forgot" class="button accent" type="button" data-i18n="account.forgot"></button>
-        <p class="account-switch"><span data-i18n="account.login.noAccount"></span><button id="to-request" class="button accent" type="button" data-i18n="account.request.title"></button></p>
-      </form>
-      <form id="request" class="account-page" novalidate hidden>
-        <h2 id="request-title" class="account-title" tabindex="-1" data-i18n="account.request.title"></h2>
-        <p class="account-text" data-i18n="account.request.text"></p>
-        <button class="button tonal wide" type="button" data-google><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"/></svg><span data-i18n="account.google"></span></button>
-        <p class="account-or" data-i18n="account.or"></p>
-        <label class="field"><input id="request-name" class="input field-input" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="next" maxlength="80" data-i18n-attr="placeholder:account.name"><span class="field-label" data-i18n="account.name"></span></label>
-        <label class="field"><input id="request-email" class="input field-input" type="email" autocomplete="email" autocapitalize="off" enterkeyhint="next" maxlength="200" data-i18n-attr="placeholder:account.email"><span class="field-label" data-i18n="account.email"></span></label>
-        <label class="field"><input id="request-password" class="input field-input" type="password" autocomplete="new-password" enterkeyhint="send" minlength="8" maxlength="200" data-i18n-attr="placeholder:account.newPassword"><span class="field-label" data-i18n="account.newPassword"></span></label>
-        <p id="request-error" class="input-help danger" role="alert" hidden></p>
-        <button id="request-submit" class="button primary wide" type="submit" data-i18n="account.request.submit"></button>
-        <p class="account-switch"><span data-i18n="account.request.hasAccount"></span><button id="to-login" class="button accent" type="button" data-i18n="account.login.title"></button></p>
-      </form>
+        <button id="login-offline" class="button accent" type="button" data-i18n="account.offline" hidden></button>
+      </div>
       <div id="waiting" class="account-page" hidden>
         <svg class="icon account-wait" aria-hidden="true"><use href="icons.svg#refresh"/></svg>
         <h2 id="waiting-title" class="account-title" tabindex="-1" data-i18n="account.waiting.title"></h2>

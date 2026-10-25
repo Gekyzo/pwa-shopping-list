@@ -5,6 +5,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 ## Unreleased
 
 - Puoi usare l'app senza account: tocca **Usa senza account** in Accedi. Le tue liste restano su questo dispositivo. Accedi più tardi dalle Impostazioni per sincronizzarle.
+- L'accesso con email e password non c'è più. Se lo usavi, accedi con Google con la stessa email: mantieni il tuo account e le tue liste.
 
 ## 1.6.0 - 2026-10-25
 

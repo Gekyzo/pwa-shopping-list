@@ -44,7 +44,7 @@
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/whatsnew.js` | The release notes sheet, its row in `Ajustes` and the seen version (VER-20 to VER-22) | `whatsnew`, `onboarding`, `i18n`, `storage`, `ds/sheet`, `ui/context` |
-| `src/ui/account.js` | The account screens `Iniciar sesión`, `Solicitar acceso` and `Esperando aprobación`, the start of the sync and its realtime stream, the offline note, the banner of a device with no session, the row `Cuenta` of `Ajustes`, the row `Compartir lista` and the banner of an invite (ACC-1 to ACC-11, SYNC-3, SYNC-11, SHARE-7, SHARE-9) | `pocketbase`, `syncer`, `session`, `shares`, `config`, `storage`, `store`, `records`, `i18n`, `ui/context`, `ui/view` |
+| `src/ui/account.js` | The account screens `Iniciar sesión` and `Esperando aprobación`, the offline flag, the start of the sync and its realtime stream, the offline note, the banner of a device with no session, the row `Cuenta` of `Ajustes`, the row `Compartir lista` and the banner of an invite (ACC-1 to ACC-13, SYNC-3, SYNC-11, SHARE-7, SHARE-9) | `pocketbase`, `syncer`, `session`, `shares`, `config`, `storage`, `store`, `records`, `i18n`, `ui/context`, `ui/view` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/share.js` | The sheet `Compartir lista` of `Ajustes`: the people and the invite, the accept and the decline, the leave (SHARE-5, SHARE-8, SHARE-9) | `shares`, `ui/context`, `ui/account` |
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |

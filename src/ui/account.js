@@ -1,4 +1,4 @@
-// The account screens (ACC-2): Iniciar sesión, with Usar sin cuenta (ACC-13), Solicitar acceso and
+// The account screens (ACC-2): Iniciar sesión, with Google or Usar sin cuenta (ACC-13), and
 // Esperando aprobación, the sync of the
 // device (SYNC-3), its offline note (SYNC-11), the banner of a device with no session (ACC-11) and the
 // row Cuenta of Ajustes (ACC-10).
@@ -14,11 +14,9 @@ import { intlTag } from '#i18n';
 import { $, storage, state, stateLost, sharing, sharedBase, ownState, setSharing, ui, t, lang, showToast, render, replaceState, download } from '#ui/context';
 import { inList } from '#ui/view';
 
-// ACC-2: the length that Solicitar acceso asks of a password.
-const PASSWORD_MIN = 8;
 // In sessionStorage, for the time of the Google redirect only (ACC-5): the state and the verifier.
 const OAUTH_KEY = 'shopping.oauth';
-const SCREENS = ['login', 'request', 'waiting'];
+const SCREENS = ['login', 'waiting'];
 
 // With no storage the app keeps no session and no sync: it works as before, local only.
 const client = storage
@@ -227,99 +225,16 @@ const enter = async (session) => {
   if (!before && hasBeforeLogin()) offerBeforeLogin();
 };
 
-const submitLogin = () =>
-  busy('login', async () => {
-    const email = $('login-email').value.trim();
-    const password = $('login-password').value;
-    if (!email) {
-      showError('login', 'account.error.emailMissing');
-      return;
-    }
-    showError('login', null);
-    let session;
-    try {
-      session = await client.authWithPassword(email, password);
-    } catch (error) {
-      // PocketBase answers a wrong email or password with a 400.
-      showError('login', error?.type === 'invalid' && error.status === 400 ? 'account.error.wrongPassword' : errorKey(error));
-      return;
-    }
-    $('login-password').value = '';
-    await enter(session);
-  });
-
-// The error of a sign-up, by the field that the server refused.
-const requestErrorKey = (error) => {
-  const { email, password } = error?.fields ?? {};
-  if (email?.code === 'validation_not_unique') return 'account.error.emailTaken';
-  if (password) return 'account.error.passwordShort';
-  return errorKey(error);
-};
-
-const submitRequest = () =>
-  busy('request', async () => {
-    const name = $('request-name').value.trim();
-    const email = $('request-email').value.trim();
-    const password = $('request-password').value;
-    if (!email) {
-      showError('request', 'account.error.emailMissing');
-      return;
-    }
-    if (password.length < PASSWORD_MIN) {
-      showError('request', 'account.error.passwordShort');
-      return;
-    }
-    showError('request', null);
-    let session;
-    try {
-      session = await client.requestAccess({ name, email, password });
-    } catch (error) {
-      const key = requestErrorKey(error);
-      // The account exists, for example after a sign-up whose login failed: Iniciar sesión, with its email.
-      if (key === 'account.error.emailTaken') {
-        $('login-email').value = email;
-        show('login', { canClose: closable });
-        showError('login', key);
-        $('login-password').focus();
-        return;
-      }
-      showError('request', key);
-      return;
-    }
-    $('request-password').value = '';
-    await enter(session);
-  });
-
-// The same message whether the address has an account or not.
-const forgot = () =>
-  busy('login', async () => {
-    const email = $('login-email').value.trim();
-    if (!email) {
-      showError('login', 'account.error.emailMissing');
-      return;
-    }
-    try {
-      await client.requestPasswordReset(email);
-    } catch (error) {
-      if (error?.type === 'network' || error?.type === 'server' || error?.status === 429) {
-        showError('login', errorKey(error));
-        return;
-      }
-    }
-    showError('login', null);
-    showToast(t('account.resetSent'));
-  });
-
 // ACC-5: the server gives the URL of Google; the state and the verifier wait in sessionStorage.
-const google = (name) =>
-  busy(name, async () => {
-    showError(name, null);
+const google = () =>
+  busy('login', async () => {
+    showError('login', null);
     try {
       const { url, pending } = await client.oauthStart(redirectUrl());
       sessionStorage.setItem(OAUTH_KEY, JSON.stringify(pending));
       location.assign(url);
     } catch (error) {
-      showError(name, error?.type === 'network' || error?.type === 'server' || error?.type === 'rate' ? errorKey(error) : 'account.error.google');
+      showError('login', error?.type === 'network' || error?.type === 'server' || error?.type === 'rate' ? errorKey(error) : 'account.error.google');
     }
   });
 
@@ -534,24 +449,7 @@ export const renderSync = () => {
 export const bind = () => {
   if (!syncer) return;
   status = syncer.status();
-  $('login').addEventListener('submit', (event) => {
-    event.preventDefault();
-    submitLogin();
-  });
-  $('request').addEventListener('submit', (event) => {
-    event.preventDefault();
-    submitRequest();
-  });
-  $('login-forgot').addEventListener('click', forgot);
-  $('to-request').addEventListener('click', () => {
-    showError('request', null);
-    show('request', { canClose: closable });
-  });
-  $('to-login').addEventListener('click', () => {
-    showError('login', null);
-    show('login', { canClose: closable });
-  });
-  for (const name of ['login', 'request']) $(name).querySelector('[data-google]').addEventListener('click', () => google(name));
+  $('login').querySelector('[data-google]').addEventListener('click', google);
   $('waiting-check').addEventListener('click', checkAgain);
   $('waiting-logout').addEventListener('click', leaveWaiting);
   $('account-back').addEventListener('click', closeAccount);

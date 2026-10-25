@@ -267,34 +267,20 @@ const auth = body.match(/<section id="auth"[\s\S]*?<\/section>/)?.[0] ?? '';
 const viewOf = (id) => auth.match(new RegExp(`<(?:form|div) id="${id}" class="account-page"[\\s\\S]*?</(?:form|div)>\\s*(?=<(?:form|div) id=|</section>)`))?.[0] ?? '';
 const keysOf = (part) => [...part.matchAll(/data-i18n="([^"]+)"/g)].map(([, key]) => key);
 
-test('the account layer is a modal dialog with a back button and three hidden-by-default views (ACC-2)', () => {
+test('the account layer is a modal dialog with a back button and two views (ACC-2)', () => {
   assert.match(auth, /^<section id="auth" class="account" role="dialog" aria-modal="true" aria-labelledby="login-title" hidden>/);
   assert.match(auth, /<div class="account-top">\s*<button id="account-back" class="button accent" type="button" data-i18n="account.back" hidden><\/button>\s*<\/div>/);
   const views = [...auth.matchAll(/<(form|div) id="([^"]+)" class="account-page"([^>]*)>/g)].map(([, tag, id, rest]) => [tag, id, rest.includes('hidden')]);
-  assert.deepEqual(views, [['form', 'login', false], ['form', 'request', true], ['div', 'waiting', true]]);
+  assert.deepEqual(views, [['div', 'login', false], ['div', 'waiting', true]]);
 });
 
-test('Iniciar sesión has Google, Usar sin cuenta, the divider, email, password, Entrar, the reset and the link to Solicitar acceso (ACC-2)', () => {
+test('Iniciar sesión has Google and Usar sin cuenta, and no email or password (ACC-2)', () => {
   const login = viewOf('login');
-  assert.deepEqual(keysOf(login), [
-    'account.login.title', 'account.login.text', 'account.google', 'account.offline', 'account.or', 'account.email', 'account.password',
-    'account.login.submit', 'account.forgot', 'account.login.noAccount', 'account.request.title',
-  ]);
-  assert.match(login, /<input id="login-email" class="input field-input" type="email" autocomplete="email"/);
-  assert.match(login, /<input id="login-password" class="input field-input" type="password" autocomplete="current-password"/);
-  assert.match(login, /<p id="login-error" class="input-help danger" role="alert" hidden><\/p>\s*<button id="login-submit" class="button primary wide" type="submit"/);
+  assert.deepEqual(keysOf(login), ['account.login.title', 'account.login.text', 'account.google', 'account.offline']);
+  assert.match(login, /^<div id="login" class="account-page">/);
   assert.match(login, /<button class="button tonal wide" type="button" data-google><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"\/><\/svg>/);
-  assert.match(login, /<\/button>\s*<button id="login-offline" class="button accent" type="button" data-i18n="account.offline" hidden><\/button>\s*<p class="account-or"/);
-});
-
-test('Solicitar acceso has Google, the name, the email, a password of 8 or more, Enviar solicitud and the link back (ACC-2)', () => {
-  const request = viewOf('request');
-  assert.deepEqual(keysOf(request), [
-    'account.request.title', 'account.request.text', 'account.google', 'account.or', 'account.name', 'account.email',
-    'account.newPassword', 'account.request.submit', 'account.request.hasAccount', 'account.login.title',
-  ]);
-  assert.match(request, /<input id="request-password" class="input field-input" type="password" autocomplete="new-password"[^>]*minlength="8"/);
-  assert.match(request, /<button id="request-submit" class="button primary wide" type="submit"/);
+  assert.match(login, /<\/button>\s*<p id="login-error" class="input-help danger" role="alert" hidden><\/p>\s*<button id="login-offline" class="button accent" type="button" data-i18n="account.offline" hidden><\/button>/);
+  assert.doesNotMatch(auth, /<input|type="password"|id="request"/);
 });
 
 test('Esperando aprobación has Comprobar de nuevo and Cerrar sesión (ACC-2)', () => {
