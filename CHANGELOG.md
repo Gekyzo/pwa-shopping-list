@@ -14,6 +14,12 @@ no change has no entry.
   `ownerName` of `shopping_shares`) deploys first, then the app. An app that runs before the
   migration sends `scope` and `cancelled` to a server that has no such field. `docs/two-users.md`
   holds the two-user check of the feature, with the offline check.
+- Namespaced shared ids in the combined state (SHARE-12): `combine` gives each id of the shared
+  part, and each reference to one (a meal's `recipe`, `sent`), the prefix `shared:`; `split`
+  takes it away. Before, an id of both lists (the walkthrough sample `sample-pasta`, an item of
+  an imported backup) sent a `sent` id to both parts, opened the own recipe for a tap on the
+  shared one and ticked or deleted the item in both lists. `onList` gives its operation the shared
+  part with the ids of the screen and gives a combined `id` back.
 - Scope and states in the sheet `Compartir lista` (SHARE-5, SHARE-8, SHARE-9): the invite form
   has two chips `#share-scope` (`list` chosen at each open) and `invite(email, scope)` sends the
   chosen one. Each person row shows the state of `personState` (`share.cancelled` new) and

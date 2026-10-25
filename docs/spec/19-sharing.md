@@ -117,7 +117,10 @@ person of a share.
 
 - **SHARE-12** A member works on one combined state: the own entities, then the shared ones, each
   shared one marked `shared`. With scope `all` the shared recipes and meals are in it; with scope
-  `list` they are not, and the own `sent` is the whole `sent`. The marker never syncs or saves:
+  `list` they are not, and the own `sent` is the whole `sent`. Each id of the shared part, and each
+  reference to one (the recipe of a meal, `sent`), has the prefix `shared:` in the combined state:
+  the two lists may hold one id each (the sample recipe of the walkthrough, an imported backup),
+  and an id of the screen names one entity. The marker and the prefix never sync or save:
   each save splits the state into the own part and the shared part, and the shared part keeps its
   `group`, `sort` and `aisles`. An add, a rename, a recipe send and a meal act in one list, so the
   name rule (LIST-2) and the meal slot hold inside that list: two lists may each hold a `Leche`.
