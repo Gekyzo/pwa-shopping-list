@@ -80,13 +80,13 @@ tables in order: each starts from the state the table before leaves.
 | 9 | A: `Recetas` → `+ Crear receta`, name `Pasta de A`, `Listo`. B: `Recetas`. | B shows `Aún no hay recetas`. |
 | 10 | A: `Ajustes` → `Compartir lista`, tap `Comparte: Solo Compra` of B. | The scope of B reads `Comparte: Compra, Recetas y Menú`. Within a few seconds B's `Recetas` shows `Pasta de A` with the tag `User A`. |
 | 11 | B: open `Pasta de A`, add the product `Tomate de receta`, `Listo`, then `Añadir a Compra`. | B's `Todas` shows `Tomate de receta` with the tag `User A`, and the `User A` chip counts it. A shows `Tomate de receta` in its list. |
-| 12 | A: tap the scope of B again (back to `Solo Compra`). | Within a few seconds B's `Recetas` shows `Aún no hay recetas`. B's lists keep their items. No message appears when no change was waiting. |
+| 12 | A: tap the scope of B again (back to `Solo Compra`). | Within a few seconds B's `Recetas` shows `Aún no hay recetas`. B's lists keep their items: the `User A` chip keeps `Pan A` and `Tomate de receta`. No message appears when no change was waiting. |
 
 ### End of a share
 
 | # | Steps | Expected |
 |---|---|---|
-| 13 | B: `Ajustes` → `Compartir lista` → `Dejar de compartir`. Wait 5 s. | A toast reads `Ya no compartes la lista de usera@example.test.` with `Deshacer`. After 5 s the chips and tags of B go; B shows its own items only (`Huevos B`, `Cafe todas`, `Pan A`). A's sheet shows B with `Cancelada`, `Invitar de nuevo` and ✕. |
+| 13 | B: `Ajustes` → `Compartir lista` → `Dejar de compartir`. Wait 5 s. | B sees a toast that reads `Ya no compartes la lista de usera@example.test.` with `Deshacer`. After 5 s the chips and tags of B go; B shows its own items only (`Huevos B`, `Cafe todas`, `Pan A`). A's sheet shows B with `Cancelada`, `Invitar de nuevo` and ✕. |
 | 14 | A: `Invitar de nuevo`. | A's sheet shows `Invitación enviada`. B shows the banner `Ver invitación`. |
 | 15 | B: `Ver invitación`, `Rechazar`. Wait 5 s. | The banner of B goes away. A's sheet shows B with `Cancelada`. |
 | 16 | A: `Invitar de nuevo`. B: `Ver invitación`, `Aceptar`, confirm. | B shows the chips again. B's own list is the same as in step 13. |
@@ -100,8 +100,8 @@ Start from a share with B accepted (A invites, B accepts). Load the app of B onc
 
 | # | Steps | Expected |
 |---|---|---|
-| 20 | In `pwa-server`, stop PocketBase: `docker compose -f docker-compose.yml -f compose.dev.yml --env-file dev.env stop pocketbase`. B: tick a shared item (`Tomate de receta`) and an own item (`Huevos B`). | Both ticks show at once. `shopping.queue` and `shopping.shared.queue` of B each hold one change. |
-| 21 | Start PocketBase again (`start pocketbase`). Wait 12 s. | Both queues of B are empty. In the API the shared item is `bought: true` in the space of A, and `Huevos B` is `bought: true` in the space of B only. A shows the shared tick. |
+| 20 | Stop PocketBase: `cd ../pwa-server && docker compose -f docker-compose.yml -f compose.dev.yml --env-file dev.env stop pocketbase`. B: tick a shared item (`Tomate de receta`) and an own item (`Huevos B`). | Both ticks show at once. `shopping.queue` and `shopping.shared.queue` of B each hold one change. |
+| 21 | Start PocketBase again: `cd ../pwa-server && docker compose -f docker-compose.yml -f compose.dev.yml --env-file dev.env start pocketbase`. Wait 12 s. | Both queues of B are empty. In the API the shared item is `bought: true` in the space of A, and `Huevos B` is `bought: true` in the space of B only. A shows the shared tick. |
 
 Last run: 2026-10-25, the unreleased separate lists on v1.5.0, in agent-browser at 412 x 900. Each step
 gave the expected result.
