@@ -38,6 +38,8 @@ const fakeServer = () => {
   return {
     rows,
     stamp,
+    // SHARE-1: the shares of the server, `{ id, owner, email, ownerEmail, member }`.
+    shares: [],
     live: (owner) => rows.filter((row) => row.owner === owner && !row.deleted),
     add: (owner, kind, key, data) => rows.push({ id: `pb${rows.length + 1}`, owner, kind, key, data, deleted: false, updated: stamp() }),
     copy,
@@ -45,6 +47,21 @@ const fakeServer = () => {
 };
 
 const ownerOf = (token) => JSON.parse(Buffer.from(token.split('.')[1], 'base64url')).id;
+
+const emailOf = (id) => `${id}@example.test`;
+
+// The rule of the server (SHARE-1): a user acts on their own space and on the space of a share whose
+// member they are.
+const mayAct = (server, user, space) => space === user || server.shares.some((s) => s.owner === space && s.member === user);
+
+// PocketBase answers a refused rule as it answers a guest: a 400 with no field error.
+const refusedRule = () => new PocketBaseError('invalid', 400, {});
+
+const addShare = (server, owner, member = '', email = emailOf(member)) => {
+  const share = { id: `sh${server.shares.length + 1}`, owner, email, ownerEmail: emailOf(owner), member };
+  server.shares.push(share);
+  return share;
+};
 
 const fakeClient = (server, { approved = true } = {}) => {
   const calls = [];
@@ -61,27 +78,53 @@ const fakeClient = (server, { approved = true } = {}) => {
       const id = ownerOf(token);
       return { token: tokenOf(id, calls.length), user: { id, email: `${id}@example.test`, name: id, approved: client.approved } };
     },
-    pull: async (token, since) => {
+    failShares: null,
+    listShares: async (token) => {
+      calls.push('shares');
+      if (client.failShares) throw client.failShares;
+      const user = ownerOf(token);
+      return server.shares.filter((s) => s.owner === user || s.member === user || s.email === emailOf(user)).map((s) => ({ ...s }));
+    },
+    failShareCall: null,
+    invite: async (token, owner, email) => {
+      calls.push('invite');
+      if (client.failShareCall) throw client.failShareCall;
+      return { ...addShare(server, owner, '', email.toLowerCase()) };
+    },
+    acceptShare: async (token, id, userId) => {
+      calls.push('accept');
+      if (client.failShareCall) throw client.failShareCall;
+      const share = server.shares.find((s) => s.id === id);
+      share.member = userId;
+      return { ...share };
+    },
+    removeShare: async (token, id) => {
+      calls.push('remove');
+      if (client.failShareCall) throw client.failShareCall;
+      server.shares.splice(server.shares.findIndex((s) => s.id === id), 1);
+    },
+    pull: async (token, since, space) => {
       calls.push('pull');
       if (client.hold) await client.hold('pull');
       if (client.failPull) throw client.failPull;
-      const owner = ownerOf(token);
+      if (!mayAct(server, ownerOf(token), space)) return [];
       return server.rows
-        .filter((row) => row.owner === owner && (!since || row.updated >= since))
+        .filter((row) => row.owner === space && (!since || row.updated >= since))
         .sort((a, b) => (a.updated < b.updated ? -1 : 1))
         .map(({ owner: _, ...row }) => ({ ...row }));
     },
-    push: async (token, change, ids) => {
+    push: async (token, change, ids, space) => {
       calls.push('push');
       if (client.hold) await client.hold('push');
       client.pushes += 1;
       const failure = client.failPush?.(client.pushes, change, token);
       if (failure) throw failure;
-      const owner = ownerOf(token);
+      if (!mayAct(server, ownerOf(token), space)) throw refusedRule();
+      const owner = space;
       // SYNC-6: a tombstone keeps its data, as the server does.
       const body = change.op === 'delete' ? { deleted: true } : { deleted: false, data: change.data };
       const id = ids.get(recordKey(change.kind, change.key));
-      let row = id ? server.rows.find((r) => r.id === id) : null;
+      let row = id ? server.rows.find((r) => r.id === id && r.owner === owner) : null;
       if (!row && change.op === 'delete') {
         row = server.rows.find((r) => r.owner === owner && r.kind === change.kind && r.key === change.key);
         if (!row) return null;
@@ -140,7 +183,7 @@ test('a tick is queued, pushed, and the queue is empty after run', async () => {
   assert.deepEqual(loadQueue(a.storage), []);
   assert.equal(server.live('u1').find((row) => row.key === 'i1').data.bought, true);
   const status = a.box.statuses.at(-1);
-  assert.deepEqual(status, { online: true, pending: 0, lastSync: '2026-10-24T08:00:00.000Z', auth: false, reached: 2 });
+  assert.deepEqual(status, { online: true, pending: 0, lastSync: '2026-10-24T08:00:00.000Z', auth: false, reached: 2, space: 'u1', shares: [], left: 0 });
 });
 
 test('the debounce timer runs the sync', async () => {
@@ -217,13 +260,13 @@ test('the token is refreshed before the data requests, and again after 10 minute
   const syncer = createSyncer({ client, storage, getState: emptyState, setState() {}, now: () => clock, setTimer() {}, clearTimer() {} });
   // The stored sync state has no base records, so the first run sends the settings of the state.
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'push', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'shares', 'push', 'pull']);
   assert.notEqual(loadSession(storage).token, sessionOf('u1').token);
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'shares', 'push', 'pull', 'shares', 'pull']);
   clock += 10 * 60_000 + 1;
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'pull', 'refresh', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'shares', 'push', 'pull', 'shares', 'pull', 'refresh', 'shares', 'pull']);
 });
 
 test('an expired token is refreshed even right after a refresh', async () => {
@@ -240,7 +283,7 @@ test('an expired token is refreshed even right after a refresh', async () => {
   const syncer = createSyncer({ client, storage, getState: emptyState, setState() {}, now: () => Date.now(), setTimer() {}, clearTimer() {} });
   await syncer.run();
   await syncer.run();
-  assert.deepEqual(client.calls, ['refresh', 'push', 'pull', 'refresh', 'pull']);
+  assert.deepEqual(client.calls, ['refresh', 'shares', 'push', 'pull', 'refresh', 'shares', 'pull']);
 });
 
 test('a refresh that says the user is no longer approved makes no data request (ACC-4)', async () => {
@@ -888,4 +931,166 @@ test('the status counts a run only when the server answered it (SYNC-11)', async
   await a.syncer.run();
   assert.equal(reached(), 2);
   assert.equal(a.box.statuses.at(-1).lastSync, '2026-10-24T08:00:00.000Z');
+});
+
+// --- SHARE-6, SHARE-7: the sync of a space ------------------------------------------------------
+
+const names = (state) => state.items.map((i) => i.name).sort();
+
+// Owner o1 with a list on the server, and a member device u1 with a list of its own.
+const sharedWorld = async () => {
+  const server = fakeServer();
+  const owner = device({ server, user: 'o1' });
+  owner.change(withItems([item('o-i1', 'Leche')]));
+  await owner.syncer.run();
+  const member = device({ server, user: 'u1' });
+  member.change(withItems([item('u-i1', 'Pan')]));
+  await member.syncer.run();
+  return { server, owner, member };
+};
+
+test('a run lists the shares after the refresh and before the push', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  a.change(withItems([item('i1', 'Leche')]));
+  await a.syncer.run();
+  assert.deepEqual(a.client.calls.slice(0, 4), ['refresh', 'shares', 'push', 'push']);
+  assert.equal(a.client.calls.at(-1), 'pull');
+});
+
+test('a login sets the space to the user', async () => {
+  const server = fakeServer();
+  const a = device({ server, session: null });
+  assert.equal(await a.syncer.login(sessionOf('u1')), 'synced');
+  assert.equal(loadSyncState(a.storage).space, 'u1');
+  assert.equal(a.syncer.status().space, 'u1');
+});
+
+test('an accept on another device moves this device to the shared space after it sends its own queue', async () => {
+  const { server, member } = await sharedWorld();
+  member.change(withItems([item('u-i1', 'Pan'), item('u-i2', 'Sal')]));
+  addShare(server, 'o1', 'u1');
+  assert.equal(await member.syncer.run(), 'ok');
+  assert.deepEqual(names(member.box.state), ['Leche']);
+  assert.deepEqual(server.live('u1').filter((r) => r.kind === 'item').map((r) => r.data.name).sort(), ['Pan', 'Sal']);
+  assert.deepEqual(server.live('o1').filter((r) => r.kind === 'item').map((r) => r.data.name), ['Leche']);
+  assert.equal(loadSyncState(member.storage).space, 'o1');
+  assert.deepEqual(loadQueue(member.storage), []);
+});
+
+test('a member edits the space of the owner, and the owner gets the change', async () => {
+  const { server, owner, member } = await sharedWorld();
+  addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  member.change(withItems([...member.box.state.items, item('m-i9', 'Huevos')]));
+  await member.syncer.run();
+  await owner.syncer.run();
+  assert.deepEqual(names(owner.box.state), ['Huevos', 'Leche']);
+  assert.ok(!server.live('u1').some((r) => r.key === 'm-i9'));
+});
+
+test("a member's settings change patches the record of the space", async () => {
+  const { server, owner, member } = await sharedWorld();
+  addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  const own = server.rows.find((r) => r.owner === 'u1' && r.kind === 'settings');
+  const before = JSON.stringify(own.data);
+  member.change({ ...member.box.state, sort: 'name' });
+  await member.syncer.run();
+  await owner.syncer.run();
+  assert.equal(owner.box.state.sort, 'name');
+  assert.equal(JSON.stringify(own.data), before);
+});
+
+test('a revoke while changes are queued drops them, reports left and pulls the own list', async () => {
+  const { server, member } = await sharedWorld();
+  const share = addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  member.change(withItems([...member.box.state.items, item('m-i9', 'Huevos')]));
+  server.shares.splice(server.shares.indexOf(share), 1);
+  assert.equal(await member.syncer.run(), 'ok');
+  assert.equal(member.syncer.status().auth, false);
+  assert.deepEqual(names(member.box.state), ['Pan']);
+  assert.equal(member.box.statuses.at(-1).left, 1);
+  assert.equal(member.box.statuses.at(-1).space, 'u1');
+  assert.ok(!server.rows.some((r) => r.key === 'm-i9'));
+  assert.deepEqual(server.live('o1').filter((r) => r.kind === 'item').map((r) => r.data.name), ['Leche']);
+});
+
+test('a change of space with an empty queue reports no change lost', async () => {
+  const { server, member } = await sharedWorld();
+  const share = addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  server.shares.splice(server.shares.indexOf(share), 1);
+  await member.syncer.run();
+  assert.equal(member.box.statuses.at(-1).left, 0);
+});
+
+test('a change of space puts a state that queues nothing', async () => {
+  const { server, member } = await sharedWorld();
+  addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  const pushes = member.client.pushes;
+  await member.syncer.run();
+  assert.equal(member.client.pushes, pushes);
+  assert.deepEqual(loadQueue(member.storage), []);
+});
+
+test('the share list fails at the network: the run stops offline and keeps the space', async () => {
+  const { server, member } = await sharedWorld();
+  addShare(server, 'o1', 'u1');
+  member.client.failShares = new PocketBaseError('network');
+  assert.equal(await member.syncer.run(), 'offline');
+  assert.equal(loadSyncState(member.storage).space, 'u1');
+  assert.deepEqual(names(member.box.state), ['Pan']);
+});
+
+test('a leave sends the queue to the shared space first', async () => {
+  const { server, owner, member } = await sharedWorld();
+  const share = addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  member.change(withItems([...member.box.state.items, item('m-i9', 'Huevos')]));
+  assert.equal(await member.syncer.leave(share.id), 'ok');
+  await owner.syncer.run();
+  assert.deepEqual(names(owner.box.state), ['Huevos', 'Leche']);
+  assert.deepEqual(names(member.box.state), ['Pan']);
+  assert.equal(server.shares.length, 0);
+  assert.equal(member.box.statuses.at(-1).left, 0);
+});
+
+test('invite and accept go through the server and sync', async () => {
+  const { server, owner, member } = await sharedWorld();
+  assert.equal(await owner.syncer.invite(' U1@example.test '), 'ok');
+  assert.deepEqual(server.shares.map((s) => [s.owner, s.email, s.member]), [['o1', 'u1@example.test', '']]);
+  assert.deepEqual(owner.syncer.status().shares.length, 1);
+  await member.syncer.run();
+  assert.equal(member.syncer.status().shares.length, 1);
+  assert.equal(await member.syncer.accept(server.shares[0].id), 'ok');
+  assert.deepEqual(names(member.box.state), ['Leche']);
+});
+
+test('remove deletes the share and syncs', async () => {
+  const { server, owner } = await sharedWorld();
+  const share = addShare(server, 'o1', 'u1');
+  assert.equal(await owner.syncer.remove(share.id), 'ok');
+  assert.deepEqual(server.shares, []);
+  assert.deepEqual(owner.syncer.status().shares, []);
+});
+
+test('invite maps the server errors to share.error keys', async () => {
+  const server = fakeServer();
+  const a = device({ server });
+  const cases = [
+    [new PocketBaseError('invalid', 400, { email: { code: 'share_self' } }), 'share.error.self'],
+    [new PocketBaseError('invalid', 400, { email: { code: 'validation_not_unique' } }), 'share.error.taken'],
+    [new PocketBaseError('invalid', 400, { email: { code: 'share_member' } }), 'share.error.taken'],
+    [new PocketBaseError('invalid', 400, { email: { code: 'validation_invalid_email' } }), 'share.error.invalid'],
+    [new PocketBaseError('network'), 'share.error.network'],
+    [new PocketBaseError('server', 503), 'share.error.network'],
+  ];
+  for (const [error, key] of cases) {
+    a.client.failShareCall = error;
+    assert.deepEqual(await a.syncer.invite('x@example.test'), { error: key }, key);
+  }
+  assert.deepEqual(await a.syncer.invite('   '), { error: 'share.error.invalid' });
 });
