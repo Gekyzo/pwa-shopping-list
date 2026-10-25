@@ -159,7 +159,7 @@ export const createSyncer = ({
     for (let change = queue[0]; change; change = queue[0]) {
       let rec;
       try {
-        rec = await client.push(token, change, sync.ids);
+        rec = await client.push(token, change, sync.ids, sync.owner);
       } catch (error) {
         if (!live()) return STALE;
         if (known(error).type === 'gone') {
@@ -224,7 +224,7 @@ export const createSyncer = ({
     if (stopped) return { result: stopped };
     let pulled;
     try {
-      pulled = await client.pull(token, sync.cursor);
+      pulled = await client.pull(token, sync.cursor, sync.owner);
     } catch (error) {
       return { result: live() ? stopOf(known(error)) : STALE };
     }
@@ -365,7 +365,7 @@ export const createSyncer = ({
     if (previousOwner === null && hasLocalData) {
       let pulled;
       try {
-        pulled = await client.pull(session.token, '');
+        pulled = await client.pull(session.token, '', userId);
       } catch (error) {
         abandon(error);
       }

@@ -4,6 +4,7 @@ import { recordKey } from '#records';
 
 const USERS = '/api/collections/users';
 const RECORDS = '/api/collections/shopping_records/records';
+const SHARES = '/api/collections/shopping_shares/records';
 const PAGE = 500;
 
 export class PocketBaseError extends Error {
@@ -30,16 +31,6 @@ export const isUniqueViolation = (error) =>
   error.status === 400 &&
   Object.values(error.fields).some((field) => field?.code === 'validation_not_unique');
 
-// The `id` claim of the JWT of a user token.
-const userIdOf = (token) => {
-  try {
-    const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(atob(payload)).id ?? '';
-  } catch {
-    return '';
-  }
-};
-
 const quoted = (text) => `"${String(text).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
 
 const sessionOf = ({ token, record }) => ({
@@ -48,6 +39,14 @@ const sessionOf = ({ token, record }) => ({
 });
 
 const serverRecOf = ({ id, kind, key, data, deleted, updated }) => ({ id, kind, key, data, deleted: deleted === true, updated });
+
+const shareOf = ({ id, owner, email, ownerEmail, member }) => ({ id, owner, email, ownerEmail: ownerEmail ?? '', member: member ?? '' });
+
+// SHARE-6: a member can read two spaces, so every request for records names the space.
+const inSpace = (space) => {
+  if (!space) throw new PocketBaseError('auth');
+  return `owner = ${quoted(space)}`;
+};
 
 export const createClient = ({ url, fetch, EventSource }) => {
   const base = url.replace(/\/+$/, '');
@@ -81,10 +80,11 @@ export const createClient = ({ url, fetch, EventSource }) => {
   const authWithPassword = async (email, password) =>
     sessionOf(await call('POST', `${USERS}/auth-with-password`, { body: { identity: email, password } }));
 
-  const findRecord = async (token, { kind, key }) => {
+  // Both spaces of a member hold `settings:settings` and the meal keys, so the lookup names the space.
+  const findRecord = async (token, { kind, key }, space) => {
     const page = await call('GET', RECORDS, {
       token,
-      query: { filter: `kind = ${quoted(kind)} && key = ${quoted(key)}`, perPage: '1' },
+      query: { filter: `${inSpace(space)} && kind = ${quoted(kind)} && key = ${quoted(key)}`, perPage: '1' },
     });
     return page.items[0] ? serverRecOf(page.items[0]) : null;
   };
@@ -95,23 +95,31 @@ export const createClient = ({ url, fetch, EventSource }) => {
   const bodyOf = ({ op, data }) => (op === 'delete' ? { deleted: true } : { deleted: false, data });
 
   // SYNC-6: a delete never creates a record; with no record on the server it resolves to null.
-  const patchFound = async (token, change) => {
-    const found = await findRecord(token, change);
+  const patchFound = async (token, change, space) => {
+    const found = await findRecord(token, change, space);
     return found ? patch(token, found.id, bodyOf(change)) : null;
   };
 
-  const create = async (token, change) => {
-    const owner = userIdOf(token);
-    if (!owner) throw new PocketBaseError('auth');
+  // SHARE-1: a record has the owner of its space, whoever writes it.
+  const create = async (token, change, space) => {
     try {
       return serverRecOf(
-        await call('POST', RECORDS, { token, body: { owner, kind: change.kind, key: change.key, ...bodyOf(change) } }),
+        await call('POST', RECORDS, { token, body: { owner: space, kind: change.kind, key: change.key, ...bodyOf(change) } }),
       );
     } catch (error) {
       if (!isUniqueViolation(error)) throw error;
-      const found = await findRecord(token, change);
+      const found = await findRecord(token, change, space);
       if (!found) throw error;
       return patch(token, found.id, bodyOf(change));
+    }
+  };
+
+  const pages = async (token, path, query, map) => {
+    const all = [];
+    for (let page = 1; ; page += 1) {
+      const result = await call('GET', path, { token, query: { ...query, perPage: String(PAGE), page: String(page) } });
+      all.push(...result.items.map(map));
+      if (!(result.totalPages > page)) return all;
     }
   };
 
@@ -149,24 +157,30 @@ export const createClient = ({ url, fetch, EventSource }) => {
       await call('POST', `${USERS}/request-password-reset`, { body: { email } });
     },
 
-    // SYNC-4: every record with `updated` at or after the cursor; an empty cursor pulls everything.
-    pull: async (token, since) => {
-      const pulled = [];
-      for (let page = 1; ; page += 1) {
-        const result = await call('GET', RECORDS, {
-          token,
-          query: { ...(since ? { filter: `updated >= ${quoted(since)}` } : {}), sort: 'updated', perPage: String(PAGE), page: String(page) },
-        });
-        pulled.push(...result.items.map(serverRecOf));
-        if (!(result.totalPages > page)) return pulled;
-      }
+    // SYNC-4: every record of the space with `updated` at or after the cursor; an empty cursor pulls
+    // the whole space.
+    pull: async (token, since, space) => {
+      const filter = since ? `${inSpace(space)} && updated >= ${quoted(since)}` : inSpace(space);
+      return pages(token, RECORDS, { filter, sort: 'updated' }, serverRecOf);
+    },
+
+    // SHARE-6: the shares where the user is the owner, the member or the invitee (the rules of the server).
+    listShares: (token) => pages(token, SHARES, { sort: 'created' }, shareOf),
+
+    invite: async (token, owner, email) => shareOf(await call('POST', SHARES, { token, body: { owner, email } })),
+
+    acceptShare: async (token, id, userId) => shareOf(await call('PATCH', `${SHARES}/${id}`, { token, body: { member: userId } })),
+
+    removeShare: async (token, id) => {
+      await call('DELETE', `${SHARES}/${id}`, { token });
     },
 
     // `ids` is keyed by recordKey(kind, key). Resolves to the server record, or null for a delete of
     // a record that the server does not hold. A delete of a known record that the server does not
     // find throws `gone`: a token that is not valid gets the same answers, so the syncer checks the
     // token first (SYNC-6, ACC-7).
-    push: async (token, change, ids) => {
+    push: async (token, change, ids, space) => {
+      inSpace(space);
       const id = ids.get(recordKey(change.kind, change.key));
       if (id) {
         try {
@@ -175,15 +189,15 @@ export const createClient = ({ url, fetch, EventSource }) => {
           if (error.status !== 404) throw error;
           // The record is gone from the server: a delete has nothing left to do, an upsert creates it again.
           if (change.op === 'delete') {
-            const found = await patchFound(token, change);
+            const found = await patchFound(token, change, space);
             if (found === null) throw new PocketBaseError('gone', 404);
             return found;
           }
         }
       } else if (change.op === 'delete') {
-        return patchFound(token, change);
+        return patchFound(token, change, space);
       }
-      return create(token, change);
+      return create(token, change, space);
     },
 
     // The returned function closes the stream. A failed subscription is silent: SYNC-3 syncs at the
@@ -200,7 +214,7 @@ export const createClient = ({ url, fetch, EventSource }) => {
         if (connects > 1) onReconnect();
         try {
           const { clientId } = JSON.parse(event.data);
-          await call('POST', '/api/realtime', { token: tokenOf(), body: { clientId, subscriptions: ['shopping_records'] } });
+          await call('POST', '/api/realtime', { token: tokenOf(), body: { clientId, subscriptions: ['shopping_records', 'shopping_shares'] } });
         } catch {
           // See above.
         }
@@ -215,6 +229,8 @@ export const createClient = ({ url, fetch, EventSource }) => {
         }
         onChange(rec);
       });
+      // SHARE-6: a share that starts or ends changes the space to sync; the event carries no record.
+      source.addEventListener('shopping_shares', () => onChange(null));
       return () => source.close();
     },
   };
