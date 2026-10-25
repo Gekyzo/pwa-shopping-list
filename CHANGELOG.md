@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+- Deploy order of separate shared lists: the `pwa-server` migration 4 (`scope`, `cancelled` and
+  `ownerName` of `shopping_shares`) deploys first, then the app. An app that runs before the
+  migration sends `scope` and `cancelled` to a server that has no such field. `docs/two-users.md`
+  holds the two-user check of the feature, with the offline check.
 - Scope and states in the sheet `Compartir lista` (SHARE-5, SHARE-8, SHARE-9): the invite form
   has two chips `#share-scope` (`list` chosen at each open) and `invite(email, scope)` sends the
   chosen one. Each person row shows the state of `personState` (`share.cancelled` new) and
