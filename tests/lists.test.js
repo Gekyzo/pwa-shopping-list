@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { emptyState, addItem, toggleBought } from '#store';
 import { sendRecipe } from '#recipes';
 import { setMeal, menuWeek, dishRecipe } from '#menu';
-import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts } from '#lists';
+import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts, reorderList } from '#lists';
 
 const item = (id, name, extra = {}) => ({ id, name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '', ...extra });
 const recipe = (id, name) => ({ id, name, products: [] });
@@ -269,3 +269,35 @@ test('onList gives the combined id of a new shared recipe, and of an existing on
   assert.equal(again.id, made.id);
 });
 
+// I1: a manual move runs in the list of its rows, so it never writes the order of the other list.
+test('a move of two own items in the name order keeps the shared items as they are', () => {
+  const combined = combine(own(), shared(), 'all');
+  const result = reorderList(combined, ['o2', 'o1'], shared(), 'all');
+  const parts = split(result.state, shared(), 'all');
+  assert.deepEqual(parts.shared, shared());
+  assert.deepEqual(parts.own.items.map((entry) => entry.id), ['o2', 'o1']);
+  assert.equal(parts.own.sort, 'custom');
+});
+
+test('a move of two shared items in the name order switches the own order to custom', () => {
+  const base = { ...shared(), items: [item('s1', 'Sal'), item('s2', 'Arroz'), item('s3', 'Leche')] };
+  const combined = combine({ ...own(), items: [item('o1', 'Pan'), item('o2', 'Leche')] }, base, 'all');
+  // The screen shows Arroz, Leche, Sal: Sal goes above Arroz.
+  const result = reorderList(combined, ['shared:s1', 'shared:s2', 'shared:s3'], base, 'all');
+  const parts = split(result.state, base, 'all');
+  assert.deepEqual(parts.shared.items.map((entry) => entry.name), ['Sal', 'Arroz', 'Leche']);
+  assert.equal(parts.shared.sort, 'custom');
+  // The own list keeps the order of the screen, in the custom order now.
+  assert.deepEqual(parts.own.items.map((entry) => entry.name), ['Leche', 'Pan']);
+  assert.equal(parts.own.sort, 'custom');
+});
+
+test('a move that changes nothing gives the same state', () => {
+  const combined = { ...combine(own(), shared(), 'all'), sort: 'custom' };
+  assert.equal(reorderList(combined, ['o1', 'o2'], shared(), 'all').state, combined);
+  assert.equal(reorderList(combined, ['shared:s1', 'shared:s2'], shared(), 'all').state, combined);
+});
+
+test('a move of an unknown item is an error', () => {
+  assert.equal(reorderList(combine(own(), shared(), 'all'), ['nope'], shared(), 'all').error.key, 'error.itemNotFound');
+});

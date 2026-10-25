@@ -1,3 +1,5 @@
+import { reorderItems } from '#store';
+
 // SHARE-12: the screen works on one combined state. For a member it holds the own entities and the
 // shared ones, each shared one marked `shared: true`. Each id of the shared part, and each reference
 // to one (a meal's `recipe`, `sent`), has the prefix `shared:` in it, so that an id of both lists
@@ -110,6 +112,24 @@ export const onList = (state, which, op, sharedBase, scope) => {
 
 // The list that holds an entity of the combined state.
 export const listOf = (entity) => (isShared(entity) ? 'shared' : 'own');
+
+// SHARE-15: a manual move runs in the list of its rows (no row moves in Todas, SHARE-14), so it
+// never changes the order of the other list. The screen shows both lists in the own order: the
+// moved list moves in that order. A move in the name order switches the own order to custom, with
+// the own items in the name order, as `reorderItems` does; the order of the shared part stays its own.
+export const reorderList = (state, ids, sharedBase, scope) => {
+  const moved = state.items.find((entity) => entity.id === ids[0]);
+  if (!moved) return { error: { key: 'error.itemNotFound' } };
+  const which = listOf(moved);
+  const inOrder = (part) => {
+    const shown = part.sort === state.sort ? part : { ...part, sort: state.sort };
+    const result = reorderItems(shown, ids);
+    return result.state === shown ? { state: part } : result;
+  };
+  const result = onList(state, which, inOrder, sharedBase, scope);
+  if (result.error || which === 'own' || state.sort !== 'name' || result.state === state) return result;
+  return onList(result.state, 'own', (part) => reorderItems(part, []), sharedBase, scope);
+};
 
 // SHARE-15: the list that an add goes to. An add from Todas goes to the own list.
 export const targetList = (choice) => (choice === 'shared' ? 'shared' : 'own');
