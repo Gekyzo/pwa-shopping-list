@@ -10,6 +10,17 @@ no change has no entry.
 
 ## Unreleased
 
+- Two-lane syncer (SHARE-6, SHARE-7, SHARE-8, SHARE-13): each run syncs the own space, then the
+  shared space of a share whose member is the user, with the same push, pull and merge; the own
+  space is always the user's, and the swap of space is gone. `createSyncer` takes `getShared` and
+  `setShared(state | null, share | null)`; new `notifyShared`, `decline`, `setScope` and
+  `reinvite`; `leave` and `decline` cancel the share, `remove` deletes it. `status()` drops `space`
+  and gains `shared`; `pending` counts both queues. A start or an end of the share, a narrowed
+  scope (recipes and meals dropped, no delete queued) and a widened scope (a pull in full) apply at
+  each run. With scope `list` the shared lane sends items only. A device of v1.5.0 in a shared
+  space moves that data to the shared keys and pulls its own space in full. `targetSpace` is
+  removed. Until the screen shows both lists, `src/ui/account.js` saves the shared state with
+  `saveSharedState` and the sheet declines with `decline`.
 - Storage of the shared space (SHARE-12): keys `shopping.shared.v1`, `shopping.shared.sync` and
   `shopping.shared.queue`; `loadSharedState` and `saveSharedState`; `loadSyncState`, `saveSyncState`,
   `loadQueue` and `saveQueue` take a `lane` (`own` or `shared`); the shared sync state stores the

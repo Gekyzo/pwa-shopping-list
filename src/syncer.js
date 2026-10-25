@@ -1,15 +1,16 @@
 // The sync driver: it queues each save, sends the queue, pulls the account and merges it into the state
 // (SYNC-2 to SYNC-9), runs the login and the logout of the account (ACC-4, ACC-7 to ACC-9), and the
-// shares of the space (SHARE-6 to SHARE-8).
+// shares (SHARE-6 to SHARE-8). It syncs two lanes: the own space always, and the shared space while
+// the user is a member of a share (SHARE-12). Both lanes run the same push, pull and merge.
 // The client, the storage, the clock and the timer are injected, so a test runs with no network.
 import { toRecords, fromRecords, diffRecords, recordKey } from '#records';
 import { enqueue, mergePulled, dedupe, cursorOf } from '#sync';
 import {
   loadSession, saveSession, clearAccountData, loadSyncState, saveSyncState, loadQueue, saveQueue,
-  tokenExpired, accountChange, firstLogin, BEFORE_LOGIN_KEY, SESSION_KEY,
+  saveSharedState, tokenExpired, accountChange, firstLogin, BEFORE_LOGIN_KEY, SESSION_KEY,
 } from '#session';
 import { PocketBaseError, isUniqueViolation } from '#pocketbase';
-import { targetSpace } from '#shares';
+import { sharedSpace } from '#shares';
 import { normalizeState } from '#storage';
 import { emptyState } from '#store';
 
@@ -48,6 +49,13 @@ const hasData = (state) => diffRecords(toRecords(emptyState()), toRecords(state)
 
 const listed = (rec) => rec.kind === 'item' || rec.kind === 'recipe';
 
+// SHARE-7: the kinds that a share of scope `list` gives; recipes and meals leave the lane.
+const LIST_KINDS = ['item', 'settings'];
+const kindOf = (id) => id.slice(0, id.indexOf(':'));
+const onlyList = (map) => new Map([...map].filter(([id]) => LIST_KINDS.includes(kindOf(id))));
+
+const sameShare = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
 // SYNC-2: `records` hold none of the items and recipes of `local`, and `local` holds some.
 const holdsNone = (local, records) => {
   const known = [...local.values()].filter(listed);
@@ -72,6 +80,10 @@ export const createSyncer = ({
   storage,
   getState,
   setState,
+  // SHARE-12: the state of the shared lane, as the app holds it, or null with no share. The app saves
+  // what setShared gives (`saveSharedState`), as it saves what setState gives.
+  getShared = () => null,
+  setShared = () => {},
   now = Date.now,
   onStatus = () => {},
   setTimer = setTimeout,
@@ -79,16 +91,85 @@ export const createSyncer = ({
   // ACC-1: true when the start could not read `shopping.v1` and fell back to the empty state.
   lost = false,
 }) => {
-  let sync = loadSyncState(storage);
-  let queue = loadQueue(storage);
+  // A lane: its sync state, its queue and `seen`, the records of the last state that the syncer saw
+  // (at the start, of a save, or that it put in place). `allows` filters what the lane may queue.
+  const own = {
+    name: 'own',
+    sync: loadSyncState(storage),
+    queue: loadQueue(storage),
+    get: getState,
+    set: (next) => setState(next),
+    allows: () => true,
+  };
+  const shared = {
+    name: 'shared',
+    sync: loadSyncState(storage, 'shared'),
+    queue: loadQueue(storage, 'shared'),
+    // The share of the lane: `{ owner, ownerName, ownerEmail, scope, id }`.
+    share: null,
+    get: getShared,
+    set: (next) => setShared(next, shared.share),
+    // SHARE-7: with scope `list` the lane sends items only. The settings of the owner hold `sent` ids
+    // of recipes that the member does not see; the validation drops them, and a push would wipe them.
+    allows: (change) => shared.sync.scope !== 'list' || change.kind === 'item',
+  };
+  const active = () => shared.sync.space !== null;
+
+  const persist = (lane) => {
+    saveQueue(storage, lane.queue, lane.name);
+    saveSyncState(storage, lane.sync, lane.name);
+  };
+
+  // SHARE-12: a device of v1.5.0 that a member left in the shared space holds that space in the own
+  // keys. The data moves to the shared keys first, so a stop halfway loses nothing: the next start
+  // finds the shared lane and only resets the own lane. The own lane then pulls in full (SYNC-8).
+  if (own.sync.owner !== null && own.sync.space !== own.sync.owner) {
+    const old = own.sync;
+    if (!active()) {
+      const state = getState();
+      const share = sharedSpace(old.shares, old.owner);
+      shared.queue = own.queue;
+      shared.sync = {
+        ...old,
+        shares: [],
+        scope: share?.owner === old.space ? share.scope : 'all',
+        // ACC-1: a lost state is no base: the shared space is pulled again in full.
+        ...(lost ? { local: toRecords(emptyState()), cursor: '' } : {}),
+      };
+      saveSharedState(storage, state);
+      persist(shared);
+      setShared(state, share?.owner === old.space ? share : null);
+    }
+    own.queue = [];
+    own.sync = {
+      ...emptySync(),
+      owner: old.owner,
+      space: old.owner,
+      shares: old.shares,
+      local: toRecords(emptyState()),
+      ...(old.lastSync ? { lastSync: old.lastSync } : {}),
+    };
+    setState(emptyState());
+    persist(own);
+  }
   // ACC-1: the account is pulled again in full, with the empty state as the base, so the lost
   // state deletes nothing.
-  if (lost && sync.owner !== null) {
-    sync = { ...sync, local: toRecords(emptyState()), cursor: '' };
-    saveSyncState(storage, sync);
+  if (lost && own.sync.owner !== null) {
+    own.sync = { ...own.sync, local: toRecords(emptyState()), cursor: '' };
+    saveSyncState(storage, own.sync);
   }
-  // The records of the last state that the syncer saw: at the start, of a save, or that it put in place.
-  let seen = toRecords(getState());
+  if (active()) {
+    const share = sharedSpace(own.sync.shares, own.sync.owner);
+    shared.share = share?.owner === shared.sync.space ? share : null;
+    // ACC-1 for the shared lane: with no shared state the space is pulled again in full.
+    if (getShared() === null) {
+      shared.sync = { ...shared.sync, local: toRecords(emptyState()), cursor: '' };
+      persist(shared);
+    }
+  }
+  own.seen = toRecords(getState());
+  shared.seen = toRecords(getShared() ?? emptyState());
+
   let online = true;
   let lastRefresh = null;
   let running = null;
@@ -103,34 +184,34 @@ export const createSyncer = ({
   let authStopped = false;
   // SYNC-11: counts the runs after which the server had answered (ok, a rate limit, an auth error).
   let reached = 0;
-  // SHARE-7: the changes that the last change from a shared space to the own space dropped; the next
+  // SHARE-7: the shared changes that an end of the share or a narrowed scope dropped; the next
   // report shows them once.
   let left = 0;
 
+  const pending = () => own.queue.length + shared.queue.length;
+
   // `auth` is true after an auth stop, until the next login (ACC-7): the app then shows Iniciar sesión.
   const status = () => ({
-    online, pending: queue.length, lastSync: sync.lastSync ?? null, auth: authStopped, reached,
-    space: sync.space, shares: sync.shares, left,
+    online, pending: pending(), lastSync: own.sync.lastSync ?? null, auth: authStopped, reached,
+    shared: active() ? shared.share : null, shares: own.sync.shares, left,
   });
   const report = () => {
     onStatus(status());
     left = 0;
   };
-  const persist = () => {
-    saveQueue(storage, queue);
-    saveSyncState(storage, sync);
+
+  const put = (lane, next) => {
+    lane.seen = toRecords(next);
+    lane.set(next);
   };
 
-  const put = (next) => {
-    seen = toRecords(next);
-    setState(next);
-  };
+  const admit = (lane, changes) => enqueue(lane.queue, changes.filter(lane.allows));
 
   // SYNC-2: a state that never held the items and recipes of the account since the start (a state
   // that fell back to the empty one) does not delete them. A user who deletes them one by one, or an
   // import (`explicit`, SYNC-9), still does.
-  const refused = (records, explicit) => {
-    if (explicit || !holdsNone(sync.local, records) || !holdsNone(sync.local, seen)) return false;
+  const refused = (lane, records, explicit) => {
+    if (explicit || !holdsNone(lane.sync.local, records) || !holdsNone(lane.sync.local, lane.seen)) return false;
     console.error('sync: a state with none of the items and recipes of the account is not sent');
     return true;
   };
@@ -138,21 +219,23 @@ export const createSyncer = ({
   // The run only syncs for the user that a finished login made the owner of the stored data.
   const activeSession = () => {
     const session = loadSession(storage);
-    return session && session.user.approved === true && sync.owner === session.user.id ? session : null;
+    return session && session.user.approved === true && own.sync.owner === session.user.id ? session : null;
   };
 
   // SYNC-2: a save that notify did not queue (no approval, the question of ACC-8, a login in progress)
   // is queued at the next run, so that the merge cannot overwrite it. The base is the state that the
   // login set (SYNC-8), so the default settings of a device with no data are no change.
-  const catchUp = () => {
-    const records = toRecords(getState());
-    if (refused(records, false)) return;
-    seen = records;
-    const changes = diffRecords(sync.local, records);
+  const catchUp = (lane) => {
+    const state = lane.get();
+    if (state === null) return;
+    const records = toRecords(state);
+    if (refused(lane, records, false)) return;
+    lane.seen = records;
+    const changes = diffRecords(lane.sync.local, records);
     if (changes.length === 0) return;
-    queue = enqueue(queue, changes);
-    sync = { ...sync, local: records };
-    persist();
+    lane.queue = admit(lane, changes);
+    lane.sync = { ...lane.sync, local: records };
+    persist(lane);
   };
 
   // ACC-7: refresh an expired token, and any token after REFRESH_MS. The answer carries `approved`.
@@ -175,12 +258,12 @@ export const createSyncer = ({
 
   // SYNC-4: each change in order. A change leaves the queue only after the server took it, and the queue
   // is saved at once, so a run that stops resends nothing as a new record.
-  const pushAll = async (session, firstToken, live) => {
+  const pushAll = async (lane, session, firstToken, live) => {
     let token = firstToken;
-    for (let change = queue[0]; change; change = queue[0]) {
+    for (let change = lane.queue[0]; change; change = lane.queue[0]) {
       let rec;
       try {
-        rec = await client.push(token, change, sync.ids, sync.space);
+        rec = await client.push(token, change, lane.sync.ids, lane.sync.space);
       } catch (error) {
         if (!live()) return STALE;
         if (known(error).type === 'gone') {
@@ -196,8 +279,8 @@ export const createSyncer = ({
       }
       if (!live()) return STALE;
       const id = recordKey(change.kind, change.key);
-      const server = new Map(sync.server);
-      const ids = new Map(sync.ids);
+      const server = new Map(lane.sync.server);
+      const ids = new Map(lane.sync.ids);
       if (rec) {
         server.set(id, rec);
         ids.set(id, rec.id);
@@ -206,10 +289,10 @@ export const createSyncer = ({
         server.delete(id);
         ids.delete(id);
       }
-      sync = { ...sync, server, ids };
+      lane.sync = { ...lane.sync, server, ids };
       // By identity: a save during the push may have replaced the change with a newer one.
-      queue = queue.filter((queued) => queued !== change);
-      persist();
+      lane.queue = lane.queue.filter((queued) => queued !== change);
+      persist(lane);
     }
     return null;
   };
@@ -217,43 +300,95 @@ export const createSyncer = ({
   // SYNC-4 to SYNC-7: the pulled records go into the state; a queued change wins. Returns false when
   // the validation refuses the merged records: then the state, the queue and the cursor stay, and the
   // next sync pulls those records again.
-  const merge = (pulled) => {
-    const merged = mergePulled({ local: sync.local, server: sync.server, queue, pulled });
+  const merge = (lane, pulled) => {
+    const { sync } = lane;
+    const merged = mergePulled({ local: sync.local, server: sync.server, queue: lane.queue, pulled });
     const deduped = dedupe(merged.local, merged.server);
     const next = normalizeState(fromRecords(deduped.local));
     if (next === null) return false;
     const ids = new Map(sync.ids);
     for (const rec of pulled) ids.set(recordKey(rec.kind, rec.key), rec.id);
-    queue = enqueue(queue, deduped.removed);
+    lane.queue = admit(lane, deduped.removed);
     const nextRecords = toRecords(next);
-    if (diffRecords(toRecords(getState()), nextRecords).length > 0) put(next);
-    else seen = nextRecords;
+    const current = lane.get();
+    if (current === null || diffRecords(toRecords(current), nextRecords).length > 0) put(lane, next);
+    else lane.seen = nextRecords;
     // The validation can drop a meal or a `sent` id of a removed recipe: the server gets that too.
-    queue = enqueue(queue, diffRecords(deduped.local, nextRecords));
-    sync = { ...sync, server: merged.server, ids, local: nextRecords, cursor: cursorOf(pulled, sync.cursor) };
+    lane.queue = admit(lane, diffRecords(deduped.local, nextRecords));
+    lane.sync = { ...sync, server: merged.server, ids, local: nextRecords, cursor: cursorOf(pulled, sync.cursor) };
     return true;
   };
 
-  // SHARE-7: the queue of the own space goes first, since the user can still write it; the queue of a
-  // shared space is dropped, since the user can no longer write it. Then the device takes the new
-  // space in full, as a device with no local data at its first login (SYNC-8).
-  const changeSpace = async (session, token, target, live) => {
-    if (sync.space === session.user.id) {
-      const stopped = await pushAll(session, token, live);
-      if (stopped) return stopped;
-    } else {
-      left = queue.length;
+  // Resolves to `{ stop }` with the result of the run, or to `{ merged }`.
+  const pullLane = async (lane, token, live) => {
+    let pulled;
+    try {
+      pulled = await client.pull(token, lane.sync.cursor, lane.sync.space);
+    } catch (error) {
+      return { stop: live() ? stopOf(known(error)) : STALE };
     }
-    queue = [];
-    const empty = emptyState();
-    sync = { ...emptySync(), owner: sync.owner, space: target, shares: sync.shares, local: toRecords(empty) };
-    put(empty);
-    persist();
-    return null;
+    if (!live()) return { stop: STALE };
+    const merged = merge(lane, pulled);
+    persist(lane);
+    return { merged };
   };
 
-  // Resolves to null when the share ended and the device changed space, else to the result of the run.
-  const recheckSpace = async (session, token, live) => {
+  // SHARE-7: a new share starts the lane empty; the first pull takes the space in full (SYNC-8).
+  const startShared = (share, userId) => {
+    shared.share = share;
+    shared.queue = [];
+    shared.sync = { ...emptySync(), owner: userId, space: share.owner, scope: share.scope, local: toRecords(emptyState()) };
+    persist(shared);
+    put(shared, emptyState());
+  };
+
+  // SHARE-7: the user can no longer write the shared space, so its queue is dropped and counted.
+  const endShared = () => {
+    left += shared.queue.length;
+    shared.share = null;
+    shared.queue = [];
+    shared.sync = emptySync();
+    shared.seen = toRecords(emptyState());
+    persist(shared);
+    setShared(null, null);
+  };
+
+  // SHARE-7: from scope `all` to `list` the recipes and meals leave the lane, its queue and its
+  // base. They stay on the server: nothing queues a delete.
+  const narrow = () => {
+    const kept = shared.queue.filter(shared.allows);
+    left += shared.queue.length - kept.length;
+    shared.queue = kept;
+    const local = onlyList(shared.sync.local);
+    const next = normalizeState(fromRecords(local));
+    shared.sync = { ...shared.sync, local: next ? toRecords(next) : local, server: onlyList(shared.sync.server), ids: onlyList(shared.sync.ids) };
+    if (next) put(shared, next);
+  };
+
+  // SHARE-6, SHARE-7: the shared lane follows the share of the user, `share` or null.
+  const follow = (share, userId) => {
+    if (active() && share?.owner !== shared.sync.space) endShared();
+    if (share === null) return;
+    if (!active()) {
+      startShared(share, userId);
+      return;
+    }
+    const before = { share: shared.share, scope: shared.sync.scope };
+    shared.share = share;
+    shared.sync = { ...shared.sync, scope: share.scope };
+    if (before.scope === 'all' && share.scope === 'list') narrow();
+    else {
+      // SHARE-7: from `list` to `all` the recipes and meals come in a pull in full.
+      if (before.scope === 'list' && share.scope === 'all') shared.sync = { ...shared.sync, cursor: '' };
+      if (!sameShare(before.share, share) && shared.get() !== null) setShared(shared.get(), share);
+    }
+    persist(shared);
+  };
+
+  // R5 of SHARE-7: a share can end between the list and the push. The server then refuses the push as
+  // it refuses a token that is not valid; a new list of the shares tells the two apart. Resolves to
+  // the result of the run, or to null when the lane changed and can go on.
+  const recheckShare = async (session, token, live) => {
     let shares;
     try {
       shares = await client.listShares(token);
@@ -261,20 +396,38 @@ export const createSyncer = ({
       return live() ? stopOf(known(error)) : STALE;
     }
     if (!live()) return STALE;
-    const target = targetSpace(shares, session.user.id);
-    if (target === sync.space) return 'auth';
-    sync = { ...sync, shares };
-    return changeSpace(session, token, target, live);
+    own.sync = { ...own.sync, shares };
+    persist(own);
+    const share = sharedSpace(shares, session.user.id);
+    if (share?.owner === shared.sync.space && share.scope === shared.sync.scope) return 'auth';
+    follow(share, session.user.id);
+    return null;
+  };
+
+  // Resolves to `{ stop }` with the result of the run, or to `{ merged }`.
+  const syncShared = async (session, token, live) => {
+    follow(sharedSpace(own.sync.shares, session.user.id), session.user.id);
+    persist(own);
+    if (!active()) return {};
+    let stopped = await pushAll(shared, session, token, live);
+    if (stopped === 'auth') {
+      stopped = await recheckShare(session, token, live);
+      if (!stopped && active()) stopped = await pushAll(shared, session, token, live);
+    }
+    if (stopped) return { stop: stopped };
+    if (!active()) return {};
+    return pullLane(shared, token, live);
   };
 
   // Resolves to the result of the run and whether the merge queued changes to send soon.
   const syncOnce = async (live) => {
     const session = activeSession();
     if (!session) return { result: 'ok' };
-    catchUp();
+    catchUp(own);
+    if (active()) catchUp(shared);
     const { token, stop } = await freshToken(session, live);
     if (stop) return { result: stop };
-    // SHARE-6: the shares say which space to sync, before anything is sent.
+    // SHARE-6: the shares say which shared space to sync, before anything is sent.
     let shares;
     try {
       shares = await client.listShares(token);
@@ -282,28 +435,18 @@ export const createSyncer = ({
       return { result: live() ? stopOf(known(error)) : STALE };
     }
     if (!live()) return { result: STALE };
-    sync = { ...sync, shares };
-    const target = targetSpace(shares, session.user.id);
-    if (target !== sync.space) {
-      const changed = await changeSpace(session, token, target, live);
-      if (changed) return { result: changed };
-    }
-    let stopped = await pushAll(session, token, live);
-    // SHARE-7: a share can end between the list and the push. The server then refuses the push as it
-    // refuses a token that is not valid; a new list of the shares tells the two apart.
-    if (stopped === 'auth' && sync.space !== session.user.id) stopped = await recheckSpace(session, token, live);
+    own.sync = { ...own.sync, shares };
+    // The own lane first. A stop of the shared lane keeps what the own lane did: it is saved.
+    const stopped = await pushAll(own, session, token, live);
     if (stopped) return { result: stopped };
-    let pulled;
-    try {
-      pulled = await client.pull(token, sync.cursor, sync.space);
-    } catch (error) {
-      return { result: live() ? stopOf(known(error)) : STALE };
-    }
-    if (!live()) return { result: STALE };
-    const merged = merge(pulled);
-    sync = { ...sync, lastSync: new Date(now()).toISOString() };
-    persist();
-    return { result: 'ok', followUp: merged && queue.length > 0 };
+    const ownRun = await pullLane(own, token, live);
+    if (ownRun.stop) return { result: ownRun.stop };
+    const sharedRun = await syncShared(session, token, live);
+    if (sharedRun.stop) return { result: sharedRun.stop };
+    own.sync = { ...own.sync, lastSync: new Date(now()).toISOString() };
+    persist(own);
+    const followUp = (ownRun.merged && own.queue.length > 0) || (sharedRun.merged && shared.queue.length > 0);
+    return { result: 'ok', followUp };
   };
 
   // A run while one of the same generation is in progress gets the promise of that run.
@@ -375,16 +518,26 @@ export const createSyncer = ({
   // SYNC-2: the changes of a save against the last state that the syncer knows. The syncer never calls it
   // for its own setState. A device with no account keeps no queue. After an auth stop the change waits
   // in the queue for the login (ACC-7).
-  const notify = (state, { explicit = false } = {}) => {
-    if (!activeSession()) return;
+  const noted = (lane, state, explicit) => {
     const records = toRecords(state);
-    if (refused(records, explicit)) return;
-    seen = records;
-    queue = enqueue(queue, diffRecords(sync.local, records));
-    sync = { ...sync, local: records };
-    persist();
+    if (refused(lane, records, explicit)) return;
+    lane.seen = records;
+    lane.queue = admit(lane, diffRecords(lane.sync.local, records));
+    lane.sync = { ...lane.sync, local: records };
+    persist(lane);
     report();
     if (!authStopped) schedule();
+  };
+
+  const notify = (state, { explicit = false } = {}) => {
+    if (!activeSession()) return;
+    noted(own, state, explicit);
+  };
+
+  // SHARE-12: a save of the shared part. With no shared lane there is nothing to queue.
+  const notifyShared = (state) => {
+    if (!activeSession() || !active()) return;
+    noted(shared, state, false);
   };
 
   // A run in progress becomes stale: it saves nothing and changes no state after this.
@@ -394,12 +547,17 @@ export const createSyncer = ({
     timer = null;
     cancelRetry();
     retries = 0;
-    sync = emptySync();
-    queue = [];
+    own.sync = emptySync();
+    own.queue = [];
+    shared.sync = emptySync();
+    shared.queue = [];
+    shared.share = null;
+    shared.seen = toRecords(emptyState());
     lastRefresh = null;
     authStopped = false;
     clearAccountData(storage);
-    put(emptyState());
+    put(own, emptyState());
+    setShared(null, null);
   };
 
   // The login is not finished: remove its session, so that it can start again. `keys` are removed too.
@@ -421,9 +579,9 @@ export const createSyncer = ({
     // ACC-4: no request for data, and the local list stays as it is.
     if (session.user.approved !== true) return 'waiting';
     const userId = session.user.id;
-    let change = accountChange({ previousOwner: sync.owner, userId, queueLength: queue.length });
+    let change = accountChange({ previousOwner: own.sync.owner, userId, queueLength: pending() });
     // A queue with no owner is the queue of an unknown user.
-    if (sync.owner === null && queue.length > 0) change = 'ask-export';
+    if (own.sync.owner === null && own.queue.length > 0) change = 'ask-export';
     if (change === 'ask-export' && !discard) return 'ask-export';
     if (change !== 'continue') {
       reset();
@@ -431,7 +589,7 @@ export const createSyncer = ({
       lastRefresh = now();
     }
     const state = getState();
-    const previousOwner = sync.owner;
+    const previousOwner = own.sync.owner;
     const hasLocalData = hasData(state);
     if (previousOwner === null && hasLocalData) {
       let pulled;
@@ -444,9 +602,9 @@ export const createSyncer = ({
       const plan = firstLogin({ previousOwner, serverCount: live.length, hasLocalData });
       if (plan === 'upload') {
         const records = toRecords(state);
-        queue = enqueue(queue, diffRecords(new Map(), records));
-        sync = { ...sync, local: records };
-        seen = records;
+        own.queue = enqueue(own.queue, diffRecords(new Map(), records));
+        own.sync = { ...own.sync, local: records };
+        own.seen = records;
       } else if (plan === 'take-account') {
         // SYNC-8: the old list is saved first; with no copy of it the account does not replace it.
         try {
@@ -462,19 +620,19 @@ export const createSyncer = ({
         if (next === null) abandon(new Error('sync: the validation refuses the data of the account'), [BEFORE_LOGIN_KEY]);
         const local = toRecords(next);
         const ids = new Map(pulled.map((rec) => [recordKey(rec.kind, rec.key), rec.id]));
-        queue = enqueue(queue, [...deduped.removed, ...diffRecords(deduped.local, local)]);
-        sync = { ...sync, local, server, ids, cursor: cursorOf(pulled, '') };
-        put(next);
+        own.queue = enqueue(own.queue, [...deduped.removed, ...diffRecords(deduped.local, local)]);
+        own.sync = { ...own.sync, local, server, ids, cursor: cursorOf(pulled, '') };
+        put(own, next);
       }
     } else if (previousOwner === null) {
       // SYNC-8: a device with no local data takes the account. The state at the login is the base of
       // the first sync, so its default settings are not a change that would overwrite the account.
-      sync = { ...sync, local: toRecords(state) };
-      seen = sync.local;
+      own.sync = { ...own.sync, local: toRecords(state) };
+      own.seen = own.sync.local;
     }
-    // SHARE-6: a login starts in the own space; the first run moves a member to the shared one.
-    sync = { ...sync, owner: userId, space: sync.space ?? userId };
-    persist();
+    // SHARE-6: the own lane always syncs the space of the user; the first run starts a shared lane.
+    own.sync = { ...own.sync, owner: userId, space: userId };
+    persist(own);
     // A run in progress uses the token of before the login: it becomes stale, so that its auth error
     // cannot stop the sync of this login, and the login starts a run of its own.
     generation += 1;
@@ -482,10 +640,10 @@ export const createSyncer = ({
     return 'synced';
   };
 
-  // ACC-9: online, the queue goes first. Changes that are still not sent need an export first.
+  // ACC-9: online, the queues go first. Changes that are still not sent need an export first.
   const logout = async ({ online: isOnline, discard = false }) => {
     if (isOnline) await run();
-    if (queue.length > 0 && !discard) return 'ask-export';
+    if (pending() > 0 && !discard) return 'ask-export';
     reset();
     online = true;
     report();
@@ -511,22 +669,30 @@ export const createSyncer = ({
     return 'ok';
   };
 
-  const invite = (email) => {
+  const invite = (email, scope) => {
     const address = String(email).trim();
     if (!address) return Promise.resolve({ error: 'share.error.invalid' });
-    return shareRequest((token, userId) => client.invite(token, userId, address));
+    return shareRequest((token, userId) => client.invite(token, userId, address, scope));
   };
 
   const accept = (id) => shareRequest((token, userId) => client.acceptShare(token, id, userId));
 
+  // SHARE-8: the owner deletes a share; an invitee declines with a cancel, and the row stays.
   const remove = (id) => shareRequest((token) => client.removeShare(token, id));
 
-  // SHARE-8: the queue goes to the shared space before the share ends.
+  const decline = (id) => shareRequest((token) => client.cancelShare(token, id));
+
+  // SHARE-8: the shared queue goes to the shared space before the share ends.
   const leave = async (id) => {
     await run();
-    if (queue.length > 0) return { error: 'share.error.network' };
-    return remove(id);
+    if (shared.queue.length > 0) return { error: 'share.error.network' };
+    return decline(id);
   };
 
-  return { notify, run, login, logout, status, invite, accept, remove, leave };
+  // SHARE-11: the owner changes the scope of a share, or opens a cancelled one again.
+  const setScope = (id, scope) => shareRequest((token) => client.setShareScope(token, id, scope));
+
+  const reinvite = (id) => shareRequest((token) => client.reinvite(token, id));
+
+  return { notify, notifyShared, run, login, logout, status, invite, accept, remove, decline, leave, setScope, reinvite };
 };
