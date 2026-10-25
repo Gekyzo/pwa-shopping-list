@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, STORAGE_KEY,
+  SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY, loadSharedState, saveSharedState,
   loadSession, saveSession, clearAccountData, loadSyncState, saveSyncState, loadQueue, saveQueue,
   tokenExpired, routeAtStart, accountChange, firstLogin,
 } from '#session';
@@ -85,7 +86,7 @@ test('the queue and the sync state survive a save and a load', () => {
   const state = {
     owner: 'u1',
     space: 'o1',
-    shares: [{ id: 's1', owner: 'o1', email: 'u1@b.c', ownerEmail: 'o1@b.c', member: 'u1' }],
+    shares: [{ id: 's1', owner: 'o1', email: 'u1@b.c', ownerEmail: 'o1@b.c', ownerName: 'Olga', member: 'u1', scope: 'list', cancelled: true }],
     cursor: '2026-10-24 08:00:00.000Z',
     server: new Map([['item/a', { id: 'r1', kind: 'item', key: 'a', data: { n: 1 }, deleted: false, updated: 'x' }]]),
     local: new Map([['item/a', { n: 1 }]]),
@@ -106,6 +107,21 @@ test('a sync state of v1.4 has the owner as its space and no shares (SHARE-6)', 
   const loaded = loadSyncState(storage);
   assert.equal(loaded.space, 'u1');
   assert.deepEqual(loaded.shares, []);
+});
+
+test('a share of v1.5.0 loads with the defaults of the new fields; the new fields are kept', () => {
+  const storage = fakeStorage();
+  const old = { id: 's1', owner: 'o1', email: 'u1@b.c', ownerEmail: 'o1@b.c', member: 'u1' };
+  const stored = { owner: 'u1', space: 'o1', cursor: '', server: [], local: [], ids: [], lastSync: null };
+  storage.setItem(SYNC_KEY, JSON.stringify({ ...stored, shares: [old] }));
+  assert.deepEqual(loadSyncState(storage).shares, [{ ...old, ownerName: '', scope: 'all', cancelled: false }]);
+  const fresh = { ...old, ownerName: 'Olga', scope: 'list', cancelled: true };
+  storage.setItem(SYNC_KEY, JSON.stringify({ ...stored, shares: [fresh] }));
+  assert.deepEqual(loadSyncState(storage).shares, [fresh]);
+  for (const bad of [{ ownerName: 1 }, { scope: 'x' }, { cancelled: 'no' }]) {
+    storage.setItem(SYNC_KEY, JSON.stringify({ ...stored, shares: [{ ...fresh, ...bad }] }));
+    assert.deepEqual(loadSyncState(storage).shares, [], JSON.stringify(bad));
+  }
 });
 
 test('a bad space gives the empty sync state, and a bad list of shares gives none', () => {
@@ -135,6 +151,61 @@ test('a corrupt or missing value loads as the empty one', () => {
   assert.deepEqual(loadQueue(brokenStorage()), []);
   assert.equal(saveQueue(brokenStorage(), []), false);
   assert.equal(saveSyncState(brokenStorage(), emptySync()), false);
+});
+
+const planeState = { version: 9, items: [], recipes: [], sent: [], group: 'aisle', sort: 'custom', menu: {}, aisles: [] };
+
+test('saveSharedState then loadSharedState; null removes the shared state', () => {
+  const storage = fakeStorage();
+  assert.equal(loadSharedState(storage), null);
+  const state = { ...planeState, items: [{ id: 'i1', name: 'Pan', recurrent: false, list: 'active', bought: false }] };
+  assert.equal(saveSharedState(storage, state), true);
+  assert.ok(storage.getItem(SHARED_STORAGE_KEY));
+  assert.equal(loadSharedState(storage).items[0].name, 'Pan');
+  assert.equal(saveSharedState(storage, null), true);
+  assert.equal(storage.getItem(SHARED_STORAGE_KEY), null);
+  assert.equal(loadSharedState(storage), null);
+});
+
+test('a shared state that does not validate loads as null', () => {
+  const storage = fakeStorage();
+  for (const bad of ['{', 'null', '{"version":99,"items":[]}', '{"version":9}']) {
+    storage.setItem(SHARED_STORAGE_KEY, bad);
+    assert.equal(loadSharedState(storage), null, bad);
+  }
+  assert.equal(loadSharedState(brokenStorage()), null);
+  assert.equal(saveSharedState(brokenStorage(), planeState), false);
+});
+
+test('the shared lane uses its own keys and leaves the own ones alone', () => {
+  const storage = fakeStorage();
+  const own = { ...emptySync(), owner: 'u1', space: 'u1', cursor: 'c1' };
+  saveSyncState(storage, own);
+  saveQueue(storage, [{ op: 'own' }]);
+  const shared = { ...emptySync(), owner: 'u1', space: 'o1', cursor: 'c2' };
+  assert.equal(saveSyncState(storage, { ...shared, scope: 'list' }, 'shared'), true);
+  assert.equal(saveQueue(storage, [{ op: 'shared' }], 'shared'), true);
+  assert.deepEqual(loadSyncState(storage), own);
+  assert.deepEqual(loadQueue(storage), [{ op: 'own' }]);
+  assert.deepEqual(loadSyncState(storage, 'shared'), { ...shared, scope: 'list' });
+  assert.deepEqual(loadQueue(storage, 'shared'), [{ op: 'shared' }]);
+  assert.ok(storage.getItem(SHARED_SYNC_KEY) && storage.getItem(SHARED_QUEUE_KEY));
+  assert.equal(loadSyncState(storage).scope, undefined);
+});
+
+test('the scope of the shared lane defaults to all, and a bad one too', () => {
+  const storage = fakeStorage();
+  const stored = { owner: 'u1', space: 'o1', cursor: '', server: [], local: [], ids: [], lastSync: null };
+  storage.setItem(SHARED_SYNC_KEY, JSON.stringify(stored));
+  assert.equal(loadSyncState(storage, 'shared').scope, 'all');
+  storage.setItem(SHARED_SYNC_KEY, JSON.stringify({ ...stored, scope: 'x' }));
+  assert.equal(loadSyncState(storage, 'shared').scope, 'all');
+});
+
+test('clearAccountData removes the shared keys too', () => {
+  const storage = fakeStorage({ [SHARED_STORAGE_KEY]: '1', [SHARED_SYNC_KEY]: '1', [SHARED_QUEUE_KEY]: '1' });
+  assert.equal(clearAccountData(storage), true);
+  for (const key of [SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY]) assert.equal(storage.getItem(key), null, key);
 });
 
 test('clearAccountData removes the account keys and the list, and keeps the preferences', () => {

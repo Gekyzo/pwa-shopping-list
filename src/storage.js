@@ -451,6 +451,11 @@ export const SYNC_KEY = 'shopping.sync';
 export const QUEUE_KEY = 'shopping.queue';
 export const BEFORE_LOGIN_KEY = 'shopping.v1.beforeLogin';
 
+// The shared lane of a member: the shared space beside the own one (SHARE-12).
+export const SHARED_STORAGE_KEY = 'shopping.shared.v1';
+export const SHARED_SYNC_KEY = 'shopping.shared.sync';
+export const SHARED_QUEUE_KEY = 'shopping.shared.queue';
+
 // Every key that the app writes to the storage: the state, its corrupt copy and each preference of the
 // device. Borrar todos los datos removes them all (BACKUP-7).
 export const APP_KEYS = [
@@ -469,6 +474,9 @@ export const APP_KEYS = [
   SYNC_KEY,
   QUEUE_KEY,
   BEFORE_LOGIN_KEY,
+  SHARED_STORAGE_KEY,
+  SHARED_SYNC_KEY,
+  SHARED_QUEUE_KEY,
 ];
 
 // After it, the install counts as new: the next start shows the walkthrough.

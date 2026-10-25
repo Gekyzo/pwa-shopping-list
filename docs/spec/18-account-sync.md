@@ -175,7 +175,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 
 ## Keys
 
-The keys `shopping.session`, `shopping.sync`, `shopping.queue` and `shopping.v1.beforeLogin` are in
+The keys `shopping.session`, `shopping.sync`, `shopping.queue` and `shopping.v1.beforeLogin` (and the three shared keys of SHARE-12) are in
 the table of [08-storage.md](08-storage.md). `shopping.session` holds the token and the user.
 `shopping.sync` holds the owner of the data, the space of the data and the last list of shares (SHARE-6), the last cursor, the last known server state, the
 records of the last state that the sync knows and the time of the last sync. `shopping.queue` holds the
