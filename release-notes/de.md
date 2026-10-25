@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.5.0 - 2026-10-25
+
 - Du kannst deine Liste mit anderen Personen teilen: Gib in `Ajustes` › `Cuenta` › `Compartir lista` ihre E-Mail ein. Nach der Annahme sehen und ändern sie dieselbe Liste, die Rezepte und den Speiseplan auf ihren Geräten.
 
 ## 1.4.1 - 2026-10-24

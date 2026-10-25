@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.5.0 - 2026-10-25
+
 - Pots compartir la teva llista amb altres persones: a `Ajustes` › `Cuenta` › `Compartir lista` escriu el seu correu. Quan accepten, veuen i canvien la mateixa llista, les receptes i el menú als seus dispositius.
 
 ## 1.4.1 - 2026-10-24
