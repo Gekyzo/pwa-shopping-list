@@ -21,6 +21,7 @@
 | `src/sync.js` | The queue of record changes, the merge of pulled records and the duplicates (SYNC-5, SYNC-6, SYNC-7) | `records` |
 | `src/pocketbase.js` | The client of the PocketBase server: sign-in, token refresh, pull, push and the realtime stream (ACC-12, SYNC-4, SYNC-6) | `records` |
 | `src/session.js` | The session, the sync state and the queue in the storage, the token expiry, the start route and the login rules (ACC-1, ACC-7, ACC-8, SYNC-8) | `storage` |
+| `src/shares.js` | The rules of a shared space: the space to sync, the case of the sheet **Compartir lista** and the pending invite (SHARE-5, SHARE-6, SHARE-9) | nothing |
 | `src/syncer.js` | The sync driver: it queues each save, sends the queue, pulls and merges the account, and runs the login and the logout of the account (ACC-4, ACC-7 to ACC-9, SYNC-2 to SYNC-9) | `records`, `sync`, `pocketbase`, `session`, `storage`, `store` |
 | `src/config.js` | The API URL for the host that serves the app (ACC-12) | nothing |
 | `src/version.js` | Pure version rules | nothing |
@@ -108,6 +109,7 @@
 | `tests/records.test.js` | The state to records and back, the diff of two sets of records |
 | `tests/pocketbase.test.js` | The PocketBase client against a fake `fetch` and a fake `EventSource` |
 | `tests/session.test.js` | The session storage, the token expiry, the start route and the login rules |
+| `tests/shares.test.js` | The space to sync, the case of the sheet and the pending invite |
 | `tests/syncer.test.js` | The sync driver against a fake server: the queue, the push and the pull, two devices, the errors, the token refresh, the login and the logout, the import |
 | `tests/context.test.js` | The save of `commit` and the function that it calls after a save |
 | `tests/config.test.js` | The API URL for each host |
