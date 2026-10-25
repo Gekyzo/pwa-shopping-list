@@ -36,8 +36,11 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   address of the field, and then shows `account.resetSent`, the same message whether the address has
   an account or not. A login that the account replaces (SYNC-8) then offers the old list as an
   export file, one time.
-- **ACC-3** A sign-up with email and password creates an account that is not approved. The user then
-  sees **Esperando aprobación**.
+- **ACC-3** One account of the server serves every app of the server; access is approved per app.
+  "Approved" is the access row of this app (`app_access`, app `shopping`) with status `approved`.
+  Each sign-in reads that row; with no row, the app asks for access with a `pending` row. A sign-up
+  with email and password creates an account that is not approved. The user then sees
+  **Esperando aprobación**. A `pending` or `revoked` row shows the same screen.
 - **ACC-4** An account that is not approved makes no request for data. A device that holds a list
   before that login keeps it stored, unchanged, until the approval. Then SYNC-8 applies.
   **Comprobar de nuevo** refreshes the session: an approved account logs in, else the message
@@ -45,7 +48,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   the account is not the owner of the stored data, so the list stays; the owner logs out as ACC-9.
 - **ACC-5** Google sign-in is a redirect. The app asks the server for the URL of the provider, sends the
   browser there with the URL of the app as the return address, and exchanges the `code` on return.
-  The server creates the account of an OAuth sign-up as not approved. The app removes `code`,
+  The account of an OAuth sign-up is not approved (ACC-3). The app removes `code`,
   `state` and `error` from the URL at once and keeps each other parameter, as ARR-4. A return
   with no `code` (a cancel at Google) or with a `state` that is not the one sent drops the pending
   sign-in and shows **Iniciar sesión** with `account.error.google`.
@@ -53,7 +56,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   stored on the device.
 - **ACC-7** A token counts as expired 60 s before its `exp` claim, or when the app cannot read it.
   Before the first request for data of a sync, the app refreshes the token when it is expired or
-  when the last refresh is more than 10 minutes old. The answer of the refresh carries `approved`:
+  when the last refresh is more than 10 minutes old. Each refresh reads the access row again:
   an account that is no longer approved makes no request for data (ACC-4). The server answers a
   token that is not valid as a guest, so a push refused with a 400 and no field error also counts
   as an auth error. After an auth error the app shows **Iniciar sesión**. It keeps the local state

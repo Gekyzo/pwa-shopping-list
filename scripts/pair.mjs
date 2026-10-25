@@ -1,7 +1,8 @@
 // Two copies of the app for a local test of a feature between two people (a share): user A on
 // http://localhost:8081 and user B on http://localhost:8082. Each origin has its own storage, so
 // one browser holds two sessions. Both use the PocketBase of the local stack of `pwa-server`
-// (ACC-12), where this script creates the two users, approved. No dependencies.
+// (ACC-12), where this script creates the two users and approves their access to the shopping app.
+// No dependencies.
 //
 //   npm run pair [-- --reset] [-- --open]
 //
@@ -33,13 +34,13 @@ export const parseArgs = (argv) => {
 // True when PocketBase answers a request of `origin` with that origin, or with any origin.
 export const allowsOrigin = (header, origin) => header === '*' || header === origin;
 
-// The body that creates a user of the pair: approved and verified, so it logs in at once (ACC-4).
+// The body that creates a user of the pair: verified, so it logs in at once. Its access is a row
+// of its own (ACC-4), which `approve` writes.
 export const userBody = (user) => ({
   email: user.email,
   name: `User ${user.name}`,
   password: PASSWORD,
   passwordConfirm: PASSWORD,
-  approved: true,
   verified: true,
 });
 
@@ -89,6 +90,17 @@ const findUser = async (token, email) => {
   return (await call('GET', `/api/collections/users/records?filter=${filter}`, { token })).items[0] ?? null;
 };
 
+// An approved access row of the shopping app for the user: an update of the row, or a new one.
+const approve = async (token, userId) => {
+  const app = (await call('GET', `/api/collections/apps/records?filter=${encodeURIComponent('slug="shopping"')}`, { token })).items[0];
+  if (!app) throw new Error('pair: the server has no shopping app. Run the migrations of pwa-server (migration 5).');
+  const filter = encodeURIComponent(`user="${userId}" && app="${app.id}"`);
+  const row = (await call('GET', `/api/collections/app_access/records?filter=${filter}`, { token })).items[0];
+  if (row?.status === 'approved') return;
+  if (row) await call('PATCH', `/api/collections/app_access/records/${row.id}`, { token, body: { status: 'approved' } });
+  else await call('POST', '/api/collections/app_access/records', { token, body: { user: userId, app: app.id, status: 'approved' } });
+};
+
 // Creates each missing user; with `reset`, deletes it first. An existing user keeps its data.
 const prepareUsers = async (token, { reset }) => {
   for (const user of USERS) {
@@ -97,8 +109,8 @@ const prepareUsers = async (token, { reset }) => {
       await call('DELETE', `/api/collections/users/records/${found.id}`, { token });
       found = null;
     }
-    if (!found) await call('POST', '/api/collections/users/records', { token, body: userBody(user) });
-    else if (!found.approved) await call('PATCH', `/api/collections/users/records/${found.id}`, { token, body: { approved: true } });
+    if (!found) found = await call('POST', '/api/collections/users/records', { token, body: userBody(user) });
+    await approve(token, found.id);
   }
 };
 
