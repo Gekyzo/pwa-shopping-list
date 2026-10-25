@@ -21,6 +21,7 @@ repository root.
 | Module | Responsibility | May import |
 |---|---|---|
 | `src/store.js` | Pure state operations and derived views | nothing |
+| `src/lists.js` | The combined state of a member: the own list and the shared list in one state, and the split back into two | `store` |
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store.js` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store.js` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store.js` |
