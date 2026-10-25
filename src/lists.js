@@ -68,3 +68,16 @@ export const onList = (state, which, op, sharedBase, scope) => {
   if (result.error) return { error: result.error };
   return { ...result, state: combine(...(which === 'own' ? [result.state, parts.shared] : [parts.own, result.state]), scope) };
 };
+
+// The list that holds an entity of the combined state.
+export const listOf = (entity) => (isShared(entity) ? 'shared' : 'own');
+
+// SHARE-15: the list that an add goes to. An add from Todas goes to the own list.
+export const targetList = (choice) => (choice === 'shared' ? 'shared' : 'own');
+
+// SHARE-14: the count of each list chip, the items to buy of that list.
+export const listCounts = (state) => {
+  const toBuy = state.items.filter((item) => item.list === 'active' && !item.bought);
+  const shared = toBuy.filter(isShared).length;
+  return { all: toBuy.length, own: toBuy.length - shared, shared };
+};

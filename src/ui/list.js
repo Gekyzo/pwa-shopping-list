@@ -4,8 +4,10 @@ import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
 import { canSearch, dockShown, emptyAction } from '#sections';
-import { $, el, state, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
-import { inList, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
+import { listCounts } from '#lists';
+import { listName } from '#shares';
+import { $, el, state, sharing, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
+import { inList, listChoice, listState, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { icon } from '#ui/controls';
 import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
 import { recipeNode, dishNode, sendToList } from '#ui/recipes';
@@ -195,7 +197,7 @@ const renderShopDone = (summary) => {
     store.tripSummary(viewState()).left === 0;
   $('shop-done').hidden = !done;
   if (!done) return;
-  const next = shops.nextShop(state, shop);
+  const next = shops.nextShop(listState(), shop);
   $('shop-done-text').textContent = t('shops.done', { shop: shopLabel(shop) });
   $('shop-done-next').hidden = next === null;
   if (next) $('shop-done-next').textContent = t('shops.next', { shop: shopLabel(next.shop), count: next.count });
@@ -243,11 +245,37 @@ export const renderTrip = () => {
 
 export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
 
+// The shop lists of the list chip in view (SHARE-14).
+const shopChipsInView = () => (inList() && shopLists === 'show' ? shops.shopChips(listState()) : []);
+
+const chipCount = (value) => (value === 0 ? '✓' : String(value));
+
+// SHARE-14: the row of the list chips of Compra, for a member only: Todas, Mi lista and the shared
+// list. A count is the items to buy of that list. A choice opens Todas of its shop lists.
+export const renderListChips = () => {
+  const shown = inList() && sharing !== null;
+  $('list-chips').hidden = !shown;
+  if (!shown) return;
+  const counts = listCounts(state);
+  const chips = [[null, t('lists.all'), counts.all], ['own', t('lists.own'), counts.own], ['shared', listName(sharing), counts.shared]];
+  $('list-chips').replaceChildren(...chips.map(([choice, label, count]) => {
+    const pick = () => {
+      Object.assign(ui, { openId: null, openSide: null, listChoice: choice, shop: null });
+      render();
+    };
+    const button = el('button', { type: 'button', className: 'chip surface', onclick: pick }, [
+      el('span', { textContent: label }),
+      el('span', { className: 'count', textContent: chipCount(count) }),
+    ]);
+    button.setAttribute('aria-pressed', String(choice === listChoice()));
+    return button;
+  }));
+};
+
 // The row of the shop lists of Compra. A count is the items to buy.
 export const renderShopChips = () => {
-  const chips = inList() && shopLists === 'show' ? shops.shopChips(state) : [];
+  const chips = shopChipsInView();
   $('shop-chips').hidden = chips.length === 0;
-  const count = (value) => (value === 0 ? '✓' : String(value));
   const buttons = chips.map(({ shop, count: value }) => {
     const pick = () => {
       Object.assign(ui, { openId: null, openSide: null });
@@ -256,7 +284,7 @@ export const renderShopChips = () => {
     };
     const button = el('button', { type: 'button', className: 'chip surface', onclick: pick }, [
       el('span', { textContent: shopLabel(shop) }),
-      el('span', { className: 'count', textContent: count(value) }),
+      el('span', { className: 'count', textContent: chipCount(value) }),
     ]);
     button.setAttribute('aria-pressed', String(shop === ui.shop));
     return button;
@@ -283,7 +311,7 @@ export const renderDock = () => {
   const shown = dockShown({ view: ui.view, activeCount: store.activeItems(state).length, emptyAction: !$('empty-action').hidden });
   $('dock').hidden = !shown;
   if (!shown) return;
-  const chips = inList() && shopLists === 'show' ? shops.shopChips(state) : [];
+  const chips = shopChipsInView();
   const search = ui.searchOpen;
   $('dock').classList.toggle('searching', search);
   for (const id of ['dock-prev', 'dock-shop', 'dock-next']) $(id).hidden = search || chips.length === 0;
@@ -303,8 +331,8 @@ export const renderDock = () => {
     el('span', { className: 'chevron', textContent: '▾', ariaHidden: 'true' }),
   );
   $('dock-shop').setAttribute('aria-expanded', String(ui.shopPickOpen));
-  const previous = shops.previousShop(state, ui.shop);
-  const next = shops.nextShop(state, ui.shop);
+  const previous = shops.previousShop(listState(), ui.shop);
+  const next = shops.nextShop(listState(), ui.shop);
   $('dock-prev').disabled = previous === null;
   $('dock-next').disabled = next === null;
   $('dock-prev').onclick = () => previous && pickShop(previous.shop);
@@ -316,7 +344,7 @@ export const renderShopPick = () => {
   if (!inList()) ui.shopPickOpen = false;
   $('shop-pick').hidden = !ui.shopPickOpen;
   if (!ui.shopPickOpen) return;
-  const chips = shopLists === 'show' ? shops.shopChips(state) : [];
+  const chips = shopChipsInView();
   $('shop-pick').querySelector('.sheet-body').replaceChildren(...chips.map(({ shop, count }) => {
     const pick = () => {
       ui.shop = shop;

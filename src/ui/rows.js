@@ -2,7 +2,7 @@ import * as store from '#store';
 import { reached, settle } from '#swipe';
 import { loadSwipeHint, saveSwipeHint } from '#storage';
 import { SIDE_BUTTON, DRAG_START, HINT_WAIT_MS, HINT_SHIFT, el, storage, state, ui, t, apply, render, guardClick } from '#ui/context';
-import { isOpen, searching, shownGroup } from '#ui/view';
+import { isOpen, searching, shownGroup, mixed, tagOf } from '#ui/view';
 import { leave, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
@@ -71,7 +71,10 @@ const itemRow = (item, also) => {
   const name = el('button', { type: 'button', className: 'item-row-name' }, nameParts(item, also));
   name.setAttribute('role', 'checkbox');
   name.setAttribute('aria-checked', String(item.bought));
-  const row = [check, name, el('div', { className: 'item-row-end' }, [editButton(item)])];
+  // SHARE-14: in Todas the end slot shows the list of the item before the edit button.
+  const tag = tagOf(item);
+  const end = tag === null ? [editButton(item)] : [el('span', { className: 'pill', textContent: tag, title: tag }), editButton(item)];
+  const row = [check, name, el('div', { className: 'item-row-end' }, end)];
   return {
     row,
     end: [editAction(item), repeatAction(item), deleteAction(item)],
@@ -168,8 +171,8 @@ export const hintSwipe = () => {
 };
 
 // The rows that a row can move among: its group, or the rows to buy of a flat list.
-// Null for a row that does not move.
-const scopeOf = (item, groupId) => (item.bought ? null : groupId ?? 'rest');
+// Null for a row that does not move. SHARE-14: in Todas of a member no row moves.
+const scopeOf = (item, groupId) => (item.bought || mixed() ? null : groupId ?? 'rest');
 
 // A side action closes the row, then runs.
 const closing = (button) => {

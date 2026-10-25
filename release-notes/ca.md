@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- Quan acceptes una llista compartida, la teva llista es queda. A `Compra` veus les dues juntes: `Totes`, `La meva llista` i la llista de l’altra persona són xips a dalt, amb el que falta per comprar a cadascuna. A `Totes`, cada article diu de quina llista és, i el que afegeixes va a la teva llista.
 
 ## 1.5.0 - 2026-10-25
 

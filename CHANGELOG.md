@@ -10,6 +10,14 @@ no change has no entry.
 
 ## Unreleased
 
+- List chips of a member in `Compra` (SHARE-14, SHARE-15): `ui.listChoice` (`null` | `'own'` |
+  `'shared'`, not stored, reset by `setSharing(null, null)`) filters the combined state through
+  `listView` before the shop list, so the shop chips, the dock and its picker show the shops of
+  that list. New `#list-chips` row (`list-chips` component) with the counts of `listCounts`; in
+  **Todas** a `pill` tag in the end slot of each row and no manual reorder. Adds run through
+  `onListOf(targetList(choice))` and a rename through the list of its item (`listOf`); the
+  suggestions and `findByName` read the target list only. New keys `lists.all`, `lists.own`,
+  `lists.ownTag`, `lists.label`.
 - Two-lane syncer (SHARE-6, SHARE-7, SHARE-8, SHARE-13): each run syncs the own space, then the
   shared space of a share whose member is the user, with the same push, pull and merge; the own
   space is always the user's, and the swap of space is gone. `createSyncer` takes `getShared` and

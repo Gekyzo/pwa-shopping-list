@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- When you accept a shared list, your own list stays. `Shopping` shows both side by side: `All`, `My list` and the other person's list are chips at the top, each with what is left to buy. In `All`, each item shows its list, and what you add goes to your list.
 
 ## 1.5.0 - 2026-10-25
 

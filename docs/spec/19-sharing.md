@@ -114,6 +114,24 @@ person of a share.
   nothing. The shared part shows once the share is known: the stored sync state gives it at the
   start, and each status of the syncer after.
 
+## The member's screen
+
+- **SHARE-14** For a member, `Compra` shows a row of list chips below the header, at every width:
+  **Todas**, **Mi lista** and the shared list, named as in SHARE-11. Each chip counts the items to
+  buy of its list. **Todas** shows the items of both lists; the other chips show the items of one
+  list. The shop lists work inside the list chip: their chips, the dock and its picker show the
+  shops of that list. In **Todas** each row shows a tag of its list: `Mía` or the name of the
+  shared list; the other chips show no tag. An item of one name in both lists shows as two rows. A
+  manual reorder does not start in **Todas**. The owner, and a user with no share, see no list
+  chips and no tags. The choice is not stored: it is **Todas** at each start and at the end of the
+  share.
+
+- **SHARE-15** An add from **Mi lista** and from **Todas** goes to the own list; an add from the
+  shared chip goes to the shared list. The suggestions of the add sheet and its duplicate check
+  (ADD-6) look at that list only. A rename runs in the list of its item. A tick, a delete, the
+  other changes of an item and `Deshacer` act on the item in its own list. **Terminar compra**
+  ends the trip of both lists in one operation.
+
 ## Limits
 
 - **SHARE-10** A share has no roles: each member changes all the data of the space; only the owner
