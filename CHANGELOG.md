@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.6.1 - 2026-10-25
+
 - Access per app (ACC-3, ACC-4, ACC-7): the server serves several apps with one account
   (`pwa-server` migration 5, `apps` and `app_access`). Each sign-in and each refresh reads the
   access row of `shopping`; with no row the app creates a `pending` one. `user.approved` of the
