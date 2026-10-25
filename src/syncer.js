@@ -1,5 +1,6 @@
 // The sync driver: it queues each save, sends the queue, pulls the account and merges it into the state
-// (SYNC-2 to SYNC-9), and runs the login and the logout of the account (ACC-4, ACC-7 to ACC-9).
+// (SYNC-2 to SYNC-9), runs the login and the logout of the account (ACC-4, ACC-7 to ACC-9), and the
+// shares of the space (SHARE-6 to SHARE-8).
 // The client, the storage, the clock and the timer are injected, so a test runs with no network.
 import { toRecords, fromRecords, diffRecords, recordKey } from '#records';
 import { enqueue, mergePulled, dedupe, cursorOf } from '#sync';
@@ -7,7 +8,8 @@ import {
   loadSession, saveSession, clearAccountData, loadSyncState, saveSyncState, loadQueue, saveQueue,
   tokenExpired, accountChange, firstLogin, BEFORE_LOGIN_KEY, SESSION_KEY,
 } from '#session';
-import { PocketBaseError } from '#pocketbase';
+import { PocketBaseError, isUniqueViolation } from '#pocketbase';
+import { targetSpace } from '#shares';
 import { normalizeState } from '#storage';
 import { emptyState } from '#store';
 
@@ -19,7 +21,7 @@ const RETRY_MS = [5_000, 15_000, 30_000, 60_000];
 // ACC-7: a token is refreshed at least this often, so that a lost approval stops the sync.
 const REFRESH_MS = 10 * 60_000;
 
-const emptySync = () => ({ owner: null, cursor: '', server: new Map(), local: new Map(), ids: new Map() });
+const emptySync = () => ({ owner: null, space: null, shares: [], cursor: '', server: new Map(), local: new Map(), ids: new Map() });
 
 // Why a request failed, as the result of the run. PocketBase answers a refused rule with a 400 and no
 // field error (a token that is not valid counts as a guest), so that is an auth error too.
@@ -50,6 +52,16 @@ const listed = (rec) => rec.kind === 'item' || rec.kind === 'recipe';
 const holdsNone = (local, records) => {
   const known = [...local.values()].filter(listed);
   return known.length > 0 && known.every((rec) => !records.has(recordKey(rec.kind, rec.key)));
+};
+
+// SHARE-3, SHARE-9: the message of a share request that failed.
+const shareError = (error) => {
+  if (!(error instanceof PocketBaseError)) throw error;
+  if (['network', 'server', 'rate'].includes(error.type)) return 'share.error.network';
+  const code = error.fields?.email?.code;
+  if (code === 'share_self') return 'share.error.self';
+  if (code === 'share_member' || isUniqueViolation(error)) return 'share.error.taken';
+  return 'share.error.invalid';
 };
 
 // Returned by a run that a reset made stale: it stops with no save and no change of the state.
@@ -91,10 +103,19 @@ export const createSyncer = ({
   let authStopped = false;
   // SYNC-11: counts the runs after which the server had answered (ok, a rate limit, an auth error).
   let reached = 0;
+  // SHARE-7: the changes that the last change from a shared space to the own space dropped; the next
+  // report shows them once.
+  let left = 0;
 
   // `auth` is true after an auth stop, until the next login (ACC-7): the app then shows Iniciar sesión.
-  const status = () => ({ online, pending: queue.length, lastSync: sync.lastSync ?? null, auth: authStopped, reached });
-  const report = () => onStatus(status());
+  const status = () => ({
+    online, pending: queue.length, lastSync: sync.lastSync ?? null, auth: authStopped, reached,
+    space: sync.space, shares: sync.shares, left,
+  });
+  const report = () => {
+    onStatus(status());
+    left = 0;
+  };
   const persist = () => {
     saveQueue(storage, queue);
     saveSyncState(storage, sync);
@@ -159,7 +180,7 @@ export const createSyncer = ({
     for (let change = queue[0]; change; change = queue[0]) {
       let rec;
       try {
-        rec = await client.push(token, change, sync.ids, sync.owner);
+        rec = await client.push(token, change, sync.ids, sync.space);
       } catch (error) {
         if (!live()) return STALE;
         if (known(error).type === 'gone') {
@@ -213,6 +234,24 @@ export const createSyncer = ({
     return true;
   };
 
+  // SHARE-7: the queue of the own space goes first, since the user can still write it; the queue of a
+  // shared space is dropped, since the user can no longer write it. Then the device takes the new
+  // space in full, as a device with no local data at its first login (SYNC-8).
+  const changeSpace = async (session, token, target, live) => {
+    if (sync.space === session.user.id) {
+      const stopped = await pushAll(session, token, live);
+      if (stopped) return stopped;
+    } else {
+      left = queue.length;
+    }
+    queue = [];
+    const empty = emptyState();
+    sync = { ...emptySync(), owner: sync.owner, space: target, shares: sync.shares, local: toRecords(empty) };
+    put(empty);
+    persist();
+    return null;
+  };
+
   // Resolves to the result of the run and whether the merge queued changes to send soon.
   const syncOnce = async (live) => {
     const session = activeSession();
@@ -220,11 +259,25 @@ export const createSyncer = ({
     catchUp();
     const { token, stop } = await freshToken(session, live);
     if (stop) return { result: stop };
+    // SHARE-6: the shares say which space to sync, before anything is sent.
+    let shares;
+    try {
+      shares = await client.listShares(token);
+    } catch (error) {
+      return { result: live() ? stopOf(known(error)) : STALE };
+    }
+    if (!live()) return { result: STALE };
+    sync = { ...sync, shares };
+    const target = targetSpace(shares, session.user.id);
+    if (target !== sync.space) {
+      const changed = await changeSpace(session, token, target, live);
+      if (changed) return { result: changed };
+    }
     const stopped = await pushAll(session, token, live);
     if (stopped) return { result: stopped };
     let pulled;
     try {
-      pulled = await client.pull(token, sync.cursor, sync.owner);
+      pulled = await client.pull(token, sync.cursor, sync.space);
     } catch (error) {
       return { result: live() ? stopOf(known(error)) : STALE };
     }
@@ -401,7 +454,8 @@ export const createSyncer = ({
       sync = { ...sync, local: toRecords(state) };
       seen = sync.local;
     }
-    sync = { ...sync, owner: userId };
+    // SHARE-6: a login starts in the own space; the first run moves a member to the shared one.
+    sync = { ...sync, owner: userId, space: sync.space ?? userId };
     persist();
     // A run in progress uses the token of before the login: it becomes stale, so that its auth error
     // cannot stop the sync of this login, and the login starts a run of its own.
@@ -420,5 +474,38 @@ export const createSyncer = ({
     return 'done';
   };
 
-  return { notify, run, login, logout, status };
+  // SHARE-3, SHARE-5, SHARE-8: a request of a share, then a run that applies it. Resolves to 'ok', or to
+  // `{ error }` with the key of the message.
+  const shareRequest = async (request) => {
+    const session = activeSession();
+    if (!session) return { error: 'share.error.invalid' };
+    const mine = generation;
+    const { token, stop } = await freshToken(session, () => mine === generation);
+    if (stop) return { error: stop === 'auth' ? 'share.error.invalid' : 'share.error.network' };
+    try {
+      await request(token, session.user.id);
+    } catch (error) {
+      return { error: shareError(error) };
+    }
+    await run();
+    return 'ok';
+  };
+
+  const invite = (email) => {
+    const address = String(email).trim();
+    if (!address) return Promise.resolve({ error: 'share.error.invalid' });
+    return shareRequest((token, userId) => client.invite(token, userId, address));
+  };
+
+  const accept = (id) => shareRequest((token, userId) => client.acceptShare(token, id, userId));
+
+  const remove = (id) => shareRequest((token) => client.removeShare(token, id));
+
+  // SHARE-8: the queue goes to the shared space before the share ends.
+  const leave = async (id) => {
+    await run();
+    return remove(id);
+  };
+
+  return { notify, run, login, logout, status, invite, accept, remove, leave };
 };
