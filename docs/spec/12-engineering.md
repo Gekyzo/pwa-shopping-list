@@ -5,6 +5,7 @@
 | Module | Responsibility | May import |
 |---|---|---|
 | `src/store.js` | Pure state operations and derived views | nothing |
+| `src/lists.js` | The combined state of a member: the own list and the shared list in one state, and the split back into two | `store` |
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store` |
@@ -102,6 +103,7 @@
 | Test file | Covers |
 |---|---|
 | `tests/store.test.js` | Items, the trip, the order, the search, the figures, the bring back of a saved item |
+| `tests/lists.test.js` | The combined state of the own list and the shared list: combine, split, the view of one list, an operation in one list (SHARE-12) |
 | `tests/recipes.test.js` | Recipes, the send, the groups, the search, the sample recipe |
 | `tests/shops.test.js` | Shops and the list by shop |
 | `tests/aisles.test.js` | Aisles, the aisle of an item and the list by aisle |
