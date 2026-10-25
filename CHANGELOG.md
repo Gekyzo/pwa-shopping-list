@@ -30,6 +30,14 @@ no change has no entry.
   shared list under scope `all`, and sums `added` and `already`. Before, it filled the own list
   only, so a member with an empty own menu got `error.menuEmpty` with the shared meals on the
   screen. `error.menuEmpty` now comes only when both menus are empty.
+- Review fixes of the member's screen: the `Compartir lista` count of `Ajustes` counts the pending
+  and joined people only (SHARE-9); the scope button of a person has the label
+  `share.scopeChange` (`{current} — …{email}`), which starts with its text (SHARE-9, WCAG 2.5.3);
+  while the list chips show, the entry of all shops is `shops.allShops` (new key) in the shop
+  chips, the dock and its picker (SHARE-14), and the dock chip is a flex chip, so a long name ends
+  in an ellipsis; the list tag is `pill ghost` (`tagNode` of `ui/rows`); the foot of the meal
+  sheet hides with neither a dish nor one meal (MENU-20); the rename and the link of a recipe
+  sheet do nothing when the recipe is gone.
 - Scope and states in the sheet `Compartir lista` (SHARE-5, SHARE-8, SHARE-9): the invite form
   has two chips `#share-scope` (`list` chosen at each open) and `invite(email, scope)` sends the
   chosen one. Each person row shows the state of `personState` (`share.cancelled` new) and

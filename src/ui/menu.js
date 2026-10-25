@@ -149,7 +149,8 @@ export const renderMeal = () => {
   $('meal-planned').replaceChildren(...(two ? planned.map((entry) => plannedRow(day, meal, entry)) : []));
   $('meal-recipe').hidden = !dish;
   $('meal-remove').hidden = planned.length !== 1;
-  $('meal-actions').hidden = !planned.length;
+  // The bar of the foot holds Crear receta of a dish and the Quitar of one meal: with neither it hides.
+  $('meal-actions').hidden = !dish && planned.length !== 1;
   mealHeight ??= $('meal-sheet').offsetHeight;
   $('meal-sheet').style.minHeight = `${mealHeight}px`;
 };

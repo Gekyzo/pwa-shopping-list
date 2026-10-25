@@ -87,7 +87,8 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   meal sheet show the tag of their recipe. A recipe put in a meal goes to the list of the recipe
   and replaces only the meal of that list (MENU-3); a dish goes to the own list. The meal sheet of
   a slot with two meals lists both above the field, each with its tag and a `✕` that empties only
-  that meal (MENU-4); the **Quitar** of the foot does not show then. **Crear receta** turns the
+  that meal (MENU-4); the **Quitar** of the foot does not show then, and with no dish the foot
+  does not show at all. **Crear receta** turns the
   dish into a recipe of the list of the dish (MENU-17). **Llenar cesta** fills each list from its
   own menu: the own recipes go to the own list, the shared recipes to the shared list (MENU-5).
   A list with no meal, or with no product, is skipped; `error.menuEmpty` shows only when both
