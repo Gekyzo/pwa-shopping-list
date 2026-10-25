@@ -14,6 +14,7 @@ export default {
   'menu.fill': 'Fill basket',
   'menu.clear': 'Clear the menu',
   'menu.remove': 'Remove',
+  'menu.removeMeal': 'Remove {name}',
   'menu.noRecipe': 'no recipe',
   'menu.typeDish': 'Type the name of a dish.',
   'menu.addDish': 'Add “{name}” with no recipe',

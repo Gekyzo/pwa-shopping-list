@@ -10,6 +10,16 @@ no change has no entry.
 
 ## Unreleased
 
+- Tags and list routing in `Recetas` and `Menú` (REC-38, MENU-20): with scope `all` the recipe
+  rows, the dish rows, the meals and the chips of the meal sheet show the `pill` tag of their list
+  (`recipeTag` of `ui/view`, one `tagNode` of `ui/rows` for the whole app). New `listPart(state,
+  which)` in `src/lists.js` gives the entities of one list; each list has its own week, so a slot
+  shows up to two meals and the meal sheet lists both in `#meal-planned`, each with its own
+  Quitar (`menu.removeMeal`). A send, an edit and a delete of a recipe run through
+  `onListOf(listOf(recipe))`; a new recipe and a dish through `onOwn`; a dish turns into a recipe
+  of the list of its menu; `setMeal` runs in the list of the recipe, `clearMeal` in the list of the meal;
+  `fillMenu` and `clearMenu` on the own list. `onList` gives back the same combined state when its
+  operation changes nothing (REC-21).
 - List chips of a member in `Compra` (SHARE-14, SHARE-15): `ui.listChoice` (`null` | `'own'` |
   `'shared'`, not stored, reset by `setSharing(null, null)`) filters the combined state through
   `listView` before the shop list, so the shop chips, the dock and its picker show the shops of

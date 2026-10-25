@@ -79,6 +79,19 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   into a recipe (MENU-17), closes the sheet, shows `Recetas` and opens the sheet of the recipe,
   with `Deshacer` and the message `Receta creada: «name».`
 
+## Shared menu
+
+- **MENU-20** For a member with scope `all` (SHARE-12), `Menú` shows the meals of both lists.
+  Each list has its own week, so a slot holds one meal of each list at most: a slot with two
+  shows both, the own one first, each name with the tag of its list (SHARE-14). The chips of the
+  meal sheet show the tag of their recipe. A recipe put in a meal goes to the list of the recipe
+  and replaces only the meal of that list (MENU-3); a dish goes to the own list. The meal sheet of
+  a slot with two meals lists both above the field, each with its tag and a `✕` that empties only
+  that meal (MENU-4); the **Quitar** of the foot does not show then. **Crear receta** turns the
+  dish into a recipe of the list of the dish (MENU-17). **Llenar cesta** and **Vaciar menú** act
+  on the own menu only, and **Vaciar menú** is disabled while the own menu is empty. With scope
+  `list`, for the owner and with no share, `Menú` shows the own meals with no tag.
+
 ## Limits
 
 No date, no week after this one, no third meal. No quantity.

@@ -14,6 +14,7 @@ export default {
   'menu.fill': 'Llenar cesta',
   'menu.clear': 'Vaciar menú',
   'menu.remove': 'Quitar',
+  'menu.removeMeal': 'Quitar {name}',
   'menu.noRecipe': 'sin receta',
   'menu.typeDish': 'Escribe el nombre de un plato.',
   'menu.addDish': 'Añadir «{name}» sin receta',

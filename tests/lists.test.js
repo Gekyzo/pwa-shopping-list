@@ -1,7 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem, toggleBought } from '#store';
-import { combine, split, listView, isShared, onList, targetList, listOf, listCounts } from '#lists';
+import { sendRecipe } from '#recipes';
+import { setMeal, menuWeek } from '#menu';
+import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts } from '#lists';
 
 const item = (id, name, extra = {}) => ({ id, name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '', ...extra });
 const recipe = (id, name) => ({ id, name, products: [] });
@@ -148,4 +150,59 @@ test('listCounts counts the items to buy of each list', () => {
 
 test('listCounts of a state with no item is zero for each list', () => {
   assert.deepEqual(listCounts(emptyState()), { all: 0, own: 0, shared: 0 });
+});
+
+test('listPart gives the items, recipes, meals and sent of one list', () => {
+  const combined = combine(own(), shared(), 'all');
+  const mine = listPart(combined, 'own');
+  assert.deepEqual(mine.items.map((entry) => entry.id), ['o1', 'o2']);
+  assert.deepEqual(mine.recipes.map((entry) => entry.id), ['ro']);
+  assert.deepEqual(mine.menu, [{ day: 0, meal: 'lunch', recipe: 'ro' }]);
+  assert.deepEqual(mine.sent, ['ro']);
+  const theirs = listPart(combined, 'shared');
+  assert.deepEqual(theirs.items.map((entry) => entry.id), ['s1', 's2']);
+  assert.deepEqual(theirs.recipes.map((entry) => entry.id), ['rs']);
+  assert.equal(theirs.menu.length, 1);
+  assert.ok(theirs.menu.every(isShared));
+  assert.deepEqual(theirs.sent, ['rs']);
+});
+
+test('listPart of the shared list under scope list has no recipe and no meal', () => {
+  const theirs = listPart(combine(own(), shared(), 'list'), 'shared');
+  assert.deepEqual(theirs.items.map((entry) => entry.id), ['s1', 's2']);
+  assert.deepEqual(theirs.recipes, []);
+  assert.deepEqual(theirs.menu, []);
+  assert.deepEqual(theirs.sent, []);
+});
+
+test('listPart with no choice gives the state as it is', () => {
+  const combined = combine(own(), shared(), 'all');
+  assert.equal(listPart(combined, null), combined);
+});
+
+test('onList gives the same combined state when the operation changes nothing', () => {
+  const combined = combine(own(), shared(), 'all');
+  assert.equal(onList(combined, 'shared', (part) => ({ state: part, count: 0 }), shared(), 'all').state, combined);
+});
+
+test('a send of a shared recipe through onList brings its products to the shared list only', () => {
+  const base = { ...shared(), recipes: [{ id: 'rs', name: 'Paella', products: ['Leche', 'Arroz'] }], sent: [] };
+  const combined = combine(own(), base, 'all');
+  const result = onList(combined, 'shared', (part) => sendRecipe(part, 'rs', () => 'n1'), base, 'all');
+  const parts = split(result.state, base, 'all');
+  assert.deepEqual(parts.own.items, own().items);
+  assert.deepEqual(parts.shared.items.map((entry) => entry.name), ['Leche', 'Sal', 'Arroz']);
+  assert.deepEqual(parts.shared.sent, ['rs']);
+  assert.deepEqual(parts.own.sent, ['ro']);
+  assert.equal(result.added, 1);
+});
+
+test('a meal of a shared recipe keeps the own meal of that slot', () => {
+  const combined = combine(own(), shared(), 'all');
+  const result = onList(combined, 'shared', (part) => setMeal(part, 0, 'lunch', 'rs'), shared(), 'all');
+  const parts = split(result.state, shared(), 'all');
+  assert.deepEqual(parts.own.menu, [{ day: 0, meal: 'lunch', recipe: 'ro' }]);
+  assert.deepEqual(parts.shared.menu, [{ day: 0, meal: 'lunch', recipe: 'rs' }]);
+  assert.equal(menuWeek(listPart(result.state, 'shared'))[0].meals[0].recipe.name, 'Paella');
+  assert.equal(menuWeek(listPart(result.state, 'own'))[0].meals[0].recipe.name, 'Tortilla');
 });

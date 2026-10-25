@@ -592,6 +592,7 @@
      @variant dish   A meal with a dish that has no recipe.
      @part meal-label  Comida or Cena.
      @part meal-name   The recipe, cut with an ellipsis.
+     @part meal-entry  A meal of a member with scope all: its name and the tag of its list (MENU-20).
      @example <button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button> */
   .meal {
     display: flex;
@@ -637,6 +638,36 @@
 
   .meal.free .meal-name {
     color: var(--muted);
+  }
+
+  /* MENU-20: the tag of a meal keeps its place; the name gives way with an ellipsis. */
+  .meal-entry {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .meal-entry .pill,
+  .chip .pill,
+  .product .pill {
+    flex: none;
+    max-width: calc(var(--tap) * 2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chip .pill {
+    margin-inline-start: var(--space-1);
+  }
+
+  /* @component meal-planned
+     @scope menu
+     @summary The two meals of a slot in the meal sheet of a member, each with the tag of its list and its own Quitar, apart from the field below (MENU-20).
+     @example <ul class="products meal-planned"><li class="product"><span class="product-text">Sopa</span><span class="pill">Mía</span><button class="button icon" type="button">✕</button></li><li class="product"><span class="product-text">Paella</span><span class="pill">Ana</span><button class="button icon" type="button">✕</button></li></ul> */
+  .products.meal-planned {
+    margin: 0 0 var(--space-2);
   }
 
   /* Menú shows no add button (MENU-14), so `main` keeps no room for one at its end: the bar of Menú

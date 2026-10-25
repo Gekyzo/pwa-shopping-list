@@ -14,6 +14,7 @@ export default {
   'menu.fill': 'Remplir panier',
   'menu.clear': 'Vider le menu',
   'menu.remove': 'Retirer',
+  'menu.removeMeal': 'Retirer {name}',
   'menu.noRecipe': 'sans recette',
   'menu.typeDish': 'Saisissez le nom d’un plat.',
   'menu.addDish': 'Ajouter « {name} » sans recette',
