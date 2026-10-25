@@ -9,6 +9,7 @@ build step and no dependencies.
 ```sh
 npm test         # unit tests (node --test)
 npm run serve    # http://localhost:8080
+npm run pair     # user A on :8081 and user B on :8082, on the local pwa-server
 npm run icons    # write the PNG icons again
 npm run release  # bump, commit and tag vX.Y.Z; git push --follow-tags deploys
 npm run ds       # copy the design system again from ../pwa-design-system
