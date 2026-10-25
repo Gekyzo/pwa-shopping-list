@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { emptyState, addItem, toggleBought } from '#store';
 import { sendRecipe } from '#recipes';
 import { setMeal, menuWeek, dishRecipe } from '#menu';
-import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts, reorderList } from '#lists';
+import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts, reorderList, fillLists } from '#lists';
 
 const item = (id, name, extra = {}) => ({ id, name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '', ...extra });
 const recipe = (id, name) => ({ id, name, products: [] });
@@ -300,4 +300,56 @@ test('a move that changes nothing gives the same state', () => {
 
 test('a move of an unknown item is an error', () => {
   assert.equal(reorderList(combine(own(), shared(), 'all'), ['nope'], shared(), 'all').error.key, 'error.itemNotFound');
+});
+
+// I3: Llenar cesta fills each list from its own menu.
+const withMenu = (items, recipeList, menuList) => ({ ...emptyState(), items, recipes: recipeList, menu: menuList });
+
+test('fillLists fills the shared list from the shared menu when the own menu is empty', () => {
+  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const combined = combine(emptyState(), base, 'all');
+  const result = fillLists(combined, base, 'all', () => 'n1');
+  const parts = split(result.state, base, 'all');
+  assert.deepEqual(parts.shared.items.map((entry) => entry.name), ['Arroz']);
+  assert.deepEqual(parts.shared.sent, ['r1']);
+  assert.deepEqual(parts.own.items, []);
+  assert.deepEqual([result.added, result.already], [1, 0]);
+});
+
+test('fillLists fills each list from its menu and sums the sends', () => {
+  const mine = withMenu([item('o1', 'Huevos')], [{ id: 'r1', name: 'Tortilla', products: ['Huevos', 'Patatas'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
+  let next = 0;
+  const result = fillLists(combine(mine, base, 'all'), base, 'all', () => `n${(next += 1)}`);
+  const parts = split(result.state, base, 'all');
+  assert.deepEqual(parts.own.items.map((entry) => entry.name), ['Huevos', 'Patatas']);
+  assert.deepEqual(parts.shared.items.map((entry) => entry.name), ['Arroz']);
+  assert.deepEqual([parts.own.sent, parts.shared.sent], [['r1'], ['r1']]);
+  assert.deepEqual([result.added, result.already], [2, 1]);
+});
+
+test('fillLists under scope list fills the own list only', () => {
+  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const result = fillLists(combine(emptyState(), base, 'list'), base, 'list', () => 'n1');
+  assert.equal(result.error.key, 'error.menuEmpty');
+});
+
+test('fillLists gives menuEmpty only when both menus are empty', () => {
+  const base = withMenu([], [], []);
+  assert.equal(fillLists(combine(emptyState(), base, 'all'), base, 'all').error.key, 'error.menuEmpty');
+  assert.equal(fillLists(emptyState(), null, null).error.key, 'error.menuEmpty');
+});
+
+test('fillLists gives menuNoProducts when no menu gives a product', () => {
+  const base = withMenu([], [], [{ day: 0, meal: 'lunch', dish: 'Sopa' }]);
+  assert.equal(fillLists(combine(emptyState(), base, 'all'), base, 'all').error.key, 'error.menuNoProducts');
+});
+
+test('fillLists that changes nothing gives the same state', () => {
+  const base = withMenu([item('s1', 'Arroz')], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const sent = { ...base, sent: ['r1'] };
+  const combined = combine(emptyState(), sent, 'all');
+  const result = fillLists(combined, sent, 'all');
+  assert.equal(result.state, combined);
+  assert.deepEqual([result.added, result.already], [0, 1]);
 });

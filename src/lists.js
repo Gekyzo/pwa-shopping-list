@@ -1,4 +1,5 @@
 import { reorderItems } from '#store';
+import { fillMenu } from '#menu';
 
 // SHARE-12: the screen works on one combined state. For a member it holds the own entities and the
 // shared ones, each shared one marked `shared: true`. Each id of the shared part, and each reference
@@ -129,6 +130,31 @@ export const reorderList = (state, ids, sharedBase, scope) => {
   const result = onList(state, which, inOrder, sharedBase, scope);
   if (result.error || which === 'own' || state.sort !== 'name' || result.state === state) return result;
   return onList(result.state, 'own', (part) => reorderItems(part, []), sharedBase, scope);
+};
+
+// MENU-20: Llenar cesta fills each list from its own menu: the own one, then the shared one under
+// scope `all`. A list with an empty menu, or with no product in it, is skipped; its error comes
+// only when no list fills: `error.menuEmpty` when each menu is empty. `added` and `already` are the
+// sums of the fills. A fill that changes nothing gives the same state.
+export const fillLists = (state, sharedBase, scope, newId) => {
+  const lists = sharedBase && scope === 'all' ? ['own', 'shared'] : ['own'];
+  let next = state;
+  let added = 0;
+  let already = 0;
+  const errors = [];
+  for (const which of lists) {
+    const result = onList(next, which, (part) => fillMenu(part, newId), sharedBase, scope);
+    if (result.error && !['error.menuEmpty', 'error.menuNoProducts'].includes(result.error.key)) return { error: result.error };
+    if (result.error) {
+      errors.push(result.error);
+      continue;
+    }
+    next = result.state;
+    added += result.added;
+    already += result.already;
+  }
+  if (errors.length < lists.length) return { state: next, added, already };
+  return { error: errors.find((error) => error.key === 'error.menuNoProducts') ?? errors[0] };
 };
 
 // SHARE-15: the list that an add goes to. An add from Todas goes to the own list.

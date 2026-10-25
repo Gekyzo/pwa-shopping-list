@@ -18,7 +18,7 @@ import {
   hasStoredState,
 } from '#storage';
 import { loadSharedState, saveSharedState } from '#session';
-import { combine, split, onList, reorderList } from '#lists';
+import { combine, split, onList, reorderList, fillLists } from '#lists';
 import { LANGUAGES, PSEUDO, resolveLanguage, translator } from '#i18n';
 import { shouldShow } from '#onboarding';
 
@@ -237,6 +237,9 @@ export const onListOf = (which, op) => onList(state, which, op, shownBase(), sco
 
 // The manual move of the items of `ids`, in the list that holds them (SHARE-15).
 export const reorderOf = (ids) => reorderList(state, ids, shownBase(), scope());
+
+// Llenar cesta: each list from its own menu (MENU-20).
+export const fillMenus = () => fillLists(state, shownBase(), scope());
 
 // `options` go to the after-commit function: an import is `explicit` (SYNC-9).
 export const commit = (next, options = {}) => {
