@@ -52,6 +52,7 @@ import { startWhatsNew, isWhatsNewOpen, closeWhatsNew, bind as bindWhatsNew } fr
 import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
 import { renderInstall, bind as bindInstall } from '#ui/install';
 import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
+import { renderShare, closeShare, bind as bindShare } from '#ui/share';
 import { bind as bindNav } from '#ui/nav';
 import {
   syncer,
@@ -152,6 +153,7 @@ const renderAll = () => {
   renderEdit();
   renderMeal();
   renderAisles();
+  renderShare();
   renderShopPick();
   showDockMatches();
   holdBack();
@@ -207,6 +209,7 @@ const closeSheets = () => {
   if (ui.mealOpen !== null) closeMeal();
   if (ui.tripOpen) closeTrip();
   if (ui.aislesOpen) closeAisles();
+  if (ui.shareOpen) closeShare();
   if (ui.shopPickOpen) closeShopPick();
   if (isWhatsNewOpen()) closeWhatsNew();
 };
@@ -277,6 +280,12 @@ document.addEventListener('keydown', (event) => {
 
 $('toast-undo').addEventListener('click', () => {
   if (!undoState) return;
+  // A Deshacer of a request that waits (SHARE-8) is a function: it cancels the request.
+  if (typeof undoState === 'function') {
+    undoState();
+    hideToast();
+    return;
+  }
   const keys = rowKeys();
   debugLog('undo');
   // The render of the commit opens the rows that the undo puts back (animateRows). A recipe or a
@@ -291,6 +300,7 @@ bindSettings();
 bindInstall();
 bindAisles();
 bindAccount();
+bindShare();
 
 // Each sheet closes by Listo of its head and by a drag down of its grab or head. Each close
 // hides the layer at once, so the closing transition starts where the drag left the sheet.
@@ -301,6 +311,7 @@ const SHEET_CLOSE = {
   meal: closeMeal,
   edit: closeEdit,
   aisles: closeAisles,
+  share: closeShare,
   recipe: closeRecipe,
   'shop-pick': closeShopPick,
 };

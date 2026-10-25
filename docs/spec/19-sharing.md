@@ -58,14 +58,15 @@ person of a share.
 - **SHARE-9** The group **Cuenta** of `Ajustes` has the row **Compartir lista**, below the email,
   when the session is approved. It opens the sheet **Compartir lista**, which shows one case:
   - the owner: each person of the space with the email and `Invitación enviada` or `Comparte la
-    lista`, and **Quitar**; then the email field and **Invitar**;
+    lista`, and the remove button ✕ (`Quitar a <email>`); then the email field and **Invitar**;
   - an invitee: `<email> te invita a compartir su lista.`, the warning of SHARE-5, **Aceptar** and
     **Rechazar**;
   - a member: `Compartes la lista de <email>.` and **Dejar de compartir**.
 
   An error of an invite shows below the field: `share.error.self`, `share.error.taken`,
   `share.error.network`, `share.error.invalid`. While an invite waits, a banner over the list says
-  who invites; its button opens the sheet. The sheet is a layer of NAV-25.
+  who invites; its button **Ver invitación** opens the sheet. The sheet is a layer of NAV-25. The
+  Deshacer of SHARE-8 cancels the request that waits, so the share stays as it was.
 
 ## Limits
 

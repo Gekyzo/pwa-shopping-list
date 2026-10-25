@@ -85,9 +85,9 @@ const sheetParts = () => {
   return opens.map((open, i) => ({ id: open[2] ?? null, part: body.slice(open.index, opens[i + 1]?.index ?? body.length) }));
 };
 
-test('each of the eight sheets has the grab, then a head with its title and Listo, then a body', () => {
+test('each of the nine sheets has the grab, then a head with its title and Listo, then a body', () => {
   const parts = sheetParts();
-  assert.equal(parts.length, 8);
+  assert.equal(parts.length, 9);
   for (const { id, part } of parts) {
     assert.match(
       part,
@@ -120,6 +120,7 @@ test('the sheets with a title of their own give it an id; the others a fixed tex
     'id="meal-title" ',
     'id="edit-title" ',
     ' data-i18n="aisles.title"',
+    ' data-i18n="share.title"',
     'id="recipe-title" ',
   ]);
 });

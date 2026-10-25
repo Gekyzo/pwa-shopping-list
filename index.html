@@ -44,6 +44,11 @@
         <button id="sync-login" class="button tonal wide" type="button" data-i18n="account.login.title"></button>
       </section>
 
+      <section id="share-banner" class="banner" hidden>
+        <strong id="share-banner-text"></strong>
+        <button id="share-banner-open" class="button tonal wide" type="button" data-i18n="share.bannerOpen"></button>
+      </section>
+
       <div id="shop-chips" class="cluster scroll shop-lists" role="group" data-i18n-attr="aria-label:shops.lists" hidden></div>
 
       <div id="shop-done" class="empty-state" hidden>
@@ -84,6 +89,7 @@
           <h2 class="list-group-head" data-i18n="settings.account"></h2>
           <div class="list-group">
             <div id="account-row" class="settings-row account-row"><span id="account-email" class="settings-row-label"></span><span id="account-sync" class="settings-row-value"></span></div>
+            <button id="share-open" class="settings-row" type="button" aria-haspopup="dialog" aria-controls="share" hidden><span class="settings-row-label" data-i18n="share.row"></span><span id="share-count" class="settings-row-value"></span><span class="chevron" aria-hidden="true">›</span></button>
             <button id="logout" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="account.logout"></span></button>
             <button id="account-login" class="settings-row" type="button"><span class="settings-row-label" data-i18n="sync.banner"></span><span class="chevron" aria-hidden="true">›</span></button>
           </div>
@@ -338,6 +344,35 @@
       </form>
     </div>
 
+    <div id="share" class="sheet-layer" hidden>
+      <div id="share-veil" class="sheet-veil"></div>
+      <form id="share-form" class="sheet" role="dialog" autocomplete="off" novalidate data-i18n-attr="aria-label:share.title">
+        <div class="sheet-grab"></div>
+        <header class="sheet-head"><h2 class="sheet-title main" data-i18n="share.title"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
+        <div class="sheet-body">
+          <div id="share-owner" class="share-case">
+            <p class="input-help" data-i18n="share.text"></p>
+            <ul id="share-people" class="products flush"></ul>
+            <div class="input-row">
+              <input id="share-email" class="input strong" type="email" inputmode="email" autocapitalize="off" enterkeyhint="send" maxlength="254" data-i18n-attr="placeholder:share.email,aria-label:share.email">
+              <button id="share-submit" class="button primary" type="submit" data-i18n="share.invite" disabled></button>
+            </div>
+            <p id="share-error" class="input-help danger" role="alert" hidden></p>
+          </div>
+          <div id="share-invited" class="share-case" hidden>
+            <p id="share-invited-text" class="share-text"></p>
+            <p id="share-warning" class="input-help"></p>
+            <button id="share-accept" class="button primary wide" type="button" data-i18n="share.accept"></button>
+            <button id="share-decline" class="button tonal wide" type="button" data-i18n="share.decline"></button>
+          </div>
+          <div id="share-member" class="share-case" hidden>
+            <p id="share-member-text" class="share-text"></p>
+            <button id="share-leave" class="button tonal wide" type="button" data-i18n="share.leave"></button>
+          </div>
+        </div>
+      </form>
+    </div>
+
     <div id="recipe" class="sheet-layer" hidden>
       <div id="recipe-veil" class="sheet-veil"></div>
       <div id="recipe-sheet" class="sheet" role="dialog">
@@ -524,6 +559,7 @@
           "#ui/recipes": "./src/ui/recipes.js",
           "#ui/rows": "./src/ui/rows.js",
           "#ui/settings": "./src/ui/settings.js",
+          "#ui/share": "./src/ui/share.js",
           "#ui/account": "./src/ui/account.js",
           "#ui/aisles": "./src/ui/aisles.js",
           "#ui/install": "./src/ui/install.js",

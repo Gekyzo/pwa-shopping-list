@@ -2,6 +2,7 @@
 // device (SYNC-3), its offline note (SYNC-11), the banner of a device with no session (ACC-11) and the
 // row Cuenta of Ajustes (ACC-10).
 import { createClient, PocketBaseError } from '#pocketbase';
+import { shareCase, pendingInvite } from '#shares';
 import { createSyncer } from '#syncer';
 import { loadSession, saveSession, loadSyncState, routeAtStart, SESSION_KEY, BEFORE_LOGIN_KEY } from '#session';
 import { apiUrl } from '#config';
@@ -26,7 +27,7 @@ const client = storage
 // The screen in view, or null; and whether it can close back to the list (the device has a list).
 let screen = null;
 let closable = false;
-let status = { online: true, pending: 0, lastSync: null, auth: false, reached: 0 };
+let status = { online: true, pending: 0, lastSync: null, auth: false, reached: 0, space: null, shares: [], left: 0 };
 let offline = !navigator.onLine;
 // The close function of the realtime stream (SYNC-3), or null.
 let stream = null;
@@ -62,6 +63,9 @@ const onStatus = (next) => {
     disconnect();
     show('login', { canClose: true });
   }
+  // SHARE-7: a change from a shared space back to the own one dropped changes that were not sent.
+  if (next.left > 0) showToast(t('share.left', { count: next.left }));
+  if (ui.shareOpen) render();
   renderSync();
 };
 
@@ -81,7 +85,10 @@ const hasLocalData = () => {
   return dataValue;
 };
 
-const sessionNow = () => (syncer ? loadSession(storage) : null);
+export const sessionNow = () => (syncer ? loadSession(storage) : null);
+
+// The last status of the syncer: the shares of the space too (SHARE-6), for the sheet Compartir lista.
+export const shareStatus = () => status;
 
 // Import and Borrar todos los datos ask another question with a session (SYNC-9, SYNC-10).
 export const signedIn = () => sessionNow() !== null;
@@ -473,6 +480,14 @@ export const renderSync = () => {
   $('account-login').hidden = session !== null && !status.auth;
   $('account-email').textContent = session ? session.user.email || session.user.name : '';
   $('account-sync').textContent = session ? lastSyncText() : '';
+  // SHARE-9: the row Compartir lista, and the banner of a pending invite.
+  const shares = status.shares ?? [];
+  $('share-open').hidden = !session || status.auth;
+  const shown = session ? shareCase(shares, session.user) : null;
+  $('share-count').textContent = shown?.case === 'owner' && shown.people.length > 0 ? String(shown.people.length) : '';
+  const invite = session && !status.auth ? pendingInvite(shares, session.user) : null;
+  $('share-banner').hidden = !inList() || !invite;
+  $('share-banner-text').textContent = invite ? t('share.banner', { email: invite.ownerEmail }) : '';
 };
 
 export const bind = () => {

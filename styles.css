@@ -757,6 +757,34 @@
     font-size: var(--text-s);
   }
 
+  /* @component share-case
+     @scope settings
+     @summary One case of the sheet Compartir lista (SHARE-9): the people and the invite field of an owner, the invite of an invitee, or the share of a member.
+     @part share-text     A text of the case, which breaks a long email anywhere.
+     @part share-person   The email of a person and the state of the invite, one under the other.
+     @example <div class="share-case" style="width: 100%"><p class="share-text">ana@example.test te invita a compartir su lista.</p><button class="button primary wide" type="button">Aceptar</button><button class="button tonal wide" type="button">Rechazar</button></div> */
+  .share-case {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+  }
+
+  .share-person {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding-block: var(--space-2);
+    padding-inline-start: var(--space-4);
+    overflow-wrap: anywhere;
+  }
+
+  .share-case > .share-text {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
   /* The select is invisible: the row shows the ring when the select has the keyboard focus. */
   .settings .settings-row:has(> .select:focus-visible) {
     outline: 2px solid var(--text);
