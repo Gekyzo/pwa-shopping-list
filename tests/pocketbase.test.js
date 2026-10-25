@@ -191,8 +191,8 @@ test('listShares follows every page and maps each share, a pending one with an e
   assert.equal(calls[0].url.searchParams.get('sort'), 'created');
   assert.equal(calls[0].headers.Authorization, TOKEN);
   assert.deepEqual(shares, [
-    { id: 's1', owner: 'owner1', email: 'b@b.c', ownerEmail: 'a@b.c', member: '' },
-    { id: 's2', owner: 'owner1', email: 'b@b.c', ownerEmail: 'a@b.c', member: 'user1' },
+    { id: 's1', owner: 'owner1', email: 'b@b.c', ownerEmail: 'a@b.c', ownerName: '', member: '', scope: 'all', cancelled: false },
+    { id: 's2', owner: 'owner1', email: 'b@b.c', ownerEmail: 'a@b.c', ownerName: '', member: 'user1', scope: 'all', cancelled: false },
   ]);
 });
 
@@ -202,10 +202,32 @@ test('invite, acceptShare and removeShare send their method, path and body', asy
   assert.equal((await client.acceptShare(TOKEN, 's1', 'user1')).member, 'user1');
   assert.equal(await client.removeShare(TOKEN, 's1'), undefined);
   assert.deepEqual(calls.map((c) => [c.method, c.url.pathname, c.body]), [
-    ['POST', '/api/collections/shopping_shares/records', { owner: 'owner1', email: 'b@b.c' }],
+    ['POST', '/api/collections/shopping_shares/records', { owner: 'owner1', email: 'b@b.c', scope: 'all' }],
     ['PATCH', '/api/collections/shopping_shares/records/s1', { member: 'user1' }],
     ['DELETE', '/api/collections/shopping_shares/records/s1', undefined],
   ]);
+});
+
+test('invite sends the scope, and the other share requests send their body', async () => {
+  const { calls, client } = fake(reply(200, shareRow()), reply(200, shareRow()), reply(200, shareRow()), reply(200, shareRow()));
+  await client.invite(TOKEN, 'owner1', 'b@b.c', 'list');
+  await client.cancelShare(TOKEN, 's1');
+  await client.setShareScope(TOKEN, 's1', 'all');
+  await client.reinvite(TOKEN, 's1');
+  assert.deepEqual(calls.map((c) => [c.method, c.url.pathname, c.body]), [
+    ['POST', '/api/collections/shopping_shares/records', { owner: 'owner1', email: 'b@b.c', scope: 'list' }],
+    ['PATCH', '/api/collections/shopping_shares/records/s1', { cancelled: true }],
+    ['PATCH', '/api/collections/shopping_shares/records/s1', { scope: 'all' }],
+    ['PATCH', '/api/collections/shopping_shares/records/s1', { cancelled: false, member: '' }],
+  ]);
+});
+
+test('a share maps scope and cancelled, with the defaults all and false', async () => {
+  const { client } = fake(reply(200, shareRow({ ownerName: 'Ana', scope: 'list', cancelled: true })), reply(200, shareRow({ scope: '' })));
+  const [full] = [await client.invite(TOKEN, 'o', 'b@b.c', 'list')];
+  assert.deepEqual([full.ownerName, full.scope, full.cancelled], ['Ana', 'list', true]);
+  const bare = await client.invite(TOKEN, 'o', 'b@b.c', 'all');
+  assert.deepEqual([bare.ownerName, bare.scope, bare.cancelled], ['', 'all', false]);
 });
 
 test('a refused invite keeps the field errors of the server', async () => {

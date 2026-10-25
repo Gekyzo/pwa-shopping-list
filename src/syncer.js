@@ -60,7 +60,7 @@ const shareError = (error) => {
   if (['network', 'server', 'rate'].includes(error.type)) return 'share.error.network';
   const code = error.fields?.email?.code;
   if (code === 'share_self') return 'share.error.self';
-  if (code === 'share_member' || isUniqueViolation(error)) return 'share.error.taken';
+  if (code === 'share_member' || code === 'share_taken' || isUniqueViolation(error)) return 'share.error.taken';
   return 'share.error.invalid';
 };
 

@@ -40,7 +40,10 @@ const sessionOf = ({ token, record }) => ({
 
 const serverRecOf = ({ id, kind, key, data, deleted, updated }) => ({ id, kind, key, data, deleted: deleted === true, updated });
 
-const shareOf = ({ id, owner, email, ownerEmail, member }) => ({ id, owner, email, ownerEmail: ownerEmail ?? '', member: member ?? '' });
+const shareOf = ({ id, owner, email, ownerEmail, ownerName, member, scope, cancelled }) => ({
+  id, owner, email, ownerEmail: ownerEmail ?? '', ownerName: ownerName ?? '', member: member ?? '',
+  scope: scope || 'all', cancelled: cancelled ?? false,
+});
 
 // SHARE-6: a member can read two spaces, so every request for records names the space.
 const inSpace = (space) => {
@@ -167,7 +170,16 @@ export const createClient = ({ url, fetch, EventSource }) => {
     // SHARE-6: the shares where the user is the owner, the member or the invitee (the rules of the server).
     listShares: (token) => pages(token, SHARES, { sort: 'created' }, shareOf),
 
-    invite: async (token, owner, email) => shareOf(await call('POST', SHARES, { token, body: { owner, email } })),
+    // SHARE-11: the scope is `all` (the whole space) or `list` (the shared list only).
+    invite: async (token, owner, email, scope = 'all') => shareOf(await call('POST', SHARES, { token, body: { owner, email, scope } })),
+
+    // SHARE-11: the owner ends a share and keeps the row, so the person stays in the sheet as cancelled.
+    cancelShare: async (token, id) => shareOf(await call('PATCH', `${SHARES}/${id}`, { token, body: { cancelled: true } })),
+
+    setShareScope: async (token, id, scope) => shareOf(await call('PATCH', `${SHARES}/${id}`, { token, body: { scope } })),
+
+    // SHARE-11: a new invite to a cancelled share: it is open again, with no member.
+    reinvite: async (token, id) => shareOf(await call('PATCH', `${SHARES}/${id}`, { token, body: { cancelled: false, member: '' } })),
 
     acceptShare: async (token, id, userId) => shareOf(await call('PATCH', `${SHARES}/${id}`, { token, body: { member: userId } })),
 
