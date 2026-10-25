@@ -103,5 +103,5 @@ Start from a share with B accepted (A invites, B accepts). Load the app of B onc
 | 20 | In `pwa-server`, stop PocketBase: `docker compose -f docker-compose.yml -f compose.dev.yml --env-file dev.env stop pocketbase`. B: tick a shared item (`Tomate de receta`) and an own item (`Huevos B`). | Both ticks show at once. `shopping.queue` and `shopping.shared.queue` of B each hold one change. |
 | 21 | Start PocketBase again (`start pocketbase`). Wait 12 s. | Both queues of B are empty. In the API the shared item is `bought: true` in the space of A, and `Huevos B` is `bought: true` in the space of B only. A shows the shared tick. |
 
-Last run: 2026-10-25, v1.5.0 plus `npm run pair`, in agent-browser at 412 x 900. Each step gave the
-expected result. Screenshots of the run: `.superpowers/sdd/2026-10-25-separate-shared-lists/task-10-shots/`.
+Last run: 2026-10-25, the unreleased separate lists on v1.5.0, in agent-browser at 412 x 900. Each step
+gave the expected result.
