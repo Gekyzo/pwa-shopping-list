@@ -73,6 +73,10 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
   state and not part of the backup.
 - **`localStorage`**, key `shopping.swipeHint`: `1` after `Compra` showed the slide of a row one
   time (ROW-14). It is not part of the state and not part of the backup.
+- **`localStorage`**, keys `shopping.shared.v1`, `shopping.shared.sync` and `shopping.shared.queue`: the
+  shared lane of a member (SHARE-12). The first is a plain state of version 9 (the shared part, with no
+  `shared` marker); the others are the sync state, with the `scope` of the share, and the queue of the
+  shared space. `src/session.js` reads and writes them; `clearAccountData` and `resetAll` remove them.
 - **Cache API**, cache `shopping-shell-v17`: the app shell, served
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers

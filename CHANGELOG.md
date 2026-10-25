@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+- Storage of the shared space (SHARE-12): keys `shopping.shared.v1`, `shopping.shared.sync` and
+  `shopping.shared.queue`; `loadSharedState` and `saveSharedState`; `loadSyncState`, `saveSyncState`,
+  `loadQueue` and `saveQueue` take a `lane` (`own` or `shared`); the shared sync state stores the
+  `scope`. A stored share of v1.5.0 loads with `ownerName` '', `scope` `all` and `cancelled` false.
 - Rules and client calls for the scope and the cancelled state of a share (SHARE-11): `shareOf`
   maps `ownerName`, `scope` and `cancelled`; `invite` takes a scope; new `cancelShare`,
   `setShareScope` and `reinvite`; `src/shares.js` has `sharedSpace`, `listName` and `personState`,
