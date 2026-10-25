@@ -5,7 +5,7 @@
 | Module | Responsibility | May import |
 |---|---|---|
 | `src/store.js` | Pure state operations and derived views | nothing |
-| `src/lists.js` | The combined state of a member: the own list and the shared list in one state, the split back into two, the list of an add, the manual move in one list and the counts of the list chips | `store` |
+| `src/lists.js` | The combined state of a member: the own list and the shared list in one state, the split back into two, the list of an add, the manual move in one list, the fill of each list from its menu and the counts of the list chips | `store`, `menu` |
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store` |

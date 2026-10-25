@@ -88,8 +88,12 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   and replaces only the meal of that list (MENU-3); a dish goes to the own list. The meal sheet of
   a slot with two meals lists both above the field, each with its tag and a `✕` that empties only
   that meal (MENU-4); the **Quitar** of the foot does not show then. **Crear receta** turns the
-  dish into a recipe of the list of the dish (MENU-17). **Llenar cesta** and **Vaciar menú** act
-  on the own menu only, and **Vaciar menú** is disabled while the own menu is empty. With scope
+  dish into a recipe of the list of the dish (MENU-17). **Llenar cesta** fills each list from its
+  own menu: the own recipes go to the own list, the shared recipes to the shared list (MENU-5).
+  A list with no meal, or with no product, is skipped; `error.menuEmpty` shows only when both
+  menus are empty, `error.menuNoProducts` when no menu gives a product, and the counts of the
+  message are the sums of both fills (MENU-7). **Vaciar menú** acts on the own menu only, and is
+  disabled while the own menu is empty. With scope
   `list`, for the owner and with no share, `Menú` shows the own meals with no tag.
 
 ## Limits

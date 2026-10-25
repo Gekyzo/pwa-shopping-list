@@ -2,7 +2,7 @@ import * as recipes from '#recipes';
 import * as menu from '#menu';
 import { intlTag } from '#i18n';
 import { listOf, listPart } from '#lists';
-import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, onListOf } from '#ui/context';
+import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, onListOf, fillMenus } from '#ui/context';
 import { sendText, recipeFromDish } from '#ui/recipes';
 import { showView } from '#ui/nav';
 import { tagNode } from '#ui/rows';
@@ -90,9 +90,9 @@ const dayNode = ({ day, meals }) =>
 // The days of Menú.
 export const weekNodes = () => week().map(dayNode);
 
-// MENU-20: Llenar cesta and Vaciar menú act on the own menu only.
+// MENU-20: Llenar cesta fills each list from its own menu; Vaciar menú empties the own menu only.
 const fillBasket = () => {
-  const result = onOwn((own) => menu.fillMenu(own));
+  const result = fillMenus();
   if (result.error || result.state !== state) {
     apply(result, { undoText: t('toast.menuFilled', { summary: sendText(result) }) });
   }

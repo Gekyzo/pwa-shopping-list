@@ -25,6 +25,11 @@ no change has no entry.
   in the order of the screen (the own `sort`). Before, `ui/drag` ran it on the combined state: in
   the name order it sorted the items of both lists and wrote a new order of the shared list. A
   move of the shared list in the name order also switches the own order to custom.
+- `Llenar cesta` of a member (MENU-20): `fillLists(state, sharedBase, scope, newId)` of
+  `src/lists.js` (`fillMenus` of `ui/context`) runs `fillMenu` in the own list, then in the
+  shared list under scope `all`, and sums `added` and `already`. Before, it filled the own list
+  only, so a member with an empty own menu got `error.menuEmpty` with the shared meals on the
+  screen. `error.menuEmpty` now comes only when both menus are empty.
 - Scope and states in the sheet `Compartir lista` (SHARE-5, SHARE-8, SHARE-9): the invite form
   has two chips `#share-scope` (`list` chosen at each open) and `invite(email, scope)` sends the
   chosen one. Each person row shows the state of `personState` (`share.cancelled` new) and
@@ -44,7 +49,7 @@ no change has no entry.
   Quitar (`menu.removeMeal`). A send, an edit and a delete of a recipe run through
   `onListOf(listOf(recipe))`; a new recipe and a dish through `onOwn`; a dish turns into a recipe
   of the list of its menu; `setMeal` runs in the list of the recipe, `clearMeal` in the list of the meal;
-  `fillMenu` and `clearMenu` on the own list. `onList` gives back the same combined state when its
+  `clearMenu` on the own list. `onList` gives back the same combined state when its
   operation changes nothing (REC-21).
 - List chips of a member in `Compra` (SHARE-14, SHARE-15): `ui.listChoice` (`null` | `'own'` |
   `'shared'`, not stored, reset by `setSharing(null, null)`) filters the combined state through
