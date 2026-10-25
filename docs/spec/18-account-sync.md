@@ -21,13 +21,14 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   session whose login is not finished (the question of ACC-8) refreshes its token before that
   login goes on: an auth error opens **Iniciar sesión**, a network error keeps the list, and the next
   start or `online` event tries again.
-- **ACC-2** Three screens cover the list. **Iniciar sesión** has the Google button, the email,
+- **ACC-2** Three screens cover the list. **Iniciar sesión** has the Google button, **Usar sin
+  cuenta** while there is no session (ACC-13), the email,
   the password, **Entrar**, **¿Olvidaste la contraseña?** and the link to **Solicitar acceso**.
   **Solicitar acceso** has the Google button, the name, the email, the password (8 characters or more),
   **Enviar solicitud** and the link back to **Iniciar sesión**. **Esperando aprobación** has
   **Comprobar de nuevo** and **Cerrar sesión**. Their texts name the one who approves as the
   administrator, never by a person's name. The screens cover the app, the walkthrough too.
-  When the device has a list, **Iniciar sesión** and **Solicitar acceso** also have **Volver a la
+  When the device has a list or the offline flag, **Iniciar sesión** and **Solicitar acceso** also have **Volver a la
   lista**; `Escape` and the back of the phone close them too, as a layer of NAV-25. A screen that
   cannot close is not a layer: the back closes the layer below it. An error shows below the fields: `account.error.wrongPassword`,
   `account.error.network`, `account.error.emailTaken`, `account.error.passwordShort`. A password
@@ -47,6 +48,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   **Comprobar de nuevo** refreshes the session: an approved account logs in, else the message
   `account.waiting.still`. **Cerrar sesión** of **Esperando aprobación** removes only the session when
   the account is not the owner of the stored data, so the list stays; the owner logs out as ACC-9.
+  With no list and no offline flag it then opens **Iniciar sesión**; else the list.
 - **ACC-5** Google sign-in is a redirect. The app asks the server for the URL of the provider, sends the
   browser there with the URL of the app as the return address, and exchanges the `code` on return.
   The account of an OAuth sign-up is not approved (ACC-3). The app removes `code`,
@@ -81,7 +83,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   **Cerrar sesión**. The time of the last sync is under the email, in the muted style, and a long
   email wraps inside the row. With no session the group has **Inicia sesión para sincronizar**, which opens
   **Iniciar sesión** with **Volver a la lista**.
-- **ACC-11** With no session and with `shopping.v1` data, the list shows the banner
+- **ACC-11** With no session, with `shopping.v1` data and with no offline flag (ACC-13), the list shows the banner
   **Inicia sesión para sincronizar**. The device works local-only until the user logs in. Its button
   opens **Iniciar sesión** with **Volver a la lista**.
 - **ACC-12** The API URL is one config value. When the app is served from `localhost`, `127.0.0.1` or

@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- Pots fer servir l'app sense compte: toca **Fes-la servir sense compte** a Inicia la sessió. Les teves llistes es queden en aquest dispositiu. Inicia la sessió més tard des de Configuració per sincronitzar-les.
 
 ## 1.6.0 - 2026-10-25
 

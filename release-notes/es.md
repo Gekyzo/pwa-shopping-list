@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Puedes usar la app sin cuenta: toca **Usar sin cuenta** en Iniciar sesión. Tus listas se quedan en este dispositivo. Inicia sesión más tarde desde Ajustes para sincronizarlas.
 
 ## 1.6.0 - 2026-10-25
 

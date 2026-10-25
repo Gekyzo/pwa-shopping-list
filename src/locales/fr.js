@@ -283,6 +283,7 @@ export default {
   'account.login.title': 'Se connecter',
   'account.login.text': 'Connectez-vous pour retrouver vos listes sur tous vos appareils.',
   'account.google': 'Continuer avec Google',
+  'account.offline': 'Utiliser sans compte',
   'account.or': 'ou',
   'account.name': 'Nom',
   'account.email': 'E-mail',

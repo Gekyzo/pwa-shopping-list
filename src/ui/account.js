@@ -1,10 +1,11 @@
-// The account screens (ACC-2): Iniciar sesión, Solicitar acceso and Esperando aprobación, the sync of the
+// The account screens (ACC-2): Iniciar sesión, with Usar sin cuenta (ACC-13), Solicitar acceso and
+// Esperando aprobación, the sync of the
 // device (SYNC-3), its offline note (SYNC-11), the banner of a device with no session (ACC-11) and the
 // row Cuenta of Ajustes (ACC-10).
 import { createClient, PocketBaseError } from '#pocketbase';
 import { shareCase, pendingInvite } from '#shares';
 import { createSyncer } from '#syncer';
-import { loadSession, saveSession, loadSyncState, routeAtStart, SESSION_KEY, BEFORE_LOGIN_KEY } from '#session';
+import { loadSession, saveSession, loadSyncState, routeAtStart, loadOffline, saveOffline, dropOffline, SESSION_KEY, BEFORE_LOGIN_KEY } from '#session';
 import { apiUrl } from '#config';
 import { exportJson, exportFilename } from '#storage';
 import { emptyState } from '#store';
@@ -31,6 +32,8 @@ let status = { online: true, pending: 0, lastSync: null, auth: false, reached: 0
 let offline = !navigator.onLine;
 // The close function of the realtime stream (SYNC-3), or null.
 let stream = null;
+// Usar sin cuenta for this start, when the storage refused the flag (ACC-13).
+let offlineNow = false;
 
 const show = (name, { canClose = false } = {}) => {
   screen = name;
@@ -105,6 +108,11 @@ const hasLocalData = () => {
 };
 
 export const sessionNow = () => (syncer ? loadSession(storage) : null);
+
+const offlineChosen = () => offlineNow || loadOffline(storage);
+
+// Iniciar sesión closes back to the list on a device with a list, or one that works with no account.
+const canGoBack = () => hasLocalData() || offlineChosen();
 
 // The last status of the syncer: the shares of the space too (SHARE-6), for the sheet Compartir lista.
 export const shareStatus = () => status;
@@ -200,7 +208,7 @@ const enter = async (session) => {
     }
   } catch (error) {
     if (!(error instanceof PocketBaseError)) console.error(error);
-    show('login', { canClose: hasLocalData() });
+    show('login', { canClose: canGoBack() });
     showError('login', 'account.error.network');
     return;
   }
@@ -210,6 +218,9 @@ const enter = async (session) => {
   }
   // The first sync of the login stopped at an auth error: onStatus shows Iniciar sesión (ACC-7).
   if (syncer.status().auth) return;
+  // ACC-13: a login that opens the list ends the offline mode.
+  dropOffline(storage);
+  offlineNow = false;
   close();
   connect();
   renderSync();
@@ -322,7 +333,7 @@ export const finishOAuth = async ({ code, state: returned }) => {
   } catch {
     // No pending sign-in: the error below.
   }
-  show('login', { canClose: hasLocalData() });
+  show('login', { canClose: canGoBack() });
   renderSync();
   if (!syncer) return;
   if (!pending || !code) {
@@ -346,7 +357,7 @@ const checkAgain = () =>
   busy('waiting', async () => {
     const session = sessionNow();
     if (!session) {
-      show('login', { canClose: hasLocalData() });
+      show('login', { canClose: canGoBack() });
       return;
     }
     let fresh;
@@ -358,7 +369,7 @@ const checkAgain = () =>
         return;
       }
       dropSession();
-      show('login', { canClose: hasLocalData() });
+      show('login', { canClose: canGoBack() });
       return;
     }
     saveSession(storage, fresh);
@@ -401,7 +412,7 @@ const leaveWaiting = () => {
   const session = sessionNow();
   if (session && loadSyncState(storage).owner === session.user.id) return logout();
   dropSession();
-  if (hasLocalData()) close();
+  if (canGoBack()) close();
   else show('login');
   renderSync();
   return null;
@@ -421,7 +432,7 @@ const resumeLogin = async (session) => {
   } catch (error) {
     if (error?.type !== 'auth') return;
     dropSession();
-    show('login', { canClose: hasLocalData() });
+    show('login', { canClose: canGoBack() });
     renderSync();
     return;
   }
@@ -433,7 +444,7 @@ const resumeLogin = async (session) => {
 export const startAccount = () => {
   if (!syncer) return;
   const session = sessionNow();
-  const route = routeAtStart({ session, hasLocalData: hasLocalData() });
+  const route = routeAtStart({ session, hasLocalData: hasLocalData(), offline: offlineChosen() });
   if (route === 'login' || route === 'waiting') show(route);
   else if (route === 'list' && loginPending(session)) {
     // A login that stopped at the question of ACC-8 asks it again.
@@ -473,10 +484,19 @@ export const closeAccount = () => {
   if (closable) close();
 };
 
+// ACC-13: Usar sin cuenta closes Iniciar sesión, for this start too when the storage refuses the flag.
+const useOffline = () => {
+  offlineNow = !saveOffline(storage);
+  close();
+  renderSync();
+};
+
 export const renderAccount = (route = screen) => {
   $('auth').hidden = route === null;
   for (const name of SCREENS) $(name).hidden = name !== route;
   $('account-back').hidden = !closable;
+  // After an auth stop (ACC-7) the session stays, and Volver a la lista is the way back.
+  $('login-offline').hidden = sessionNow() !== null;
   if (route) $('auth').setAttribute('aria-labelledby', `${route}-title`);
 };
 
@@ -493,7 +513,7 @@ export const renderSync = () => {
   const session = sessionNow();
   $('sync-offline').hidden = !session || ui.view === 'settings' || !(offline || !status.online);
   // ACC-7: after an auth stop the banner stays, so that a dismissed Iniciar sesión can open again.
-  $('sync-banner').hidden = !inList() || (session !== null ? !status.auth : !hasLocalData());
+  $('sync-banner').hidden = !inList() || (session !== null ? !status.auth : !hasLocalData() || offlineChosen());
   $('account-row').hidden = !session;
   $('logout').hidden = !session;
   $('account-login').hidden = session !== null && !status.auth;
@@ -535,6 +555,7 @@ export const bind = () => {
   $('waiting-check').addEventListener('click', checkAgain);
   $('waiting-logout').addEventListener('click', leaveWaiting);
   $('account-back').addEventListener('click', closeAccount);
+  $('login-offline').addEventListener('click', useOffline);
   const openLogin = () => {
     showError('login', null);
     show('login', { canClose: true });
