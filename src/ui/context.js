@@ -18,7 +18,7 @@ import {
   hasStoredState,
 } from '#storage';
 import { loadSharedState, saveSharedState } from '#session';
-import { combine, split, onList } from '#lists';
+import { combine, split, onList, reorderList } from '#lists';
 import { LANGUAGES, PSEUDO, resolveLanguage, translator } from '#i18n';
 import { shouldShow } from '#onboarding';
 
@@ -234,6 +234,9 @@ export const onOwn = (op) => onList(state, 'own', op, shownBase(), scope());
 
 // Runs a store operation on one list, 'own' or 'shared', as onOwn does.
 export const onListOf = (which, op) => onList(state, which, op, shownBase(), scope());
+
+// The manual move of the items of `ids`, in the list that holds them (SHARE-15).
+export const reorderOf = (ids) => reorderList(state, ids, shownBase(), scope());
 
 // `options` go to the after-commit function: an import is `explicit` (SYNC-9).
 export const commit = (next, options = {}) => {

@@ -20,6 +20,11 @@ no change has no entry.
   an imported backup) sent a `sent` id to both parts, opened the own recipe for a tap on the
   shared one and ticked or deleted the item in both lists. `onList` gives its operation the shared
   part with the ids of the screen and gives a combined `id` back.
+- Manual reorder in one list (SHARE-15): `reorderList(state, ids, sharedBase, scope)` of
+  `src/lists.js` (`reorderOf` of `ui/context`) runs `reorderItems` in the list of the moved rows,
+  in the order of the screen (the own `sort`). Before, `ui/drag` ran it on the combined state: in
+  the name order it sorted the items of both lists and wrote a new order of the shared list. A
+  move of the shared list in the name order also switches the own order to custom.
 - Scope and states in the sheet `Compartir lista` (SHARE-5, SHARE-8, SHARE-9): the invite form
   has two chips `#share-scope` (`list` chosen at each open) and `invite(email, scope)` sends the
   chosen one. Each person row shows the state of `personState` (`share.cancelled` new) and

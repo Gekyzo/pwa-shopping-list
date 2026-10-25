@@ -146,8 +146,11 @@ person of a share.
 - **SHARE-15** An add from **Mi lista** and from **Todas** goes to the own list; an add from the
   shared chip goes to the shared list. The suggestions of the add sheet and its duplicate check
   (ADD-6) look at that list only. A rename runs in the list of its item. A tick, a delete, the
-  other changes of an item and `Deshacer` act on the item in its own list. **Terminar compra**
-  ends the trip of both lists in one operation.
+  other changes of an item and `Deshacer` act on the item in its own list. A manual reorder moves
+  the rows of one list (SHARE-14) and changes the order of that list only. The screen shows both
+  lists in the own order: in the name order a reorder of either list switches the own order to
+  custom, with the own items kept in the name order; the order of the shared part stays its own.
+  **Terminar compra** ends the trip of both lists in one operation.
 
 ## Limits
 

@@ -1,6 +1,5 @@
-import * as store from '#store';
 import { dropIndex, moveTo, shifts } from '#reorder';
-import { HOLD_MS, EDGE, EDGE_STEP, DRAG_START, scroller, state, ui, t, apply, guardClick } from '#ui/context';
+import { HOLD_MS, EDGE, EDGE_STEP, DRAG_START, scroller, state, ui, t, apply, guardClick, reorderOf } from '#ui/context';
 import { searching, isOpen } from '#ui/view';
 import { rowTops, slide } from '#ui/motion';
 
@@ -84,7 +83,8 @@ export const endReorder = (keep) => {
   const ids = moveTo(rows.map((row) => row.dataset.id), from, to);
   // A move in the name order changes the order to the custom one.
   const undoText = t(state.sort === 'name' ? 'toast.orderCustom' : 'toast.order');
-  if (apply(store.reorderItems(state, ids), { undoText })) slide(before);
+  // SHARE-15: the move runs in the list of its rows.
+  if (apply(reorderOf(ids), { undoText })) slide(before);
 };
 
 // Lets a hold of a finger, or a vertical drag of the mouse, lift the row and move it in its scope.
