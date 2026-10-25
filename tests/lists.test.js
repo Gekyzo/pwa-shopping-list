@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem, toggleBought } from '#store';
-import { combine, split, listView, isShared, onList } from '#lists';
+import { combine, split, listView, isShared, onList, targetList, listOf, listCounts } from '#lists';
 
 const item = (id, name, extra = {}) => ({ id, name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '', ...extra });
 const recipe = (id, name) => ({ id, name, products: [] });
@@ -126,4 +126,26 @@ test('undo state round trip', () => {
   const after = onList(before, 'shared', (part) => toggleBought(part, 's1'), shared(), 'all').state;
   assert.equal(split(after, shared(), 'all').shared.items[0].bought, true);
   assert.equal(split(before, shared(), 'all').shared.items[0].bought, false);
+});
+
+test('targetList sends an add from Todas and from Mi lista to the own list', () => {
+  assert.equal(targetList(null), 'own');
+  assert.equal(targetList('own'), 'own');
+  assert.equal(targetList('shared'), 'shared');
+});
+
+test('listOf names the list of an entity', () => {
+  const combined = combine(own(), shared(), 'list');
+  assert.deepEqual(combined.items.map(listOf), ['own', 'own', 'shared', 'shared']);
+});
+
+test('listCounts counts the items to buy of each list', () => {
+  const base = shared();
+  const sharedState = { ...base, items: [...base.items, item('s3', 'Sal fina', { bought: true }), item('s4', 'Arroz', { list: 'saved' })] };
+  const combined = combine({ ...own(), items: [...own().items, item('o3', 'Agua', { recurrent: true })] }, sharedState, 'list');
+  assert.deepEqual(listCounts(combined), { all: 5, own: 3, shared: 2 });
+});
+
+test('listCounts of a state with no item is zero for each list', () => {
+  assert.deepEqual(listCounts(emptyState()), { all: 0, own: 0, shared: 0 });
 });

@@ -24,7 +24,7 @@ import {
   commit,
   debugLog,
 } from '#ui/context';
-import { inList, viewState } from '#ui/view';
+import { inList, listState, viewState } from '#ui/view';
 import { rowKeys, bringIn, flash, snapshotRows, animateRows } from '#ui/motion';
 import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { endReorder, bind as bindDrag } from '#ui/drag';
@@ -35,6 +35,7 @@ import { renderArrange, closeArrange, bind as bindArrange } from '#ui/arrange';
 import {
   headerOf,
   shopLabel,
+  renderListChips,
   renderShopChips,
   renderDock,
   renderShopPick,
@@ -101,13 +102,14 @@ const renderAll = () => {
   if (!state.recipes.some((recipe) => recipe.id === ui.recipeId)) ui.recipeId = null;
   // A shop list whose chip went shows Todas.
   // A hidden row leaves no list filtered.
-  ui.shop = shopLists === 'show' ? shops.validShop(state, ui.shop) : null;
+  ui.shop = shopLists === 'show' ? shops.validShop(listState(), ui.shop) : null;
   // The preview of Terminar compra counts the open items with the setting's choice (TRIP-7).
   const kept = tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : [];
   const summary = store.tripSummary(state, kept);
   const header = headerOf(store.tripSummary(viewState()));
   if (inList() && ui.shop !== null) header.title = shopLabel(ui.shop);
 
+  renderListChips();
   renderShopChips();
   $('title').textContent = header.title;
   $('subtitle').textContent = header.subtitle;

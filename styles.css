@@ -316,6 +316,30 @@
     border-bottom: 1px solid var(--line);
   }
 
+  /* @component list-chips
+     @scope list
+     @summary The lists of a member of a share, below the header of Compra at every width: Todas, the own list and the shared list (SHARE-14).
+     @example <div class="cluster scroll list-chips"><button class="chip surface" type="button" aria-pressed="true"><span>Todas</span><span class="count">5</span></button><button class="chip surface" type="button"><span>Mi lista</span><span class="count">2</span></button><button class="chip surface" type="button"><span>Ana</span><span class="count">3</span></button></div> */
+  .list-chips {
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* The tag of a row of Todas widens the end slot up to two buttons more; a longer name ends in
+     an ellipsis (SHARE-14). */
+  .item-row-end:has(.pill) {
+    gap: var(--space-1);
+    width: auto;
+    min-width: calc(var(--tap) * 2);
+  }
+
+  .item-row-end .pill {
+    max-width: calc(var(--tap) * 2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   /* Below 600px the dock holds the shop list of Compra and the search. */
   body:has(.dock:not([hidden])) .shop-lists,
   body:has(.dock:not([hidden])) .search {

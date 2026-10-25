@@ -21,7 +21,7 @@ repository root.
 | Module | Responsibility | May import |
 |---|---|---|
 | `src/store.js` | Pure state operations and derived views | nothing |
-| `src/lists.js` | The combined state of a member: the own list and the shared list in one state, and the split back into two | `store` |
+| `src/lists.js` | The combined state of a member: the own list and the shared list in one state, the split back into two, the list of an add and the counts of the list chips | `store` |
 | `src/recipes.js` | Pure recipe operations; resolves product names against the items | `store.js` |
 | `src/shops.js` | Pure shop operations and the list by shop | `store.js` |
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store.js` |
@@ -37,16 +37,16 @@ repository root.
 | `src/i18n.js` | The language to show (`resolveLanguage`) and the function `t(key, params)` of one language (`translator`) | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language: a flat object from key to a text or to `{ one, other }` | nothing |
 | `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render`, the combined state of a member | `store`, `storage`, `session`, `lists`, `i18n`, `onboarding` |
-| `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
+| `src/ui/view.js` | What the screen shows of the state: the list chip and the list in view, the tag of a row, the target of an add, the search, the open row, the grouping | `store`, `recipes`, `shops`, `lists`, `shares`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, the rename field and its `Guardado`, the more button | `sheets`, `store`, `ui/context`, `ui/view` |
-| `src/ui/edit.js` | The edit sheet `Editar` | `store`, `shops`, `aisles`, `ui/context` |
+| `src/ui/edit.js` | The edit sheet `Editar` | `store`, `lists`, `shops`, `aisles`, `ui/context` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `store`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
 | `src/ui/recipes.js` | The section `Recetas` | `recipes`, `menu`, `ui/context`, `ui/controls`, `ui/motion` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `i18n`, `ui/context`, `ui/recipes`, `ui/nav` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, shop lists, the dock and its shop picker, header, trip sheet | `store`, `recipes`, `shops`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
+| `src/ui/list.js` | The lists `Actual` and `Próxima`: rows, search, list chips, shop lists, the dock and its shop picker, header, trip sheet | `store`, `recipes`, `shops`, `lists`, `shares`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |

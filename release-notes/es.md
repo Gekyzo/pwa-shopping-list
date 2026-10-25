@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Cuando aceptas una lista compartida, tu propia lista se queda. En `Compra` ves las dos juntas: `Todas`, `Mi lista` y la lista de la otra persona son chips arriba, con lo que falta por comprar en cada una. En `Todas`, cada artículo dice de qué lista es, y lo que añades va a tu lista.
 
 ## 1.5.0 - 2026-10-25
 

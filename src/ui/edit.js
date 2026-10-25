@@ -1,7 +1,8 @@
 import * as store from '#store';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
-import { $, el, state, ui, t, apply, render } from '#ui/context';
+import { listOf } from '#lists';
+import { $, el, state, ui, t, apply, render, onListOf } from '#ui/context';
 import { bindField, flashSaved, applySaved, clearSaved } from '#ui/controls';
 
 export const openEdit = (item) => {
@@ -90,6 +91,13 @@ const deleteItem = () => {
   if (apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) })) ui.editId = null;
 };
 
+// SHARE-15: a rename runs in the list of its item, so the name rule holds inside that list. The
+// field writes only while the item exists.
+const renameIn = (value) => {
+  const item = editItem();
+  return apply(onListOf(listOf(item), (part) => store.renameItem(part, item.id, value)));
+};
+
 export const bind = () => {
   $('edit-veil').addEventListener('click', closeEdit);
   $('edit-form').addEventListener('submit', (event) => {
@@ -108,6 +116,6 @@ export const bind = () => {
     if (editItem()) applySaved($('edit-form'), store.toggleRecurrent(state, ui.editId));
   });
   const onSaved = () => flashSaved($('edit-form'));
-  bindField($('edit-name'), { read: () => editItem()?.name, write: (value) => apply(store.renameItem(state, ui.editId, value)), onSaved });
+  bindField($('edit-name'), { read: () => editItem()?.name, write: renameIn, onSaved });
   bindField($('edit-quantity'), { read: () => editItem()?.quantity, write: (value) => apply(store.setQuantity(state, ui.editId, value)), onSaved });
 };

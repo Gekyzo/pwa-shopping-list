@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Quando accetti una lista condivisa, la tua lista resta. In `Spesa` vedi le due insieme: `Tutte`, `La mia lista` e la lista dell’altra persona sono chip in alto, ognuna con quello che resta da comprare. In `Tutte`, ogni articolo indica la sua lista, e quello che aggiungi va nella tua lista.
 
 ## 1.5.0 - 2026-10-25
 

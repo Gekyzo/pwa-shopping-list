@@ -170,6 +170,8 @@ export const ui = {
   searchOpen: false,
   // The shop list of Compra: null for Todas, '' for Sin tienda, or a shop. Not stored.
   shop: null,
+  // SHARE-14: the list chip of a member: null for Todas, 'own' or 'shared'. Not stored.
+  listChoice: null,
   // The group where the row actions are open: a recipe id, `shop:<name>`, or null out of a group.
   openGroup: null,
   // The side menu of the open item row: 'end' (slide left) or null.
@@ -230,6 +232,9 @@ export const ownState = () => split(state, shownBase(), scope()).own;
 // Runs a store operation on the own part only, and gives the combined state of its result.
 export const onOwn = (op) => onList(state, 'own', op, shownBase(), scope());
 
+// Runs a store operation on one list, 'own' or 'shared', as onOwn does.
+export const onListOf = (which, op) => onList(state, which, op, shownBase(), scope());
+
 // `options` go to the after-commit function: an import is `explicit` (SYNC-9).
 export const commit = (next, options = {}) => {
   if (DEV) {
@@ -271,6 +276,8 @@ export const setSharing = (share, shared) => {
   const own = ownState();
   sharing = share;
   sharedBase = shared;
+  // SHARE-14: with no share there are no list chips.
+  if (!share) ui.listChoice = null;
   if (storage) saveSharedState(storage, shared);
   state = combine(own, shownBase(), scope());
   render();

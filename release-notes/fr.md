@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Quand vous acceptez une liste partagée, votre propre liste reste. `Courses` montre les deux côte à côte : `Toutes`, `Ma liste` et la liste de l’autre personne sont des puces en haut, chacune avec ce qui reste à acheter. Dans `Toutes`, chaque article indique sa liste, et ce que vous ajoutez va dans votre liste.
 
 ## 1.5.0 - 2026-10-25
 

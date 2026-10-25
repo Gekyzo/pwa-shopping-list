@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Wenn du eine geteilte Liste annimmst, bleibt deine eigene Liste. `Einkauf` zeigt beide nebeneinander: `Alle`, `Meine Liste` und die Liste der anderen Person sind Chips oben, jeweils mit dem, was noch zu kaufen ist. In `Alle` zeigt jeder Artikel seine Liste, und was du hinzufügst, kommt in deine Liste.
 
 ## 1.5.0 - 2026-10-25
 

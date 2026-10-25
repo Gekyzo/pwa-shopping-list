@@ -2,8 +2,8 @@ import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
 import { suggestionRows } from '#suggest';
-import { $, el, state, ui, t, say, textOf, showToast, apply, render } from '#ui/context';
-import { inList, endSearch } from '#ui/view';
+import { $, el, state, ui, t, say, textOf, showToast, apply, render, onListOf } from '#ui/context';
+import { inList, endSearch, addTarget, targetState } from '#ui/view';
 
 const whereText = (item) => {
   if (item.list === 'saved') return t('where.saved');
@@ -28,7 +28,8 @@ export const renderSheet = () => {
   }
   // The array runs from the best row to the worst; the list shows it upside down, so that the
   // first row sits next to the input.
-  const rows = suggestionRows(state, text).map((row) => el('li', {}, [
+  // SHARE-15: the suggestions come from the list that the add goes to.
+  const rows = suggestionRows(targetState(), text).map((row) => el('li', {}, [
     row.kind === 'create'
       ? el('button', { type: 'button', className: 'list-row accent', textContent: t('add.createNamed', { name: text }), onclick: submitAdd })
       : el('button', { type: 'button', className: 'list-row', onclick: () => useExisting(row.item) }, [
@@ -105,7 +106,7 @@ const submitAdd = () => {
     return;
   }
   const input = $('add-name');
-  const existing = store.findByName(state, input.value);
+  const existing = store.findByName(targetState(), input.value);
   if (existing) {
     useExisting(existing);
     return;
@@ -121,8 +122,11 @@ const submitAdd = () => {
 // Adds a name that is not in the list, with the toast of the add. True when it was added.
 const addNew = (text) => {
   const name = text.trim();
-  const added = store.addItem(state, text);
-  const result = added.error ? added : shops.withShop(added, added.state.items.at(-1).id, pickedShop());
+  // SHARE-15: the add runs in its list, so the name rule holds inside that list.
+  const result = onListOf(addTarget(), (part) => {
+    const added = store.addItem(part, text);
+    return added.error ? added : shops.withShop(added, added.state.items.at(-1).id, pickedShop());
+  });
   if (!result.error) endSearch();
   if (!apply(result)) return false;
   showToast(say('toast.addedTo', { name, list: 'active' }));
@@ -131,7 +135,7 @@ const addNew = (text) => {
 
 // The action of the empty state of a search with no match: adds the searched name, and the search ends.
 export const addQuery = () => {
-  const existing = store.findByName(state, ui.query);
+  const existing = store.findByName(targetState(), ui.query);
   if (existing) useExisting(existing);
   else addNew(ui.query);
 };

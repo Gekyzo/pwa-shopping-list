@@ -1,15 +1,37 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
-import { state, ui } from '#ui/context';
+import { listView, isShared, targetList } from '#lists';
+import { listName } from '#shares';
+import { state, sharing, ui, t } from '#ui/context';
 
 // An item of two recipes, or of two shops, shows in two groups: `groupId` tells its rows apart.
 export const isOpen = (id, groupId) => ui.openId === id && ui.openGroup === groupId;
 
 export const inList = () => ui.view === 'active';
 
+// SHARE-14: the list choice of a member; null (Todas) with no share.
+export const listChoice = () => (sharing ? ui.listChoice : null);
+
+// The state of the list chip on the screen: its items only. The shop lists work inside it.
+export const listState = () => listView(state, listChoice());
+
 // The state of the shop list on the screen. The operations still run on the full state.
-export const viewState = () => (inList() ? shops.shopState(state, ui.shop) : state);
+export const viewState = () => (inList() ? shops.shopState(listState(), ui.shop) : state);
+
+// True while Compra shows the items of both lists of a member, in Todas.
+export const mixed = () => sharing !== null && ui.listChoice === null;
+
+// SHARE-14: the tag of a row in Todas, the name of its list; null in the other choices.
+export const tagOf = (item) => {
+  if (!mixed()) return null;
+  return isShared(item) ? listName(sharing) : t('lists.ownTag');
+};
+
+// SHARE-15: the list of an add, and the part of the state that its suggestions and its duplicate
+// check look at.
+export const addTarget = () => targetList(listChoice());
+export const targetState = () => (sharing ? listView(state, addTarget()) : state);
 
 // True for an item that the search of the list shows.
 export const found = (item) => store.matchesItem(item, ui.query);
