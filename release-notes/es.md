@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.7.0 - 2026-10-25
+
 - Puedes usar la app sin cuenta: toca **Usar sin cuenta** en Iniciar sesión. Tus listas se quedan en este dispositivo. Inicia sesión más tarde desde Ajustes para sincronizarlas.
 - Ya no se inicia sesión con correo y contraseña. Si lo usabas, inicia sesión con Google con el mismo correo: conservas tu cuenta y tus listas.
 
