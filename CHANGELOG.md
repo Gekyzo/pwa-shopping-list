@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.6.0 - 2026-10-25
+
 - Deploy order of separate shared lists: the `pwa-server` migration 4 (`scope`, `cancelled` and
   `ownerName` of `shopping_shares`) deploys first, then the app. An app that runs before the
   migration sends `scope` and `cancelled` to a server that has no such field. `docs/two-users.md`

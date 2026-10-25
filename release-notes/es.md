@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.6.0 - 2026-10-25
+
 - Cuando aceptas una lista compartida, tu propia lista se queda. En `Compra` ves las dos juntas: `Todas`, `Mi lista` y la lista de la otra persona son chips arriba, con lo que falta por comprar en cada una. En `Todas`, cada artículo dice de qué lista es, y lo que añades va a tu lista. Si también comparte recetas y menú, `Recetas` y `Menú` muestran los de las dos listas, cada uno con su lista: una receta compartida envía sus productos a la lista compartida.
 - Al invitar a alguien en `Compartir lista`, eliges qué compartes: `Solo Compra` o `Compra, Recetas y Menú`. Puedes cambiarlo después con un toque en la persona. Si alguien rechaza la invitación o deja de compartir, ves `Cancelada` y puedes `Invitar de nuevo`.
 
