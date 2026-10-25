@@ -32,6 +32,9 @@ npm run release  # bump the version, commit it and tag it vX.Y.Z
 npm run ds       # copy the design system again from ../pwa-design-system
 ```
 
+To test a feature between two people, such as a share, run `npm run pair`; see
+[`docs/two-users.md`](docs/two-users.md) for the setup and the un-share check.
+
 A change of behaviour changes its rule in `docs/spec/` in the same commit. The `pre-commit` hook
 stops a commit of the app that has no change of the specification; `git commit --no-verify` passes
 a commit that changes no rule.
