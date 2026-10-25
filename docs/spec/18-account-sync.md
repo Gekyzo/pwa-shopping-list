@@ -160,7 +160,9 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 - **SYNC-9** The import (BACKUP-5) replaces the data of the account, so on every device. The next sync
   sends a tombstone for each record of the server that the import does not hold, and an upsert for the
   others. The import is the one save that can replace the whole account with no regard to SYNC-2. With a session the question of the import is
-  `import.confirmAccount` (BACKUP-5), which says so.
+  `import.confirmAccount` (BACKUP-5), which says so. For a member (SHARE-12) the backup covers the
+  own list only: **Exportar** writes the own part, with no shared entity and no `shared` marker, and
+  the import replaces the own part and keeps the shared part. The shared list belongs to its owner.
 - **SYNC-10** **Borrar todos los datos** (BACKUP-7) clears this device only: the state, the queue,
   the last known server state and the token. It logs out and sends nothing. The sync stops first: a
   sync in progress becomes stale and saves nothing, and the queue is dropped. The data of the account

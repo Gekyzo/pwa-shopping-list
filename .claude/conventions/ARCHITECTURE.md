@@ -36,7 +36,7 @@ repository root.
 | `src/version.js` | Pure version rules: validation, comparison, the next version | nothing |
 | `src/i18n.js` | The language to show (`resolveLanguage`) and the function `t(key, params)` of one language (`translator`) | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language: a flat object from key to a text or to `{ one, other }` | nothing |
-| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render` | `store`, `storage`, `i18n`, `onboarding` |
+| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render`, the combined state of a member | `store`, `storage`, `session`, `lists`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, the rename field and its `Guardado`, the more button | `sheets`, `store`, `ui/context`, `ui/view` |

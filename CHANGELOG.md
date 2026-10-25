@@ -21,6 +21,13 @@ no change has no entry.
   space moves that data to the shared keys and pulls its own space in full. `targetSpace` is
   removed. Until the screen shows both lists, `src/ui/account.js` saves the shared state with
   `saveSharedState` and the sheet declines with `decline`.
+- The screen works on the combined state (SHARE-12, SYNC-9): `src/ui/context.js` holds `sharing`
+  and `sharedBase`, and `commit` splits each save into the own part (`shopping.v1`, `notify`) and
+  the shared part (`shopping.shared.v1`, `notifyShared`); the after-commit function takes
+  `(own, shared, options)`. `replaceState` takes the own part, `setSharing(share, shared)` is the
+  `setShared` of the syncer, `ownState` and `onOwn` serve the backup, the walkthrough sample and
+  the delete of the sample. Export holds the own list only; import replaces the own part only. A
+  member sees the shared items in `Compra` with no tag yet.
 - Storage of the shared space (SHARE-12): keys `shopping.shared.v1`, `shopping.shared.sync` and
   `shopping.shared.queue`; `loadSharedState` and `saveSharedState`; `loadSyncState`, `saveSyncState`,
   `loadQueue` and `saveQueue` take a `lane` (`own` or `shared`); the shared sync state stores the

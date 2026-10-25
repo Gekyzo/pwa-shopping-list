@@ -9,7 +9,8 @@ import {
   $,
   el,
   ui,
-  state,
+  ownState,
+  onOwn,
   storage,
   t,
   lang,
@@ -42,7 +43,7 @@ const renderValues = () => {
 
 // Borrar datos de ejemplo shows while the sample recipe exists (ONB-14).
 export const renderSample = () => {
-  $('delete-sample').hidden = !hasSample(state);
+  $('delete-sample').hidden = !hasSample(ownState());
 };
 
 const VERSION_KEYS = { current: 'version.current', unknown: 'version.unknown' };
@@ -154,14 +155,15 @@ const renderTripEnd = () => {
 
 export const bind = () => {
   $('export').addEventListener('click', () => {
-    download(exportFilename(new Date()), exportJson(state));
+    // SYNC-9: the backup holds the own list only; the shared list belongs to its owner.
+    download(exportFilename(new Date()), exportJson(ownState()));
   });
 
   $('import').addEventListener('click', () => $('import-file').click());
   $('delete-sample').addEventListener('click', () => {
     // The button goes with the recipe, so the focus goes to the button above it.
     $('show-onboarding').focus();
-    apply(deleteRecipe(state, SAMPLE_ID), { undoText: t('toast.sampleDeleted') });
+    apply(onOwn((own) => deleteRecipe(own, SAMPLE_ID)), { undoText: t('toast.sampleDeleted') });
   });
   // The app starts again as a new install, with the walkthrough (BACKUP-7). With no storage the data is
   // only in memory, so the reload alone clears it. With a session it clears this device only and logs
@@ -221,6 +223,7 @@ export const bind = () => {
     };
     // SYNC-9: with a session the import replaces the data of the account, on every device.
     if (!window.confirm(t(signedIn() ? 'import.confirmAccount' : 'import.confirm', found))) return;
-    apply(result, { undoText: t('toast.imported'), explicit: true });
+    // SYNC-9: the import replaces the own part only; the shared part stays.
+    apply(onOwn(() => result), { undoText: t('toast.imported'), explicit: true });
   });
 };

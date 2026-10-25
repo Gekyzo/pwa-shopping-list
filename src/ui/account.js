@@ -4,13 +4,13 @@
 import { createClient, PocketBaseError } from '#pocketbase';
 import { shareCase, pendingInvite } from '#shares';
 import { createSyncer } from '#syncer';
-import { loadSession, saveSession, loadSyncState, loadSharedState, saveSharedState, routeAtStart, SESSION_KEY, BEFORE_LOGIN_KEY } from '#session';
+import { loadSession, saveSession, loadSyncState, routeAtStart, SESSION_KEY, BEFORE_LOGIN_KEY } from '#session';
 import { apiUrl } from '#config';
 import { exportJson, exportFilename } from '#storage';
 import { emptyState } from '#store';
 import { toRecords, diffRecords } from '#records';
 import { intlTag } from '#i18n';
-import { $, storage, state, stateLost, ui, t, lang, showToast, render, replaceState, download } from '#ui/context';
+import { $, storage, state, stateLost, sharing, sharedBase, ownState, setSharing, ui, t, lang, showToast, render, replaceState, download } from '#ui/context';
 import { inList } from '#ui/view';
 
 // ACC-2: the length that Solicitar acceso asks of a password.
@@ -48,6 +48,9 @@ const close = () => {
   render();
 };
 
+const SHARE_KEYS = ['id', 'owner', 'ownerName', 'ownerEmail', 'scope'];
+const sameShare = (a, b) => a === b || (a !== null && b !== null && SHARE_KEYS.every((key) => a[key] === b[key]));
+
 const onStatus = (next) => {
   const stopped = next.auth && !status.auth;
   // SYNC-11: a sync that reached the server (its `reached` counter grew) proves the device is online,
@@ -65,23 +68,27 @@ const onStatus = (next) => {
   }
   // SHARE-7: an end of the share, or a narrowed scope, dropped shared changes that were not sent.
   if (next.left > 0) showToast(t('share.left', { count: next.left }));
+  // SHARE-12: a share that changed with no new shared state (a narrowed scope) changes the screen too.
+  if (!sameShare(sharing, next.shared)) setSharing(next.shared, sharedBase);
   if (ui.shareOpen) render();
   renderSync();
 };
 
-// SHARE-12: the shared lane syncs, and its state is saved, but the screen does not show it yet.
+// SHARE-12: each lane works on its part of the combined state; the screen shows both.
 export const syncer = client
   ? createSyncer({
     client,
     storage,
-    getState: () => state,
+    getState: ownState,
     setState: replaceState,
-    getShared: () => loadSharedState(storage),
-    setShared: (next) => saveSharedState(storage, next),
+    getShared: () => sharedBase,
+    setShared: (next, share) => setSharing(share, next),
     onStatus,
     lost: stateLost,
   })
   : null;
+// The share of the stored sync state, before the first status of a run.
+if (syncer && syncer.status().shared) setSharing(syncer.status().shared, sharedBase);
 
 // ACC-1: the state differs from a new install, the settings too (the rule of the syncer). Kept for one
 // state, since each render asks.
@@ -90,7 +97,7 @@ let dataValue = false;
 const hasLocalData = () => {
   if (dataOf !== state) {
     dataOf = state;
-    dataValue = diffRecords(toRecords(emptyState()), toRecords(state)).length > 0;
+    dataValue = diffRecords(toRecords(emptyState()), toRecords(ownState())).length > 0;
   }
   return dataValue;
 };
@@ -186,7 +193,7 @@ const enter = async (session) => {
   try {
     result = await syncer.login(session);
     if (result === 'ask-export') {
-      if (window.confirm(t('account.exportAsk'))) exportState(state);
+      if (window.confirm(t('account.exportAsk'))) exportState(ownState());
       result = await syncer.login(session, { discard: true });
     }
   } catch (error) {
@@ -370,7 +377,7 @@ export const logout = async () => {
       connect();
       return;
     }
-    if (window.confirm(t('account.logoutExport'))) exportState(state);
+    if (window.confirm(t('account.logoutExport'))) exportState(ownState());
     await syncer.logout({ online: false, discard: true });
   }
   ui.view = 'active';

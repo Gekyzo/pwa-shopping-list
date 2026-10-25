@@ -107,6 +107,12 @@ person of a share.
   each save splits the state into the own part and the shared part, and the shared part keeps its
   `group`, `sort` and `aisles`. An add, a rename, a recipe send and a meal act in one list, so the
   name rule (LIST-2) and the meal slot hold inside that list: two lists may each hold a `Leche`.
+  The split happens at each save of the screen (`commit` of `src/ui/context.js`): the own part
+  goes to `shopping.v1` and the own lane, the shared part to `shopping.shared.v1` and the shared
+  lane. `Deshacer` puts back a combined state, so the split sends each restore to its list. A state
+  that the sync puts in place, of either lane, is combined again with the other part and queues
+  nothing. The shared part shows once the share is known: the stored sync state gives it at the
+  start, and each status of the syncer after.
 
 ## Limits
 

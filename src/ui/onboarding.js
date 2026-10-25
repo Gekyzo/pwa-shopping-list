@@ -2,7 +2,7 @@ import { PAGES, hasBack, isLast, step, textParts, pageTextKey, offersSample as o
 import { loadSample } from '#recipes';
 import { slideDirection } from '#sections';
 import { saveOnboarded } from '#storage';
-import { $, el, storage, state, ui, t, apply, guardClick } from '#ui/context';
+import { $, el, storage, ownState, onOwn, ui, t, apply, guardClick } from '#ui/context';
 import { icon } from '#ui/controls';
 
 // A part of a page text: plain text, or a key with an optional icon. A key with an icon and no
@@ -23,7 +23,10 @@ const SAMPLE_PRODUCTS = ['tomatoSauce', 'pasta', 'garlic', 'oliveOil', 'salt'];
 const sampleText = () => ({ name: t('sample.name'), products: SAMPLE_PRODUCTS.map((key) => t(`sample.${key}`)) });
 
 // The switch shows on the last page while the state has no items and no recipes (ONB-13).
-const offersSample = () => offersSampleOf({ page: PAGES[ui.onboarding], items: state.items.length, recipes: state.recipes.length });
+const offersSample = () => {
+  const own = ownState();
+  return offersSampleOf({ page: PAGES[ui.onboarding], items: own.items.length, recipes: own.recipes.length });
+};
 
 export const renderOnboarding = () => {
   const open = ui.onboarding !== null;
@@ -92,7 +95,7 @@ export const bind = () => {
       return;
     }
     // Only Empezar loads the sample and its products; Saltar and Escape do not (ONB-13).
-    if (offersSample() && $('sample-switch').checked) apply(loadSample(state, sampleText()));
+    if (offersSample() && $('sample-switch').checked) apply(onOwn((own) => loadSample(own, sampleText())));
     closeOnboarding();
   });
   $('onboarding-back').addEventListener('click', () => turnOnboarding(-1));
