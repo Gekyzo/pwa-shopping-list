@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Puoi condividere la tua lista con altre persone: in `Ajustes` › `Cuenta` › `Compartir lista` scrivi la loro email. Quando accettano, vedono e modificano la stessa lista, le ricette e il menù sui loro dispositivi.
 
 ## 1.4.1 - 2026-10-24
 

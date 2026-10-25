@@ -10,7 +10,12 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Share the data of an account by email (SHARE-1 to SHARE-10). A new collection `shopping_shares`
+  on the server (`pwa-server` migration 3) holds the invites; the rules of `shopping_records` let a
+  member act on the records of the owner. The sync state stores the space, each sync lists the
+  shares before the push, and a change of space sends the own queue first or drops the queue of a
+  shared space. New: `src/shares.js`, `src/ui/share.js`, the sheet `Compartir lista`, the banner of
+  an invite. Cache `shopping-shell-v24`.
 
 ## 1.4.1 - 2026-10-24
 
