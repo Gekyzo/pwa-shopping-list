@@ -47,13 +47,17 @@ person of a share.
   new space in full, as a device with no local data at its first login (SYNC-8). Nothing of one
   space goes into the other. The new state is not a save: it queues nothing, and it removes the
   message and its `Deshacer` (PROD-9). A sync that lists the shares and fails stops as SYNC-4 says,
-  and keeps the stored space.
+  and keeps the stored space. A share can end between the list and the push: when the server
+  refuses a push in a shared space as it refuses a token that is not valid (ACC-7), the sync lists
+  the shares again, and changes space when the share ended instead of an auth stop. A share request
+  made while a sync runs waits for that sync, then starts a new one, which sees the change.
 
 ## Screens
 
 - **SHARE-8** The owner removes a person, a member leaves, an invitee declines: each is one tap with
   no confirmation and a `Deshacer` of 5 s (PROD-9). The request goes when the 5 s end. A leave first
-  sends the queue to the shared space, then removes the share, then syncs the own space. A remove
+  sends the queue to the shared space, then removes the share, then syncs the own space. When the
+  queue cannot be sent, the leave stops with `share.error.network` and the share stays. A remove
   or a leave deletes no record: the data of the owner and the own data of the member stay.
 - **SHARE-9** The group **Cuenta** of `Ajustes` has the row **Compartir lista**, below the email,
   when the session is approved. It opens the sheet **Compartir lista**, which shows one case:
