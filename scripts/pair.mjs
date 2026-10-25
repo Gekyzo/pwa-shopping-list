@@ -6,13 +6,16 @@
 //
 //   npm run pair [-- --reset] [-- --open]
 //
+// The app signs in with Google only, so the script signs each user in itself and writes the page
+// .pair/<user>.html: opened on the origin of the user, it stores the session and opens the app.
 // --reset deletes the two users first, with their records and shares (a cascade delete).
-// --open opens the two copies in the browser.
+// --open opens the two login pages in the browser.
 // PAIR_SU_EMAIL and PAIR_SU_PASSWORD override the superuser of `pwa-server/dev.env`.
 import { spawn } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
+import { SESSION_KEY } from '../src/storage.js';
 
 export const API = 'http://localhost:8090';
 export const MAILPIT = 'http://localhost:8025';
@@ -23,6 +26,9 @@ export const USERS = [
 ];
 
 export const originOf = (user) => `http://localhost:${user.port}`;
+
+export const PAIR_DIR = '.pair';
+export const loginUrl = (user) => `${originOf(user)}/${PAIR_DIR}/${user.name.toLowerCase()}.html`;
 
 export const parseArgs = (argv) => {
   const known = new Set(['--reset', '--open']);
@@ -44,8 +50,27 @@ export const userBody = (user) => ({
   verified: true,
 });
 
+// The session that the app stores (ACC-6): both users are approved.
+export const pairSession = ({ token, record }) => ({
+  token,
+  user: { id: record.id, email: record.email, name: record.name ?? '', approved: true },
+});
+
+// The session as a string literal of a script: `<` escaped, so no text of it can close the tag.
+export const loginPage = (session) => {
+  const literal = JSON.stringify(JSON.stringify(session)).replaceAll('<', '\\u003c');
+  return `<!doctype html>
+<meta charset="utf-8">
+<title>Pair login</title>
+<script>
+localStorage.setItem(${JSON.stringify(SESSION_KEY)}, ${literal});
+location.replace('/');
+</script>
+`;
+};
+
 export const summary = (users) => [
-  ...users.map((user) => `User ${user.name}: ${originOf(user)}  ${user.email} / ${PASSWORD}`),
+  ...users.map((user) => `User ${user.name}: ${loginUrl(user)}  ${user.email} / ${PASSWORD}`),
   `Mailpit (invite emails): ${MAILPIT}`,
   'Ctrl-C stops the two servers.',
 ].join('\n');
@@ -116,6 +141,15 @@ const prepareUsers = async (token, { reset }) => {
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
+// The app has no password login: each user signs in here, and its page carries the session.
+const writeLoginPages = async () => {
+  mkdirSync(`${root}/${PAIR_DIR}`, { recursive: true });
+  for (const user of USERS) {
+    const auth = await call('POST', '/api/collections/users/auth-with-password', { body: { identity: user.email, password: PASSWORD } });
+    writeFileSync(`${root}/${PAIR_DIR}/${user.name.toLowerCase()}.html`, loginPage(pairSession(auth)));
+  }
+};
+
 const serve = (user) => spawn('python3', ['-m', 'http.server', String(user.port), '--bind', '127.0.0.1'], { cwd: root, stdio: 'ignore' });
 
 // Windows Chrome from WSL when the helper exists, else the browser of the desktop.
@@ -129,6 +163,7 @@ const main = async () => {
   const options = parseArgs(process.argv.slice(2));
   await checkServer();
   await prepareUsers(await superuserToken(), options);
+  await writeLoginPages();
   const servers = USERS.map(serve);
   const stop = () => {
     servers.forEach((server) => server.kill());
@@ -140,7 +175,7 @@ const main = async () => {
     if (code) console.error(`pair: the server of user ${USERS[index].name} stopped (port ${USERS[index].port} in use?)`);
   }));
   console.log(summary(USERS));
-  if (options.open) open(USERS.map(originOf));
+  if (options.open) open(USERS.map(loginUrl));
 };
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

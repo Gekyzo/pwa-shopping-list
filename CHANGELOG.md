@@ -11,6 +11,7 @@ no change has no entry.
 ## Unreleased
 
 - Usar sin cuenta on Iniciar sesión: the device works with no account (ACC-1, ACC-2, ACC-11, ACC-13). Key `shopping.offline` = `1`, in `APP_KEYS`; `routeAtStart` gives `offline`, which shows no screen and starts no sync. A login that opens the list removes the flag; the banner of ACC-11 does not show while it is set.
+- Email and password sign-in removed: no fields on Iniciar sesión, no Solicitar acceso, no password reset (ACC-2, ACC-3). `authWithPassword`, `requestAccess` and `requestPasswordReset` leave `src/pocketbase.js`, with 17 texts in each locale. The server keeps password accounts; a Google sign-in with the same email links to them. `npm run pair` now signs the two users in through the API and writes `.pair/<user>.html`, which stores the session (`docs/two-users.md`).
 
 ## 1.6.1 - 2026-10-25
 

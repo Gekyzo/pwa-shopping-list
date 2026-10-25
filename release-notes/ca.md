@@ -5,6 +5,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 ## Unreleased
 
 - Pots fer servir l'app sense compte: toca **Fes-la servir sense compte** a Inicia la sessió. Les teves llistes es queden en aquest dispositiu. Inicia la sessió més tard des de Configuració per sincronitzar-les.
+- Ja no s'inicia la sessió amb correu i contrasenya. Si ho feies servir, inicia la sessió amb Google amb el mateix correu: conserves el teu compte i les teves llistes.
 
 ## 1.6.0 - 2026-10-25
 

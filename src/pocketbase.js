@@ -107,9 +107,6 @@ export const createClient = ({ url, fetch, EventSource }) => {
 
   const withAccess = async (auth) => sessionOf(auth, (await accessOf(auth.token, auth.record.id)) === 'approved');
 
-  const authWithPassword = async (email, password) =>
-    withAccess(await call('POST', `${USERS}/auth-with-password`, { body: { identity: email, password } }));
-
   // Both spaces of a member hold `settings:settings` and the meal keys, so the lookup names the space.
   const findRecord = async (token, { kind, key }, space) => {
     const page = await call('GET', RECORDS, {
@@ -154,13 +151,6 @@ export const createClient = ({ url, fetch, EventSource }) => {
   };
 
   return {
-    authWithPassword,
-
-    requestAccess: async ({ name, email, password }) => {
-      await call('POST', `${USERS}/records`, { body: { email, password, passwordConfirm: password, name } });
-      return authWithPassword(email, password);
-    },
-
     oauthStart: async (redirectUrl) => {
       const methods = await call('GET', `${USERS}/auth-methods`);
       const provider = methods.oauth2?.providers?.find(({ name }) => name === 'google');
@@ -182,10 +172,6 @@ export const createClient = ({ url, fetch, EventSource }) => {
     },
 
     refresh: async (token) => withAccess(await call('POST', `${USERS}/auth-refresh`, { token })),
-
-    requestPasswordReset: async (email) => {
-      await call('POST', `${USERS}/request-password-reset`, { body: { email } });
-    },
 
     // SYNC-4: every record of the space with `updated` at or after the cursor; an empty cursor pulls
     // the whole space.

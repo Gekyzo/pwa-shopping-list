@@ -21,28 +21,20 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   session whose login is not finished (the question of ACC-8) refreshes its token before that
   login goes on: an auth error opens **Iniciar sesión**, a network error keeps the list, and the next
   start or `online` event tries again.
-- **ACC-2** Three screens cover the list. **Iniciar sesión** has the Google button, **Usar sin
-  cuenta** while there is no session (ACC-13), the email,
-  the password, **Entrar**, **¿Olvidaste la contraseña?** and the link to **Solicitar acceso**.
-  **Solicitar acceso** has the Google button, the name, the email, the password (8 characters or more),
-  **Enviar solicitud** and the link back to **Iniciar sesión**. **Esperando aprobación** has
-  **Comprobar de nuevo** and **Cerrar sesión**. Their texts name the one who approves as the
-  administrator, never by a person's name. The screens cover the app, the walkthrough too.
-  When the device has a list or the offline flag, **Iniciar sesión** and **Solicitar acceso** also have **Volver a la
-  lista**; `Escape` and the back of the phone close them too, as a layer of NAV-25. A screen that
-  cannot close is not a layer: the back closes the layer below it. An error shows below the fields: `account.error.wrongPassword`,
-  `account.error.network`, `account.error.emailTaken`, `account.error.passwordShort`. A password
-  of less than 8 characters is refused before any request. A sign-up whose email has an account
-  (such as a second try after a login that failed) opens **Iniciar sesión** with that email and
-  `account.error.emailTaken`. **¿Olvidaste la contraseña?** asks the server for a reset email for the
-  address of the field, and then shows `account.resetSent`, the same message whether the address has
-  an account or not. A login that the account replaces (SYNC-8) then offers the old list as an
-  export file, one time.
+- **ACC-2** Two screens cover the list. **Iniciar sesión** has the Google button and, while there
+  is no session, **Usar sin cuenta** (ACC-13). The app has no email and password sign-in.
+  **Esperando aprobación** has **Comprobar de nuevo** and **Cerrar sesión**. Their texts name the
+  one who approves as the administrator, never by a person's name. The screens cover the app, the
+  walkthrough too. When the device has a list or the offline flag, **Iniciar sesión** also has
+  **Volver a la lista**; `Escape` and the back of the phone close it too, as a layer of NAV-25. A
+  screen that cannot close is not a layer: the back closes the layer below it. An error shows below
+  the Google button: `account.error.google`, `account.error.network`, `account.error.tooMany`.
+  A login that the account replaces (SYNC-8) then offers the old list as an export file, one time.
 - **ACC-3** One account of the server serves every app of the server; access is approved per app.
   "Approved" is the access row of this app (`app_access`, app `shopping`) with status `approved`.
-  Each sign-in reads that row; with no row, the app asks for access with a `pending` row. A sign-up
-  with email and password creates an account that is not approved. The user then sees
-  **Esperando aprobación**. A `pending` or `revoked` row shows the same screen.
+  Each sign-in reads that row; with no row, the app asks for access with a `pending` row, and the
+  user then sees **Esperando aprobación**. An account made before with email and password signs in
+  with Google with the same email: the server links the two. A `pending` or `revoked` row shows the same screen.
 - **ACC-4** An account that is not approved makes no request for data. A device that holds a list
   before that login keeps it stored, unchanged, until the approval. Then SYNC-8 applies.
   **Comprobar de nuevo** refreshes the session: an approved account logs in, else the message

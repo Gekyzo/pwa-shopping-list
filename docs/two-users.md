@@ -18,13 +18,17 @@ the local stack.
    npm run pair -- --open    # also opens both copies in Chrome
    ```
 
-| | URL | Login |
+| | Login page | Account |
 |---|---|---|
-| User A | http://localhost:8081 | `usera@example.test` / `devpassword123` |
-| User B | http://localhost:8082 | `userb@example.test` / `devpassword123` |
+| User A | http://localhost:8081/.pair/a.html | `usera@example.test` / `devpassword123` |
+| User B | http://localhost:8082/.pair/b.html | `userb@example.test` / `devpassword123` |
 | Invite emails | http://localhost:8025 (Mailpit) | |
 
-Ctrl-C stops both servers. Open each URL in its own tab, at a phone viewport.
+Ctrl-C stops both servers. Open each login page in its own tab, at a phone viewport. The app
+signs in with Google only (ACC-2), so `npm run pair` signs each user in with its password through
+the API and writes its session into `.pair/<user>.html` (git-ignored). The page stores the session
+on its origin and opens the app, which then refreshes the token and logs in. Run `npm run pair`
+again when a token has expired.
 
 ## How it works
 
@@ -52,7 +56,7 @@ two origins, or when the superuser cannot log in.
 ## Check: separate shared lists (SHARE-5 to SHARE-15)
 
 Start with `npm run pair -- --reset`, at a phone viewport (412 x 900). Set `Idioma` to `Español` on
-both copies. Log in as A on 8081 and add `Pan A`. Log in as B on 8082 and add `Leche B`. Do the
+both copies. Open the login page of A on 8081 and add `Pan A`. Open the login page of B on 8082 and add `Leche B`. Do the
 tables in order: each starts from the state the table before leaves.
 
 ### Invite and accept (scope `Solo Compra`)
