@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.5.0 - 2026-10-25
+
 - Share the data of an account by email (SHARE-1 to SHARE-10). A new collection `shopping_shares`
   on the server (`pwa-server` migration 3) holds the invites; the rules of `shopping_records` let a
   member act on the records of the owner. The sync state stores the space, each sync lists the

@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.5.0 - 2026-10-25
+
 - You can share your list with other people: in `Ajustes` › `Cuenta` › `Compartir lista`, type their email. Once they accept, they see and change the same list, recipes and menu on their devices.
 
 ## 1.4.1 - 2026-10-24
