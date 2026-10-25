@@ -14,6 +14,7 @@ export default {
   'menu.fill': 'Korb füllen',
   'menu.clear': 'Menü leeren',
   'menu.remove': 'Entfernen',
+  'menu.removeMeal': '{name} entfernen',
   'menu.noRecipe': 'ohne Rezept',
   'menu.typeDish': 'Gib den Namen eines Gerichts ein.',
   'menu.addDish': '„{name}“ ohne Rezept hinzufügen',

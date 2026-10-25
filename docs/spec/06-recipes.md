@@ -127,6 +127,18 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-34** A tap on the veil or `Escape` closes the sheet. It closes when its recipe goes, by a
   `Deshacer` or an import, and when the section changes.
 
+## Shared recipes
+
+- **REC-38** For a member with scope `all` (SHARE-12), `Recetas` shows the recipes of both lists.
+  Each row shows the tag of its list before the send button, as the rows of **Todas** do
+  (SHARE-14): `Mía` or the name of the shared list. A send (REC-17 to REC-21) acts in the list of
+  the recipe: a shared recipe sends its products to the shared list and records `sent` there, and
+  `en la lista` looks at that list. A rename, a link, a product and a delete act in the list of
+  the recipe, so the name rule holds inside that list. A new recipe goes to the own list. The
+  dishes of each menu show apart, each with its tag (REC-36), and a dish turns into a recipe of
+  the list of its menu. With scope `list`, for the owner and with no share, `Recetas` shows the
+  own recipes with no tag.
+
 ## Limits
 
 No quantity, unit, step, photo or category. No choice of products at send time. No rename of a product: remove it and add it again. No order of recipes or of products.

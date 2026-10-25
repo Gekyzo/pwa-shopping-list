@@ -59,6 +59,16 @@ export const listView = (state, choice) => {
   return { ...state, items: state.items.filter((item) => isShared(item) === wanted) };
 };
 
+// The entities of one list in the combined state, with their markers: `null` gives the state as it
+// is. Recetas and Menú read one list through it (REC-38, MENU-20).
+export const listPart = (state, which) => {
+  if (!which) return state;
+  const wanted = which === 'shared';
+  const mine = (entity) => isShared(entity) === wanted;
+  const recipes = state.recipes.filter(mine);
+  return { ...state, items: state.items.filter(mine), recipes, menu: state.menu.filter(mine), sent: only(state.sent, recipes) };
+};
+
 // Runs `op` on one list alone, so that its rules (a name is unique, a meal slot is free) hold
 // inside that list. The error of `op` returns as it is.
 export const onList = (state, which, op, sharedBase, scope) => {
@@ -66,6 +76,8 @@ export const onList = (state, which, op, sharedBase, scope) => {
   const parts = split(state, sharedBase, scope);
   const result = op(parts[which]);
   if (result.error) return { error: result.error };
+  // An operation that changes nothing gives the same state, so the screen can tell (REC-21).
+  if (result.state === parts[which]) return { ...result, state };
   return { ...result, state: combine(...(which === 'own' ? [result.state, parts.shared] : [parts.own, result.state]), scope) };
 };
 

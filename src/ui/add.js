@@ -2,7 +2,7 @@ import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
 import { suggestionRows } from '#suggest';
-import { $, el, state, ui, t, say, textOf, showToast, apply, render, onListOf } from '#ui/context';
+import { $, el, state, ui, t, say, textOf, showToast, apply, render, onOwn, onListOf } from '#ui/context';
 import { inList, endSearch, addTarget, targetState } from '#ui/view';
 
 const whereText = (item) => {
@@ -88,7 +88,8 @@ const useExisting = (item) => {
 
 const submitRecipe = () => {
   const input = $('add-name');
-  const result = recipes.addRecipe(state, input.value);
+  // REC-38: a new recipe goes to the own list.
+  const result = onOwn((own) => recipes.addRecipe(own, input.value));
   if (result.error) {
     showToast(textOf(result.error));
     input.focus();

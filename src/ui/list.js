@@ -4,14 +4,14 @@ import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
 import { canSearch, dockShown, emptyAction } from '#sections';
-import { listCounts } from '#lists';
+import { listCounts, listPart } from '#lists';
 import { listName } from '#shares';
 import { $, el, state, sharing, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
 import { inList, listChoice, listState, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { icon } from '#ui/controls';
 import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
 import { recipeNode, dishNode, sendToList } from '#ui/recipes';
-import { dayNode } from '#ui/menu';
+import { weekNodes } from '#ui/menu';
 import { leaveNode } from '#ui/motion';
 import { openSheet, addQuery } from '#ui/add';
 import { showView } from '#ui/nav';
@@ -177,15 +177,16 @@ const renderSearch = () => {
 
 // The recipes, then the dishes of the menu with no recipe under their head.
 const recipeNodes = () => {
-  const dishes = menu.menuDishes(state, ui.query);
+  // REC-38: the dishes of each menu, own first, so that each turns into a recipe of its list.
+  const dishes = ['own', 'shared'].flatMap((which) => menu.menuDishes(listPart(state, which), ui.query).map((dish) => dishNode(dish, which)));
   const head = dishes.length ? [groupHead(t('recipes.dishes'), String(dishes.length))] : [];
-  return [...recipes.searchRecipes(state, ui.query).map(recipeNode), ...head, ...dishes.map(dishNode)];
+  return [...recipes.searchRecipes(state, ui.query).map(recipeNode), ...head, ...dishes];
 };
 
 const nodesOf = (items) => {
   if (ui.view === 'settings') return [];
   // With no recipe the week still shows: a meal can hold a dish.
-  if (ui.view === 'menu') return menu.menuWeek(state).map(dayNode);
+  if (ui.view === 'menu') return weekNodes();
   return ui.view === 'recipes' ? recipeNodes() : listNodes(items);
 };
 

@@ -1,9 +1,16 @@
 import * as recipes from '#recipes';
 import * as menu from '#menu';
-import { $, el, state, ui, t, undoState, showToast, apply, render } from '#ui/context';
+import { listOf, listPart } from '#lists';
+import { $, el, state, ui, t, undoState, showToast, apply, render, onOwn, onListOf } from '#ui/context';
 import { icon, iconButton, bindField, flashSaved, applySaved, clearSaved } from '#ui/controls';
 import { leaveNode } from '#ui/motion';
-import { swipeBox } from '#ui/rows';
+import { swipeBox, tagNode } from '#ui/rows';
+import { recipeTag } from '#ui/view';
+
+// REC-38: an operation on a recipe runs in the list that holds it, so its items, its `sent` and
+// its name rule stay in that list.
+const onRecipe = (recipe, op) => onListOf(listOf(recipe), op);
+const recipeOf = (id) => state.recipes.find((recipe) => recipe.id === id);
 
 export const sendText = ({ added, already }) => {
   const parts = [];
@@ -13,7 +20,7 @@ export const sendText = ({ added, already }) => {
 };
 
 export const sendToList = (recipe) => {
-  const result = recipes.sendRecipe(state, recipe.id);
+  const result = onRecipe(recipe, (part) => recipes.sendRecipe(part, recipe.id));
   if (result.error || result.state !== state) {
     apply(result, { undoText: t('toast.sent', { name: recipe.name, summary: sendText(result) }) });
   }
@@ -29,7 +36,7 @@ const productNode = (recipe, product) => {
     textContent: '✕',
     onclick: () =>
       leaveNode(key, [node], () =>
-        applySaved($('recipe-sheet'), recipes.removeRecipeProduct(state, recipe.id, product), {
+        applySaved($('recipe-sheet'), onRecipe(recipe, (part) => recipes.removeRecipeProduct(part, recipe.id, product)), {
           undoText: t('toast.productRemoved', { product, name: recipe.name }),
         }),
       ),
@@ -57,7 +64,7 @@ const productForm = (recipe) => {
   // The field stays through the renders of the sheet: it is empty and keeps the focus after an add.
   const add = (name) => {
     ui.bringKeys.add(`product:${recipe.id}:${name.trim().toLowerCase()}`);
-    if (applySaved($('recipe-sheet'), recipes.addRecipeProduct(state, recipe.id, name))) {
+    if (applySaved($('recipe-sheet'), onRecipe(recipe, (part) => recipes.addRecipeProduct(part, recipe.id, name)))) {
       input.value = '';
       suggestions.replaceChildren();
     } else ui.bringKeys.clear();
@@ -95,7 +102,7 @@ const deleteAction = (recipe, node) => {
     t('sheet.delete'),
     () =>
       leaveNode(node.dataset.key, [node], () =>
-        apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
+        apply(onRecipe(recipe, (part) => recipes.deleteRecipe(part, recipe.id)), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
       ),
     { variant: 'danger', labelled: true },
   );
@@ -108,7 +115,8 @@ const deleteAction = (recipe, node) => {
 export const recipeNode = (recipe) => {
   const meta = [
     t('count.products', { count: recipe.products.length }),
-    ...(recipes.inList(state, recipe) ? [t('recipe.inListShort')] : []),
+    // REC-38: a recipe is in the list that its send fills.
+    ...(recipes.inList(listPart(state, listOf(recipe)), recipe) ? [t('recipe.inListShort')] : []),
     ...(recipe.url ? [t('recipe.hasLink')] : []),
   ];
   const name = el('button', { type: 'button', className: 'item-row-name', onclick: () => openRecipe(recipe) }, [
@@ -116,7 +124,8 @@ export const recipeNode = (recipe) => {
     el('small', { className: 'item-row-meta', textContent: meta.join(' · ') }),
   ]);
   name.setAttribute('aria-haspopup', 'dialog');
-  const row = [name, el('div', { className: 'item-row-end' }, [sendButton(recipe)])];
+  const tag = recipeTag(recipe);
+  const row = [name, el('div', { className: 'item-row-end' }, tag === null ? [sendButton(recipe)] : [tagNode(tag), sendButton(recipe)])];
   const node = el('li', { className: 'item-row recipe' });
   node.dataset.key = `recipe:${recipe.id}`;
   const right = { run: () => sendToList(recipe), icon: 'cart-add' };
@@ -125,35 +134,37 @@ export const recipeNode = (recipe) => {
 };
 
 // A dish of the menu with no recipe becomes a recipe, and its sheet opens for the products. `show`
-// runs between the two, to change the section.
-export const recipeFromDish = (name, show = () => {}) => {
-  const result = menu.dishRecipe(state, name);
+// runs between the two, to change the section. REC-38: the recipe goes to the list of the dish, so
+// that its meals keep a recipe of their own list: a dish of the own menu gives an own recipe.
+export const recipeFromDish = (name, which = 'own', show = () => {}) => {
+  const result = onListOf(which, (part) => menu.dishRecipe(part, name));
   if (!apply(result, { undoText: t('toast.recipeCreated', { name }) })) return;
   show();
-  openRecipe(state.recipes.find((recipe) => recipe.id === result.id));
+  openRecipe(recipeOf(result.id));
 };
 
 // A row of a dish of the menu with no recipe: a tap on the name or on the end button creates its
-// recipe.
-export const dishNode = ({ name, meals }) => {
+// recipe. `which` is the list of the menu that holds the dish.
+export const dishNode = ({ name, meals }, which = 'own') => {
   const label = t('row.createRecipe', { name });
-  const create = () => recipeFromDish(name);
+  const create = () => recipeFromDish(name, which);
   const nameButton = el('button', { type: 'button', className: 'item-row-name', onclick: create }, [
     el('span', { className: 'item-row-label', textContent: name }),
     el('small', { className: 'item-row-meta', textContent: t('count.menuMeals', { count: meals }) }),
   ]);
   const end = el('button', { type: 'button', className: 'button icon', title: t('menu.toRecipe'), onclick: create }, [icon('book')]);
   end.setAttribute('aria-label', label);
+  const tag = recipeTag({ shared: which === 'shared' });
   // The layers of a recipe row with no side menu: the dish has no slide.
-  const body = el('div', { className: 'item-row-body' }, [nameButton, el('div', { className: 'item-row-end' }, [end])]);
+  const body = el('div', { className: 'item-row-body' }, [nameButton, el('div', { className: 'item-row-end' }, tag === null ? [end] : [tagNode(tag), end])]);
   const node = el('li', { className: 'item-row dish' }, [el('div', { className: 'item-row-swipe' }, [body])]);
-  node.dataset.key = `dish:${name.toLowerCase()}`;
+  node.dataset.key = which === 'shared' ? `dish:shared:${name.toLowerCase()}` : `dish:${name.toLowerCase()}`;
   return node;
 };
 
 // The sheet of one recipe
 
-const openRecipeOf = () => state.recipes.find((recipe) => recipe.id === ui.recipeId);
+const openRecipeOf = () => recipeOf(ui.recipeId);
 
 export const openRecipe = (recipe) => {
   Object.assign(ui, { recipeId: recipe.id, openId: null, openSide: null });
@@ -200,7 +211,7 @@ const deleteOpenRecipe = () => {
   const recipe = openRecipeOf();
   if (!recipe) return;
   // The render of the delete closes the sheet: its recipe is gone.
-  if (apply(recipes.deleteRecipe(state, recipe.id), { undoText: t('toast.recipeDeleted', { name: recipe.name }) })) ui.recipeId = null;
+  if (apply(onRecipe(recipe, (part) => recipes.deleteRecipe(part, recipe.id)), { undoText: t('toast.recipeDeleted', { name: recipe.name }) })) ui.recipeId = null;
 };
 
 export const bind = () => {
@@ -209,16 +220,16 @@ export const bind = () => {
   const onSaved = () => flashSaved($('recipe-sheet'));
   bindField($('recipe-name'), {
     read: () => openRecipeOf()?.name,
-    write: (value) => apply(recipes.renameRecipe(state, ui.recipeId, value)),
+    write: (value) => apply(onRecipe(openRecipeOf(), (part) => recipes.renameRecipe(part, ui.recipeId, value))),
     onSaved,
   });
   bindField($('recipe-url'), {
     read: () => openRecipeOf()?.url,
     write: (value) => {
-      const before = openRecipeOf().url;
-      const result = recipes.setRecipeUrl(state, ui.recipeId, value);
+      const recipe = openRecipeOf();
+      const result = onRecipe(recipe, (part) => recipes.setRecipeUrl(part, ui.recipeId, value));
       // A text that gives the same address, as one with no scheme, changes nothing.
-      if (!result.error && result.state.recipes.find((recipe) => recipe.id === ui.recipeId).url === before) return false;
+      if (!result.error && result.state.recipes.find((entry) => entry.id === ui.recipeId).url === recipe.url) return false;
       return apply(result, { undoText: t(value.trim() ? 'toast.linkSaved' : 'toast.linkRemoved') });
     },
     onSaved,

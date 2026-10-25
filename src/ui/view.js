@@ -22,11 +22,16 @@ export const viewState = () => (inList() ? shops.shopState(listState(), ui.shop)
 // True while Compra shows the items of both lists of a member, in Todas.
 export const mixed = () => sharing !== null && ui.listChoice === null;
 
+// The name of the list of an entity: `Mía` or the name of the shared list.
+const tagText = (entity) => (isShared(entity) ? listName(sharing) : t('lists.ownTag'));
+
 // SHARE-14: the tag of a row in Todas, the name of its list; null in the other choices.
-export const tagOf = (item) => {
-  if (!mixed()) return null;
-  return isShared(item) ? listName(sharing) : t('lists.ownTag');
-};
+export const tagOf = (item) => (mixed() ? tagText(item) : null);
+
+// REC-38, MENU-20: with scope `all` the recipes and the meals of both lists show, each with the tag
+// of its list. With scope `list`, or with no share, they show no tag.
+export const listTags = () => sharing?.scope === 'all';
+export const recipeTag = (entity) => (listTags() ? tagText(entity) : null);
 
 // SHARE-15: the list of an add, and the part of the state that its suggestions and its duplicate
 // check look at.

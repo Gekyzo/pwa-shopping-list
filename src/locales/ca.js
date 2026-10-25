@@ -14,6 +14,7 @@ export default {
   'menu.fill': 'Omple cistella',
   'menu.clear': 'Buida el menú',
   'menu.remove': 'Treu',
+  'menu.removeMeal': 'Treu {name}',
   'menu.noRecipe': 'sense recepta',
   'menu.typeDish': 'Escriu el nom d’un plat.',
   'menu.addDish': 'Afegeix «{name}» sense recepta',
