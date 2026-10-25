@@ -10,6 +10,17 @@ no change has no entry.
 
 ## Unreleased
 
+- Scope and states in the sheet `Compartir lista` (SHARE-5, SHARE-8, SHARE-9): the invite form
+  has two chips `#share-scope` (`list` chosen at each open) and `invite(email, scope)` sends the
+  chosen one. Each person row shows the state of `personState` (`share.cancelled` new) and
+  `share.scopeOf`; the scope of an active person is a button that calls `setScope` with
+  `otherScope` (new in `src/shares.js`, with `scopeOf`); a cancelled row has `share.reinvite`
+  (`reinvite`) beside ✕. The invitee and the member see the scope (`#share-invited-scope`,
+  `#share-member-scope`); new accept texts `share.acceptWarning` and `share.acceptAsk`. The
+  syncer status gets `narrowed` beside `left`: a narrowed scope counts there and `ui/account`
+  shows `share.narrowed` instead of `share.left` (SHARE-7). New keys `share.scopeLabel`,
+  `share.scope.list`, `share.scope.all`, `share.scopeOf`, `share.scopeChange`,
+  `share.cancelled`, `share.reinvite`, `share.narrowed`; `share.text` names the choice.
 - Tags and list routing in `Recetas` and `Menú` (REC-38, MENU-20): with scope `all` the recipe
   rows, the dish rows, the meals and the chips of the meal sheet show the `pill` tag of their list
   (`recipeTag` of `ui/view`, one `tagNode` of `ui/rows` for the whole app). New `listPart(state,

@@ -356,6 +356,10 @@
           <div id="share-owner" class="share-case">
             <p class="input-help" data-i18n="share.text"></p>
             <ul id="share-people" class="products flush"></ul>
+            <div id="share-scope" class="cluster" role="group" data-i18n-attr="aria-label:share.scopeLabel">
+              <button class="chip" type="button" data-scope="list" data-i18n="share.scope.list"></button>
+              <button class="chip" type="button" data-scope="all" data-i18n="share.scope.all"></button>
+            </div>
             <div class="input-row">
               <input id="share-email" class="input strong" type="email" inputmode="email" autocapitalize="off" enterkeyhint="send" maxlength="254" data-i18n-attr="placeholder:share.email,aria-label:share.email">
               <button id="share-submit" class="button primary" type="submit" data-i18n="share.invite" disabled></button>
@@ -364,12 +368,14 @@
           </div>
           <div id="share-invited" class="share-case" hidden>
             <p id="share-invited-text" class="share-text"></p>
+            <p id="share-invited-scope" class="share-text"></p>
             <p id="share-warning" class="input-help"></p>
             <button id="share-accept" class="button primary wide" type="button" data-i18n="share.accept"></button>
             <button id="share-decline" class="button tonal wide" type="button" data-i18n="share.decline"></button>
           </div>
           <div id="share-member" class="share-case" hidden>
             <p id="share-member-text" class="share-text"></p>
+            <p id="share-member-scope" class="share-text"></p>
             <button id="share-leave" class="button tonal wide" type="button" data-i18n="share.leave"></button>
           </div>
         </div>

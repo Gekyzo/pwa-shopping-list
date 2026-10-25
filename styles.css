@@ -816,7 +816,8 @@
      @scope settings
      @summary One case of the sheet Compartir lista (SHARE-9): the people and the invite field of an owner, the invite of an invitee, or the share of a member.
      @part share-text     A text of the case, which breaks a long email anywhere.
-     @part share-person   The email of a person and the state of the invite, one under the other.
+     @part share-person   The email of a person, the state of the invite and the scope, one under the other. The scope of an active person is a button: a tap changes it.
+     @part share-actions  The buttons at the end of the row of a person: Invitar de nuevo of a cancelled person, then ✕.
      @example <div class="share-case" style="width: 100%"><p class="share-text">ana@example.test te invita a compartir su lista.</p><button class="button primary wide" type="button">Aceptar</button><button class="button tonal wide" type="button">Rechazar</button></div> */
   .share-case {
     display: flex;
@@ -833,6 +834,19 @@
     padding-block: var(--space-2);
     padding-inline-start: var(--space-4);
     overflow-wrap: anywhere;
+  }
+
+  .share-person > .button {
+    align-self: flex-start;
+    min-height: var(--tap);
+    padding-inline: 0;
+  }
+
+  .share-actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--space-2);
   }
 
   .share-case > .share-text {

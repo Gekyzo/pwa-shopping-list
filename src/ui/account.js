@@ -27,7 +27,7 @@ const client = storage
 // The screen in view, or null; and whether it can close back to the list (the device has a list).
 let screen = null;
 let closable = false;
-let status = { online: true, pending: 0, lastSync: null, auth: false, reached: 0, shared: null, shares: [], left: 0 };
+let status = { online: true, pending: 0, lastSync: null, auth: false, reached: 0, shared: null, shares: [], left: 0, narrowed: 0 };
 let offline = !navigator.onLine;
 // The close function of the realtime stream (SYNC-3), or null.
 let stream = null;
@@ -66,8 +66,10 @@ const onStatus = (next) => {
     disconnect();
     show('login', { canClose: true });
   }
-  // SHARE-7: an end of the share, or a narrowed scope, dropped shared changes that were not sent.
-  if (next.left > 0) showToast(t('share.left', { count: next.left }));
+  // SHARE-7: an end of the share, or a narrowed scope, dropped shared changes that were not sent. An
+  // end says so for both.
+  if (next.left > 0) showToast(t('share.left', { count: next.left + next.narrowed }));
+  else if (next.narrowed > 0) showToast(t('share.narrowed', { count: next.narrowed }));
   // SHARE-12: a share that changed with no new shared state (a narrowed scope) changes the screen too.
   if (!sameShare(sharing, next.shared)) setSharing(next.shared, sharedBase);
   if (ui.shareOpen) render();

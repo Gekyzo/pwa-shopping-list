@@ -5,6 +5,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 ## Unreleased
 
 - Quand vous acceptez une liste partagée, votre propre liste reste. `Courses` montre les deux côte à côte : `Toutes`, `Ma liste` et la liste de l’autre personne sont des puces en haut, chacune avec ce qui reste à acheter. Dans `Toutes`, chaque article indique sa liste, et ce que vous ajoutez va dans votre liste. Si les recettes et le menu sont partagés aussi, `Recettes` et `Menu` montrent ceux des deux listes, chacun avec sa liste : une recette partagée envoie ses produits dans la liste partagée.
+- Quand vous invitez quelqu’un dans `Compartir lista`, vous choisissez ce que vous partagez : `Courses seulement` ou `Courses, Recettes et Menu`. Vous pouvez le changer ensuite d’un appui sur la personne. Si quelqu’un refuse l’invitation ou arrête de partager, vous voyez `Annulée` et pouvez `Inviter à nouveau`.
 
 ## 1.5.0 - 2026-10-25
 
