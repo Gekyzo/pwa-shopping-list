@@ -17,6 +17,8 @@ import {
   loadOnboarded,
   hasStoredState,
 } from '#storage';
+import { loadSharedState, saveSharedState } from '#session';
+import { combine, split, onList } from '#lists';
 import { LANGUAGES, PSEUDO, resolveLanguage, translator } from '#i18n';
 import { shouldShow } from '#onboarding';
 
@@ -95,7 +97,13 @@ export const textOf = ({ key, params }) => say(key, params);
 const firstStart = storage ? shouldShow({ seen: loadOnboarded(storage), hasState: hasStoredState(storage) }) : false;
 
 const loaded = storage ? loadState(storage) : { state: store.emptyState(), lost: false };
+// SHARE-12: for a member, `state` is the combined state of the own part and the shared part.
 export let state = loaded.state;
+// The share whose member is the user, `{ owner, ownerName, ownerEmail, scope, id }`, or null. The
+// syncer gives it (account.js); until then the shared part stays out of the screen.
+export let sharing = null;
+// The shared part as last saved, or null. Read now: the syncer reads it at its construction.
+export let sharedBase = storage ? loadSharedState(storage) : null;
 // ACC-1: the stored state could not be read at this start; the sync pulls the account again.
 export const stateLost = loaded.lost;
 
@@ -204,11 +212,23 @@ export const setRender = (fn) => {
 };
 export const render = () => renderer();
 
-// The function that a save calls, with the saved state: the sync queues the change (SYNC-2, SYNC-3).
+// The function that a save calls, with the saved own part and the saved shared part (null with no
+// share): the sync queues each change in its lane (SYNC-2, SYNC-3, SHARE-6).
 let afterCommit = null;
 export const setAfterCommit = (fn) => {
   afterCommit = fn;
 };
+
+// SHARE-12: the shared part that the screen shows, and its scope. With no share both are null, so
+// `combine` and `split` give the own state as it is.
+const shownBase = () => (sharing ? sharedBase : null);
+const scope = () => sharing?.scope ?? null;
+
+// The own part of the state: the backup (SYNC-9), the walkthrough and the sync of the own lane.
+export const ownState = () => split(state, shownBase(), scope()).own;
+
+// Runs a store operation on the own part only, and gives the combined state of its result.
+export const onOwn = (op) => onList(state, 'own', op, shownBase(), scope());
 
 // `options` go to the after-commit function: an import is `explicit` (SYNC-9).
 export const commit = (next, options = {}) => {
@@ -218,12 +238,15 @@ export const commit = (next, options = {}) => {
   }
   state = next;
   ui.animate = true;
-  const saved = storage !== null && save(storage, state);
+  // SHARE-12: the split takes the markers away, so that no part saves or syncs one.
+  const { own, shared } = split(state, shownBase(), scope());
+  const saved = storage !== null && save(storage, own) && (shared === null || saveSharedState(storage, shared));
+  if (saved && shared) sharedBase = shared;
   render();
   // After the render: an error of the sync never leaves the screen behind the state.
   if (saved && afterCommit) {
     try {
-      afterCommit(state, options);
+      afterCommit(own, shared, options);
     } catch (error) {
       console.error(error);
     }
@@ -231,13 +254,25 @@ export const commit = (next, options = {}) => {
   return saved;
 };
 
-// The state that the sync puts in place (SYNC-2): saved and rendered, with no after-commit function, so
-// that it queues nothing.
+// The own part that the sync puts in place (SYNC-2): saved and rendered, with no after-commit
+// function, so that it queues nothing. The shared part stays as it is.
 export const replaceState = (next) => {
   // Deshacer would put back the state of before the merge, and send it as a change of the user.
   if (undoState) hideToast();
-  state = next;
-  if (storage) save(storage, state);
+  state = combine(next, shownBase(), scope());
+  if (storage) save(storage, next);
+  render();
+};
+
+// SHARE-12: the share and the shared part that the sync puts in place, or (null, null) at the end of
+// the share. Saved and rendered with no after-commit function, as replaceState.
+export const setSharing = (share, shared) => {
+  if (undoState) hideToast();
+  const own = ownState();
+  sharing = share;
+  sharedBase = shared;
+  if (storage) saveSharedState(storage, shared);
+  state = combine(own, shownBase(), scope());
   render();
 };
 

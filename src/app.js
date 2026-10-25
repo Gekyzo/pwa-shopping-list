@@ -354,7 +354,11 @@ if (!storage) showToast(t('error.noStorage'));
 // The account and the sync (ACC-1, SYNC-3): each save queues its change, and the sync runs at the start,
 // at `online` and at a change of the account.
 if (syncer) {
-  setAfterCommit((saved, options) => syncer.notify(saved, options));
+  // SHARE-6: each part of a save queues in its own lane.
+  setAfterCommit((own, shared, options) => {
+    syncer.notify(own, options);
+    if (shared) syncer.notifyShared(shared);
+  });
   window.addEventListener('online', goOnline);
   window.addEventListener('offline', goOffline);
   document.addEventListener('visibilitychange', goVisible);

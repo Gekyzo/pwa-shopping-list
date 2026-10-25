@@ -30,7 +30,7 @@
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language | nothing |
-| `src/ui/context.js` | The values that the views share, their setters, the toast, the save, the function called after a save (`setAfterCommit`), the state that the sync puts in place (`replaceState`), the download of a file and `render` | `store`, `storage`, `i18n`, `onboarding` |
+| `src/ui/context.js` | The values that the views share, their setters, the toast, the save, the function called after a save (`setAfterCommit`), the state that the sync puts in place (`replaceState`), the combined state of a member (`setSharing`, `ownState`, `onOwn`, SHARE-12), the download of a file and `render` | `store`, `storage`, `session`, `lists`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list in view, the search, the open row, the grouping | `store`, `recipes`, `shops`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and the `Guardado` of a sheet save | `sheets`, `ui/context` |
