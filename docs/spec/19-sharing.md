@@ -22,7 +22,9 @@ person of a share.
   the administrator approves the account as for any account (ACC-4). An account that is not
   approved sees no invite.
 - **SHARE-5** The invitee accepts or declines in the sheet **Compartir lista**. The accept asks
-  first (`share.acceptWarning`). An accept keeps the own list of the invitee as it is: the list
+  first (`share.acceptAsk`): `¿Compartir la lista de <email>? Su lista se mostrará junto a la
+  tuya.` The sheet shows the warning `share.acceptWarning` above **Aceptar**: `Su lista se
+  mostrará junto a la tuya. La tuya no cambia.` An accept keeps the own list of the invitee as it is: the list
   of the owner comes beside it (SHARE-7). An owner of a share (an invite or a member) cannot
   accept: the sheet says so (`share.blocked`), and the server refuses it too.
 
@@ -46,8 +48,11 @@ person of a share.
     can no longer write the shared space, so the shared queue is dropped. When it held changes,
     the app says so (`share.left`). The shared state and the shared sync state go;
   - scope `all` to `list`: the shared recipes and meals leave the shared state, its sync state and
-    its queue. They stay on the server: nothing queues a delete. The dropped queued changes count
-    in `share.left`;
+    its queue. They stay on the server: nothing queues a delete. When the dropped queued changes
+    are one or more, the app says so with `share.narrowed` (`Ya no compartes recetas ni menú. Se
+    perdieron <n> cambios sin enviar.`), not with `share.left`: the share goes on. The syncer
+    counts the two drops apart (`left` and `narrowed` of its status); when both happen in one
+    sync, `share.left` counts both;
   - scope `list` to `all`: the shared lane pulls the space in full, so the recipes and meals come;
   - with scope `list` the shared lane sends changes of items only, never of the settings, of a
     recipe or of a meal. The settings of the owner hold `sent` ids of recipes that the member does
@@ -76,14 +81,23 @@ person of a share.
   first sends the shared queue to the shared space, then cancels the share, then syncs. When the
   shared queue cannot be sent, the leave stops with `share.error.network` and the share stays. A
   remove, a decline or a leave deletes no record: the data of the owner and the own data of the
-  member stay.
+  member stay. ✕ on a cancelled person removes the row the same way. A change of scope and
+  **Invitar de nuevo** go at once, with no `Deshacer`: a second tap undoes a change of scope.
 - **SHARE-9** The group **Cuenta** of `Ajustes` has the row **Compartir lista**, below the email,
   when the session is approved. It opens the sheet **Compartir lista**, which shows one case:
-  - the owner: each person of the space with the email and `Invitación enviada` or `Comparte la
-    lista`, and the remove button ✕ (`Quitar a <email>`); then the email field and **Invitar**;
-  - an invitee: `<email> te invita a compartir su lista.`, the warning of SHARE-5, **Aceptar** and
-    **Rechazar**;
-  - a member: `Compartes la lista de <email>.` and **Dejar de compartir**.
+  - the owner: each person of the space with the email, the state (`Invitación enviada`,
+    `Comparte la lista` or `Cancelada`) and the scope (`Comparte: Solo Compra` or `Comparte:
+    Compra, Recetas y Menú`), and the remove button ✕ (`Quitar a <email>`). A tap on the scope of a
+    pending or joined person sets the other scope (SHARE-11); the member's device follows it at
+    its next sync (SHARE-7). A cancelled person also has **Invitar de nuevo**, which sets the share
+    back to pending. Then the scope of the invite, two chips **Solo Compra** (`list`) and **Compra,
+    Recetas y Menú** (`all`), with **Solo Compra** chosen at each open of the sheet; then the
+    email field and **Invitar**, which invites with the chosen scope. An invite of the email of a
+    cancelled person replaces that cancelled row with a new one;
+  - an invitee: `<email> te invita a compartir su lista.`, the scope of the invite (`Comparte:
+    <scope>`), the warning of SHARE-5, **Aceptar** and **Rechazar**;
+  - a member: `Compartes la lista de <email>.`, the scope of the share (`Comparte: <scope>`) and
+    **Dejar de compartir**.
 
   An error of an invite shows below the field: `share.error.self`, `share.error.taken`,
   `share.error.network`, `share.error.invalid`. While an invite waits, a banner over the list says
@@ -93,9 +107,9 @@ person of a share.
 ## Scope and cancel
 
 - **SHARE-11** A share has a `scope`: `all` (the whole space, the default) or `list` (the shared
-  list only), and a `cancelled` flag. The owner cancels a share with `cancelled: true`: the row
-  stays, so the person shows in the sheet with the state `cancelled`, and a new invite
-  (`cancelled: false`, no member) opens it again. A cancelled share is no invite and no
+  list only), and a `cancelled` flag. The invitee (a decline) or the member (a leave) cancels a
+  share with `cancelled: true`: the row stays, so the person shows in the sheet with the state
+  `cancelled`, and a new invite by the owner (`cancelled: false`, no member) opens it again. A cancelled share is no invite and no
   membership: the space to sync, the pending invite and the case of the invitee ignore it, and it
   does not block an accept (SHARE-5). The owner lists each person as `pending`, `joined` or
   `cancelled`. The name of a shared list is the name of its owner, else the part of the owner

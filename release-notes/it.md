@@ -5,6 +5,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 ## Unreleased
 
 - Quando accetti una lista condivisa, la tua lista resta. In `Spesa` vedi le due insieme: `Tutte`, `La mia lista` e la lista dell’altra persona sono chip in alto, ognuna con quello che resta da comprare. In `Tutte`, ogni articolo indica la sua lista, e quello che aggiungi va nella tua lista. Se sono condivisi anche ricette e menù, `Ricette` e `Menù` mostrano quelli delle due liste, ognuno con la sua lista: una ricetta condivisa manda i suoi prodotti nella lista condivisa.
+- Quando inviti qualcuno in `Compartir lista`, scegli cosa condividi: `Solo Spesa` o `Spesa, Ricette e Menù`. Puoi cambiarlo dopo con un tocco sulla persona. Se qualcuno rifiuta l’invito o smette di condividere, vedi `Annullata` e puoi `Invita di nuovo`.
 
 ## 1.5.0 - 2026-10-25
 

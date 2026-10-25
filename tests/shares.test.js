@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sharedSpace, listName, personState, shareCase, pendingInvite } from '#shares';
+import { sharedSpace, listName, personState, shareCase, pendingInvite, scopeOf, otherScope } from '#shares';
 
 const share = (id, owner, email, member = '', ownerEmail = `${owner}@b.c`, extra = {}) => ({
   id, owner, email, ownerEmail, ownerName: '', member, scope: 'all', cancelled: false, ...extra,
@@ -72,6 +72,17 @@ test('personState gives pending, joined and cancelled', () => {
   assert.equal(personState(share('s1', 'o', 'a@b.c', 'a')), 'joined');
   assert.equal(personState(share('s1', 'o', 'a@b.c', 'a', 'o@b.c', { cancelled: true })), 'cancelled');
   assert.equal(personState(share('s1', 'o', 'a@b.c', '', 'o@b.c', { cancelled: true })), 'cancelled');
+});
+
+test('scopeOf gives the scope of a share, all when it has none (SHARE-11)', () => {
+  assert.equal(scopeOf(share('s1', 'o', 'a@b.c', '', 'o@b.c', { scope: 'list' })), 'list');
+  assert.equal(scopeOf(share('s1', 'o', 'a@b.c')), 'all');
+  assert.equal(scopeOf({ id: 's1' }), 'all');
+});
+
+test('otherScope gives the scope that a tap on a person sets (SHARE-9)', () => {
+  assert.equal(otherScope('list'), 'all');
+  assert.equal(otherScope('all'), 'list');
 });
 
 test('a cancelled invite is not pending', () => {

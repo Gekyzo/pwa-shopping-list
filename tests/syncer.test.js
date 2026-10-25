@@ -221,7 +221,7 @@ test('a tick is queued, pushed, and the queue is empty after run', async () => {
   assert.deepEqual(loadQueue(a.storage), []);
   assert.equal(server.live('u1').find((row) => row.key === 'i1').data.bought, true);
   const status = a.box.statuses.at(-1);
-  assert.deepEqual(status, { online: true, pending: 0, lastSync: '2026-10-24T08:00:00.000Z', auth: false, reached: 2, shared: null, shares: [], left: 0 });
+  assert.deepEqual(status, { online: true, pending: 0, lastSync: '2026-10-24T08:00:00.000Z', auth: false, reached: 2, shared: null, shares: [], left: 0, narrowed: 0 });
 });
 
 test('the debounce timer runs the sync', async () => {
@@ -1187,7 +1187,9 @@ test('a narrowed scope drops recipes and meals and queues no delete', async () =
   assert.deepEqual(member.box.shared.menu, []);
   assert.deepEqual(names(member.box.shared), ['Leche']);
   assert.equal(member.box.share.scope, 'list');
-  assert.equal(member.box.statuses.at(-1).left, 1);
+  // SHARE-7: a narrowed scope is no end of the share: the drop counts in narrowed, not in left.
+  assert.equal(member.box.statuses.at(-1).narrowed, 1);
+  assert.equal(member.box.statuses.at(-1).left, 0);
   assert.deepEqual(member.client.pushed.slice(pushed), []);
   assert.deepEqual(loadQueue(member.storage, 'shared'), []);
   const sync = loadSyncState(member.storage, 'shared');

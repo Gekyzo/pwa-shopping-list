@@ -184,20 +184,22 @@ export const createSyncer = ({
   let authStopped = false;
   // SYNC-11: counts the runs after which the server had answered (ok, a rate limit, an auth error).
   let reached = 0;
-  // SHARE-7: the shared changes that an end of the share or a narrowed scope dropped; the next
-  // report shows them once.
+  // SHARE-7: the shared changes that an end of the share (`left`) or a narrowed scope (`narrowed`)
+  // dropped; the next report shows them once.
   let left = 0;
+  let narrowed = 0;
 
   const pending = () => own.queue.length + shared.queue.length;
 
   // `auth` is true after an auth stop, until the next login (ACC-7): the app then shows Iniciar sesión.
   const status = () => ({
     online, pending: pending(), lastSync: own.sync.lastSync ?? null, auth: authStopped, reached,
-    shared: active() ? shared.share : null, shares: own.sync.shares, left,
+    shared: active() ? shared.share : null, shares: own.sync.shares, left, narrowed,
   });
   const report = () => {
     onStatus(status());
     left = 0;
+    narrowed = 0;
   };
 
   const put = (lane, next) => {
@@ -357,7 +359,7 @@ export const createSyncer = ({
   // base. They stay on the server: nothing queues a delete.
   const narrow = () => {
     const kept = shared.queue.filter(shared.allows);
-    left += shared.queue.length - kept.length;
+    narrowed += shared.queue.length - kept.length;
     shared.queue = kept;
     const local = onlyList(shared.sync.local);
     const next = normalizeState(fromRecords(local));

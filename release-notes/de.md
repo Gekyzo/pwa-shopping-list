@@ -5,6 +5,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 ## Unreleased
 
 - Wenn du eine geteilte Liste annimmst, bleibt deine eigene Liste. `Einkauf` zeigt beide nebeneinander: `Alle`, `Meine Liste` und die Liste der anderen Person sind Chips oben, jeweils mit dem, was noch zu kaufen ist. In `Alle` zeigt jeder Artikel seine Liste, und was du hinzufügst, kommt in deine Liste. Teilt die Person auch Rezepte und Menü, zeigen `Rezepte` und `Menü` die von beiden Listen, jeweils mit ihrer Liste: Ein geteiltes Rezept schickt seine Produkte in die geteilte Liste.
+- Wenn du jemanden in `Compartir lista` einlädst, wählst du, was du teilst: `Nur Einkauf` oder `Einkauf, Rezepte und Menü`. Du kannst es später mit einem Tipp auf die Person ändern. Lehnt jemand die Einladung ab oder teilt nicht mehr, siehst du `Beendet` und kannst `Erneut einladen`.
 
 ## 1.5.0 - 2026-10-25
 
