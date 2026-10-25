@@ -8,8 +8,9 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 - **ACC-1** At the start the app routes by the session and the local data:
   - a saved session, approved: the list, online or not;
   - a saved session, not approved: **Esperando aprobación**;
-  - no session and no `shopping.v1` data: **Iniciar sesión**;
-  - no session and `shopping.v1` data: the list as before, with the banner of ACC-11.
+  - no session and the offline flag (ACC-13): the list, with no banner, online or not;
+  - no session, no flag and no `shopping.v1` data: **Iniciar sesión**;
+  - no session, no flag and `shopping.v1` data: the list as before, with the banner of ACC-11.
 
   The route never reads the clock: an expired token does not change it (ACC-6, ACC-7). The device has
   `shopping.v1` data when the state differs from the state of a new install, the settings too. So
@@ -85,6 +86,10 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   opens **Iniciar sesión** with **Volver a la lista**.
 - **ACC-12** The API URL is one config value. When the app is served from `localhost`, `127.0.0.1` or
   `[::1]`, it is `http://localhost:8090`. Else it is `https://artisandevs.duckdns.org`.
+- **ACC-13** The offline flag is `shopping.offline` = `1`: the device works with no account and
+  sends nothing. **Usar sin cuenta** writes it. A login that opens the list removes it, and
+  **Borrar todos los datos** removes it with the other keys (BACKUP-7). A storage that refuses
+  the write still closes **Iniciar sesión**.
 
 ## Sync
 
@@ -183,7 +188,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 
 ## Keys
 
-The keys `shopping.session`, `shopping.sync`, `shopping.queue` and `shopping.v1.beforeLogin` (and the three shared keys of SHARE-12) are in
+The keys `shopping.session`, `shopping.sync`, `shopping.queue`, `shopping.v1.beforeLogin`, `shopping.offline` (and the three shared keys of SHARE-12) are in
 the table of [08-storage.md](08-storage.md). `shopping.session` holds the token and the user.
 `shopping.sync` holds the owner of the data, the space of the data and the last list of shares (SHARE-6), the last cursor, the last known server state, the
 records of the last state that the sync knows and the time of the last sync. `shopping.queue` holds the

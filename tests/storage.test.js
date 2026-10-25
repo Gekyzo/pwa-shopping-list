@@ -45,6 +45,7 @@ import {
   loadSeen,
   saveSeen,
   APP_KEYS,
+  OFFLINE_KEY,
   resetAll,
 } from '#storage';
 import { emptyState } from '#store';
@@ -785,7 +786,8 @@ test('resetAll removes every key of the app and keeps the keys of other apps', (
 });
 
 test('APP_KEYS holds the state, its corrupt copy and each preference of the device', () => {
-  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY, SEEN_VERSION_KEY, SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY];
+  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY, SEEN_VERSION_KEY, SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY, OFFLINE_KEY];
+  assert.equal(OFFLINE_KEY, 'shopping.offline');
   assert.deepEqual([...APP_KEYS].sort(), [...keys].sort());
 });
 

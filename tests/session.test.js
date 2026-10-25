@@ -5,6 +5,7 @@ import {
   SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY, loadSharedState, saveSharedState,
   loadSession, saveSession, clearAccountData, loadSyncState, saveSyncState, loadQueue, saveQueue,
   tokenExpired, routeAtStart, accountChange, firstLogin,
+  OFFLINE_KEY, loadOffline, saveOffline, dropOffline,
 } from '#session';
 
 const fakeStorage = (initial = {}) => {
@@ -30,6 +31,31 @@ test('routeAtStart routes by the session and the local data (ACC-1)', () => {
   assert.equal(routeAtStart({ session: { token: 't', user: { ...user, approved: false } }, hasLocalData: true }), 'waiting');
   assert.equal(routeAtStart({ session: null, hasLocalData: false }), 'login');
   assert.equal(routeAtStart({ session: null, hasLocalData: true }), 'banner');
+});
+
+test('with no session the offline flag opens the list with no banner; a session wins over it (ACC-1)', () => {
+  assert.equal(routeAtStart({ session: null, hasLocalData: false, offline: true }), 'offline');
+  assert.equal(routeAtStart({ session: null, hasLocalData: true, offline: true }), 'offline');
+  assert.equal(routeAtStart({ session, hasLocalData: false, offline: true }), 'list');
+  assert.equal(routeAtStart({ session: { token: 't', user: { ...user, approved: false } }, hasLocalData: false, offline: true }), 'waiting');
+});
+
+test('the offline flag is saved, read and removed (ACC-13)', () => {
+  const storage = fakeStorage({ 'shopping.v1': '{}' });
+  assert.equal(loadOffline(storage), false);
+  assert.equal(saveOffline(storage), true);
+  assert.equal(storage.getItem(OFFLINE_KEY), '1');
+  assert.equal(loadOffline(storage), true);
+  dropOffline(storage);
+  assert.equal(loadOffline(storage), false);
+  assert.equal(storage.getItem('shopping.v1'), '{}');
+  for (const text of ['', '0', 'true']) assert.equal(loadOffline(fakeStorage({ [OFFLINE_KEY]: text })), false, text);
+});
+
+test('a blocked storage reads no offline flag and saves none', () => {
+  assert.equal(loadOffline(brokenStorage()), false);
+  assert.equal(saveOffline(brokenStorage()), false);
+  assert.doesNotThrow(() => dropOffline(brokenStorage()));
 });
 
 test('a saved session opens the list even with an expired token', () => {

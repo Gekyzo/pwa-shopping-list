@@ -1,9 +1,9 @@
 import {
-  SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, STORAGE_KEY,
+  SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, STORAGE_KEY, OFFLINE_KEY,
   SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY, normalizeState,
 } from '#storage';
 
-export { SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, STORAGE_KEY, SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY };
+export { SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, STORAGE_KEY, OFFLINE_KEY, SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY };
 
 // SHARE-12: the own lane and the shared lane keep a sync state and a queue each.
 const KEYS = {
@@ -137,8 +137,35 @@ export const tokenExpired = (token, now) => {
 };
 
 // Where the start goes (ACC-1). It never reads the clock: a saved session opens the list at once (ACC-6).
-export const routeAtStart = ({ session, hasLocalData }) => {
+// ACC-13: the device works with no account.
+export const loadOffline = (storage) => {
+  try {
+    return storage.getItem(OFFLINE_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+
+export const saveOffline = (storage) => {
+  try {
+    storage.setItem(OFFLINE_KEY, '1');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const dropOffline = (storage) => {
+  try {
+    storage.removeItem(OFFLINE_KEY);
+  } catch {
+    // Nothing more to remove.
+  }
+};
+
+export const routeAtStart = ({ session, hasLocalData, offline = false }) => {
   if (session) return session.user.approved ? 'list' : 'waiting';
+  if (offline) return 'offline';
   return hasLocalData ? 'banner' : 'login';
 };
 

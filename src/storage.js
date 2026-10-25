@@ -450,6 +450,8 @@ export const SESSION_KEY = 'shopping.session';
 export const SYNC_KEY = 'shopping.sync';
 export const QUEUE_KEY = 'shopping.queue';
 export const BEFORE_LOGIN_KEY = 'shopping.v1.beforeLogin';
+// The device works with no account: Usar sin cuenta (ACC-13).
+export const OFFLINE_KEY = 'shopping.offline';
 
 // The shared lane of a member: the shared space beside the own one (SHARE-12).
 export const SHARED_STORAGE_KEY = 'shopping.shared.v1';
@@ -477,6 +479,7 @@ export const APP_KEYS = [
   SHARED_STORAGE_KEY,
   SHARED_SYNC_KEY,
   SHARED_QUEUE_KEY,
+  OFFLINE_KEY,
 ];
 
 // After it, the install counts as new: the next start shows the walkthrough.
