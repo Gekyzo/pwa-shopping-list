@@ -4,7 +4,7 @@
 import { createClient, PocketBaseError } from '#pocketbase';
 import { shareCase, pendingInvite } from '#shares';
 import { createSyncer } from '#syncer';
-import { loadSession, saveSession, loadSyncState, routeAtStart, SESSION_KEY, BEFORE_LOGIN_KEY } from '#session';
+import { loadSession, saveSession, loadSyncState, loadSharedState, saveSharedState, routeAtStart, SESSION_KEY, BEFORE_LOGIN_KEY } from '#session';
 import { apiUrl } from '#config';
 import { exportJson, exportFilename } from '#storage';
 import { emptyState } from '#store';
@@ -27,7 +27,7 @@ const client = storage
 // The screen in view, or null; and whether it can close back to the list (the device has a list).
 let screen = null;
 let closable = false;
-let status = { online: true, pending: 0, lastSync: null, auth: false, reached: 0, space: null, shares: [], left: 0 };
+let status = { online: true, pending: 0, lastSync: null, auth: false, reached: 0, shared: null, shares: [], left: 0 };
 let offline = !navigator.onLine;
 // The close function of the realtime stream (SYNC-3), or null.
 let stream = null;
@@ -63,14 +63,24 @@ const onStatus = (next) => {
     disconnect();
     show('login', { canClose: true });
   }
-  // SHARE-7: a change from a shared space back to the own one dropped changes that were not sent.
+  // SHARE-7: an end of the share, or a narrowed scope, dropped shared changes that were not sent.
   if (next.left > 0) showToast(t('share.left', { count: next.left }));
   if (ui.shareOpen) render();
   renderSync();
 };
 
+// SHARE-12: the shared lane syncs, and its state is saved, but the screen does not show it yet.
 export const syncer = client
-  ? createSyncer({ client, storage, getState: () => state, setState: replaceState, onStatus, lost: stateLost })
+  ? createSyncer({
+    client,
+    storage,
+    getState: () => state,
+    setState: replaceState,
+    getShared: () => loadSharedState(storage),
+    setShared: (next) => saveSharedState(storage, next),
+    onStatus,
+    lost: stateLost,
+  })
   : null;
 
 // ACC-1: the state differs from a new install, the settings too (the rule of the syncer). Kept for one

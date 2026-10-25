@@ -109,7 +109,7 @@ const accept = async () => {
 const decline = () => {
   const shown = currentCase();
   if (shown.case !== 'invited') return;
-  later(shown.share.id, t('share.declined'), () => syncer.remove(shown.share.id));
+  later(shown.share.id, t('share.declined'), () => syncer.decline(shown.share.id));
 };
 
 const leave = () => {

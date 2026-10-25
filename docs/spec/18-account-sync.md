@@ -91,6 +91,9 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   the settings. A device preference does not sync: the language, the hand, the theme, the density,
   **Al terminar la compra**, the row of shop lists, the hint of the swipe and the flag of the
   walkthrough.
+  Each space has one `settings` record. A member pulls the settings of the shared space with
+  the shared list, and sends a change of them only with scope `all` (SHARE-7): with scope `list`
+  the member does not see the recipes whose ids `sent` holds.
 - **SYNC-2** Each save of the state is compared with the last state that the sync knows: the
   state of the last save or of the last merge. The upserts and the deletes go into the queue in
   `shopping.queue`. The state, `Deshacer` and the pure modules do not change. A state that held

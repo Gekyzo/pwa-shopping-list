@@ -1,21 +1,21 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { targetSpace, sharedSpace, listName, personState, shareCase, pendingInvite } from '#shares';
+import { sharedSpace, listName, personState, shareCase, pendingInvite } from '#shares';
 
 const share = (id, owner, email, member = '', ownerEmail = `${owner}@b.c`, extra = {}) => ({
   id, owner, email, ownerEmail, ownerName: '', member, scope: 'all', cancelled: false, ...extra,
 });
 const user = (id, email = `${id}@b.c`) => ({ id, email, name: id, approved: true });
 
-test('targetSpace is the own space with no share or with a pending invite (SHARE-6)', () => {
-  assert.equal(targetSpace([], 'u1'), 'u1');
-  assert.equal(targetSpace([share('s1', 'o1', 'u1@b.c')], 'u1'), 'u1');
+test('sharedSpace is null with no share or with a pending invite (SHARE-6)', () => {
+  assert.equal(sharedSpace([], 'u1'), null);
+  assert.equal(sharedSpace([share('s1', 'o1', 'u1@b.c')], 'u1'), null);
 });
 
-test('targetSpace is the space of the owner of the share whose member is the user', () => {
+test('sharedSpace is the space of the owner of the share whose member is the user', () => {
   const shares = [share('s1', 'o1', 'u1@b.c', 'u1'), share('s2', 'u1', 'x@b.c')];
-  assert.equal(targetSpace(shares, 'u1'), 'o1');
-  assert.equal(targetSpace([share('s1', 'o1', 'u2@b.c', 'u2')], 'u1'), 'u1');
+  assert.equal(sharedSpace(shares, 'u1').owner, 'o1');
+  assert.equal(sharedSpace([share('s1', 'o1', 'u2@b.c', 'u2')], 'u1'), null);
 });
 
 test('shareCase of an owner lists the people of the own space in invite order', () => {
@@ -92,5 +92,5 @@ test('the rules leave the shares unchanged', () => {
   const shares = Object.freeze([Object.freeze(share('s1', 'u1', 'a@b.c'))]);
   shareCase(shares, user('u1'));
   pendingInvite(shares, user('u1'));
-  targetSpace(shares, 'u1');
+  sharedSpace(shares, 'u1');
 });

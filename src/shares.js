@@ -1,4 +1,4 @@
-// The rules of a shared space (SHARE-1 to SHARE-9): which space a user syncs, and what the sheet
+// The rules of a shared space (SHARE-1 to SHARE-9): which shared space a user syncs, and what the sheet
 // Compartir lista shows. Pure: no storage, no network, no DOM.
 
 // SHARE-3: the server stores the invited email in lower case; a user email keeps its case.
@@ -14,9 +14,6 @@ export const sharedSpace = (shares, userId) => {
   const share = membership(shares, userId);
   return share && { owner: share.owner, ownerName: share.ownerName ?? '', ownerEmail: share.ownerEmail, scope: share.scope ?? 'all', id: share.id };
 };
-
-// Task 5 removes this: the syncer still asks for the space to sync.
-export const targetSpace = (shares, userId) => sharedSpace(shares, userId)?.owner ?? userId;
 
 // SHARE-11: the name of the shared list: the name of the owner, else the part of the email before `@`.
 export const listName = (share) => share.ownerName || share.ownerEmail.split('@')[0];

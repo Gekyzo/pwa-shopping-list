@@ -23,7 +23,7 @@
 | `src/pocketbase.js` | The client of the PocketBase server: sign-in, token refresh, pull, push and the realtime stream (ACC-12, SYNC-4, SYNC-6) | `records` |
 | `src/session.js` | The session, the sync state and the queue in the storage, the token expiry, the start route and the login rules (ACC-1, ACC-7, ACC-8, SYNC-8) | `storage` |
 | `src/shares.js` | The rules of a shared space: the space to sync, the case of the sheet **Compartir lista** and the pending invite (SHARE-5, SHARE-6, SHARE-9, SHARE-11) | nothing |
-| `src/syncer.js` | The sync driver: it queues each save, sends the queue, pulls and merges the account, runs the login and the logout of the account, and the share requests (ACC-4, ACC-7 to ACC-9, SYNC-2 to SYNC-9, SHARE-6 to SHARE-8) | `records`, `sync`, `pocketbase`, `session`, `shares`, `storage`, `store` |
+| `src/syncer.js` | The sync driver: it queues each save, sends the queue, pulls and merges the account, in an own lane and a shared lane, runs the login and the logout of the account, and the share requests (ACC-4, ACC-7 to ACC-9, SYNC-2 to SYNC-9, SHARE-6 to SHARE-8, SHARE-13) | `records`, `sync`, `pocketbase`, `session`, `shares`, `storage`, `store` |
 | `src/config.js` | The API URL for the host that serves the app (ACC-12) | nothing |
 | `src/version.js` | Pure version rules | nothing |
 | `src/whatsnew.js` | The parse of the release notes and the versions that a user has not seen | `version` |
@@ -113,7 +113,7 @@
 | `tests/pocketbase.test.js` | The PocketBase client against a fake `fetch` and a fake `EventSource` |
 | `tests/session.test.js` | The session storage, the token expiry, the start route and the login rules |
 | `tests/shares.test.js` | The space to sync, the case of the sheet and the pending invite |
-| `tests/syncer.test.js` | The sync driver against a fake server: the queue, the push and the pull, two devices, the errors, the token refresh, the login and the logout, the import |
+| `tests/syncer.test.js` | The sync driver against a fake server: the queue, the push and the pull, two devices, the errors, the token refresh, the login and the logout, the import, the own lane and the shared lane of a member (start, end, scope, upgrade of v1.5.0) |
 | `tests/context.test.js` | The save of `commit` and the function that it calls after a save |
 | `tests/config.test.js` | The API URL for each host |
 | `tests/sync.test.js` | The queue, the merge of pulled records, the duplicates and the cursor |

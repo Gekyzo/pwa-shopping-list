@@ -8,8 +8,7 @@ person of a share.
 
 - **SHARE-1** The data of an account is a space, named by the id of its owner. Each record of the
   server has the owner of its space (SYNC-1), whoever wrote it. Each user has a space of their own.
-  A member of a share works in the space of the owner instead, and their own space stays on the
-  server, unchanged.
+  A member of a share works in their own space and in the space of the owner, side by side.
 - **SHARE-2** A share holds the whole space: `Compra`, `Recetas`, `Menú` and the settings that sync
   (SYNC-1). A device preference never syncs, so each person keeps their own.
 - **SHARE-3** The owner invites a person by their email. The server stores the email in lower case,
@@ -23,43 +22,61 @@ person of a share.
   the administrator approves the account as for any account (ACC-4). An account that is not
   approved sees no invite.
 - **SHARE-5** The invitee accepts or declines in the sheet **Compartir lista**. The accept asks
-  first (`share.acceptWarning`): the device then shows the list of the owner in place of the
-  list of the invitee, which stays in their account. An owner of a share (an invite or a member)
-  cannot accept: the sheet says so (`share.blocked`), and the server refuses it too.
+  first (`share.acceptWarning`). An accept keeps the own list of the invitee as it is: the list
+  of the owner comes beside it (SHARE-7). An owner of a share (an invite or a member) cannot
+  accept: the sheet says so (`share.blocked`), and the server refuses it too.
 
 ## Sync
 
-- **SHARE-6** `shopping.sync` holds the space of the stored data. A sync pulls and sends the
-  records of that space only: a member can read two spaces, their own and the shared one. Each
-  sync lists the shares of the user after the refresh of the token and before the push. The
-  space to sync is the owner of the share whose member is the user, else the user. The realtime
-  stream also follows the shares: an event of a share starts a sync, as an event of a record
-  does (SYNC-3).
-- **SHARE-7** When the space to sync differs from the stored space, the sync changes space before
-  it sends anything:
-  - from the own space to a shared space (an accept on this device or on another device of the
-    user): the queue holds changes of the own space, which the user can still write, so the sync
-    sends it first;
-  - from a shared space to the own space (a leave, a remove by the owner): the user can no longer
-    write the shared space, so the queue is dropped. When the queue held changes, the app says so
-    (`share.left`).
+- **SHARE-6** A sync has two lanes, each with its own sync state and queue (SHARE-12): the own
+  lane syncs the space of the user, always; the shared lane syncs the space of the owner of the
+  share whose member is the user (`sharedSpace`), while there is one. Each sync lists the shares
+  of the user after the refresh of the token and before the push. Then the own lane pushes and
+  pulls, then the shared lane does the same, with the same push, pull and merge (SYNC-4 to
+  SYNC-7, and the guard of SYNC-2 in each lane). A save of the own part queues in the own lane, a
+  save of the shared part in the shared lane: a change goes to the space of its list only. A stop
+  of the shared lane (offline, rate limit, server error) stops the sync with that result and
+  keeps what the own lane did. The realtime stream also follows the shares: an event of a share
+  starts a sync, as an event of a record does (SYNC-3).
+- **SHARE-7** The shared lane follows the share at each sync, before it sends anything:
+  - a share now and none before (an accept on this device or on another device of the user): the
+    lane starts with the empty state and pulls the space of the owner in full, as a device with
+    no local data at its first login (SYNC-8);
+  - a share before and none now (a leave, a decline, a cancel or a remove by the owner): the user
+    can no longer write the shared space, so the shared queue is dropped. When it held changes,
+    the app says so (`share.left`). The shared state and the shared sync state go;
+  - scope `all` to `list`: the shared recipes and meals leave the shared state, its sync state and
+    its queue. They stay on the server: nothing queues a delete. The dropped queued changes count
+    in `share.left`;
+  - scope `list` to `all`: the shared lane pulls the space in full, so the recipes and meals come;
+  - with scope `list` the shared lane sends changes of items only, never of the settings, of a
+    recipe or of a meal. The settings of the owner hold `sent` ids of recipes that the member does
+    not see; the validation drops them, and a push would wipe them on the server.
 
-  Then the device drops the state, the queue and the sync state of the old space, and pulls the
-  new space in full, as a device with no local data at its first login (SYNC-8). Nothing of one
-  space goes into the other. The new state is not a save: it queues nothing, and it removes the
-  message and its `Deshacer` (PROD-9). A sync that lists the shares and fails stops as SYNC-4 says,
-  and keeps the stored space. A share can end between the list and the push: when the server
-  refuses a push in a shared space as it refuses a token that is not valid (ACC-7), the sync lists
-  the shares again, and changes space when the share ended instead of an auth stop. A share request
-  made while a sync runs waits for that sync, then starts a new one, which sees the change.
+  The own list never changes at a start or an end of the share: nothing of one space goes into
+  the other. A state that the shared lane puts in place is not a save: it queues nothing, and it
+  removes the message and its `Deshacer` (PROD-9). A sync that lists the shares and fails stops as
+  SYNC-4 says, and keeps both lanes. A share can end between the list and the push: when the
+  server refuses a push of the shared lane as it refuses a token that is not valid (ACC-7), the
+  sync lists the shares again, and ends the shared lane when the share ended, instead of an auth
+  stop. A share request made while a sync runs waits for that sync, then starts a new one, which
+  sees the change.
+- **SHARE-13** A device of v1.5.0 that a member left in the shared space holds that space in
+  `shopping.v1`, `shopping.sync` and `shopping.queue` (the `space` of `shopping.sync` differs from
+  its `owner`). At the start the app moves that state, sync state and queue to the shared keys,
+  and gives the own lane the empty state with an empty cursor, so the next sync pulls the own
+  space in full (SYNC-8) and sends the shared queue to the shared space. The shared keys are
+  written first: a stop halfway loses nothing.
 
 ## Screens
 
 - **SHARE-8** The owner removes a person, a member leaves, an invitee declines: each is one tap with
-  no confirmation and a `Deshacer` of 5 s (PROD-9). The request goes when the 5 s end. A leave first
-  sends the queue to the shared space, then removes the share, then syncs the own space. When the
-  queue cannot be sent, the leave stops with `share.error.network` and the share stays. A remove
-  or a leave deletes no record: the data of the owner and the own data of the member stay.
+  no confirmation and a `Deshacer` of 5 s (PROD-9). The request goes when the 5 s end. A remove by
+  the owner deletes the share. A decline and a leave cancel it (SHARE-11): the row stays. A leave
+  first sends the shared queue to the shared space, then cancels the share, then syncs. When the
+  shared queue cannot be sent, the leave stops with `share.error.network` and the share stays. A
+  remove, a decline or a leave deletes no record: the data of the owner and the own data of the
+  member stay.
 - **SHARE-9** The group **Cuenta** of `Ajustes` has the row **Compartir lista**, below the email,
   when the session is approved. It opens the sheet **Compartir lista**, which shows one case:
   - the owner: each person of the space with the email and `Invitación enviada` or `Comparte la
