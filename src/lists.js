@@ -1,24 +1,46 @@
 // SHARE-12: the screen works on one combined state. For a member it holds the own entities and the
-// shared ones, each shared one marked `shared: true`. The marker lives only here: `split` removes
-// it, so it never reaches storage or sync. The combined state is never normalized: it may hold
-// two items of one name, or two meals of one slot, one for each list.
+// shared ones, each shared one marked `shared: true`. Each id of the shared part, and each reference
+// to one (a meal's `recipe`, `sent`), has the prefix `shared:` in it, so that an id of both lists
+// names one entity. The marker and the prefix live only here: `split` removes them, so they never
+// reach storage or sync. The combined state is never normalized: it may hold two items of one name,
+// or two meals of one slot, one for each list.
 export const isShared = (entity) => entity.shared === true;
+
+const PREFIX = 'shared:';
+// Both are idempotent: an operation on a shared part may mix the ids of the combined state with
+// new plain ids.
+const toCombined = (id) => (id.startsWith(PREFIX) ? id : `${PREFIX}${id}`);
+const toPlain = (id) => (id.startsWith(PREFIX) ? id.slice(PREFIX.length) : id);
+
+const withId = (entity, map) => ({ ...entity, id: map(entity.id) });
+const withRecipe = (entry, map) => (entry.recipe ? { ...entry, recipe: map(entry.recipe) } : entry);
+
+// The ids of a part, and the references to them, through `map`.
+const mapIds = (part, map) => ({
+  ...part,
+  items: part.items.map((entity) => withId(entity, map)),
+  recipes: part.recipes.map((entity) => withId(entity, map)),
+  menu: part.menu.map((entry) => withRecipe(entry, map)),
+  sent: part.sent.map(map),
+});
 
 const mark = (entity) => ({ ...entity, shared: true });
 const unmark = ({ shared, ...entity }) => entity;
 const own = (entities) => entities.filter((entity) => !isShared(entity));
 const marked = (entities) => entities.filter(isShared).map(unmark);
+const plainEntities = (entities) => marked(entities).map((entity) => withId(entity, toPlain));
 
 // Scope `all` shares recipes and meals too; scope `list` shares the items only.
 export const combine = (ownState, sharedState, scope) => {
   if (!sharedState) return ownState;
   const all = scope === 'all';
+  const shared = mapIds(sharedState, toCombined);
   return {
     ...ownState,
-    items: [...ownState.items, ...sharedState.items.map(mark)],
-    recipes: all ? [...ownState.recipes, ...sharedState.recipes.map(mark)] : ownState.recipes,
-    menu: all ? [...ownState.menu, ...sharedState.menu.map(mark)] : ownState.menu,
-    sent: all ? [...ownState.sent, ...sharedState.sent] : ownState.sent,
+    items: [...ownState.items, ...shared.items.map(mark)],
+    recipes: all ? [...ownState.recipes, ...shared.recipes.map(mark)] : ownState.recipes,
+    menu: all ? [...ownState.menu, ...shared.menu.map(mark)] : ownState.menu,
+    sent: all ? [...ownState.sent, ...shared.sent] : ownState.sent,
   };
 };
 
@@ -33,7 +55,8 @@ export const split = (state, sharedBase, scope) => {
   if (!sharedBase) return { own: state, shared: null };
   const all = scope === 'all';
   const ownRecipes = own(state.recipes);
-  const sharedRecipes = all ? marked(state.recipes) : sharedBase.recipes;
+  const sharedRecipes = all ? plainEntities(state.recipes) : sharedBase.recipes;
+  const sharedSent = only(state.sent, state.recipes.filter(isShared)).map(toPlain);
   return {
     own: {
       ...state,
@@ -44,10 +67,10 @@ export const split = (state, sharedBase, scope) => {
     },
     shared: {
       ...sharedBase,
-      items: marked(state.items),
+      items: plainEntities(state.items),
       recipes: sharedRecipes,
-      menu: all ? marked(state.menu) : sharedBase.menu,
-      sent: all ? only(state.sent, sharedRecipes) : sharedBase.sent,
+      menu: all ? marked(state.menu).map((entry) => withRecipe(entry, toPlain)) : sharedBase.menu,
+      sent: all ? sharedSent : sharedBase.sent,
     },
   };
 };
@@ -70,15 +93,19 @@ export const listPart = (state, which) => {
 };
 
 // Runs `op` on one list alone, so that its rules (a name is unique, a meal slot is free) hold
-// inside that list. The error of `op` returns as it is.
+// inside that list. `op` gets the ids of the combined state, so an id of the screen works in it,
+// and an `id` of its result is an id of the combined state. The error of `op` returns as it is.
 export const onList = (state, which, op, sharedBase, scope) => {
   if (which === 'shared' && !sharedBase) return { error: { key: 'share.error.invalid' } };
   const parts = split(state, sharedBase, scope);
-  const result = op(parts[which]);
+  const part = which === 'shared' ? mapIds(parts.shared, toCombined) : parts.own;
+  const result = op(part);
   if (result.error) return { error: result.error };
   // An operation that changes nothing gives the same state, so the screen can tell (REC-21).
-  if (result.state === parts[which]) return { ...result, state };
-  return { ...result, state: combine(...(which === 'own' ? [result.state, parts.shared] : [parts.own, result.state]), scope) };
+  if (result.state === part) return { ...result, state };
+  if (which === 'own') return { ...result, state: combine(result.state, parts.shared, scope) };
+  const id = typeof result.id === 'string' ? { id: toCombined(result.id) } : {};
+  return { ...result, ...id, state: combine(parts.own, mapIds(result.state, toPlain), scope) };
 };
 
 // The list that holds an entity of the combined state.
