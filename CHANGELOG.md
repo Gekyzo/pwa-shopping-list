@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+- Rules and client calls for the scope and the cancelled state of a share (SHARE-11): `shareOf`
+  maps `ownerName`, `scope` and `cancelled`; `invite` takes a scope; new `cancelShare`,
+  `setShareScope` and `reinvite`; `src/shares.js` has `sharedSpace`, `listName` and `personState`,
+  and ignores cancelled shares. `share_taken` maps to `share.error.taken`.
 - `npm run pair` (`scripts/pair.mjs`): user A on `localhost:8081` and user B on `localhost:8082`,
   each origin with its own storage, on the local `pwa-server` with the two users approved. It
   needs both origins in `PB_ORIGINS` of `pwa-server/dev.env`.

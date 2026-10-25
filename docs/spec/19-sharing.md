@@ -15,8 +15,9 @@ person of a share.
 - **SHARE-3** The owner invites a person by their email. The server stores the email in lower case,
   so the case of the typed email does not count, and it emails the invite. The server refuses:
   - the email of the owner (`share.error.self`);
-  - an email that has an invite or a share already (`share.error.taken`): a person is a member of
-    one space at most;
+  - an email that has an active invite or share already (`share.error.taken`, server code
+    `share_taken`): a person is a member of one space at most. A cancelled share (SHARE-11) does
+    not count;
   - an invite by a user who is a member of a space: a share has no chain.
 - **SHARE-4** An invite gives no account. A person with no account requests access (ACC-3), and
   the administrator approves the account as for any account (ACC-4). An account that is not
@@ -71,6 +72,17 @@ person of a share.
   `share.error.network`, `share.error.invalid`. While an invite waits, a banner over the list says
   who invites; its button **Ver invitación** opens the sheet. The sheet is a layer of NAV-25. The
   Deshacer of SHARE-8 cancels the request that waits, so the share stays as it was.
+
+## Scope and cancel
+
+- **SHARE-11** A share has a `scope`: `all` (the whole space, the default) or `list` (the shared
+  list only), and a `cancelled` flag. The owner cancels a share with `cancelled: true`: the row
+  stays, so the person shows in the sheet with the state `cancelled`, and a new invite
+  (`cancelled: false`, no member) opens it again. A cancelled share is no invite and no
+  membership: the space to sync, the pending invite and the case of the invitee ignore it, and it
+  does not block an accept (SHARE-5). The owner lists each person as `pending`, `joined` or
+  `cancelled`. The name of a shared list is the name of its owner, else the part of the owner
+  email before `@`.
 
 ## Limits
 
