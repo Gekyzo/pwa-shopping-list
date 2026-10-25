@@ -22,7 +22,7 @@ const brokenStorage = () => ({
 const user = { id: 'u1', email: 'a@b.c', name: 'Ana', approved: true };
 const session = { token: 't', user };
 const jwt = (payload) => `h.${btoa(JSON.stringify(payload)).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '')}.s`;
-const emptySync = () => ({ owner: null, cursor: '', server: new Map(), local: new Map(), ids: new Map() });
+const emptySync = () => ({ owner: null, space: null, shares: [], cursor: '', server: new Map(), local: new Map(), ids: new Map() });
 
 test('routeAtStart routes by the session and the local data (ACC-1)', () => {
   assert.equal(routeAtStart({ session, hasLocalData: false }), 'list');
@@ -84,6 +84,8 @@ test('the queue and the sync state survive a save and a load', () => {
   assert.deepEqual(loadQueue(storage), queue);
   const state = {
     owner: 'u1',
+    space: 'o1',
+    shares: [{ id: 's1', owner: 'o1', email: 'u1@b.c', ownerEmail: 'o1@b.c', member: 'u1' }],
     cursor: '2026-10-24 08:00:00.000Z',
     server: new Map([['item/a', { id: 'r1', kind: 'item', key: 'a', data: { n: 1 }, deleted: false, updated: 'x' }]]),
     local: new Map([['item/a', { n: 1 }]]),
@@ -96,6 +98,25 @@ test('the queue and the sync state survive a save and a load', () => {
   const synced = { ...state, lastSync: '2026-10-24T08:00:00.000Z' };
   saveSyncState(storage, synced);
   assert.deepEqual(loadSyncState(storage), synced);
+});
+
+test('a sync state of v1.4 has the owner as its space and no shares (SHARE-6)', () => {
+  const storage = fakeStorage();
+  storage.setItem(SYNC_KEY, JSON.stringify({ owner: 'u1', cursor: '', server: [], local: [], ids: [], lastSync: null }));
+  const loaded = loadSyncState(storage);
+  assert.equal(loaded.space, 'u1');
+  assert.deepEqual(loaded.shares, []);
+});
+
+test('a bad space gives the empty sync state, and a bad list of shares gives none', () => {
+  const storage = fakeStorage();
+  const stored = { owner: 'u1', cursor: '', server: [], local: [], ids: [], lastSync: null };
+  storage.setItem(SYNC_KEY, JSON.stringify({ ...stored, space: 7 }));
+  assert.deepEqual(loadSyncState(storage), emptySync());
+  for (const shares of ['x', [1], [{ id: 's1' }], null]) {
+    storage.setItem(SYNC_KEY, JSON.stringify({ ...stored, space: 'o1', shares }));
+    assert.deepEqual(loadSyncState(storage).shares, [], JSON.stringify(shares));
+  }
 });
 
 test('a corrupt or missing value loads as the empty one', () => {

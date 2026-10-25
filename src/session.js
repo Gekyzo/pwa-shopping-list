@@ -41,9 +41,13 @@ export const clearAccountData = (storage) => {
   }
 };
 
-const emptySyncState = () => ({ owner: null, cursor: '', server: new Map(), local: new Map(), ids: new Map() });
+const emptySyncState = () => ({ owner: null, space: null, shares: [], cursor: '', server: new Map(), local: new Map(), ids: new Map() });
 
 const MAPS = ['server', 'local', 'ids'];
+
+const SHARE_FIELDS = ['id', 'owner', 'email', 'ownerEmail', 'member'];
+
+const isShare = (share) => isObject(share) && SHARE_FIELDS.every((field) => typeof share[field] === 'string');
 
 // The maps are stored as arrays of entries (SYNC-2, SYNC-4). A bad value gives the empty state.
 export const loadSyncState = (storage) => {
@@ -51,11 +55,15 @@ export const loadSyncState = (storage) => {
   const valid =
     isObject(data) &&
     (data.owner === null || typeof data.owner === 'string') &&
+    (data.space === undefined || data.space === null || typeof data.space === 'string') &&
     typeof data.cursor === 'string' &&
     MAPS.every((name) => Array.isArray(data[name]) && data[name].every((entry) => Array.isArray(entry) && entry.length === 2));
   if (!valid) return emptySyncState();
   return {
     owner: data.owner,
+    // SHARE-6: the space of the stored data. A state of v1.4 has none: its data is the own space.
+    space: typeof data.space === 'string' ? data.space : data.owner,
+    shares: Array.isArray(data.shares) && data.shares.every(isShare) ? data.shares : [],
     cursor: data.cursor,
     ...Object.fromEntries(MAPS.map((name) => [name, new Map(data[name])])),
     // The time of the last sync, for the row Cuenta (ACC-10). Absent until a first sync.
@@ -66,6 +74,8 @@ export const loadSyncState = (storage) => {
 export const saveSyncState = (storage, state) =>
   write(storage, SYNC_KEY, {
     owner: state.owner,
+    space: state.space ?? state.owner,
+    shares: state.shares ?? [],
     cursor: state.cursor,
     ...Object.fromEntries(MAPS.map((name) => [name, [...state[name]]])),
     lastSync: state.lastSync ?? null,
