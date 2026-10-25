@@ -21,6 +21,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.sync` | The space, the last list of shares, the last cursor and the last known server state (SYNC-2, SYNC-4, SHARE-6) |
 | `localStorage` | `shopping.queue` | The changes not sent to the server (SYNC-2) |
 | `localStorage` | `shopping.v1.beforeLogin` | The local state that a first login replaced (SYNC-8) |
+| `localStorage` | `shopping.offline` | `1` when the device works with no account ([18-account-sync.md](18-account-sync.md), ACC-13) |
 | `localStorage` | `shopping.shared.v1` | The state of the shared space of a member, as JSON, beside `shopping.v1` ([19-sharing.md](19-sharing.md), SHARE-12) |
 | `localStorage` | `shopping.shared.sync` | The sync state of the shared space, and the `scope` of its share (SHARE-12) |
 | `localStorage` | `shopping.shared.queue` | The changes of the shared space not sent to the server (SHARE-12) |
