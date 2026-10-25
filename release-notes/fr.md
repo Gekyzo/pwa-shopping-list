@@ -4,6 +4,10 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+No change.
+
+## 1.7.0 - 2026-10-25
+
 - Tu peux utiliser l'app sans compte : touche **Utiliser sans compte** sur Se connecter. Tes listes restent sur cet appareil. Connecte-toi plus tard depuis les Réglages pour les synchroniser.
 - La connexion par e-mail et mot de passe disparaît. Si tu l'utilisais, connecte-toi avec Google avec le même e-mail : tu gardes ton compte et tes listes.
 

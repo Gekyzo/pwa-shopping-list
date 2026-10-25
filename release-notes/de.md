@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.7.0 - 2026-10-25
+
 - Du kannst die App ohne Konto nutzen: Tippe unter Anmelden auf **Ohne Konto nutzen**. Deine Listen bleiben auf diesem Gerät. Melde dich später unter Optionen an, um sie zu synchronisieren.
 - Die Anmeldung mit E-Mail und Passwort entfällt. Wenn du sie genutzt hast, melde dich mit Google mit derselben E-Mail an: Konto und Listen bleiben erhalten.
 

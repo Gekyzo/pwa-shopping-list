@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.7.0 - 2026-10-25
+
 - You can use the app without an account: tap **Use without an account** on Sign in. Your lists stay on this device. Sign in later from Settings to sync them.
 - Sign-in with email and password is gone. If you used it, sign in with Google with the same email: you keep your account and your lists.
 
