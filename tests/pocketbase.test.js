@@ -14,6 +14,8 @@ const serverRow = (over = {}) => ({
   id: 'r1', collectionId: 'c', owner: 'user1', kind: 'item', key: 'a', data: { n: 1 }, deleted: false,
   updated: '2026-10-24 08:00:00.000Z', ...over,
 });
+// The access row of the user for the shopping app (ACC-4); no status: no row.
+const access = (status) => reply(200, { items: status ? [{ id: 'acc1', user: 'user1', app: 'app1', status }] : [], page: 1, totalPages: status ? 1 : 0 });
 const unique = reply(400, {
   data: { key: { code: 'validation_not_unique' }, kind: { code: 'validation_not_unique' }, owner: { code: 'validation_not_unique' } },
   message: 'Failed to create record.', status: 400,
@@ -32,7 +34,7 @@ const fake = (...replies) => {
 };
 
 test('authWithPassword posts identity and password and returns the session', async () => {
-  const { calls, client } = fake(reply(200, { token: 'T', record: { ...userRecord, extra: 1 } }));
+  const { calls, client } = fake(reply(200, { token: 'T', record: { ...userRecord, extra: 1 } }), access('approved'));
   const session = await client.authWithPassword('a@b.c', 'pw');
   assert.equal(calls[0].method, 'POST');
   assert.equal(calls[0].url.pathname, '/api/collections/users/auth-with-password');
@@ -41,7 +43,7 @@ test('authWithPassword posts identity and password and returns the session', asy
 });
 
 test('requestAccess creates the user then logs in', async () => {
-  const { calls, client } = fake(reply(200, userRecord), reply(200, { token: 'T', record: { ...userRecord, approved: false } }));
+  const { calls, client } = fake(reply(200, userRecord), reply(200, { token: 'T', record: { ...userRecord, approved: false } }), access('pending'));
   const session = await client.requestAccess({ name: 'Ana', email: 'a@b.c', password: 'pw' });
   assert.equal(calls[0].url.pathname, '/api/collections/users/records');
   assert.deepEqual(calls[0].body, { email: 'a@b.c', password: 'pw', passwordConfirm: 'pw', name: 'Ana' });
@@ -74,7 +76,7 @@ test('oauthFinish rejects a state that does not match, with no request', async (
 });
 
 test('oauthFinish exchanges the code and sends no createData', async () => {
-  const { calls, client } = fake(reply(200, { token: 'T', record: userRecord }));
+  const { calls, client } = fake(reply(200, { token: 'T', record: userRecord }), access('approved'));
   const session = await client.oauthFinish({ code: 'c', state: 'S' }, { provider: 'google', state: 'S', codeVerifier: 'V' }, 'https://app.test/');
   assert.equal(calls[0].url.pathname, '/api/collections/users/auth-with-oauth2');
   assert.deepEqual(calls[0].body, { provider: 'google', code: 'c', codeVerifier: 'V', redirectURL: 'https://app.test/' });
@@ -82,12 +84,63 @@ test('oauthFinish exchanges the code and sends no createData', async () => {
 });
 
 test('refresh posts the token and requestPasswordReset resolves with nothing', async () => {
-  const { calls, client } = fake(reply(200, { token: 'T2', record: userRecord }), reply(204, null));
+  const { calls, client } = fake(reply(200, { token: 'T2', record: userRecord }), access('approved'), reply(204, null));
   assert.equal((await client.refresh('T')).token, 'T2');
   assert.equal(calls[0].headers.Authorization, 'T');
   assert.equal(await client.requestPasswordReset('a@b.c'), undefined);
-  assert.equal(calls[1].url.pathname, '/api/collections/users/request-password-reset');
-  assert.deepEqual(calls[1].body, { email: 'a@b.c' });
+  assert.equal(calls[2].url.pathname, '/api/collections/users/request-password-reset');
+  assert.deepEqual(calls[2].body, { email: 'a@b.c' });
+});
+
+test('a session reads the access row of the shopping app with the new token (ACC-4)', async () => {
+  const { calls, client } = fake(reply(200, { token: 'T', record: userRecord }), access('approved'));
+  const session = await client.authWithPassword('a@b.c', 'pw');
+  assert.equal(calls[1].method, 'GET');
+  assert.equal(calls[1].url.pathname, '/api/collections/app_access/records');
+  assert.equal(calls[1].url.searchParams.get('filter'), 'user = "user1" && app.slug = "shopping"');
+  assert.equal(calls[1].headers.Authorization, 'T');
+  assert.equal(session.user.approved, true);
+});
+
+test('a pending or revoked row is not approved, whatever the user record says (ACC-4)', async () => {
+  for (const status of ['pending', 'revoked']) {
+    const { client } = fake(reply(200, { token: 'T', record: { ...userRecord, approved: true } }), access(status));
+    assert.equal((await client.refresh('T')).user.approved, false, status);
+  }
+});
+
+test('with no row the client asks for access with a pending row of the shopping app (ACC-3)', async () => {
+  const { calls, client } = fake(
+    reply(200, { token: 'T', record: userRecord }),
+    access(null),
+    reply(200, { items: [{ id: 'app1', slug: 'shopping' }], page: 1, totalPages: 1 }),
+    reply(200, { id: 'acc1', user: 'user1', app: 'app1', status: 'pending' }),
+  );
+  const session = await client.oauthFinish({ code: 'c', state: 'S' }, { provider: 'google', state: 'S', codeVerifier: 'V' }, 'u');
+  assert.equal(calls[2].url.pathname, '/api/collections/apps/records');
+  assert.equal(calls[2].url.searchParams.get('filter'), 'slug = "shopping"');
+  assert.equal(calls[3].method, 'POST');
+  assert.equal(calls[3].url.pathname, '/api/collections/app_access/records');
+  assert.deepEqual(calls[3].body, { user: 'user1', app: 'app1', status: 'pending' });
+  assert.equal(session.user.approved, false);
+});
+
+test('a row made meanwhile (a duplicate) is read again', async () => {
+  const dup = reply(400, { data: { user: { code: 'validation_not_unique' } }, message: 'Failed to create record.', status: 400 });
+  const { calls, client } = fake(
+    reply(200, { token: 'T', record: userRecord }),
+    access(null),
+    reply(200, { items: [{ id: 'app1', slug: 'shopping' }], page: 1, totalPages: 1 }),
+    dup,
+    access('approved'),
+  );
+  assert.equal((await client.refresh('T')).user.approved, true);
+  assert.equal(calls.length, 5);
+});
+
+test('a server with no shopping app is an invalid error', async () => {
+  const { client } = fake(reply(200, { token: 'T', record: userRecord }), access(null), reply(200, { items: [], page: 1, totalPages: 0 }));
+  await assert.rejects(client.refresh('T'), { type: 'invalid' });
 });
 
 test('pull follows every page and sends the cursor in the filter', async () => {

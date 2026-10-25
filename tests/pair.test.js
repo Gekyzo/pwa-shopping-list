@@ -25,10 +25,10 @@ test('allowsOrigin accepts the same origin or any origin only', () => {
   assert.equal(allowsOrigin(null, 'http://localhost:8081'), false);
 });
 
-test('userBody makes an approved, verified user with the shared password', () => {
+test('userBody makes a verified user with the shared password; access is a row of its own', () => {
   const body = userBody(USERS[0]);
   assert.equal(body.email, 'usera@example.test');
-  assert.equal(body.approved, true);
+  assert.equal('approved' in body, false);
   assert.equal(body.verified, true);
   assert.equal(body.password, PASSWORD);
   assert.equal(body.passwordConfirm, PASSWORD);

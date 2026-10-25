@@ -10,7 +10,12 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Access per app (ACC-3, ACC-4, ACC-7): the server serves several apps with one account
+  (`pwa-server` migration 5, `apps` and `app_access`). Each sign-in and each refresh reads the
+  access row of `shopping`; with no row the app creates a `pending` one. `user.approved` of the
+  session is that row, approved. `users.approved` of the server only mirrors the row for 1.6.0
+  and goes away later. Deploy order: the server first (done 2026-10-25), then the app.
+  `npm run pair` approves the pair through the access row.
 
 ## 1.6.0 - 2026-10-25
 

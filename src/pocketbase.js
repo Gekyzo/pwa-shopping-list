@@ -5,6 +5,10 @@ import { recordKey } from '#records';
 const USERS = '/api/collections/users';
 const RECORDS = '/api/collections/shopping_records/records';
 const SHARES = '/api/collections/shopping_shares/records';
+const ACCESS = '/api/collections/app_access/records';
+const APPS = '/api/collections/apps/records';
+// The slug of this app on the server: one account serves every app, and access is per app.
+const APP = 'shopping';
 const PAGE = 500;
 
 export class PocketBaseError extends Error {
@@ -33,9 +37,10 @@ export const isUniqueViolation = (error) =>
 
 const quoted = (text) => `"${String(text).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
 
-const sessionOf = ({ token, record }) => ({
+// `approved` is the access row of this app (ACC-4), not a field of the user.
+const sessionOf = ({ token, record }, approved) => ({
   token,
-  user: { id: record.id, email: record.email, name: record.name ?? '', approved: record.approved === true },
+  user: { id: record.id, email: record.email, name: record.name ?? '', approved },
 });
 
 const serverRecOf = ({ id, kind, key, data, deleted, updated }) => ({ id, kind, key, data, deleted: deleted === true, updated });
@@ -80,8 +85,30 @@ export const createClient = ({ url, fetch, EventSource }) => {
     return json;
   };
 
+  const findAccess = async (token, userId) => (await call('GET', ACCESS, {
+    token,
+    query: { filter: `user = ${quoted(userId)} && app.slug = ${quoted(APP)}`, perPage: '1' },
+  })).items[0] ?? null;
+
+  // ACC-3: with no row, signing in asks for access with a pending row. A row made meanwhile by
+  // another device (a duplicate) is read again.
+  const accessOf = async (token, userId) => {
+    const found = await findAccess(token, userId);
+    if (found) return found.status;
+    const app = (await call('GET', APPS, { token, query: { filter: `slug = ${quoted(APP)}`, perPage: '1' } })).items[0];
+    if (!app) throw new PocketBaseError('invalid', 404);
+    try {
+      return (await call('POST', ACCESS, { token, body: { user: userId, app: app.id, status: 'pending' } })).status;
+    } catch (error) {
+      if (!isUniqueViolation(error)) throw error;
+      return (await findAccess(token, userId))?.status ?? 'pending';
+    }
+  };
+
+  const withAccess = async (auth) => sessionOf(auth, (await accessOf(auth.token, auth.record.id)) === 'approved');
+
   const authWithPassword = async (email, password) =>
-    sessionOf(await call('POST', `${USERS}/auth-with-password`, { body: { identity: email, password } }));
+    withAccess(await call('POST', `${USERS}/auth-with-password`, { body: { identity: email, password } }));
 
   // Both spaces of a member hold `settings:settings` and the meal keys, so the lookup names the space.
   const findRecord = async (token, { kind, key }, space) => {
@@ -144,17 +171,17 @@ export const createClient = ({ url, fetch, EventSource }) => {
       };
     },
 
-    // The server creates an OAuth account as not approved by itself: the body carries no `approved`.
+    // The body carries no createData: access is a row of its own (ACC-3).
     oauthFinish: async ({ code, state }, pending, redirectUrl) => {
       if (state !== pending.state) throw new PocketBaseError('state');
-      return sessionOf(
+      return withAccess(
         await call('POST', `${USERS}/auth-with-oauth2`, {
           body: { provider: pending.provider, code, codeVerifier: pending.codeVerifier, redirectURL: redirectUrl },
         }),
       );
     },
 
-    refresh: async (token) => sessionOf(await call('POST', `${USERS}/auth-refresh`, { token })),
+    refresh: async (token) => withAccess(await call('POST', `${USERS}/auth-refresh`, { token })),
 
     requestPasswordReset: async (email) => {
       await call('POST', `${USERS}/request-password-reset`, { body: { email } });
