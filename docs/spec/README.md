@@ -28,6 +28,7 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 | [16-install.md](16-install.md) | The install offer and the Install button of `Ajustes` |
 | [17-aisles.md](17-aisles.md) | The sections of the store, the section of an item, the list by section |
 | [18-account-sync.md](18-account-sync.md) | Accounts, the session, and the sync between devices |
+| [19-sharing.md](19-sharing.md) | The share of the data of an account with other people by email |
 
 ## Rule identifiers
 
@@ -58,6 +59,7 @@ The rules DS-1 to DS-8 and LAY-1 to LAY-4 belong to the design system, `pwa-desi
 | `INS` | 16-install |
 | `AISLE` | 17-aisles |
 | `ACC`, `SYNC` | 18-account-sync |
+| `SHARE` | 19-sharing |
 
 ## Words
 

@@ -9,8 +9,9 @@ next trip is almost ready.
 
 ## User and device
 
-- **PROD-1** One user for each account, with one device or more. There is no sharing between accounts
-  (ACC-1, [18-account-sync.md](18-account-sync.md)).
+- **PROD-1** One owner for each account, with one device or more (ACC-1,
+  [18-account-sync.md](18-account-sync.md)). The owner can share the data of the account with
+  other people by email (SHARE-1, [19-sharing.md](19-sharing.md)).
 - **PROD-2** The target is Chrome on Android, with the app installed on the home screen. The app
   also works in a desktop browser with a mouse.
 - **PROD-3** The layout is for a phone in portrait. The manifest locks the installed app to
@@ -52,6 +53,7 @@ next trip is almost ready.
 | Offline use, version and update | [10-offline-version.md](10-offline-version.md) |
 | Reminder at the shop | [11-integrations.md](11-integrations.md) |
 | Account and sync between devices | [18-account-sync.md](18-account-sync.md) |
+| Share the list with other people by email | [19-sharing.md](19-sharing.md) |
 
 ## Not in the product
 
@@ -59,7 +61,7 @@ These are decisions, not gaps.
 
 - Quantities, units, prices, categories, notes and photos of an item.
 - More than one list for the trip, a list for a later trip, and a history of past trips.
-- A shared list. Google Tasks as a shared list was rejected.
+- Google Tasks as a shared list: it was rejected for the share of SHARE-1.
 - Geolocation in the app and system notifications.
 - Steps, quantities and photos of a recipe.
 - A screen of shops, a rename of a shop for all its items.
