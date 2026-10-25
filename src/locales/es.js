@@ -283,6 +283,7 @@ export default {
   'account.login.title': 'Iniciar sesión',
   'account.login.text': 'Inicia sesión para tener tus listas en todos tus dispositivos.',
   'account.google': 'Continuar con Google',
+  'account.offline': 'Usar sin cuenta',
   'account.or': 'o',
   'account.name': 'Nombre',
   'account.email': 'Correo electrónico',

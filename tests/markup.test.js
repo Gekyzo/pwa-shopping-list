@@ -274,16 +274,17 @@ test('the account layer is a modal dialog with a back button and three hidden-by
   assert.deepEqual(views, [['form', 'login', false], ['form', 'request', true], ['div', 'waiting', true]]);
 });
 
-test('Iniciar sesión has Google, the divider, email, password, Entrar, the reset and the link to Solicitar acceso (ACC-2)', () => {
+test('Iniciar sesión has Google, Usar sin cuenta, the divider, email, password, Entrar, the reset and the link to Solicitar acceso (ACC-2)', () => {
   const login = viewOf('login');
   assert.deepEqual(keysOf(login), [
-    'account.login.title', 'account.login.text', 'account.google', 'account.or', 'account.email', 'account.password',
+    'account.login.title', 'account.login.text', 'account.google', 'account.offline', 'account.or', 'account.email', 'account.password',
     'account.login.submit', 'account.forgot', 'account.login.noAccount', 'account.request.title',
   ]);
   assert.match(login, /<input id="login-email" class="input field-input" type="email" autocomplete="email"/);
   assert.match(login, /<input id="login-password" class="input field-input" type="password" autocomplete="current-password"/);
   assert.match(login, /<p id="login-error" class="input-help danger" role="alert" hidden><\/p>\s*<button id="login-submit" class="button primary wide" type="submit"/);
   assert.match(login, /<button class="button tonal wide" type="button" data-google><svg class="icon small" aria-hidden="true"><use href="icons.svg#google"\/><\/svg>/);
+  assert.match(login, /<\/button>\s*<button id="login-offline" class="button accent" type="button" data-i18n="account.offline" hidden><\/button>\s*<p class="account-or"/);
 });
 
 test('Solicitar acceso has Google, the name, the email, a password of 8 or more, Enviar solicitud and the link back (ACC-2)', () => {

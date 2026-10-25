@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Usar sin cuenta on Iniciar sesión: the device works with no account (ACC-1, ACC-2, ACC-11, ACC-13). Key `shopping.offline` = `1`, in `APP_KEYS`; `routeAtStart` gives `offline`, which shows no screen and starts no sync. A login that opens the list removes the flag; the banner of ACC-11 does not show while it is set.
 
 ## 1.6.1 - 2026-10-25
 

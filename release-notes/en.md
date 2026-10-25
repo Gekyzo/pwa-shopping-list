@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- You can use the app without an account: tap **Use without an account** on Sign in. Your lists stay on this device. Sign in later from Settings to sync them.
 
 ## 1.6.0 - 2026-10-25
 

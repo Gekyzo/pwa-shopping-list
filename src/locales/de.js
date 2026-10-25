@@ -283,6 +283,7 @@ export default {
   'account.login.title': 'Anmelden',
   'account.login.text': 'Melde dich an, um deine Listen auf jedem Gerät zu haben.',
   'account.google': 'Weiter mit Google',
+  'account.offline': 'Ohne Konto nutzen',
   'account.or': 'oder',
   'account.name': 'Name',
   'account.email': 'E-Mail',

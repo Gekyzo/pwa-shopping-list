@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Puoi usare l'app senza account: tocca **Usa senza account** in Accedi. Le tue liste restano su questo dispositivo. Accedi più tardi dalle Impostazioni per sincronizzarle.
 
 ## 1.6.0 - 2026-10-25
 
