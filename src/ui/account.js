@@ -503,7 +503,9 @@ export const renderSync = () => {
   const shares = status.shares ?? [];
   $('share-open').hidden = !session || status.auth;
   const shown = session ? shareCase(shares, session.user) : null;
-  $('share-count').textContent = shown?.case === 'owner' && shown.people.length > 0 ? String(shown.people.length) : '';
+  // SHARE-9: the count is the active people, pending or joined; a cancelled person does not count.
+  const active = shown?.case === 'owner' ? shown.people.filter((person) => person.state !== 'cancelled').length : 0;
+  $('share-count').textContent = active > 0 ? String(active) : '';
   const invite = session && !status.auth ? pendingInvite(shares, session.user) : null;
   $('share-banner').hidden = !inList() || !invite;
   $('share-banner-text').textContent = invite ? t('share.banner', { email: invite.ownerEmail }) : '';

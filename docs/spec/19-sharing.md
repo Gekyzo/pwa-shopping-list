@@ -84,11 +84,14 @@ person of a share.
   member stay. ✕ on a cancelled person removes the row the same way. A change of scope and
   **Invitar de nuevo** go at once, with no `Deshacer`: a second tap undoes a change of scope.
 - **SHARE-9** The group **Cuenta** of `Ajustes` has the row **Compartir lista**, below the email,
-  when the session is approved. It opens the sheet **Compartir lista**, which shows one case:
+  when the session is approved. For the owner, the row shows the count of the active people,
+  pending or joined; a cancelled person does not count, and with none the row shows no count.
+  It opens the sheet **Compartir lista**, which shows one case:
   - the owner: each person of the space with the email, the state (`Invitación enviada`,
     `Comparte la lista` or `Cancelada`) and the scope (`Comparte: Solo Compra` or `Comparte:
-    Compra, Recetas y Menú`), and the remove button ✕ (`Quitar a <email>`). A tap on the scope of a
-    pending or joined person sets the other scope (SHARE-11); the member's device follows it at
+    Compra, Recetas y Menú`), and the remove button ✕ (`Quitar a <email>`). The scope of a pending
+    or joined person is a button whose name starts with its text (`Comparte: Solo Compra — cambiar
+    para <email>`); a tap on it sets the other scope (SHARE-11); the member's device follows it at
     its next sync (SHARE-7). A cancelled person also has **Invitar de nuevo**, which sets the share
     back to pending. Then the scope of the invite, two chips **Solo Compra** (`list`) and **Compra,
     Recetas y Menú** (`all`), with **Solo Compra** chosen at each open of the sheet; then the
@@ -137,8 +140,10 @@ person of a share.
   **Todas**, **Mi lista** and the shared list, named as in SHARE-11. Each chip counts the items to
   buy of its list. **Todas** shows the items of both lists; the other chips show the items of one
   list. The shop lists work inside the list chip: their chips, the dock and its picker show the
-  shops of that list. In **Todas** each row shows a tag of its list: `Mía` or the name of the
-  shared list; the other chips show no tag. An item of one name in both lists shows as two rows. A
+  shops of that list; while the list chips show, the entry of all the shops (the shop chip, the
+  dock and its picker) is `Todas las tiendas`, apart from the list chip **Todas**. In **Todas**
+  each row shows a tag of its list: `Mía` or the name of the shared list, a neutral `pill ghost`
+  (the green `pill` means done); the other chips show no tag. An item of one name in both lists shows as two rows. A
   manual reorder does not start in **Todas**. The owner, and a user with no share, see no list
   chips and no tags. The choice is not stored: it is **Todas** at each start and at the end of the
   share.

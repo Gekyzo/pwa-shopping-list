@@ -84,7 +84,8 @@ const itemRow = (item, also) => {
 };
 
 // SHARE-14: the tag of the list of a row, one look in Compra, Recetas and Menú.
-export const tagNode = (tag) => el('span', { className: 'pill', textContent: tag, title: tag });
+// The tag of a list is neutral: the green `pill` means done.
+export const tagNode = (tag) => el('span', { className: 'pill ghost', textContent: tag, title: tag });
 
 const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
 

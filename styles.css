@@ -171,7 +171,11 @@
   }
 
   /* The dock holds five controls below 600px: the chip shrinks, and a long name ends in an ellipsis. */
+  /* A flex chip, so that a long name (`Todas las tiendas`, a long shop) ends in an ellipsis and the
+     count and the chevron stay inside the chip. */
   .dock .chip {
+    display: flex;
+    align-items: center;
     min-width: 0;
   }
 
@@ -665,7 +669,7 @@
   /* @component meal-planned
      @scope menu
      @summary The two meals of a slot in the meal sheet of a member, each with the tag of its list and its own Quitar, apart from the field below (MENU-20).
-     @example <ul class="products meal-planned"><li class="product"><span class="product-text">Sopa</span><span class="pill">Mía</span><button class="button icon" type="button">✕</button></li><li class="product"><span class="product-text">Paella</span><span class="pill">Ana</span><button class="button icon" type="button">✕</button></li></ul> */
+     @example <ul class="products meal-planned"><li class="product"><span class="product-text">Sopa</span><span class="pill ghost">Mía</span><button class="button icon" type="button">✕</button></li><li class="product"><span class="product-text">Paella</span><span class="pill ghost">Ana</span><button class="button icon" type="button">✕</button></li></ul> */
   .products.meal-planned {
     margin: 0 0 var(--space-2);
   }

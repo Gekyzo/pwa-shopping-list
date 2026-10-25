@@ -220,14 +220,20 @@ export const bind = () => {
   const onSaved = () => flashSaved($('recipe-sheet'));
   bindField($('recipe-name'), {
     read: () => openRecipeOf()?.name,
-    write: (value) => apply(onRecipe(openRecipeOf(), (part) => recipes.renameRecipe(part, ui.recipeId, value))),
+    write: (value) => {
+      // A sync can take the recipe away while its sheet is open.
+      const recipe = openRecipeOf();
+      if (!recipe) return false;
+      return apply(onRecipe(recipe, (part) => recipes.renameRecipe(part, recipe.id, value)));
+    },
     onSaved,
   });
   bindField($('recipe-url'), {
     read: () => openRecipeOf()?.url,
     write: (value) => {
       const recipe = openRecipeOf();
-      const result = onRecipe(recipe, (part) => recipes.setRecipeUrl(part, ui.recipeId, value));
+      if (!recipe) return false;
+      const result = onRecipe(recipe, (part) => recipes.setRecipeUrl(part, recipe.id, value));
       // A text that gives the same address, as one with no scheme, changes nothing.
       if (!result.error && result.state.recipes.find((entry) => entry.id === ui.recipeId).url === recipe.url) return false;
       return apply(result, { undoText: t(value.trim() ? 'toast.linkSaved' : 'toast.linkRemoved') });

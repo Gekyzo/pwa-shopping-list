@@ -67,7 +67,8 @@ const now = async (request) => {
 const scopeButton = (share) => {
   const next = otherScope(scopeOf(share));
   const button = el('button', { type: 'button', className: 'button accent', textContent: scopeText(share) });
-  button.setAttribute('aria-label', t('share.scopeChange', { email: share.email, scope: t(`share.scope.${next}`) }));
+  // SHARE-9: the name of the button starts with its text (WCAG 2.5.3).
+  button.setAttribute('aria-label', t('share.scopeChange', { current: scopeText(share), email: share.email }));
   button.addEventListener('click', () => now(() => syncer.setScope(share.id, next)));
   return button;
 };

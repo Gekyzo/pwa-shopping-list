@@ -244,7 +244,10 @@ export const renderTrip = () => {
   $('trip-open').hidden = store.openItems(state).length === 0;
 };
 
-export const shopLabel = (shop) => (shop === null ? t('shops.all') : shop === '' ? t('group.noShop') : shop);
+// SHARE-14: while the list chips show, the shop entry of all shops says so, beside the list chip Todas.
+const allShops = () => t(inList() && sharing !== null ? 'shops.allShops' : 'shops.all');
+
+export const shopLabel = (shop) => (shop === null ? allShops() : shop === '' ? t('group.noShop') : shop);
 
 // The shop lists of the list chip in view (SHARE-14).
 const shopChipsInView = () => (inList() && shopLists === 'show' ? shops.shopChips(listState()) : []);
