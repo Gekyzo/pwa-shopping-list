@@ -18,7 +18,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.onboarded` | `1` after the walkthrough of the first start closed ([07-screen.md](07-screen.md), ONB-7) |
 | `localStorage` | `shopping.seen-version` | The newest version whose release notes the user saw ([10-offline-version.md](10-offline-version.md), VER-20) |
 | `localStorage` | `shopping.session` | The token and the user of the account ([18-account-sync.md](18-account-sync.md), ACC-6) |
-| `localStorage` | `shopping.sync` | The last cursor and the last known server state (SYNC-2, SYNC-4) |
+| `localStorage` | `shopping.sync` | The space, the last list of shares, the last cursor and the last known server state (SYNC-2, SYNC-4, SHARE-6) |
 | `localStorage` | `shopping.queue` | The changes not sent to the server (SYNC-2) |
 | `localStorage` | `shopping.v1.beforeLogin` | The local state that a first login replaced (SYNC-8) |
 | Cache API | `shopping-shell-v23` | The app shell ([10-offline-version.md](10-offline-version.md)) |

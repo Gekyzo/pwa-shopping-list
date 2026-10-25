@@ -86,7 +86,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 ## Sync
 
 - **SYNC-1** The server holds one record for each item, each recipe, each meal of the menu and the
-  settings. A record has `kind` (`item`, `recipe`, `meal` or `settings`), `key`, `data`, `deleted` and
+  settings, for each space (SHARE-1). A record has `owner` (the owner of the space), `kind` (`item`, `recipe`, `meal` or `settings`), `key`, `data`, `deleted` and
   `updated`. The key is the `id` of an item or of a recipe, `<day>-<meal>` for a meal, and `settings` for
   the settings. A device preference does not sync: the language, the hand, the theme, the density,
   **Al terminar la compra**, the row of shop lists, the hint of the swipe and the flag of the
@@ -113,7 +113,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   the server (a 429) or at a server error (a 5xx), the queue stays and a sync starts again after
   5 s, then 15 s, 30 s and 60 s, and then every 60 s; a sync that reaches the server ends the series.
   A stop at the network does not start a retry: the `online` event does.
-- **SYNC-4** A sync is online only and runs in this order: the app sends the queue in order,
+- **SYNC-4** A sync is online only and runs in this order: the app lists the shares (SHARE-6), sends the queue in order,
   pulls each record with `updated` at or after the last cursor (a record pulled twice is harmless),
   merges the records into the state, and applies again the changes that are still queued.
   A change leaves the queue, and the queue is saved, only after the server took it, so a sync that
@@ -177,9 +177,9 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 
 The keys `shopping.session`, `shopping.sync`, `shopping.queue` and `shopping.v1.beforeLogin` are in
 the table of [08-storage.md](08-storage.md). `shopping.session` holds the token and the user.
-`shopping.sync` holds the owner of the data, the last cursor, the last known server state, the
+`shopping.sync` holds the owner of the data, the space of the data and the last list of shares (SHARE-6), the last cursor, the last known server state, the
 records of the last state that the sync knows and the time of the last sync. `shopping.queue` holds the
 changes not sent.
 
-Limits: no sharing between users, and no merge of two lists. Two devices of one user can differ for
-a short time, and the last change to arrive wins for each record.
+Limits: no merge of two lists. Two devices of one user, or of two people of a share, can differ
+for a short time, and the last change to arrive wins for each record (SHARE-10).
