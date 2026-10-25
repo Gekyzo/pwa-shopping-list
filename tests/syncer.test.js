@@ -1094,3 +1094,49 @@ test('invite maps the server errors to share.error keys', async () => {
   }
   assert.deepEqual(await a.syncer.invite('   '), { error: 'share.error.invalid' });
 });
+
+// --- Final review: races between a running sync and a share --------------------------------------
+
+test('a share request during a run waits for it, then syncs again, so the space changes', async () => {
+  const { server, member } = await sharedWorld();
+  const share = addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  const held = holdOnce(member.client, 'pull');
+  const running = member.syncer.run();
+  await held.waiting;
+  const removed = member.syncer.remove(share.id);
+  held.release();
+  await running;
+  assert.equal(await removed, 'ok');
+  assert.equal(loadSyncState(member.storage).space, 'u1');
+  assert.deepEqual(names(member.box.state), ['Pan']);
+});
+
+test('a push refused in a shared space that ended changes space instead of an auth stop', async () => {
+  const { server, member } = await sharedWorld();
+  const share = addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  member.change(withItems([...member.box.state.items, item('m-i9', 'Huevos')]));
+  member.client.hold = (name) => {
+    if (name !== 'push') return null;
+    member.client.hold = null;
+    server.shares.splice(server.shares.indexOf(share), 1);
+    return null;
+  };
+  assert.equal(await member.syncer.run(), 'ok');
+  assert.equal(member.syncer.status().auth, false);
+  assert.equal(loadSyncState(member.storage).space, 'u1');
+  assert.deepEqual(names(member.box.state), ['Pan']);
+  assert.equal(member.box.statuses.at(-1).left, 1);
+});
+
+test('a leave whose queue is not sent keeps the share and says so (SHARE-8)', async () => {
+  const { server, member } = await sharedWorld();
+  const share = addShare(server, 'o1', 'u1');
+  await member.syncer.run();
+  member.change(withItems([...member.box.state.items, item('m-i9', 'Huevos')]));
+  member.client.failPush = () => new PocketBaseError('network');
+  assert.deepEqual(await member.syncer.leave(share.id), { error: 'share.error.network' });
+  assert.equal(server.shares.length, 1);
+  assert.equal(loadQueue(member.storage).length, 1);
+});

@@ -252,6 +252,21 @@ export const createSyncer = ({
     return null;
   };
 
+  // Resolves to null when the share ended and the device changed space, else to the result of the run.
+  const recheckSpace = async (session, token, live) => {
+    let shares;
+    try {
+      shares = await client.listShares(token);
+    } catch (error) {
+      return live() ? stopOf(known(error)) : STALE;
+    }
+    if (!live()) return STALE;
+    const target = targetSpace(shares, session.user.id);
+    if (target === sync.space) return 'auth';
+    sync = { ...sync, shares };
+    return changeSpace(session, token, target, live);
+  };
+
   // Resolves to the result of the run and whether the merge queued changes to send soon.
   const syncOnce = async (live) => {
     const session = activeSession();
@@ -273,7 +288,10 @@ export const createSyncer = ({
       const changed = await changeSpace(session, token, target, live);
       if (changed) return { result: changed };
     }
-    const stopped = await pushAll(session, token, live);
+    let stopped = await pushAll(session, token, live);
+    // SHARE-7: a share can end between the list and the push. The server then refuses the push as it
+    // refuses a token that is not valid; a new list of the shares tells the two apart.
+    if (stopped === 'auth' && sync.space !== session.user.id) stopped = await recheckSpace(session, token, live);
     if (stopped) return { result: stopped };
     let pulled;
     try {
@@ -487,6 +505,8 @@ export const createSyncer = ({
     } catch (error) {
       return { error: shareError(error) };
     }
+    // A run in progress listed the shares before the request: a new run sees the change.
+    if (running?.generation === generation) await running.promise;
     await run();
     return 'ok';
   };
@@ -504,6 +524,7 @@ export const createSyncer = ({
   // SHARE-8: the queue goes to the shared space before the share ends.
   const leave = async (id) => {
     await run();
+    if (queue.length > 0) return { error: 'share.error.network' };
     return remove(id);
   };
 
