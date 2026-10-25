@@ -10,7 +10,9 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- `npm run pair` (`scripts/pair.mjs`): user A on `localhost:8081` and user B on `localhost:8082`,
+  each origin with its own storage, on the local `pwa-server` with the two users approved. It
+  needs both origins in `PB_ORIGINS` of `pwa-server/dev.env`.
 
 ## 1.5.0 - 2026-10-25
 

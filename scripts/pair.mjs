@@ -1,0 +1,139 @@
+// Two copies of the app for a local test of a feature between two people (a share): user A on
+// http://localhost:8081 and user B on http://localhost:8082. Each origin has its own storage, so
+// one browser holds two sessions. Both use the PocketBase of the local stack of `pwa-server`
+// (ACC-12), where this script creates the two users, approved. No dependencies.
+//
+//   npm run pair [-- --reset] [-- --open]
+//
+// --reset deletes the two users first, with their records and shares (a cascade delete).
+// --open opens the two copies in the browser.
+// PAIR_SU_EMAIL and PAIR_SU_PASSWORD override the superuser of `pwa-server/dev.env`.
+import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { fileURLToPath } from 'node:url';
+
+export const API = 'http://localhost:8090';
+export const MAILPIT = 'http://localhost:8025';
+export const PASSWORD = 'devpassword123';
+export const USERS = [
+  { name: 'A', email: 'usera@example.test', port: 8081 },
+  { name: 'B', email: 'userb@example.test', port: 8082 },
+];
+
+export const originOf = (user) => `http://localhost:${user.port}`;
+
+export const parseArgs = (argv) => {
+  const known = new Set(['--reset', '--open']);
+  const unknown = argv.filter((arg) => !known.has(arg));
+  if (unknown.length > 0) throw new Error(`pair: unknown option ${unknown.join(' ')}`);
+  return { reset: argv.includes('--reset'), open: argv.includes('--open') };
+};
+
+// True when PocketBase answers a request of `origin` with that origin, or with any origin.
+export const allowsOrigin = (header, origin) => header === '*' || header === origin;
+
+// The body that creates a user of the pair: approved and verified, so it logs in at once (ACC-4).
+export const userBody = (user) => ({
+  email: user.email,
+  name: `User ${user.name}`,
+  password: PASSWORD,
+  passwordConfirm: PASSWORD,
+  approved: true,
+  verified: true,
+});
+
+export const summary = (users) => [
+  ...users.map((user) => `User ${user.name}: ${originOf(user)}  ${user.email} / ${PASSWORD}`),
+  `Mailpit (invite emails): ${MAILPIT}`,
+  'Ctrl-C stops the two servers.',
+].join('\n');
+
+const call = async (method, path, { token, body } = {}) => {
+  const response = await fetch(`${API}${path}`, {
+    method,
+    headers: { 'content-type': 'application/json', ...(token ? { authorization: token } : {}) },
+    body: body && JSON.stringify(body),
+  });
+  const text = await response.text();
+  if (!response.ok) throw new Error(`pair: ${method} ${path} answered ${response.status} ${text}`);
+  return text ? JSON.parse(text) : null;
+};
+
+const checkServer = async () => {
+  try {
+    await call('GET', '/api/health');
+  } catch {
+    throw new Error(`pair: no PocketBase at ${API}. Start the local stack of pwa-server (RUNBOOK.md, "Local run").`);
+  }
+  for (const user of USERS) {
+    const response = await fetch(`${API}/api/health`, { headers: { origin: originOf(user) } });
+    if (!allowsOrigin(response.headers.get('access-control-allow-origin'), originOf(user))) {
+      throw new Error(`pair: PocketBase refuses ${originOf(user)}. Add it to PB_ORIGINS of pwa-server/dev.env, then recreate the pocketbase container.`);
+    }
+  }
+};
+
+const superuserToken = async () => {
+  const identity = process.env.PAIR_SU_EMAIL ?? 'admin@example.test';
+  const password = process.env.PAIR_SU_PASSWORD ?? 'devpassword123';
+  try {
+    return (await call('POST', '/api/collections/_superusers/auth-with-password', { body: { identity, password } })).token;
+  } catch {
+    throw new Error(`pair: the superuser ${identity} cannot log in. Create it as RUNBOOK.md of pwa-server says ("Dev superuser").`);
+  }
+};
+
+const findUser = async (token, email) => {
+  const filter = encodeURIComponent(`email="${email}"`);
+  return (await call('GET', `/api/collections/users/records?filter=${filter}`, { token })).items[0] ?? null;
+};
+
+// Creates each missing user; with `reset`, deletes it first. An existing user keeps its data.
+const prepareUsers = async (token, { reset }) => {
+  for (const user of USERS) {
+    let found = await findUser(token, user.email);
+    if (found && reset) {
+      await call('DELETE', `/api/collections/users/records/${found.id}`, { token });
+      found = null;
+    }
+    if (!found) await call('POST', '/api/collections/users/records', { token, body: userBody(user) });
+    else if (!found.approved) await call('PATCH', `/api/collections/users/records/${found.id}`, { token, body: { approved: true } });
+  }
+};
+
+const root = fileURLToPath(new URL('..', import.meta.url));
+
+const serve = (user) => spawn('python3', ['-m', 'http.server', String(user.port), '--bind', '127.0.0.1'], { cwd: root, stdio: 'ignore' });
+
+// Windows Chrome from WSL when the helper exists, else the browser of the desktop.
+const open = (urls) => {
+  const helper = `${homedir()}/.claude/scripts/open-in-chrome.sh`;
+  const [command, args] = existsSync(helper) ? [helper, urls] : ['xdg-open', urls.slice(0, 1)];
+  spawn(command, args, { stdio: 'ignore', detached: true }).unref();
+};
+
+const main = async () => {
+  const options = parseArgs(process.argv.slice(2));
+  await checkServer();
+  await prepareUsers(await superuserToken(), options);
+  const servers = USERS.map(serve);
+  const stop = () => {
+    servers.forEach((server) => server.kill());
+    process.exit(0);
+  };
+  process.on('SIGINT', stop);
+  process.on('SIGTERM', stop);
+  servers.forEach((server, index) => server.on('exit', (code) => {
+    if (code) console.error(`pair: the server of user ${USERS[index].name} stopped (port ${USERS[index].port} in use?)`);
+  }));
+  console.log(summary(USERS));
+  if (options.open) open(USERS.map(originOf));
+};
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error(error.message);
+    process.exit(1);
+  });
+}

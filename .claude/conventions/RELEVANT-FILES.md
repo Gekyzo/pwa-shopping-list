@@ -29,7 +29,7 @@ description: Where to look first in this component, what to ignore, and which pe
 
 ## Tests
 
-`tests/<module>.test.js` for `store`, `recipes`, `shops`, `aisles`, `swipe`, `sections`, `onboarding`, `reorder`, `storage` and `version`, `tests/sw.test.js` for `localizeManifest` of `sw.js`, `tests/png.test.js` for `scripts/png.mjs`, `tests/glyph.test.js` for `scripts/glyph.mjs` and `tests/changelog.test.js` for `scripts/changelog.mjs`. Run
+`tests/<module>.test.js` for `store`, `recipes`, `shops`, `aisles`, `swipe`, `sections`, `onboarding`, `reorder`, `storage` and `version`, `tests/sw.test.js` for `localizeManifest` of `sw.js`, `tests/png.test.js` for `scripts/png.mjs`, `tests/glyph.test.js` for `scripts/glyph.mjs` and `tests/changelog.test.js` for `scripts/changelog.mjs`, `tests/pair.test.js` for `scripts/pair.mjs`. Run
 `npm test` (`node --test`). `src/app.js`, `src/ui/` and the rest of `sw.js` have no unit tests; check them in
 a browser with `npm run serve`. `tests/spec.test.js` checks `docs/spec/` against the code, and
 `tests/layers.test.js` the layer rules of `src/ui/`. `tests/design.test.js` runs the rules of the design system and

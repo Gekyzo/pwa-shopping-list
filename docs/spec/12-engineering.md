@@ -138,6 +138,7 @@
 | `tests/glyph.test.js` | The segments of a line icon of `scripts/glyph.mjs`, which `npm run icons` draws for the shortcut icons |
 | `tests/release.test.js` | The release of `scripts/release.mjs`: the bump commit, the tag and the refusals, also a `main` behind `origin` and release notes that differ between languages (VER-10 to VER-12, VER-19) |
 | `tests/changelog.test.js` | The release of `CHANGELOG.md` and of the release notes by `scripts/changelog.mjs`, which the version bump uses (VER-17, VER-19) |
+| `tests/pair.test.js` | The users, origins and options of `scripts/pair.mjs`, which `npm run pair` runs for a local test between two people |
 | `tests/spec.test.js` | The facts of this specification that the code can prove (ENG-12) |
 
 A unit test uses `node:test` with `node:assert/strict`, one behaviour for each test, and checks
@@ -176,6 +177,7 @@ of a rule is correct; that stays a review by the author.
 ```sh
 npm test         # unit tests
 npm run serve    # http://localhost:8080
+npm run pair     # user A on :8081 and user B on :8082, on the local pwa-server
 npm run icons    # write the PNG icons again
 npm run hooks    # enable .githooks/ in this clone
 npm run release  # bump the version, commit it and tag it vX.Y.Z

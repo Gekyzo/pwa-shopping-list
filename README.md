@@ -26,6 +26,7 @@ Node 20 or later.
 npm run hooks    # enable the git hooks of .githooks/ in this clone (one time)
 npm test         # unit tests (node:test)
 npm run serve    # http://localhost:8080
+npm run pair     # user A on :8081 and user B on :8082, on the local pwa-server
 npm run icons    # write the PNG icons again after a change in icons/source.png or scripts/make-icons.mjs
 npm run release  # bump the version, commit it and tag it vX.Y.Z
 npm run ds       # copy the design system again from ../pwa-design-system
