@@ -38,6 +38,7 @@
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `reorder`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
 | `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `store`, `recipes`, `menu`, `lists`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/view` |
+| `src/ui/panels.js` | The panels of `Compra` and `Menú` from 600px: Por tienda, Próxima compra, Para la cesta | `store`, `shops`, `menu`, `ui/context`, `ui/view` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `lists`, `i18n`, `ui/context`, `ui/recipes`, `ui/nav`, `ui/rows`, `ui/view` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The list `Compra`: rows, search, list chips, shop lists, the dock and its shop picker, header, trip sheet | `store`, `recipes`, `shops`, `lists`, `shares`, `aisles`, `menu`, `sections`, `ui/context`, `ui/view`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |

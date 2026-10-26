@@ -57,6 +57,15 @@ export const shopGroups = (state) => {
   return { groups, rest: source.filter((item) => shown(item) && item.shops.length === 0) };
 };
 
+// The count of each shop of Active for the panel Por tienda (LIST-38): `left` items to buy of
+// `total`, the shops in name order, then `''` (Sin tienda) when an item has no shop.
+export const shopCounts = (state) => {
+  const { groups } = shopGroups(state);
+  const loose = activeItems(state).filter((item) => item.shops.length === 0);
+  const counts = groups.map(({ shop, items, total }) => ({ shop, left: items.length, total }));
+  return loose.length ? [...counts, { shop: '', left: loose.filter((item) => !item.bought).length, total: loose.length }] : counts;
+};
+
 // The shop lists: `null` is `Todas`, `''` is `Sin tienda`, a name is a shop.
 export const inShop = (item, shop) => (shop === null ? true : shop === '' ? item.shops.length === 0 : hasShop(item, shop));
 

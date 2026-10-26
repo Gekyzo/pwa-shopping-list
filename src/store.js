@@ -218,6 +218,13 @@ export const tripOutcome = (state, keep = []) => {
   };
 };
 
+// The items of Active that come back at the next trip, for the panel Próxima compra (LIST-39):
+// each recurrent item, and the open items of `keep` (as `startNewShopping` keeps them).
+export const comingBack = (state, keep = []) => {
+  const kept = keptIds(state, keep);
+  return sortItems(state, state.items.filter((item) => item.list === 'active' && (item.recurrent || kept.has(item.id))));
+};
+
 // The message of the toast that an arrival at the shop shows, or null when nothing is left to buy.
 export const arrivalMessage = (state) => {
   const { left } = tripSummary(state);

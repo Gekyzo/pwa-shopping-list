@@ -26,6 +26,7 @@ import {
   GROUPS,
   compareNames,
   setQuantity,
+  comingBack,
 } from '#store';
 
 let counter = 0;
@@ -657,4 +658,20 @@ test('a saved item keeps its name: search finds it and an add of the name is a d
 test('a delete removes a saved item for good', () => {
   const state = saved(['Batteries']);
   assert.deepEqual(deleteItem(state, find(state, 'Batteries').id).state.items, []);
+});
+
+test('comingBack gives the recurrent items of Active, bought or not (LIST-39)', () => {
+  const state = build(['Milk', 'active', { recurrent: true, bought: true }], ['Bread', 'active'], ['Water', 'active', { recurrent: true }], ['Tea', 'saved', { recurrent: true }]);
+  assert.deepEqual(names(comingBack(state)), ['Milk', 'Water']);
+});
+
+test('comingBack adds the open items that the trip keeps, and ignores a bought or unknown id', () => {
+  const state = build(['Milk', 'active', { recurrent: true }], ['Bread', 'active'], ['Rice', 'active', { bought: true }]);
+  const keep = [find(state, 'Bread').id, find(state, 'Rice').id, 'nope'];
+  assert.deepEqual(names(comingBack(state, keep)), ['Milk', 'Bread']);
+});
+
+test('comingBack follows the sort by name', () => {
+  const state = setSort(build(['Water', 'active', { recurrent: true }], ['Bread', 'active', { recurrent: true }]), 'name').state;
+  assert.deepEqual(names(comingBack(state)), ['Bread', 'Water']);
 });

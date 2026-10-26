@@ -14,6 +14,7 @@ import {
   nextShop,
   previousShop,
   withShop,
+  shopCounts,
 } from '#shops';
 
 let counter = 0;
@@ -303,4 +304,29 @@ test('previousShop does not change the state', () => {
   const copy = structuredClone(state);
   previousShop(state, 'Lidl');
   assert.deepEqual(state, copy);
+});
+
+test('shopCounts counts the items to buy of each shop of Active, then the items with no shop (LIST-38)', () => {
+  const state = build(
+    ['Milk', 'active', { shops: ['Lidl'] }],
+    ['Eggs', 'active', { shops: ['Lidl', 'Aldi'], bought: true }],
+    ['Bread', 'active', { shops: ['Aldi'] }],
+    ['Salt', 'active'],
+    ['Rice', 'active', { bought: true }],
+    ['Tea', 'saved', { shops: ['Mercadona'] }],
+  );
+  assert.deepEqual(shopCounts(state), [
+    { shop: 'Aldi', left: 1, total: 2 },
+    { shop: 'Lidl', left: 1, total: 2 },
+    { shop: '', left: 1, total: 2 },
+  ]);
+});
+
+test('shopCounts keeps a shop whose items are all bought, and has no Sin tienda when each item has a shop', () => {
+  const state = build(['Milk', 'active', { shops: ['Lidl'], bought: true }]);
+  assert.deepEqual(shopCounts(state), [{ shop: 'Lidl', left: 0, total: 1 }]);
+});
+
+test('shopCounts of an empty Active is empty', () => {
+  assert.deepEqual(shopCounts(build(['Tea', 'saved', { shops: ['Lidl'] }])), []);
 });

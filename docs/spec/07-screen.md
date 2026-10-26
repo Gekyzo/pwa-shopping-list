@@ -13,16 +13,18 @@ ellipsis. The message shows below the top
 edge. A sheet comes up from the bottom, over a veil. The walkthrough of the first start covers all
 of it.
 
-From 600px wide (a tablet, an unfolded phone, a phone on its side) the bottom bar is a rail at the
-side of the hand (NAV-13), and the header and the content form one centred column (DSV-8). The rules below name it
-the bottom bar at each width.
+The screen has four width classes (DSV-9): a phone below 600px, a foldable (an unfolded phone, a
+phone on its side) from 600px, a tablet from 840px and a desktop from 1024px. From 600px the bottom
+bar is a rail at the left with either hand, and the header and the content form one centred column
+(DSV-8). From 1024px the app stands in one centred frame, and the rail is a labelled sidebar at the
+left of it (NAV-26). The rules below name it the bottom bar at each width.
 
 ## Sections
 
 - **NAV-1** The bottom bar has four sections, in this order: `Compra`, `Recetas`, `Menú`,
   `Ajustes`. The app starts in `Compra`. A
-  section shows its icon and its name, and no count. Its name is also the name of its button for a
-  screen reader.
+  section shows its icon and its name, and no count, except `Compra` in the sidebar (NAV-26). Its
+  name is also the name of its button for a screen reader.
 - **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
   edit, and closes the search (LIST-24, REC-26).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
@@ -168,10 +170,12 @@ the bottom bar at each width.
 - **NAV-10** The trip sheet closes as each sheet does (NAV-8). The open puts the focus on
   **Terminar compra**, and the close puts it back on the trip button.
 
-- **NAV-24** From 600px the `+` button floats above the bottom right of the list. It collapses to a
-  square of the tap size (48 px) after a scroll of the list of more than 24 px down, and opens
-  again on any scroll up and at the top of the list (`fabState`). Below 600px the `+` is the last
-  button of the dock, with no collapse; it floats as from 600px only while the dock does not show.
+- **NAV-24** Below 600px the `+` is the last button of the dock; while the dock does not show it
+  floats above the bottom right of the list, and it collapses to a square of the tap size (48 px)
+  after a scroll of the list of more than 24 px down, and opens again on any scroll up and at the
+  top of the list (`fabState`). From 600px the add is the button **Añadir artículo** (in `Recetas`
+  **Crear receta**) of the header, after its other buttons, with the same conditions, and the `+`
+  does not float.
 - **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an account
   screen that can go back to the list (ACC-2), then an open sheet, then an open row, then the
   search of a list (`closeTop`). While a layer is open, one entry of the
@@ -189,13 +193,24 @@ the bottom bar at each width.
 
   | Part | `Derecha` | `Izquierda` |
   |---|---|---|
-  | `+` button | Dock, at its end; from 600px bottom right | Dock, at its start; from 600px bottom left |
-  | Rail, from 600px wide (DSV-8) | Right | Left |
+  | `+` button, below 600px wide | Dock, at its end; floating, bottom right | Dock, at its start; floating, bottom left |
+  | Rail, from 600px wide (DSV-9) | Left | Left |
   | Dock, below 600px wide (SHOP-26) | Search, then `+`, at the right | `+`, then search, at the left |
   | Header | Text, buttons | Buttons, text |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
 
+- **NAV-26** From 600px wide the bottom bar is a rail at the left with `Derecha` and with
+  `Izquierda`. From 1024px it is a sidebar of 232px at the left of a centred frame of at most
+  1280px (DSV-9). It shows the mark and the name of
+  the app above the sections, one row for each section with its icon and its name, and the current
+  section on a pill. The row of `Compra` ends with the count of the items left, as the header counts
+  them; with no item left it shows no count. The count is not part of the name for a screen reader.
+  With no session (ACC-13) the foot of the rail shows the offline icon, and from 1024px the text
+  **Sin cuenta · en este dispositivo**. The message stays at the side of the hand, inside the frame.
+- **NAV-27** From 840px wide `Ajustes` takes a column of at most 960px, and each group is a row:
+  its title and its help at the left, its rows at the right, the groups split by a line.
+  **Copia de seguridad** and **Preferencias** have a line of help at every width.
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).
 

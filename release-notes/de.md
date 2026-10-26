@@ -5,7 +5,12 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 ## Unreleased
 
 - Auf breiten Bildschirmen zeigen die Optionen keine zwei Scrollleisten mehr.
+- Auf Tablet, Faltgerät und Computer sind die Bereiche immer links. Am Computer steht Bodega in einem zentrierten Rahmen mit einer Seitenleiste, die die Namen der Bereiche und das, was du noch kaufen musst, zeigt.
+- Auf breiten Bildschirmen zeigt Einkauf, was in jedem Geschäft offen ist und was beim nächsten Einkauf zurückkommt, und Menü, was „Korb füllen“ hinzufügt.
 - Der Titel des Tabs und der installierten App lautet jetzt „Einkaufsliste - Bodega“.
+- Auf Tablet und Computer öffnet sich ein Rezept in einem Bereich neben der Rezeptliste, und du kannst zwischen Rezepten wechseln, ohne ihn zu schließen.
+- Auf Tablet, Faltgerät und Computer ist die Hinzufügen-Taste in der Kopfzeile, und Blätter wie Hinzufügen öffnen sich neben der Liste, ohne sie zu verdecken.
+- Auf breiten Bildschirmen zeigen die Optionen jede Gruppe mit ihrer Erklärung daneben.
 
 ## 1.7.1 - 2026-10-26
 

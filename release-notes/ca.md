@@ -5,7 +5,12 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 ## Unreleased
 
 - En pantalles amples, Configuració ja no mostra dues barres de desplaçament.
+- En una tauleta, un plegable o un ordinador, les seccions són sempre a l'esquerra. En un ordinador, Bodega ocupa un marc centrat amb una barra lateral amb els noms de les seccions i el que encara has de comprar.
+- En pantalles amples, Compra mostra el que queda a cada botiga i el que torna a la propera compra, i Menú el que afegeix «Omple cistella».
 - El títol de la pestanya i de l'app instal·lada ara és «Llista de la compra - Bodega».
+- En una tauleta o un ordinador, una recepta s'obre en un tauler al costat de la llista de receptes, i pots passar d'una a una altra sense tancar-lo.
+- En una tauleta, un plegable o un ordinador, el botó per afegir és a la capçalera, i els fulls com Afegeix s'obren al costat de la llista sense tapar-la.
+- En pantalles amples, Configuració mostra cada grup amb la seva explicació al costat.
 
 ## 1.7.1 - 2026-10-26
 

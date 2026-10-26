@@ -5,7 +5,12 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 ## Unreleased
 
 - Sugli schermi larghi, le Impostazioni non mostrano più due barre di scorrimento.
+- Su tablet, pieghevole o computer, le sezioni sono sempre a sinistra. Sul computer, Bodega sta in una cornice centrata con una barra laterale che mostra i nomi delle sezioni e quello che ti resta da comprare.
+- Sugli schermi larghi, Spesa mostra cosa resta in ogni negozio e cosa torna alla prossima spesa, e Menù cosa aggiunge «Riempi cestino».
 - Il titolo della scheda e dell'app installata ora è «Lista della spesa - Bodega».
+- Su tablet o computer, una ricetta si apre in un pannello accanto all'elenco delle ricette, e puoi passare dall'una all'altra senza chiuderlo.
+- Su tablet, pieghevole o computer, il pulsante per aggiungere è nell'intestazione, e i pannelli come Aggiungi si aprono accanto alla lista senza coprirla.
+- Sugli schermi larghi, le Impostazioni mostrano ogni gruppo con la sua spiegazione accanto.
 
 ## 1.7.1 - 2026-10-26
 
