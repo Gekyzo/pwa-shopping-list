@@ -37,12 +37,13 @@ export const pendingInvite = (shares, user) => {
 };
 
 // SHARE-9: the one case of the sheet. An owner of a share cannot accept an invite (SHARE-5); a
-// cancelled share does not block (SHARE-11).
+// cancelled share does not block (SHARE-11). A blocked invitee gets the own people, to remove them.
 export const shareCase = (shares, user) => {
   const member = membership(shares, user.id);
   if (member) return { case: 'member', share: member };
   const own = shares.filter((share) => share.owner === user.id);
+  const people = own.map((share) => ({ ...share, state: personState(share) }));
   const invite = pendingInvite(shares, user);
-  if (invite) return { case: 'invited', share: invite, blocked: own.some(active) };
-  return { case: 'owner', people: own.map((share) => ({ ...share, state: personState(share) })) };
+  if (invite) return { case: 'invited', share: invite, blocked: own.some(active), people };
+  return { case: 'owner', people };
 };

@@ -26,7 +26,9 @@ person of a share.
   tuya.` The sheet shows the warning `share.acceptWarning` above **Aceptar**: `Su lista se
   mostrará junto a la tuya. La tuya no cambia.` An accept keeps the own list of the invitee as it is: the list
   of the owner comes beside it (SHARE-7). An owner of a share (an invite or a member) cannot
-  accept: the sheet says so (`share.blocked`), and the server refuses it too.
+  accept: the sheet says so (`share.blocked`), and the server refuses it too. Below that text
+  the sheet lists the people of the own space, as for the owner (SHARE-9), each with its ✕, so
+  that the invitee can remove them and then accept.
 
 ## Sync
 
@@ -98,7 +100,8 @@ person of a share.
     email field and **Invitar**, which invites with the chosen scope. An invite of the email of a
     cancelled person replaces that cancelled row with a new one;
   - an invitee: `<email> te invita a compartir su lista.`, the scope of the invite (`Comparte:
-    <scope>`), the warning of SHARE-5, **Aceptar** and **Rechazar**;
+    <scope>`), the warning of SHARE-5, **Aceptar** and **Rechazar**; an invitee who owns a share
+    also sees the own people of SHARE-5, with no **Aceptar**;
   - a member: `Compartes la lista de <email>.`, the scope of the share (`Comparte: <scope>`) and
     **Dejar de compartir**.
 

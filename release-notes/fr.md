@@ -5,6 +5,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 ## Unreleased
 
 - Quand tu cherches dans Courses, la liste reste en haut et ne descend plus jusqu'au champ de recherche.
+- Si quelqu'un t'invite à partager sa liste alors que tu partages la tienne, tu peux maintenant retirer ces personnes dans l'invitation même, puis l'accepter.
 
 ## 1.7.0 - 2026-10-25
 
