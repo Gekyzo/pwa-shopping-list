@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- On wide screens, Settings no longer shows two scroll bars.
 
 ## 1.7.1 - 2026-10-26
 

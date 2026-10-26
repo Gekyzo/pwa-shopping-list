@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- En pantalles amples, Configuració ja no mostra dues barres de desplaçament.
 
 ## 1.7.1 - 2026-10-26
 
