@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- En pantallas anchas, Ajustes ya no muestra dos barras de desplazamiento.
 
 ## 1.7.1 - 2026-10-26
 

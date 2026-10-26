@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- Em ecrãs largos, as Definições já não mostram duas barras de deslocamento.
 
 ## 1.7.1 - 2026-10-26
 

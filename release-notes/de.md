@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Auf breiten Bildschirmen zeigen die Optionen keine zwei Scrollleisten mehr.
 
 ## 1.7.1 - 2026-10-26
 

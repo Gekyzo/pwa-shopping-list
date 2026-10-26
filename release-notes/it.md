@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Sugli schermi larghi, le Impostazioni non mostrano più due barre di scorrimento.
 
 ## 1.7.1 - 2026-10-26
 

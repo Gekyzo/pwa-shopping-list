@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Sur les grands écrans, les Réglages n'affichent plus deux barres de défilement.
 
 ## 1.7.1 - 2026-10-26
 

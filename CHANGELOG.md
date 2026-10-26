@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Settings from 600px: one scrollbar again. The screen-reader text of `.version-status` was `position: absolute` with no positioned ancestor, so it sat below the scrolling `main` and made the page scroll too, which moved the rail. `.version-status` is now `position: relative`.
 
 ## 1.7.1 - 2026-10-26
 
