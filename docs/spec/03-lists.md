@@ -150,9 +150,8 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 - **LIST-37** Below 600px a tap on the search button of the dock turns the dock into the field
   **Buscar artículo o tienda**, with the focus, a clear button while it has a text, and the button
   **Cancelar**. **Cancelar**, `Escape` and the back of the phone (NAV-25), or a loss of focus with an
-  empty field close it; a close clears the text. The list ends at the dock while the field is
-  open, so the matches fill it from the bottom and the nearest match is next to the field. A group
-  head keeps its colour.
+  empty field close it; a close clears the text. The list keeps its place at the top while the
+  field is open. A group head keeps its colour.
 - **LIST-22** The list shows only the items whose name, one of whose shops or whose aisle
   (AISLE-9) contains the text,
   with no case and no accent distinction. An empty text shows all items.

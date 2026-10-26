@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Quand tu cherches dans Courses, la liste reste en haut et ne descend plus jusqu'au champ de recherche.
 
 ## 1.7.0 - 2026-10-25
 

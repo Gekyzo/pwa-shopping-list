@@ -126,8 +126,7 @@
   }
 
   /* @extends dock
-     @state searching  The search is open: the field and Cancelar take the dock, and the list ends
-                       at the dock, so the nearest match is next to the field.
+     @state searching  The search is open: the field and Cancelar take the dock.
      @part dock-shop-name  The name of the list in the chip of the dock, cut with an ellipsis. */
   /* The search button and the add button stay at the end of the dock, also with no shop list:
      the add button keeps no auto margin, so it closes the group beside the search button. */
@@ -188,25 +187,6 @@
 
   .dock .chip .chevron {
     margin-inline-start: var(--space-2);
-  }
-
-  body:has(.dock.searching:not([hidden])) main {
-    display: flex;
-    flex-direction: column;
-  }
-
-  body:has(.dock.searching:not([hidden])) .item-list {
-    margin-top: auto;
-  }
-
-  @media (min-width: 600px) {
-    body:has(.dock.searching:not([hidden])) main {
-      display: block;
-    }
-
-    body:has(.dock.searching:not([hidden])) .item-list {
-      margin-top: 0;
-    }
   }
 
   /* A field beside a button, as the link of a recipe beside its open button, takes the room that is left. */

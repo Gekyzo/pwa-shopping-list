@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Search of the dock (LIST-37): the list keeps its place at the top while the field is open. The rule that ended the list at the dock (`main` as a flex column, `margin-top: auto` on `.item-list`) is removed from `styles.css`.
 
 ## 1.7.0 - 2026-10-25
 

@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- Ao pesquisar em Compras, a lista fica no topo e já não desce até ao campo de pesquisa.
 
 ## 1.7.0 - 2026-10-25
 

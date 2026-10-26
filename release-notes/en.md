@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- When you search in Shopping, the list stays at the top and no longer moves down to the search field.
 
 ## 1.7.0 - 2026-10-25
 
