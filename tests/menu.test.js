@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem } from '#store';
 import { addRecipe, addRecipeProduct } from '#recipes';
-import { DAYS, MEALS, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, menuWeek, fillMenu } from '#menu';
+import { DAYS, MEALS, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, menuWeek, fillMenu, basketPreview } from '#menu';
 
 let counter = 0;
 const newId = () => `id-${++counter}`;
@@ -292,4 +292,26 @@ test('dishRecipe rejects a name that is no dish of the menu', () => {
   const result = dishRecipe(start, 'Paella', newId);
   assert.deepEqual(result.error, { key: 'error.dishNotFound' });
   assert.equal(result.state, start);
+});
+
+test('basketPreview lists the products the fill puts to buy, in menu order, each one time (MENU-21)', () => {
+  const { state, lentils, omelette } = kitchen();
+  const planned = plan(state, [[0, 'lunch', omelette], [1, 'dinner', lentils]]);
+  assert.deepEqual(basketPreview(planned), ['Eggs', 'Onion', 'Lentils']);
+});
+
+test('basketPreview leaves out a product already to buy, and keeps one that is bought or saved', () => {
+  const { state, lentils } = kitchen();
+  let planned = plan(state, [[0, 'lunch', lentils]]);
+  planned = addItem(planned, 'onion', newId).state;
+  assert.deepEqual(basketPreview(planned), ['Lentils']);
+  const bought = { ...planned, items: planned.items.map((item) => ({ ...item, bought: true })) };
+  assert.deepEqual(basketPreview(bought), ['Lentils', 'Onion']);
+});
+
+test('basketPreview is empty with no menu, only dishes, or recipes with no product', () => {
+  const { state, empty } = kitchen();
+  assert.deepEqual(basketPreview(state), []);
+  assert.deepEqual(basketPreview(plan(state, [[0, 'lunch', empty]])), []);
+  assert.deepEqual(basketPreview(setDish(state, 0, 'lunch', 'Pizza').state), []);
 });

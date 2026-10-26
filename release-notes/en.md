@@ -5,7 +5,12 @@ What changes for you in each version of the app. The newest version is first.
 ## Unreleased
 
 - On wide screens, Settings no longer shows two scroll bars.
+- On a tablet, a foldable or a computer, the sections are always on the left. On a computer, Bodega sits in a centred frame with a sidebar that shows the names of the sections and what you still have to buy.
+- On wide screens, Shopping shows what is left at each shop and what comes back on the next trip, and Menu shows what “Fill basket” adds.
 - The title of the tab and of the installed app is now "Shopping list - Bodega".
+- On a tablet or a computer, a recipe opens in a panel next to the list of recipes, and you can move from one to another without closing it.
+- On a tablet, a foldable or a computer, the add button is in the header, and sheets such as Add open next to the list without covering it.
+- On wide screens, Settings shows each group with its explanation beside it.
 
 ## 1.7.1 - 2026-10-26
 

@@ -81,6 +81,10 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
 
 ## Shared menu
 
+- **MENU-21** From 600px wide, `Menú` with a planned meal shows the panel **Para la cesta**: the
+  products that **Llenar cesta** puts to buy, in menu and product order, each one time, with their
+  count (`basketPreview`); six rows at most, then `y N más`. With nothing to add it says
+  `Todo está en Compra`. It stands as the panels of `Compra` do (LIST-38).
 - **MENU-20** For a member with scope `all` (SHARE-12), `Menú` shows the meals of both lists.
   Each list has its own week, so a slot holds one meal of each list at most: a slot with two
   shows both, the own one first, each name with the tag of its list (SHARE-14). The chips of the

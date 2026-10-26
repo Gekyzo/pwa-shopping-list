@@ -34,6 +34,11 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   recipe with no case distinction (`error.duplicateProduct`).
 - **REC-9** The sheet of a recipe lists its products under **Productos**, with no line above
   it, each with a `✕` button, and the field **Añadir producto**. The removal of a product has `Deshacer`; the add does not.
+- **REC-39** From 840px wide (DSV-9) the sheet of a recipe is a pane at the end of the frame, at
+  most 480px wide, with no veil. The recipes stand in one column beside it, and the row of the open
+  recipe is on a pill. A tap on another recipe shows it in the pane. **Listo**, `Escape` and the back
+  close the pane as they close the sheet (NAV-25). The add of the header stays (NAV-24). Below
+  840px the recipe is the sheet of NAV-8.
 - **REC-10** While the user types a product, the recipe lists up to 5 names that contain the text,
   with no case and no accent distinction: the names of the items, then the products of the
   recipes, each name one time with no case distinction, with the spelling of the item first. The

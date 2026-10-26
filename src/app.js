@@ -30,6 +30,7 @@ import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { endReorder, bind as bindDrag } from '#ui/drag';
 import { moveRow } from '#ui/rows';
 import { renderRecipe, closeRecipe, bind as bindRecipe } from '#ui/recipes';
+import { renderPanels } from '#ui/panels';
 import { renderMeal, renderMenuActions, closeMeal, bind as bindMenu } from '#ui/menu';
 import { renderArrange, closeArrange, bind as bindArrange } from '#ui/arrange';
 import {
@@ -66,6 +67,7 @@ import {
   isAccountOpen,
   accountClosable,
   closeAccount,
+  signedIn,
   bind as bindAccount,
 } from '#ui/account';
 
@@ -89,6 +91,9 @@ const holdBack = () => {
     history.back();
   }
 };
+
+// The tablet width of DSV-9, from which the recipe sheet is a pane.
+const desktop = matchMedia('(min-width: 840px)');
 
 let debugView = null;
 const renderAll = () => {
@@ -128,19 +133,29 @@ const renderAll = () => {
   renderInstall();
   renderTrip();
   renderMenuActions();
+  renderPanels();
   renderSync();
 
   // An action in the empty state replaces the add button. Below 600px the add button of the dock
   // takes the place of the fab (design-system.css), with the same label and the same conditions.
-  const noAdd = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || sheetOpen(ui);
-  for (const id of ['fab', 'dock-add']) {
+  // From 840px the recipe is a pane beside the list, not a sheet over it (REC-39): the add stays.
+  // From 600px the add is the button of the header (NAV-24); the fab and the dock-add are hidden there.
+  const recipePane = desktop.matches && ui.recipeId !== null && !ui.sheetOpen;
+  const noAdd = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || (sheetOpen(ui) && !recipePane);
+  const addLabel = t(ui.view === 'recipes' ? 'add.recipe' : 'add.item');
+  for (const id of ['fab', 'dock-add', 'header-add']) {
     $(id).hidden = noAdd;
-    $(id).setAttribute('aria-label', t(ui.view === 'recipes' ? 'add.recipe' : 'add.item'));
+    $(id).setAttribute('aria-label', addLabel);
   }
+  $('header-add-text').textContent = addLabel;
   document.querySelectorAll('.nav-item').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
   });
+  // The sidebar from 1024px counts the items left in Compra (NAV-26).
+  $('nav-count').textContent = summary.left > 0 ? String(summary.left) : '';
+  // The foot of the rail says that the lists stay on this device (NAV-26).
+  $('nav-account').hidden = signedIn();
 
   if (ui.focusProduct) $('recipe-products').querySelector('.product-name')?.focus();
   ui.focusProduct = false;
@@ -161,6 +176,11 @@ const renderAll = () => {
   holdBack();
 };
 setRender(renderAll);
+desktop.addEventListener('change', render);
+// The sheets from 840px start below the header, level with the panels (DSV-6).
+new ResizeObserver(([entry]) => {
+  document.documentElement.style.setProperty('--header-height', `${Math.round(entry.borderBoxSize[0].blockSize)}px`);
+}).observe(document.querySelector('.app-header'));
 
 // Events
 

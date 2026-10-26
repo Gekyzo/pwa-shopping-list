@@ -152,6 +152,14 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
   **Cancelar**. **Cancelar**, `Escape` and the back of the phone (NAV-25), or a loss of focus with an
   empty field close it; a close clears the text. The list keeps its place at the top while the
   field is open. A group head keeps its colour.
+- **LIST-38** From 600px wide, `Compra` with an item shows the panel **Por tienda** when an item has
+  a shop: each shop of the list, in name order, with its items left of its total (`5 de 7`), then
+  **Sin tienda** when an item has no shop, and under each a bar at the true ratio of the shop with
+  the most items left (`shopCounts`). Below 840px the panels stand below the list; from 840px they
+  are a column beside it that stays in sight while the list scrolls. Below 600px there is no panel.
+- **LIST-39** Next to it, the panel **Próxima compra** lists the items that come back when the trip
+  ends: each recurrent item, and with **Aplazar** (TRIP-7) each open item (`comingBack`), with
+  their count and their shops; six rows at most, then `y N más`.
 - **LIST-22** The list shows only the items whose name, one of whose shops or whose aisle
   (AISLE-9) contains the text,
   with no case and no accent distinction. An empty text shows all items.

@@ -183,6 +183,10 @@ let shown = null;
 export const renderRecipe = () => {
   const recipe = openRecipeOf();
   $('recipe').hidden = !recipe;
+  // The row of the open recipe is marked; from 840px it stands beside the pane (REC-39).
+  document.querySelectorAll('.item-row.recipe').forEach((node) => {
+    node.classList.toggle('current', node.dataset.key === `recipe:${recipe?.id}`);
+  });
   if (!recipe) {
     shown = null;
     clearSaved($('recipe-sheet'));

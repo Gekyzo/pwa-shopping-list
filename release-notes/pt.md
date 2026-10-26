@@ -5,7 +5,12 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 ## Unreleased
 
 - Em ecrãs largos, as Definições já não mostram duas barras de deslocamento.
+- Num tablet, num dobrável ou num computador, as secções ficam sempre à esquerda. No computador, a Bodega fica numa moldura centrada com uma barra lateral com os nomes das secções e o que ainda tens de comprar.
+- Em ecrãs largos, Compras mostra o que falta em cada loja e o que volta nas próximas compras, e Menu o que «Encher cesto» adiciona.
 - O título do separador e da app instalada é agora «Lista de compras - Bodega».
+- Num tablet ou num computador, uma receita abre num painel ao lado da lista de receitas, e podes passar de uma para outra sem o fechar.
+- Num tablet, num dobrável ou num computador, o botão para adicionar está no cabeçalho, e as folhas como Adicionar abrem ao lado da lista sem a tapar.
+- Em ecrãs largos, as Definições mostram cada grupo com a sua explicação ao lado.
 
 ## 1.7.1 - 2026-10-26
 

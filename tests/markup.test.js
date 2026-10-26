@@ -298,7 +298,7 @@ test('the list has the offline note and the banner of a device with no session (
 test('Ajustes starts with the group Cuenta: the email and the last sync, Cerrar sesión, and the login of a device with no session (ACC-10)', () => {
   const [first] = groups[0];
   assert.match(first, /data-i18n="settings.account"/);
-  assert.match(settings, /<div id="account-group" hidden>/);
+  assert.match(settings, /<div id="account-group" class="settings-section" hidden>/);
   assert.match(first, /<div id="account-row" class="settings-row account-row"><span id="account-email" class="settings-row-label"><\/span><span id="account-sync" class="settings-row-value"><\/span><\/div>/);
   assert.match(first, /<button id="logout" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="account.logout"><\/span><\/button>/);
 });

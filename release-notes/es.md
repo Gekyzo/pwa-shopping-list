@@ -5,7 +5,12 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 ## Unreleased
 
 - En pantallas anchas, Ajustes ya no muestra dos barras de desplazamiento.
+- En una tableta, un plegable o un ordenador, las secciones están siempre a la izquierda. En un ordenador, Bodega ocupa un marco centrado con una barra lateral con los nombres de las secciones y lo que te queda por comprar.
+- En pantallas anchas, Compra muestra lo que queda en cada tienda y lo que vuelve en la próxima compra, y Menú lo que añade «Llenar cesta».
 - El título de la pestaña y de la app instalada es ahora «Lista de la compra - Bodega».
+- En una tableta o un ordenador, una receta se abre en un panel junto a la lista de recetas, y puedes pasar de una a otra sin cerrarlo.
+- En una tableta, un plegable o un ordenador, el botón para añadir está en la cabecera, y las hojas como Añadir se abren junto a la lista sin taparla.
+- En pantallas anchas, Ajustes muestra cada grupo con su explicación al lado.
 
 ## 1.7.1 - 2026-10-26
 

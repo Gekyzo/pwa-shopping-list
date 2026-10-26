@@ -102,3 +102,23 @@ export const fillMenu = (state, newId) => {
   }
   return { state: next, added, already };
 };
+
+// The products that `Llenar cesta` puts to buy, for the panel Para la cesta (MENU-21): in menu and
+// product order, each name one time, those that are not to buy in Active yet. Empty when the fill
+// has nothing to send.
+export const basketPreview = (state) => {
+  const result = fillMenu(state, () => 'preview');
+  if (result.error) return [];
+  const toBuy = (items) => new Set(items.filter((item) => item.list === 'active' && !item.bought).map((item) => item.name.toLowerCase()));
+  const before = toBuy(state.items);
+  const after = toBuy(result.state.items);
+  const ids = [...new Set(state.menu.filter((entry) => entry.recipe).map((entry) => entry.recipe))];
+  const products = ids.flatMap((id) => findRecipe(state, id)?.products ?? []);
+  const seen = new Set();
+  return products.filter((product) => {
+    const key = product.toLowerCase();
+    if (seen.has(key) || before.has(key) || !after.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
