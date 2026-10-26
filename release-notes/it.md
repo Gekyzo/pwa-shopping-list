@@ -5,6 +5,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 ## Unreleased
 
 - Quando cerchi in Spesa, la lista resta in alto e non scende più fino al campo di ricerca.
+- Se qualcuno ti invita a condividere la sua lista mentre condividi la tua, ora puoi togliere quelle persone nell'invito stesso e poi accettarlo.
 
 ## 1.7.0 - 2026-10-25
 

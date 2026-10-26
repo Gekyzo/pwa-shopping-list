@@ -34,12 +34,17 @@ test('shareCase of a member names the share', () => {
 
 test('shareCase of an invitee compares the email with no regard to case (SHARE-3)', () => {
   const shares = [share('s1', 'o1', 'ana@b.c')];
-  assert.deepEqual(shareCase(shares, user('u1', 'Ana@B.c')), { case: 'invited', share: shares[0], blocked: false });
+  assert.deepEqual(shareCase(shares, user('u1', 'Ana@B.c')), { case: 'invited', share: shares[0], blocked: false, people: [] });
 });
 
 test('shareCase of an invitee who owns a share is blocked (SHARE-5)', () => {
   const shares = [share('s1', 'o1', 'u1@b.c'), share('s2', 'u1', 'x@b.c')];
-  assert.deepEqual(shareCase(shares, user('u1')), { case: 'invited', share: shares[0], blocked: true });
+  assert.deepEqual(shareCase(shares, user('u1')), {
+    case: 'invited',
+    share: shares[0],
+    blocked: true,
+    people: [{ ...shares[1], state: 'pending' }],
+  });
 });
 
 test('pendingInvite is the invite for the email of the user, and null for a member or with none', () => {

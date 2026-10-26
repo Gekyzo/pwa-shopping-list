@@ -125,6 +125,10 @@ export const renderShare = () => {
     $('share-invited-text').textContent = t('share.invited', { email: shown.share.ownerEmail });
     $('share-invited-scope').textContent = scopeText(shown.share);
     $('share-warning').textContent = t(shown.blocked ? 'share.blocked' : 'share.acceptWarning');
+    // SHARE-5: a blocked invitee removes the own people here, then accepts.
+    const people = shown.blocked ? shown.people.filter((share) => !waiting.has(share.id)) : [];
+    $('share-invited-people').replaceChildren(...people.map(personNode));
+    $('share-invited-people').hidden = people.length === 0;
     $('share-accept').hidden = shown.blocked || hidden;
     $('share-decline').hidden = hidden;
   } else {

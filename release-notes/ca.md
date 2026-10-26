@@ -5,6 +5,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 ## Unreleased
 
 - Quan cerques a Compra, la llista es queda a dalt i ja no baixa fins al camp de cerca.
+- Si et conviden a compartir una altra llista mentre comparteixes la teva, ara pots treure aquestes persones a la mateixa invitació i després acceptar-la.
 
 ## 1.7.0 - 2026-10-25
 

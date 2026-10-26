@@ -11,6 +11,7 @@ no change has no entry.
 ## Unreleased
 
 - Search of the dock (LIST-37): the list keeps its place at the top while the field is open. The rule that ended the list at the dock (`main` as a flex column, `margin-top: auto` on `.item-list`) is removed from `styles.css`.
+- Share sheet of a blocked invitee (SHARE-5, SHARE-9): `shareCase` gives the invited case the own people too, and the sheet lists them in `share-invited-people` with their ✕. Before, an invitee who owned a share saw `share.blocked` with no way to remove the own people, since the owner case was hidden.
 
 ## 1.7.0 - 2026-10-25
 
