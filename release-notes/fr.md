@@ -4,6 +4,10 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+No change.
+
+## 1.8.0 - 2026-10-26
+
 - Sur les grands écrans, les Réglages n'affichent plus deux barres de défilement.
 - Sur une tablette, un pliable ou un ordinateur, les sections sont toujours à gauche. Sur un ordinateur, Bodega tient dans un cadre centré avec une barre latérale qui montre le nom des sections et ce qu'il te reste à acheter.
 - Sur les grands écrans, Courses montre ce qui reste dans chaque magasin et ce qui revient aux prochaines courses, et Menu ce qu’ajoute « Remplir panier ».

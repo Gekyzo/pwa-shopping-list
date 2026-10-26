@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.8.0 - 2026-10-26
+
 - En pantalles amples, Configuració ja no mostra dues barres de desplaçament.
 - En una tauleta, un plegable o un ordinador, les seccions són sempre a l'esquerra. En un ordinador, Bodega ocupa un marc centrat amb una barra lateral amb els noms de les seccions i el que encara has de comprar.
 - En pantalles amples, Compra mostra el que queda a cada botiga i el que torna a la propera compra, i Menú el que afegeix «Omple cistella».
