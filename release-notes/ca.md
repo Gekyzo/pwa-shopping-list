@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- Quan cerques a Compra, la llista es queda a dalt i ja no baixa fins al camp de cerca.
 
 ## 1.7.0 - 2026-10-25
 

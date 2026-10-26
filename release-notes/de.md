@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Wenn du im Einkauf suchst, bleibt die Liste oben und rutscht nicht mehr zum Suchfeld hinunter.
 
 ## 1.7.0 - 2026-10-25
 

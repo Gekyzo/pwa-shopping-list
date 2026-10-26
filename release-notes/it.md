@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Quando cerchi in Spesa, la lista resta in alto e non scende più fino al campo di ricerca.
 
 ## 1.7.0 - 2026-10-25
 
