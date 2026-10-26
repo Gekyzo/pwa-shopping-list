@@ -5,6 +5,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 ## Unreleased
 
 - Sur les grands écrans, les Réglages n'affichent plus deux barres de défilement.
+- Le titre de l'onglet et de l'app installée est maintenant « Liste de courses - Bodega ».
 
 ## 1.7.1 - 2026-10-26
 

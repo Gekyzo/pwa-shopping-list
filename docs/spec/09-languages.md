@@ -47,8 +47,8 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
 - **LANG-14** The data of the user: the names of items, recipes, products and shops stay as typed.
 - **LANG-15** The order by name uses the Spanish collation in each language (SORT-6).
 - **LANG-16** The name of the app is `Bodega` in each language: the short name of
-  `manifest.webmanifest` and the subtitle of `Ajustes`. The title of the page is `Bodega - Lista
-  de la compra`, with the second part in the language of the screen (`app.title`). The title
+  `manifest.webmanifest` and the subtitle of `Ajustes`. The title of the page is `Lista de la
+  compra - Bodega`, with the first part in the language of the screen (`app.title`). The title
   before the script runs is in Spanish. The name, the description and the shortcut names of the manifest
   follow the language of the screen (`app.title`, `app.description`, SHORT-3) through the worker (SW-13); before the
   page first sends them, and with no worker, they are in Spanish. An installed app shows a new

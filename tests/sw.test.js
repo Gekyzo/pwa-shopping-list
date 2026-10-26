@@ -14,7 +14,7 @@ const { localizeManifest, staleCaches, SHELL } = vm.runInNewContext(`${source}\n
 const plain = (value) => JSON.parse(JSON.stringify(value));
 
 const build = () => ({
-  name: 'Bodega - Lista de la compra',
+  name: 'Lista de la compra - Bodega',
   short_name: 'Bodega',
   description: 'Lista de la compra',
   lang: 'es',
@@ -23,14 +23,14 @@ const build = () => ({
 });
 
 test('localizeManifest takes the language, the name and the description of the text', () => {
-  const manifest = localizeManifest(build(), { lang: 'en', name: 'Bodega - Shopping list', description: 'Shopping list' });
+  const manifest = localizeManifest(build(), { lang: 'en', name: 'Shopping list - Bodega', description: 'Shopping list' });
   assert.equal(manifest.lang, 'en');
-  assert.equal(manifest.name, 'Bodega - Shopping list');
+  assert.equal(manifest.name, 'Shopping list - Bodega');
   assert.equal(manifest.description, 'Shopping list');
 });
 
 test('localizeManifest keeps the short name and the other members', () => {
-  const manifest = localizeManifest(build(), { lang: 'en', name: 'Bodega - Shopping list', description: 'Shopping list' });
+  const manifest = localizeManifest(build(), { lang: 'en', name: 'Shopping list - Bodega', description: 'Shopping list' });
   assert.equal(manifest.short_name, 'Bodega');
   assert.equal(manifest.id, build().id);
   assert.deepEqual(manifest.icons, build().icons);
@@ -50,7 +50,7 @@ test('localizeManifest ignores a member of the text that is not a non-empty stri
 
 test('localizeManifest does not change its input', () => {
   const input = build();
-  localizeManifest(input, { lang: 'en', name: 'Bodega - Shopping list', description: 'Shopping list' });
+  localizeManifest(input, { lang: 'en', name: 'Shopping list - Bodega', description: 'Shopping list' });
   assert.deepEqual(input, build());
 });
 

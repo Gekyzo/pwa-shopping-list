@@ -28,7 +28,7 @@ export default {
 
   'header.today': 'Courses du jour',
   'header.settingsSubtitle': 'Bodega',
-  'app.title': 'Bodega - Liste de courses',
+  'app.title': 'Liste de courses - Bodega',
   'app.description': 'Liste de courses qui se prépare seule pour la prochaine fois',
   'header.empty': 'La liste est vide',
   'header.allBought': 'Tout est acheté',

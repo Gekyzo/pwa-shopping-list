@@ -28,7 +28,7 @@ export default {
 
   'header.today': 'Einkauf heute',
   'header.settingsSubtitle': 'Bodega',
-  'app.title': 'Bodega - Einkaufsliste',
+  'app.title': 'Einkaufsliste - Bodega',
   'app.description': 'Einkaufsliste, die sich selbst für den nächsten Einkauf vorbereitet',
   'header.empty': 'Die Liste ist leer',
   'header.allBought': 'Alles gekauft',

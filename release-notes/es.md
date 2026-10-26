@@ -5,6 +5,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 ## Unreleased
 
 - En pantallas anchas, Ajustes ya no muestra dos barras de desplazamiento.
+- El título de la pestaña y de la app instalada es ahora «Lista de la compra - Bodega».
 
 ## 1.7.1 - 2026-10-26
 
