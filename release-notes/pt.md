@@ -4,6 +4,10 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+No change.
+
+## 1.7.1 - 2026-10-26
+
 - Ao pesquisar em Compras, a lista fica no topo e já não desce até ao campo de pesquisa.
 - Se alguém te convidar a partilhar a lista enquanto partilhas a tua, agora podes remover essas pessoas no próprio convite e depois aceitá-lo.
 

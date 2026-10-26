@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.7.1 - 2026-10-26
+
 - Al buscar en Compra, la lista se queda arriba y ya no baja hasta el campo de búsqueda.
 - Si te invitan a compartir otra lista mientras compartes la tuya, ahora puedes quitar a esas personas en la misma invitación y después aceptarla.
 

@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.7.1 - 2026-10-26
+
 - Wenn du im Einkauf suchst, bleibt die Liste oben und rutscht nicht mehr zum Suchfeld hinunter.
 - Wenn dich jemand einlädt, seine Liste zu teilen, während du deine teilst, kannst du diese Personen jetzt direkt in der Einladung entfernen und sie dann annehmen.
 
