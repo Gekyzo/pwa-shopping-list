@@ -28,7 +28,7 @@ export default {
 
   'header.today': 'Spesa di oggi',
   'header.settingsSubtitle': 'Bodega',
-  'app.title': 'Bodega - Lista della spesa',
+  'app.title': 'Lista della spesa - Bodega',
   'app.description': 'Lista della spesa che si prepara da sola per la prossima volta',
   'header.empty': 'La lista è vuota',
   'header.allBought': 'Tutto comprato',

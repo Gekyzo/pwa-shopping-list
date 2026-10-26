@@ -5,6 +5,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 ## Unreleased
 
 - Em ecrãs largos, as Definições já não mostram duas barras de deslocamento.
+- O título do separador e da app instalada é agora «Lista de compras - Bodega».
 
 ## 1.7.1 - 2026-10-26
 

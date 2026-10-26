@@ -11,6 +11,7 @@ no change has no entry.
 ## Unreleased
 
 - Settings from 600px: one scrollbar again. The screen-reader text of `.version-status` was `position: absolute` with no positioned ancestor, so it sat below the scrolling `main` and made the page scroll too, which moved the rail. `.version-status` is now `position: relative`.
+- The page title and the manifest name put the purpose first: `Lista de la compra - Bodega` (LANG-16, `app.title` in the 7 locales), as the other apps do.
 
 ## 1.7.1 - 2026-10-26
 

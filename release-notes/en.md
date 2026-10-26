@@ -5,6 +5,7 @@ What changes for you in each version of the app. The newest version is first.
 ## Unreleased
 
 - On wide screens, Settings no longer shows two scroll bars.
+- The title of the tab and of the installed app is now "Shopping list - Bodega".
 
 ## 1.7.1 - 2026-10-26
 

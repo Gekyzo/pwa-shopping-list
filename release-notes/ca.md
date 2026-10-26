@@ -5,6 +5,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 ## Unreleased
 
 - En pantalles amples, Configuració ja no mostra dues barres de desplaçament.
+- El títol de la pestanya i de l'app instal·lada ara és «Llista de la compra - Bodega».
 
 ## 1.7.1 - 2026-10-26
 

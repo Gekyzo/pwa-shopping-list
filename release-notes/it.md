@@ -5,6 +5,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 ## Unreleased
 
 - Sugli schermi larghi, le Impostazioni non mostrano più due barre di scorrimento.
+- Il titolo della scheda e dell'app installata ora è «Lista della spesa - Bodega».
 
 ## 1.7.1 - 2026-10-26
 

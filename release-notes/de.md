@@ -5,6 +5,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 ## Unreleased
 
 - Auf breiten Bildschirmen zeigen die Optionen keine zwei Scrollleisten mehr.
+- Der Titel des Tabs und der installierten App lautet jetzt „Einkaufsliste - Bodega“.
 
 ## 1.7.1 - 2026-10-26
 

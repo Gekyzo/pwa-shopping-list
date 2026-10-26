@@ -28,7 +28,7 @@ export default {
 
   'header.today': 'Compra d’avui',
   'header.settingsSubtitle': 'Bodega',
-  'app.title': 'Bodega - Llista de la compra',
+  'app.title': 'Llista de la compra - Bodega',
   'app.description': 'Llista de la compra que es prepara sola per a la pròxima vegada',
   'header.empty': 'La llista és buida',
   'header.allBought': 'Tot comprat',
