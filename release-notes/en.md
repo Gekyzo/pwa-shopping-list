@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.8.0 - 2026-10-26
+
 - On wide screens, Settings no longer shows two scroll bars.
 - On a tablet, a foldable or a computer, the sections are always on the left. On a computer, Bodega sits in a centred frame with a sidebar that shows the names of the sections and what you still have to buy.
 - On wide screens, Shopping shows what is left at each shop and what comes back on the next trip, and Menu shows what “Fill basket” adds.

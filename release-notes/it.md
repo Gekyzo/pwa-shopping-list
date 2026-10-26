@@ -4,6 +4,10 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+No change.
+
+## 1.8.0 - 2026-10-26
+
 - Sugli schermi larghi, le Impostazioni non mostrano più due barre di scorrimento.
 - Su tablet, pieghevole o computer, le sezioni sono sempre a sinistra. Sul computer, Bodega sta in una cornice centrata con una barra laterale che mostra i nomi delle sezioni e quello che ti resta da comprare.
 - Sugli schermi larghi, Spesa mostra cosa resta in ogni negozio e cosa torna alla prossima spesa, e Menù cosa aggiunge «Riempi cestino».

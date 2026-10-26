@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.8.0 - 2026-10-26
+
 - En pantallas anchas, Ajustes ya no muestra dos barras de desplazamiento.
 - En una tableta, un plegable o un ordenador, las secciones están siempre a la izquierda. En un ordenador, Bodega ocupa un marco centrado con una barra lateral con los nombres de las secciones y lo que te queda por comprar.
 - En pantallas anchas, Compra muestra lo que queda en cada tienda y lo que vuelve en la próxima compra, y Menú lo que añade «Llenar cesta».

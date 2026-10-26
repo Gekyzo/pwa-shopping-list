@@ -4,6 +4,10 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+No change.
+
+## 1.8.0 - 2026-10-26
+
 - Em ecrãs largos, as Definições já não mostram duas barras de deslocamento.
 - Num tablet, num dobrável ou num computador, as secções ficam sempre à esquerda. No computador, a Bodega fica numa moldura centrada com uma barra lateral com os nomes das secções e o que ainda tens de comprar.
 - Em ecrãs largos, Compras mostra o que falta em cada loja e o que volta nas próximas compras, e Menu o que «Encher cesto» adiciona.

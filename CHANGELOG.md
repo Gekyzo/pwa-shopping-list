@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.8.0 - 2026-10-26
+
 - Settings from 600px: one scrollbar again. The screen-reader text of `.version-status` was `position: absolute` with no positioned ancestor, so it sat below the scrolling `main` and made the page scroll too, which moved the rail. `.version-status` is now `position: relative`.
 - Layout by four width classes (DSV-9, NAV-26): phone < 600px unchanged; from 600px the rail stands at the left with either hand (`--frame-side`, 0 until 1024px); from 1024px a centred frame of at most 1280px with a 232px labelled sidebar, the app mark (`nav-brand`) and the count of items left in Compra (`nav-count`). `--rail-width` is the frame margin plus the rail, so the toast, the `+` and the side sheets clear both. App-only exception to LAY-1/LAY-2 and DS-8. New text key `app.name`.
 - Panels of Compra and Menú from 600px (LIST-38, LIST-39, MENU-21): `src/ui/panels.js` renders Por tienda (`shopCounts`), Próxima compra (`comingBack`) and Para la cesta (`basketPreview`) in `side-panels`, the last child of `main`: below the content until 840px, a sticky grid column of `--panel-width` from 840px. Nine text keys `panels.*`.

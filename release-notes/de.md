@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.8.0 - 2026-10-26
+
 - Auf breiten Bildschirmen zeigen die Optionen keine zwei Scrollleisten mehr.
 - Auf Tablet, Faltgerät und Computer sind die Bereiche immer links. Am Computer steht Bodega in einem zentrierten Rahmen mit einer Seitenleiste, die die Namen der Bereiche und das, was du noch kaufen musst, zeigt.
 - Auf breiten Bildschirmen zeigt Einkauf, was in jedem Geschäft offen ist und was beim nächsten Einkauf zurückkommt, und Menü, was „Korb füllen“ hinzufügt.
