@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.7.1 - 2026-10-26
+
 - When you search in Shopping, the list stays at the top and no longer moves down to the search field.
 - If someone invites you to share their list while you share yours, you can now remove those people in the invite itself and then accept it.
 
