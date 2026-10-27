@@ -1,4 +1,4 @@
-const CACHE = 'shopping-shell-v25';
+const CACHE = 'shopping-shell-v26';
 
 const SHELL = [
   './',
@@ -128,10 +128,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// The cache key of a request: its URL with no query, so that `./?open=add` and `./` are one
+// entry and a fresh copy replaces the cached one.
+const keyOf = (url) => {
+  const key = new URL(url);
+  key.search = '';
+  return key.href;
+};
+
 // Fetches a fresh copy past the HTTP cache and stores it for the next launch.
 const refresh = async (cache, request) => {
   const response = await fetch(request.url, { cache: 'no-cache' });
-  if (response.ok) await cache.put(request.url, response.clone());
+  if (response.ok) await cache.put(keyOf(request.url), response.clone());
   return response;
 };
 
@@ -139,7 +147,7 @@ const refresh = async (cache, request) => {
 const respond = async (event) => {
   const { request } = event;
   const cache = await caches.open(CACHE);
-  const cached = await cache.match(request.url, { ignoreSearch: true });
+  const cached = await cache.match(keyOf(request.url));
   const fresh = refresh(cache, request);
   if (cached) {
     event.waitUntil(fresh.catch(() => {}));

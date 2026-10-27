@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- A app volta a abrir depois da atualização para a 1.9.0 quando a abres a partir de um atalho. As atualizações chegam agora também pelos atalhos.
 
 ## 1.9.0 - 2026-10-27
 

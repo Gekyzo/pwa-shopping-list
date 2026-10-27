@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Shell cache key (SW-6): `refresh` of `sw.js` stored a fresh copy under the full URL while `respond` matched with `ignoreSearch`, so a start from a shortcut (`./?open=active`) kept the cached `./` of the install for ever. With 1.9.0 the old `index.html` had no `twin-reach-group`, and `renderTwinReach` stopped the start. `keyOf` now drops the query for the match and for the store. The cache is `shopping-shell-v26`, so each phone loads the full shell again.
 
 ## 1.9.0 - 2026-10-27
 

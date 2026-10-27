@@ -6,8 +6,9 @@ import { LANGUAGES } from '#i18n';
 
 // sw.js is a classic script: run it with a stub `self` and return its pure functions.
 const source = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
-const { localizeManifest, staleCaches, SHELL } = vm.runInNewContext(`${source}\n;({ localizeManifest, staleCaches, SHELL })`, {
+const { localizeManifest, staleCaches, keyOf, SHELL } = vm.runInNewContext(`${source}\n;({ localizeManifest, staleCaches, keyOf, SHELL })`, {
   self: { addEventListener: () => {} },
+  URL,
 });
 
 // An object of the vm realm has another Object.prototype: compare a plain copy.
@@ -89,10 +90,17 @@ test('localizeManifest does not change the shortcuts of its input', () => {
 });
 
 test('the activate keeps the caches of another app', () => {
-  const keys = ['shopping-shell-v21', 'shopping-shell-v25', 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
+  const keys = ['shopping-shell-v21', 'shopping-shell-v26', 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
   assert.deepEqual(plain(staleCaches(keys)), ['shopping-shell-v21']);
 });
 
 test('SHELL has the release notes of each language, so they show offline (VER-20)', () => {
   for (const lang of LANGUAGES) assert.ok(SHELL.includes(`./release-notes/${lang}.md`), lang);
+});
+
+test('keyOf drops the query, so a start from a shortcut refreshes the cached page (SW-6)', () => {
+  const page = 'https://gekyzo.github.io/pwa-shopping-list/';
+  assert.equal(keyOf(`${page}?open=active`), page);
+  assert.equal(keyOf(page), page);
+  assert.equal(keyOf(`${page}src/app.js?v=1#top`), `${page}src/app.js#top`);
 });
