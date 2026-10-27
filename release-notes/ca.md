@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- Si comparteixes una llista, un article que és a la teva llista i a la compartida apareix ara en una sola fila a Totes, amb les dues etiquetes. Cada llista té el seu color. Un ajust nou tria si en marcar o treure aquesta fila canvia només la teva llista o les dues.
 
 ## 1.8.0 - 2026-10-26
 

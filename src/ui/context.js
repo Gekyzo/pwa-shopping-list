@@ -10,6 +10,8 @@ import {
   saveShopLists,
   loadTripEnd,
   saveTripEnd,
+  loadTwinReach,
+  saveTwinReach,
   loadTheme,
   saveTheme,
   loadDensity,
@@ -82,6 +84,8 @@ export let theme = storage ? loadTheme(storage) : 'system';
 export let shopLists = storage ? loadShopLists(storage) : 'show';
 // `save` makes Descartar the first choice of an item not bought at Terminar compra (TRIP-7).
 export let tripEnd = storage ? loadTripEnd(storage) : 'keep';
+// `both` makes a tick or a delete of a merged row of Todas reach the shared twin too (SHARE-16).
+export let twinReach = storage ? loadTwinReach(storage) : 'own';
 document.documentElement.dataset.theme = theme;
 // `compact` takes space out of the rows of a list, in styles.css.
 export let density = storage ? loadDensity(storage) : 'normal';
@@ -153,6 +157,8 @@ export const ui = {
   whatsNewOpen: false,
   // The item whose edit sheet is open, or null.
   editId: null,
+  // SHARE-16: the shared twin of the item of the edit sheet, when it opened from a merged row.
+  editTwin: null,
   // The meal whose sheet is open, as { day, meal }, or null.
   mealOpen: null,
   mealQuery: '',
@@ -350,4 +356,9 @@ export const setShopLists = (choice) => {
 export const setTripEnd = (choice) => {
   tripEnd = choice === 'save' ? 'save' : 'keep';
   if (storage) saveTripEnd(storage, tripEnd);
+};
+
+export const setTwinReach = (choice) => {
+  twinReach = choice === 'both' ? 'both' : 'own';
+  if (storage) saveTwinReach(storage, twinReach);
 };

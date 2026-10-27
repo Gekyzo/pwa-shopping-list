@@ -160,9 +160,56 @@ export const fillLists = (state, sharedBase, scope, newId) => {
 // SHARE-15: the list that an add goes to. An add from Todas goes to the own list.
 export const targetList = (choice) => (choice === 'shared' ? 'shared' : 'own');
 
-// SHARE-14: the count of each list chip, the items to buy of that list.
+// SHARE-14: two items are twins when one is in each list, in the same list of the trip, with the
+// same name (no case, no spaces at the ends), and neither is bought.
+const twinKey = (item) => `${item.list}\u0000${item.name.trim().toLowerCase()}`;
+
+// SHARE-14: Todas shows an own item and its shared twin as one row: the own item, with the id of
+// the twin in `twin`. A shared item is the twin of one own item at most. The marker lives only in
+// the view: the operations run on the combined state, by id.
+export const mergeTwins = (state) => {
+  const twins = new Map();
+  for (const entity of state.items) {
+    if (isShared(entity) && !entity.bought && !twins.has(twinKey(entity))) twins.set(twinKey(entity), entity.id);
+  }
+  const claimed = new Set();
+  const items = state.items.map((entity) => {
+    const twin = isShared(entity) || entity.bought ? undefined : twins.get(twinKey(entity));
+    if (twin === undefined || claimed.has(twin)) return entity;
+    claimed.add(twin);
+    return { ...entity, twin };
+  });
+  if (claimed.size === 0) return state;
+  return { ...state, items: items.filter((entity) => !claimed.has(entity.id)) };
+};
+
+// SHARE-16: the ids that a tick or a delete of a row acts on. `reach` is the setting of the
+// device: `own` the own item only, `both` the own item and its twin.
+export const twinIds = (item, reach) => (reach === 'both' && item.twin ? [item.id, item.twin] : [item.id]);
+
+// SHARE-16: the key of the toast of a delete: a merged row names the list or lists it left.
+export const deletedKey = (item, reach) => {
+  if (!item.twin) return 'toast.deleted';
+  return reach === 'both' ? 'toast.deletedBoth' : 'toast.deletedOwn';
+};
+
+// Runs `op(state, id)` for each id, one after the other. The first error returns with the state
+// as it was.
+export const acrossTwins = (state, ids, op) => {
+  let next = state;
+  for (const id of ids) {
+    const result = op(next, id);
+    if (result.error) return { state, error: result.error };
+    next = result.state;
+  }
+  return { state: next };
+};
+
+// SHARE-14: the count of each list chip, the items to buy of that list. Todas counts a pair of
+// twins once.
 export const listCounts = (state) => {
-  const toBuy = state.items.filter((item) => item.list === 'active' && !item.bought);
-  const shared = toBuy.filter(isShared).length;
-  return { all: toBuy.length, own: toBuy.length - shared, shared };
+  const toBuy = (items) => items.filter((item) => item.list === 'active' && !item.bought);
+  const items = toBuy(state.items);
+  const shared = items.filter(isShared).length;
+  return { all: toBuy(mergeTwins(state).items).length, own: items.length - shared, shared };
 };

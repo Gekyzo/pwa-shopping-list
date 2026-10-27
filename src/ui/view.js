@@ -1,7 +1,7 @@
 import * as store from '#store';
 import * as recipes from '#recipes';
 import * as shops from '#shops';
-import { listView, isShared, targetList } from '#lists';
+import { listView, mergeTwins, isShared, targetList } from '#lists';
 import { listName } from '#shares';
 import { state, sharing, ui, t } from '#ui/context';
 
@@ -13,20 +13,21 @@ export const inList = () => ui.view === 'active';
 // SHARE-14: the list choice of a member; null (Todas) with no share.
 export const listChoice = () => (sharing ? ui.listChoice : null);
 
-// The state of the list chip on the screen: its items only. The shop lists work inside it.
-export const listState = () => listView(state, listChoice());
+// True while Compra shows the items of both lists of a member, in Todas.
+export const mixed = () => sharing !== null && ui.listChoice === null;
+
+// The state of the list chip on the screen: its items only. The shop lists work inside it. In
+// Todas an item of both lists is one row (SHARE-14).
+export const listState = () => (mixed() ? mergeTwins(state) : listView(state, listChoice()));
 
 // The state of the shop list on the screen. The operations still run on the full state.
 export const viewState = () => (inList() ? shops.shopState(listState(), ui.shop) : state);
 
-// True while Compra shows the items of both lists of a member, in Todas.
-export const mixed = () => sharing !== null && ui.listChoice === null;
+// The tag of the list of an entity: its text, `Mía` or the name of the shared list, and its list.
+const tagText = (entity) => (isShared(entity) ? { text: listName(sharing), list: 'shared' } : { text: t('lists.ownTag'), list: 'own' });
 
-// The name of the list of an entity: `Mía` or the name of the shared list.
-const tagText = (entity) => (isShared(entity) ? listName(sharing) : t('lists.ownTag'));
-
-// SHARE-14: the tag of a row in Todas, the name of its list; null in the other choices.
-export const tagOf = (item) => (mixed() ? tagText(item) : null);
+// SHARE-14: the tags of a row in Todas: two for a merged row, own first; none in the other choices.
+export const tagsOf = (item) => (mixed() ? [tagText(item), ...(item.twin ? [tagText({ shared: true })] : [])] : []);
 
 // REC-38, MENU-20: with scope `all` the recipes and the meals of both lists show, each with the tag
 // of its list. With scope `list`, or with no share, they show no tag.

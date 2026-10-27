@@ -7,6 +7,7 @@ import {
   HAND_KEY,
   SHOP_LISTS_KEY,
   TRIP_END_KEY,
+  TWIN_REACH_KEY,
   load,
   loadState,
   save,
@@ -20,6 +21,8 @@ import {
   loadShopLists,
   saveShopLists,
   loadTripEnd,
+  loadTwinReach,
+  saveTwinReach,
   saveTripEnd,
   THEME_KEY,
   loadTheme,
@@ -430,6 +433,24 @@ test('saveTripEnd stores save and keep removes the key', () => {
   assert.equal(storage.getItem(TRIP_END_KEY), null);
 });
 
+test('loadTwinReach returns both when stored and own for no value and an unknown value', () => {
+  assert.equal(TWIN_REACH_KEY, 'shopping.twinReach');
+  assert.equal(loadTwinReach(fakeStorage({ [TWIN_REACH_KEY]: 'both' })), 'both');
+  assert.equal(loadTwinReach(fakeStorage()), 'own');
+  assert.equal(loadTwinReach(fakeStorage({ [TWIN_REACH_KEY]: 'own' })), 'own');
+  assert.equal(loadTwinReach(fakeStorage({ [TWIN_REACH_KEY]: 'other' })), 'own');
+});
+
+test('saveTwinReach stores both and own removes the key', () => {
+  const storage = fakeStorage();
+  assert.equal(saveTwinReach(storage, 'both'), true);
+  assert.equal(storage.getItem(TWIN_REACH_KEY), 'both');
+  assert.equal(saveTwinReach(storage, 'own'), true);
+  assert.equal(storage.getItem(TWIN_REACH_KEY), null);
+  assert.equal(saveTwinReach(storage, 'other'), true);
+  assert.equal(storage.getItem(TWIN_REACH_KEY), null);
+});
+
 test('the trip end save survives a save and a load, and keep goes back to the default', () => {
   const storage = fakeStorage();
   assert.equal(loadTripEnd(storage), 'keep');
@@ -786,7 +807,7 @@ test('resetAll removes every key of the app and keeps the keys of other apps', (
 });
 
 test('APP_KEYS holds the state, its corrupt copy and each preference of the device', () => {
-  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY, SEEN_VERSION_KEY, SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY, OFFLINE_KEY];
+  const keys = [STORAGE_KEY, CORRUPT_KEY, LANGUAGE_KEY, HAND_KEY, SHOP_LISTS_KEY, TRIP_END_KEY, TWIN_REACH_KEY, THEME_KEY, DENSITY_KEY, ONBOARDED_KEY, SWIPE_HINT_KEY, SEEN_VERSION_KEY, SESSION_KEY, SYNC_KEY, QUEUE_KEY, BEFORE_LOGIN_KEY, SHARED_STORAGE_KEY, SHARED_SYNC_KEY, SHARED_QUEUE_KEY, OFFLINE_KEY];
   assert.equal(OFFLINE_KEY, 'shopping.offline');
   assert.deepEqual([...APP_KEYS].sort(), [...keys].sort());
 });

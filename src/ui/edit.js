@@ -1,12 +1,12 @@
 import * as store from '#store';
 import * as shops from '#shops';
 import * as aisles from '#aisles';
-import { listOf } from '#lists';
-import { $, el, state, ui, t, apply, render, onListOf } from '#ui/context';
+import { listOf, twinIds, acrossTwins, deletedKey } from '#lists';
+import { $, el, state, ui, t, twinReach, apply, render, onListOf } from '#ui/context';
 import { bindField, flashSaved, applySaved, clearSaved } from '#ui/controls';
 
 export const openEdit = (item) => {
-  Object.assign(ui, { editId: item.id, openId: null });
+  Object.assign(ui, { editId: item.id, editTwin: item.twin ?? null, openId: null });
   $('edit-name').value = item.name;
   $('edit-quantity').value = item.quantity;
   $('edit-shop').value = '';
@@ -84,11 +84,15 @@ const submitShop = () => {
 const editItem = () => state.items.find((entry) => entry.id === ui.editId);
 
 // Eliminar of the foot deletes the item, with Deshacer, and closes the sheet.
+// SHARE-16: from a merged row it reaches the twin as the setting says.
 const deleteItem = () => {
-  const item = editItem();
-  if (!item) return;
+  const found = editItem();
+  if (!found) return;
+  const twin = state.items.some((entry) => entry.id === ui.editTwin) ? ui.editTwin : undefined;
+  const item = twin ? { ...found, twin } : found;
+  const result = acrossTwins(state, twinIds(item, twinReach), store.deleteItem);
   // The render of the delete closes the sheet: its item is gone.
-  if (apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) })) ui.editId = null;
+  if (apply(result, { undoText: t(deletedKey(item, twinReach), { name: item.name }) })) ui.editId = null;
 };
 
 // SHARE-15: a rename runs in the list of its item, so the name rule holds inside that list. The

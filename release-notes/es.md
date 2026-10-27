@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Si compartes una lista, un artículo que está en tu lista y en la compartida aparece ahora en una sola fila en Todas, con las dos etiquetas. Cada lista tiene su color. Un ajuste nuevo elige si al marcar o quitar esa fila cambia solo tu lista o las dos.
 
 ## 1.8.0 - 2026-10-26
 

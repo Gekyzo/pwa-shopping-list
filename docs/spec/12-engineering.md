@@ -36,7 +36,7 @@
 | `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and the `Guardado` of a sheet save | `sheets`, `ui/context` |
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `lists`, `shops`, `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `reorder`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
+| `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `lists`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
 | `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `store`, `recipes`, `menu`, `lists`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/view` |
 | `src/ui/panels.js` | The panels of `Compra` and `Menú` from 600px: Por tienda, Próxima compra, Para la cesta | `store`, `shops`, `menu`, `ui/context`, `ui/view` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `lists`, `i18n`, `ui/context`, `ui/recipes`, `ui/nav`, `ui/rows`, `ui/view` |
@@ -104,7 +104,7 @@
 | Test file | Covers |
 |---|---|
 | `tests/store.test.js` | Items, the trip, the order, the search, the figures, the bring back of a saved item |
-| `tests/lists.test.js` | The combined state of the own list and the shared list: combine, split, the view of one list, an operation in one list (SHARE-12) |
+| `tests/lists.test.js` | The combined state of the own list and the shared list: combine, split, the view of one list, an operation in one list (SHARE-12), the twins of Todas (SHARE-14, SHARE-16) |
 | `tests/recipes.test.js` | Recipes, the send, the groups, the search, the sample recipe |
 | `tests/shops.test.js` | Shops and the list by shop |
 | `tests/aisles.test.js` | Aisles, the aisle of an item and the list by aisle |

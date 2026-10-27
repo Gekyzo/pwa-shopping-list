@@ -19,6 +19,9 @@ import {
   theme,
   density,
   tripEnd,
+  twinReach,
+  setTwinReach,
+  sharing,
   textOf,
   showToast,
   apply,
@@ -153,6 +156,14 @@ const renderTripEnd = () => {
   });
 };
 
+// SHARE-16: only a member has merged rows, so only a member sees the setting.
+export const renderTwinReach = () => {
+  $('twin-reach-group').hidden = sharing === null;
+  document.querySelectorAll('[data-twin-reach]').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.twinReach === twinReach));
+  });
+};
+
 export const bind = () => {
   $('export').addEventListener('click', () => {
     // SYNC-9: the backup holds the own list only; the shared list belongs to its owner.
@@ -196,6 +207,14 @@ export const bind = () => {
     if (!button) return;
     setTripEnd(button.dataset.tripEnd);
     renderTripEnd();
+    render();
+  });
+
+  $('twin-reach').addEventListener('click', (event) => {
+    const button = event.target.closest('[data-twin-reach]');
+    if (!button) return;
+    setTwinReach(button.dataset.twinReach);
+    renderTwinReach();
     render();
   });
 

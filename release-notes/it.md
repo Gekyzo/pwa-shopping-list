@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Se condividi una lista, un articolo che è nella tua lista e in quella condivisa ora appare in una sola riga in Tutte, con entrambe le etichette. Ogni lista ha il suo colore. Una nuova impostazione sceglie se spuntare o eliminare quella riga cambia solo la tua lista o entrambe.
 
 ## 1.8.0 - 2026-10-26
 
