@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.9.0 - 2026-10-27
+
 - If you share a list, an item that is in your list and in the shared list now shows as one row in All, with both tags. Each list has its own colour. A new setting chooses whether a tick or a delete of that row changes your list only or both lists.
 
 ## 1.8.0 - 2026-10-26

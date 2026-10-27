@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.9.0 - 2026-10-27
+
 - Wenn du eine Liste teilst, steht ein Artikel, der in deiner Liste und in der geteilten Liste ist, jetzt in einer Zeile unter Alle, mit beiden Etiketten. Jede Liste hat ihre Farbe. Eine neue Einstellung wählt, ob Abhaken oder Löschen dieser Zeile nur deine Liste oder beide ändert.
 
 ## 1.8.0 - 2026-10-26
