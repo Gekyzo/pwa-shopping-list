@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- L'app si apre di nuovo dopo l'aggiornamento alla 1.9.0 quando la avvii da una scorciatoia. Gli aggiornamenti arrivano ora anche dalle scorciatoie.
 
 ## 1.9.0 - 2026-10-27
 
