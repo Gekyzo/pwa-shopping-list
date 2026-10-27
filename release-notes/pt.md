@@ -4,6 +4,10 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+No change.
+
+## 1.9.0 - 2026-10-27
+
 - Se partilhas uma lista, um artigo que está na tua lista e na partilhada aparece agora numa só linha em Todas, com as duas etiquetas. Cada lista tem a sua cor. Uma nova definição escolhe se marcar ou eliminar essa linha muda só a tua lista ou as duas.
 
 ## 1.8.0 - 2026-10-26
