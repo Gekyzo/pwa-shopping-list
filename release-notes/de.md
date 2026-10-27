@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.9.1 - 2026-10-27
+
 - Die App öffnet sich nach dem Update auf 1.9.0 wieder, wenn du sie über eine Verknüpfung startest. Updates kommen jetzt auch über die Verknüpfungen an.
 
 ## 1.9.0 - 2026-10-27

@@ -4,6 +4,10 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+No change.
+
+## 1.9.1 - 2026-10-27
+
 - L'app s'ouvre de nouveau après la mise à jour 1.9.0 quand tu la lances depuis un raccourci. Les mises à jour arrivent aussi par les raccourcis.
 
 ## 1.9.0 - 2026-10-27
