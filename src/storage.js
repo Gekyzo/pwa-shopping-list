@@ -458,6 +458,30 @@ export const SHARED_STORAGE_KEY = 'shopping.shared.v1';
 export const SHARED_SYNC_KEY = 'shopping.shared.sync';
 export const SHARED_QUEUE_KEY = 'shopping.shared.queue';
 
+// SHARE-16: what a tick or a delete of a merged row of Todas reaches: the `own` item only, or
+// `both` items. A preference of the device, as the hand is.
+export const TWIN_REACH_KEY = 'shopping.twinReach';
+
+// `both` when stored, else `own`.
+export const loadTwinReach = (storage) => {
+  try {
+    return storage.getItem(TWIN_REACH_KEY) === 'both' ? 'both' : 'own';
+  } catch {
+    return 'own';
+  }
+};
+
+// `own` is the choice of an app with no choice: it removes the key.
+export const saveTwinReach = (storage, choice) => {
+  try {
+    if (choice === 'both') storage.setItem(TWIN_REACH_KEY, 'both');
+    else storage.removeItem(TWIN_REACH_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // Every key that the app writes to the storage: the state, its corrupt copy and each preference of the
 // device. Borrar todos los datos removes them all (BACKUP-7).
 export const APP_KEYS = [
@@ -467,6 +491,7 @@ export const APP_KEYS = [
   HAND_KEY,
   SHOP_LISTS_KEY,
   TRIP_END_KEY,
+  TWIN_REACH_KEY,
   THEME_KEY,
   DENSITY_KEY,
   ONBOARDED_KEY,

@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Si tu partages une liste, un article qui est dans ta liste et dans la liste partagée s’affiche maintenant sur une seule ligne dans Toutes, avec les deux étiquettes. Chaque liste a sa couleur. Un nouveau réglage choisit si cocher ou supprimer cette ligne change seulement ta liste ou les deux.
 
 ## 1.8.0 - 2026-10-26
 

@@ -145,8 +145,13 @@ person of a share.
   list. The shop lists work inside the list chip: their chips, the dock and its picker show the
   shops of that list; while the list chips show, the entry of all the shops (the shop chip, the
   dock and its picker) is `Todas las tiendas`, apart from the list chip **Todas**. In **Todas**
-  each row shows a tag of its list: `Mía` or the name of the shared list, a neutral `pill ghost`
-  (the green `pill` means done); the other chips show no tag. An item of one name in both lists shows as two rows. A
+  each row shows a tag of its list: `Mía` or the name of the shared list, a `list-tag` outline in
+  the colour of its list, blue (`--list-own`) for `Mía` and amber (`--list-shared`) for the shared
+  list (no tag is green: the green `pill` means done); the other chips show no tag. An own item
+  and a shared item of one name (no case, no spaces at the ends) in the same list of the trip,
+  neither of them bought, are twins: **Todas** shows them as one row, the own item, with both tags,
+  `Mía` first, and counts it once, as the count of the sidebar (NAV-26) does. The other chips show each item in its own list. A bought item
+  has no twin, so a tick that reaches one item only splits the row in two. A
   manual reorder does not start in **Todas**. The owner, and a user with no share, see no list
   chips and no tags. The choice is not stored: it is **Todas** at each start and at the end of the
   share.
@@ -159,6 +164,14 @@ person of a share.
   lists in the own order: in the name order a reorder of either list switches the own order to
   custom, with the own items kept in the name order; the order of the shared part stays its own.
   **Terminar compra** ends the trip of both lists in one operation.
+
+- **SHARE-16** A tick and a delete of a merged row of **Todas** (SHARE-14) reach what the setting
+  **Artículo en las dos listas** of `Ajustes` says: `Mi lista` (the default) the own item only,
+  `Las dos` the own item and its twin. No choice reaches the shared item only. A delete names the
+  list in its toast: `"{name}" eliminado de Mi lista.` or `"{name}" eliminado de las dos listas.`;
+  `Deshacer` puts back each item that it removed. The edit sheet of a merged row edits the own
+  item; its `Eliminar` follows the setting, as the delete of the row. Only a member sees the setting. It is a preference of the device, stored in
+  `shopping.twinReach`: the value `both` for `Las dos`.
 
 ## Limits
 

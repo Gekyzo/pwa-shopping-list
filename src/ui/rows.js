@@ -1,8 +1,9 @@
 import * as store from '#store';
 import { reached, settle } from '#swipe';
 import { loadSwipeHint, saveSwipeHint } from '#storage';
-import { SIDE_BUTTON, DRAG_START, HINT_WAIT_MS, HINT_SHIFT, el, storage, state, ui, t, apply, render, guardClick } from '#ui/context';
-import { isOpen, searching, shownGroup, mixed, tagOf } from '#ui/view';
+import { SIDE_BUTTON, DRAG_START, HINT_WAIT_MS, HINT_SHIFT, el, storage, state, ui, t, twinReach, apply, render, guardClick } from '#ui/context';
+import { twinIds, acrossTwins, deletedKey } from '#lists';
+import { isOpen, searching, shownGroup, mixed, tagsOf } from '#ui/view';
 import { leave, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
@@ -28,12 +29,15 @@ const editAction = (item) => iconButton('edit', t('row.edit'), () => openEdit(it
 const repeatAction = (item) =>
   iconButton('repeat', t(item.recurrent ? 'row.noRepeat' : 'row.repeat'), () => apply(store.toggleRecurrent(state, item.id)), { labelled: true });
 
+// SHARE-16: a tick or a delete of a merged row reaches the twin only when the setting says both.
+const onRow = (item, op) => acrossTwins(state, twinIds(item, twinReach), op);
+
 // Its visible name is Eliminar; a screen reader also hears the name of the item.
 const deleteAction = (item) => {
   const button = iconButton(
     'trash',
     t('sheet.delete'),
-    () => apply(store.deleteItem(state, item.id), { undoText: t('toast.deleted', { name: item.name }) }),
+    () => apply(onRow(item, store.deleteItem), { undoText: t(deletedKey(item, twinReach), { name: item.name }) }),
     { variant: 'danger', labelled: true },
   );
   button.setAttribute('aria-label', t('row.delete', { name: item.name }));
@@ -64,16 +68,16 @@ const itemRow = (item, also) => {
     }
     check.checked = true;
     // A ticked item goes into the collapsed section, so a wrong tap needs an undo.
-    leave(item, () => apply(store.toggleBought(state, item.id), { undoText: t('toast.bought', { name: item.name }) }));
+    leave(item, () => apply(onRow(item, store.toggleBought), { undoText: t('toast.bought', { name: item.name }) }));
   };
   const check = el('input', { type: 'checkbox', className: 'item-row-check', checked: item.bought, tabIndex: -1 });
   check.setAttribute('aria-hidden', 'true');
   const name = el('button', { type: 'button', className: 'item-row-name' }, nameParts(item, also));
   name.setAttribute('role', 'checkbox');
   name.setAttribute('aria-checked', String(item.bought));
-  // SHARE-14: in Todas the end slot shows the list of the item before the edit button.
-  const tag = tagOf(item);
-  const end = tag === null ? [editButton(item)] : [tagNode(tag), editButton(item)];
+  // SHARE-14: in Todas the end slot shows the list of the item, or both lists of a merged row,
+  // before the edit button.
+  const end = [...tagsOf(item).map(tagNode), editButton(item)];
   const row = [check, name, el('div', { className: 'item-row-end' }, end)];
   return {
     row,
@@ -83,9 +87,10 @@ const itemRow = (item, also) => {
   };
 };
 
-// SHARE-14: the tag of the list of a row, one look in Compra, Recetas and Menú.
-// The tag of a list is neutral: the green `pill` means done.
-export const tagNode = (tag) => el('span', { className: 'pill ghost', textContent: tag, title: tag });
+// SHARE-14: the tag of the list of a row, one look in Compra, Recetas and Menú: an outline in the
+// colour of its list. The green `pill` means done, so no list tag is green.
+export const tagNode = (tag) =>
+  el('span', { className: tag.list === 'shared' ? 'pill list-tag shared' : 'pill list-tag own', textContent: tag.text, title: tag.text });
 
 const shift = (side, widths) => (side === 'start' ? widths.start : side === 'end' ? -widths.end : 0);
 

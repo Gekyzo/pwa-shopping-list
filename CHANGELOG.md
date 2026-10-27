@@ -10,7 +10,8 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Twins in Todas (SHARE-14, SHARE-16): `mergeTwins` of `src/lists.js` folds a not-bought shared item into the not-bought own item of the same name and trip list (no case, trimmed), marked `twin` in the view only; `listState` uses it in Todas, and `listCounts().all` counts a pair once. A tick or a delete of a merged row runs `acrossTwins` over `twinIds(item, twinReach)`: the own item, or both with the new device setting `shopping.twinReach` = `both` (section `twin-reach-group` of Ajustes, members only). Delete toasts `toast.deletedOwn` and `toast.deletedBoth`; text keys `settings.twinReach`, `settings.twinReachHint`, `settings.twinBoth` in the 7 locales.
+- List tags (SHARE-14): the `pill ghost` of a list becomes `pill list-tag own|shared`, an outline in `--list-own` (blue) or `--list-shared` (amber), in Compra, Recetas and Menú.
 
 ## 1.8.0 - 2026-10-26
 

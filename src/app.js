@@ -1,5 +1,6 @@
 import * as store from '#store';
 import * as shops from '#shops';
+import { listCounts } from '#lists';
 import { bindSheetDrag } from '#ds/sheet';
 import { shortcutStart, fabState } from '#sections';
 import { sheetOpen, closeTop } from '#layers';
@@ -51,7 +52,7 @@ import {
 import { renderSheet, openSheet, closeSheet, bind as bindAdd } from '#ui/add';
 import { closeOnboarding, turnOnboarding, bind as bindOnboarding } from '#ui/onboarding';
 import { startWhatsNew, isWhatsNewOpen, closeWhatsNew, bind as bindWhatsNew } from '#ui/whatsnew';
-import { renderVersion, renderSample, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
+import { renderVersion, renderSample, renderTwinReach, readVersion, applyLanguage, bind as bindSettings } from '#ui/settings';
 import { renderInstall, bind as bindInstall } from '#ui/install';
 import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
 import { renderShare, closeShare, bind as bindShare } from '#ui/share';
@@ -131,6 +132,7 @@ const renderAll = () => {
   renderVersion();
   renderSample();
   renderInstall();
+  renderTwinReach();
   renderTrip();
   renderMenuActions();
   renderPanels();
@@ -153,7 +155,9 @@ const renderAll = () => {
     else button.removeAttribute('aria-current');
   });
   // The sidebar from 1024px counts the items left in Compra (NAV-26).
-  $('nav-count').textContent = summary.left > 0 ? String(summary.left) : '';
+  // A pair of twins of a member counts once, as in Todas (SHARE-14).
+  const left = listCounts(state).all;
+  $('nav-count').textContent = left > 0 ? String(left) : '';
   // The foot of the rail says that the lists stay on this device (NAV-26).
   $('nav-account').hidden = signedIn();
 

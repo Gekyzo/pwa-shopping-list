@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { emptyState, addItem, toggleBought } from '#store';
+import { emptyState, addItem, toggleBought, deleteItem } from '#store';
 import { sendRecipe } from '#recipes';
 import { setMeal, menuWeek, dishRecipe } from '#menu';
-import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts, reorderList, fillLists } from '#lists';
+import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts, reorderList, fillLists, mergeTwins, twinIds, acrossTwins, deletedKey } from '#lists';
 
 const item = (id, name, extra = {}) => ({ id, name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '', ...extra });
 const recipe = (id, name) => ({ id, name, products: [] });
@@ -145,7 +145,8 @@ test('listCounts counts the items to buy of each list', () => {
   const base = shared();
   const sharedState = { ...base, items: [...base.items, item('s3', 'Sal fina', { bought: true }), item('s4', 'Arroz', { list: 'saved' })] };
   const combined = combine({ ...own(), items: [...own().items, item('o3', 'Agua', { recurrent: true })] }, sharedState, 'list');
-  assert.deepEqual(listCounts(combined), { all: 5, own: 3, shared: 2 });
+  // Leche is in both lists: Todas counts it once (SHARE-14).
+  assert.deepEqual(listCounts(combined), { all: 4, own: 3, shared: 2 });
 });
 
 test('listCounts of a state with no item is zero for each list', () => {
@@ -352,4 +353,66 @@ test('fillLists that changes nothing gives the same state', () => {
   const result = fillLists(combined, sent, 'all');
   assert.equal(result.state, combined);
   assert.deepEqual([result.added, result.already], [0, 1]);
+});
+
+test('mergeTwins folds a shared item of the same name into the own item', () => {
+  const combined = combine(own(), shared(), 'list');
+  const merged = mergeTwins(combined);
+  assert.deepEqual(merged.items.map((entry) => entry.id), ['o1', 'o2', 'shared:s2']);
+  assert.equal(merged.items[0].twin, 'shared:s1');
+  assert.equal(merged.items[1].twin, undefined);
+  assert.equal(combined.items.length, 4);
+  assert.equal(combined.items[0].twin, undefined);
+});
+
+test('mergeTwins matches names with no case and no spaces at the ends', () => {
+  const combined = combine(own(), { ...shared(), items: [item('s1', '  leCHE ')] }, 'list');
+  assert.equal(mergeTwins(combined).items[0].twin, 'shared:s1');
+});
+
+test('mergeTwins does not merge a bought item, nor items of two lists', () => {
+  const bought = combine(own(), { ...shared(), items: [item('s1', 'Leche', { bought: true })] }, 'list');
+  assert.equal(mergeTwins(bought), bought);
+  const ownBought = combine({ ...own(), items: [item('o1', 'Leche', { bought: true })] }, shared(), 'list');
+  assert.equal(mergeTwins(ownBought), ownBought);
+  const saved = combine(own(), { ...shared(), items: [item('s1', 'Leche', { list: 'saved' })] }, 'list');
+  assert.equal(mergeTwins(saved), saved);
+});
+
+test('mergeTwins folds one shared item only into one own item', () => {
+  const combined = combine(own(), { ...shared(), items: [item('s1', 'Leche'), item('s9', 'leche')] }, 'list');
+  assert.deepEqual(mergeTwins(combined).items.map((entry) => entry.id), ['o1', 'o2', 'shared:s9']);
+});
+
+test('mergeTwins of a state with no share returns the same state', () => {
+  const state = own();
+  assert.equal(mergeTwins(state), state);
+});
+
+test('twinIds reaches the twin only with both', () => {
+  assert.deepEqual(twinIds({ id: 'o1', twin: 'shared:s1' }, 'own'), ['o1']);
+  assert.deepEqual(twinIds({ id: 'o1', twin: 'shared:s1' }, 'both'), ['o1', 'shared:s1']);
+  assert.deepEqual(twinIds({ id: 'o1' }, 'both'), ['o1']);
+});
+
+test('acrossTwins ticks or deletes each id in one state', () => {
+  const combined = combine(own(), shared(), 'list');
+  const ticked = acrossTwins(combined, ['o1', 'shared:s1'], toggleBought);
+  assert.deepEqual(ticked.state.items.filter((entry) => entry.bought).map((entry) => entry.id), ['o1', 'shared:s1']);
+  const deleted = acrossTwins(combined, ['o1', 'shared:s1'], deleteItem);
+  assert.deepEqual(deleted.state.items.map((entry) => entry.id), ['o2', 'shared:s2']);
+  assert.equal(combined.items.length, 4);
+});
+
+test('acrossTwins returns the first error with no change', () => {
+  const combined = combine(own(), shared(), 'list');
+  const result = acrossTwins(combined, ['o1', 'missing'], deleteItem);
+  assert.ok(result.error);
+  assert.equal(result.state, combined);
+});
+
+test('deletedKey names the lists of a merged row', () => {
+  assert.equal(deletedKey({ id: 'o1' }, 'both'), 'toast.deleted');
+  assert.equal(deletedKey({ id: 'o1', twin: 'shared:s1' }, 'own'), 'toast.deletedOwn');
+  assert.equal(deletedKey({ id: 'o1', twin: 'shared:s1' }, 'both'), 'toast.deletedBoth');
 });

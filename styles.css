@@ -8,6 +8,10 @@
     --primary: var(--done);
     --on-primary: var(--on-done);
     --primary-soft: var(--done-soft);
+    /* The tags of the lists of a member (SHARE-14): blue for the own list, amber for the shared
+       one. Neither is green, the colour of done. */
+    --list-own: light-dark(#2a5db8, #8fb5f7);
+    --list-shared: light-dark(#9a5b00, #f2b65c);
   }
 
   /* From 600px (DSV-9) the rail is at the start with either hand; --frame-side is the end margin
@@ -725,6 +729,25 @@
     text-overflow: ellipsis;
   }
 
+  /* @component list-tag
+     @scope list
+     @summary The tag of the list of a row of a member, an outline in the colour of its list: --list-own for Mía, --list-shared for the shared list (SHARE-14). A merged row shows both.
+     @variant own  The tag of the own list, in --list-own.
+     @variant shared  The tag of the shared list, in --list-shared.
+     @example <span class="pill list-tag own">Mía</span> <span class="pill list-tag shared">Ana</span> */
+  .pill.list-tag {
+    border: 1px solid currentColor;
+    background: none;
+  }
+
+  .pill.list-tag.own {
+    color: var(--list-own);
+  }
+
+  .pill.list-tag.shared {
+    color: var(--list-shared);
+  }
+
   /* Below 600px the dock holds the shop list of Compra and the search. */
   body:has(.dock:not([hidden])) .shop-lists,
   body:has(.dock:not([hidden])) .search {
@@ -1052,7 +1075,7 @@
   /* @component meal-planned
      @scope menu
      @summary The two meals of a slot in the meal sheet of a member, each with the tag of its list and its own Quitar, apart from the field below (MENU-20).
-     @example <ul class="products meal-planned"><li class="product"><span class="product-text">Sopa</span><span class="pill ghost">Mía</span><button class="button icon" type="button">✕</button></li><li class="product"><span class="product-text">Paella</span><span class="pill ghost">Ana</span><button class="button icon" type="button">✕</button></li></ul> */
+     @example <ul class="products meal-planned"><li class="product"><span class="product-text">Sopa</span><span class="pill list-tag own">Mía</span><button class="button icon" type="button">✕</button></li><li class="product"><span class="product-text">Paella</span><span class="pill list-tag shared">Ana</span><button class="button icon" type="button">✕</button></li></ul> */
   .products.meal-planned {
     margin: 0 0 var(--space-2);
   }
