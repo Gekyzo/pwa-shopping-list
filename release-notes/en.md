@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.9.1 - 2026-10-27
+
 - The app opens again after the update to 1.9.0 when you start it from a shortcut. Updates now also arrive through the shortcuts.
 
 ## 1.9.0 - 2026-10-27

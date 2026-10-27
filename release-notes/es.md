@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.9.1 - 2026-10-27
+
 - La app vuelve a abrirse tras actualizar a la 1.9.0 si la abres desde un acceso directo. Las actualizaciones llegan también por los accesos directos.
 
 ## 1.9.0 - 2026-10-27

@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.9.1 - 2026-10-27
+
 - L'app torna a obrir-se després d'actualitzar a la 1.9.0 si l'obres des d'una drecera. Les actualitzacions arriben també per les dreceres.
 
 ## 1.9.0 - 2026-10-27
