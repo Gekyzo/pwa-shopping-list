@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- In Novità, i nomi dei pulsanti appaiono in grassetto, senza asterischi.
 
 ## 1.10.1 - 2026-10-30
 

@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- En Novedades, los nombres de los botones se ven en negrita, sin asteriscos.
 
 ## 1.10.1 - 2026-10-30
 

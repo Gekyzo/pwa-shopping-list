@@ -131,7 +131,8 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **VER-21** The **Novedades** sheet has the title `whatsNew.title` and `whatsNew.close` (`Cerrar`), and
   one block for each version, newest first: `whatsNew.version` with the day in the long form of
   the language, then the notes as a list. A `` `name` `` in a note shows as the key of the
-  walkthrough. The veil, `Cerrar`, a drag down, `Escape` and the back of the phone close it; it is
+  walkthrough, and a text between two `**` shows in bold, keys in it too; a `**` with no pair
+  stays as text. The veil, `Cerrar`, a drag down, `Escape` and the back of the phone close it; it is
   a sheet of `closeTop` (NAV-25).
 - **VER-22** **Ayuda** in **Ajustes** has the row `settings.whatsNew` after the introduction, which
   shows the sheet with every version. The row is hidden while the notes have no version.
