@@ -14,34 +14,16 @@
     --list-shared: light-dark(#9a5b00, #f2b65c);
   }
 
-  /* From 600px (DSV-9) the rail is at the start with either hand; --frame-side is the end margin
-     of the frame, 0 until the desktop frame of 1024px. */
+  /* The columns of the app from 600px; the frame, the gutter and --page-max are the design system's
+     (LAY-1). */
   @media (min-width: 600px) {
     :root {
-      --frame-side: 0px;
       /* The column of the panels of Compra and Menú from 840px (LIST-38). */
       --panel-width: clamp(240px, 30vw, 320px);
       /* The column of Ajustes from 840px (NAV-27). */
       --settings-max: 960px;
-      /* The height of the header, written by app.js; the sheets from 840px start below it (DSV-6). */
-      --header-height: 0px;
-      /* The side padding of the content when it has a column at its end (the panels, a sheet): the
-         same value for main, the header and the sheet, so their edges meet. */
-      --panel-pad: max(var(--space-6), (100vw - var(--rail-width) - var(--frame-side) - var(--content-max) - var(--panel-width) - var(--space-6)) / 2);
       /* The recipe pane (REC-39): half the area beside the rail, at most 480px. */
-      --pane-detail: min(480px, (100vw - var(--rail-width) - var(--frame-side)) / 2 - var(--space-6));
-    }
-  }
-
-  /* From 1024px (DSV-9) the app stands in one frame of at most --frame-max, centred, and the rail is
-     a labelled sidebar at the start of it. --rail-width is the frame's side margin plus the sidebar,
-     so each part that clears the rail clears both. */
-  @media (min-width: 1024px) {
-    :root {
-      --frame-max: 1280px;
-      --sidebar-width: 232px;
-      --frame-side: max(0px, (100vw - var(--frame-max)) / 2);
-      --rail-width: calc(var(--frame-side) + var(--sidebar-width));
+      --pane-detail: min(480px, (100vw - var(--rail-width) - var(--frame-side)) / 2 - var(--gutter));
     }
   }
 }
@@ -61,17 +43,12 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* From 600px (LAY-1, DSV-9): the fixed rail stands at the start with either hand, the body pads the
-     rail at the start and the frame's margin at the end (LAY-4), and the content is one column of at
-     most --content-max, centred beside the rail. */
+  /* From 600px the fixed rail stands at the start with either hand (LAY-2): the body pads the rail at
+     the start and the frame's end margin at the end (LAY-4). */
   @media (min-width: 600px) {
     body {
       padding-left: calc(var(--rail-width) + env(safe-area-inset-left));
       padding-right: calc(var(--frame-side) + env(safe-area-inset-right));
-    }
-
-    main {
-      padding-inline: max(0%, (100% - var(--content-max)) / 2);
     }
   }
 
@@ -95,174 +72,14 @@
 
 @layer components {
   /* @extends app-header */
-  /* From 600px the content of the header lines up with the column of main. The progress bar of
-     Compra is the last child and takes a full line below the title and the buttons. */
+  /* The progress bar of Compra is the last child and takes a full line below the title and the
+     buttons. */
   .app-header {
     flex-wrap: wrap;
   }
 
   .app-header .progress {
     flex: none;
-  }
-
-  @media (min-width: 600px) {
-    .app-header {
-      padding-inline: max(var(--space-4), (100% - var(--content-max)) / 2 + var(--space-4));
-    }
-  }
-
-  /* @extends nav-bar
-     @part nav-brand  The mark and the name of the app at the top of the sidebar, from 1024px only.
-     @part nav-count  The count of the items left in Compra, at the end of its item, from 1024px only.
-     @part nav-foot   At the foot of the rail, with no session: the offline icon, and from 1024px the text Sin cuenta (NAV-26).
-     @part nav-foot-text  The text of nav-foot, shown from 1024px. */
-  /* From 600px the rail is at the start with either hand (DSV-9, NAV-26); the parts that sit at the
-     side of the hand clear the frame's end margin, 0 below 1024px. From 1024px the rail is a sidebar
-     of --sidebar-width at the start of the frame: the brand on top, then one row for each section,
-     the current one on a --secondary pill. */
-  .nav-brand,
-  .nav-count,
-  .nav-foot {
-    display: none;
-  }
-
-  @media (min-width: 600px) {
-    .nav-bar > .nav-foot:not([hidden]) {
-      position: absolute;
-      bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
-      inset-inline: 0;
-      display: flex;
-      justify-content: center;
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .nav-foot-text {
-      display: none;
-    }
-  }
-
-  @media (min-width: 600px) {
-    :root[data-hand="right"] .nav-bar {
-      inset-inline-start: var(--frame-side);
-      right: auto;
-      width: calc(var(--rail-width) + env(safe-area-inset-left));
-      padding-right: 0;
-      padding-inline-start: env(safe-area-inset-left);
-      border-left: 0;
-      border-inline-end: 1px solid var(--line);
-    }
-
-    :root[data-hand="right"] .fab {
-      right: calc(var(--frame-side) + env(safe-area-inset-right) + var(--space-4));
-    }
-
-    .toast {
-      right: calc(var(--frame-side) + env(safe-area-inset-right) + var(--space-3));
-    }
-
-    :root[data-hand="right"] .toast {
-      left: calc(var(--rail-width) + env(safe-area-inset-left) + var(--space-3));
-      right: calc(var(--frame-side) + env(safe-area-inset-right) + var(--space-3));
-    }
-  }
-
-  @media (min-width: 840px) {
-    :root[data-hand="right"] .sheet-layer:has(.sheet-head) {
-      padding-inline-end: calc(var(--frame-side) + env(safe-area-inset-right));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .nav-bar,
-    :root[data-hand="right"] .nav-bar {
-      inset-inline-start: var(--frame-side);
-      right: auto;
-      width: var(--sidebar-width);
-      justify-content: flex-start;
-      gap: var(--space-half);
-      padding: var(--space-6) var(--space-3);
-      padding-inline-start: calc(var(--space-3) + env(safe-area-inset-left));
-      border: 0;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: 0 var(--space-2) var(--space-5);
-      font-size: var(--text-h);
-      font-weight: var(--weight-strong);
-    }
-
-    .nav-brand img {
-      border-radius: var(--radius-m);
-    }
-
-    .nav-item {
-      flex-direction: row;
-      justify-content: flex-start;
-      gap: var(--space-3);
-      height: var(--tap);
-      padding-inline: var(--space-3);
-      border-radius: var(--radius-m);
-      font-size: var(--text-m);
-    }
-
-    .nav-item:hover {
-      background: var(--surface-2);
-      color: var(--text);
-    }
-
-    .nav-item[aria-current="page"] {
-      background: var(--secondary);
-    }
-
-    .nav-item[aria-current="page"] .icon {
-      padding: 0;
-      background: none;
-    }
-
-    .nav-bar > .nav-foot:not([hidden]) {
-      justify-content: flex-start;
-      gap: var(--space-2);
-      padding-inline: var(--space-3) var(--space-3);
-      font-size: var(--text-s);
-    }
-
-    .nav-foot-text {
-      display: inline;
-    }
-
-    .nav-count {
-      display: block;
-      margin-inline-start: auto;
-      color: var(--muted);
-      font-size: var(--text-s);
-      font-weight: var(--weight-normal);
-      font-variant-numeric: tabular-nums;
-    }
-  }
-
-  /* @extends app-header
-     @part header-add  The add of the view (Añadir artículo, Crear receta), from 600px (NAV-24). */
-  /* From 600px the add is a button of the header, and the floating + does not show. */
-  .header-add {
-    display: none;
-  }
-
-  @media (min-width: 600px) {
-    .app-header > .header-add:not([hidden]) {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      align-self: center;
-    }
-
-    .fab,
-    body:has(.dock:not([hidden]) > .dock-add:not([hidden])) .fab {
-      display: none;
-    }
   }
 
   /* Below 600px the dock holds the search, so the header has no search button. */
@@ -285,73 +102,18 @@
   }
 
   /* @extends sheet */
-  /* From 600px a sheet keeps the width of the column and stands below it, so a tablet does not show
-     it as wide as the screen. The veil still covers the rail. From 840px a sheet with a head is the
-     side sheet of the design system, at the side of the hand. The rail is at the start with either
-     hand (DSV-9). */
-  @media (min-width: 600px) {
-    .sheet-layer {
-      padding-left: calc(var(--rail-width) + env(safe-area-inset-left));
-      padding-right: calc(var(--frame-side) + env(safe-area-inset-right));
-    }
-
-    .sheet {
-      width: 100%;
-      max-width: var(--content-max);
-      margin-inline: auto;
-    }
-  }
-
+  /* From 840px (DSV-6) a sheet with a head takes the column of the panels of Compra (LIST-38),
+     --panel-width wide, in the card of LAY-5. The content makes room for that column when it has no
+     panels, so the sheet covers no row. Each sheet has a head (NAV-22); a :has() may not hold another
+     :has(). */
   @media (min-width: 840px) {
     .sheet-layer:has(.sheet-head) .sheet {
-      margin-inline: 0;
-    }
-  }
-
-  /* From 840px (DSV-6, DSV-9) a sheet with a head takes the column of the panels at the end of the
-     content, as high as its content, over the veil, with either hand. The content makes room for
-     that column when it has no panels, so the sheet covers no row. It comes in with a short slide and
-     a fade. --header-height is the height of the header (app.js). */
-  @media (min-width: 840px) {
-    .sheet-layer:has(.sheet-head),
-    :root[data-hand="right"] .sheet-layer:has(.sheet-head) {
-      justify-content: flex-end;
-      align-items: flex-start;
-      padding: calc(var(--header-height) + var(--space-4)) calc(var(--frame-side) + var(--panel-pad) + env(safe-area-inset-right)) calc(var(--space-4) + env(safe-area-inset-bottom)) 0;
-    }
-
-    .sheet-layer:has(.sheet-head) .sheet,
-    :root[data-hand="right"] .sheet-layer:has(.sheet-head) .sheet {
       width: var(--panel-width);
-      height: auto;
-      max-height: 100%;
-      border-radius: var(--radius-l);
-      transition: transform var(--motion) var(--ease), opacity var(--motion) var(--ease);
     }
 
-    .sheet-layer:has(.sheet-head)[hidden] .sheet,
-    :root[data-hand="right"] .sheet-layer:has(.sheet-head)[hidden] .sheet {
-      opacity: 0;
-      transform: translateX(var(--space-7));
-    }
-
-    @starting-style {
-      .sheet-layer:has(.sheet-head) .sheet,
-      :root[data-hand="right"] .sheet-layer:has(.sheet-head) .sheet {
-        opacity: 0;
-        transform: translateX(var(--space-7));
-      }
-    }
-
-    /* With no grab and a gap above it, the head needs no room for the top inset. */
-    .sheet-layer:has(.sheet-head) .sheet-head {
-      padding-top: var(--space-3);
-    }
-
-    /* Each sheet has a head (NAV-22); a :has() may not hold another :has(). */
     body:has(.sheet-layer:not(.side-pane):not([hidden])) main:not(:has(> .side-panels:not([hidden]))),
     body:has(.sheet-layer:not(.side-pane):not([hidden])):not(:has(.side-panels:not([hidden]))) .app-header {
-      padding-inline: var(--panel-pad) calc(var(--panel-pad) + var(--panel-width) + var(--space-6));
+      padding-inline: var(--gutter) calc(var(--gutter) * 2 + var(--panel-width));
     }
   }
 
@@ -359,9 +121,8 @@
      @variant side-pane  On sheet-layer: from 840px the layer is a pane at the end of the frame, with
                          no veil and no slide, and the content of main moves beside it (REC-39). */
   @media (min-width: 840px) {
-    .sheet-layer.side-pane:has(.sheet-head),
-    :root[data-hand="right"] .sheet-layer.side-pane:has(.sheet-head) {
-      inset: var(--space-4) calc(var(--frame-side) + env(safe-area-inset-right) + var(--space-4)) var(--space-4) auto;
+    .sheet-layer.side-pane:has(.sheet-head) {
+      inset: var(--space-4) calc(var(--frame-side) + env(safe-area-inset-right) + var(--gutter)) var(--space-4) auto;
       z-index: 5;
       display: block;
       width: var(--pane-detail);
@@ -373,8 +134,7 @@
       display: none;
     }
 
-    .sheet-layer.side-pane .sheet,
-    :root[data-hand="right"] .sheet-layer.side-pane .sheet {
+    .sheet-layer.side-pane .sheet {
       width: 100%;
       height: 100%;
       max-height: 100%;
@@ -385,8 +145,7 @@
 
     body:has(.side-pane:not([hidden])) main,
     body:has(.side-pane:not([hidden])) .app-header {
-      padding-inline-start: var(--space-7);
-      padding-inline-end: calc(var(--pane-detail) + var(--space-4) + var(--space-7));
+      padding-inline: var(--gutter) calc(var(--pane-detail) + var(--gutter) * 2);
     }
 
     body:has(.side-pane:not([hidden])) .item-list:has(> .item-row.recipe) {
@@ -662,15 +421,18 @@
     }
   }
 
-  /* From 840px (tablet and desktop) they are a sticky column beside the content; the content and
-     the header share one wider column (DSV-9). */
+  /* From 840px (tablet and desktop) they are a sticky column beside the content, --gutter apart; the
+     content and the header fill the content area, as a pane does (LAY-3). */
   @media (min-width: 840px) {
+    body:has(main > .side-panels:not([hidden])) {
+      --page-max: 100%;
+    }
+
     main:has(> .side-panels:not([hidden])) {
       display: grid;
       grid-template-columns: minmax(0, 1fr) var(--panel-width);
-      column-gap: var(--space-6);
+      column-gap: var(--gutter);
       align-content: start;
-      padding-inline: var(--panel-pad);
     }
 
     main:has(> .side-panels:not([hidden])) > * {
@@ -684,10 +446,6 @@
       grid-row: 1 / span 40;
       align-self: start;
       margin: var(--space-4) 0;
-    }
-
-    body:has(.side-panels:not([hidden])) .app-header {
-      padding-inline: var(--panel-pad);
     }
   }
 
@@ -1245,9 +1003,8 @@
   /* From 840px (NAV-27) Ajustes takes a wider column, and each section is a row: its head and its
      hint at the left, its group at the right, sections split by a line. */
   @media (min-width: 840px) {
-    main:has(> .settings:not([hidden])),
-    body:has(.settings:not([hidden])) .app-header {
-      padding-inline: max(var(--space-6), (100% - var(--settings-max)) / 2);
+    body:has(main > .settings:not([hidden])) {
+      --page-max: var(--settings-max);
     }
 
     .settings-section {

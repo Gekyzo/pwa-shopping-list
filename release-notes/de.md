@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Auf einem Tablet oder Computer sind die Ränder des Bildschirms dieselben wie in den anderen Apps: Liste, Bereiche und Blätter haben denselben Abstand zum Seitenmenü.
 
 ## 1.10.0 - 2026-10-30
 
