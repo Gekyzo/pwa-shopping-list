@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Recipe link (REC-4, REC-15): the meta line drops `con enlace`. A recipe row with a link gets an icon link button before its send button, and the recipe sheet gets a `link-card` above the field **Enlace** in place of the icon button beside it. `linkInfo` of `src/recipes.js` gives the host with no `www.` and whether it is a video site; a video gets the new `play` icon and `Ver vídeo`, another page the chain and `Abrir enlace`. The catalogs drop `recipe.hasLink` and add `recipe.watch`, `recipe.watchLink` and `recipe.openSite`. `icons.svg` adds `play` and `external`.
 
 ## 1.9.1 - 2026-10-27
 

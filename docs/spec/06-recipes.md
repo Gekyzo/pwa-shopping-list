@@ -13,9 +13,9 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   and the button **Crear**, with no target choice. The new recipe opens its sheet (REC-33), with
   the cursor in its product field, and the search closes.
 - **REC-4** A recipe row shows the name and, below it, the meta line `N productos`, then
-  `en la lista` when REC-35 applies and `con enlace` when the recipe has a link (REC-15), joined by
-  ` · `. A tap on the name opens the sheet of the recipe (REC-33). The send button of REC-17 stays at the
-  end of the row.
+  `en la lista` when REC-35 applies, joined by ` · `. A tap on the name opens the sheet of the
+  recipe (REC-33). The link button of REC-15, when the recipe has a link, and the send button of
+  REC-17 stay at the end of the row.
 - **REC-5** A recipe row slides as an item row (ROW-4 to ROW-6, ROW-8, ROW-10). A slide to the
   left shows **Eliminar**, an icon button 64 px wide with its name under the icon. Its text for a screen reader
   is `Eliminar {name}`. A slide to the right sends the recipe at the
@@ -56,9 +56,14 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-14** A text with no scheme gets `https://`. Only an `http` or `https` address is valid,
   with no space and a host name of two parts at least, such as `example.com`; another text gives
   `error.invalidLink`. A stored link that is not valid becomes empty (STORE-7).
-- **REC-15** A recipe with a link adds `con enlace` to its meta line (REC-4). The sheet of the
-  recipe shows an icon button with a chain symbol beside the field **Enlace** while the recipe has a
-  link. It opens the address in a new browser context, with `noopener noreferrer`.
+- **REC-15** A link to a video site is a video: a host of `youtube.com`, `youtu.be`, `vimeo.com`,
+  `tiktok.com`, `instagram.com`, `dailymotion.com`, `dai.ly` or `fb.watch`, or a subdomain of one.
+  A recipe with a link shows an icon button before its send button (REC-4): the symbol `play` and
+  the name `Ver el vídeo de {name}` for a video, the chain symbol and `Abrir el enlace de {name}`
+  for another page. The sheet of the recipe shows a card above the field **Enlace**: the same
+  symbol, the title `Ver vídeo` or `Abrir enlace`, the host with no `www.` below it, and the symbol
+  `external` at the end. The button and the card open the address in a new browser context, with
+  `noopener noreferrer`.
 - **REC-16** A save and a removal of a link have `Deshacer`.
 
 ## Send to `Compra`

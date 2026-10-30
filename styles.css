@@ -458,11 +458,7 @@
     margin-inline-start: var(--space-2);
   }
 
-  /* A field beside a button, as the link of a recipe beside its open button, takes the room that is left. */
-  .input-row > .field {
-    flex: 1;
-  }
-
+  /* An icon button beside an input stands at its bottom edge. */
   .input-row > .button.icon {
     align-self: flex-end;
   }
@@ -799,6 +795,57 @@
   .search {
     padding: var(--space-2) var(--space-3);
     border-bottom: 1px solid var(--line);
+  }
+
+  /* @component link-card
+     @scope recipes
+     @summary The link of a recipe at the top of its sheet (REC-15): a tap opens the video, or the page, out of the app.
+     @part link-card-text   The title above the host.
+     @part link-card-title  Ver vídeo for a video site, Abrir enlace for another page.
+     @part link-card-host   The host of the link, with no www.
+     @example <a class="link-card" href="#"><svg class="icon" aria-hidden="true"><use href="icons.svg#play"/></svg><span class="link-card-text"><span class="link-card-title">Ver vídeo</span><small class="link-card-host">youtube.com</small></span><svg class="icon small" aria-hidden="true"><use href="icons.svg#external"/></svg></a> */
+  .link-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: var(--tap-l);
+    margin-top: var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-l);
+    background: var(--surface-2);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .link-card:hover {
+    background: var(--secondary);
+  }
+
+  .link-card[hidden] {
+    display: none;
+  }
+
+  .link-card-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .link-card-title {
+    font-weight: var(--weight-medium);
+  }
+
+  .link-card-host {
+    overflow: hidden;
+    color: var(--muted);
+    font-size: var(--text-xs);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .link-card > .icon.small {
+    color: var(--muted);
   }
 
   /* @component product-form

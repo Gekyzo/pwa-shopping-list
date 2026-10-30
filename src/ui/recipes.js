@@ -95,6 +95,17 @@ const sendButton = (recipe) => {
   return button;
 };
 
+// The link button of a recipe row, before its send button: it opens the video, or the page, of the
+// recipe out of the app (REC-15).
+const linkButton = (recipe, link) => {
+  const label = t(link.video ? 'recipe.watchLink' : 'recipe.openLink', { name: recipe.name });
+  const anchor = el('a', { className: 'button icon', href: recipe.url, target: '_blank', rel: 'noopener noreferrer', title: label, draggable: false }, [
+    icon(link.video ? 'play' : 'link'),
+  ]);
+  anchor.setAttribute('aria-label', label);
+  return anchor;
+};
+
 // Its visible name is Eliminar; a screen reader also hears the name of the recipe.
 const deleteAction = (recipe, node) => {
   const button = iconButton(
@@ -110,14 +121,13 @@ const deleteAction = (recipe, node) => {
   return button;
 };
 
-// A recipe row: a tap on the name opens its sheet, the send button stays at the end, a slide to the
-// left shows Eliminar, and a slide to the right sends it.
+// A recipe row: a tap on the name opens its sheet, the link button and the send button stay at the
+// end, a slide to the left shows Eliminar, and a slide to the right sends it.
 export const recipeNode = (recipe) => {
   const meta = [
     t('count.products', { count: recipe.products.length }),
     // REC-38: a recipe is in the list that its send fills.
     ...(recipes.inList(listPart(state, listOf(recipe)), recipe) ? [t('recipe.inListShort')] : []),
-    ...(recipe.url ? [t('recipe.hasLink')] : []),
   ];
   const name = el('button', { type: 'button', className: 'item-row-name', onclick: () => openRecipe(recipe) }, [
     el('span', { className: 'item-row-label', textContent: recipe.name }),
@@ -125,7 +135,9 @@ export const recipeNode = (recipe) => {
   ]);
   name.setAttribute('aria-haspopup', 'dialog');
   const tag = recipeTag(recipe);
-  const row = [name, el('div', { className: 'item-row-end' }, tag === null ? [sendButton(recipe)] : [tagNode(tag), sendButton(recipe)])];
+  const link = recipes.linkInfo(recipe.url);
+  const end = [...(tag === null ? [] : [tagNode(tag)]), ...(link ? [linkButton(recipe, link)] : []), sendButton(recipe)];
+  const row = [name, el('div', { className: 'item-row-end' }, end)];
   const node = el('li', { className: 'item-row recipe' });
   node.dataset.key = `recipe:${recipe.id}`;
   const right = { run: () => sendToList(recipe), icon: 'cart-add' };
@@ -196,11 +208,23 @@ export const renderRecipe = () => {
   $('recipe-title').textContent = recipe.name;
   if (document.activeElement !== $('recipe-name')) $('recipe-name').value = recipe.name;
   if (document.activeElement !== $('recipe-url')) $('recipe-url').value = recipe.url;
+  // The link card above the field Enlace (REC-15). Its title and its host are its name.
+  const link = recipes.linkInfo(recipe.url);
   const open = $('recipe-open');
-  open.hidden = !recipe.url;
-  open.href = recipe.url || '#';
-  open.setAttribute('aria-label', t('recipe.openLink', { name: recipe.name }));
-  open.title = t('recipe.openLink', { name: recipe.name });
+  open.hidden = !link;
+  open.href = link ? recipe.url : '#';
+  open.replaceChildren(
+    ...(link
+      ? [
+          icon(link.video ? 'play' : 'link'),
+          el('span', { className: 'link-card-text' }, [
+            el('span', { className: 'link-card-title', textContent: t(link.video ? 'recipe.watch' : 'recipe.openSite') }),
+            el('small', { className: 'link-card-host', textContent: link.host }),
+          ]),
+          icon('external', 'small'),
+        ]
+      : []),
+  );
   const products = el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product)));
   if (shown?.id !== recipe.id || shown.name !== recipe.name) {
     $('recipe-products').replaceChildren(products, productForm(recipe));

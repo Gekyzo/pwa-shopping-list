@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Une recette avec un lien affiche un bouton ▶ à côté de « Ajouter à Courses » qui ouvre la vidéo tout de suite. Dans la fiche de la recette, une carte au-dessus du champ Lien affiche « Voir la vidéo » et le site du lien, comme youtube.com.
 
 ## 1.9.1 - 2026-10-27
 
