@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- A Novetats, els noms dels botons es veuen en negreta, sense asteriscs.
 
 ## 1.10.1 - 2026-10-30
 

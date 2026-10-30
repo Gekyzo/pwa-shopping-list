@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Dans Nouveautés, les noms des boutons s'affichent en gras, sans astérisques.
 
 ## 1.10.1 - 2026-10-30
 
