@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.10.0 - 2026-10-30
+
 - Una receta con enlace muestra un botón ▶ junto a «Añadir a Compra» que abre el vídeo al momento. En la ficha de la receta, una tarjeta encima del campo Enlace muestra «Ver vídeo» y la web del enlace, como youtube.com.
 
 ## 1.9.1 - 2026-10-27

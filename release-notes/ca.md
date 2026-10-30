@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.10.0 - 2026-10-30
+
 - Una recepta amb enllaç mostra un botó ▶ al costat d’«Afegeix a Compra» que obre el vídeo a l’instant. A la fitxa de la recepta, una targeta damunt del camp Enllaç mostra «Mira el vídeo» i el web de l’enllaç, com youtube.com.
 
 ## 1.9.1 - 2026-10-27
