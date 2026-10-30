@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.10.2 - 2026-10-31
+
 - Bold in the release notes (VER-21): `textParts` of `src/onboarding.js` also cuts a text at each paired `**` and marks those parts `strong: true`, keys in them too; a `**` with no pair stays as text. `noteItem` of `src/ui/whatsnew.js` puts such a part in a `<strong>`.
 
 ## 1.10.1 - 2026-10-30
