@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.10.0 - 2026-10-30
+
 - Ein Rezept mit Link zeigt eine ▶-Schaltfläche neben „Zum Einkauf hinzufügen“, die das Video sofort öffnet. Im Blatt des Rezepts zeigt eine Karte über dem Feld Link „Video ansehen“ und die Website des Links, etwa youtube.com.
 
 ## 1.9.1 - 2026-10-27

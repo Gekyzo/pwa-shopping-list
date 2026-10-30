@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.10.0 - 2026-10-30
+
 - A recipe with a link shows a ▶ button beside “Add to Shopping” that opens the video at once. In the sheet of the recipe, a card above the Link field shows “Watch video” and the site of the link, such as youtube.com.
 
 ## 1.9.1 - 2026-10-27
