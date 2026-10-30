@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.10.1 - 2026-10-30
+
 - Design system 0.8.1 (`npm run ds`): the four width classes, the frame and the sidebar of DSV-9 now come from LAY-1 to LAY-5. `styles.css` drops its version of `nav-bar`, the header add, the toast and `fab` positions, the 600px sheet and `--panel-pad`; `tests/design.test.js` runs DS-8 again with no skip. The header and `main` share the design system's side padding: with the panels, `--page-max` is `100%` and the list, the panels and the side sheet stand `--gutter` (24px) from the rail and from the frame's end; `Ajustes` sets `--page-max` to `--settings-max`; the recipe pane and the content beside it use `--gutter` in place of 32px.
 
 ## 1.10.0 - 2026-10-30

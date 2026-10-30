@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.10.1 - 2026-10-30
+
 - En una tauleta o un ordinador, els marges de la pantalla són els mateixos que a les altres apps: la llista, els panells i els fulls queden a la mateixa distància del menú lateral.
 
 ## 1.10.0 - 2026-10-30
