@@ -14,9 +14,8 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 Not needed yet. Each item names what makes it needed.
 
 - **Browser database.** Store the data in the browser database instead of
-  `localStorage`. Unnecessary until the state nears the 5 MB limit of
-  `localStorage`, or until a feature requires it: purchase or price history,
-  photos, or sync.
+  `localStorage`. Unnecessary until the app stores images, such as receipt
+  photos or recipe pictures, which do not fit in `localStorage`.
 - **Price estimation.** Estimate the price of a list. Unnecessary until the
   products have prices, from a price field or from **Purchase history**.
 - **Send a copy.** Send a list to a contact as a link, through the Android
@@ -40,9 +39,9 @@ link, with no login. The features below need its server.
   backup in the phone does not survive **Clear site data** or an uninstall, and
   a PWA cannot replace or read a file in `Descargas` on its own.
 
-- **Sync between devices.** Keep the lists the same on a phone, a tablet and the
+- [x] **Sync between devices.** Keep the lists the same on a phone, a tablet and the
   web.
-- **Live shared list.** Share a list with a contact so that both edit the same
+- [x] **Live shared list.** Share a list with a contact so that both edit the same
   list. The link is the access: a random list id and an encryption key in the
   link fragment, with no login. The server stores only encrypted changes; the
   phones merge them item by item. Recipes are shared the same way. User
