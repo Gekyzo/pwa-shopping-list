@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- On a tablet or a computer, the margins of the screen are the same as in the other apps: the list, the panels and the sheets stand at the same distance from the side menu.
 
 ## 1.10.0 - 2026-10-30
 

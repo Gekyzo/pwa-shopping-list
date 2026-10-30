@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Sur une tablette ou un ordinateur, les marges de l'écran sont les mêmes que dans les autres apps : la liste, les panneaux et les volets sont à la même distance du menu latéral.
 
 ## 1.10.0 - 2026-10-30
 
