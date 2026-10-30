@@ -4,6 +4,10 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+No change.
+
+## 1.10.2 - 2026-10-31
+
 - In What's new, the names of the buttons show in bold, with no asterisks.
 
 ## 1.10.1 - 2026-10-30

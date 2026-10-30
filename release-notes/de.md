@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.10.2 - 2026-10-31
+
 - In Neuigkeiten erscheinen die Namen der Schaltflächen fett, ohne Sternchen.
 
 ## 1.10.1 - 2026-10-30
