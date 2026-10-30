@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- Uma receita com ligação mostra um botão ▶ ao lado de «Adicionar a Compras» que abre o vídeo de imediato. Na ficha da receita, um cartão acima do campo Ligação mostra «Ver vídeo» e o site da ligação, como youtube.com.
 
 ## 1.9.1 - 2026-10-27
 

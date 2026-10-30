@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Una ricetta con un link mostra un pulsante ▶ accanto ad «Aggiungi a Spesa» che apre subito il video. Nella scheda della ricetta, una scheda sopra il campo Link mostra «Guarda il video» e il sito del link, come youtube.com.
 
 ## 1.9.1 - 2026-10-27
 

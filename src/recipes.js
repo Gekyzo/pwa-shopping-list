@@ -59,6 +59,17 @@ export const isWebUrl = (text) => {
   }
 };
 
+// The sites of the video of a recipe. A host is one of them, or a subdomain of one.
+const VIDEO_HOSTS = ['youtube.com', 'youtu.be', 'vimeo.com', 'tiktok.com', 'instagram.com', 'dailymotion.com', 'dai.ly', 'fb.watch'];
+
+// What the screen shows of a link: its host with no `www.`, and whether it is a video site. Null
+// with no link or a link that is not valid.
+export const linkInfo = (url) => {
+  if (!url || !isWebUrl(url)) return null;
+  const host = new URL(url).hostname.replace(/^www\./, '');
+  return { host, video: VIDEO_HOSTS.some((site) => host === site || host.endsWith(`.${site}`)) };
+};
+
 // Sets the optional link of the recipe. An empty text removes it; a text with no scheme gets https.
 export const setRecipeUrl = (state, id, rawUrl) => {
   if (!findRecipe(state, id)) return reject(state, NOT_FOUND);

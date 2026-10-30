@@ -9,6 +9,7 @@ import {
   removeRecipeProduct,
   setRecipeUrl,
   isWebUrl,
+  linkInfo,
   sendRecipe,
   recipeGroups,
   buyRecipe,
@@ -446,6 +447,21 @@ test('setRecipeUrl rejects a text that is not a web address and an unknown recip
     assert.equal(result.state, state);
   });
   assert.deepEqual(setRecipeUrl(state, 'nope', LINK).error, { key: 'error.recipeNotFound' });
+});
+
+test('linkInfo gives the host with no www and marks a video site', () => {
+  assert.deepEqual(linkInfo('https://www.youtube.com/watch?v=abc'), { host: 'youtube.com', video: true });
+  assert.deepEqual(linkInfo('https://youtu.be/abc'), { host: 'youtu.be', video: true });
+  assert.deepEqual(linkInfo('https://m.youtube.com/shorts/abc'), { host: 'm.youtube.com', video: true });
+  assert.deepEqual(linkInfo('https://vm.tiktok.com/x'), { host: 'vm.tiktok.com', video: true });
+  assert.deepEqual(linkInfo('https://vimeo.com/1'), { host: 'vimeo.com', video: true });
+  assert.deepEqual(linkInfo('http://WWW.Bonviveur.com/es/recetas'), { host: 'bonviveur.com', video: false });
+  // A host that only ends with the name of a video site is not one.
+  assert.deepEqual(linkInfo('https://notyoutube.com/x'), { host: 'notyoutube.com', video: false });
+});
+
+test('linkInfo gives null with no link or a link that is not valid', () => {
+  ['', undefined, 'javascript:alert(1)', 'not a link'].forEach((text) => assert.equal(linkInfo(text), null, String(text)));
 });
 
 // A browser parses some of these texts with no error: the check does not rest on `URL` alone.
