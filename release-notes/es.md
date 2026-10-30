@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.10.1 - 2026-10-30
+
 - En una tableta o un ordenador, los márgenes de la pantalla son los mismos que en las otras apps: la lista, los paneles y las hojas quedan a la misma distancia del menú lateral.
 
 ## 1.10.0 - 2026-10-30

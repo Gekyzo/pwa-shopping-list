@@ -4,6 +4,10 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+No change.
+
+## 1.10.1 - 2026-10-30
+
 - Su un tablet o un computer, i margini dello schermo sono gli stessi delle altre app: l'elenco, i pannelli e i fogli stanno alla stessa distanza dal menu laterale.
 
 ## 1.10.0 - 2026-10-30
