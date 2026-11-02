@@ -120,6 +120,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   A stop at the network does not start a retry: the `online` event does.
 - **SYNC-4** A sync is online only and runs in this order: the app lists the shares (SHARE-6), sends the queue in order,
   pulls each record with `updated` at or after the last cursor (a record pulled twice is harmless),
+  sorted by `updated` then `id`, each next page asking for the records after the last one received,
+  not for a page number, so a record edited during the pull is read again and none is skipped,
   merges the records into the state, and applies again the changes that are still queued.
   A change leaves the queue, and the queue is saved, only after the server took it, so a sync that
   stops sends no change twice as a new record. A network error or a server error (5xx) stops the
