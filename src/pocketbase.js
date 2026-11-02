@@ -150,6 +150,23 @@ export const createClient = ({ url, fetch, EventSource }) => {
     }
   };
 
+  // Keyset pages: each request asks for the records after the last one received, by (updated, id),
+  // not for a page number. A record edited during the walk moves to the end and is read again; with
+  // numbered pages it shifts the others back by one, and the record at the page border is skipped
+  // for good (SYNC-4).
+  const keyset = async (token, path, base, first, map) => {
+    const all = [];
+    let filter = first;
+    for (;;) {
+      const result = await call('GET', path, { token, query: { filter, sort: 'updated,id', perPage: String(PAGE), page: '1' } });
+      all.push(...result.items.map(map));
+      const last = result.items.at(-1);
+      if (!(result.totalPages > 1) || !last) return all;
+      const at = quoted(last.updated);
+      filter = `${base} && (updated > ${at} || (updated = ${at} && id > ${quoted(last.id)}))`;
+    }
+  };
+
   return {
     oauthStart: async (redirectUrl) => {
       const methods = await call('GET', `${USERS}/auth-methods`);
@@ -177,7 +194,7 @@ export const createClient = ({ url, fetch, EventSource }) => {
     // the whole space.
     pull: async (token, since, space) => {
       const filter = since ? `${inSpace(space)} && updated >= ${quoted(since)}` : inSpace(space);
-      return pages(token, RECORDS, { filter, sort: 'updated' }, serverRecOf);
+      return keyset(token, RECORDS, inSpace(space), filter, serverRecOf);
     },
 
     // SHARE-6: the shares where the user is the owner, the member or the invitee (the rules of the server).
