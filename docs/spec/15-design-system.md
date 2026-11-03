@@ -27,14 +27,14 @@ This document holds the rules of the app only.
   app adds. A version holds only the rules that differ from the shared ones, so that a change of
   the shared sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
   app has its own versions of `app-header`, `sheet`, `dock`, `input`, `item-row`, `group-head`,
-  `empty-state` and `list-group`.
+  `section-head`, `empty-state`, `list-group` and `nav-bar` (colour only, DSV-13).
 - **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
   Nothing edits `vendor/` by hand.
 
 ## Exceptions
 
 - **DSV-5** Retired: design system 0.5.0 puts the rail at the side of the hand (LAY-2), so the app
-  has no version of `nav-bar`, `toast` and `fab` of its own. The layout is in DSV-8.
+  has no layout of `nav-bar`, `toast` and `fab` of its own. The layout is in DSV-8.
 - **DSV-6** From 840px a sheet with a head is the card of LAY-5, `--panel-width` wide, so it takes
   the column of the panels of `Compra` (LIST-38). The content of a view with no panels makes room
   for that column while the sheet is open, so the sheet covers no row. The recipe sheet is a pane
@@ -47,7 +47,7 @@ This document holds the rules of the app only.
 - **DSV-8** The app follows LAY-1 to LAY-5 with no exception, and `tests/design.test.js` skips no
   rule. Below 600px the bar is at the bottom, and the dock of `Compra` stands above it (SHOP-26).
   From 600px the bar is the rail at the left with either hand, and from 1024px a sidebar in a
-  centred frame (LAY-2, NAV-26); `styles.css` has no version of `nav-bar`. `body` pads
+  centred frame (LAY-2, NAV-26); `styles.css` has no layout of `nav-bar`: its version (DSV-13) sets colour and weight only. `body` pads
   `--rail-width` at the start and `--frame-side` at the end (LAY-4). The header and `main` share the
   side padding of LAY-1. From 840px the recipes of `Recetas` stand in two columns; the app has no
   list and detail section, so it has no `pane` layout.
@@ -81,6 +81,14 @@ This document holds the rules of the app only.
   `--struck` and struck through. An input has a 1.5px `--control` border and a 2px `--done` border
   on focus. The head of a group is 18px (`--text-group`), with its count as muted second text
   (`group-head-end`).
+- **DSV-13** The screens of the Stitch project `Shopping`, with no change of behaviour. The rows of
+  a list group stand in a card: an inset `--line` border with 6px corners, 16px from the edge
+  below 600px, below a head on the canvas with its count as a pill (`group-head-count`). The groups
+  of `Ajustes` are `list-group card`, under a head in small capitals. The quantity of a row is a
+  tonal chip, and the mark of a recurrent item (`item-row-repeat`) is terracotta. The header is
+  `--surface` with its tools as bordered tiles. The bar is `--surface`, and its current section is
+  emerald with no pill, on `--done-soft` from 1024px. The name of a day of `Menú` is 18px after an
+  emerald bar.
 
 ## Parts of the app
 
@@ -88,5 +96,5 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 
 | Layer | Parts |
 |---|---|
-| components | versions of `app-header`, `sheet`, `dock`, `input`, `item-row`, `group-head`, `empty-state`, `list-group` (DSV-3) |
+| components | versions of `app-header`, `nav-bar`, `sheet`, `dock`, `input`, `item-row`, `section-head`, `group-head`, `empty-state`, `list-group` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |

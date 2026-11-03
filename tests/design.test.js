@@ -46,8 +46,10 @@ test('a recipe row has one send button in the end slot and no mark', () => {
   for (const name of ['item-row-end', 'item-row-label']) assert.ok(classesInScript(script).includes(name), name);
 });
 
-test('styles.css leaves the rail to the design system (LAY-2)', () => {
-  const app = read('styles.css');
-  assert.doesNotMatch(app, /\.nav-bar\s*[{,]/);
-  assert.doesNotMatch(app, /@extends nav-bar/);
+test('styles.css leaves the layout of the rail to the design system (LAY-2, DSV-8)', () => {
+  // The version of nav-bar (DSV-13) sets colour and weight only, never the place or size of the bar.
+  const layout = /^\s*(position|inset[\w-]*|top|right|bottom|left|width|height|min-\w+|max-\w+|display|flex[\w-]*|justify-content|align-items|padding[\w-]*|margin[\w-]*|gap|order)\s*:/m;
+  const blocks = [...read('styles.css').matchAll(/([^{}]*\.nav-(?:bar|item)[^{}]*)\{([^{}]*)\}/g)];
+  assert.ok(blocks.length > 0);
+  for (const [, selector, body] of blocks) assert.doesNotMatch(body, layout, selector.trim());
 });

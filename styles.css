@@ -57,6 +57,8 @@
     --tick-stroke: 2.5px; /* the mark inside a checked tick */
     --strike: 1.5px; /* the line through a bought name */
     --border-control: 1.5px; /* the border of an input */
+    --tracking-caps: 0.04em; /* a category tag in small capitals */
+    --day-bar: 4px; /* the emerald bar before the name of a day */
 
     /* Emerald: one green for the main action, progress and the checked state. */
     --done: light-dark(#13734b, #4fbf88);
@@ -138,6 +140,20 @@
 
   .app-header .progress {
     flex: none;
+  }
+
+  /* The header of DESIGN.md (DSV-13): an elevated band, and its tools as bordered square tiles. */
+  .app-header {
+    background: var(--surface);
+  }
+
+  .app-header .button.icon {
+    border: 1px solid var(--line);
+    background: var(--bg);
+  }
+
+  .app-header .button.icon:not([hidden]) ~ .button.icon:not([hidden]) {
+    margin-left: calc(var(--space-1) * -1);
   }
 
   /* Below 600px the dock holds the search, so the header has no search button. */
@@ -438,6 +454,194 @@
     color: var(--muted);
     font-size: var(--text-s);
     font-weight: var(--weight-normal);
+  }
+
+
+  /* @extends nav-bar */
+  /* The bar of DESIGN.md (DSV-13): colour and weight only; the place and size of the bar stay those
+     of the design system (LAY-2). The current section is emerald, with no pill. */
+  .nav-bar {
+    background: var(--surface);
+  }
+
+  .nav-item {
+    font-weight: var(--weight-strong);
+  }
+
+  .nav-item[aria-current="page"],
+  .nav-item[aria-current="page"] .icon {
+    background: none;
+    color: var(--done);
+    font-weight: var(--weight-strong);
+  }
+
+  @media (min-width: 1024px) {
+    .nav-item[aria-current="page"] {
+      background: var(--done-soft);
+    }
+  }
+
+  /* @extends item-row
+     @part item-row-repeat  The mark of a recurrent item in the meta line, in the alert accent. */
+  /* The rows of a group stand in a card (DSV-13): an inset box with a border and 6px corners below
+     its head. A row that starts a group takes the top of the card, one that ends it the bottom. */
+  .item-list:has(> .item-row) {
+    margin-inline: var(--space-4);
+  }
+
+  @media (min-width: 600px) {
+    .item-list:has(> .item-row) {
+      margin-inline: 0;
+    }
+  }
+
+  /* The sides and the top of the card are a 1px padding on the --line ground of the row, clipped
+     to the padding box: the divider of a row with a check is a border-image, which takes the place
+     of every border of the row, and the body covers anything drawn inside the row. */
+  .item-list > .item-row {
+    padding-inline: 1px;
+    background: var(--line);
+    background-clip: padding-box;
+  }
+
+  .item-list > .item-row:first-child,
+  .item-list > :is(.group-head, .section-head) + .item-row {
+    padding-top: 1px;
+    border-start-start-radius: var(--radius-l);
+    border-start-end-radius: var(--radius-l);
+  }
+
+  .item-list > .item-row:last-child,
+  .item-list > .item-row:has(+ :is(.group-head, .section-head)) {
+    border-end-start-radius: var(--radius-l);
+    border-end-end-radius: var(--radius-l);
+    overflow: hidden;
+  }
+
+  .item-list > .item-row:first-child,
+  .item-list > :is(.group-head, .section-head) + .item-row {
+    overflow: hidden;
+  }
+
+  /* The last row of a card draws the bottom of the box over its whole width. */
+  .item-list > .item-row:last-child,
+  .item-list > .item-row:has(+ :is(.group-head, .section-head)) {
+    border-image: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* The name button is two columns: the name and its meta line, then the quantity chip. */
+  .item-row-name:has(> .item-row-qty) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-2);
+    align-items: center;
+    align-content: center;
+  }
+
+  .item-row-name > .item-row-qty {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .item-row-name > .item-row-meta {
+    grid-column: 1;
+  }
+
+  /* In Recetas each row is a card of its own, as in the screen of Stitch, also in the grid of
+     840px. */
+  .item-list:has(> .item-row.recipe) {
+    margin-top: var(--space-3);
+  }
+
+  .item-list:has(> .item-row.recipe) > .item-row {
+    margin-bottom: var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    border-image: none;
+    overflow: hidden;
+  }
+
+  @media (min-width: 840px) {
+    .item-list:has(> .item-row.recipe) > .group-head {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .item-row-qty {
+    justify-self: end;
+    padding: var(--space-half) var(--space-2);
+    border-radius: var(--radius-s);
+    background: var(--surface-2);
+    color: var(--text);
+    font-weight: var(--weight-medium);
+  }
+
+  .item-row.bought .item-row-qty,
+  .item-row.done .item-row-qty {
+    background: none;
+    color: var(--struck);
+  }
+
+  .item-row-meta {
+    font-weight: var(--weight-medium);
+  }
+
+  .item-row-repeat {
+    color: var(--danger);
+    font-weight: var(--weight-strong);
+  }
+
+  .item-row.bought .item-row-repeat {
+    color: inherit;
+  }
+
+  /* @extends group-head
+     @part group-head-count  The count of the group, as a pill. */
+  /* A head stands on the canvas above its card, with room above it and no line below. */
+  .group-head {
+    margin-top: var(--space-3);
+    border-bottom: 0;
+    font-weight: var(--weight-strong);
+  }
+
+  .group-head:first-child {
+    margin-top: 0;
+  }
+
+  .group-head-count {
+    padding: var(--space-half) var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-strong);
+  }
+
+  /* @extends section-head */
+  .section-head {
+    margin-top: var(--space-3);
+  }
+
+  /* @extends list-group */
+  /* The head of a group of Ajustes is a category tag of DESIGN.md: small capitals, spaced. */
+  .settings .list-group-head {
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-strong);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  .list-group.card {
+    margin-inline: var(--space-4);
+  }
+
+  @media (min-width: 600px) {
+    .list-group.card {
+      margin-inline: 0;
+    }
   }
 
 }
@@ -857,9 +1061,11 @@
 
   .day-title {
     margin: 0 0 var(--space-2);
+    padding-inline-start: var(--space-2);
+    border-inline-start: var(--day-bar) solid var(--done);
     color: var(--text);
-    font-size: var(--text-label);
-    font-weight: var(--weight-medium);
+    font-size: var(--text-group);
+    font-weight: var(--weight-strong);
   }
 
   /* Sentence case: the browser writes a weekday in lower case in some languages (`lunes`). */

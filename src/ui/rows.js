@@ -9,18 +9,21 @@ import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
 import { reorder, bindReorder } from '#ui/drag';
 
-// The name of a row, with its quantity after it, and below it the shops of the item when the list
+// The name of a row, its quantity, and below the name the shops of the item when the list
 // is not by shop, the other recipes of an item of two recipe groups (`also`) and the mark of a
 // recurrent item.
 const nameParts = (item, also) => {
-  const quantity = item.quantity ? [' ', el('span', { className: 'item-row-qty', textContent: item.quantity })] : [];
-  const parts = [el('span', { className: 'item-row-label' }, [item.name, ...quantity])];
+  // The quantity is a chip in its own column at the end of the name button (DSV-13).
+  const quantity = item.quantity ? [el('span', { className: 'item-row-qty', textContent: item.quantity })] : [];
+  const parts = [el('span', { className: 'item-row-label', textContent: item.name }), ...quantity];
   const meta = [
     ...(item.shops.length && shownGroup() !== 'shop' ? [item.shops.join(' · ')] : []),
     ...(also.length ? [t('row.alsoIn', { recipes: also.join(', ') })] : []),
-    ...(item.recurrent ? [t('row.repeats')] : []),
+    ...(item.recurrent ? [el('span', { className: 'item-row-repeat', textContent: t('row.repeats') })] : []),
   ];
-  if (meta.length) parts.push(el('small', { className: 'item-row-meta', textContent: meta.join(' · ') }));
+  // The mark of a recurrent item is its own span, so it takes the alert accent (DSV-13).
+  const joined = meta.flatMap((part, index) => (index ? [' · ', part] : [part]));
+  if (meta.length) parts.push(el('small', { className: 'item-row-meta' }, joined));
   return parts;
 };
 
@@ -280,7 +283,7 @@ const groupRows = (key) => [...document.querySelectorAll('#items .item-row')].fi
 // `right` is { run, icon } for a head that slides to the right, as a row does (GROUP-21); a search
 // stops the slide.
 export const groupHead = (title, count, key = null, right = null) => {
-  if (key === null) return el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { className: 'group-head-end', textContent: count })]);
+  if (key === null) return el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { className: 'group-head-end' }, [el('span', { className: 'group-head-count', textContent: count })])]);
   const id = `${ui.view}:${key}`;
   const open = !ui.closedGroups.has(id) || searching();
   const button = el('button', {
@@ -301,7 +304,7 @@ export const groupHead = (title, count, key = null, right = null) => {
     },
   }, [
     el('span', { textContent: title }),
-    el('span', { className: 'group-head-end' }, [el('span', { textContent: count }), chevron(open)]),
+    el('span', { className: 'group-head-end' }, [el('span', { className: 'group-head-count', textContent: count }), chevron(open)]),
   ]);
   button.setAttribute('aria-expanded', String(open));
   if (!right || searching()) return el('li', { className: 'group-head' }, [button]);
