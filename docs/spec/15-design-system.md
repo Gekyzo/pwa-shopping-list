@@ -66,6 +66,14 @@ This document holds the rules of the app only.
   `fonts/hanken-grotesk-latin.woff2` and `fonts/hanken-grotesk-latin-ext.woff2` of the app (SIL OFL,
   `fonts/OFL.txt`), both in `SHELL` of `sw.js` (SW-2), so it shows offline. No font comes from the
   network.
+- **DSV-11** The palette is warm stone paper with one emerald and one terracotta, in both themes.
+  Light: canvas `#f9f8f5` (`--bg`), rows and sheets `#ffffff`, ink `#1c1917`, muted ink `#78716c`,
+  struck ink `#a8a29e` (`--struck`), borders `#e7e5e4` and `#d6d3d1`. Dark: canvas `#0c0a09`, rows
+  `#1c1917`, ink `#f5f5f4`, muted ink `#a8a29e`. Emerald `#13734b` (dark `#4fbf88`) is `--done` and
+  `--primary`: the main action, progress and the checked state. Terracotta `#b34a24` (dark
+  `#f0906a`) is `--danger` and `--warning`. Controls, buttons and cards have 6px corners; depth
+  comes from borders, and only a sheet or a lifted row has a shadow. The body text is 16px with
+  tabular figures.
 
 ## Parts of the app
 

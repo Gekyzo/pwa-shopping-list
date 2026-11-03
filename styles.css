@@ -21,9 +21,43 @@
 
   :root {
     --font: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    /* The colour of Bodega: one green for the main action, progress and the checked state. */
-    --done: light-dark(#1f7a4d, #5fc491);
+    /* The palette of DESIGN.md (DSV-10): warm stone paper in light, warm stone in dark. Where its
+       prose and its frontmatter differ, the prose wins: canvas #f9f8f5, ink #1c1917. */
+    --bg: light-dark(#f9f8f5, #0c0a09); /* base canvas */
+    --surface: light-dark(#ffffff, #1c1917); /* elevated canvas: rows, header, sheets */
+    --surface-2: light-dark(#f5f5f4, #292524); /* a bought row, a field set on --surface */
+    --text: light-dark(#1c1917, #f5f5f4); /* primary ink */
+    --muted: light-dark(#78716c, #a8a29e); /* muted ink */
+    --struck: light-dark(#a8a29e, #78716c); /* struck ink: a bought name, an idle tick */
+    --line: light-dark(#e7e5e4, #292524);
+    --control: light-dark(#d6d3d1, #44403c);
+    --ink: light-dark(#1c1917, #f5f5f4);
+    --on-ink: light-dark(#ffffff, #1c1917);
+    --secondary: light-dark(#ecebe8, #322e2b);
+    /* Terracotta, the alert accent. #c85a32 is 4.2:1 on white, so text takes a darker step. */
+    --danger: light-dark(#b34a24, #f0906a);
+    --warning: var(--danger);
+    --scrim: rgb(28 25 23 / 0.45);
+
+    --radius-m: 6px;
+    --radius-l: 6px;
+    --radius-xl: 12px;
+    /* No blur at rest: borders give depth. Level 2 (sheets, a lifted row) has a warm edge. */
+    --shadow-s: 0 1px 2px rgb(41 37 36 / 0.16);
+    --shadow-l: 0 4px 12px rgb(120 113 108 / 0.12);
+
+    --text-s: 0.875rem; /* body-sm: 14px */
+    --text-m: 1rem; /* body-md: 16px */
+    --text-row: 1.125rem; /* body-lg: 18px, the name of a row */
+    --text-group: 1.125rem; /* headline-sm: 18px, the head of a group */
+    --text-h: 1.375rem; /* headline-md: 22px */
+    --text-l: 1.625rem; /* headline-lg-mobile: 26px, the screen title */
+    --weight-row: 500;
+
+    /* Emerald: one green for the main action, progress and the checked state. */
+    --done: light-dark(#13734b, #4fbf88);
     --on-done: light-dark(#ffffff, #0c1a12);
+    --done-soft: light-dark(#e3f1ea, #163325);
     --primary: var(--done);
     --on-primary: var(--on-done);
     --primary-soft: var(--done-soft);
@@ -59,6 +93,7 @@
     background: var(--bg);
     color: var(--text);
     font: var(--text-m)/1.4 var(--font);
+    font-variant-numeric: tabular-nums;
     -webkit-tap-highlight-color: transparent;
   }
 
