@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Un nuovo aspetto: sfondo color carta calda, il carattere Hanken Grotesk più grande, caselle rotonde e un verde smeraldo per gli articoli comprati e l'azione principale.
 
 ## 1.12.0 - 2026-11-03
 

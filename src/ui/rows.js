@@ -280,7 +280,7 @@ const groupRows = (key) => [...document.querySelectorAll('#items .item-row')].fi
 // `right` is { run, icon } for a head that slides to the right, as a row does (GROUP-21); a search
 // stops the slide.
 export const groupHead = (title, count, key = null, right = null) => {
-  if (key === null) return el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { textContent: count })]);
+  if (key === null) return el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { className: 'group-head-end', textContent: count })]);
   const id = `${ui.view}:${key}`;
   const open = !ui.closedGroups.has(id) || searching();
   const button = el('button', {

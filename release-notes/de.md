@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Ein neues Aussehen: ein warmer Papierhintergrund, die größere Schrift Hanken Grotesk, runde Kästchen und ein Smaragdgrün für Gekauftes und die Hauptaktion.
 
 ## 1.12.0 - 2026-11-03
 

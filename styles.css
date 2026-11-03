@@ -53,6 +53,10 @@
     --text-h: 1.375rem; /* headline-md: 22px */
     --text-l: 1.625rem; /* headline-lg-mobile: 26px, the screen title */
     --weight-row: 500;
+    --tick: 32px; /* the round tick of a row */
+    --tick-stroke: 2.5px; /* the mark inside a checked tick */
+    --strike: 1.5px; /* the line through a bought name */
+    --border-control: 1.5px; /* the border of an input */
 
     /* Emerald: one green for the main action, progress and the checked state. */
     --done: light-dark(#13734b, #4fbf88);
@@ -283,6 +287,22 @@
     gap: var(--space-1);
   }
 
+  /* @extends input */
+  /* The fields of DESIGN.md (DSV-12): a 1.5px stone border, and a 2px emerald one on focus. */
+  .input {
+    border-width: var(--border-control);
+  }
+
+  .input:focus-visible,
+  .field-input:focus {
+    border-width: 2px;
+    border-color: var(--done);
+  }
+
+  .input::placeholder {
+    color: var(--struck);
+  }
+
   /* @extends item-row
      @variant recipe              A recipe: its name and its meta line, then its send button.
      @state bought    A ticked item of Actual.
@@ -304,9 +324,60 @@
     }
   }
 
-  .item-row.bought .item-row-name {
-    color: var(--muted);
-    text-decoration: line-through;
+  /* The row of DESIGN.md (DSV-12): the name in body-lg, a round tick of --tick, and a bought row
+     on --surface-2 with its name struck in --struck. */
+  .item-row-name {
+    font-size: var(--text-row);
+    font-weight: var(--weight-row);
+  }
+
+  /* The quantity keeps one line, so a long name never splits "1 kg". */
+  .item-row-qty {
+    white-space: nowrap;
+  }
+
+  .item-row-check {
+    width: var(--tick);
+    height: var(--tick);
+    margin-inline: var(--space-1);
+    margin-block: var(--space-3);
+    border-color: var(--struck);
+    border-radius: var(--radius-round);
+    background: var(--surface);
+  }
+
+  .item-row-check:checked {
+    animation: tick-snap var(--motion-fast) var(--ease);
+  }
+
+  .item-row-check:checked::after {
+    width: 12px;
+    height: 6px;
+    border-width: 0 0 var(--tick-stroke) var(--tick-stroke);
+  }
+
+  @keyframes tick-snap {
+    from {
+      transform: scale(0.9);
+    }
+  }
+
+  /* The divider starts at the text, after the larger tick. */
+  .item-row:has(.item-row-check) {
+    border-image: linear-gradient(to right, transparent calc(var(--space-2) * 2 + var(--space-1) * 3 + var(--tick)), var(--line) 0) 0 0 1 0 / 0 0 1px 0;
+  }
+
+  .item-row.bought,
+  .item-row.done,
+  .item-row.bought .item-row-body,
+  .item-row.done .item-row-body {
+    background: var(--surface-2);
+  }
+
+  .item-row.bought .item-row-name,
+  .item-row.done .item-row-name {
+    color: var(--struck);
+    text-decoration: line-through var(--strike) var(--struck);
   }
 
   /* Densidad Compacta (NAV-20): the token set of the design system makes a row --tap-l (48px) high;
@@ -318,6 +389,11 @@
   /* @extends group-head
      @part group-head-button  The full-width button that closes and opens the group, with aria-expanded.
      @part group-head-end     The count and the chevron, at the end of the button. */
+
+  /* The head of a group is headline-sm of DESIGN.md (DSV-12). */
+  .group-head {
+    font-size: var(--text-group);
+  }
 
   .group-head:has(> .group-head-button) {
     padding: 0;

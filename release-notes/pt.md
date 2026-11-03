@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- Um novo visual: fundo de papel quente, a letra Hanken Grotesk maior, caixas redondas e um verde-esmeralda para os artigos comprados e a ação principal.
 
 ## 1.12.0 - 2026-11-03
 
