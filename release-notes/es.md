@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.11.0 - 2026-11-03
+
 - **Menú** empieza vacío cada lunes. Con las flechas de arriba ves el menú de las semanas anteriores, hasta 26 semanas atrás.
 
 ## 1.10.2 - 2026-10-31
