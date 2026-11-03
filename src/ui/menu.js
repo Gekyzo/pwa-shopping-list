@@ -37,12 +37,7 @@ const shortDay = (day) => {
   return node;
 };
 
-// The date of a day of the week in view, as `20 may` (MENU-25). A week is the date of its Monday.
-const dayDate = (week, day) => {
-  const [year, month, date] = week.split('-').map(Number);
-  return new Date(year, month - 1, date + day);
-};
-
+// The short date of the language, as `20 may` (MENU-25).
 const shortDate = new Map();
 const dateFormat = () => {
   if (!shortDate.has(lang)) shortDate.set(lang, new Intl.DateTimeFormat(intlTag(lang), { day: 'numeric', month: 'short' }));
@@ -117,7 +112,7 @@ const mealNode = (day, { meal, planned }) => {
 const dayNode = ({ day, meals }) =>
   el('li', { className: 'day' }, [
     // The long name shows from 600px or in the normal density; the short one in the compact density below 600px.
-    el('h3', { className: 'day-title' }, [el('span', { className: 'day-long', textContent: dayName(day) }), shortDay(day), el('span', { className: 'day-date', textContent: dateFormat().format(dayDate(shownWeek(), day)) })]),
+    el('h3', { className: 'day-title' }, [el('span', { className: 'day-long', textContent: dayName(day) }), shortDay(day), el('span', { className: 'day-date', textContent: dateFormat().format(menu.weekDay(shownWeek(), day)) })]),
     el('div', { className: 'meals' }, meals.map((entry) => mealNode(day, entry))),
   ]);
 
@@ -170,7 +165,7 @@ const renderWeekBar = () => {
   if (!shown) return;
   // MENU-25: the days of the week after its name, as `20–26 may`.
   const week = shownWeek();
-  $('menu-week-label').replaceChildren(weekLabel(ui.pastWeek), ' ', el('span', { className: 'week-bar-range', textContent: dateFormat().formatRange(dayDate(week, 0), dayDate(week, 6)) }));
+  $('menu-week-label').replaceChildren(weekLabel(ui.pastWeek), ' ', el('span', { className: 'week-bar-range', textContent: dateFormat().formatRange(menu.weekDay(week, 0), menu.weekDay(week, 6)) }));
   $('menu-week-prev').disabled = earlierWeek() === null;
   $('menu-week-next').disabled = ui.pastWeek === null;
 };
