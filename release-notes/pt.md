@@ -6,6 +6,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 - Um novo visual: fundo de papel quente, a letra Hanken Grotesk maior, caixas redondas e um verde-esmeralda para os artigos comprados e a ação principal.
 - `Receitas`, `Menu` e `Definições` seguem o novo visual: um botão verde envia uma receita para a lista, as refeições são cartões mais altos e as setas de `Definições` veem-se melhor.
+- A barra mostra talheres para `Receitas` e um livro aberto para `Menu`, e as ações que apagam dados aparecem a vermelho.
 
 ## 1.12.0 - 2026-11-03
 
