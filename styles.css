@@ -64,6 +64,7 @@
     --meal-min: 88px; /* the least height of a meal tile */
     --chevron-box: 24px; /* the box of the chevron of a settings row */
     --chevron-mark: 8px; /* the drawn mark inside it */
+    --dot: 6px; /* the dot before the status of a meal */
 
     /* Emerald: one green for the main action, progress and the checked state. */
     --done: light-dark(#13734b, #4fbf88);
@@ -1047,6 +1048,7 @@
      @scope menu
      @summary The week of Menú in view, with a button to the week before and to the week after (MENU-23).
      @part week-bar-label  Esta semana, or Semana del 26 oct.
+     @part week-bar-range  The days of the week in view after its name, as 20–26 may, in --muted (MENU-25).
      @example <div class="week-bar" style="width: 100%"><button class="button icon" type="button" aria-label="Semana anterior">‹</button><h2 class="week-bar-label">Esta semana</h2><button class="button icon" type="button" aria-label="Semana siguiente" disabled>›</button></div> */
   .week-bar {
     display: flex;
@@ -1070,6 +1072,7 @@
      @part day-title  The name of the day.
      @part day-long   The long name of the day.
      @part day-short  The short name of the day: it shows instead of the long one in the compact density below 600px.
+     @part day-date   The date of the day, as 20 may, in muted small capitals at the end of the head (MENU-25).
      @part meals      The two meals.
      @example <ul class="item-list" style="width: 100%"><li class="day"><h3 class="day-title"><span class="day-long">Lunes</span><span class="day-short">lun</span></h3><div class="meals"><button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button><button class="meal free" type="button"><small class="meal-label">Cena</small><span class="meal-name">Elegir receta</span></button></div></li></ul> */
   /* A day stands on the ground of the page: its name is a head, its meals are the tiles. */
@@ -1087,7 +1090,10 @@
   }
 
   /* Sentence case: the browser writes a weekday in lower case in some languages (`lunes`). */
-  .day-title::first-letter {
+  /* The head is a flex box, so the capital goes on each name, a flex item, and not on the head. */
+  .day-title::first-letter,
+  .day-long::first-letter,
+  .day-short::first-letter {
     text-transform: uppercase;
   }
 
@@ -1184,6 +1190,8 @@
      @part meal-label  Comida or Cena.
      @part meal-name   The recipe, cut with an ellipsis.
      @part meal-entry  A meal of a member with scope all: its name and the tag of its list (MENU-20).
+     @part meal-add    The ⊕ icon above the call of a free meal.
+     @part meal-status The status line of a slot with one meal, after a dot: Receta lista in --primary, or Anotación rápida in --muted for a dish (MENU-25).
      @example <button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button> */
   .meal {
     display: flex;
@@ -1960,6 +1968,67 @@
   .button.outline.danger {
     border-color: currentColor;
     background: var(--surface);
+  }
+
+  /* MENU-25: the range of the week, the date of a day and the status line of a meal. */
+  .week-bar-range {
+    color: var(--muted);
+    font-weight: var(--weight-normal);
+  }
+
+  .day-title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .day-date {
+    margin-inline-start: auto;
+    color: var(--muted);
+    font-size: var(--text-label-md);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 600px) {
+    .day-title {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .day-date {
+      margin-inline-start: 0;
+    }
+  }
+
+  .meal-add {
+    color: var(--muted);
+  }
+
+  .meal-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: auto;
+    color: var(--primary);
+    font-size: var(--text-label-md);
+  }
+
+  .meal-status::before {
+    content: "";
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .meal-status.dish {
+    color: var(--muted);
+  }
+
+  :root[data-density="compact"] .meal-status {
+    display: none;
   }
 
   /* The head of an aisle has the icon of its kind before its title (GROUP-22). */

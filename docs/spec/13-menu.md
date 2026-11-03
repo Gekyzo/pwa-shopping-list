@@ -126,6 +126,14 @@ past weeks stay, read only.
   message `Semana repetida: N comidas.` For a member with scope `all` each list copies its own past
   week into its own week (MENU-20); a list with no meal in that week keeps its week as it is. A put
   of a meal drops the old weeks as MENU-22 says.
+- **MENU-25** The dates of the week in view, as the Stitch screens show them. The week bar has the
+  days of the week after its name, in the short form of the language (`Esta semana 2–8 nov`,
+  `Intl.DateTimeFormat#formatRange`). The head of each day ends with its date in small capitals
+  (`2 NOV`); from 600px the date stands below the name. A free meal has the icon `plus-circle`
+  above `Elegir receta`. A slot with one meal ends with a status line after a dot: **Receta lista**
+  (`menu.statusRecipe`) for a recipe, **Anotación rápida** (`menu.statusDish`) for a dish; a slot
+  with two meals (MENU-20) has none, and Compacta (NAV-20) hides it. The status line is hidden from
+  a screen reader, as the label of the tile already says it.
 
 ## Limits
 

@@ -8,6 +8,7 @@ What changes for you in each version of the app. The newest version is first.
 - `Recipes`, `Menu` and `Settings` follow the new look: a green button sends a recipe to the list, meals are taller cards and the arrows of `Settings` are easier to see.
 - The bar shows cutlery for `Recipes` and an open book for `Menu`, and actions that delete data are red.
 - Each row of `Settings` starts with an icon, and the head of each store section shows an icon of its kind: fruit, dairy, bread, cleaning and more.
+- In `Menu`, the week bar shows its days and each day shows its date. Each meal says if it is a recipe or a quick note, and a free meal shows a ⊕.
 
 ## 1.12.0 - 2026-11-03
 
