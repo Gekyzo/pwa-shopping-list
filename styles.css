@@ -35,8 +35,8 @@
     --on-ink: light-dark(#ffffff, #1c1917);
     --secondary: light-dark(#ecebe8, #322e2b);
     /* Terracotta, the alert accent. #c85a32 is 4.2:1 on white, so text takes a darker step. */
-    --danger: light-dark(#b34a24, #f0906a);
-    --warning: var(--danger);
+    --danger: light-dark(#ba1a1a, #ffb4ab); /* error red: a destructive action, a failure */
+    --warning: light-dark(#b34a24, #f0906a); /* terracotta: an alert, a recurrent item */
     --scrim: rgb(28 25 23 / 0.45);
 
     --radius-m: 6px;
@@ -604,7 +604,7 @@
   }
 
   .item-row-repeat {
-    color: var(--danger);
+    color: var(--warning);
     font-weight: var(--weight-strong);
   }
 

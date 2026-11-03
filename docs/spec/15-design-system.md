@@ -70,8 +70,9 @@ This document holds the rules of the app only.
   Light: canvas `#f9f8f5` (`--bg`), rows and sheets `#ffffff`, ink `#1c1917`, muted ink `#78716c`,
   struck ink `#a8a29e` (`--struck`), borders `#e7e5e4` and `#d6d3d1`. Dark: canvas `#0c0a09`, rows
   `#1c1917`, ink `#f5f5f4`, muted ink `#a8a29e`. Emerald `#13734b` (dark `#4fbf88`) is `--done` and
-  `--primary`: the main action, progress and the checked state. Terracotta `#b34a24` (dark
-  `#f0906a`) is `--danger` and `--warning`. Controls, buttons and cards have 6px corners; depth
+  `--primary`: the main action, progress and the checked state. Error red `#ba1a1a` (dark
+  `#ffb4ab`) is `--danger`: a destructive action and a failure. Terracotta `#b34a24` (dark
+  `#f0906a`) is `--warning`: an alert and the mark of a recurrent item. Controls, buttons and cards have 6px corners; depth
   comes from borders, and only a sheet or a lifted row has a shadow. The body text is 16px with
   tabular figures.
 - **DSV-12** The components of `DESIGN.md`, as versions of the app (DSV-3). The name of a row is
@@ -85,7 +86,7 @@ This document holds the rules of the app only.
   a list group stand in a card: an inset `--line` border with 6px corners, 16px from the edge
   below 600px, below a head on the canvas with its count as a pill (`group-head-count`). The groups
   of `Ajustes` are `list-group card`, under a head in small capitals. The quantity of a row is a
-  tonal chip, and the mark of a recurrent item (`item-row-repeat`) is terracotta. The header is
+  tonal chip, and the mark of a recurrent item (`item-row-repeat`) is `--warning`. The header is
   `--surface` with its tools as bordered tiles. The bar is `--surface`, and its current section is
   emerald with no pill, on `--done-soft` from 1024px. The name of a day of `Menú` is 18px after an
   emerald bar.
@@ -96,7 +97,8 @@ This document holds the rules of the app only.
   `--surface`. A meal is a tile of at least 88px (`--meal-min`, none in Compacta): a 13px label,
   then the name at 18px; a free meal centres its call, and a dish stands on `--surface-2`. An
   outline danger button is drawn in `--danger` on `--surface`. The chevron of a settings row is a
-  drawn 24px mark.
+  drawn 24px mark. The bar shows crossed cutlery (`utensils`) for `Recetas` and an open book
+  (`menu`) for `Menú`, as in the screens.
 
 ## Parts of the app
 
