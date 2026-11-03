@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.12.0 - 2026-11-03
+
 - En una setmana passada de **Menú**, **Repetir aquesta setmana** copia els seus àpats a la setmana actual. Si te'n penedeixes, toca **Desfés**.
 
 ## 1.11.0 - 2026-11-03

@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.12.0 - 2026-11-03
+
 - In einer vergangenen Woche von **Menü** kopiert **Diese Woche wiederholen** ihre Mahlzeiten in die aktuelle Woche. Mit **Rückgängig** machst du es rückgängig.
 
 ## 1.11.0 - 2026-11-03

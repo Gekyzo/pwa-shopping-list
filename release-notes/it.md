@@ -4,6 +4,10 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+No change.
+
+## 1.12.0 - 2026-11-03
+
 - In una settimana passata di **Menù**, **Ripeti questa settimana** copia i suoi pasti nella settimana corrente. Se cambi idea, tocca **Annulla**.
 
 ## 1.11.0 - 2026-11-03

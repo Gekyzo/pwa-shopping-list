@@ -4,6 +4,10 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+No change.
+
+## 1.12.0 - 2026-11-03
+
 - Dans une semaine passée de **Menu**, **Répéter cette semaine** copie ses repas dans la semaine en cours. Pour revenir en arrière, touche **Annuler**.
 
 ## 1.11.0 - 2026-11-03
