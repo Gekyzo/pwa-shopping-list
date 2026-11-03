@@ -11,6 +11,7 @@ no change has no entry.
 ## Unreleased
 
 - Font Hanken Grotesk (DSV-10), the font of `DESIGN.md`: `styles.css` declares it from `fonts/hanken-grotesk-latin.woff2` and `fonts/hanken-grotesk-latin-ext.woff2` (variable, SIL OFL, `fonts/OFL.txt`) and sets `--font` to it in its `tokens` layer; the shared sheet keeps Geist. Both files are in `SHELL` of `sw.js`, cache `shopping-shell-v28`.
+- Palette and type of `DESIGN.md` (DSV-11), set in the `tokens` layer of `styles.css` over the shared tokens: warm stone grounds and inks in light and dark, emerald `--done`/`--primary` `#13734b` (dark `#4fbf88`), terracotta `--danger`/`--warning` `#b34a24` (dark `#f0906a`), the new `--struck`, 6px `--radius-m`/`--radius-l`, 12px `--radius-xl`, warm shadows, body 16px with tabular figures, title 26px. New tokens `--text-row`, `--text-group` and `--weight-row` for the component versions.
 
 ## 1.12.0 - 2026-11-03
 
