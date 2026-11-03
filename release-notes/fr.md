@@ -4,6 +4,10 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+No change.
+
+## 1.12.1 - 2026-11-03
+
 - Un nouveau look : un fond papier chaud, la police Hanken Grotesk plus grande, des cases rondes et un vert émeraude pour les articles achetés et l'action principale.
 - `Recettes`, `Menu` et `Réglages` suivent le nouveau look : un bouton vert envoie une recette dans la liste, les repas sont des cartes plus hautes et les flèches de `Réglages` se voient mieux.
 - La barre montre des couverts pour `Recettes` et un livre ouvert pour `Menu`, et les actions qui effacent des données sont en rouge.

@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.12.1 - 2026-11-03
+
 - Font Hanken Grotesk (DSV-10), the font of `DESIGN.md`: `styles.css` declares it from `fonts/hanken-grotesk-latin.woff2` and `fonts/hanken-grotesk-latin-ext.woff2` (variable, SIL OFL, `fonts/OFL.txt`) and sets `--font` to it in its `tokens` layer; the shared sheet keeps Geist. Both files are in `SHELL` of `sw.js`, cache `shopping-shell-v28`.
 - Palette and type of `DESIGN.md` (DSV-11), set in the `tokens` layer of `styles.css` over the shared tokens: warm stone grounds and inks in light and dark, emerald `--done`/`--primary` `#13734b` (dark `#4fbf88`), terracotta `--danger`/`--warning` `#b34a24` (dark `#f0906a`), the new `--struck`, 6px `--radius-m`/`--radius-l`, 12px `--radius-xl`, warm shadows, body 16px with tabular figures, title 26px. New tokens `--text-row`, `--text-group` and `--weight-row` for the component versions.
 - Components of `DESIGN.md` (DSV-12) as versions in `styles.css`: `item-row` (name 18px/500, a 32px round tick with a snap, bought rows on `--surface-2` struck in `--struck`, the quantity on one line), a new version of `input` (1.5px border, 2px `--done` on focus, `--struck` placeholder) and `group-head` (18px, count in `group-head-end`, which `groupHead` of `src/ui/rows.js` now also sets on the count of a plain head).

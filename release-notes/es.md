@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.12.1 - 2026-11-03
+
 - Nuevo aspecto: fondo de papel cálido, la letra Hanken Grotesk más grande, casillas redondas y un verde esmeralda para lo comprado y la acción principal.
 - `Recetas`, `Menú` y `Ajustes` siguen el nuevo aspecto: un botón verde envía una receta a la lista, las comidas son fichas más altas y las flechas de `Ajustes` se ven mejor.
 - La barra muestra unos cubiertos para `Recetas` y un libro abierto para `Menú`, y las acciones que borran datos se ven en rojo.
