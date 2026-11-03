@@ -59,6 +59,11 @@
     --border-control: 1.5px; /* the border of an input */
     --tracking-caps: 0.04em; /* a category tag in small capitals */
     --day-bar: 4px; /* the emerald bar before the name of a day */
+    --text-label-lg: 0.9375rem; /* label-lg: 15px, the week of Menú */
+    --text-label-md: 0.8125rem; /* label-md: 13px, the label of a meal */
+    --meal-min: 88px; /* the least height of a meal tile */
+    --chevron-box: 24px; /* the box of the chevron of a settings row */
+    --chevron-mark: 8px; /* the drawn mark inside it */
 
     /* Emerald: one green for the main action, progress and the checked state. */
     --done: light-dark(#13734b, #4fbf88);
@@ -566,12 +571,23 @@
     .item-list:has(> .item-row.recipe) > .group-head {
       grid-column: 1 / -1;
     }
+
+    /* A card as short as the other card of its grid row still fills that row. */
+    .item-list:has(> .item-row.recipe) > .item-row {
+      display: grid;
+    }
+
+    .item-list:has(> .item-row.recipe) > .item-row > .item-row-swipe > .item-row-body {
+      min-height: 100%;
+    }
   }
 
+  /* The quantity is a bordered chip, as in the screen of Stitch: a --line edge on --surface-2. */
   .item-row-qty {
     justify-self: end;
     padding: var(--space-half) var(--space-2);
-    border-radius: var(--radius-s);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
     background: var(--surface-2);
     color: var(--text);
     font-weight: var(--weight-medium);
@@ -579,7 +595,7 @@
 
   .item-row.bought .item-row-qty,
   .item-row.done .item-row-qty {
-    background: none;
+    background: var(--surface);
     color: var(--struck);
   }
 
@@ -1841,5 +1857,126 @@
 
   .art-on-solid {
     stroke: var(--on-primary);
+  }
+
+  /* DSV-14: the detail of the Stitch screens, with no change of behaviour. */
+
+  /* A recipe card: a 18px name at weight 600, the link button a bordered tile and the send button
+     an emerald tile. The tap target keeps the size of a button icon. */
+  .item-row.recipe .item-row-body {
+    padding-block: var(--space-3);
+  }
+
+  .item-row.recipe .item-row-label {
+    font-size: var(--text-group);
+    font-weight: var(--weight-strong);
+  }
+
+  .item-row.recipe .item-row-end {
+    gap: 0;
+  }
+
+  /* The tile is 40px inside the 48px target (--tap), drawn behind the icon. */
+  .item-row.recipe .item-row-end > .button.icon {
+    position: relative;
+    isolation: isolate;
+    background: none;
+  }
+
+  .item-row.recipe .item-row-end > .button.icon::before {
+    content: "";
+    position: absolute;
+    inset: var(--space-1);
+    z-index: -1;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+  }
+
+  .item-row.recipe .item-row-end > .button.icon:last-child {
+    color: var(--on-primary);
+  }
+
+  .item-row.recipe .item-row-end > .button.icon:last-child::before {
+    border-color: var(--primary);
+    background: var(--primary);
+  }
+
+  /* The week of Menú is a bordered bar on --surface. */
+  .week-bar {
+    margin: var(--space-2) var(--space-4) 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+  }
+
+  .week-bar-label {
+    font-size: var(--text-label-lg);
+    font-weight: var(--weight-strong);
+  }
+
+  /* A meal is a tall tile: its label at 13px, then the name of its recipe at 18px. A free meal
+     centres its call in the dashed tile; a dish stands on --surface-2. */
+  .meal {
+    justify-content: flex-start;
+    gap: var(--space-1);
+    min-height: var(--meal-min);
+    padding: var(--space-3);
+  }
+
+  .meal-label {
+    font-size: var(--text-label-md);
+    font-weight: var(--weight-medium);
+  }
+
+  .meal-name {
+    font-size: var(--text-row);
+    font-weight: var(--weight-row);
+  }
+
+  .meal.free {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .meal.free .meal-name {
+    font-size: var(--text-label);
+  }
+
+  .meal.dish {
+    border-color: var(--line);
+    background: var(--surface-2);
+  }
+
+  :root[data-density="compact"] .meal {
+    min-height: 0;
+  }
+
+  /* A danger button with an outline is drawn in its own colour on --surface. */
+  .button.outline.danger {
+    border-color: currentColor;
+    background: var(--surface);
+  }
+
+  /* The chevron of a settings row is a 24px mark with a 2px stroke, as in the screen of Stitch. The
+     glyph of the font is too small, so the span hides it and draws the mark. */
+  .settings-row .chevron {
+    display: grid;
+    place-items: center;
+    align-self: center;
+    width: var(--chevron-box);
+    height: var(--chevron-box);
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .settings-row .chevron::before {
+    content: "";
+    width: var(--chevron-mark);
+    height: var(--chevron-mark);
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: translateX(-2px) rotate(45deg);
   }
 }
