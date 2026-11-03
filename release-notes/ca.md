@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.12.1 - 2026-11-03
+
 - Un aspecte nou: fons de paper càlid, la lletra Hanken Grotesk més gran, caselles rodones i un verd maragda per al que has comprat i l'acció principal.
 - `Receptes`, `Menú` i `Configuració` segueixen l'aspecte nou: un botó verd envia una recepta a la llista, els àpats són fitxes més altes i les fletxes de `Configuració` es veuen millor.
 - La barra mostra uns coberts per a `Receptes` i un llibre obert per a `Menú`, i les accions que esborren dades es veuen en vermell.
