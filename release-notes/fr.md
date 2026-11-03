@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Un nouveau look : un fond papier chaud, la police Hanken Grotesk plus grande, des cases rondes et un vert émeraude pour les articles achetés et l'action principale.
 
 ## 1.12.0 - 2026-11-03
 

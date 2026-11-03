@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- A new look: a warm paper background, the larger Hanken Grotesk font, round checkboxes and an emerald green for bought items and the main action.
 
 ## 1.12.0 - 2026-11-03
 

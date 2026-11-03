@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- Un aspecte nou: fons de paper càlid, la lletra Hanken Grotesk més gran, caselles rodones i un verd maragda per al que has comprat i l'acció principal.
 
 ## 1.12.0 - 2026-11-03
 

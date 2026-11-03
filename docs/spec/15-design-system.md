@@ -26,8 +26,8 @@ This document holds the rules of the app only.
   in the same layer, so that it wins; the block documents the parts, variants and states that the
   app adds. A version holds only the rules that differ from the shared ones, so that a change of
   the shared sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
-  app has its own versions of `app-header`, `sheet`, `dock`, `item-row`, `group-head`, `empty-state`
-  and `list-group`.
+  app has its own versions of `app-header`, `sheet`, `dock`, `input`, `item-row`, `group-head`,
+  `empty-state` and `list-group`.
 - **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
   Nothing edits `vendor/` by hand.
 
@@ -74,6 +74,13 @@ This document holds the rules of the app only.
   `#f0906a`) is `--danger` and `--warning`. Controls, buttons and cards have 6px corners; depth
   comes from borders, and only a sheet or a lifted row has a shadow. The body text is 16px with
   tabular figures.
+- **DSV-12** The components of `DESIGN.md`, as versions of the app (DSV-3). The name of a row is
+  18px at weight 500 (`--text-row`, `--weight-row`), and its quantity keeps one line. The check of
+  a row is a round tick of 32px (`--tick`) with a `--struck` border, filled with `--done` when
+  checked, with a short scale snap. A bought row stands on `--surface-2`, with its name in
+  `--struck` and struck through. An input has a 1.5px `--control` border and a 2px `--done` border
+  on focus. The head of a group is 18px (`--text-group`), with its count as muted second text
+  (`group-head-end`).
 
 ## Parts of the app
 
@@ -81,5 +88,5 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 
 | Layer | Parts |
 |---|---|
-| components | versions of `app-header`, `sheet`, `dock`, `item-row`, `group-head`, `empty-state`, `list-group` (DSV-3) |
+| components | versions of `app-header`, `sheet`, `dock`, `input`, `item-row`, `group-head`, `empty-state`, `list-group` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |
