@@ -7,6 +7,7 @@ What changes for you in each version of the app. The newest version is first.
 - A new look: a warm paper background, the larger Hanken Grotesk font, round checkboxes and an emerald green for bought items and the main action.
 - `Recipes`, `Menu` and `Settings` follow the new look: a green button sends a recipe to the list, meals are taller cards and the arrows of `Settings` are easier to see.
 - The bar shows cutlery for `Recipes` and an open book for `Menu`, and actions that delete data are red.
+- Each row of `Settings` starts with an icon, and the head of each store section shows an icon of its kind: fruit, dairy, bread, cleaning and more.
 
 ## 1.12.0 - 2026-11-03
 

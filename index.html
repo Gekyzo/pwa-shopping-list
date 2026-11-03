@@ -99,18 +99,18 @@
           <h2 class="list-group-head" data-i18n="settings.account"></h2>
           <div class="list-group card">
             <div id="account-row" class="settings-row account-row"><span id="account-email" class="settings-row-label"></span><span id="account-sync" class="settings-row-value"></span></div>
-            <button id="share-open" class="settings-row" type="button" aria-haspopup="dialog" aria-controls="share" hidden><span class="settings-row-label" data-i18n="share.row"></span><span id="share-count" class="settings-row-value"></span><span class="chevron" aria-hidden="true">›</span></button>
-            <button id="logout" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="account.logout"></span></button>
-            <button id="account-login" class="settings-row" type="button"><span class="settings-row-label" data-i18n="sync.banner"></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="share-open" class="settings-row" type="button" aria-haspopup="dialog" aria-controls="share" hidden><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#users"/></svg><span class="settings-row-label" data-i18n="share.row"></span><span id="share-count" class="settings-row-value"></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="logout" class="settings-row danger" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#log-out"/></svg><span class="settings-row-label" data-i18n="account.logout"></span></button>
+            <button id="account-login" class="settings-row" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#log-in"/></svg><span class="settings-row-label" data-i18n="sync.banner"></span><span class="chevron" aria-hidden="true">›</span></button>
           </div>
         </div>
         <div class="settings-section">
           <h2 class="list-group-head" data-i18n="settings.backup"></h2>
           <p class="hint settings-hint" data-i18n="settings.backupHint"></p>
           <div class="list-group card">
-            <button id="export" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.export"></span><span class="chevron" aria-hidden="true">›</span></button>
-            <button id="import" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.import"></span><span class="chevron" aria-hidden="true">›</span></button>
-            <button id="reset" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="settings.reset"></span></button>
+            <button id="export" class="settings-row" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#export"/></svg><span class="settings-row-label" data-i18n="settings.export"></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="import" class="settings-row" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#import"/></svg><span class="settings-row-label" data-i18n="settings.import"></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="reset" class="settings-row danger" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#trash"/></svg><span class="settings-row-label" data-i18n="settings.reset"></span></button>
           </div>
         </div>
         <div class="settings-section">
@@ -118,24 +118,28 @@
           <p class="hint settings-hint" data-i18n="settings.preferencesHint"></p>
           <div class="list-group card">
             <div class="settings-row">
+              <svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#globe"/></svg>
               <span class="settings-row-label" data-i18n="settings.language"></span>
               <span id="language-value" class="settings-row-value"></span>
               <span class="chevron" aria-hidden="true">›</span>
               <select id="language" class="select" data-i18n-attr="aria-label:settings.language"></select>
             </div>
             <div class="settings-row">
+              <svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#hand"/></svg>
               <span class="settings-row-label" data-i18n="settings.hand"></span>
               <span id="hand-value" class="settings-row-value"></span>
               <span class="chevron" aria-hidden="true">›</span>
               <select id="hand" class="select" data-i18n-attr="aria-label:settings.hand"></select>
             </div>
             <div class="settings-row">
+              <svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#contrast"/></svg>
               <span class="settings-row-label" data-i18n="settings.theme"></span>
               <span id="theme-value" class="settings-row-value"></span>
               <span class="chevron" aria-hidden="true">›</span>
               <select id="theme" class="select" data-i18n-attr="aria-label:settings.theme"></select>
             </div>
             <div class="settings-row">
+              <svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#rows"/></svg>
               <span class="settings-row-label" data-i18n="settings.density"></span>
               <span id="density-value" class="settings-row-value"></span>
               <span class="chevron" aria-hidden="true">›</span>
@@ -166,21 +170,21 @@
         <div class="settings-section">
           <h2 class="list-group-head" data-i18n="settings.aisles"></h2>
           <div class="list-group card">
-            <button id="aisles-open" class="settings-row" type="button" aria-haspopup="dialog" aria-controls="aisles"><span class="settings-row-label" data-i18n="aisles.title"></span><span id="aisles-count" class="settings-row-value"></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="aisles-open" class="settings-row" type="button" aria-haspopup="dialog" aria-controls="aisles"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#sections"/></svg><span class="settings-row-label" data-i18n="aisles.title"></span><span id="aisles-count" class="settings-row-value"></span><span class="chevron" aria-hidden="true">›</span></button>
           </div>
         </div>
         <div id="install-group" class="settings-section" hidden>
           <h2 class="list-group-head" data-i18n="settings.app"></h2>
           <div class="list-group card">
-            <button id="install" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.install"></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="install" class="settings-row" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#download"/></svg><span class="settings-row-label" data-i18n="settings.install"></span><span class="chevron" aria-hidden="true">›</span></button>
           </div>
         </div>
         <div class="settings-section">
           <h2 class="list-group-head" data-i18n="settings.help"></h2>
           <div class="list-group card">
-            <button id="show-onboarding" class="settings-row" type="button"><span class="settings-row-label" data-i18n="settings.onboarding"></span><span class="chevron" aria-hidden="true">›</span></button>
-            <button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"></span><span class="chevron" aria-hidden="true">›</span></button>
-            <button id="delete-sample" class="settings-row danger" type="button" hidden><span class="settings-row-label" data-i18n="settings.deleteSample"></span></button>
+            <button id="show-onboarding" class="settings-row" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#info"/></svg><span class="settings-row-label" data-i18n="settings.onboarding"></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="show-whatsnew" class="settings-row" type="button" hidden><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#sparkles"/></svg><span class="settings-row-label" data-i18n="settings.whatsNew"></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="delete-sample" class="settings-row danger" type="button" hidden><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#trash"/></svg><span class="settings-row-label" data-i18n="settings.deleteSample"></span></button>
           </div>
         </div>
         <div id="update-banner" class="banner" hidden>

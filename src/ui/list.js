@@ -39,13 +39,28 @@ const shopNodes = () => {
   return [...grouped, ...others];
 };
 
+// The icon of the head of an aisle, by its kind (GROUP-22). Each name is written out, so that the
+// check of the sprite (DS-5) sees it.
+const AISLE_ICONS = {
+  produce: () => icon('aisle-produce', 'group-head-icon'),
+  bakery: () => icon('aisle-bakery', 'group-head-icon'),
+  meat: () => icon('aisle-meat', 'group-head-icon'),
+  fish: () => icon('aisle-fish', 'group-head-icon'),
+  dairy: () => icon('aisle-dairy', 'group-head-icon'),
+  pantry: () => icon('aisle-pantry', 'group-head-icon'),
+  drinks: () => icon('aisle-drinks', 'group-head-icon'),
+  frozen: () => icon('aisle-frozen', 'group-head-icon'),
+  cleaning: () => icon('aisle-cleaning', 'group-head-icon'),
+};
+const aisleIcon = (name) => AISLE_ICONS[aisles.aisleKind(name)]?.() ?? icon('aisle', 'group-head-icon');
+
 // The rows of the list below the aisle of each item, in the order of the walk. A row of an aisle
 // has the group id `aisle:<name>`, so that it moves only inside its aisle.
 const aisleNodes = () => {
   const { groups, rest } = store.filterGroups(aisles.aisleGroups(viewState()), ui.query);
   const grouped = groups.flatMap((group) => {
     const key = `aisle:${group.aisle}`;
-    return [groupHead(group.aisle, groupCount(group), key), ...groupNodes(key, group.items.map((item) => itemNode(item, key)))];
+    return [groupHead(group.aisle, groupCount(group), key, null, aisleIcon(group.aisle)), ...groupNodes(key, group.items.map((item) => itemNode(item, key)))];
   });
   const others = rest.length ? [groupHead(t('group.noAisle'), '', 'noAisle'), ...groupNodes('noAisle', rest.map((item) => itemNode(item)))] : [];
   return [...grouped, ...others];

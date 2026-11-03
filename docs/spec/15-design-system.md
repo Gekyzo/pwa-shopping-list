@@ -98,7 +98,8 @@ This document holds the rules of the app only.
   then the name at 18px; a free meal centres its call, and a dish stands on `--surface-2`. An
   outline danger button is drawn in `--danger` on `--surface`. The chevron of a settings row is a
   drawn 24px mark. The bar shows crossed cutlery (`utensils`) for `Recetas` and an open book
-  (`menu`) for `Menú`, as in the screens.
+  (`menu`) for `Menú`, as in the screens. Each row of `Ajustes` starts with an icon
+  (`settings-row-icon`) in `--muted`, or in `--danger` on a danger row.
 
 ## Parts of the app
 

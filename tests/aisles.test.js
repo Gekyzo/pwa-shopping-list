@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem, setSort } from '#store';
-import { addAisle, renameAisle, deleteAisle, moveAisle, setItemAisle, addDefaultAisles, aisleGroups } from '#aisles';
+import { addAisle, renameAisle, deleteAisle, moveAisle, setItemAisle, addDefaultAisles, aisleGroups, aisleKind } from '#aisles';
 
 let counter = 0;
 const newId = () => `id-${++counter}`;
@@ -178,4 +178,27 @@ test('aisleGroups uses the order of the user and leaves out the saved items', ()
     groups: [['Dairy', ['Cheese', 'Yogurt'], 3]],
     rest: ['Salt'],
   });
+});
+
+test('aisleKind gives the kind of each usual aisle in each catalog', async () => {
+  const kinds = ['produce', 'bakery', 'meat', 'dairy', 'pantry', 'drinks', 'frozen', 'cleaning'];
+  for (const lang of ['ca', 'de', 'en', 'es', 'fr', 'it', 'pt']) {
+    const { default: catalog } = await import(`../src/locales/${lang}.js`);
+    for (const kind of kinds) assert.equal(aisleKind(catalog[`aisles.usual.${kind}`]), kind, `${lang} ${kind}`);
+  }
+});
+
+test('aisleKind reads the first known word, with any case and accent', () => {
+  assert.equal(aisleKind('Frutas y verduras'), 'produce');
+  assert.equal(aisleKind('LÁCTEOS'), 'dairy');
+  assert.equal(aisleKind('Pescado y carne'), 'fish');
+  assert.equal(aisleKind('Pan y bollería'), 'bakery');
+  assert.equal(aisleKind('Produits laitiers et œufs'), 'dairy');
+});
+
+test('aisleKind has no kind for an unknown name, a part word or no name', () => {
+  assert.equal(aisleKind('Pañales'), null);
+  assert.equal(aisleKind('Pasillo 4'), null);
+  assert.equal(aisleKind(''), null);
+  assert.equal(aisleKind(undefined), null);
 });
