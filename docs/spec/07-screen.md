@@ -35,7 +35,7 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
   and after a tap.
-- **NAV-6** `Ajustes` has six groups, each a title above one full-width group of rows: **Copia de seguridad**
+- **NAV-6** `Ajustes` has six groups, each a title above one card of rows (an inset box with a border, DSV-13): **Copia de seguridad**
   (**Exportar**, **Importar**, **Borrar todos los datos**), **Preferencias** (**Idioma**, **Mano**, **Tema**, **Densidad**),
   **Al terminar la compra** (TRIP-7), **Secciones**, **Aplicación** (**Instalar la aplicación**) and
   **Ayuda** (**Ver la introducción**, **Borrar la receta de ejemplo**). A row is 56 px high or more.
@@ -66,8 +66,8 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 
 ## Item rows
 
-- **ROW-1** A row of `Compra` has a check mark, the name with its quantity after it in a muted
-  colour, a line below it with the shops, `También en «recipes»` for an item of two recipe groups
+- **ROW-1** A row of `Compra` has a check mark, the name with its quantity as a chip at the end
+  of the name button (DSV-13), a line below the name with the shops, `También en «recipes»` for an item of two recipe groups
   (GROUP-20) and `↻ cada compra` for a recurrent item (LIST-7), joined by ` · `, and an
   edit button **Editar** at its end. The name keeps two lines, then ends with an ellipsis. A tap on
   the body of the row ticks or unticks the item (LIST-11); the check mark only shows the state. A
