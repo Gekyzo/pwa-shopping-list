@@ -409,7 +409,9 @@
 
   /* @extends group-head
      @part group-head-button  The full-width button that closes and opens the group, with aria-expanded.
-     @part group-head-end     The count and the chevron, at the end of the button. */
+     @part group-head-end     The count and the chevron, at the end of the button.
+     @part group-head-title   The title with an icon before it, as the head of an aisle has (GROUP-22).
+     @part group-head-icon    The icon of the kind of an aisle, in --primary. */
 
   /* The head of a group is headline-sm of DESIGN.md (DSV-12). */
   .group-head {
@@ -1372,6 +1374,7 @@
      @summary The Ajustes section: full-width groups of settings rows (list-group) under a list-group-head. A row of Preferencias holds a real select laid over it, so a tap opens the native picker.
      @part settings-hint    A line of help below a group head, on a hint.
      @part settings-section A group head, its hint and its group. From 840px (NAV-27) the head and the hint form a column beside the group.
+     @part settings-row-icon The icon at the start of a settings row, in --muted; a danger row draws it in --danger.
      @example <section class="settings" style="width: 100%"><h2 class="list-group-head">Preferencias</h2><div class="list-group"><div class="settings-row"><span class="settings-row-label">Idioma</span><span class="settings-row-value">Español</span><span class="chevron" aria-hidden="true">›</span><select class="select" aria-label="Idioma"><option>Español</option></select></div></div></section> */
   .settings-hint {
     padding: 0 var(--space-4) var(--space-2);
@@ -1959,11 +1962,33 @@
     background: var(--surface);
   }
 
+  /* The head of an aisle has the icon of its kind before its title (GROUP-22). */
+  .group-head-title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .group-head-icon {
+    flex: none;
+    color: var(--primary);
+  }
+
+  /* The icon at the start of a settings row, as in the screen of Stitch. */
+  .settings-row-icon {
+    flex: none;
+    color: var(--muted);
+  }
+
+  .settings-row.danger .settings-row-icon {
+    color: inherit;
+  }
+
   /* The chevron of a settings row is a 24px mark with a 2px stroke, as in the screen of Stitch. The
      glyph of the font is too small, so the span hides it and draws the mark. */
   .settings-row .chevron {
-    display: grid;
-    place-items: center;
+    position: relative;
     align-self: center;
     width: var(--chevron-box);
     height: var(--chevron-box);
@@ -1971,8 +1996,12 @@
     line-height: 0;
   }
 
+  /* The mark is out of the flow: the hidden glyph stays a line of its own. */
   .settings-row .chevron::before {
     content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
     width: var(--chevron-mark);
     height: var(--chevron-mark);
     border-top: 2px solid currentColor;

@@ -262,7 +262,7 @@ test('the What\'s new sheet has a veil, a dialog with its title and Close, and a
 });
 
 test('Help in Ajustes has the What\'s new row after the introduction, hidden until there are notes (VER-22)', () => {
-  assert.match(settings, /<button id="show-onboarding"[^>]*>[\s\S]*?<\/button>\s*<button id="show-whatsnew" class="settings-row" type="button" hidden><span class="settings-row-label" data-i18n="settings.whatsNew"><\/span><span class="chevron" aria-hidden="true">›<\/span><\/button>/);
+  assert.match(settings, /<button id="show-onboarding"[^>]*>[\s\S]*?<\/button>\s*<button id="show-whatsnew" class="settings-row" type="button" hidden><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#sparkles"\/><\/svg><span class="settings-row-label" data-i18n="settings.whatsNew"><\/span><span class="chevron" aria-hidden="true">›<\/span><\/button>/);
 });
 
 const auth = body.match(/<section id="auth"[\s\S]*?<\/section>/)?.[0] ?? '';
@@ -302,5 +302,5 @@ test('Ajustes starts with the group Cuenta: the email and the last sync, Cerrar 
   assert.match(first, /data-i18n="settings.account"/);
   assert.match(settings, /<div id="account-group" class="settings-section" hidden>/);
   assert.match(first, /<div id="account-row" class="settings-row account-row"><span id="account-email" class="settings-row-label"><\/span><span id="account-sync" class="settings-row-value"><\/span><\/div>/);
-  assert.match(first, /<button id="logout" class="settings-row danger" type="button"><span class="settings-row-label" data-i18n="account.logout"><\/span><\/button>/);
+  assert.match(first, /<button id="logout" class="settings-row danger" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#log-out"\/><\/svg><span class="settings-row-label" data-i18n="account.logout"><\/span><\/button>/);
 });

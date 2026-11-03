@@ -93,3 +93,39 @@ export const aisleGroups = (state) => {
     .filter((group) => group.total > 0);
   return { groups, rest: source.filter((item) => shown(item) && !item.aisle) };
 };
+
+// The kind of an aisle, from its name, for the icon of its head: the first word of the name that
+// starts with a stem of a kind decides. The stems cover the usual aisles of each catalog and their
+// common spellings. A name with no known word has no kind (null).
+const KIND_STEMS = {
+  produce: ['frut', 'fruit', 'verdur', 'veget', 'legum', 'gemus', 'obst', 'hortal'],
+  bakery: ['panad', 'panet', 'padar', 'fleca', 'forn', 'baker', 'bread', 'backw', 'backer', 'boulang', 'brot'],
+  meat: ['carn', 'meat', 'viand', 'fleisch', 'charcut', 'boucher', 'macell'],
+  fish: ['pesc', 'peix', 'fish', 'poisson', 'fisch', 'marisc', 'seafood'],
+  dairy: ['lact', 'latic', 'latt', 'leche', 'lait', 'llet', 'leite', 'milch', 'dairy', 'queso', 'yogur', 'chees', 'fromag', 'formatg'],
+  pantry: ['despens', 'rebost', 'pantry', 'vorrat', 'epicer', 'dispens', 'mercear', 'conserv'],
+  drinks: ['bebid', 'begud', 'drink', 'boisson', 'bevand', 'getrank', 'refresc'],
+  frozen: ['congel', 'frozen', 'surgel', 'tiefkuh'],
+  cleaning: ['limpi', 'netej', 'clean', 'nettoy', 'entretien', 'puliz', 'reinig', 'hygien', 'higien', 'igien', 'drogu'],
+};
+// Words that are a kind only as a whole word: `pan` is bread, but `pañales` is not.
+const KIND_WORDS = { bakery: ['pan', 'pain', 'pane', 'pa'] };
+
+const wordsOf = (name) => String(name ?? '')
+  .toLowerCase()
+  .replace(/œ/g, 'oe')
+  .normalize('NFD')
+  .replace(/\p{M}/gu, '')
+  .split(/[^\p{L}]+/u)
+  .filter(Boolean);
+
+const kindOfWord = (word) => Object.keys(KIND_STEMS).find((kind) =>
+  KIND_STEMS[kind].some((stem) => word.startsWith(stem)) || (KIND_WORDS[kind] ?? []).includes(word)) ?? null;
+
+export const aisleKind = (name) => {
+  for (const word of wordsOf(name)) {
+    const kind = kindOfWord(word);
+    if (kind) return kind;
+  }
+  return null;
+};

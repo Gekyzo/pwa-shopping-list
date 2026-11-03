@@ -281,9 +281,10 @@ const groupRows = (key) => [...document.querySelectorAll('#items .item-row')].fi
 // The head of a group: its title, its count and a chevron. A tap closes the rows of the group, and a
 // second tap opens them. A search shows each group open. With no key the head does not close.
 // `right` is { run, icon } for a head that slides to the right, as a row does (GROUP-21); a search
-// stops the slide.
-export const groupHead = (title, count, key = null, right = null) => {
-  if (key === null) return el('li', { className: 'group-head' }, [el('span', { textContent: title }), el('span', { className: 'group-head-end' }, [el('span', { className: 'group-head-count', textContent: count })])]);
+// stops the slide. `lead` is an icon before the title, as the head of an aisle has (GROUP-22).
+export const groupHead = (title, count, key = null, right = null, lead = null) => {
+  const titleNode = lead ? el('span', { className: 'group-head-title' }, [lead, title]) : el('span', { textContent: title });
+  if (key === null) return el('li', { className: 'group-head' }, [titleNode, el('span', { className: 'group-head-end' }, [el('span', { className: 'group-head-count', textContent: count })])]);
   const id = `${ui.view}:${key}`;
   const open = !ui.closedGroups.has(id) || searching();
   const button = el('button', {
@@ -303,7 +304,7 @@ export const groupHead = (title, count, key = null, right = null) => {
       });
     },
   }, [
-    el('span', { textContent: title }),
+    titleNode,
     el('span', { className: 'group-head-end' }, [el('span', { className: 'group-head-count', textContent: count }), chevron(open)]),
   ]);
   button.setAttribute('aria-expanded', String(open));

@@ -65,6 +65,12 @@ the arrange sheet in `src/ui/arrange.js`.
   list it ticks only the members of that list. The rows close, then the group goes (GROUP-8). The
   message is `«name»: N productos comprados.` with `Deshacer`. A search stops the slide. A tap on
   the head still closes and opens the group (GROUP-16).
+- **GROUP-22** The head of an aisle has an icon before its name, in `--primary`, by the kind that
+  `aisleKind` of `src/aisles.js` reads from the name: the first word that starts with a stem of a
+  kind, in any case and with no accents, decides. The kinds are `produce`, `bakery`, `meat`,
+  `fish`, `dairy`, `pantry`, `drinks`, `frozen` and `cleaning`, each with its symbol
+  `aisle-<kind>`; the usual aisles of each catalog have their kind. A name with no known word has
+  the symbol `aisle`. The head of the items with no aisle has no icon.
 - **GROUP-9** The items to buy that are in no group show below the head `Otros`.
 - **GROUP-10** The ticked items show one time each in `Comprados (N)`, with no group.
 
