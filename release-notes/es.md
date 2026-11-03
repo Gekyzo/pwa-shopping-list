@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.12.0 - 2026-11-03
+
 - En una semana pasada de **Menú**, **Repetir esta semana** copia sus comidas a la semana actual. Si te arrepientes, pulsa **Deshacer**.
 
 ## 1.11.0 - 2026-11-03
