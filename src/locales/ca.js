@@ -16,6 +16,8 @@ export default {
   'menu.remove': 'Treu',
   'menu.removeMeal': 'Treu {name}',
   'menu.noRecipe': 'sense recepta',
+  'menu.statusRecipe': 'Recepta llesta',
+  'menu.statusDish': 'Anotació ràpida',
   'menu.typeDish': 'Escriu el nom d’un plat.',
   'menu.addDish': 'Afegeix «{name}» sense recepta',
   'menu.toRecipe': 'Crea la recepta',

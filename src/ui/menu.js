@@ -6,6 +6,7 @@ import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, 
 import { sendText, recipeFromDish } from '#ui/recipes';
 import { showView } from '#ui/nav';
 import { tagNode } from '#ui/rows';
+import { icon } from '#ui/controls';
 import { recipeTag } from '#ui/view';
 
 const LISTS = ['own', 'shared'];
@@ -34,6 +35,27 @@ const shortDay = (day) => {
   const node = el('span', { className: 'day-short', textContent: dayName(day, 'short') });
   node.setAttribute('aria-hidden', 'true');
   return node;
+};
+
+// The date of a day of the week in view, as `20 may` (MENU-25). A week is the date of its Monday.
+const dayDate = (week, day) => {
+  const [year, month, date] = week.split('-').map(Number);
+  return new Date(year, month - 1, date + day);
+};
+
+const shortDate = new Map();
+const dateFormat = () => {
+  if (!shortDate.has(lang)) shortDate.set(lang, new Intl.DateTimeFormat(intlTag(lang), { day: 'numeric', month: 'short' }));
+  return shortDate.get(lang);
+};
+
+// The status line of a slot with one meal (MENU-25): a recipe or a dish, after a dot.
+const statusNode = (planned) => {
+  if (planned.length !== 1) return [];
+  const dish = Boolean(planned[0].dish);
+  const node = el('small', { className: dish ? 'meal-status dish' : 'meal-status', textContent: t(dish ? 'menu.statusDish' : 'menu.statusRecipe') });
+  node.setAttribute('aria-hidden', 'true');
+  return [node];
 };
 
 const mealTitle = (day, meal) => t('menu.title', { meal: t(`meal.${meal}`), day: dayName(day) });
@@ -69,7 +91,7 @@ const plannedLabel = (entry) => {
 const pastMealNode = (day, { meal, planned }) => {
   const names = planned.length ? planned.map(plannedNode) : [el('span', { className: 'meal-name', textContent: '—' })];
   const kind = !planned.length ? 'meal past free' : planned.every((entry) => entry.dish) ? 'meal past dish' : 'meal past';
-  const node = el('div', { className: kind }, [el('small', { className: 'meal-label', textContent: t(`meal.${meal}`) }), ...names]);
+  const node = el('div', { className: kind }, [el('small', { className: 'meal-label', textContent: t(`meal.${meal}`) }), ...names, ...statusNode(planned)]);
   node.setAttribute('role', 'group');
   node.setAttribute('aria-label', `${mealTitle(day, meal)}: ${planned.length ? planned.map(plannedLabel).join('; ') : t('menu.noMeal')}`);
   return node;
@@ -80,10 +102,11 @@ const mealNode = (day, { meal, planned }) => {
   const dish = planned.length === 1 && planned[0].dish;
   const label = dish ? `${t(`meal.${meal}`)} · ${t('menu.noRecipe')}` : t(`meal.${meal}`);
   const kind = !planned.length ? 'meal free' : planned.every((entry) => entry.dish) ? 'meal dish' : 'meal';
-  const names = planned.length ? planned.map(plannedNode) : [el('span', { className: 'meal-name', textContent: t('menu.choose') })];
+  const names = planned.length ? planned.map(plannedNode) : [icon('plus-circle', 'meal-add'), el('span', { className: 'meal-name', textContent: t('menu.choose') })];
   const button = el('button', { type: 'button', className: kind, onclick: () => openMeal(day, meal) }, [
     el('small', { className: 'meal-label', textContent: label }),
     ...names,
+    ...statusNode(planned),
   ]);
   const text = planned.length ? planned.map(plannedLabel).join('; ') : t('menu.choose');
   button.setAttribute('aria-label', `${mealTitle(day, meal)}: ${text}`);
@@ -94,7 +117,7 @@ const mealNode = (day, { meal, planned }) => {
 const dayNode = ({ day, meals }) =>
   el('li', { className: 'day' }, [
     // The long name shows from 600px or in the normal density; the short one in the compact density below 600px.
-    el('h3', { className: 'day-title' }, [el('span', { className: 'day-long', textContent: dayName(day) }), shortDay(day)]),
+    el('h3', { className: 'day-title' }, [el('span', { className: 'day-long', textContent: dayName(day) }), shortDay(day), el('span', { className: 'day-date', textContent: dateFormat().format(dayDate(shownWeek(), day)) })]),
     el('div', { className: 'meals' }, meals.map((entry) => mealNode(day, entry))),
   ]);
 
@@ -145,7 +168,9 @@ const renderWeekBar = () => {
   const shown = ui.view === 'menu';
   $('menu-week').hidden = !shown;
   if (!shown) return;
-  $('menu-week-label').textContent = weekLabel(ui.pastWeek);
+  // MENU-25: the days of the week after its name, as `20–26 may`.
+  const week = shownWeek();
+  $('menu-week-label').replaceChildren(weekLabel(ui.pastWeek), ' ', el('span', { className: 'week-bar-range', textContent: dateFormat().formatRange(dayDate(week, 0), dayDate(week, 6)) }));
   $('menu-week-prev').disabled = earlierWeek() === null;
   $('menu-week-next').disabled = ui.pastWeek === null;
 };

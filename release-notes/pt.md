@@ -8,6 +8,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 - `Receitas`, `Menu` e `Definições` seguem o novo visual: um botão verde envia uma receita para a lista, as refeições são cartões mais altos e as setas de `Definições` veem-se melhor.
 - A barra mostra talheres para `Receitas` e um livro aberto para `Menu`, e as ações que apagam dados aparecem a vermelho.
 - Cada linha de `Definições` começa com um ícone, e o cabeçalho de cada secção da loja mostra um ícone do seu tipo: fruta, laticínios, pão, limpeza e outros.
+- Em `Menu`, a barra da semana mostra os seus dias e cada dia a sua data. Cada refeição diz se é uma receita ou uma nota rápida, e uma refeição livre mostra um ⊕.
 
 ## 1.12.0 - 2026-11-03
 

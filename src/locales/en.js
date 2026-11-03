@@ -16,6 +16,8 @@ export default {
   'menu.remove': 'Remove',
   'menu.removeMeal': 'Remove {name}',
   'menu.noRecipe': 'no recipe',
+  'menu.statusRecipe': 'Recipe ready',
+  'menu.statusDish': 'Quick note',
   'menu.typeDish': 'Type the name of a dish.',
   'menu.addDish': 'Add “{name}” with no recipe',
   'menu.toRecipe': 'Create recipe',

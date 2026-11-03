@@ -16,6 +16,8 @@ export default {
   'menu.remove': 'Retirer',
   'menu.removeMeal': 'Retirer {name}',
   'menu.noRecipe': 'sans recette',
+  'menu.statusRecipe': 'Recette prête',
+  'menu.statusDish': 'Note rapide',
   'menu.typeDish': 'Saisissez le nom d’un plat.',
   'menu.addDish': 'Ajouter « {name} » sans recette',
   'menu.toRecipe': 'Créer la recette',
