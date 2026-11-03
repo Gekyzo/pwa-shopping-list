@@ -20,7 +20,7 @@ import {
   hasStoredState,
 } from '#storage';
 import { loadSharedState, saveSharedState } from '#session';
-import { combine, split, onList, reorderList, fillLists } from '#lists';
+import { combine, split, onList, reorderList, fillLists, repeatLists } from '#lists';
 import { weekOf } from '#menu';
 import { LANGUAGES, PSEUDO, resolveLanguage, translator } from '#i18n';
 import { shouldShow } from '#onboarding';
@@ -255,6 +255,9 @@ export const shownWeek = () => ui.pastWeek ?? thisWeek();
 
 // Llenar cesta: each list from its own menu (MENU-20).
 export const fillMenus = () => fillLists(state, shownBase(), scope(), thisWeek());
+
+// Repetir esta semana: each list copies its own past week into this week (MENU-24).
+export const repeatMenus = (from) => repeatLists(state, shownBase(), scope(), from, thisWeek());
 
 // `options` go to the after-commit function: an import is `explicit` (SYNC-9).
 export const commit = (next, options = {}) => {

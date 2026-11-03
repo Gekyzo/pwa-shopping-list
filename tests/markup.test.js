@@ -154,8 +154,10 @@ test('the meal sheet has the two meals of a slot, a recipe search between the ti
 });
 
 test('Llenar cesta and Vaciar menú stand together in the action bar of Menú', () => {
-  assert.match(body, /<div id="menu-actions" class="action-bar" hidden>\s*<div class="split">\s*<button id="menu-fill" class="button primary hand-side"[\s\S]*?<\/button>\s*<button id="menu-clear" class="button outline danger"[^>]*data-i18n="menu.clear"><\/button>\s*<\/div>/);
+  assert.match(body, /<div id="menu-actions" class="action-bar" hidden>\s*<div id="menu-split" class="split">\s*<button id="menu-fill" class="button primary hand-side"[\s\S]*?<\/button>\s*<button id="menu-clear" class="button outline danger"[^>]*data-i18n="menu.clear"><\/button>\s*<\/div>/);
   assert.doesNotMatch(body, /id="menu-more"/);
+  // MENU-24: Repetir esta semana stands in the same bar, after the split, for a past week.
+  assert.match(body, /<\/div>\s*<button id="menu-repeat" class="button primary" type="button" hidden>[\s\S]*?data-i18n="menu.repeat"/);
   assert.match(body, /<button id="trip-button"[^>]*data-i18n-attr="aria-label:trip.menu"/);
 });
 

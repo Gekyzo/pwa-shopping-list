@@ -56,7 +56,7 @@ past weeks stay, read only.
   puts that recipe in the meal and closes the sheet. A meal with a recipe or a dish also has
   **Quitar**, with `Deshacer` and the message `Quitada del menú: «name».`
 - **MENU-12** An action bar stays at the bottom of the list of `Menú`, above the bottom bar.
-  It has two buttons of equal width: **Llenar cesta** on the side of the hand and **Vaciar
+  For this week it has two buttons of equal width: **Llenar cesta** on the side of the hand and **Vaciar
   menú** beside it. **Llenar cesta** fills `Compra` (MENU-5). It has the icon `cart-add`, the
   cart with a plus, before its text. Its message is `Menú: N añadidos, N ya estaban.` with
   `Deshacer`. A fill that changes nothing shows `Menú: todo estaba ya en la lista.` and keeps
@@ -114,10 +114,18 @@ past weeks stay, read only.
   language. `‹` shows the nearest earlier week that holds a meal of a list in view, and is disabled
   when there is none. `›` shows the nearest later week that holds a meal, or this week; it is
   disabled on this week. A past week shows its days as this week does (MENU-9), with each meal a
-  tile of no action whose name is `--muted`; an empty meal shows `—`. It has no action bar and no
+  tile of no action whose name is `--muted`; an empty meal shows `—`. Its action bar holds
+  **Repetir esta semana** alone (MENU-24) in place of **Llenar cesta** and **Vaciar menú**; it has no
   panel **Para la cesta**, and the header counts its meals (MENU-10). The week in view is not
   stored: the app starts on this week, and a past week that holds no meal any more shows this
   week.
+
+- **MENU-24** **Repetir esta semana** is a primary button with the icon `repeat` across the action
+  bar of a past week. It puts the meals of that week in place of all the meals of this week, each in
+  its day and meal, with its recipe or its dish, then shows this week, with `Deshacer` and the
+  message `Semana repetida: N comidas.` For a member with scope `all` each list copies its own past
+  week into its own week (MENU-20); a list with no meal in that week keeps its week as it is. A put
+  of a meal drops the old weeks as MENU-22 says.
 
 ## Limits
 

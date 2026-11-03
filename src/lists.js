@@ -1,5 +1,5 @@
 import { reorderItems } from '#store';
-import { fillMenu } from '#menu';
+import { fillMenu, repeatWeek } from '#menu';
 
 // SHARE-12: the screen works on one combined state. For a member it holds the own entities and the
 // shared ones, each shared one marked `shared: true`. Each id of the shared part, and each reference
@@ -155,6 +155,23 @@ export const fillLists = (state, sharedBase, scope, week, newId) => {
   }
   if (errors.length < lists.length) return { state: next, added, already };
   return { error: errors.find((error) => error.key === 'error.menuNoProducts') ?? errors[0] };
+};
+
+// MENU-24: Repetir esta semana copies each list's own week `from` into its week `to`: the own one,
+// then the shared one under scope `all`. A list with no meal in `from` is skipped; `error.menuEmpty`
+// comes only when no list has one. `count` is the sum of the meals copied.
+export const repeatLists = (state, sharedBase, scope, from, to) => {
+  const lists = sharedBase && scope === 'all' ? ['own', 'shared'] : ['own'];
+  let next = state;
+  let count = 0;
+  for (const which of lists) {
+    const result = onList(next, which, (part) => repeatWeek(part, from, to), sharedBase, scope);
+    if (result.error?.key === 'error.menuEmpty') continue;
+    if (result.error) return { error: result.error };
+    next = result.state;
+    count += result.count;
+  }
+  return count ? { state: next, count } : { error: { key: 'error.menuEmpty' } };
 };
 
 // SHARE-15: the list that an add goes to. An add from Todas goes to the own list.

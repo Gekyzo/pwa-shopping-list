@@ -109,6 +109,17 @@ export const clearMenu = (state, week) => {
 
 export const mealCount = (state, week) => ofWeek(state, week).length;
 
+// MENU-24: the meals of `from` in place of the meals of `to`, each in its day and meal. `count` is the
+// number of meals copied. A week with no meal gives `error.menuEmpty`.
+export const repeatWeek = (state, from, to) => {
+  if (!isWeek(to)) return reject(state, 'error.unknownMeal');
+  const copies = ofWeek(state, from).map((entry) => ({ ...entry, week: to }));
+  if (!copies.length) return reject(state, 'error.menuEmpty');
+  const first = addWeeks(to, 1 - KEPT_WEEKS);
+  const kept = state.menu.filter((entry) => entry.week !== to && entry.week >= first);
+  return { state: { ...state, menu: [...kept, ...copies].sort(mealOrder) }, count: copies.length };
+};
+
 // MENU-23: the weeks that hold a meal, oldest first, each one time.
 export const menuWeeks = (state) => [...new Set(state.menu.map((entry) => entry.week))].sort();
 

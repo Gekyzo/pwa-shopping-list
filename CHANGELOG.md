@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Repetir esta semana (MENU-24): `repeatWeek` of `src/menu.js` puts the meals of a past week in place of the meals of the target week, and `repeatLists` of `src/lists.js` runs it on each list, as `fillLists` does. In a past week the action bar of `Menú` shows the new button `#menu-repeat` (icon `repeat`) in place of the split `#menu-split`; a repeat shows this week with `Deshacer`. The catalogs add `menu.repeat` and `toast.weekRepeated`.
 
 ## 1.11.0 - 2026-11-03
 

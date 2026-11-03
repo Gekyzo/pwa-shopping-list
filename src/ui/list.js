@@ -223,8 +223,7 @@ export const renderList = (summary) => {
 
   renderEmpty(ui.view !== 'settings' && nodes.length === 0);
 
-  // MENU-23: a past week has no action bar.
-  $('menu-actions').hidden = ui.view !== 'menu' || ui.pastWeek !== null;
+  $('menu-actions').hidden = ui.view !== 'menu';
 
   $('finish').hidden = !(ui.view === 'active' && ui.shop === null && summary.total > 0 && summary.left === 0);
   renderShopDone(summary);
