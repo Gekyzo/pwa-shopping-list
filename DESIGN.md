@@ -1,20 +1,20 @@
 ---
 name: Utilitarian Market Ledger
 colors:
-  surface: '#f5faff'
-  surface-dim: '#d5dbe0'
-  surface-bright: '#f5faff'
+  surface: '#fff8f5'
+  surface-dim: '#e2d8d2'
+  surface-bright: '#fff8f5'
   surface-container-lowest: '#ffffff'
-  surface-container-low: '#eff4fa'
-  surface-container: '#e9eef4'
-  surface-container-high: '#e3e9ee'
-  surface-container-highest: '#dde3e9'
-  on-surface: '#161c20'
-  on-surface-variant: '#3f4942'
-  inverse-surface: '#2b3135'
-  inverse-on-surface: '#ecf1f7'
-  outline: '#6f7a71'
-  outline-variant: '#bec9c0'
+  surface-container-low: '#fcf2eb'
+  surface-container: '#f6ece6'
+  surface-container-high: '#f0e6e0'
+  surface-container-highest: '#eae1da'
+  on-surface: '#1f1b17'
+  on-surface-variant: '#78716c'
+  inverse-surface: '#342f2b'
+  inverse-on-surface: '#f9efe8'
+  outline: '#d6d3d1'
+  outline-variant: '#e7e5e4'
   surface-tint: '#046c45'
   primary: '#005937'
   on-primary: '#ffffff'
@@ -45,9 +45,9 @@ colors:
   tertiary-fixed-dim: '#b9c9d3'
   on-tertiary-fixed: '#0e1d25'
   on-tertiary-fixed-variant: '#3a4951'
-  background: '#f5faff'
-  on-background: '#161c20'
-  surface-variant: '#dde3e9'
+  background: '#fff8f5'
+  on-background: '#1f1b17'
+  surface-variant: '#eae1da'
 typography:
   headline-lg:
     fontFamily: Hanken Grotesk
@@ -131,24 +131,24 @@ spacing:
 This design system is engineered specifically for fast-paced, high-distraction environments: the aisles of a supermarket under glare-heavy fluorescent overheads, navigating a cart with one hand while holding a mobile screen with the other. The aesthetic fuses clean Swiss functionalism with the physical tactile feel of a high-grade paper grocery slip.
 
 ### Aesthetic Principles
-- **Glare-Defiant High Contrast:** Strict luminance pairing between charcoal slate and clean parchment off-white ensures immediate glanceability without eye strain.
+- **Glare-Defiant High Contrast:** Strict luminance pairing between warm stone neutrals and clean parchment off-white ensures immediate glanceability without eye strain.
 - **Physical Ledger Tactility:** Strikethroughs, micro-depressions, and explicit border bounds provide the psychological reassurance of striking pencil across physical paper.
 - **One-Handed Ergonomics:** Heavy anchoring towards the bottom two-thirds of the viewport. Critical actions reside strictly within natural thumb-sweep zones.
 - **Utilitarian Speed:** Eliminates gratuitous decorative art, complex nested menus, and slow transitions in favor of instantaneous state toggling and legible iconography.
 
 ## Colors
 
-The palette balances clinical legibility with warm, paper-derived undertones to soften harsh mobile glare without sacrificing contrast compliance.
+The palette balances clinical legibility with warm, stone- and paper-derived undertones to soften harsh mobile glare without sacrificing contrast compliance.
 
 ### Functional Roles
 - **Base Canvas (`#F9F8F5`):** A warm off-white surface resembling heavy uncoated bond paper. Diminishes harsh OLED white glare in bright market interiors.
 - **Elevated Canvas (`#FFFFFF`):** High-clarity white reserved for active input surfaces, modal sheets, and list cards.
-- **Primary Ink (`#1A2024`):** Near-black deep charcoal slate for items, quantities, and primary headlines. Delivers a minimum 13:1 contrast ratio against the paper base.
-- **Muted Ink (`#5C656B`):** Neutral tone for secondary metadata, packaging units, and aisle markers.
-- **Disabled / Struck Ink (`#8C959B`):** Reserved for crossed-off, completed inventory items.
+- **Primary Ink (`#1C1917` / `#292524`):** Warm, deep stone-charcoal for items, quantities, and primary headlines, derived from the warm neutral base (`#78716C`). Delivers crisp, fatigue-free contrast against the paper base.
+- **Muted Ink (`#78716C`):** Warm stone neutral tone for secondary metadata, packaging units, and aisle markers.
+- **Disabled / Struck Ink (`#A8A29E`):** Warm muted stone reserved for crossed-off, completed inventory items.
 - **Primary Action & Resolved Accent (`#13734B`):** Deep emerald green used for confirmed items, positive status badges, completed checkmarks, and primary action affordances.
 - **Alert & Category Accent (`#C85A32`):** Terracotta amber used for price changes, out-of-stock warnings, expiry alerts, and promotional department chips.
-- **Structure & Borders (`#E2DFD8`):** Uncoated-board divider lines ensuring structural clarity without optical clutter.
+- **Structure & Borders (`#E7E5E4` / `#D6D3D1`):** Warm stone-paper divider lines ensuring structural clarity without optical clutter.
 
 ## Typography
 
@@ -174,9 +174,9 @@ To maximize battery efficiency and visibility under intense fluorescent shop lam
 
 ### Elevation Hierarchy
 - **Level 0 (Base Canvas):** Uncoated paper tone `#F9F8F5`. All category headers and scroll backdrops live here.
-- **Level 1 (Card & List Rows):** Pure crisp white (`#FFFFFF`) with a 1px solid border (`#E2DFD8`). Elements feel crisp, defined, and flatly set into the screen.
-- **Level 2 (Floating Action Docks & Sheets):** Grounded by a solid 1.5px border (`#D1CDC2`) complemented by an immediate hard offset ambient edge: `0 4px 12px rgba(26, 32, 36, 0.08)`. This keeps docked controls crisp without fading into background noise.
-- **Level 3 (Pressed / Interactive Affirmation):** Inset micro-shadow (`inset 0 2px 4px rgba(0, 0, 0, 0.12)`) specifically utilized inside checkbox wells and depressed quantity steppers to validate tactile touch input instantly.
+- **Level 1 (Card & List Rows):** Pure crisp white (`#FFFFFF`) with a 1px solid border (`#E7E5E4`). Elements feel crisp, defined, and flatly set into the screen.
+- **Level 2 (Floating Action Docks & Sheets):** Grounded by a solid 1.5px border (`#D6D3D1`) complemented by an immediate warm offset ambient edge: `0 4px 12px rgba(120, 113, 108, 0.12)`. This keeps docked controls crisp without fading into background noise.
+- **Level 3 (Pressed / Interactive Affirmation):** Inset micro-shadow (`inset 0 2px 4px rgba(41, 37, 36, 0.12)`) specifically utilized inside checkbox wells and depressed quantity steppers to validate tactile touch input instantly.
 
 ## Shapes
 
@@ -192,17 +192,17 @@ A balanced **Soft** visual profile (`roundedness: 1`). Crisp, functional corners
 ### 1. Checklist Row (Core Component)
 - **Geometry:** Height minimum 56px; full horizontal width; padding `0.75rem 1rem`.
 - **States:**
-  - *Active:* Crisp `#FFFFFF` background, `#1A2024` label (`body-lg`), 1px bottom divider `#E2DFD8`.
-  - *Checked:* Background transitions subtly to `#F4F3F0`, text turns to `#8C959B` with an immediate center strike-through (`text-decoration: line-through 1.5px #8C959B`).
+  - *Active:* Crisp `#FFFFFF` background, `#1C1917` label (`body-lg`), 1px bottom divider `#E7E5E4`.
+  - *Checked:* Background transitions subtly to `#F5F5F4`, text turns to `#A8A29E` with an immediate center strike-through (`text-decoration: line-through 1.5px #A8A29E`).
 - **Affordance:** Left-aligned 32px tick target.
 
 ### 2. Tick Circles & Checkboxes
-- **Inactive:** 32px circle, `#FFFFFF` fill, 2px solid border (`#8C959B`).
+- **Inactive:** 32px circle, `#FFFFFF` fill, 2px solid border (`#A8A29E`).
 - **Active / Checked:** 32px circle, filled with `#13734B`, displaying a crisp white 2.5px gauge check icon. Transitions with a 120ms scale-snap (0.9 to 1.0) for punchy haptic feedback.
 
 ### 3. Department & Aisle Chips
 - **Geometry:** Height 28px; pill-shaped (`9999px`); padding `0 10px`.
-- **Aisle Style:** Border 1px solid `#E2DFD8`, fill `#FFFFFF`, text `#2F3E46` (`label-sm`).
+- **Aisle Style:** Border 1px solid `#E7E5E4`, fill `#FFFFFF`, text `#2F3E46` (`label-sm`).
 - **Urgent / Warning Style:** Tinted fill `rgba(200, 90, 50, 0.12)`, border `1px solid #C85A32`, text `#C85A32` (`label-sm`).
 
 ### 4. Tactile Bottom Dock (Input & Quick Add)
@@ -211,10 +211,10 @@ A balanced **Soft** visual profile (`roundedness: 1`). Crisp, functional corners
 - **Add Button:** Minimum 52px square, `#13734B` solid background, bold white plus icon (`#FFFFFF`), rounded-md.
 
 ### 5. Input Fields
-- **Default:** Height 48px, background `#FFFFFF`, border 1.5px solid `#D1CDC2`, text `#1A2024`, placeholder `#8C959B`.
+- **Default:** Height 48px, background `#FFFFFF`, border 1.5px solid `#D6D3D1`, text `#1C1917`, placeholder `#A8A29E`.
 - **Focused:** Border 2px solid `#13734B`, outline none. Instant cursor display without soft glow or blur artifacts.
 
 ### 6. Quantity Steppers
 - **Geometry:** Compact dual-button unit `[ - | 1 | + ]`.
-- **Dimensions:** Button width 36px, height 36px, border 1px solid `#E2DFD8`, fill `#F9F8F5`.
+- **Dimensions:** Button width 36px, height 36px, border 1px solid `#E7E5E4`, fill `#F9F8F5`.
 - **Active State:** Inset press depth, bold numeric display (`body-md`, tabular nums).
