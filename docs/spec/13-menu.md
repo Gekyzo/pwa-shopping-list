@@ -1,12 +1,16 @@
 # Menu
 
 Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a week and fills
-`Compra` with the products of its recipes in one action.
+`Compra` with the products of its recipes in one action. Each week starts empty; the meals of
+past weeks stay, read only.
 
 ## Week
 
 - **MENU-1** The week has 7 days, Monday first (day 0), and 2 meals a day: `lunch`
-  (`Comida`) and `dinner` (`Cena`). The week has no date.
+  (`Comida`) and `dinner` (`Cena`). A week is the date of its Monday, `YYYY-MM-DD` in local
+  time, and each meal holds its week. This week is the week of today: on Monday a new week starts
+  with no meal, with no tap and with no write of the state. Each operation of the menu acts on
+  one week, this week on the screen; a week that is not a Monday gives `error.unknownMeal`.
 - **MENU-2** A meal holds one recipe, one dish or nothing. A dish is a name with no recipe. A
   recipe or a dish can be in more than one meal.
 - **MENU-3** A recipe or a dish put in a meal replaces the recipe or the dish that the meal had. A
@@ -46,7 +50,7 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   phone. In the compact density below 600px the name above the meals is the short weekday of
   the language, also in sentence case (`Lun`), and the name of a meal takes up to two lines.
 - **MENU-10** The header shows `Menú` and `N comidas planificadas`, or `Sin comidas
-  planificadas`.
+  planificadas`, for the week in view (MENU-23).
 - **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each
   recipe, in the order of the recipes; the chip of the recipe of the meal is on. A tap on a chip
   puts that recipe in the meal and closes the sheet. A meal with a recipe or a dish also has
@@ -101,6 +105,20 @@ Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a wee
   disabled while the own menu is empty. With scope
   `list`, for the owner and with no share, `Menú` shows the own meals with no tag.
 
+## Past weeks
+
+- **MENU-22** A put of a meal (MENU-3) drops the meals of the weeks before the last 26, its own
+  week included in the 26. Nothing else drops a past week.
+- **MENU-23** A week bar stands above the days of `Menú`: `‹`, the week in view, `›`. The week in
+  view is `Esta semana`, or `Semana del 26 oct` for a past week, with the short date of the
+  language. `‹` shows the nearest earlier week that holds a meal of a list in view, and is disabled
+  when there is none. `›` shows the nearest later week that holds a meal, or this week; it is
+  disabled on this week. A past week shows its days as this week does (MENU-9), with each meal a
+  tile of no action whose name is `--muted`; an empty meal shows `—`. It has no action bar and no
+  panel **Para la cesta**, and the header counts its meals (MENU-10). The week in view is not
+  stored: the app starts on this week, and a past week that holds no meal any more shows this
+  week.
+
 ## Limits
 
-No date, no week after this one, no third meal. No quantity.
+No week after this one, no edit of a past week, no third meal. No quantity.

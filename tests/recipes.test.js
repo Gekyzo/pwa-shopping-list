@@ -219,16 +219,17 @@ test('deleteRecipe removes the recipe from sent', () => {
   assert.deepEqual(sent.sent, [first.id, second.id]);
 });
 
-test('deleteRecipe empties the meals of the recipe in the menu', () => {
+test('deleteRecipe empties the meals of the recipe in this week', () => {
   const first = withRecipe(emptyState(), 'Omelette', ['Eggs']);
   const second = withRecipe(first.state, 'Flan', ['Milk']);
+  const week = '2026-11-02';
   const menu = [
-    { day: 0, meal: 'lunch', recipe: first.id },
-    { day: 0, meal: 'dinner', recipe: second.id },
-    { day: 4, meal: 'lunch', recipe: first.id },
+    { week, day: 0, meal: 'lunch', recipe: first.id },
+    { week, day: 0, meal: 'dinner', recipe: second.id },
+    { week, day: 4, meal: 'lunch', recipe: first.id },
   ];
   const planned = { ...second.state, menu };
-  assert.deepEqual(deleteRecipe(planned, first.id).state.menu, [{ day: 0, meal: 'dinner', recipe: second.id }]);
+  assert.deepEqual(deleteRecipe(planned, first.id, week).state.menu, [{ week, day: 0, meal: 'dinner', recipe: second.id }]);
   assert.equal(planned.menu.length, 3);
 });
 
@@ -630,4 +631,14 @@ test('inList is false for a product that is missing or saved, and for a recipe w
     [false, false, false],
   );
   assert.deepEqual(state, before);
+});
+
+test('deleteRecipe keeps the meals of the recipe in a past week as dishes of its name (REC-6)', () => {
+  const first = withRecipe(emptyState(), 'Omelette', ['Eggs']);
+  const menu = [
+    { week: '2026-10-26', day: 2, meal: 'lunch', recipe: first.id },
+    { week: '2026-11-02', day: 0, meal: 'lunch', recipe: first.id },
+  ];
+  const { state } = deleteRecipe({ ...first.state, menu }, first.id, '2026-11-02');
+  assert.deepEqual(state.menu, [{ week: '2026-10-26', day: 2, meal: 'lunch', dish: 'Omelette' }]);
 });

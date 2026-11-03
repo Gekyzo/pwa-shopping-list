@@ -1,7 +1,7 @@
 import * as recipes from '#recipes';
 import * as menu from '#menu';
 import { listOf, listPart } from '#lists';
-import { $, el, state, ui, t, undoState, showToast, apply, render, onOwn, onListOf } from '#ui/context';
+import { $, el, state, ui, t, undoState, showToast, apply, render, onOwn, onListOf, thisWeek } from '#ui/context';
 import { icon, iconButton, bindField, flashSaved, applySaved, clearSaved } from '#ui/controls';
 import { leaveNode } from '#ui/motion';
 import { swipeBox, tagNode } from '#ui/rows';
@@ -113,7 +113,7 @@ const deleteAction = (recipe, node) => {
     t('sheet.delete'),
     () =>
       leaveNode(node.dataset.key, [node], () =>
-        apply(onRecipe(recipe, (part) => recipes.deleteRecipe(part, recipe.id)), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
+        apply(onRecipe(recipe, (part) => recipes.deleteRecipe(part, recipe.id, thisWeek())), { undoText: t('toast.recipeDeleted', { name: recipe.name }) }),
       ),
     { variant: 'danger', labelled: true },
   );
@@ -149,7 +149,7 @@ export const recipeNode = (recipe) => {
 // runs between the two, to change the section. REC-38: the recipe goes to the list of the dish, so
 // that its meals keep a recipe of their own list: a dish of the own menu gives an own recipe.
 export const recipeFromDish = (name, which = 'own', show = () => {}) => {
-  const result = onListOf(which, (part) => menu.dishRecipe(part, name));
+  const result = onListOf(which, (part) => menu.dishRecipe(part, thisWeek(), name));
   if (!apply(result, { undoText: t('toast.recipeCreated', { name }) })) return;
   show();
   openRecipe(recipeOf(result.id));
@@ -239,7 +239,7 @@ const deleteOpenRecipe = () => {
   const recipe = openRecipeOf();
   if (!recipe) return;
   // The render of the delete closes the sheet: its recipe is gone.
-  if (apply(onRecipe(recipe, (part) => recipes.deleteRecipe(part, recipe.id)), { undoText: t('toast.recipeDeleted', { name: recipe.name }) })) ui.recipeId = null;
+  if (apply(onRecipe(recipe, (part) => recipes.deleteRecipe(part, recipe.id, thisWeek())), { undoText: t('toast.recipeDeleted', { name: recipe.name }) })) ui.recipeId = null;
 };
 
 export const bind = () => {

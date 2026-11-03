@@ -33,12 +33,21 @@ export const renameRecipe = (state, id, rawName) => {
   return error ? reject(state, ...error) : patchRecipe(state, id, { name });
 };
 
-export const deleteRecipe = (state, id) => {
-  if (!findRecipe(state, id)) return reject(state, NOT_FOUND);
+// The longest dish name (MENU-3), the limit of the name that a deleted recipe leaves in a past week.
+const DISH_LENGTH = 80;
+
+// `week` is the week of today: the meals of the recipe in a week before it keep its name as a dish
+// (REC-6), the others become empty.
+export const deleteRecipe = (state, id, week) => {
+  const found = findRecipe(state, id);
+  if (!found) return reject(state, NOT_FOUND);
   const recipes = state.recipes.filter((recipe) => recipe.id !== id);
   const sent = state.sent.filter((sentId) => sentId !== id);
-  // The meals of the recipe become empty.
-  const menu = state.menu.filter((entry) => entry.recipe !== id);
+  const dish = found.name.slice(0, DISH_LENGTH);
+  const menu = state.menu.flatMap((entry) => {
+    if (entry.recipe !== id) return [entry];
+    return entry.week < week ? [{ week: entry.week, day: entry.day, meal: entry.meal, dish }] : [];
+  });
   return { state: { ...state, recipes, sent, menu } };
 };
 

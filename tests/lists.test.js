@@ -5,6 +5,9 @@ import { sendRecipe } from '#recipes';
 import { setMeal, menuWeek, dishRecipe } from '#menu';
 import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts, reorderList, fillLists, mergeTwins, twinIds, acrossTwins, deletedKey } from '#lists';
 
+// The Monday of the week of the meals of the tests.
+const W = '2026-11-02';
+
 const item = (id, name, extra = {}) => ({ id, name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '', ...extra });
 const recipe = (id, name) => ({ id, name, products: [] });
 
@@ -12,7 +15,7 @@ const own = () => ({
   ...emptyState(),
   items: [item('o1', 'Leche'), item('o2', 'Pan')],
   recipes: [recipe('ro', 'Tortilla')],
-  menu: [{ day: 0, meal: 'lunch', recipe: 'ro' }],
+  menu: [{ week: W, day: 0, meal: 'lunch', recipe: 'ro' }],
   sent: ['ro'],
   group: 'none',
   sort: 'name',
@@ -22,7 +25,7 @@ const shared = () => ({
   ...emptyState(),
   items: [item('s1', 'Leche'), item('s2', 'Sal')],
   recipes: [recipe('rs', 'Paella')],
-  menu: [{ day: 0, meal: 'lunch', dish: 'Paella' }],
+  menu: [{ week: W, day: 0, meal: 'lunch', dish: 'Paella' }],
   sent: ['rs'],
   group: 'aisle',
   sort: 'custom',
@@ -158,7 +161,7 @@ test('listPart gives the items, recipes, meals and sent of one list', () => {
   const mine = listPart(combined, 'own');
   assert.deepEqual(mine.items.map((entry) => entry.id), ['o1', 'o2']);
   assert.deepEqual(mine.recipes.map((entry) => entry.id), ['ro']);
-  assert.deepEqual(mine.menu, [{ day: 0, meal: 'lunch', recipe: 'ro' }]);
+  assert.deepEqual(mine.menu, [{ week: W, day: 0, meal: 'lunch', recipe: 'ro' }]);
   assert.deepEqual(mine.sent, ['ro']);
   const theirs = listPart(combined, 'shared');
   assert.deepEqual(theirs.items.map((entry) => entry.id), ['shared:s1', 'shared:s2']);
@@ -200,12 +203,12 @@ test('a send of a shared recipe through onList brings its products to the shared
 
 test('a meal of a shared recipe keeps the own meal of that slot', () => {
   const combined = combine(own(), shared(), 'all');
-  const result = onList(combined, 'shared', (part) => setMeal(part, 0, 'lunch', 'shared:rs'), shared(), 'all');
+  const result = onList(combined, 'shared', (part) => setMeal(part, W, 0, 'lunch', 'shared:rs'), shared(), 'all');
   const parts = split(result.state, shared(), 'all');
-  assert.deepEqual(parts.own.menu, [{ day: 0, meal: 'lunch', recipe: 'ro' }]);
-  assert.deepEqual(parts.shared.menu, [{ day: 0, meal: 'lunch', recipe: 'rs' }]);
-  assert.equal(menuWeek(listPart(result.state, 'shared'))[0].meals[0].recipe.name, 'Paella');
-  assert.equal(menuWeek(listPart(result.state, 'own'))[0].meals[0].recipe.name, 'Tortilla');
+  assert.deepEqual(parts.own.menu, [{ week: W, day: 0, meal: 'lunch', recipe: 'ro' }]);
+  assert.deepEqual(parts.shared.menu, [{ week: W, day: 0, meal: 'lunch', recipe: 'rs' }]);
+  assert.equal(menuWeek(listPart(result.state, 'shared'), W)[0].meals[0].recipe.name, 'Paella');
+  assert.equal(menuWeek(listPart(result.state, 'own'), W)[0].meals[0].recipe.name, 'Tortilla');
 });
 
 // I2: the two lists may hold one id each (the sample recipe of the walkthrough, an imported
@@ -214,7 +217,7 @@ const twin = () => ({
   ...emptyState(),
   items: [item('x1', 'Pasta')],
   recipes: [{ id: 'sample-pasta', name: 'Pasta', products: ['Pasta'], url: '' }],
-  menu: [{ day: 0, meal: 'lunch', recipe: 'sample-pasta' }],
+  menu: [{ week: W, day: 0, meal: 'lunch', recipe: 'sample-pasta' }],
 });
 
 test('one id in both lists gives two entities with distinct ids in the combined state', () => {
@@ -261,9 +264,9 @@ test('combine then split of shared ids gives back both parts, for both scopes', 
 });
 
 test('onList gives the combined id of a new shared recipe, and of an existing one', () => {
-  const base = { ...emptyState(), menu: [{ day: 1, meal: 'dinner', dish: 'Sopa' }] };
+  const base = { ...emptyState(), menu: [{ week: W, day: 1, meal: 'dinner', dish: 'Sopa' }] };
   const combined = combine(emptyState(), base, 'all');
-  const made = onList(combined, 'shared', (part) => dishRecipe(part, 'Sopa', () => 'r1'), base, 'all');
+  const made = onList(combined, 'shared', (part) => dishRecipe(part, W, 'Sopa', () => 'r1'), base, 'all');
   assert.ok(made.state.recipes.some((entry) => entry.id === made.id && isShared(entry)));
   assert.deepEqual(split(made.state, base, 'all').shared.recipes.map((entry) => entry.id), ['r1']);
   const again = onList(made.state, 'shared', (part) => ({ state: part, id: part.recipes[0].id }), split(made.state, base, 'all').shared, 'all');
@@ -307,9 +310,9 @@ test('a move of an unknown item is an error', () => {
 const withMenu = (items, recipeList, menuList) => ({ ...emptyState(), items, recipes: recipeList, menu: menuList });
 
 test('fillLists fills the shared list from the shared menu when the own menu is empty', () => {
-  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ week: W, day: 0, meal: 'lunch', recipe: 'r1' }]);
   const combined = combine(emptyState(), base, 'all');
-  const result = fillLists(combined, base, 'all', () => 'n1');
+  const result = fillLists(combined, base, 'all', W, () => 'n1');
   const parts = split(result.state, base, 'all');
   assert.deepEqual(parts.shared.items.map((entry) => entry.name), ['Arroz']);
   assert.deepEqual(parts.shared.sent, ['r1']);
@@ -318,10 +321,10 @@ test('fillLists fills the shared list from the shared menu when the own menu is 
 });
 
 test('fillLists fills each list from its menu and sums the sends', () => {
-  const mine = withMenu([item('o1', 'Huevos')], [{ id: 'r1', name: 'Tortilla', products: ['Huevos', 'Patatas'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
-  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const mine = withMenu([item('o1', 'Huevos')], [{ id: 'r1', name: 'Tortilla', products: ['Huevos', 'Patatas'], url: '' }], [{ week: W, day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ week: W, day: 0, meal: 'lunch', recipe: 'r1' }]);
   let next = 0;
-  const result = fillLists(combine(mine, base, 'all'), base, 'all', () => `n${(next += 1)}`);
+  const result = fillLists(combine(mine, base, 'all'), base, 'all', W, () => `n${(next += 1)}`);
   const parts = split(result.state, base, 'all');
   assert.deepEqual(parts.own.items.map((entry) => entry.name), ['Huevos', 'Patatas']);
   assert.deepEqual(parts.shared.items.map((entry) => entry.name), ['Arroz']);
@@ -330,27 +333,27 @@ test('fillLists fills each list from its menu and sums the sends', () => {
 });
 
 test('fillLists under scope list fills the own list only', () => {
-  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
-  const result = fillLists(combine(emptyState(), base, 'list'), base, 'list', () => 'n1');
+  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ week: W, day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const result = fillLists(combine(emptyState(), base, 'list'), base, 'list', W, () => 'n1');
   assert.equal(result.error.key, 'error.menuEmpty');
 });
 
 test('fillLists gives menuEmpty only when both menus are empty', () => {
   const base = withMenu([], [], []);
-  assert.equal(fillLists(combine(emptyState(), base, 'all'), base, 'all').error.key, 'error.menuEmpty');
-  assert.equal(fillLists(emptyState(), null, null).error.key, 'error.menuEmpty');
+  assert.equal(fillLists(combine(emptyState(), base, 'all'), base, 'all', W).error.key, 'error.menuEmpty');
+  assert.equal(fillLists(emptyState(), null, null, W).error.key, 'error.menuEmpty');
 });
 
 test('fillLists gives menuNoProducts when no menu gives a product', () => {
-  const base = withMenu([], [], [{ day: 0, meal: 'lunch', dish: 'Sopa' }]);
-  assert.equal(fillLists(combine(emptyState(), base, 'all'), base, 'all').error.key, 'error.menuNoProducts');
+  const base = withMenu([], [], [{ week: W, day: 0, meal: 'lunch', dish: 'Sopa' }]);
+  assert.equal(fillLists(combine(emptyState(), base, 'all'), base, 'all', W).error.key, 'error.menuNoProducts');
 });
 
 test('fillLists that changes nothing gives the same state', () => {
-  const base = withMenu([item('s1', 'Arroz')], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const base = withMenu([item('s1', 'Arroz')], [{ id: 'r1', name: 'Paella', products: ['Arroz'], url: '' }], [{ week: W, day: 0, meal: 'lunch', recipe: 'r1' }]);
   const sent = { ...base, sent: ['r1'] };
   const combined = combine(emptyState(), sent, 'all');
-  const result = fillLists(combined, sent, 'all');
+  const result = fillLists(combined, sent, 'all', W);
   assert.equal(result.state, combined);
   assert.deepEqual([result.added, result.already], [0, 1]);
 });

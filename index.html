@@ -64,6 +64,12 @@
         <input id="query" class="input raised" type="search" maxlength="80" autocomplete="off" enterkeyhint="search">
       </div>
 
+      <div id="menu-week" class="week-bar" hidden>
+        <button id="menu-week-prev" class="button icon" type="button" data-i18n-attr="aria-label:menu.prevWeek"><svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg></button>
+        <h2 id="menu-week-label" class="week-bar-label" aria-live="polite"></h2>
+        <button id="menu-week-next" class="button icon" type="button" data-i18n-attr="aria-label:menu.nextWeek"><svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg></button>
+      </div>
+
       <ul id="items" class="item-list"></ul>
 
       <div id="empty" class="empty-state low" hidden>

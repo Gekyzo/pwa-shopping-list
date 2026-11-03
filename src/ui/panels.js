@@ -1,7 +1,7 @@
 import { comingBack, openItems } from '#store';
 import { shopCounts } from '#shops';
-import { basketPreview } from '#menu';
-import { $, el, state, ui, t, tripEnd } from '#ui/context';
+import { basketPreview, mealCount } from '#menu';
+import { $, el, state, ui, t, tripEnd, thisWeek } from '#ui/context';
 import { listState } from '#ui/view';
 
 // The rows a panel shows before its `y N más` line.
@@ -49,8 +49,8 @@ const renderNext = (view) => {
 
 // Para la cesta (MENU-21): what Llenar cesta puts to buy.
 const renderBasket = () => {
-  const products = basketPreview(state);
-  $('panel-basket').hidden = state.menu.length === 0;
+  const products = basketPreview(state, thisWeek());
+  $('panel-basket').hidden = false;
   $('panel-basket-count').textContent = String(products.length);
   $('panel-basket-note').textContent = t('panels.basketNote', { fill: t('menu.fill') });
   const entries = products.map((name) => el('li', { className: 'side-panel-row' }, [el('span', { textContent: name })]));
@@ -58,11 +58,11 @@ const renderBasket = () => {
 };
 
 // The panels of Compra and Menú, from 600px (DSV-9): below the content until 840px, then beside it.
-// Compra shows them while its list has an item; Menú while a meal is planned.
+// Compra shows them while its list has an item; Menú while this week, in view, has a meal (MENU-23).
 export const renderPanels = () => {
   const compra = ui.view === 'active';
   const view = listState();
-  const shown = compra ? view.items.some((item) => item.list === 'active') : ui.view === 'menu' && state.menu.length > 0;
+  const shown = compra ? view.items.some((item) => item.list === 'active') : ui.view === 'menu' && ui.pastWeek === null && mealCount(state, thisWeek()) > 0;
   $('panels').hidden = !shown;
   for (const id of ['panel-shops', 'panel-next', 'panel-basket']) $(id).hidden = true;
   if (!shown) return;

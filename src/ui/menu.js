@@ -2,7 +2,7 @@ import * as recipes from '#recipes';
 import * as menu from '#menu';
 import { intlTag } from '#i18n';
 import { listOf, listPart } from '#lists';
-import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, onListOf, fillMenus } from '#ui/context';
+import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, onListOf, fillMenus, thisWeek, shownWeek } from '#ui/context';
 import { sendText, recipeFromDish } from '#ui/recipes';
 import { showView } from '#ui/nav';
 import { tagNode } from '#ui/rows';
@@ -12,9 +12,9 @@ const LISTS = ['own', 'shared'];
 
 // MENU-20: each list has its own week, so a slot may hold two meals, one of each list. The meals of
 // a slot are `{ which, shared, recipe, dish }`, the own one first. With no share the shared week is
-// empty.
+// empty. The week is the one in view (MENU-23).
 const week = () => {
-  const weeks = LISTS.map((which) => menu.menuWeek(listPart(state, which)));
+  const weeks = LISTS.map((which) => menu.menuWeek(listPart(state, which), shownWeek()));
   return weeks[0].map(({ day, meals }) => ({
     day,
     meals: meals.map(({ meal }, index) => ({
@@ -65,7 +65,18 @@ const plannedLabel = (entry) => {
   return [plannedName(entry), ...(entry.dish ? [t('menu.noRecipe')] : []), ...(tag === null ? [] : [tag])].join(', ');
 };
 
+// MENU-23: a meal of a past week is a tile with no action; an empty one shows a dash.
+const pastMealNode = (day, { meal, planned }) => {
+  const names = planned.length ? planned.map(plannedNode) : [el('span', { className: 'meal-name', textContent: '—' })];
+  const kind = !planned.length ? 'meal past free' : planned.every((entry) => entry.dish) ? 'meal past dish' : 'meal past';
+  const node = el('div', { className: kind }, [el('small', { className: 'meal-label', textContent: t(`meal.${meal}`) }), ...names]);
+  node.setAttribute('role', 'group');
+  node.setAttribute('aria-label', `${mealTitle(day, meal)}: ${planned.length ? planned.map(plannedLabel).join('; ') : t('menu.noMeal')}`);
+  return node;
+};
+
 const mealNode = (day, { meal, planned }) => {
+  if (ui.pastWeek !== null) return pastMealNode(day, { meal, planned });
   const dish = planned.length === 1 && planned[0].dish;
   const label = dish ? `${t(`meal.${meal}`)} · ${t('menu.noRecipe')}` : t(`meal.${meal}`);
   const kind = !planned.length ? 'meal free' : planned.every((entry) => entry.dish) ? 'meal dish' : 'meal';
@@ -87,8 +98,12 @@ const dayNode = ({ day, meals }) =>
     el('div', { className: 'meals' }, meals.map((entry) => mealNode(day, entry))),
   ]);
 
-// The days of Menú.
-export const weekNodes = () => week().map(dayNode);
+// The days of Menú. A past week that holds no meal any more, or a change of the clock, shows this
+// week again.
+export const weekNodes = () => {
+  if (ui.pastWeek !== null && !pastWeeks().includes(ui.pastWeek)) ui.pastWeek = null;
+  return week().map(dayNode);
+};
 
 // MENU-20: Llenar cesta fills each list from its own menu; Vaciar menú empties the own menu only.
 const fillBasket = () => {
@@ -101,7 +116,40 @@ const fillBasket = () => {
 };
 
 export const renderMenuActions = () => {
-  $('menu-clear').disabled = menu.mealCount(listPart(state, 'own')) === 0;
+  $('menu-clear').disabled = menu.mealCount(listPart(state, 'own'), thisWeek()) === 0;
+  renderWeekBar();
+};
+
+// MENU-23: the weeks before this one that hold a meal of a list in view, oldest first.
+const pastWeeks = () => {
+  const today = thisWeek();
+  return menu.menuWeeks(state).filter((week) => week < today);
+};
+
+// `Semana del 26 oct` in the language of the screen.
+const weekLabel = (week) => {
+  if (week === null) return t('menu.thisWeek');
+  const [year, month, day] = week.split('-').map(Number);
+  const date = new Intl.DateTimeFormat(intlTag(lang), { day: 'numeric', month: 'short' }).format(new Date(year, month - 1, day));
+  return t('menu.weekOf', { date });
+};
+
+// ‹ goes to the nearest earlier week with a meal; › to the nearest later one, or to this week.
+const earlierWeek = () => pastWeeks().filter((week) => ui.pastWeek === null || week < ui.pastWeek).at(-1) ?? null;
+const laterWeek = () => pastWeeks().find((week) => week > ui.pastWeek) ?? null;
+
+const renderWeekBar = () => {
+  const shown = ui.view === 'menu';
+  $('menu-week').hidden = !shown;
+  if (!shown) return;
+  $('menu-week-label').textContent = weekLabel(ui.pastWeek);
+  $('menu-week-prev').disabled = earlierWeek() === null;
+  $('menu-week-next').disabled = ui.pastWeek === null;
+};
+
+const showWeek = (week) => {
+  ui.pastWeek = week;
+  render();
 };
 
 // The height of the sheet at its first render while open: the results change, the sheet does not.
@@ -136,7 +184,7 @@ export const renderMeal = () => {
     // MENU-20: the meal goes to the list of the recipe, in place of the meal of that list only.
     const pick = () => {
       ui.mealOpen = null;
-      apply(onListOf(listOf(recipe), (part) => menu.setMeal(part, day, meal, recipe.id)));
+      apply(onListOf(listOf(recipe), (part) => menu.setMeal(part, thisWeek(), day, meal, recipe.id)));
     };
     const chip = el('button', { type: 'button', className: 'chip', onclick: pick }, tag === null ? [recipe.name] : [recipe.name, tagNode(tag)]);
     chip.setAttribute('aria-pressed', String(planned.some((entry) => entry.recipe?.id === recipe.id)));
@@ -167,7 +215,7 @@ const plannedRow = (day, meal, entry) => {
 // MENU-20: Quitar empties the meal of one list; the meal of the other list stays.
 const clearPlanned = (day, meal, entry) => {
   ui.mealOpen = null;
-  apply(onListOf(entry.which, (part) => menu.clearMeal(part, day, meal)), { undoText: t('toast.mealCleared', { name: plannedName(entry) }) });
+  apply(onListOf(entry.which, (part) => menu.clearMeal(part, thisWeek(), day, meal)), { undoText: t('toast.mealCleared', { name: plannedName(entry) }) });
 };
 
 // The text of the field as a new dish: not empty and not the name of a recipe, or null.
@@ -182,7 +230,7 @@ const addDish = () => {
   const { day, meal } = ui.mealOpen;
   ui.mealOpen = null;
   // MENU-20: a dish goes to the own menu.
-  apply(onOwn((own) => menu.setDish(own, day, meal, name)));
+  apply(onOwn((own) => menu.setDish(own, thisWeek(), day, meal, name)));
 };
 
 // The dish becomes a recipe of its list, and its sheet opens in Recetas for the products.
@@ -194,8 +242,10 @@ const dishToRecipe = () => {
 
 export const bind = () => {
   $('menu-fill').addEventListener('click', fillBasket);
-  $('menu-clear').addEventListener('click', () => apply(onOwn((own) => menu.clearMenu(own)), { undoText: t('toast.menuCleared') }));
+  $('menu-clear').addEventListener('click', () => apply(onOwn((own) => menu.clearMenu(own, thisWeek())), { undoText: t('toast.menuCleared') }));
   $('meal-veil').addEventListener('click', closeMeal);
+  $('menu-week-prev').addEventListener('click', () => showWeek(earlierWeek()));
+  $('menu-week-next').addEventListener('click', () => showWeek(laterWeek()));
   $('meal-query').addEventListener('input', (event) => {
     ui.mealQuery = event.target.value;
     renderMeal();

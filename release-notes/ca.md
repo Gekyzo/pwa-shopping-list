@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- **Menú** comença buit cada dilluns. Amb les fletxes de dalt veus el menú de les setmanes anteriors, fins a 26 setmanes enrere.
 
 ## 1.10.2 - 2026-10-31
 

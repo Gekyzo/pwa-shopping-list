@@ -89,10 +89,13 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 
 - **SYNC-1** The server holds one record for each item, each recipe, each meal of the menu and the
   settings, for each space (SHARE-1). A record has `owner` (the owner of the space), `kind` (`item`, `recipe`, `meal` or `settings`), `key`, `data`, `deleted` and
-  `updated`. The key is the `id` of an item or of a recipe, `<day>-<meal>` for a meal, and `settings` for
+  `updated`. The key is the `id` of an item or of a recipe, `<week>-<day>-<meal>` for a meal (`2026-11-02-0-lunch`), and `settings` for
   the settings. A device preference does not sync: the language, the hand, the theme, the density,
   **Al terminar la compra**, the row of shop lists, the hint of the swipe and the flag of the
   walkthrough.
+  A meal record of the key `<day>-<meal>` of version 9 is a meal with no week: the merge dates it
+  (STORE-8) and sends the delete of the old key and the upsert of the new one. The change of week
+  writes no record (MENU-1).
   Each space has one `settings` record. A member pulls the settings of the shared space with
   the shared list, and sends a change of them only with scope `all` (SHARE-7): with scope `list`
   the member does not see the recipes whose ids `sent` holds.

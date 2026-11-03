@@ -7,6 +7,9 @@ import { normalizeState, BEFORE_LOGIN_KEY, STORAGE_KEY } from '#storage';
 import { saveSession, loadSession, loadQueue, saveQueue, saveSyncState, loadSyncState, loadSharedState, SESSION_KEY, SHARED_STORAGE_KEY } from '#session';
 import { recordKey, toRecords } from '#records';
 
+// The Monday of the week of the meals of the tests.
+const W = '2026-11-02';
+
 const item = (id, name, patch = {}) => ({ id, name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '', ...patch });
 const withItems = (items) => ({ ...emptyState(), items });
 
@@ -1176,7 +1179,7 @@ test('decline cancels the invite, and setScope and reinvite go to the server', a
 });
 
 test('a narrowed scope drops recipes and meals and queues no delete', async () => {
-  const ownerState = { ...withItems([item('o-i1', 'Leche')]), recipes: [recipe('r1', 'Pasta'), recipe('r2', 'Sopa')], sent: ['r1'], menu: [{ day: 0, meal: 'lunch', recipe: 'r1' }] };
+  const ownerState = { ...withItems([item('o-i1', 'Leche')]), recipes: [recipe('r1', 'Pasta'), recipe('r2', 'Sopa')], sent: ['r1'], menu: [{ week: W, day: 0, meal: 'lunch', recipe: 'r1' }] };
   const { server, member, share } = await joinedWorld({}, ownerState);
   assert.equal(member.box.shared.recipes.length, 2);
   member.changeShared({ ...member.box.shared, recipes: [recipe('r1', 'Pasta'), recipe('r2', 'Sopa larga')] });

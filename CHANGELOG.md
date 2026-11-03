@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Menu history (MENU-1, MENU-22, MENU-23): each meal holds `week`, the Monday of its week (`YYYY-MM-DD`, local time), and every operation of `src/menu.js` takes the week after the state. This week comes from the clock (`thisWeek` of `src/ui/context.js`), so a new week starts empty with no write and no sync change. A put drops the weeks before the last 26. `Menú` gets a week bar (`‹`, `Esta semana` or `Semana del 26 oct`, `›`) that shows a past week read only, with no action bar and no **Para la cesta**. A deleted recipe leaves its meals of past weeks as dishes of its name (REC-6). State version 10: a meal of version 1 to 9 gets the week of the load (STORE-8); the meal record key is `<week>-<day>-<meal>`, and an old key `<day>-<meal>` is dated and sent again at the next merge (SYNC-1). Cache `shopping-shell-v27`. The catalogs add `menu.thisWeek`, `menu.weekOf`, `menu.prevWeek`, `menu.nextWeek` and `menu.noMeal`.
 
 ## 1.10.3 - 2026-11-02
 

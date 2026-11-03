@@ -4,6 +4,9 @@ import { toRecords, fromRecords, diffRecords, recordKey } from '#records';
 import { normalizeState } from '#storage';
 import { emptyState } from '#store';
 
+// The Monday of the week of the meals of the tests.
+const W = '2026-11-02';
+
 const item = (id, name, extra = {}) => ({ id, name, recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '', ...extra });
 const recipe = (id, name) => ({ id, name, products: ['Pasta'], url: '' });
 
@@ -11,7 +14,7 @@ const sample = () => ({
   ...emptyState(),
   items: [item('a', 'Pasta'), item('b', 'Leche')],
   recipes: [recipe('r1', 'Sopa')],
-  menu: [{ day: 0, meal: 'lunch', dish: 'Sopa' }],
+  menu: [{ week: W, day: 0, meal: 'lunch', dish: 'Sopa' }],
   sort: 'name',
   aisles: ['Frutas'],
 });
@@ -20,10 +23,10 @@ test('toRecords gives one record per item, recipe and meal, and one settings rec
   const records = toRecords(sample());
   assert.deepEqual(
     [...records.keys()].sort(),
-    ['item:a', 'item:b', 'meal:0-lunch', 'recipe:r1', 'settings:settings'],
+    ['item:a', 'item:b', 'meal:2026-11-02-0-lunch', 'recipe:r1', 'settings:settings'],
   );
   assert.deepEqual(records.get('settings:settings').data, { group: 'recipe', sort: 'name', sent: [], aisles: ['Frutas'] });
-  assert.deepEqual(records.get('meal:0-lunch').data, { dish: 'Sopa' });
+  assert.deepEqual(records.get('meal:2026-11-02-0-lunch').data, { dish: 'Sopa' });
   assert.equal(records.get(recordKey('item', 'a')).key, 'a');
 });
 
@@ -34,7 +37,7 @@ test('item data carries its position in the list', () => {
 });
 
 test('fromRecords of toRecords returns the same state', () => {
-  const state = normalizeState({ ...sample(), recipes: [recipe('r1', 'Sopa')], sent: ['r1'], menu: [{ day: 1, meal: 'dinner', recipe: 'r1' }, { day: 0, meal: 'lunch', dish: 'Sopa' }] });
+  const state = normalizeState({ ...sample(), recipes: [recipe('r1', 'Sopa')], sent: ['r1'], menu: [{ week: W, day: 1, meal: 'dinner', recipe: 'r1' }, { week: W, day: 0, meal: 'lunch', dish: 'Sopa' }] });
   assert.deepEqual(normalizeState(fromRecords(toRecords(state))), state);
 });
 
@@ -78,4 +81,12 @@ test('diffRecords ignores the order of the keys of data', () => {
   const a = new Map([['item:x', { kind: 'item', key: 'x', data: { p: 1, q: 2 } }]]);
   const b = new Map([['item:x', { kind: 'item', key: 'x', data: { q: 2, p: 1 } }]]);
   assert.deepEqual(diffRecords(a, b), []);
+});
+
+test('fromRecords reads a meal record of the version 9 key with no week, and normalizeState dates it', () => {
+  const records = new Map([['meal:3-dinner', { kind: 'meal', key: '3-dinner', data: { dish: 'Sopa' } }]]);
+  assert.deepEqual(fromRecords(records).menu, [{ day: 3, meal: 'dinner', dish: 'Sopa' }]);
+  const state = normalizeState(fromRecords(records), new Date(2026, 10, 4));
+  assert.deepEqual(state.menu, [{ week: '2026-11-02', day: 3, meal: 'dinner', dish: 'Sopa' }]);
+  assert.deepEqual([...toRecords(state).keys()].filter((key) => key.startsWith('meal:')), ['meal:2026-11-02-3-dinner']);
 });

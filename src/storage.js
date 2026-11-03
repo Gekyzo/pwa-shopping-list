@@ -1,6 +1,6 @@
 import { emptyState, GROUPS, SORTS } from '#store';
 import { isWebUrl } from '#recipes';
-import { DAYS, MEALS } from '#menu';
+import { DAYS, MEALS, isWeek, weekOf, mealOrder } from '#menu';
 
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
@@ -111,36 +111,39 @@ const normalizeRecipe = (recipe) => {
 // The longest dish name, the limit of the field of the meal sheet.
 const DISH_LENGTH = 80;
 
-// A meal holds a known recipe or a dish name, never both.
-const mealOf = ({ day, meal, recipe, dish }, known) => {
-  if (!Number.isInteger(day) || day < 0 || day >= DAYS || !MEALS.includes(meal)) return null;
-  if (dish === undefined) return known.has(recipe) ? { day, meal, recipe } : null;
+// A meal holds a known recipe or a dish name, never both. A meal with no week, of version 1 to 9 or
+// of an old record, is a meal of the week of `today` (STORE-8).
+const mealOf = ({ week: rawWeek, day, meal, recipe, dish }, known, today) => {
+  const week = rawWeek === undefined ? today : rawWeek;
+  if (!isWeek(week) || !Number.isInteger(day) || day < 0 || day >= DAYS || !MEALS.includes(meal)) return null;
+  if (dish === undefined) return known.has(recipe) ? { week, day, meal, recipe } : null;
   const name = typeof dish === 'string' ? dish.trim() : '';
-  return recipe === undefined && name && name.length <= DISH_LENGTH ? { day, meal, dish: name } : null;
+  return recipe === undefined && name && name.length <= DISH_LENGTH ? { week, day, meal, dish: name } : null;
 };
 
 // The menu only plans a fill, so a bad entry is dropped and the state stays valid: an entry with
-// no known day, meal or recipe, a bad dish, and the second entry of one meal. Versions 1 to 3 have
-// no menu; versions 1 to 8 have no dish.
-const normalizeMenu = (rawMenu, known) => {
+// no known week, day, meal or recipe, a bad dish, and the second entry of one meal. Versions 1 to 3
+// have no menu; versions 1 to 8 have no dish; versions 1 to 9 have no week.
+const normalizeMenu = (rawMenu, known, today) => {
   if (!Array.isArray(rawMenu)) return [];
   const seen = new Set();
   return rawMenu
     .filter((entry) => typeof entry === 'object' && entry !== null)
-    .map((entry) => mealOf(entry, known))
+    .map((entry) => mealOf(entry, known, today))
     .filter((entry) => {
-      const key = `${entry?.day}-${entry?.meal}`;
+      const key = `${entry?.week}-${entry?.day}-${entry?.meal}`;
       if (!entry || seen.has(key)) return false;
       seen.add(key);
       return true;
     })
-    .sort((a, b) => a.day - b.day || MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
+    .sort(mealOrder);
 };
 
-const VERSIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const VERSIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-// Returns a clean version 9 state, or null when the data is not a known state.
-export const normalizeState = (data) => {
+// Returns a clean version 10 state, or null when the data is not a known state. `now` dates the
+// meals that have no week.
+export const normalizeState = (data, now = new Date()) => {
   if (typeof data !== 'object' || data === null || !VERSIONS.includes(data.version) || !Array.isArray(data.items)) return null;
   // Version 1 has no recipes.
   const rawRecipes = data.version === 1 ? [] : data.recipes;
@@ -160,13 +163,13 @@ export const normalizeState = (data) => {
   const sent = [...new Set(rawSent.filter((id) => typeof id === 'string' && known.has(id)))];
   const aisles = normalizeAisles(data.aisles);
   return {
-    version: 9,
+    version: 10,
     items: knownAisles(oneSpelling(items), aisles),
     recipes,
     sent,
     group: groupOf(data),
     sort: SORTS.includes(data.sort) ? data.sort : 'custom',
-    menu: normalizeMenu(data.menu, known),
+    menu: normalizeMenu(data.menu, known, weekOf(now)),
     aisles,
   };
 };
