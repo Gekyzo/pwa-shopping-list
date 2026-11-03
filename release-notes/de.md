@@ -5,6 +5,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 ## Unreleased
 
 - Ein neues Aussehen: ein warmer Papierhintergrund, die größere Schrift Hanken Grotesk, runde Kästchen und ein Smaragdgrün für Gekauftes und die Hauptaktion.
+- `Rezepte`, `Menü` und `Optionen` folgen dem neuen Aussehen: Ein grüner Knopf schickt ein Rezept auf die Liste, Mahlzeiten sind höhere Karten und die Pfeile in `Optionen` sind besser zu sehen.
 
 ## 1.12.0 - 2026-11-03
 

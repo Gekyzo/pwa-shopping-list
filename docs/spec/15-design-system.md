@@ -89,6 +89,14 @@ This document holds the rules of the app only.
   `--surface` with its tools as bordered tiles. The bar is `--surface`, and its current section is
   emerald with no pill, on `--done-soft` from 1024px. The name of a day of `Menú` is 18px after an
   emerald bar.
+- **DSV-14** The detail of the Stitch screens, with no change of behaviour. The quantity chip of a
+  row has a 1px `--line` border. The name of a recipe card is 18px at weight 600; its link button is
+  a bordered tile and its send button an emerald tile, both 40px inside the 48px target (`--tap`).
+  From 840px a card fills the height of its grid row. The week of `Menú` is a bordered bar on
+  `--surface`. A meal is a tile of at least 88px (`--meal-min`, none in Compacta): a 13px label,
+  then the name at 18px; a free meal centres its call, and a dish stands on `--surface-2`. An
+  outline danger button is drawn in `--danger` on `--surface`. The chevron of a settings row is a
+  drawn 24px mark.
 
 ## Parts of the app
 
