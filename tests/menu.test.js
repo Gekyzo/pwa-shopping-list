@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem } from '#store';
 import { addRecipe, addRecipeProduct } from '#recipes';
-import { DAYS, MEALS, KEPT_WEEKS, weekOf, addWeeks, isWeek, menuWeeks, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, menuWeek, fillMenu, basketPreview } from '#menu';
+import { DAYS, MEALS, KEPT_WEEKS, weekOf, addWeeks, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, menuWeek, fillMenu, basketPreview } from '#menu';
 
 // The Monday of the week of the tests.
 const W = '2026-11-02';
@@ -395,4 +395,30 @@ test('menuWeeks gives each week with a meal one time, oldest first', () => {
   assert.deepEqual(menuWeeks(start), []);
   const state = [[W, 0], [LAST, 3], [W, 2], [LAST, 1]].reduce((current, [week, day]) => setMeal(current, week, day, 'lunch', lentils).state, start);
   assert.deepEqual(menuWeeks(state), [LAST, W]);
+});
+
+test('repeatWeek puts the meals of a past week in place of the meals of this week (MENU-24)', () => {
+  const { state: start, lentils, omelette } = kitchen();
+  const past = setDish(setMeal(start, LAST, 0, 'lunch', lentils).state, LAST, 3, 'dinner', 'Sopa').state;
+  const planned = setMeal(setMeal(past, W, 0, 'lunch', omelette).state, W, 5, 'lunch', omelette).state;
+  const before = structuredClone(planned);
+  const { state, count, error } = repeatWeek(planned, LAST, W);
+  assert.equal(error, undefined);
+  assert.equal(count, 2);
+  assert.deepEqual(state.menu, [
+    { week: LAST, day: 0, meal: 'lunch', recipe: lentils },
+    { week: LAST, day: 3, meal: 'dinner', dish: 'Sopa' },
+    { week: W, day: 0, meal: 'lunch', recipe: lentils },
+    { week: W, day: 3, meal: 'dinner', dish: 'Sopa' },
+  ]);
+  assert.deepEqual(planned, before);
+});
+
+test('repeatWeek rejects a week with no meal and a target that is not a Monday', () => {
+  const { state: start, lentils } = kitchen();
+  const planned = setMeal(start, W, 0, 'lunch', lentils).state;
+  const empty = repeatWeek(planned, LAST, W);
+  assert.deepEqual(empty.error, { key: 'error.menuEmpty' });
+  assert.equal(empty.state, planned);
+  assert.deepEqual(repeatWeek(planned, W, '2026-11-03').error, { key: 'error.unknownMeal' });
 });

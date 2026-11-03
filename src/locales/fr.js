@@ -25,9 +25,11 @@ export default {
   'menu.prevWeek': 'Semaine précédente',
   'menu.nextWeek': 'Semaine suivante',
   'menu.noMeal': 'Aucun repas',
+  'menu.repeat': 'Répéter cette semaine',
   'toast.menuFilled': 'Menu : {summary}.',
   'toast.menuNothing': 'Menu : tout était déjà dans la liste.',
   'toast.menuCleared': 'Menu vidé.',
+  'toast.weekRepeated': { one: 'Semaine répétée : {count} repas.', other: 'Semaine répétée : {count} repas.' },
   'toast.mealCleared': 'Retiré du menu : « {name} ».',
   'toast.recipeCreated': 'Recette créée : « {name} ».',
 

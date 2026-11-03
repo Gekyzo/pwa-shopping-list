@@ -2,7 +2,7 @@ import * as recipes from '#recipes';
 import * as menu from '#menu';
 import { intlTag } from '#i18n';
 import { listOf, listPart } from '#lists';
-import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, onListOf, fillMenus, thisWeek, shownWeek } from '#ui/context';
+import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, onListOf, fillMenus, repeatMenus, thisWeek, shownWeek } from '#ui/context';
 import { sendText, recipeFromDish } from '#ui/recipes';
 import { showView } from '#ui/nav';
 import { tagNode } from '#ui/rows';
@@ -117,6 +117,9 @@ const fillBasket = () => {
 
 export const renderMenuActions = () => {
   $('menu-clear').disabled = menu.mealCount(listPart(state, 'own'), thisWeek()) === 0;
+  // MENU-23, MENU-24: a past week has Repetir esta semana in place of Llenar cesta and Vaciar menú.
+  $('menu-split').hidden = ui.pastWeek !== null;
+  $('menu-repeat').hidden = ui.pastWeek === null;
   renderWeekBar();
 };
 
@@ -145,6 +148,13 @@ const renderWeekBar = () => {
   $('menu-week-label').textContent = weekLabel(ui.pastWeek);
   $('menu-week-prev').disabled = earlierWeek() === null;
   $('menu-week-next').disabled = ui.pastWeek === null;
+};
+
+// MENU-24: this week takes the meals of the week in view, then shows.
+const repeatShown = () => {
+  const result = repeatMenus(ui.pastWeek);
+  if (!result.error) ui.pastWeek = null;
+  apply(result, { undoText: t('toast.weekRepeated', { count: result.count ?? 0 }) });
 };
 
 const showWeek = (week) => {
@@ -245,6 +255,7 @@ export const bind = () => {
   $('menu-clear').addEventListener('click', () => apply(onOwn((own) => menu.clearMenu(own, thisWeek())), { undoText: t('toast.menuCleared') }));
   $('meal-veil').addEventListener('click', closeMeal);
   $('menu-week-prev').addEventListener('click', () => showWeek(earlierWeek()));
+  $('menu-repeat').addEventListener('click', repeatShown);
   $('menu-week-next').addEventListener('click', () => showWeek(laterWeek()));
   $('meal-query').addEventListener('input', (event) => {
     ui.mealQuery = event.target.value;

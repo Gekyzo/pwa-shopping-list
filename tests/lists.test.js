@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { emptyState, addItem, toggleBought, deleteItem } from '#store';
 import { sendRecipe } from '#recipes';
 import { setMeal, menuWeek, dishRecipe } from '#menu';
-import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts, reorderList, fillLists, mergeTwins, twinIds, acrossTwins, deletedKey } from '#lists';
+import { combine, split, listView, listPart, isShared, onList, targetList, listOf, listCounts, reorderList, fillLists, repeatLists, mergeTwins, twinIds, acrossTwins, deletedKey } from '#lists';
 
 // The Monday of the week of the meals of the tests.
 const W = '2026-11-02';
@@ -418,4 +418,29 @@ test('deletedKey names the lists of a merged row', () => {
   assert.equal(deletedKey({ id: 'o1' }, 'both'), 'toast.deleted');
   assert.equal(deletedKey({ id: 'o1', twin: 'shared:s1' }, 'own'), 'toast.deletedOwn');
   assert.equal(deletedKey({ id: 'o1', twin: 'shared:s1' }, 'both'), 'toast.deletedBoth');
+});
+
+// MENU-24: Repetir esta semana copies each list's own past week.
+const LAST = '2026-10-26';
+
+test('repeatLists copies the past week of each list into its own week and sums the meals', () => {
+  const mine = withMenu([], [{ id: 'r1', name: 'Tortilla', products: [], url: '' }], [{ week: LAST, day: 0, meal: 'lunch', recipe: 'r1' }]);
+  const base = withMenu([], [{ id: 'r1', name: 'Paella', products: [], url: '' }], [{ week: LAST, day: 2, meal: 'dinner', recipe: 'r1' }, { week: LAST, day: 4, meal: 'lunch', dish: 'Sopa' }]);
+  const result = repeatLists(combine(mine, base, 'all'), base, 'all', LAST, W);
+  assert.equal(result.count, 3);
+  const parts = split(result.state, base, 'all');
+  assert.deepEqual(parts.own.menu.filter((entry) => entry.week === W), [{ week: W, day: 0, meal: 'lunch', recipe: 'r1' }]);
+  assert.deepEqual(parts.shared.menu.filter((entry) => entry.week === W), [
+    { week: W, day: 2, meal: 'dinner', recipe: 'r1' },
+    { week: W, day: 4, meal: 'lunch', dish: 'Sopa' },
+  ]);
+});
+
+test('repeatLists skips a list with no meal in the week, and gives menuEmpty when no list has one', () => {
+  const base = withMenu([], [], [{ week: LAST, day: 1, meal: 'lunch', dish: 'Sopa' }]);
+  const result = repeatLists(combine(emptyState(), base, 'all'), base, 'all', LAST, W);
+  assert.equal(result.count, 1);
+  assert.deepEqual(split(result.state, base, 'all').own.menu, []);
+  assert.deepEqual(repeatLists(emptyState(), null, null, LAST, W).error, { key: 'error.menuEmpty' });
+  assert.deepEqual(repeatLists(combine(emptyState(), base, 'list'), base, 'list', LAST, W).error, { key: 'error.menuEmpty' });
 });

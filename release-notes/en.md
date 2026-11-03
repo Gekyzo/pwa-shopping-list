@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- In a past week of **Menu**, **Repeat this week** copies its meals to the current week. If you change your mind, tap **Undo**.
 
 ## 1.11.0 - 2026-11-03
 

@@ -25,9 +25,11 @@ export default {
   'menu.prevWeek': 'Setmana anterior',
   'menu.nextWeek': 'Setmana següent',
   'menu.noMeal': 'Sense àpat',
+  'menu.repeat': 'Repetir aquesta setmana',
   'toast.menuFilled': 'Menú: {summary}.',
   'toast.menuNothing': 'Menú: tot era ja a la llista.',
   'toast.menuCleared': 'Menú buidat.',
+  'toast.weekRepeated': { one: 'Setmana repetida: {count} àpat.', other: 'Setmana repetida: {count} àpats.' },
   'toast.mealCleared': 'Tret del menú: «{name}».',
   'toast.recipeCreated': 'Recepta creada: «{name}».',
 
