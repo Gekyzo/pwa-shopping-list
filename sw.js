@@ -1,4 +1,4 @@
-const CACHE = 'shopping-shell-v27';
+const CACHE = 'shopping-shell-v28';
 
 const SHELL = [
   './',
@@ -7,6 +7,8 @@ const SHELL = [
   './vendor/design-system/sheet.js',
   './vendor/design-system/geist.woff2',
   './styles.css',
+  './fonts/hanken-grotesk-latin.woff2',
+  './fonts/hanken-grotesk-latin-ext.woff2',
   './icons.svg',
   './manifest.webmanifest',
   './src/app.js',

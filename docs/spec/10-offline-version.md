@@ -8,14 +8,14 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **SW-1** `src/app.js` registers `sw.js` at each start. With no service worker the app works with
   a connection only.
 - **SW-2** The app shell is the list `SHELL` of `sw.js`: the page, the two stylesheets (DSV-2),
-  the font of the design system (`geist.woff2`), the manifest, each module of `src/`, each catalog, `version.json`, the release notes of each language (VER-20), the icons of the app and the
+  the font of the design system (`geist.woff2`), the font files of the app (`fonts/*.woff2`, DSV-10), the manifest, each module of `src/`, each catalog, `version.json`, the release notes of each language (VER-20), the icons of the app and the
   icon sprite `icons.svg`. A file that the app loads and that is not in `SHELL` does not work offline at the
   first start.
 - **SW-3** At its install the worker downloads the full shell past the HTTP cache, so the shell is
   never a mix of two deploys. It then takes control at once (`skipWaiting`, `clients.claim`).
 - **SW-4** At its activation the worker deletes each cache whose name starts with `shopping-`
   and is not the current one or `shopping-manifest` (SW-13). The cache name is
-  `shopping-shell-v27`. A cache of another app of the same origin stays, such as those of Stash
+  `shopping-shell-v28`. A cache of another app of the same origin stays, such as those of Stash
   (`lists-`).
 - **SW-5** The worker answers only `GET` requests of its own origin.
 - **SW-6** A request is answered stale-while-revalidate: the cached copy at once, and a fresh copy

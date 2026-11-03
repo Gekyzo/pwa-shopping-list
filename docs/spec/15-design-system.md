@@ -58,6 +58,15 @@ This document holds the rules of the app only.
   (LIST-38, LIST-39, MENU-21). From 840px the recipe sheet is a pane (`side-pane`, REC-39), and
   `Ajustes` sets `--page-max` to `--settings-max` (NAV-27).
 
+## The look of the app
+
+- **DSV-10** The app follows `DESIGN.md` (the Utilitarian Market Ledger of the Stitch project
+  `Shopping`) in this app only: `styles.css` sets its tokens in the `tokens` layer over those of the
+  design system, and the shared sheet does not change. The font is Hanken Grotesk, from the files
+  `fonts/hanken-grotesk-latin.woff2` and `fonts/hanken-grotesk-latin-ext.woff2` of the app (SIL OFL,
+  `fonts/OFL.txt`), both in `SHELL` of `sw.js` (SW-2), so it shows offline. No font comes from the
+  network.
+
 ## Parts of the app
 
 The parts of `styles.css`, by layer. The shared parts are in the design system.

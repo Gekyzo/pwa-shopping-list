@@ -66,6 +66,17 @@ test('SHELL of sw.js has the style sheet and the icons', () => {
   for (const file of ['./styles.css', './icons.svg']) assert.ok(shell.includes(`'${file}'`), file);
 });
 
+test('SHELL of sw.js has each font file that styles.css loads (DSV-10)', () => {
+  const shell = read('sw.js');
+  const fonts = [...read('styles.css').matchAll(/url\("([^"]+\.woff2)"\)/g)].map(([, path]) => `./${path}`);
+  assert.ok(fonts.length > 0);
+  for (const file of fonts) assert.ok(shell.includes(`'${file}'`), file);
+});
+
+test('styles.css sets the font of DESIGN.md, Hanken Grotesk (DSV-10)', () => {
+  assert.match(read('styles.css'), /--font:\s*"Hanken Grotesk"/);
+});
+
 test('SHELL of sw.js has every path of the import map', () => {
   const shell = read('sw.js');
   const map = JSON.parse(read('index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]);

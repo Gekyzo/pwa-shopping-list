@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- Font Hanken Grotesk (DSV-10), the font of `DESIGN.md`: `styles.css` declares it from `fonts/hanken-grotesk-latin.woff2` and `fonts/hanken-grotesk-latin-ext.woff2` (variable, SIL OFL, `fonts/OFL.txt`) and sets `--font` to it in its `tokens` layer; the shared sheet keeps Geist. Both files are in `SHELL` of `sw.js`, cache `shopping-shell-v28`.
 
 ## 1.12.0 - 2026-11-03
 
