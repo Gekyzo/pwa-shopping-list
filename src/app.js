@@ -39,6 +39,7 @@ import {
   shopLabel,
   renderListChips,
   renderShopChips,
+  renderRecipeChips,
   renderDock,
   renderShopPick,
   showDockMatches,
@@ -117,6 +118,7 @@ const renderAll = () => {
 
   renderListChips();
   renderShopChips();
+  renderRecipeChips();
   $('title').textContent = header.title;
   $('subtitle').textContent = header.subtitle;
   $('progress').hidden = header.pct === null;

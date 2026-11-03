@@ -9,6 +9,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 - La barra mostra uns coberts per a `Receptes` i un llibre obert per a `Menú`, i les accions que esborren dades es veuen en vermell.
 - Cada fila de `Configuració` comença amb una icona, i la capçalera de cada secció de la botiga mostra una icona del seu tipus: fruita, làctics, pa, neteja i altres.
 - A `Menú`, la barra de la setmana mostra els seus dies i cada dia la seva data. Cada àpat diu si és una recepta o una anotació ràpida, i un àpat lliure mostra un ⊕.
+- A `Receptes`, cada recepta mostra els seus productes i la marca «a la llista», i uns xips filtren les receptes: `Totes`, `A la llista` i `Amb enllaç`.
 
 ## 1.12.0 - 2026-11-03
 

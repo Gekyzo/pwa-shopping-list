@@ -109,6 +109,10 @@ export default {
   'trip.continue': 'Seguir comprant',
 
   'recipes.search': 'Cerca recepta o producte',
+  'recipes.filters': 'Filtres de receptes',
+  'recipes.filterAll': 'Totes',
+  'recipes.filterInList': 'A la llista',
+  'recipes.filterLink': 'Amb enllaç',
   'recipes.dishes': 'Plats sense recepta',
   'search.label': 'Cerca a la llista',
   'search.items': 'Cerca article o botiga',

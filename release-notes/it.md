@@ -9,6 +9,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 - La barra mostra delle posate per `Ricette` e un libro aperto per `Menù`, e le azioni che cancellano dati sono in rosso.
 - Ogni riga di `Impostazioni` inizia con un’icona, e l’intestazione di ogni reparto del negozio mostra un’icona del suo tipo: frutta, latticini, pane, pulizia e altri.
 - In `Menù`, la barra della settimana mostra i suoi giorni e ogni giorno la sua data. Ogni pasto dice se è una ricetta o una nota rapida, e un pasto libero mostra un ⊕.
+- In `Ricette`, ogni ricetta mostra i suoi prodotti e il badge «nella lista», e dei chip filtrano le ricette: `Tutte`, `Nella lista` e `Con un link`.
 
 ## 1.12.0 - 2026-11-03
 

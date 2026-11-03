@@ -124,14 +124,14 @@ const deleteAction = (recipe, node) => {
 // A recipe row: a tap on the name opens its sheet, the link button and the send button stay at the
 // end, a slide to the left shows Eliminar, and a slide to the right sends it.
 export const recipeNode = (recipe) => {
-  const meta = [
-    t('count.products', { count: recipe.products.length }),
-    // REC-38: a recipe is in the list that its send fills.
-    ...(recipes.inList(listPart(state, listOf(recipe)), recipe) ? [t('recipe.inListShort')] : []),
-  ];
+  // REC-38: a recipe is in the list that its send fills; REC-40 draws it as a badge.
+  const listed = recipes.inList(listPart(state, listOf(recipe)), recipe);
   const name = el('button', { type: 'button', className: 'item-row-name', onclick: () => openRecipe(recipe) }, [
     el('span', { className: 'item-row-label', textContent: recipe.name }),
-    el('small', { className: 'item-row-meta', textContent: meta.join(' · ') }),
+    ...(listed ? [el('small', { className: 'recipe-in-list', textContent: t('recipe.inListShort') })] : []),
+    el('small', { className: 'item-row-meta', textContent: t('count.products', { count: recipe.products.length }) }),
+    // REC-40: the products of the recipe on one line, cut with an ellipsis.
+    ...(recipe.products.length ? [el('small', { className: 'recipe-products', textContent: recipe.products.join(', ') })] : []),
   ]);
   name.setAttribute('aria-haspopup', 'dialog');
   const tag = recipeTag(recipe);
