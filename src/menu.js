@@ -24,6 +24,12 @@ export const addWeeks = (week, count) => {
   return isoDate(new Date(year, month - 1, day + count * 7));
 };
 
+// The local date of day `day` (0 is Monday) of `week`, for the dates of Menú (MENU-25).
+export const weekDay = (week, day) => {
+  const [year, month, date] = week.split('-').map(Number);
+  return new Date(year, month - 1, date + day);
+};
+
 // A date `YYYY-MM-DD` that is a Monday.
 export const isWeek = (value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && weekOf(new Date(`${value}T12:00:00`)) === value;
 

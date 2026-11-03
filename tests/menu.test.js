@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem } from '#store';
 import { addRecipe, addRecipeProduct } from '#recipes';
-import { DAYS, MEALS, KEPT_WEEKS, weekOf, addWeeks, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, menuWeek, fillMenu, basketPreview } from '#menu';
+import { DAYS, MEALS, KEPT_WEEKS, weekOf, addWeeks, weekDay, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, menuWeek, fillMenu, basketPreview } from '#menu';
 
 // The Monday of the week of the tests.
 const W = '2026-11-02';
@@ -421,4 +421,10 @@ test('repeatWeek rejects a week with no meal and a target that is not a Monday',
   assert.deepEqual(empty.error, { key: 'error.menuEmpty' });
   assert.equal(empty.state, planned);
   assert.deepEqual(repeatWeek(planned, W, '2026-11-03').error, { key: 'error.unknownMeal' });
+});
+
+test('weekDay gives the local date of each day of a week, across a month and a year', () => {
+  assert.deepEqual([0, 6].map((day) => weekDay('2026-11-02', day).toDateString()), ['Mon Nov 02 2026', 'Sun Nov 08 2026']);
+  assert.equal(weekDay('2026-12-28', 4).toDateString(), 'Fri Jan 01 2027');
+  assert.equal(weekDay('2026-03-30', 6).toDateString(), 'Sun Apr 05 2026');
 });
