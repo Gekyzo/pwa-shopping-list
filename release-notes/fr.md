@@ -4,6 +4,10 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+No change.
+
+## 1.11.0 - 2026-11-03
+
 - **Menu** repart vide chaque lundi. Les flèches du haut montrent le menu des semaines passées, jusqu’à 26 semaines en arrière.
 
 ## 1.10.2 - 2026-10-31

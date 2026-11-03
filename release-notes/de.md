@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.11.0 - 2026-11-03
+
 - **Menü** beginnt jeden Montag leer. Mit den Pfeilen oben siehst du das Menü der letzten Wochen, bis zu 26 Wochen zurück.
 
 ## 1.10.2 - 2026-10-31
