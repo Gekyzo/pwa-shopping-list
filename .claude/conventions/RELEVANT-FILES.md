@@ -18,11 +18,12 @@ description: Where to look first in this component, what to ignore, and which pe
 ## Look here first
 
 - `docs/spec/` for what the app does, one identifier for each rule.
-- `DESIGN.md` for the revamp proposal from the Stitch project `Shopping`
+- `DESIGN.md` for the look of the app, from the Stitch project `Shopping`
   (`projects/6581702173965354921`). It is the Stitch export with `outline`, `outline-variant` and
   `on-surface-variant` set by hand to the stone values of its prose; Stitch cannot hold them, so
-  this file, not the Stitch design system, is the source. It is not applied: the code follows
-  `vendor/design-system/`.
+  this file, not the Stitch design system, is the source. It is applied in this app only
+  (DSV-10 to DSV-12): the tokens and component versions of `styles.css` override
+  `vendor/design-system/`, and the font is in `fonts/`.
 - `src/store.js` for a list rule.
 - `src/shops.js` for a shop rule.
 - `src/aisles.js` for an aisle rule (a section of the store).
