@@ -12,8 +12,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-3** The `+` button in `Recetas` opens the add sheet with the field `Nombre de la receta`
   and the button **Crear**, with no target choice. The new recipe opens its sheet (REC-33), with
   the cursor in its product field, and the search closes.
-- **REC-4** A recipe row shows the name and, below it, the meta line `N productos`, then
-  `en la lista` when REC-35 applies, joined by ` · `. A tap on the name opens the sheet of the
+- **REC-4** A recipe row shows the name, the badge `en la lista` when REC-35 applies, the meta
+  line `N productos` and the line of its products (REC-40). A tap on the name opens the sheet of the
   recipe (REC-33). The link button of REC-15, when the recipe has a link, and the send button of
   REC-17 stay at the end of the row.
 - **REC-5** A recipe row slides as an item row (ROW-4 to ROW-6, ROW-8, ROW-10). A slide to the
@@ -26,8 +26,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-7** The recipes show in the order of their creation. Below 600px wide they stand in one column; from
   600px in two, filled row by row, so more of them fit on the screen of a tablet or an unfolded phone.
 - **REC-35** A recipe whose products are all items of `Compra`, ticked or not, with no case
-  distinction, adds `en la lista` to its meta line (REC-4). A recipe with no products has no such
-  text. The rule of "all in `Compra`" is the one of the groups by recipe (GROUP-5).
+  distinction, shows the badge `en la lista` (REC-4, REC-40). A recipe with no products has no
+  such badge. The rule of "all in `Compra`" is the one of the groups by recipe (GROUP-5).
 
 ## Products
 
@@ -40,6 +40,15 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   recipe is on a pill. A tap on another recipe shows it in the pane. **Listo**, `Escape` and the back
   close the pane as they close the sheet (NAV-25). The add of the header stays (NAV-24). Below
   840px the recipe is the sheet of NAV-8.
+- **REC-40** The detail of a recipe card and the filters of `Recetas`, as the Stitch screens show
+  them. A recipe in the list that its send fills (REC-38) shows the badge **en la lista**
+  (`recipe-in-list`) below its name, in place of the text on its meta line. A recipe with products
+  ends its name with the products on one line, joined by `, ` and cut with an ellipsis
+  (`recipe-products`); Compacta hides it. Below the header, the chips **Todas**, **En la lista**
+  and **Con enlace** (`recipe-chips`), each with its count, choose the recipes in view:
+  `filterRecipes` of `src/recipes.js`. A filter with no recipe has no chip, a row with Todas alone
+  does not show, and a filter that loses its last recipe gives way to Todas. A filter other than
+  Todas shows no dishes (REC-38). The choice is `ui.recipeFilter`, not saved.
 - **REC-10** While the user types a product, the recipe lists up to 5 names that contain the text,
   with no case and no accent distinction: the names of the items, then the products of the
   recipes, each name one time with no case distinction, with the spelling of the item first. The

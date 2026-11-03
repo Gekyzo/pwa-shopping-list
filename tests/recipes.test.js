@@ -21,6 +21,8 @@ import {
   hasSample,
   addSample,
   loadSample,
+  filterRecipes,
+  filterCounts,
 } from '#recipes';
 
 let counter = 0;
@@ -641,4 +643,19 @@ test('deleteRecipe keeps the meals of the recipe in a past week as dishes of its
   ];
   const { state } = deleteRecipe({ ...first.state, menu }, first.id, '2026-11-02');
   assert.deepEqual(state.menu, [{ week: '2026-10-26', day: 2, meal: 'lunch', dish: 'Omelette' }]);
+});
+
+test('filterRecipes keeps every recipe, the recipes in the list, or the recipes with a link (REC-40)', () => {
+  const list = [
+    { id: 'a', name: 'A', products: [], url: 'https://www.youtube.com/watch?v=abc' },
+    { id: 'b', name: 'B', products: [], url: '' },
+    { id: 'c', name: 'C', products: [], url: 'https://example.com/c' },
+  ];
+  const isInList = (recipe) => recipe.id === 'b';
+  assert.deepEqual(filterRecipes(list, 'all', isInList).map((r) => r.id), ['a', 'b', 'c']);
+  assert.deepEqual(filterRecipes(list, 'inList', isInList).map((r) => r.id), ['b']);
+  assert.deepEqual(filterRecipes(list, 'link', isInList).map((r) => r.id), ['a', 'c']);
+  assert.deepEqual(filterRecipes(list, 'unknown', isInList).map((r) => r.id), ['a', 'b', 'c']);
+  assert.deepEqual(filterCounts(list, isInList), { all: 3, inList: 1, link: 2 });
+  assert.deepEqual(filterCounts([], isInList), { all: 0, inList: 0, link: 0 });
 });

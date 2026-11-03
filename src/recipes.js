@@ -212,6 +212,20 @@ export const searchRecipes = (state, query) => {
   return state.recipes.filter((recipe) => [recipe.name, ...recipe.products].some((text) => fold(text).includes(key)));
 };
 
+// The filters of Recetas (REC-40): every recipe, the recipes in their list, the recipes with a
+// link. `isInList` says if a recipe is in the list that its send fills (REC-38).
+export const RECIPE_FILTERS = ['all', 'inList', 'link'];
+
+const FILTER_TESTS = {
+  all: () => true,
+  inList: (recipe, isInList) => isInList(recipe),
+  link: (recipe) => linkInfo(recipe.url) !== null,
+};
+
+export const filterRecipes = (list, filter, isInList) => list.filter((recipe) => (FILTER_TESTS[filter] ?? FILTER_TESTS.all)(recipe, isInList));
+
+export const filterCounts = (list, isInList) => Object.fromEntries(RECIPE_FILTERS.map((filter) => [filter, filterRecipes(list, filter, isInList).length]));
+
 // The sample recipe of the walkthrough. Its fixed id lets `Ajustes` find it after a rename.
 export const SAMPLE_ID = 'sample-pasta';
 

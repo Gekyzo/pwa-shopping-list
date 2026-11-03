@@ -9,6 +9,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 - La barre montre des couverts pour `Recettes` et un livre ouvert pour `Menu`, et les actions qui effacent des données sont en rouge.
 - Chaque ligne de `Réglages` commence par une icône, et l’en-tête de chaque rayon du magasin montre une icône de son type : fruits, produits laitiers, pain, entretien et autres.
 - Dans `Menu`, la barre de la semaine montre ses jours et chaque jour sa date. Chaque repas dit s’il s’agit d’une recette ou d’une note rapide, et un repas libre montre un ⊕.
+- Dans `Recettes`, chaque recette montre ses produits et le badge « dans la liste », et des puces filtrent les recettes : `Toutes`, `Dans la liste` et `Avec un lien`.
 
 ## 1.12.0 - 2026-11-03
 

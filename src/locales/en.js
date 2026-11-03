@@ -109,6 +109,10 @@ export default {
   'trip.continue': 'Keep shopping',
 
   'recipes.search': 'Search recipe or product',
+  'recipes.filters': 'Recipe filters',
+  'recipes.filterAll': 'All',
+  'recipes.filterInList': 'In the list',
+  'recipes.filterLink': 'With a link',
   'recipes.dishes': 'Dishes with no recipe',
   'search.label': 'Search the list',
   'search.items': 'Search item or shop',

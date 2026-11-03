@@ -9,6 +9,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 - Die Leiste zeigt Besteck für `Rezepte` und ein offenes Buch für `Menü`, und Aktionen, die Daten löschen, sind rot.
 - Jede Zeile in `Optionen` beginnt mit einem Symbol, und der Kopf jedes Ladenbereichs zeigt ein Symbol seiner Art: Obst, Milchprodukte, Brot, Reinigung und mehr.
 - In `Menü` zeigt die Wochenleiste ihre Tage und jeder Tag sein Datum. Jede Mahlzeit sagt, ob sie ein Rezept oder eine schnelle Notiz ist, und eine freie Mahlzeit zeigt ein ⊕.
+- In `Rezepte` zeigt jedes Rezept seine Produkte und das Abzeichen «auf der Liste», und Chips filtern die Rezepte: `Alle`, `Auf der Liste` und `Mit Link`.
 
 ## 1.12.0 - 2026-11-03
 

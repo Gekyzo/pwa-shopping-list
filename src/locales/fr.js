@@ -109,6 +109,10 @@ export default {
   'trip.continue': 'Continuer les courses',
 
   'recipes.search': 'Chercher une recette ou un produit',
+  'recipes.filters': 'Filtres des recettes',
+  'recipes.filterAll': 'Toutes',
+  'recipes.filterInList': 'Dans la liste',
+  'recipes.filterLink': 'Avec un lien',
   'recipes.dishes': 'Plats sans recette',
   'search.label': 'Chercher dans la liste',
   'search.items': 'Chercher un article ou un magasin',

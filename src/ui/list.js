@@ -4,7 +4,7 @@ import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
 import { canSearch, dockShown, emptyAction } from '#sections';
-import { listCounts, listPart } from '#lists';
+import { listCounts, listPart, listOf } from '#lists';
 import { listName } from '#shares';
 import { $, el, state, sharing, ui, t, shopLists, tripEnd, apply, render, thisWeek, shownWeek } from '#ui/context';
 import { inList, listChoice, listState, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
@@ -190,12 +190,42 @@ const renderSearch = () => {
   if ($('query').value !== ui.query) $('query').value = ui.query;
 };
 
+// A recipe is in the list that its send fills (REC-38).
+const recipeInList = (recipe) => recipes.inList(listPart(state, listOf(recipe)), recipe);
+
+const FILTER_KEYS = { all: 'recipes.filterAll', inList: 'recipes.filterInList', link: 'recipes.filterLink' };
+
+// REC-40: the filters of Recetas, each with its count. A filter with no recipe has no chip, and a
+// row with Todas alone does not show. A filter that loses its last recipe gives way to Todas.
+export const renderRecipeChips = () => {
+  const counts = recipes.filterCounts(state.recipes, recipeInList);
+  if (counts[ui.recipeFilter] === 0) ui.recipeFilter = 'all';
+  const filters = recipes.RECIPE_FILTERS.filter((filter) => filter === 'all' || counts[filter] > 0);
+  const shown = ui.view === 'recipes' && filters.length > 1;
+  $('recipe-chips').hidden = !shown;
+  if (!shown) return;
+  $('recipe-chips').replaceChildren(...filters.map((filter) => {
+    const pick = () => {
+      Object.assign(ui, { openId: null, recipeFilter: filter });
+      render();
+    };
+    const button = el('button', { type: 'button', className: 'chip surface', onclick: pick }, [
+      el('span', { textContent: t(FILTER_KEYS[filter]) }),
+      el('span', { className: 'count', textContent: String(counts[filter]) }),
+    ]);
+    button.setAttribute('aria-pressed', String(filter === ui.recipeFilter));
+    return button;
+  }));
+};
+
 // The recipes, then the dishes of the menu with no recipe under their head.
 const recipeNodes = () => {
   // REC-38: the dishes of each menu, own first, so that each turns into a recipe of its list.
   const dishes = ['own', 'shared'].flatMap((which) => menu.menuDishes(listPart(state, which), thisWeek(), ui.query).map((dish) => dishNode(dish, which)));
   const head = dishes.length ? [groupHead(t('recipes.dishes'), String(dishes.length))] : [];
-  return [...recipes.searchRecipes(state, ui.query).map(recipeNode), ...head, ...dishes];
+  // REC-40: a filter other than Todas shows only its recipes, with no dishes.
+  const shown = recipes.filterRecipes(recipes.searchRecipes(state, ui.query), ui.recipeFilter, recipeInList);
+  return [...shown.map(recipeNode), ...(ui.recipeFilter === 'all' ? [...head, ...dishes] : [])];
 };
 
 const nodesOf = (items) => {

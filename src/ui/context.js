@@ -172,6 +172,8 @@ export const ui = {
   closedGroups: new Set(),
   // The recipe whose sheet is open, or null.
   recipeId: null,
+  // The filter of Recetas (REC-40): `all`, `inList` or `link`.
+  recipeFilter: 'all',
   // The text of the search field, which Recetas shows always and a list shows on demand. It is
   // not stored.
   query: '',
