@@ -14,6 +14,7 @@ import {
   exportJson,
   exportFilename,
   importJson,
+  normalizeState,
   loadLanguage,
   saveLanguage,
   loadHand,
@@ -52,6 +53,11 @@ import {
   resetAll,
 } from '#storage';
 import { emptyState } from '#store';
+import { weekOf } from '#menu';
+
+// The Monday of the meals of the samples, and the week that a load gives to a meal with no week.
+const W = '2026-10-26';
+const TODAY = weekOf(new Date());
 
 const fakeStorage = (initial = {}) => {
   const data = new Map(Object.entries(initial));
@@ -95,13 +101,13 @@ const sample = () => {
   const { grouped, items, ...rest } = sampleV2();
   return {
     ...rest,
-    version: 9,
+    version: 10,
     items: [
       { id: 'a', name: 'Bread', recurrent: false, list: 'active', bought: true, shops: ['Lidl', 'Market'], quantity: '2', aisle: 'Bakery' },
       { id: 'b', name: 'Milk', recurrent: true, list: 'active', bought: false, shops: [], quantity: '', aisle: '' },
     ],
     group: 'shop',
-    menu: [{ day: 0, meal: 'lunch', recipe: 'r1' }],
+    menu: [{ week: W, day: 0, meal: 'lunch', recipe: 'r1' }],
     aisles: ['Bakery', 'Dairy'],
   };
 };
@@ -112,7 +118,7 @@ const sampleV3 = () => {
   return { ...rest, version: 3 };
 };
 
-// The items of sampleV1 and sampleV2, as a version 9 state has them: the item of Next and the
+// The items of sampleV1 and sampleV2, as a version 10 state has them: the item of Next and the
 // ticked item with again are both in Actual, not ticked, with no again field.
 const migratedItems = () => [
   { id: 'a', name: 'Bread', recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '' },
@@ -175,7 +181,7 @@ test('importJson rejects text that is not JSON', () => {
 });
 
 test('importJson rejects an unknown version', () => {
-  const text = JSON.stringify({ ...sample(), version: 10 });
+  const text = JSON.stringify({ ...sample(), version: 11 });
   assert.deepEqual(importJson(text), { error: { key: 'error.notBackup' } });
 });
 
@@ -207,7 +213,7 @@ test('importJson drops unknown fields, moves Next to Actual and drops again', ()
   };
   assert.deepEqual(importJson(JSON.stringify(data)), {
     state: {
-      version: 9,
+      version: 10,
       items: [
         { id: 'a', name: 'Milk', recurrent: true, list: 'active', bought: false, shops: [], quantity: '', aisle: '' },
         { id: 'b', name: 'Soap', recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '' },
@@ -223,7 +229,7 @@ test('importJson drops unknown fields, moves Next to Actual and drops again', ()
 });
 
 const migratedV1 = () => ({
-  version: 9,
+  version: 10,
   items: migratedItems(),
   recipes: [],
   sent: [],
@@ -233,8 +239,8 @@ const migratedV1 = () => ({
   aisles: [],
 });
 
-test('emptyState is a version 9 state with no items, no recipes, no menu and the recipe grouping', () => {
-  assert.deepEqual(emptyState(), { version: 9, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] });
+test('emptyState is a version 10 state with no items, no recipes, no menu and the recipe grouping', () => {
+  assert.deepEqual(emptyState(), { version: 10, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] });
 });
 
 test('load migrates a version 1 state', () => {
@@ -250,7 +256,7 @@ test('importJson migrates a version 1 backup', () => {
 test('load migrates a version 2 state', () => {
   const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(sampleV2()) });
   const { grouped, ...rest } = sampleV2();
-  assert.deepEqual(load(storage), { ...rest, version: 9, items: migratedItems(), group: 'recipe', menu: [], aisles: [] });
+  assert.deepEqual(load(storage), { ...rest, version: 10, items: migratedItems(), group: 'recipe', menu: [], aisles: [] });
   assert.equal(storage.getItem(CORRUPT_KEY), null);
 });
 
@@ -630,7 +636,7 @@ test('importJson migrates a version 3 backup with an empty menu', () => {
   assert.deepEqual(importJson(JSON.stringify(sampleV3())).state, { ...sample(), menu: [] });
 });
 
-test('importJson keeps the valid meals of the menu in day and meal order and drops the others', () => {
+test('importJson dates the meals with no week to this week, keeps the valid ones in day and meal order and drops the others', () => {
   const recipes = [...sample().recipes, { id: 'r2', name: 'Flan', products: [], url: '' }];
   const menu = [
     { day: 3, meal: 'dinner', recipe: 'r2' },
@@ -646,9 +652,9 @@ test('importJson keeps the valid meals of the menu in day and meal order and dro
     { day: 0, meal: 'dinner', recipe: 'r1', extra: true },
   ];
   assert.deepEqual(importJson(JSON.stringify({ ...sample(), recipes, menu })).state.menu, [
-    { day: 0, meal: 'dinner', recipe: 'r1' },
-    { day: 3, meal: 'lunch', recipe: 'r1' },
-    { day: 3, meal: 'dinner', recipe: 'r2' },
+    { week: TODAY, day: 0, meal: 'dinner', recipe: 'r1' },
+    { week: TODAY, day: 3, meal: 'lunch', recipe: 'r1' },
+    { week: TODAY, day: 3, meal: 'dinner', recipe: 'r2' },
   ]);
 });
 
@@ -662,8 +668,8 @@ test('importJson keeps a dish of the menu and drops a bad one', () => {
     { day: 4, meal: 'lunch', dish: 'Pisto', extra: true },
   ];
   assert.deepEqual(importJson(JSON.stringify({ ...sample(), menu })).state.menu, [
-    { day: 1, meal: 'lunch', dish: 'Paella' },
-    { day: 4, meal: 'lunch', dish: 'Pisto' },
+    { week: TODAY, day: 1, meal: 'lunch', dish: 'Paella' },
+    { week: TODAY, day: 4, meal: 'lunch', dish: 'Pisto' },
   ]);
 });
 
@@ -744,7 +750,7 @@ test('load migrates a version 7 state with an item of Next and a ticked item wit
   };
   const storage = fakeStorage({ [STORAGE_KEY]: JSON.stringify(v7) });
   const state = load(storage);
-  assert.equal(state.version, 9);
+  assert.equal(state.version, 10);
   assert.deepEqual(state.items, [
     { id: 'a', name: 'Bread', recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '' },
     { id: 'b', name: 'Soap', recurrent: false, list: 'active', bought: false, shops: [], quantity: '', aisle: '' },
@@ -768,11 +774,11 @@ test('importJson accepts an item with no again field and rejects again that is n
   assert.deepEqual(importJson(JSON.stringify(bad)), { error: { key: 'error.notBackup' } });
 });
 
-test('save writes a version 9 state with no again field', () => {
+test('save writes a version 10 state with no again field', () => {
   const storage = fakeStorage();
   save(storage, sample());
   const stored = JSON.parse(storage.getItem(STORAGE_KEY));
-  assert.equal(stored.version, 9);
+  assert.equal(stored.version, 10);
   assert.equal(stored.items.some((item) => 'again' in item), false);
 });
 
@@ -841,4 +847,23 @@ test('saveSeen stores the version, and is false for a storage that throws', () =
   assert.equal(saveSeen(storage, '1.2.3'), true);
   assert.equal(loadSeen(storage), '1.2.3');
   assert.equal(saveSeen(brokenStorage(), '1.2.3'), false);
+});
+
+test('importJson keeps the meals of each week and drops a meal whose week is not a Monday', () => {
+  const menu = [
+    { week: '2026-11-02', day: 0, meal: 'lunch', recipe: 'r1' },
+    { week: '2026-10-26', day: 0, meal: 'lunch', recipe: 'r1' },
+    { week: '2026-10-27', day: 1, meal: 'lunch', recipe: 'r1' },
+    { week: 20261026, day: 1, meal: 'lunch', recipe: 'r1' },
+    { week: '2026-10-26', day: 0, meal: 'lunch', dish: 'Twice' },
+  ];
+  assert.deepEqual(importJson(JSON.stringify({ ...sample(), menu })).state.menu, [
+    { week: '2026-10-26', day: 0, meal: 'lunch', recipe: 'r1' },
+    { week: '2026-11-02', day: 0, meal: 'lunch', recipe: 'r1' },
+  ]);
+});
+
+test('normalizeState dates a meal of version 9 to the week of its date', () => {
+  const v9 = { ...sample(), version: 9, menu: [{ day: 2, meal: 'dinner', recipe: 'r1' }] };
+  assert.deepEqual(normalizeState(v9, new Date(2026, 10, 8)).menu, [{ week: '2026-11-02', day: 2, meal: 'dinner', recipe: 'r1' }]);
 });

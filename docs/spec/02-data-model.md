@@ -6,18 +6,18 @@ The app has one state object. Each operation returns a new object and never chan
 
 ```js
 {
-  version: 9,
+  version: 10,
   items: [Item],      // insertion order, changed only by a manual move
   recipes: [Recipe],  // insertion order
   sent: [string],     // ids of the recipes sent to Compra in this trip, in send order
   group: 'recipe',    // 'recipe' | 'shop' | 'aisle' | 'none'
   sort: 'custom',     // 'custom' | 'name'
-  menu: [Meal],       // the planned meals of the week, in day and meal order
+  menu: [Meal],       // the planned meals of this week and of the past weeks, in week, day and meal order
   aisles: [string],   // the sections of the store, in the order of the walk
 }
 ```
 
-The empty state is `{ version: 9, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] }`.
+The empty state is `{ version: 10, items: [], recipes: [], sent: [], group: 'recipe', sort: 'custom', menu: [], aisles: [] }`.
 
 ## Item
 
@@ -49,6 +49,7 @@ The empty state is `{ version: 9, items: [], recipes: [], sent: [], group: 'reci
 
 ```js
 {
+  week: string,       // the Monday of its week, 'YYYY-MM-DD' in local time (MENU-1)
   day: number,        // 0 (Monday) to 6
   meal: 'lunch' | 'dinner',
   recipe: string,     // the id of a recipe, or absent with a dish
@@ -74,8 +75,8 @@ A meal has a `recipe` or a `dish`, never both. A meal with no recipe and no dish
 - **DATA-11** A recipe and an item have no link. A product matches an item by name, with no case
   distinction, at the time of use. A rename of one does not change the other.
 - **DATA-12** A shop has no record. It exists while an item has it.
-- **DATA-13** `menu` has one record for each meal at most, in day and meal order. Its `recipe` is
-  the id of a recipe that exists.
+- **DATA-13** `menu` has one record for each meal of each week at most, in week, day and meal
+  order. Its `recipe` is the id of a recipe that exists.
 - **DATA-14** The names of `aisles` are trimmed, not empty and unique with no case distinction.
 - **DATA-15** `item.aisle` is `''` or a name of `aisles`, in the spelling of `aisles`. An item has
   one aisle at most. See [17-aisles.md](17-aisles.md).

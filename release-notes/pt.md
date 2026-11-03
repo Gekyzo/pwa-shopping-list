@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- **Menu** começa vazio a cada segunda-feira. Com as setas no topo vês o menu das semanas anteriores, até 26 semanas atrás.
 
 ## 1.10.2 - 2026-10-31
 

@@ -691,6 +691,27 @@
     }
   }
 
+  /* @component week-bar
+     @scope menu
+     @summary The week of Menú in view, with a button to the week before and to the week after (MENU-23).
+     @part week-bar-label  Esta semana, or Semana del 26 oct.
+     @example <div class="week-bar" style="width: 100%"><button class="button icon" type="button" aria-label="Semana anterior">‹</button><h2 class="week-bar-label">Esta semana</h2><button class="button icon" type="button" aria-label="Semana siguiente" disabled>›</button></div> */
+  .week-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .week-bar-label {
+    margin: 0;
+    color: var(--text);
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
+    text-align: center;
+  }
+
   /* @component day
      @scope menu
      @summary One day of the menu: its name, then its two meals side by side.
@@ -805,6 +826,7 @@
      @summary One meal of a day: its label, then its recipe or the call to choose one.
      @variant free   A meal with no recipe and no dish.
      @variant dish   A meal with a dish that has no recipe.
+     @variant past   A meal of a past week: read only, its name muted (MENU-23).
      @part meal-label  Comida or Cena.
      @part meal-name   The recipe, cut with an ellipsis.
      @part meal-entry  A meal of a member with scope all: its name and the tag of its list (MENU-20).
@@ -828,6 +850,11 @@
 
   .meal.dish {
     border-color: var(--muted);
+  }
+
+  /* A meal of a past week (MENU-23) is read only: a tile with no press. */
+  .meal.past .meal-name {
+    color: var(--muted);
   }
 
   /* @component meal-actions

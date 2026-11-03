@@ -20,8 +20,9 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   left shows **Eliminar**, an icon button 64 px wide with its name under the icon. Its text for a screen reader
   is `Eliminar {name}`. A slide to the right sends the recipe at the
   release (REC-17), with the rule and the backdrop of ROW-11 and the icon `cart-add`.
-- **REC-6** A delete removes the recipe, its id from `sent` and its meals from the menu. It has
-  `Deshacer`. The items that the recipe sent stay in the lists.
+- **REC-6** A delete removes the recipe, its id from `sent` and its meals of this week from the
+  menu. Each of its meals of a past week becomes a dish of its name, cut to 80 characters, so that
+  the past week keeps it (MENU-23). It has `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation. Below 600px wide they stand in one column; from
   600px in two, filled row by row, so more of them fit on the screen of a tablet or an unfolded phone.
 - **REC-35** A recipe whose products are all items of `Compra`, ticked or not, with no case
@@ -86,7 +87,7 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 
 ## Dishes with no recipe
 
-- **REC-36** Below the recipes, `Recetas` shows the dishes of the menu (MENU-2) under the head
+- **REC-36** Below the recipes, `Recetas` shows the dishes of the menu of this week (MENU-2) under the head
   `Platos sin receta` with their number. Each dish shows one time, with the spelling of its first
   meal, in menu order. With no dish the head does not show.
 - **REC-37** A dish row shows the name and the meta line `En N comidas del menú`. It has no slide.

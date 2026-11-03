@@ -6,7 +6,7 @@ import * as menu from '#menu';
 import { canSearch, dockShown, emptyAction } from '#sections';
 import { listCounts, listPart } from '#lists';
 import { listName } from '#shares';
-import { $, el, state, sharing, ui, t, shopLists, tripEnd, apply, render } from '#ui/context';
+import { $, el, state, sharing, ui, t, shopLists, tripEnd, apply, render, thisWeek, shownWeek } from '#ui/context';
 import { inList, listChoice, listState, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { icon } from '#ui/controls';
 import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
@@ -109,7 +109,7 @@ export const headerOf = (summary) => {
   // Only Compra has a bar: `pct` is null in the other sections.
   if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), pct: null };
   if (ui.view === 'menu') {
-    const count = menu.mealCount(state);
+    const count = menu.mealCount(state, shownWeek());
     const subtitle = count ? t('header.menuMeals', { count }) : t('header.noMeals');
     return { title: t('nav.menu'), subtitle, pct: null };
   }
@@ -134,7 +134,7 @@ let secondaryRun = null;
 const renderEmpty = (shown) => {
   $('empty').hidden = !shown;
   const sample = state.recipes.find((recipe) => recipe.id === recipes.SAMPLE_ID);
-  const { title, text, action, secondary } = emptyAction(ui.view, { query: ui.query, hasRecipes: state.recipes.length > 0 || menu.menuDishes(state).length > 0, sample: Boolean(sample) });
+  const { title, text, action, secondary } = emptyAction(ui.view, { query: ui.query, hasRecipes: state.recipes.length > 0 || menu.menuDishes(state, thisWeek()).length > 0, sample: Boolean(sample) });
   $('empty').classList.toggle('apart', Boolean(title && action));
   const params = { query: ui.query.trim(), recipe: sample?.name ?? '' };
   $('empty-title').hidden = !title;
@@ -158,7 +158,7 @@ const renderEmpty = (shown) => {
 // and in the dock below. A section with nothing to search has no search button.
 const searchable = () => canSearch(ui.view, {
   items: store.activeItems(viewState()).length,
-  recipes: state.recipes.length + menu.menuDishes(state).length,
+  recipes: state.recipes.length + menu.menuDishes(state, thisWeek()).length,
 });
 
 const searchLabel = () => t(inList() ? 'search.items' : 'recipes.search');
@@ -178,7 +178,7 @@ const renderSearch = () => {
 // The recipes, then the dishes of the menu with no recipe under their head.
 const recipeNodes = () => {
   // REC-38: the dishes of each menu, own first, so that each turns into a recipe of its list.
-  const dishes = ['own', 'shared'].flatMap((which) => menu.menuDishes(listPart(state, which), ui.query).map((dish) => dishNode(dish, which)));
+  const dishes = ['own', 'shared'].flatMap((which) => menu.menuDishes(listPart(state, which), thisWeek(), ui.query).map((dish) => dishNode(dish, which)));
   const head = dishes.length ? [groupHead(t('recipes.dishes'), String(dishes.length))] : [];
   return [...recipes.searchRecipes(state, ui.query).map(recipeNode), ...head, ...dishes];
 };
@@ -223,7 +223,8 @@ export const renderList = (summary) => {
 
   renderEmpty(ui.view !== 'settings' && nodes.length === 0);
 
-  $('menu-actions').hidden = ui.view !== 'menu';
+  // MENU-23: a past week has no action bar.
+  $('menu-actions').hidden = ui.view !== 'menu' || ui.pastWeek !== null;
 
   $('finish').hidden = !(ui.view === 'active' && ui.shop === null && summary.total > 0 && summary.left === 0);
   renderShopDone(summary);

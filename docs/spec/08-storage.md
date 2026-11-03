@@ -26,7 +26,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.shared.v1` | The state of the shared space of a member, as JSON, beside `shopping.v1` ([19-sharing.md](19-sharing.md), SHARE-12) |
 | `localStorage` | `shopping.shared.sync` | The sync state of the shared space, and the `scope` of its share (SHARE-12) |
 | `localStorage` | `shopping.shared.queue` | The changes of the shared space not sent to the server (SHARE-12) |
-| Cache API | `shopping-shell-v26` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-shell-v27` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 | Cache API | `shopping-manifest` | The name, the description and the shortcut names of the manifest in the language of the screen (SW-13) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
@@ -73,7 +73,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | `sort` | Unknown: `custom` |
   | Unknown fields | Dropped |
 
-- **STORE-8** An older state is migrated when it is read, and saved as version 9 at the next
+- **STORE-8** An older state is migrated when it is read, and saved as version 10 at the next
   change:
 
   | From | Change |
@@ -86,6 +86,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Version 1 to 6 | `aisles: []`, and each item gets `aisle: ''` |
   | Version 1 to 7 | An item of `list: 'next'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. Each item loses `again` |
   | Version 1 to 8 | No change of the data: version 9 adds the dish of a meal |
+  | Version 1 to 9 | Each meal gets `week`: the Monday of the week of the load (MENU-1). A meal whose `week` is not a Monday `YYYY-MM-DD` is dropped |
 
 ## Failures
 

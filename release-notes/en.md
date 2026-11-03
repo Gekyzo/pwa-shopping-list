@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- **Menú** starts empty each Monday. Use the arrows at the top to see the menu of past weeks, up to 26 weeks back.
 
 ## 1.10.2 - 2026-10-31
 

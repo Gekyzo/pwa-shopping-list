@@ -36,7 +36,7 @@ repository root.
 | `src/version.js` | Pure version rules: validation, comparison, the next version | nothing |
 | `src/i18n.js` | The language to show (`resolveLanguage`) and the function `t(key, params)` of one language (`translator`) | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language: a flat object from key to a text or to `{ one, other }` | nothing |
-| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render`, the combined state of a member | `store`, `storage`, `session`, `lists`, `i18n`, `onboarding` |
+| `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render`, the combined state of a member, the week of today | `store`, `storage`, `session`, `lists`, `menu`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list chip and the list in view, the tag of a row, the target of an add, the search, the open row, the grouping | `store`, `recipes`, `shops`, `lists`, `shares`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, the rename field and its `Guardado`, the more button | `sheets`, `store`, `ui/context`, `ui/view` |
@@ -63,7 +63,7 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
 ## Boundaries
 
 - **`localStorage`**, key `shopping.v1`: the only data store. The state is
-  `{ version: 9, items, recipes, sent, group, sort, menu, aisles }`; a state of version 1 to 8 is migrated when it is read. Invalid content is
+  `{ version: 10, items, recipes, sent, group, sort, menu, aisles }`; a state of version 1 to 9 is migrated when it is read. Invalid content is
   kept under `shopping.v1.corrupt`.
 - **`localStorage`**, key `shopping.lang`: the language that the user chose in `Ajustes`, one of
   `ca`, `de`, `en`, `es`, `fr`, `it`, `pt`. No key means that the app follows `navigator.languages`,
@@ -74,7 +74,7 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
 - **`localStorage`**, key `shopping.swipeHint`: `1` after `Compra` showed the slide of a row one
   time (ROW-14). It is not part of the state and not part of the backup.
 - **`localStorage`**, keys `shopping.shared.v1`, `shopping.shared.sync` and `shopping.shared.queue`: the
-  shared lane of a member (SHARE-12). The first is a plain state of version 9 (the shared part, with no
+  shared lane of a member (SHARE-12). The first is a plain state of version 10 (the shared part, with no
   `shared` marker); the others are the sync state, with the `scope` of the share, and the queue of the
   shared space. `src/session.js` reads and writes them; `clearAccountData` and `resetAll` remove them.
 - **Cache API**, cache `shopping-shell-v17`: the app shell, served

@@ -32,6 +32,7 @@ import {
   setDensity,
   setTripEnd,
   download,
+  thisWeek,
 } from '#ui/context';
 import { renderOnboarding } from '#ui/onboarding';
 import { signedIn, stopSync } from '#ui/account';
@@ -174,7 +175,7 @@ export const bind = () => {
   $('delete-sample').addEventListener('click', () => {
     // The button goes with the recipe, so the focus goes to the button above it.
     $('show-onboarding').focus();
-    apply(onOwn((own) => deleteRecipe(own, SAMPLE_ID)), { undoText: t('toast.sampleDeleted') });
+    apply(onOwn((own) => deleteRecipe(own, SAMPLE_ID, thisWeek())), { undoText: t('toast.sampleDeleted') });
   });
   // The app starts again as a new install, with the walkthrough (BACKUP-7). With no storage the data is
   // only in memory, so the reload alone clears it. With a session it clears this device only and logs

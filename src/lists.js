@@ -136,14 +136,14 @@ export const reorderList = (state, ids, sharedBase, scope) => {
 // scope `all`. A list with an empty menu, or with no product in it, is skipped; its error comes
 // only when no list fills: `error.menuEmpty` when each menu is empty. `added` and `already` are the
 // sums of the fills. A fill that changes nothing gives the same state.
-export const fillLists = (state, sharedBase, scope, newId) => {
+export const fillLists = (state, sharedBase, scope, week, newId) => {
   const lists = sharedBase && scope === 'all' ? ['own', 'shared'] : ['own'];
   let next = state;
   let added = 0;
   let already = 0;
   const errors = [];
   for (const which of lists) {
-    const result = onList(next, which, (part) => fillMenu(part, newId), sharedBase, scope);
+    const result = onList(next, which, (part) => fillMenu(part, week, newId), sharedBase, scope);
     if (result.error && !['error.menuEmpty', 'error.menuNoProducts'].includes(result.error.key)) return { error: result.error };
     if (result.error) {
       errors.push(result.error);

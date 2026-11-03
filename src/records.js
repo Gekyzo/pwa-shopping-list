@@ -1,20 +1,28 @@
 // The state as records, one for each entity (SYNC-1), and the diff of two such sets (SYNC-2).
 // Pure: no storage, no clock, no DOM.
-const VERSION = 9;
+const VERSION = 10;
 
 export const recordKey = (kind, key) => `${kind}:${key}`;
 
 const record = (kind, key, data) => [recordKey(kind, key), { kind, key, data }];
 
-// A meal holds a recipe or a dish; the key is the slot.
-const mealData = ({ day, meal, ...rest }) => rest;
+// A meal holds a recipe or a dish; the key is the slot, `<week>-<day>-<meal>` (SYNC-1).
+const mealData = ({ week, day, meal, ...rest }) => rest;
+
+// A key of version 9 is `<day>-<meal>`: its meal has no week, and the normalization dates it.
+const MEAL_KEY = /^(?:(\d{4}-\d{2}-\d{2})-)?(\d+)-(.+)$/;
+
+const mealOfKey = (key, data) => {
+  const [, week, day, meal] = MEAL_KEY.exec(key) ?? [];
+  return { ...(week ? { week } : {}), day: Number(day), meal, ...data };
+};
 
 // SYNC-1: the list order is the `position` of each item and recipe.
 export const toRecords = (state) =>
   new Map([
     ...state.items.map((item, position) => record('item', item.id, { ...item, position })),
     ...state.recipes.map((recipe, position) => record('recipe', recipe.id, { ...recipe, position })),
-    ...state.menu.map((entry) => record('meal', `${entry.day}-${entry.meal}`, mealData(entry))),
+    ...state.menu.map((entry) => record('meal', `${entry.week}-${entry.day}-${entry.meal}`, mealData(entry))),
     record('settings', 'settings', { group: state.group, sort: state.sort, sent: state.sent, aisles: state.aisles }),
   ]);
 
@@ -29,10 +37,7 @@ const byPosition = (recs) =>
 // A raw state: callers pass it through `normalizeState`.
 export const fromRecords = (records) => {
   const settings = records.get(recordKey('settings', 'settings'))?.data ?? {};
-  const menu = ofKind(records, 'meal').map(({ key, data }) => {
-    const [day, meal] = key.split('-');
-    return { day: Number(day), meal, ...data };
-  });
+  const menu = ofKind(records, 'meal').map(({ key, data }) => mealOfKey(key, data));
   return {
     version: VERSION,
     items: byPosition(ofKind(records, 'item')),

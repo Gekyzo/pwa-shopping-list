@@ -21,6 +21,7 @@ import {
 } from '#storage';
 import { loadSharedState, saveSharedState } from '#session';
 import { combine, split, onList, reorderList, fillLists } from '#lists';
+import { weekOf } from '#menu';
 import { LANGUAGES, PSEUDO, resolveLanguage, translator } from '#i18n';
 import { shouldShow } from '#onboarding';
 
@@ -161,6 +162,8 @@ export const ui = {
   editTwin: null,
   // The meal whose sheet is open, as { day, meal }, or null.
   mealOpen: null,
+  // MENU-23: the past week that Menú shows, `YYYY-MM-DD`, or null for this week. Not stored.
+  pastWeek: null,
   mealQuery: '',
   // The page of the walkthrough in view, or null while the walkthrough is closed.
   onboarding: firstStart ? 0 : null,
@@ -244,8 +247,14 @@ export const onListOf = (which, op) => onList(state, which, op, shownBase(), sco
 // The manual move of the items of `ids`, in the list that holds them (SHARE-15).
 export const reorderOf = (ids) => reorderList(state, ids, shownBase(), scope());
 
+// The Monday of today: the week of the menu (MENU-1). From the clock, so a new week starts empty.
+export const thisWeek = () => weekOf(new Date());
+
+// The week that Menú shows (MENU-23).
+export const shownWeek = () => ui.pastWeek ?? thisWeek();
+
 // Llenar cesta: each list from its own menu (MENU-20).
-export const fillMenus = () => fillLists(state, shownBase(), scope());
+export const fillMenus = () => fillLists(state, shownBase(), scope(), thisWeek());
 
 // `options` go to the after-commit function: an import is `explicit` (SYNC-9).
 export const commit = (next, options = {}) => {

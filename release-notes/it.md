@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- **Menù** riparte vuoto ogni lunedì. Con le frecce in alto vedi il menù delle settimane passate, fino a 26 settimane indietro.
 
 ## 1.10.2 - 2026-10-31
 
