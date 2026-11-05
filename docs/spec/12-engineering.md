@@ -50,6 +50,7 @@
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/share.js` | The sheet `Compartir lista` of `Ajustes`: the people and the invite, the accept and the decline, the leave (SHARE-5, SHARE-8, SHARE-9) | `shares`, `ui/context`, `ui/account` |
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |
+| `src/ui/move.js` | The screen of the old address and its button, the import of a moved backup on the new address (ADDR-1 to ADDR-8) | `move`, `session`, `storage`, `ui/context`, `ui/account`, `ui/onboarding` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding`, `ui/account` |
 | `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |

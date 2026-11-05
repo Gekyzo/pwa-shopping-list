@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- La app se muda a `bodega.artisandevs.duckdns.org`. En la dirección antigua, **Mover mis datos** copia tu lista a la nueva; con cuenta, envía antes tus cambios y luego inicias sesión allí.
 
 ## 1.12.1 - 2026-11-03
 

@@ -1673,6 +1673,7 @@
   /* @component onboarding
      @scope onboarding
      @summary The walkthrough of the first start, over the full app: a page, the dots, the buttons.
+     @variant move             The screen of the old address (ADDR-1): over every layer, Iniciar sesión too.
      @part onboarding-top      The top bar: Atrás at the start and Saltar at the end. It keeps out of the top safe-area inset.
      @part onboarding-logo     The app icon, at the top of the first page only.
      @part onboarding-page     The page in view: on the first page the app icon, then its drawing, its title and its text.
@@ -1701,6 +1702,11 @@
     /* A horizontal slide changes the page, so the browser must not take it. */
     touch-action: pan-y;
     overflow: hidden auto;
+  }
+
+  /* ADDR-1: the move screen covers the account screens (z-index 40) too. */
+  .onboarding.move {
+    z-index: 50;
   }
 
   /* From 600px the walkthrough keeps the width of the column, centred. */

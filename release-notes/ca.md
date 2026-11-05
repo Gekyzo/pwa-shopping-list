@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- L’app es muda a `bodega.artisandevs.duckdns.org`. A l’adreça antiga, **Moure les meves dades** copia la teva llista a la nova; amb compte, primer envia els teus canvis i després inicies sessió allà.
 
 ## 1.12.1 - 2026-11-03
 

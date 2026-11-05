@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- The app moves to `bodega.artisandevs.duckdns.org`. On the old address, **Move my data** copies your list to the new one; with an account, it sends your changes first, and then you sign in there.
 
 ## 1.12.1 - 2026-11-03
 
