@@ -15,7 +15,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   never a mix of two deploys. It then takes control at once (`skipWaiting`, `clients.claim`).
 - **SW-4** At its activation the worker deletes each cache whose name starts with `shopping-`
   and is not the current one or `shopping-manifest` (SW-13). The cache name is
-  `shopping-shell-v28`. A cache of another app of the same origin stays, such as those of Stash
+  `shopping-shell-v29`. A cache of another app of the same origin stays, such as those of Stash
   (`lists-`).
 - **SW-5** The worker answers only `GET` requests of its own origin.
 - **SW-6** A request is answered stale-while-revalidate: the cached copy at once, and a fresh copy
@@ -79,7 +79,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 
 - **VER-9** The app is a static site: the repository root, served over HTTPS at
   `https://bodega.artisandevs.duckdns.org/`. Caddy on pwa-server serves that address from the
-  Pages site `https://polaris-works.github.io/pwa-shopping-list/`, the old address (MOVE-1). A release tag `vX.Y.Z` is a deploy: its push runs
+  Pages site `https://polaris-works.github.io/pwa-shopping-list/`, the old address (ADDR-1). A release tag `vX.Y.Z` is a deploy: its push runs
   `.github/workflows/pages.yml`, which publishes the tagged commit to GitHub Pages. A push to
   `main` deploys nothing. The Pages source of the repository is GitHub Actions, and its
   `github-pages` environment allows the tags `v*`.

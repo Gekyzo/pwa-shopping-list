@@ -29,6 +29,7 @@ The names of the screen are the Spanish ones, because `src/locales/es.js` is the
 | [17-aisles.md](17-aisles.md) | The sections of the store, the section of an item, the list by section |
 | [18-account-sync.md](18-account-sync.md) | Accounts, the session, and the sync between devices |
 | [19-sharing.md](19-sharing.md) | The share of the data of an account with other people by email |
+| [20-address.md](20-address.md) | The move of the data from the old address to the new one |
 
 ## Rule identifiers
 
@@ -60,6 +61,7 @@ The rules DS-1 to DS-8 and LAY-1 to LAY-4 belong to the design system, `pwa-desi
 | `AISLE` | 17-aisles |
 | `ACC`, `SYNC` | 18-account-sync |
 | `SHARE` | 19-sharing |
+| `ADDR` | 20-address |
 
 ## Words
 
