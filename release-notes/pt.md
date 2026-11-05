@@ -4,6 +4,10 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+No change.
+
+## 1.13.0 - 2026-11-05
+
 - A app muda-se para `bodega.artisandevs.duckdns.org`. No endereço antigo, **Mover os meus dados** copia a tua lista para o novo; com conta, envia primeiro as tuas alterações e depois inicias sessão lá.
 
 ## 1.12.1 - 2026-11-03
