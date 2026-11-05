@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- The API is `https://api.artisandevs.duckdns.org` (ACC-12); the old name stays an alias on the server.
 
 ## 1.12.1 - 2026-11-03
 

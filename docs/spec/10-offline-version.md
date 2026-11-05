@@ -78,7 +78,8 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 ## Deploy
 
 - **VER-9** The app is a static site: the repository root, served over HTTPS at
-  `https://gekyzo.github.io/pwa-shopping-list/`. A release tag `vX.Y.Z` is a deploy: its push runs
+  `https://bodega.artisandevs.duckdns.org/`. Caddy on pwa-server serves that address from the
+  Pages site `https://gekyzo.github.io/pwa-shopping-list/`, the old address (MOVE-1). A release tag `vX.Y.Z` is a deploy: its push runs
   `.github/workflows/pages.yml`, which publishes the tagged commit to GitHub Pages. A push to
   `main` deploys nothing. The Pages source of the repository is GitHub Actions, and its
   `github-pages` environment allows the tags `v*`.
