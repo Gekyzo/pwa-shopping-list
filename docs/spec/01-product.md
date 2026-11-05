@@ -22,7 +22,7 @@ next trip is almost ready.
 - **PROD-4** The data lives on the device first, in the `localStorage` of the origin. It then syncs to
   the account of the user (SYNC-1). A device with no session sends nothing.
 - **PROD-5** The network requests are the static files of the same origin and the API of the
-  account, at `https://artisandevs.duckdns.org` (ACC-12).
+  account, at `https://api.artisandevs.duckdns.org` (ACC-12).
 - **PROD-6** Each function works with no connection after the first load, except the check of the
   deployed version and the update.
 - **PROD-7** The app is plain HTML, CSS and ES modules. It has no build step and no dependency, at
