@@ -287,7 +287,6 @@ export default {
   'move.go': 'Moure les meves dades',
   'move.syncing': 'S’estan enviant els teus canvis…',
   'move.waiting': 'Sense connexió. El trasllat continua quan torni la xarxa.',
-  'move.syncFailed': 'No s’han pogut enviar els teus canvis. Torna-ho a provar.',
   'move.tooLarge': 'Les teves dades no caben a l’enllaç. Exporta una còpia i importa-la a l’adreça nova.',
   'move.export': 'Exportar còpia',
   'move.done': 'Dades mogudes. Instal·la aquesta adreça i treu la icona de l’antiga.',

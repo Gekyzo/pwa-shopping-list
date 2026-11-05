@@ -287,7 +287,6 @@ export default {
   'move.go': 'Déplacer mes données',
   'move.syncing': 'Envoi de tes modifications…',
   'move.waiting': 'Pas de connexion. Le déménagement reprend quand le réseau revient.',
-  'move.syncFailed': 'Tes modifications n’ont pas pu être envoyées. Réessaie.',
   'move.tooLarge': 'Tes données ne tiennent pas dans le lien. Exporte une sauvegarde et importe-la sur la nouvelle adresse.',
   'move.export': 'Exporter une sauvegarde',
   'move.done': 'Données déplacées. Installe cette adresse et retire l’icône de l’ancienne.',

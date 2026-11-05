@@ -287,7 +287,6 @@ export default {
   'move.go': 'Meine Daten umziehen',
   'move.syncing': 'Deine Änderungen werden gesendet …',
   'move.waiting': 'Keine Verbindung. Der Umzug geht weiter, sobald das Netz zurück ist.',
-  'move.syncFailed': 'Deine Änderungen konnten nicht gesendet werden. Versuche es noch einmal.',
   'move.tooLarge': 'Deine Daten passen nicht in den Link. Exportiere eine Sicherung und importiere sie auf der neuen Adresse.',
   'move.export': 'Sicherung exportieren',
   'move.done': 'Daten umgezogen. Installiere diese Adresse und entferne das Symbol der alten.',
