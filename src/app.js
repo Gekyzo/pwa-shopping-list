@@ -58,6 +58,7 @@ import { renderInstall, bind as bindInstall } from '#ui/install';
 import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
 import { renderShare, closeShare, bind as bindShare } from '#ui/share';
 import { bind as bindNav } from '#ui/nav';
+import { startMove } from '#ui/move';
 import {
   syncer,
   renderSync,
@@ -366,7 +367,7 @@ const oauthReturn = params.has('state') && (params.has('code') || params.has('er
   : null;
 // The query goes before a sheet opens: the entry of the sheet (holdBack) then comes after an address
 // with no query, and a reload opens nothing.
-const used = ['arrival', 'open', ...(oauthReturn ? ['code', 'state', 'error'] : [])];
+const used = ['arrival', 'open', 'moved', ...(oauthReturn ? ['code', 'state', 'error'] : [])];
 if (used.some((name) => params.has(name))) {
   const rest = new URLSearchParams(params);
   for (const name of used) rest.delete(name);
@@ -379,6 +380,8 @@ if (start) {
   else render();
 }
 if (!storage) showToast(t('error.noStorage'));
+// ADDR-1, ADDR-5: before the account starts, so its route (ACC-1) sees the moved data.
+await startMove({ moved: params.has('moved') });
 // The account and the sync (ACC-1, SYNC-3): each save queues its change, and the sync runs at the start,
 // at `online` and at a change of the account.
 if (syncer) {

@@ -11,6 +11,7 @@ no change has no entry.
 ## Unreleased
 
 - The API is `https://api.artisandevs.duckdns.org` (ACC-12); the old name stays an alias on the server.
+- The move to `bodega.artisandevs.duckdns.org` (ADDR-1 to ADDR-8): `src/move.js`, `src/ui/move.js`, the screen `#move` of the old address; shell cache `shopping-shell-v29`.
 
 ## 1.12.1 - 2026-11-03
 

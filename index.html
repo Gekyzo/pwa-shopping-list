@@ -455,6 +455,16 @@
       </div>
     </div>
 
+    <div id="move" class="onboarding move" role="dialog" aria-modal="true" data-i18n-attr="aria-label:move.label" hidden>
+      <div class="onboarding-page">
+        <h2 id="move-title" class="onboarding-title" tabindex="-1"></h2>
+        <p class="onboarding-text" data-i18n="move.text"></p>
+        <p id="move-status" class="onboarding-text" role="status"></p>
+        <button id="move-export" class="button quiet wide" type="button" data-i18n="move.export" hidden></button>
+        <button id="move-go" class="button primary wide" type="button" data-i18n="move.go"></button>
+      </div>
+    </div>
+
     <div id="onboarding" class="onboarding" role="dialog" aria-modal="true" data-i18n-attr="aria-label:onboarding.label" hidden>
       <div class="onboarding-top">
         <button id="onboarding-back" class="button accent" type="button" data-i18n="onboarding.back" hidden></button>
@@ -585,6 +595,7 @@
           "#syncer": "./src/syncer.js",
           "#config": "./src/config.js",
           "#move": "./src/move.js",
+          "#ui/move": "./src/ui/move.js",
           "#version": "./src/version.js",
           "#whatsnew": "./src/whatsnew.js",
           "#install": "./src/install.js",
