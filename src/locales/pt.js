@@ -287,7 +287,6 @@ export default {
   'move.go': 'Mover os meus dados',
   'move.syncing': 'A enviar as tuas alterações…',
   'move.waiting': 'Sem ligação. A mudança continua quando a rede voltar.',
-  'move.syncFailed': 'Não foi possível enviar as tuas alterações. Tenta de novo.',
   'move.tooLarge': 'Os teus dados não cabem no link. Exporta uma cópia e importa-a no novo endereço.',
   'move.export': 'Exportar cópia',
   'move.done': 'Dados movidos. Instala este endereço e remove o ícone do antigo.',

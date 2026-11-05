@@ -381,7 +381,8 @@ if (start) {
 }
 if (!storage) showToast(t('error.noStorage'));
 // ADDR-1, ADDR-5: before the account starts, so its route (ACC-1) sees the moved data.
-await startMove({ moved: params.has('moved') });
+// A failed move must not stop the start of the app.
+await startMove({ moved: params.has('moved') }).catch((error) => console.error(error));
 // The account and the sync (ACC-1, SYNC-3): each save queues its change, and the sync runs at the start,
 // at `online` and at a change of the account.
 if (syncer) {

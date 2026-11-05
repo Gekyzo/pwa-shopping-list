@@ -28,8 +28,11 @@ const fromBase64url = (text) => {
   return Uint8Array.from(binary, (char) => char.charCodeAt(0));
 };
 
-export const encodeMove = async (json) =>
-  PREFIX + toBase64url(await pipe(new TextEncoder().encode(json), new CompressionStream('deflate-raw')));
+// null with no CompressionStream (Safari before 16.4): the user exports instead (ADDR-4).
+export const encodeMove = async (json) => {
+  if (typeof CompressionStream !== 'function') return null;
+  return PREFIX + toBase64url(await pipe(new TextEncoder().encode(json), new CompressionStream('deflate-raw')));
+};
 
 // null: the hash is no move. Else the result of Import (BACKUP rules), or not a backup.
 export const decodeMove = async (hash) => {
@@ -43,11 +46,20 @@ export const decodeMove = async (hash) => {
   return importJson(text);
 };
 
+// ADDR-5: `clear` removes the fragment from the URL before the decode, so a reload imports nothing.
+export const takeMove = async (hash, clear) => {
+  if (!hash.startsWith(PREFIX)) return null;
+  clear();
+  return decodeMove(hash);
+};
+
 export const moveUrl = (hash, search) => (hash.length > MAX_HASH ? null : `${NEW_ORIGIN}/${search}${hash}`);
 
-// ADDR-2: a session never travels in a URL. A signed-in user sends the queue, then signs in again.
-export const moveMode = ({ signedIn, queued, online }) => {
+// ADDR-2: a session never travels in a URL. A signed-in user syncs first; only a clean sync of an
+// approved account moves with no data (the account brings it back). Any other end carries the data,
+// so a pending approval, a stopped session or a failed send never strands the list.
+export const moveMode = ({ signedIn, online, sync }) => {
   if (!signedIn) return 'carry';
-  if (queued === 0) return 'go';
-  return online ? 'sync' : 'wait';
+  if (!sync) return online ? 'sync' : 'wait';
+  return sync.result === 'ok' && sync.pending === 0 && sync.approved ? 'go' : 'carry';
 };

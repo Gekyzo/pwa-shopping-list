@@ -1,51 +1,60 @@
 // The move to the new address (ADDR-1 to ADDR-8): the screen of the old address, and the import of a
 // moved backup on the new one.
-import { NEW_ORIGIN, isOldOrigin, encodeMove, decodeMove, moveUrl, moveMode } from '#move';
-import { loadQueue } from '#session';
+import { NEW_ORIGIN, isOldOrigin, encodeMove, takeMove, moveUrl, moveMode } from '#move';
 import { exportJson } from '#storage';
-import { $, storage, t, textOf, showToast, apply, onOwn, ownState } from '#ui/context';
-import { signedIn, syncer, hasLocalData } from '#ui/account';
+import { $, t, textOf, showToast, apply, onOwn, ownState } from '#ui/context';
+import { signedIn, sessionNow, syncer, hasLocalData } from '#ui/account';
 import { closeOnboarding } from '#ui/onboarding';
-
-const queued = () => (storage ? loadQueue(storage).length + loadQueue(storage, 'shared').length : 0);
 
 const say = (key) => {
   $('move-status').textContent = key ? t(key) : '';
 };
 
-// ADDR-2 to ADDR-4. `synced`: one sync already ran for this tap, so a queue left means it failed.
-const go = async (synced = false) => {
-  const mode = moveMode({ signedIn: signedIn(), queued: queued(), online: navigator.onLine });
+// ADDR-3, ADDR-4: the backup in the fragment, else Export (too large, or no CompressionStream).
+const carry = async () => {
+  let hash = null;
+  try {
+    hash = await encodeMove(exportJson(ownState()));
+  } catch {
+    // The URL path is out; Export below still works.
+  }
+  const url = hash && moveUrl(hash, location.search);
+  if (url) {
+    location.assign(url);
+    return;
+  }
+  say('move.tooLarge');
+  $('move-export').hidden = false;
+};
+
+// ADDR-2: no data in the URL only after a clean sync of an approved account.
+const go = async () => {
+  const mode = moveMode({ signedIn: signedIn(), online: navigator.onLine });
   if (mode === 'carry') {
-    const url = moveUrl(await encodeMove(exportJson(ownState())), location.search);
-    if (url) location.assign(url);
-    else {
-      say('move.tooLarge');
-      $('move-export').hidden = false;
-    }
+    await carry();
     return;
   }
-  if (mode === 'go') {
-    const query = new URLSearchParams(location.search);
-    query.set('moved', '1');
-    location.assign(`${NEW_ORIGIN}/?${query}`);
-    return;
-  }
+  $('move-go').disabled = true;
   if (mode === 'wait') {
     say('move.waiting');
-    window.addEventListener('online', () => go(), { once: true });
-    return;
-  }
-  if (synced) {
-    say('move.syncFailed');
-    $('move-go').disabled = false;
+    window.addEventListener('online', () => {
+      $('move-go').disabled = false;
+      go();
+    }, { once: true });
     return;
   }
   say('move.syncing');
-  $('move-go').disabled = true;
-  await syncer.run();
+  const result = await syncer.run();
+  const sync = { result, pending: syncer.status().pending, approved: Boolean(sessionNow()?.user.approved) };
   $('move-go').disabled = false;
-  go(true);
+  say(null);
+  if (moveMode({ signedIn: true, online: navigator.onLine, sync }) === 'carry') {
+    await carry();
+    return;
+  }
+  const query = new URLSearchParams(location.search);
+  query.set('moved', '1');
+  location.assign(`${NEW_ORIGIN}/?${query}`);
 };
 
 const showOldScreen = () => {
@@ -58,11 +67,9 @@ const showOldScreen = () => {
   $('move-go').focus();
 };
 
-// ADDR-5, ADDR-6. The fragment leaves the URL before the decode, so a reload imports nothing.
+// ADDR-5, ADDR-6.
 const importMoved = async () => {
-  const hash = location.hash;
-  history.replaceState(null, '', `${location.pathname}${location.search}`);
-  const result = await decodeMove(hash);
+  const result = await takeMove(location.hash, () => history.replaceState(null, '', `${location.pathname}${location.search}`));
   if (result.error) {
     showToast(textOf(result.error));
     return;

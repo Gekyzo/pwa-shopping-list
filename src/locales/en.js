@@ -287,7 +287,6 @@ export default {
   'move.go': 'Move my data',
   'move.syncing': 'Sending your changes…',
   'move.waiting': 'No connection. The move goes on when the network is back.',
-  'move.syncFailed': 'Your changes could not be sent. Try again.',
   'move.tooLarge': 'Your data does not fit in the link. Export a backup and import it on the new address.',
   'move.export': 'Export backup',
   'move.done': 'Data moved. Install this address and remove the icon of the old one.',

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { exportJson, importJson } from '#storage';
-import { OLD_HOST, NEW_ORIGIN, MAX_HASH, isOldOrigin, encodeMove, decodeMove, moveUrl, moveMode } from '#move';
+import { OLD_HOST, NEW_ORIGIN, MAX_HASH, isOldOrigin, encodeMove, decodeMove, moveUrl, moveMode, takeMove } from '#move';
 
 const sample = importJson(readFileSync(new URL('../shopping-sample.json', import.meta.url), 'utf8')).state;
 const base64url = (text) => Buffer.from(text).toString('base64url');
@@ -61,10 +61,51 @@ test('a hash over the limit gives no URL, so the user exports (ADDR-4)', () => {
   assert.equal(moveUrl(`#import=${'a'.repeat(MAX_HASH)}`, ''), null);
 });
 
-test('moveMode: signed out carries the data, signed in sends the queue first (ADDR-2)', () => {
-  assert.equal(moveMode({ signedIn: false, queued: 3, online: false }), 'carry');
-  assert.equal(moveMode({ signedIn: true, queued: 2, online: true }), 'sync');
-  assert.equal(moveMode({ signedIn: true, queued: 2, online: false }), 'wait');
-  assert.equal(moveMode({ signedIn: true, queued: 0, online: true }), 'go');
-  assert.equal(moveMode({ signedIn: true, queued: 0, online: false }), 'go');
+test('moveMode: signed out carries the data (ADDR-3)', () => {
+  assert.equal(moveMode({ signedIn: false, online: false }), 'carry');
+  assert.equal(moveMode({ signedIn: false, online: true }), 'carry');
+});
+
+test('moveMode: signed in syncs first, and waits offline (ADDR-2)', () => {
+  assert.equal(moveMode({ signedIn: true, online: true }), 'sync');
+  assert.equal(moveMode({ signedIn: true, online: false }), 'wait');
+});
+
+test('moveMode: after a clean sync of an approved account the move needs no data (ADDR-2)', () => {
+  assert.equal(moveMode({ signedIn: true, online: true, sync: { result: 'ok', pending: 0, approved: true } }), 'go');
+});
+
+test('moveMode: any other sync end carries the data, so nothing is stranded (ADDR-2)', () => {
+  const cases = [
+    { result: 'ok', pending: 0, approved: false },
+    { result: 'ok', pending: 2, approved: true },
+    { result: 'auth', pending: 1, approved: true },
+    { result: 'offline', pending: 0, approved: true },
+  ];
+  for (const sync of cases) assert.equal(moveMode({ signedIn: true, online: true, sync }), 'carry', JSON.stringify(sync));
+});
+
+test('takeMove clears the fragment before it decodes, so a reload imports nothing (ADDR-5)', async () => {
+  const hash = await encodeMove(exportJson(sample));
+  const order = [];
+  const result = await takeMove(hash, () => order.push('clear'));
+  order.push('decoded');
+  assert.deepEqual(order, ['clear', 'decoded']);
+  assert.deepEqual(result, { state: sample });
+});
+
+test('takeMove leaves a hash with no move alone (ADDR-5)', async () => {
+  let cleared = false;
+  assert.equal(await takeMove('#top', () => { cleared = true; }), null);
+  assert.equal(cleared, false);
+});
+
+test('encodeMove is null with no CompressionStream, so the user exports (ADDR-4)', async () => {
+  const saved = globalThis.CompressionStream;
+  globalThis.CompressionStream = undefined;
+  try {
+    assert.equal(await encodeMove('{}'), null);
+  } finally {
+    globalThis.CompressionStream = saved;
+  }
 });
