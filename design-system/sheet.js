@@ -1,4 +1,4 @@
-// Drag-to-close for a bottom sheet. An app imports it from vendor/design-system/sheet.js.
+// Drag-to-close for a bottom sheet. An app imports it from design-system/sheet.js.
 // `dismissed` is pure. `bindSheetDrag` touches the DOM and has no unit test: it needs a browser.
 
 const FAR = 0.3; // share of the sheet height that closes it

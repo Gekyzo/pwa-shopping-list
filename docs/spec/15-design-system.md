@@ -1,23 +1,20 @@
 # Design system
 
-The shared tokens, base rules, components, layouts and icon rules come from `pwa-design-system`.
-Its rules DS-1 to DS-8 are in its `docs/spec/01-design-system.md`, and LAY-1 to LAY-5 in its
-`docs/spec/02-layout.md`. `vendor/design-system/SOURCE.json` names the version and the commit that
-this app uses. `tests/design.test.js` runs each rule of `vendor/design-system/rules.js` over the
+The base tokens, base rules, components, layouts and icon rules are in `design-system/`. They
+started as a copy of `pwa-design-system` 0.9.0 (commit `ecb3edf`); since 2026-11-07 the app owns
+them, and no other repository is needed. The rules DS-1 to DS-8 and LAY-1 to LAY-5 keep their
+names from that design system: `design-system/rules.js` holds DS-1 to DS-8, and the comments of
+`design-system/design-system.css` document LAY-1 to LAY-5. `tests/design.test.js` runs each rule of `design-system/rules.js` over the
 files of the app and skips no rule (DSV-8). `designs/index.html` shows each part, shared and
 own.
 
 This document holds the rules of the app only.
 
-## The copy
+## The base sheet
 
-- **DSV-1** `vendor/design-system/` holds `design-system.css`, `catalog.js`, `rules.js`,
-  `sheet.js`, the font `geist.woff2` and `SOURCE.json`: the version, the commit and the sha256 of
-  each file, and no other file. Only
-  `npm run ds` writes it, from `../pwa-design-system` with no uncommitted change of those files. A
-  file that differs from its hash fails `tests/vendor.test.js`. The tests read the copy only, so
-  they pass with no `../pwa-design-system`.
-- **DSV-2** `index.html` and `designs/index.html` link `vendor/design-system/design-system.css`
+- **DSV-1** `design-system/` holds `design-system.css`, `catalog.js`, `rules.js`, `sheet.js` and
+  the font `geist.woff2`, and no other file (`tests/design-files.test.js`).
+- **DSV-2** `index.html` and `designs/index.html` link `design-system/design-system.css`
   before `styles.css`, and `SHELL` of `sw.js` has both (SW-2). A layer of the two sheets is one
   layer: a rule of `styles.css` comes after the shared rules of its layer.
 - **DSV-3** `styles.css` starts with the same layer statement and holds the parts of the app only:
@@ -28,8 +25,10 @@ This document holds the rules of the app only.
   the shared sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
   app has its own versions of `app-header`, `sheet`, `dock`, `input`, `item-row`, `group-head`,
   `section-head`, `empty-state`, `list-group` and `nav-bar` (colour only, DSV-13).
-- **DSV-4** A change of a shared part is made in `pwa-design-system`, then `npm run ds` here.
-  Nothing edits `vendor/` by hand.
+- **DSV-4** A change of a base part is made in `design-system/` directly, with its test in
+  `tests/design.test.js` or `tests/design-files.test.js`. `styles.css` keeps the parts of the app
+  and its versions of base parts (DSV-3); a change of the layout of the rail goes to
+  `design-system/design-system.css` (DSV-8).
 
 ## Exceptions
 

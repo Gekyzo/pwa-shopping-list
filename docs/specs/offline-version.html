@@ -524,7 +524,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><b>Abierto</b>
     <ul>
       <li>VER-14 dice que la app instalada va en vertical, pero <code>manifest.webmanifest</code> tiene <code>orientation: any</code>, como pide INS-4. El código sigue INS-4; VER-14 está desfasada.</li>
-      <li>SW-2 no nombra <code>vendor/design-system/sheet.js</code>, un módulo fuera de <code>src/</code> que la app carga. <code>SHELL</code> sí lo contiene.</li>
+      <li>SW-2 no nombra <code>design-system/sheet.js</code>, un módulo fuera de <code>src/</code> que la app carga. <code>SHELL</code> sí lo contiene.</li>
       <li>Sin regla: un refresco en segundo plano que falla a medias puede mezclar archivos de dos versiones publicadas (<code>sw.js:118</code>). SW-3 solo garantiza un paquete sin mezcla al instalar.</li>
     </ul>
   </li>

@@ -138,9 +138,9 @@
 | `tests/controls.test.js` | Each call of `bindField` in `src/ui/` passes `read` and `write` as one object (AISLE-12) |
 | `tests/aliases.test.js` | The import map against `package.json`; each `#ds/` alias names a vendored module |
 | `tests/layers.test.js` | The layer rules: no import of `src/app.js`, no view in a pure module, no cycle among `src/ui/`, one owner for each shared value, `SHELL` (ENG-16) |
-| `tests/design.test.js` | Each rule of `vendor/design-system/rules.js` over the two stylesheets, `index.html`, `icons.svg`, `src/ui/` and `designs/` (DSV-8); the classes of the item rows |
+| `tests/design.test.js` | Each rule of `design-system/rules.js` over the two stylesheets, `index.html`, `icons.svg`, `src/ui/` and `designs/` (DSV-8); the classes of the item rows |
 | `tests/look.test.js` | The look of the Stitch screens of Bodega as facts of `styles.css`: the palette in both themes (DSV-11) and the parts of the screens |
-| `tests/vendor.test.js` | The copy of the design system: its files and hashes, its place in `index.html`, `designs/index.html` and `SHELL`, no copied rule in `styles.css` (DSV-1 to DSV-3) |
+| `tests/design-files.test.js` | The base sheet `design-system/`: its files, its place in `index.html`, `designs/index.html` and `SHELL`, no copied rule in `styles.css` (DSV-1 to DSV-3) |
 | `tests/png.test.js` | The PNG encoder and decoder of `scripts/png.mjs`, which `npm run icons` uses |
 | `tests/glyph.test.js` | The segments of a line icon of `scripts/glyph.mjs`, which `npm run icons` draws for the shortcut icons |
 | `tests/release.test.js` | The release of `scripts/release.mjs`: the bump commit, the tag and the refusals, also a `main` behind `origin` and release notes that differ between languages (VER-10 to VER-12, VER-19) |
