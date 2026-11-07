@@ -49,6 +49,9 @@
     /* No blur at rest: borders give depth. Level 2 (sheets, a lifted row) has a warm edge. */
     --shadow-s: 0 1px 2px rgb(41 37 36 / 0.16);
     --shadow-l: 0 4px 12px rgb(120 113 108 / 0.12);
+    /* The emerald bar at the start of the current section from 1024px, and the room around its count (DSV-22). */
+    --shadow-current: inset 3px 0 0 var(--done);
+    --shadow-count: 0 0 0 0.25em var(--done);
 
     --text-s: 0.875rem; /* body-sm: 14px */
     --text-m: 1rem; /* body-md: 16px */
@@ -633,9 +636,21 @@
     font-weight: var(--weight-strong);
   }
 
+  /* DSV-22: from 1024px the current section is a tinted band with an emerald bar at its start, and
+     its count an emerald pill, as in the desktop screens of Bodega. Colour only: the shadow draws
+     the bar and the room around the count, so the rail keeps its layout (DSV-8). */
   @media (min-width: 1024px) {
     .nav-item[aria-current="page"] {
-      background: var(--done-soft);
+      background: var(--secondary);
+      box-shadow: var(--shadow-current);
+    }
+
+    .nav-item[aria-current="page"] .nav-count {
+      border-radius: var(--radius-pill);
+      background: var(--done);
+      box-shadow: var(--shadow-count);
+      color: var(--on-done);
+      font-weight: var(--weight-strong);
     }
   }
 
@@ -686,6 +701,38 @@
   .item-list > .item-row:has(+ :is(.group-head, .section-head)) {
     border-image: none;
     border-bottom: 1px solid var(--line);
+  }
+
+  /* DSV-22: from 1024px the head of a group is the tinted top of its card, the meta of a row a small
+     outlined pill, and the quantity an outlined chip, as in the desktop screen of Compra. */
+  @media (min-width: 1024px) {
+    .item-list:not(:has(> .item-row.recipe)) > .group-head {
+      margin-bottom: 0;
+      padding-inline: var(--space-4);
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      border-start-start-radius: var(--radius-l);
+      border-start-end-radius: var(--radius-l);
+      background: var(--surface-2);
+    }
+
+    .item-list:not(:has(> .item-row.recipe)) > .group-head + .item-row {
+      border-start-start-radius: 0;
+      border-start-end-radius: 0;
+    }
+
+    .item-row-body:has(> .item-row-check) > .item-row-name > .item-row-meta {
+      width: fit-content;
+      margin-top: var(--space-half);
+      padding: 0 var(--space-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-pill);
+    }
+
+    .item-row-qty {
+      box-shadow: inset 0 0 0 1px var(--line);
+      background: var(--surface);
+    }
   }
 
   /* The name button is two columns: the name and its meta line, then the quantity chip. */

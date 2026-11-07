@@ -13,6 +13,7 @@ What changes for you in each version of the app. The newest version is first.
 - In **Recipes**, the buttons of a recipe stand beside its name, and its products take the whole width of the card.
 - **Menu** shows how many meals of the week are planned and how many are free, an icon on each meal for a recipe or a dish, and a calendar on the week.
 - **Settings** shows an icon on each group, marks **Delete all data** as permanent, and explains **Install the app**.
+- On a wide screen, the current section stands out with a green bar, and each group of **Compra** has its title inside its card.
 
 ## 1.13.0 - 2026-11-05
 

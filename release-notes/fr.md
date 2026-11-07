@@ -13,6 +13,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 - Dans **Recettes**, les boutons d'une recette sont à côté de son nom, et ses produits prennent toute la largeur de la carte.
 - **Menu** montre combien de repas de la semaine sont prévus et combien sont libres, une icône sur chaque repas pour une recette ou un plat, et un calendrier sur la semaine.
 - **Réglages** montre une icône sur chaque groupe, marque **Supprimer toutes les données** comme irréversible et explique **Installer l’application**.
+- Sur un grand écran, la section actuelle ressort avec une barre verte, et chaque groupe de **Courses** a son titre dans sa carte.
 
 ## 1.13.0 - 2026-11-05
 
