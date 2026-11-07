@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur les écrans larges, l’en-tête de **Courses** suit le design : sur le fond de la page, un titre plus grand, des boutons aux coins plus droits et des magasins en plus petit. Le bouton d’ajout dit **Ajouter**.
 - Avec une souris, le bouton ⋮ d’un article ne cache plus sa quantité : il a sa propre place avant la poignée.
 - Avec une souris, un clic sur un article de **Courses** ouvre **Modifier**. Pour le cocher, clique sur son cercle. Glisser avec la souris déplace toujours l’article. Au doigt, toucher l’article le coche toujours.
 - Sur les grands écrans d’environ 1024 px, le titre de l’en-tête n’est plus coupé : le champ de recherche se rétrécit et, si besoin, n’affiche que la loupe.
@@ -76,7 +77,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 - Sur les grands écrans, Courses montre ce qui reste dans chaque magasin et ce qui revient aux prochaines courses, et Menu ce qu’ajoute « Remplir panier ».
 - Le titre de l'onglet et de l'app installée est maintenant « Liste de courses - Bodega ».
 - Sur une tablette ou un ordinateur, une recette s'ouvre dans un panneau à côté de la liste des recettes, et tu peux passer de l'une à l'autre sans le fermer.
-- Sur une tablette, un pliable ou un ordinateur, le bouton pour ajouter est dans l'en-tête, et les volets comme Ajouter s'ouvrent à côté de la liste sans la cacher.
+- Sur une tablette, un pliable ou un ordinateur, le bouton pour ajouter est dans l’en-tête, et les volets comme Ajouter s'ouvrent à côté de la liste sans la cacher.
 - Sur les grands écrans, les Réglages montrent chaque groupe avec son explication à côté.
 
 ## 1.7.1 - 2026-10-26

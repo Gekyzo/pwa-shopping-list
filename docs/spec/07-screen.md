@@ -194,9 +194,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **NAV-24** Below 600px the `+` is the last button of the dock; while the dock does not show it
   floats above the bottom right of the list, and it collapses to a square of the tap size (48 px)
   after a scroll of the list of more than 24 px down, and opens again on any scroll up and at the
-  top of the list (`fabState`). From 600px the add is the button **Añadir artículo** (in `Recetas`
+  top of the list (`fabState`). From 600px the add is the button **Añadir** (in `Recetas`
   **Crear receta**) of the header, after its other buttons, with the same conditions, and the `+`
-  does not float.
+  does not float. Its accessible name stays **Añadir artículo**.
 - **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an account
   screen that can go back to the list (ACC-2), then an open sheet, then an open row, then the
   search of a list (`closeTop`). With no layer open, the back of `Recetas`, `Menú` or `Ajustes`

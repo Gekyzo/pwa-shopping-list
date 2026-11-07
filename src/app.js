@@ -151,7 +151,9 @@ const renderAll = () => {
     $(id).hidden = noAdd;
     $(id).setAttribute('aria-label', addLabel);
   }
-  $('header-add-text').textContent = addLabel;
+  // The header names the add of a list with one word, as the desktop screen of Compra; its aria-label
+  // keeps the whole name (NAV-24).
+  $('header-add-text').textContent = ui.view === 'recipes' ? addLabel : t('add.short');
   $('nav-add-text').textContent = addLabel;
   document.querySelectorAll('.nav-item').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');

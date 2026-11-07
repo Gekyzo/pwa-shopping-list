@@ -204,3 +204,13 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   **Mover todos a la compra actual** has a `--control` edge on `--surface-2`. The card
   **Almacenamiento IndexedDB** of the screen is not built: the app stores its lists in
   `localStorage`, not IndexedDB.
+- **DSV-27** The header of the desktop screen of `Compra`, from 1024px. It is on the canvas
+  (`--bg`) with its `--line` below, 20px above and below its content, and the title is 32px
+  (`--text-headline-l`). The tools stand 12px apart with 4px corners: the search field and the
+  arrange button on `--surface-2` with a `--line` edge and 20px icons, the field text 13px in
+  `--struck` and its key on `--surface-high`; the add is outlined with an emerald `+` and 13px
+  text; **Terminar compra** is 15px at weight 600. The chips row stands 20px below the tools; a
+  chip label is 11px bold, its count in `--struck`, and the count of the pressed chip is on
+  `--done-fixed` in `--on-done-fixed`. The tools and the chips keep the tap size (TAP-1): only
+  their look follows the screen. The button **Más filtros** of the screen is not built: the app
+  has no such filter.

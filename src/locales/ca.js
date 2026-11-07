@@ -158,6 +158,7 @@ export default {
   'send.already': { one: '{count} ja hi era', other: '{count} ja hi eren' },
 
   'add.item': 'Afegeix article',
+  'add.short': 'Afegeix',
   'add.itemLabel': 'Afegeix article a la llista',
   'add.recipe': 'Crea recepta',
   'add.recipeName': 'Nom de la recepta',
