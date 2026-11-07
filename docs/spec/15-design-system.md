@@ -182,3 +182,8 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   (`row-handle`). Below 1024px a row and a head keep the phone screen: the count at the end of
   the head, the recurrence in the meta line, a sans quantity chip. This reverses the "no
   monospace" choice of `docs/bodega-inconsistencies.html` for the desktop row.
+- **DSV-25** The sidebar of the desktop screens of Bodega, from 1024px: the frame fills the width
+  (`--frame-max: 100vw`), the sidebar is tinted `--surface-2` with a `--line` at its end drawn as a
+  shadow (`--shadow-sidebar`), so the rail keeps the layout of the design system (DSV-8). The
+  brand is a 40px mark with the status line `nav-brand-note`, the add is `nav-action`, and the
+  foot is `nav-foot boxed` with its value `nav-foot-value`: optional parts of design system 0.9.0.

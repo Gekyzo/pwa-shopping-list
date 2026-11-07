@@ -74,6 +74,11 @@
     --chevron-mark: 8px; /* the drawn mark inside it */
     --dot: 6px; /* the dot before the status of a meal */
     --search-field: 260px; /* the search field of the header from 1024px */
+    /* The desktop screens of Bodega fill the width: no centred frame from 1024px (DSV-25). */
+    --frame-max: 100vw;
+    /* The end line of the tinted sidebar from 1024px, drawn as a shadow so the rail keeps its
+       layout (DSV-8, DSV-25). */
+    --shadow-sidebar: inset -1px 0 0 var(--line);
 
     /* Emerald: one green for the main action, progress and the checked state. */
     --done: light-dark(#13734b, #82d8a8); /* primary-container; dark inverse-primary */
@@ -718,6 +723,12 @@
     .nav-item[aria-current="page"] {
       background: var(--secondary);
       box-shadow: var(--shadow-current);
+    }
+
+    /* DSV-25: the sidebar is tinted surface-container-low with a line at its end. */
+    .nav-bar {
+      background: var(--surface-2);
+      box-shadow: var(--shadow-sidebar);
     }
 
     .nav-item[aria-current="page"] .nav-count {

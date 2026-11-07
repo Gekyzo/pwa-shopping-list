@@ -71,7 +71,6 @@ import {
   isAccountOpen,
   accountClosable,
   closeAccount,
-  signedIn,
   bind as bindAccount,
 } from '#ui/account';
 
@@ -146,11 +145,12 @@ const renderAll = () => {
   const recipePane = desktop.matches && ui.recipeId !== null && !ui.sheetOpen;
   const noAdd = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || (sheetOpen(ui) && !recipePane);
   const addLabel = t(ui.view === 'recipes' ? 'add.recipe' : 'add.item');
-  for (const id of ['fab', 'dock-add', 'header-add']) {
+  for (const id of ['fab', 'dock-add', 'header-add', 'nav-add']) {
     $(id).hidden = noAdd;
     $(id).setAttribute('aria-label', addLabel);
   }
   $('header-add-text').textContent = addLabel;
+  $('nav-add-text').textContent = addLabel;
   document.querySelectorAll('.nav-item').forEach((button) => {
     if (button.dataset.view === ui.view) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
@@ -159,8 +159,6 @@ const renderAll = () => {
   // A pair of twins of a member counts once, as in Todas (SHARE-14).
   const left = listCounts(state).all;
   $('nav-count').textContent = left > 0 ? String(left) : '';
-  // The foot of the rail says that the lists stay on this device (NAV-26).
-  $('nav-account').hidden = signedIn();
 
   if (ui.focusProduct) $('recipe-products').querySelector('.product-name')?.focus();
   ui.focusProduct = false;

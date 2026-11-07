@@ -421,8 +421,20 @@ const lastSyncText = () => {
   return t('sync.lastSync', { time });
 };
 
+// NAV-26: the status line below the name of the app and the foot of the sidebar. With no account
+// the lists stay on this device; with one the foot says whether the sync is up to date.
+const renderNavStatus = () => {
+  const session = syncer ? sessionNow() : null;
+  const online = status.online && !offline;
+  $('nav-status').textContent = t(session && online ? 'nav.synced' : 'nav.offlineMode');
+  $('nav-account-text').textContent = t(session ? 'nav.sync' : 'nav.local');
+  $('nav-account-value').textContent = session ? t(online ? 'nav.syncOk' : 'nav.syncOffline') : '';
+  $('nav-account').title = [$('nav-account-text').textContent, $('nav-account-value').textContent].filter(Boolean).join(' · ');
+};
+
 // The offline note (SYNC-11), the banner (ACC-11) and the row Cuenta (ACC-10).
 export const renderSync = () => {
+  renderNavStatus();
   $('account-group').hidden = !syncer;
   if (!syncer) return;
   const session = sessionNow();
