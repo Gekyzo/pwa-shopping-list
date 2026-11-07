@@ -7,6 +7,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 - In **Spesa**, il nome di ogni prodotto ha più spazio: viene tagliato meno e occupa meno righe.
 - Nuovi colori: uno sfondo di carta calda con linee grigio-verdi tenui, nel tema chiaro e in quello scuro.
 - In **Spesa**, il nome di ogni prodotto sta su una riga, e la quantità è un'etichetta tenue.
+- In **Spesa**, i prodotti comprati stanno in una scheda a parte, sotto una spunta.
 
 ## 1.13.0 - 2026-11-05
 

@@ -112,6 +112,10 @@ each part.
 - **DSV-15** The name of a row of `Compra` keeps one line, then ends with an ellipsis; its
   quantity is a tonal chip on `--secondary` with no edge, 13px with tabular figures. A bought
   quantity is drawn: a `--line` edge on `--surface`, in `--struck`.
+- **DSV-16** `Comprados (N)` (LIST-12) is a card of its own: its head (`bought-head`) is the top
+  of a box with a 1px `--line` border, 6px corners and a `--surface-2` ground, with a check in
+  `--done` before the title at 18px and the chevron at its end; the bought rows close the box. A
+  bought tick is filled at 70% opacity.
 
 ## Parts of the app
 

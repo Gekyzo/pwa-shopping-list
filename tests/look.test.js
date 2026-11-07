@@ -82,3 +82,11 @@ test('the quantity of a row is a tonal chip with no border (DSV-15)', () => {
 test('no hex colour outside the tokens layer', () => {
   assert.deepEqual(css.slice(tokensEnd).match(/#[0-9a-f]{3,8}\b/gi) ?? [], []);
 });
+
+test('the bought items stand in a card of their own, on --surface-2 (DSV-16)', () => {
+  const head = block('.item-list > .bought-head');
+  assert.match(head, /background:\s*var\(--surface-2\)/);
+  assert.match(head, /border:\s*1px solid var\(--line\)/);
+  assert.match(head, /border-radius:\s*var\(--radius-l\)/);
+  assert.match(block('.bought-icon'), /color:\s*var\(--done\)/);
+});

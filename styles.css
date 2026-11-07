@@ -658,6 +658,49 @@
     margin-top: var(--space-3);
   }
 
+  /* @extends section-head
+     @part bought-head   The head of the bought items: the top of a card on --surface-2 that holds
+                         their rows (DSV-16).
+     @part bought-icon   The check before its title, in --done. */
+  .item-list > .bought-head {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+
+  .item-list > .bought-head:has(+ .item-row) {
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .item-list > .bought-head + .item-row {
+    padding-top: 0;
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+  }
+
+  .bought-head > .section-head-button {
+    justify-content: flex-start;
+    gap: var(--space-2);
+    border-bottom: 0;
+    font-size: var(--text-group);
+    font-weight: var(--weight-strong);
+  }
+
+  .bought-head > .section-head-button > .chevron {
+    margin-inline-start: auto;
+  }
+
+  .bought-icon {
+    color: var(--done);
+  }
+
+  /* A bought tick is filled, but quieter than the rows still to buy. */
+  .item-row.bought .item-row-check {
+    opacity: 0.7;
+  }
+
   /* @extends list-group */
   /* The head of a group of Ajustes is a category tag of DESIGN.md: small capitals, spaced. */
   .settings .list-group-head {
