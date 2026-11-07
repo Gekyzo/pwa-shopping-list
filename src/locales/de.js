@@ -158,6 +158,7 @@ export default {
   'send.already': { one: '{count} war schon da', other: '{count} waren schon da' },
 
   'add.item': 'Artikel hinzufügen',
+  'add.short': 'Hinzufügen',
   'add.itemLabel': 'Artikel zur Liste hinzufügen',
   'add.recipe': 'Rezept erstellen',
   'add.recipeName': 'Name des Rezepts',

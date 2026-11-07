@@ -77,6 +77,12 @@
     --chevron-mark: 8px; /* the drawn mark inside it */
     --dot: 6px; /* the dot before the status of a meal */
     --search-field: 260px; /* the search field of the header from 1024px */
+    --text-headline-l: 2rem; /* headline-lg: 32px, the screen title from 1024px */
+    --tracking-tight: -0.025em; /* the screen title from 1024px */
+    /* primary-fixed: the count of the pressed chip of the header from 1024px. A fixed colour keeps
+       its value in both themes. */
+    --done-fixed: #9df5c3;
+    --on-done-fixed: #002112;
     /* The desktop screens of Bodega fill the width: no centred frame from 1024px (DSV-25). */
     --frame-max: 100vw;
     /* The end line of the tinted sidebar from 1024px, drawn as a shadow so the rail keeps its
@@ -208,7 +214,7 @@
       min-width: var(--tap);
       max-width: var(--search-field);
       padding-inline: var(--space-3);
-      background: var(--surface);
+      background: var(--surface-2);
       color: var(--muted);
       container-type: inline-size;
     }
@@ -230,7 +236,8 @@
       display: inline;
       flex: 1;
       overflow: hidden;
-      font-size: var(--text-s);
+      color: var(--struck);
+      font-size: var(--text-label-md);
       text-align: start;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -240,7 +247,8 @@
       display: inline;
       padding: var(--space-half) var(--space-1);
       border-radius: var(--radius-s);
-      background: var(--secondary);
+      background: var(--surface-high);
+      color: var(--struck);
       font-family: var(--font-mono);
       font-size: var(--text-xs);
     }
@@ -276,6 +284,54 @@
 
   .app-header .button.icon:not([hidden]) ~ .button.icon:not([hidden]) {
     margin-left: calc(var(--space-1) * -1);
+  }
+
+  /* The header of the desktop screen of Compra (DSV-27), from 1024px: on the canvas with its line,
+     20px above and below, a 32px title, and the tools 12px apart with 4px corners. The tools and
+     the chips keep the tap size (TAP-1); only their look follows the screen. */
+  @media (min-width: 1024px) {
+    .app-header {
+      padding-top: calc(var(--space-5) + env(safe-area-inset-top));
+      padding-bottom: var(--space-5);
+      background: var(--bg);
+    }
+
+    .app-header-title {
+      font-size: var(--text-headline-l);
+      letter-spacing: var(--tracking-tight);
+    }
+
+    .app-header .button.icon {
+      border-radius: var(--radius-s);
+      background: var(--surface-2);
+    }
+
+    .app-header .button.icon > .icon {
+      width: var(--icon-s);
+      height: var(--icon-s);
+    }
+
+    .app-header .button.icon:not([hidden]) ~ .button.icon:not([hidden]) {
+      margin-left: 0;
+    }
+
+    .app-header > :is(.header-add, .header-finish) {
+      border-radius: var(--radius-s);
+      font-weight: var(--weight-medium);
+    }
+
+    .app-header > .header-add {
+      font-size: var(--text-label-md);
+    }
+
+    .app-header > .header-finish {
+      padding-inline: var(--space-5);
+      font-size: var(--text-label-lg);
+    }
+
+    .app-header:has(> .header-finish:not([hidden])) > .header-add > .icon {
+      color: var(--done);
+    }
   }
 
   /* Below 600px the dock holds the search, so the header has no search button. */
@@ -1600,6 +1656,30 @@
       border-radius: var(--radius-pill);
       background: var(--done-soft);
       color: var(--done);
+    }
+  }
+
+  /* From 1024px the chips are those of the desktop screen of Compra (DSV-27): 20px below the tools,
+     11px bold labels, the count in --struck, and the count of the pressed chip on --done-fixed. */
+  @media (min-width: 1024px) {
+    .app-header > :is(.shop-lists, .list-chips) {
+      margin-top: var(--space-2);
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip {
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-strong);
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip > .count {
+      margin-left: var(--space-1);
+      color: var(--struck);
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip[aria-pressed="true"] > .count {
+      background: var(--done-fixed);
+      color: var(--on-done-fixed);
+      font-weight: var(--weight-strong);
     }
   }
 

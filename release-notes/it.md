@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Sugli schermi larghi, l’intestazione di **Spesa** segue il design: sullo sfondo della pagina, un titolo più grande, pulsanti con angoli più squadrati e negozi in caratteri più piccoli. Il pulsante per aggiungere dice **Aggiungi**.
 - Con il mouse, il pulsante ⋮ di un articolo non copre più la quantità: ha il suo posto prima della maniglia.
 - Con il mouse, un clic su un articolo di **Spesa** apre **Modifica**. Per spuntarlo, fai clic sul cerchio. Trascinare con il mouse sposta ancora l’articolo. Con il dito, toccare l’articolo lo spunta ancora.
 - Sugli schermi larghi di circa 1024 px il titolo dell’intestazione non viene più tagliato: il campo di ricerca si restringe e, se serve, mostra solo la lente.
@@ -76,7 +77,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 - Sugli schermi larghi, Spesa mostra cosa resta in ogni negozio e cosa torna alla prossima spesa, e Menù cosa aggiunge «Riempi cestino».
 - Il titolo della scheda e dell'app installata ora è «Lista della spesa - Bodega».
 - Su tablet o computer, una ricetta si apre in un pannello accanto all'elenco delle ricette, e puoi passare dall'una all'altra senza chiuderlo.
-- Su tablet, pieghevole o computer, il pulsante per aggiungere è nell'intestazione, e i pannelli come Aggiungi si aprono accanto alla lista senza coprirla.
+- Su tablet, pieghevole o computer, il pulsante per aggiungere è nell’intestazione, e i pannelli come Aggiungi si aprono accanto alla lista senza coprirla.
 - Sugli schermi larghi, le Impostazioni mostrano ogni gruppo con la sua spiegazione accanto.
 
 ## 1.7.1 - 2026-10-26
