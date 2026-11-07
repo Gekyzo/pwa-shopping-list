@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" width="800" height="440" font-family="'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <title>Share: invite a person by email, and each one sees their own list beside the shared one</title>
+  <defs>
+    <symbol id="person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </defs>
+  <rect width="800" height="440" rx="16" fill="#ecebe8"/>
+
+  <!-- Invite -->
+  <rect x="32" y="32" width="300" height="376" rx="12" fill="#f9f8f5"/>
+  <text x="52" y="68" font-size="20" font-weight="700" fill="#1c1917">Compartir lista</text>
+  <text x="52" y="94" font-size="12" fill="#78716c">Correo electrónico</text>
+  <rect x="52" y="104" width="260" height="40" rx="6" fill="#fff" stroke="#d6d3d1" stroke-width="1.5"/>
+  <text x="64" y="129" font-size="14" fill="#1c1917">ana@example.com</text>
+  <rect x="52" y="156" width="260" height="40" rx="20" fill="#13734b"/>
+  <text x="182" y="181" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">Invitar</text>
+  <g font-size="13" fill="#1c1917">
+    <text x="52" y="236" font-weight="700">Qué compartes</text>
+    <text x="52" y="260">• Solo Compra</text>
+    <text x="52" y="282">• Compra, Recetas y Menú</text>
+    <text x="52" y="304" fill="#78716c">  (with the settings that sync)</text>
+  </g>
+  <text x="52" y="344" font-size="12" fill="#78716c">The language, the hand and the theme</text>
+  <text x="52" y="362" font-size="12" fill="#78716c">stay on each device. The person</text>
+  <text x="52" y="380" font-size="12" fill="#78716c">accepts or declines the invite.</text>
+
+  <!-- People -->
+  <g color="#2a5db8"><use href="#person" x="370" y="150" width="44" height="44"/></g>
+  <g color="#9a5b00"><use href="#person" x="370" y="250" width="44" height="44"/></g>
+  <path d="M392 202v40" stroke="#78716c" stroke-width="2" stroke-dasharray="4 4"/>
+
+  <!-- Member view -->
+  <rect x="448" y="32" width="320" height="376" rx="12" fill="#f9f8f5"/>
+  <text x="468" y="68" font-size="20" font-weight="700" fill="#1c1917">Compra</text>
+  <g font-size="12" font-weight="700">
+    <rect x="468" y="84" width="70" height="28" rx="14" fill="#1c1917"/>
+    <text x="503" y="102" fill="#fff" text-anchor="middle">Todas 5</text>
+    <rect x="546" y="84" width="88" height="28" rx="14" fill="#fff" stroke="#2a5db8"/>
+    <text x="590" y="102" fill="#2a5db8" text-anchor="middle">Mi lista 2</text>
+    <rect x="642" y="84" width="72" height="28" rx="14" fill="#fff" stroke="#9a5b00"/>
+    <text x="678" y="102" fill="#9a5b00" text-anchor="middle">Ana 3</text>
+  </g>
+  <g font-size="13" font-weight="500" fill="#1c1917">
+    <rect x="462" y="128" width="292" height="40" rx="6" fill="#fff"/>
+    <rect x="462" y="128" width="4" height="40" rx="2" fill="#2a5db8"/>
+    <circle cx="488" cy="148" r="9" fill="none" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="506" y="153">Café</text>
+
+    <rect x="462" y="174" width="292" height="40" rx="6" fill="#fff"/>
+    <rect x="462" y="174" width="4" height="40" rx="2" fill="#9a5b00"/>
+    <circle cx="488" cy="194" r="9" fill="none" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="506" y="199">Leche</text>
+
+    <rect x="462" y="220" width="292" height="40" rx="6" fill="#fff"/>
+    <rect x="462" y="220" width="4" height="40" rx="2" fill="#9a5b00"/>
+    <circle cx="488" cy="240" r="9" fill="none" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="506" y="245">Manzanas</text>
+
+    <rect x="462" y="266" width="292" height="40" rx="6" fill="#fff"/>
+    <rect x="462" y="266" width="4" height="40" rx="2" fill="#2a5db8"/>
+    <circle cx="488" cy="286" r="9" fill="none" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="506" y="291">Arroz</text>
+
+    <rect x="462" y="312" width="292" height="40" rx="6" fill="#fff"/>
+    <rect x="462" y="312" width="4" height="40" rx="2" fill="#9a5b00"/>
+    <circle cx="488" cy="332" r="9" fill="none" stroke="#d6d3d1" stroke-width="2"/>
+    <text x="506" y="337">Pan</text>
+  </g>
+  <text x="468" y="384" font-size="12" fill="#78716c">Blue: your own list. Amber: the shared list.</text>
+</svg>
