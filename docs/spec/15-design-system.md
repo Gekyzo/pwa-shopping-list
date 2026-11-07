@@ -135,7 +135,8 @@ each part.
 - **DSV-19** A recipe card of `Recetas` (REC-40). Its actions stand at its top end, beside the
   name: the link tile, if the recipe has a link, then the send tile. The name, its count and its
   badge keep clear of them; the products take the full width of the card below. With the left
-  hand the actions stand at the top start. The count of `Recetas` in the header is a pill on
+  hand the actions stand at the top start. The actions keep their place in the tab order, after the products,
+  so the focus goes back up from the products to them. The count of `Recetas` in the header is a pill on
   `--done-soft` in `--done`.
 - **DSV-20** `Menú` (MENU-26). The count in the header is a neutral pill: `--secondary` with a
   `--line` edge, in `--muted`. The week bar starts with a muted `calendar`. A planned meal shows
@@ -149,7 +150,8 @@ each part.
   **Borrar todos los datos** ends with the tag `settings.irreversible` in small capitals in
   `--danger` (`settings-row-tag`). The count of the aisles is a pill on `--secondary`
   (`settings-row-count`). **Instalar la aplicación** has the hint `settings.installHint` below
-  its name (`settings-row-hint`). The update banner is a tonal card on `--secondary` with a
+  its name (`settings-row-hint`). A hint or a tag is the description of its control
+  (`aria-describedby`), not part of its name. The update banner is a tonal card on `--secondary` with a
   `--line` edge. From 1024px each row icon stands in a 32px `--surface-2` tile (`--icon-tile`).
   The trip-end choice stays two segments: the switch of the screen would be a change of control.
 - **DSV-22** From 1024px, as in the desktop screens. The current section of the rail is a band on
