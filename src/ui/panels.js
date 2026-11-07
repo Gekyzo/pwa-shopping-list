@@ -38,7 +38,7 @@ const renderRecipes = (view) => {
     const done = inList === total;
     const see = el('button', { type: 'button', className: 'side-panel-link', onclick: () => seeRecipe(recipe) }, [
       el('span', { textContent: t('panels.see') }),
-      icon('chevron-right', 'small'),
+      icon('arrow-right', 'small'),
     ]);
     see.setAttribute('aria-label', t('panels.seeRecipe', { name: recipe.name }));
     return el('li', { className: 'side-panel-card' }, [

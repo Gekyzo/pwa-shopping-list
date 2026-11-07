@@ -377,7 +377,7 @@ export const postponedSection = (items) => {
     bringBackButton(item),
   ]));
   const all = el('li', { className: 'postponed-row' }, [
-    el('button', { type: 'button', className: 'button outline wide', onclick: bringAll }, [icon('cart-add', 'small'), el('span', { textContent: t('panels.bringAll') })]),
+    el('button', { type: 'button', className: 'button outline wide', onclick: bringAll }, [icon('list-add', 'small'), el('span', { textContent: t('panels.bringAll') })]),
   ]);
   return [el('li', { className: 'section-head bought-head postponed-head' }, [button]), ...(open ? [...rows, all] : [])];
 };

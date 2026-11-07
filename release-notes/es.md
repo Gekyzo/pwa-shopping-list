@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En pantallas anchas, los paneles de **Compra** se parecen más al diseño: **Ver** lleva una flecha, los nombres de **Próxima compra** tienen un trazo más fino y el botón para moverlo todo lleva un icono de lista.
 - En pantallas anchas, la cabecera de **Compra** es como el diseño: sobre el fondo de la página, un título más grande, botones con esquinas más rectas y tiendas con letra más pequeña. El botón de añadir dice **Añadir**.
 - Con un ratón, el botón ⋮ de un artículo ya no tapa la cantidad: tiene su propio sitio antes del asa.
 - Con un ratón, un clic en un artículo de **Compra** abre **Editar**. Para marcarlo como comprado, haz clic en el círculo. Arrastrar con el ratón sigue moviendo el artículo. Con el dedo, tocar el artículo sigue marcándolo.

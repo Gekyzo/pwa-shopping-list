@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Sugli schermi larghi, i pannelli di **Spesa** seguono il design più da vicino: **Vedi** ha una freccia, i nomi in **Prossima spesa** sono meno marcati e il pulsante che sposta tutto mostra un’icona di elenco.
 - Sugli schermi larghi, l’intestazione di **Spesa** segue il design: sullo sfondo della pagina, un titolo più grande, pulsanti con angoli più squadrati e negozi in caratteri più piccoli. Il pulsante per aggiungere dice **Aggiungi**.
 - Con il mouse, il pulsante ⋮ di un articolo non copre più la quantità: ha il suo posto prima della maniglia.
 - Con il mouse, un clic su un articolo di **Spesa** apre **Modifica**. Per spuntarlo, fai clic sul cerchio. Trascinare con il mouse sposta ancora l’articolo. Con il dito, toccare l’articolo lo spunta ancora.

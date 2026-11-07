@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- On wide screens, the panels of **Shopping** follow the design more closely: **See** has an arrow, the names in **Next trip** are less bold and the button that moves everything shows a list icon.
 - On wide screens, the header of **Shopping** follows the design: on the page background, a larger title, buttons with squarer corners and shops in smaller text. The add button says **Add**.
 - With a mouse, the ⋮ button of an item no longer covers its quantity: it has its own place before the handle.
 - With a mouse, a click on an item of **Shopping** opens **Edit**. To tick it, click its circle. A drag with the mouse still moves the item. With a finger, a tap on the item still ticks it.
