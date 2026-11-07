@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Com um rato, um clique num artigo de **Compras** abre **Editar**. Para o marcar como comprado, clica no círculo. Arrastar com o rato continua a mover o artigo. Com o dedo, tocar no artigo continua a marcá-lo.
 - Em ecrãs largos de cerca de 1024 px, o título do cabeçalho já não é cortado: o campo de pesquisa fica mais estreito e, se for preciso, mostra só a lupa.
 - Em ecrãs largos, a lista e os painéis de **Compras** seguem o design: mais espaço à volta da lista e entre os grupos, painéis mais largos, etiquetas e quantidades mais claras e uma barra verde mais grossa para cada receita.
 - Cada secção tem o seu próprio endereço: `#/compra`, `#/recetas`, `#/menu` e `#/ajustes`. Ao recarregar continuas na mesma secção. O botão Voltar do telemóvel volta primeiro a **Compras** e depois sai da app.

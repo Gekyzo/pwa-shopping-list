@@ -8,7 +8,7 @@ import { leave, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
 import { reorder, bindReorder, endReorder } from '#ui/drag';
-import { mouseMenu } from '#device';
+import { mouseMenu, rowClick } from '#device';
 
 // The name of a row, its quantity, and below the name the shops of the item when the list
 // is not by shop, the other recipes of an item of two recipe groups (`also`) and the mark of a
@@ -59,13 +59,15 @@ const deleteAction = (item) => {
   return button;
 };
 
+// Opens Editar for a row; an open row closes first (ROW-6).
+const editRow = (item) => {
+  Object.assign(ui, { openId: null, openSide: null });
+  openEdit(item);
+};
+
 // The edit button at the end of a row. It is out of the name, so a tap on it does not tick.
 const editButton = (item) => {
-  const edit = () => {
-    // An open row closes first (ROW-6).
-    Object.assign(ui, { openId: null, openSide: null });
-    openEdit(item);
-  };
+  const edit = () => editRow(item);
   // The grip of the screens stands where the pencil was; a tap still opens Editar (DSV-24).
   const button = el('button', { type: 'button', className: 'button icon row-handle', title: t('row.edit'), onclick: edit }, [icon('grip')]);
   button.setAttribute('aria-label', t('row.editName', { name: item.name }));
@@ -91,9 +93,10 @@ const moreButton = (item, groupId) => {
   return button;
 };
 
-// A row of Compra: a tap on its body ticks the item (D1), the check only shows the state, and the
-// edit button stays at the end. The name is the checkbox for the keyboard and a screen reader: a
-// button gives it Space and Enter, and its click reaches the body like a tap.
+// A row of Compra: a tap on its body ticks the item (D1), and a mouse click on it opens Editar,
+// except on the check mark, which ticks (ROW-1). The edit button stays at the end. The name is the
+// checkbox for the keyboard and a screen reader: a button gives it Space and Enter, and its click
+// reaches the body like a tap.
 const itemRow = (item, also, groupId) => {
   const toggle = () => {
     if (item.bought) {
@@ -117,7 +120,14 @@ const itemRow = (item, also, groupId) => {
     row,
     end: [editAction(item), ...(item.bought ? [] : [postponeAction(item)]), repeatAction(item), deleteAction(item)],
     right: { run: toggle, icon: item.bought ? 'undo' : 'check' },
-    tap: toggle,
+    tap: (event) => {
+      // The check mark takes no pointer (design system): a click beside the name, on the side of
+      // the check mark, is a click on it. The end slot never comes here (tapBody).
+      const box = name.getBoundingClientRect();
+      const onCheck = event.clientX < box.left || event.clientX > box.right;
+      if (rowClick({ pointerType: event.pointerType, detail: event.detail, onCheck }) === 'edit') editRow(item);
+      else toggle();
+    },
   };
 };
 
@@ -237,7 +247,7 @@ const tapBody = (event, opened, tap) => {
     render();
     return;
   }
-  tap();
+  tap(event);
 };
 
 // The box of a row that slides: the action of the slide to the right below it, the side actions

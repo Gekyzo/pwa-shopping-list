@@ -72,8 +72,11 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   (GROUP-20) and `↻ cada compra` for a recurrent item (LIST-7), joined by ` · `, and an
   edit button **Editar** at its end: the grip `grip` of the screens, named `Editar «name»`. From
   1024px `↻ cada compra` is a pill beside the name instead (DSV-24). The slot of the edit button is one button wide, so the name
-  takes the rest of the row; a tag of `Todas` widens it (SHARE-14). The name keeps one line, then ends with an ellipsis (DSV-15). A tap on
-  the body of the row ticks or unticks the item (LIST-11); the check mark only shows the state. A
+  takes the rest of the row; a tag of `Todas` widens it (SHARE-14). The name keeps one line, then ends with an ellipsis (DSV-15). A tap of
+  a finger or a pen on the body of the row ticks or unticks the item (LIST-11). A click of a mouse
+  on the body opens the edit sheet (ROW-7), and a click of a mouse on the check mark ticks or
+  unticks the item (`rowClick` of `src/device.js`); a click with no pointer type ticks. A drag of a
+  mouse moves the row (MOVE-1). A
   tap on the edit button opens the edit sheet (ROW-7) and does not tick. With **Izquierda**
   (NAV-12) the edit button is at the start of the row and the check mark at its end. For the
   keyboard and a screen reader, the name is a checkbox: `Space` or `Enter` ticks it.

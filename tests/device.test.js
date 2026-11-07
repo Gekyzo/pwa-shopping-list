@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { BREAKPOINTS, CLASSES, FEATURES, deviceClass, features, gesturePointer, mouseMenu } from '#device';
+import { BREAKPOINTS, CLASSES, FEATURES, deviceClass, features, gesturePointer, mouseMenu, rowClick } from '#device';
 
 test('deviceClass gives the class of each width of DSV-9', () => {
   const widths = [0, 599, 600, 839, 840, 1023, 1024, 1440];
@@ -54,4 +54,25 @@ test('mouseMenu is true for the right click of a mouse, also as a plain MouseEve
   // The menu key and Shift+F10 send a contextmenu with no pointer type and button 0.
   assert.equal(mouseMenu({ pointerType: '', button: 0 }), false);
   assert.equal(mouseMenu({ pointerType: undefined, button: 0 }), false);
+});
+
+test('rowClick: a mouse click on the body of a row opens Editar (ROW-1)', () => {
+  assert.equal(rowClick({ pointerType: 'mouse', detail: 1, onCheck: false }), 'edit');
+});
+
+test('rowClick: a mouse click on the check mark ticks (ROW-1)', () => {
+  assert.equal(rowClick({ pointerType: 'mouse', detail: 1, onCheck: true }), 'tick');
+});
+
+test('rowClick: a finger and a pen tick (LIST-11)', () => {
+  for (const pointerType of ['touch', 'pen']) assert.equal(rowClick({ pointerType, detail: 1, onCheck: false }), 'tick', pointerType);
+});
+
+test('rowClick: the keyboard ticks, also with a mouse type (ROW-1)', () => {
+  assert.equal(rowClick({ pointerType: '', detail: 0, onCheck: false }), 'tick');
+  assert.equal(rowClick({ pointerType: 'mouse', detail: 0, onCheck: false }), 'tick');
+});
+
+test('rowClick: a click with no pointer type ticks, as before', () => {
+  assert.equal(rowClick({ pointerType: undefined, detail: 1, onCheck: false }), 'tick');
 });

@@ -23,6 +23,12 @@ export const features = (cls) => (Object.hasOwn(FEATURES, cls) ? FEATURES[cls] :
 // A finger or a pen slides; a mouse drag selects. An empty type is an old browser: treat it as touch.
 export const gesturePointer = (pointerType) => pointerType !== 'mouse';
 
+// What a click on the body of an item row of Compra does (ROW-1, LIST-11): a mouse click opens
+// Editar, except on the check mark, which ticks. A finger, a pen and the keyboard (a click with no
+// press, `detail` 0) tick. A click with no pointer type (an old browser) ticks, as before.
+export const rowClick = ({ pointerType, detail, onCheck }) =>
+  detail !== 0 && pointerType === 'mouse' && !onCheck ? 'edit' : 'tick';
+
 // The contextmenu of a right click of a mouse. Safari sends a plain MouseEvent with no pointer type;
 // the menu key and Shift+F10 send button 0 (ROW-15).
 export const mouseMenu = ({ pointerType, button }) => pointerType === 'mouse' || (pointerType === undefined && button === 2);
