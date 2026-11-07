@@ -35,6 +35,7 @@
     --ink: light-dark(#1f1b17, #f9efe8);
     --on-ink: light-dark(#ffffff, #1f1b17);
     --secondary: light-dark(#f6ece6, #3d3733); /* surface-container: a chip, a tonal button */
+    --surface-high: light-dark(#eae1da, #48423d); /* surface-container-highest: the current section from 1024px */
     --danger: light-dark(#ba1a1a, #ffb4ab); /* error: a destructive action, a failure */
     --warning: light-dark(#a23e18, #ffb59c); /* secondary, terracotta: an alert, a recurrent item */
     --scrim: rgb(31 27 23 / 0.45);
@@ -49,9 +50,8 @@
     /* No blur at rest: borders give depth. Level 2 (sheets, a lifted row) has a warm edge. */
     --shadow-s: 0 1px 2px rgb(41 37 36 / 0.16);
     --shadow-l: 0 4px 12px rgb(120 113 108 / 0.12);
-    /* The emerald bar at the start of the current section from 1024px, and the room around its count (DSV-22). */
-    --shadow-current: inset 3px 0 0 var(--done);
-    --shadow-count: 0 0 0 0.25em var(--done);
+    /* The emerald bar at the start of the current section from 1024px (DSV-22). */
+    --shadow-current: inset 4px 0 0 var(--done);
 
     --text-s: 0.875rem; /* body-sm: 14px */
     --text-m: 1rem; /* body-md: 16px */
@@ -69,6 +69,7 @@
     --day-bar: 4px; /* the emerald bar before the name of a day */
     --text-label-lg: 0.9375rem; /* label-lg: 15px, the week of Menú */
     --text-label-md: 0.8125rem; /* label-md: 13px, the label of a meal */
+    --text-label-sm: 0.6875rem; /* label-sm: 11px, the count and the foot of the sidebar */
     --meal-min: 88px; /* the least height of a meal tile */
     --chevron-box: 24px; /* the box of the chevron of a settings row */
     --chevron-mark: 8px; /* the drawn mark inside it */
@@ -716,13 +717,24 @@
     font-weight: var(--weight-strong);
   }
 
-  /* DSV-22: from 1024px the current section is a tinted band with an emerald bar at its start, and
-     its count an emerald pill, as in the desktop screens of Bodega. Colour only: the shadow draws
-     the bar and the room around the count, so the rail keeps its layout (DSV-8). */
+  /* DSV-22: from 1024px the current section is a band on surface-container-highest with a 4px
+     emerald bar at its start, and its count an emerald pill, as in the desktop screens of Bodega.
+     Colour and type only: the shadow draws the bar, so the rail keeps its layout (DSV-8). */
   @media (min-width: 1024px) {
+    .nav-item {
+      color: var(--muted);
+      font-size: var(--text-s);
+      font-weight: var(--weight-medium);
+    }
+
+    .nav-item:hover {
+      background: var(--surface-high);
+    }
+
     .nav-item[aria-current="page"] {
-      background: var(--secondary);
+      background: var(--surface-high);
       box-shadow: var(--shadow-current);
+      font-weight: var(--weight-strong);
     }
 
     /* DSV-25: the sidebar is tinted surface-container-low with a line at its end. */
@@ -731,12 +743,30 @@
       box-shadow: var(--shadow-sidebar);
     }
 
+    .nav-brand {
+      font-size: var(--text-group);
+    }
+
+    .nav-brand-note {
+      color: var(--control);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-medium);
+    }
+
     .nav-item[aria-current="page"] .nav-count {
-      border-radius: var(--radius-pill);
       background: var(--done);
-      box-shadow: var(--shadow-count);
       color: var(--on-done);
+      font-size: var(--text-label-sm);
       font-weight: var(--weight-strong);
+    }
+
+    .nav-bar > .nav-foot.boxed {
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .nav-foot-value {
+      color: var(--control);
     }
   }
 

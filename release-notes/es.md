@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En pantallas anchas, la barra lateral es como el diseño: algo más ancha, la sección actual con un fondo más marcado y una barra verde, el número de artículos en una píldora y el estado de la sincronización bajo una línea.
 - Con un teclado: de 1 a 4 abren las secciones, N añade y / busca. En un artículo seleccionado, la tecla de menú o Mayús+F10 muestra sus acciones y Supr lo elimina.
 - Con un ratón, haz clic derecho en un artículo o usa su botón ⋮ para ver sus acciones. Arrastrar la cabecera con el ratón ya no cambia de sección.
 - En **Recetas**, cada producto que añades empieza por mayúscula: «arroz» se guarda como «Arroz».
