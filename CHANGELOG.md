@@ -10,6 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
+- An item can be postponed: `list: 'postponed'` (LIST-40 to LIST-42), from the slide actions of a row (ROW-3) and the foot of `Editar`. **Terminar compra** brings postponed items back. The panel **Por tienda** becomes **Recetas en la lista** (`recipeProgress`, REC-41) and **Próxima compra** lists the postponed items with a bring back and **Mover todos a la compra actual** (LIST-38, LIST-39); below 600px they close the list as `Pospuestos (N)`. New icon `clock`. The state stays version 10.
 - The end slot of a row of `Compra` is one button wide (`--tap`), not two: the name gets 48 px more, and the divider of the left hand starts after one button (ROW-1).
 - The palette is the one of the Stitch screens of Bodega (DSV-11): canvas `#fff8f5`, borders `#bec9c0` and `#6f7a71`, muted ink `#3f4942`, terracotta `#a23e18`; dark is derived from the same roles. `DESIGN.md` holds the Stitch outline values again.
 - The name of a row of `Compra` keeps one line, then ends with an ellipsis; its quantity is a tonal chip on `--secondary` with no edge, and a bought quantity is drawn with a `--line` edge (DSV-15, ROW-1).

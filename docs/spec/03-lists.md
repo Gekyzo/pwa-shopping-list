@@ -156,14 +156,19 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
   **Cancelar**. **Cancelar**, `Escape` and the back of the phone (NAV-25), or a loss of focus with an
   empty field close it; a close clears the text. The list keeps its place at the top while the
   field is open. A group head keeps its colour.
-- **LIST-38** From 600px wide, `Compra` with an item shows the panel **Por tienda** when an item has
-  a shop: each shop of the list, in name order, with its items left of its total (`5 de 7`), then
-  **Sin tienda** when an item has no shop, and under each a bar at the true ratio of the shop with
-  the most items left (`shopCounts`). Below 840px the panels stand below the list; from 840px they
-  are a column beside it that stays in sight while the list scrolls. Below 600px there is no panel.
-- **LIST-39** Next to it, the panel **Próxima compra** lists the items that come back when the trip
-  ends: each recurrent item, and with **Aplazar** (TRIP-7) each open item (`comingBack`), with
-  their count and their shops; six rows at most, then `y N más`.
+- **LIST-38** From 600px wide, `Compra` with an item to buy or a postponed item shows the panel
+  **Recetas en la lista** when a recipe has a product in `Compra` (REC-41): the count `N activas` in
+  a pill, then one bordered tile for each such recipe with its name, the link **Ver** that opens it
+  in `Recetas`, `N de M ingredientes en lista` and a bar at N/M; at N = M the line starts with `✓`
+  and the line and the bar take `--done`. Below 840px the panels stand below the list; from 840px
+  they are a column beside it that stays in sight while the list scrolls. Below 600px there is no
+  panel.
+- **LIST-39** Below it, the panel **Próxima compra** · `Pospuestos` lists the postponed items
+  (LIST-40), when there is one: the line `Productos reservados para la siguiente salida al
+  supermercado:`, then each item with its quantity and its shops below its name and a `+` that
+  brings it back (LIST-42), six rows at most, then `y N más`; and the outlined button **Mover todos
+  a la compra actual**. Below 600px, where there is no panel, the list of `Compra` ends with a
+  closed head `Pospuestos (N)` that opens the same rows and button.
 - **LIST-22** The list shows only the items whose name, one of whose shops or whose aisle
   (AISLE-9) contains the text,
   with no case and no accent distinction. An empty text shows all items.

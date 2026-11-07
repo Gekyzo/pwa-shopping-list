@@ -81,7 +81,7 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 
   | Row | Slide to the left |
   |---|---|
-  | `Compra` | **Editar**, **Repetir** (`No repetir` for a recurrent item, LIST-7), **Eliminar** |
+  | `Compra` | **Editar**, **Posponer** (not for a ticked item, LIST-40), **Repetir** (`No repetir` for a recurrent item, LIST-7), **Eliminar** |
 
 - **ROW-4** A drag becomes a slide after 10 px of horizontal move. A drag that is first vertical
   scrolls the list.
