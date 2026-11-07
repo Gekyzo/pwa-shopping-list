@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En pantallas anchas, la lista y los paneles de **Compra** son como el diseño: más aire alrededor de la lista y entre los grupos, paneles más anchos, etiquetas y cantidades más claras, la barra de cada receta más gruesa y verde.
 - Cada sección tiene su propia dirección: `#/compra`, `#/recetas`, `#/menu` y `#/ajustes`. Al recargar sigues en la misma sección. El botón Atrás del móvil vuelve primero a **Compra** y después sale de la app.
 - En pantallas anchas, la barra lateral es como el diseño: algo más ancha, la sección actual con un fondo más marcado y una barra verde, el número de artículos en una píldora y el estado de la sincronización bajo una línea.
 - Con un teclado: de 1 a 4 abren las secciones, N añade y / busca. En un artículo seleccionado, la tecla de menú o Mayús+F10 muestra sus acciones y Supr lo elimina.

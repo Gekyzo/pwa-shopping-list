@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Sugli schermi larghi la lista e i pannelli di **Spesa** seguono il design: più spazio intorno alla lista e tra i gruppi, pannelli più larghi, etichette e quantità più chiare e una barra verde più spessa per ogni ricetta.
 - Ogni sezione ha il suo indirizzo: `#/compra`, `#/recetas`, `#/menu` e `#/ajustes`. Ricaricando resti nella stessa sezione. Il tasto Indietro del telefono torna prima a **Spesa** e poi esce dall’app.
 - Sugli schermi larghi la barra laterale segue il design: un po’ più larga, la sezione attuale su uno sfondo più marcato con una barra verde, il numero di articoli in una pillola e lo stato della sincronizzazione sotto una linea.
 - Con la tastiera: da 1 a 4 aprono le sezioni, N aggiunge e / cerca. Su un articolo selezionato, il tasto menu o Maiusc+F10 mostra le sue azioni e Canc lo elimina.

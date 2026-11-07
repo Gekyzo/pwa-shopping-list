@@ -38,6 +38,8 @@
     --surface-high: light-dark(#eae1da, #48423d); /* surface-container-highest: the current section from 1024px */
     --danger: light-dark(#ba1a1a, #ffb4ab); /* error: a destructive action, a failure */
     --warning: light-dark(#a23e18, #ffb59c); /* secondary, terracotta: an alert, a recurrent item */
+    --warning-soft: light-dark(rgb(255 219 207 / 0.4), rgb(130 40 1 / 0.4)); /* secondary-fixed/40: the ground of a recurrent pill */
+    --warning-line: light-dark(rgb(162 62 24 / 0.3), rgb(255 181 156 / 0.3)); /* secondary/30: the edge of a recurrent pill */
     --scrim: rgb(31 27 23 / 0.45);
     /* The toast is the inverse surface of the screens: dark on light, light on dark (DSV-17). */
     --toast-bg: light-dark(#342f2b, #eae1da); /* inverse-surface */
@@ -107,9 +109,13 @@
     }
   }
 
-  /* The rows of the desktop screen of Compra (DSV-24): a 28px tick and a 16px semibold name. */
+  /* The rows of the desktop screen of Compra (DSV-24): a 28px tick and a 16px semibold name. The
+     content is 32px from its edges, and the panels take a third of it, as the 4 of 12 columns of
+     the screen (DSV-26). */
   @media (min-width: 1024px) {
     :root {
+      --gutter: var(--space-7);
+      --panel-width: max(240px, (100vw - var(--rail-width) - var(--space-7) * 4) / 3);
       --tick: 28px;
       --text-row: 1rem;
       --weight-row: 600;
@@ -833,9 +839,22 @@
   /* DSV-22: from 1024px the head of a group is the tinted top of its card, the meta of a row a small
      outlined pill, and the quantity an outlined chip, as in the desktop screen of Compra. */
   @media (min-width: 1024px) {
+    /* DSV-26: the list starts 32px below the header, and its cards stand 24px apart. */
+    .item-list:not(:has(> .item-row.recipe)):has(> :is(.item-row, .postponed-head)) {
+      margin-top: var(--space-7);
+    }
+
+    .item-list:not(:has(> .item-row.recipe)) > :is(.group-head, .section-head) {
+      margin-top: var(--space-6);
+    }
+
+    .item-list:not(:has(> .item-row.recipe)) > :is(.group-head, .section-head):first-child {
+      margin-top: 0;
+    }
+
     .item-list:not(:has(> .item-row.recipe)) > .group-head {
       margin-bottom: 0;
-      padding-inline: var(--space-4);
+      padding-inline: 0;
       border: 1px solid var(--line);
       border-bottom: 0;
       border-start-start-radius: var(--radius-l);
@@ -848,6 +867,16 @@
     /* More specific than the count at the end of the head, which comes later in this layer. */
     .group-head-button > .group-head-count {
       margin-inline-start: 0;
+      border-color: transparent;
+      background: var(--secondary);
+      color: var(--control);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    /* DSV-26: a row with a meta line has 10px above and below its text. */
+    .item-row-body:has(> .item-row-check) > .item-row-name {
+      padding-block: calc(var(--space-3) - var(--space-half));
     }
 
     .group-head-button > .group-head-end {
@@ -862,19 +891,37 @@
 
     .item-row-body:has(> .item-row-check) > .item-row-name > .item-row-meta {
       width: fit-content;
-      margin-top: var(--space-half);
-      padding: 0 var(--space-2);
+      margin-top: var(--space-1);
+      padding: var(--space-half) var(--space-2);
       border: 1px solid var(--line);
       border-radius: var(--radius-pill);
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-strong);
     }
 
-    /* More specific than the tonal chip, which comes later in this layer. */
+    /* More specific than the tonal chip, which comes later in this layer. DSV-26: the chip of the
+       screen, on surface-container-low with 2px corners. */
     .item-row-name > .item-row-qty {
+      padding: var(--space-1) calc(var(--space-2) + var(--space-half));
+      border-radius: var(--space-half);
       box-shadow: inset 0 0 0 1px var(--line);
-      background: var(--surface);
+      background: var(--surface-2);
+      color: var(--muted);
       font-family: var(--font-mono);
-      font-size: var(--text-s);
-      font-weight: var(--weight-normal);
+      font-size: var(--text-label-md);
+      font-weight: var(--weight-medium);
+    }
+
+    /* DSV-26: the grip is an 18px mark in the outline colour. */
+    .row-handle {
+      color: var(--control);
+    }
+
+    .row-handle > .icon {
+      width: calc(var(--space-4) + var(--space-half));
+      height: calc(var(--space-4) + var(--space-half));
     }
 
     /* More specific than the hidden pill below 1024px, which comes later in this layer. */
@@ -882,10 +929,11 @@
       display: inline-flex;
       flex: none;
       align-items: center;
-      padding: 0 var(--space-2);
-      border: 1px solid currentColor;
+      padding: var(--space-half) var(--space-2);
+      border: 1px solid var(--warning-line);
       border-radius: var(--radius-pill);
-      font-size: var(--text-xs);
+      background: var(--warning-soft);
+      font-size: var(--text-label-sm);
     }
 
     .item-row-meta > .item-row-repeat-meta,
@@ -1374,6 +1422,110 @@
       grid-row: 1 / span 40;
       align-self: start;
       margin: var(--space-4) 0;
+    }
+  }
+
+  /* DSV-26: from 1024px the panels of the desktop screen of Compra. A panel has 20px of padding and
+     a line below its head; the tiles of Recetas en la lista are tinted with an 8px bar; the rows of
+     Próxima compra are 14px with 11px details; the second texts are 11px. */
+  @media (min-width: 1024px) {
+    main > .side-panels:not([hidden]) {
+      top: var(--space-7);
+      gap: var(--space-6);
+      margin: var(--space-7) 0;
+    }
+
+    .side-panel {
+      padding: var(--space-5);
+    }
+
+    .side-panel-head {
+      align-items: center;
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--line);
+      font-size: var(--text-label-lg);
+    }
+
+    .side-panel-head + .side-panel-list {
+      margin-top: var(--space-4);
+    }
+
+    .side-panel-end {
+      color: var(--control);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .side-panel-end.pill {
+      padding: var(--space-half) var(--space-2);
+      background: var(--secondary);
+      color: var(--done);
+      font-weight: var(--weight-strong);
+    }
+
+    .side-panel-note {
+      margin-top: var(--space-3);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .side-panel-card {
+      padding: var(--space-3);
+      border-radius: var(--radius-s);
+      background: var(--surface-2);
+    }
+
+    .side-panel-card + .side-panel-card {
+      margin-top: var(--space-4);
+    }
+
+    .side-panel-card > .side-panel-name {
+      font-size: var(--text-label-md);
+    }
+
+    .side-panel-card > .side-panel-value {
+      color: var(--muted);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .side-panel-card > .side-panel-value.done {
+      color: var(--done);
+      font-weight: var(--weight-strong);
+    }
+
+    .side-panel-link {
+      font-size: var(--text-label-sm);
+    }
+
+    .side-panel-card > .side-panel-bar {
+      height: var(--space-2);
+      background: var(--surface-high);
+    }
+
+    .side-panel-card .side-panel-fill {
+      background: var(--done);
+    }
+
+    .side-panel-row:has(> .bring-back) {
+      padding-block: calc(var(--space-2) + var(--space-half));
+    }
+
+    .side-panel-row:has(> .bring-back) .side-panel-name {
+      font-weight: var(--weight-row);
+    }
+
+    .side-panel-row:has(> .bring-back) .side-panel-detail {
+      color: var(--control);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .side-panel-action {
+      border-color: var(--control);
+      background: var(--surface-2);
+      font-size: var(--text-label-md);
+      font-weight: var(--weight-strong);
     }
   }
 

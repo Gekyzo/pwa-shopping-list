@@ -221,8 +221,20 @@ test('from 1024px a group head is the tinted top of its card, and the meta of a 
   assert.match(block('.item-row-name > .item-row-qty', wide), /box-shadow:\s*inset 0 0 0 1px var\(--line\)/);
 });
 
+test('from 1024px the content is 32px from its edges and the panels take a third of it (DSV-26)', () => {
+  assert.match(block(':root', wide), /--gutter:\s*var\(--space-7\)/);
+  assert.match(block(':root', wide), /--panel-width:\s*max\(240px, \(100vw - var\(--rail-width\) - var\(--space-7\) \* 4\) \/ 3\)/);
+  assert.match(block('.item-list:not(:has(> .item-row.recipe)) > :is(.group-head, .section-head)', wide), /margin-top:\s*var\(--space-6\)/);
+});
+
+test('from 1024px the panels have a line below their head and an emerald 8px bar (DSV-26)', () => {
+  assert.match(block('.side-panel-head', wide), /border-bottom:\s*1px solid var\(--line\)/);
+  assert.match(block('.side-panel-card > .side-panel-bar', wide), /height:\s*var\(--space-2\)/);
+  assert.match(block('.side-panel-card .side-panel-fill', wide), /background:\s*var\(--done\)/);
+});
+
 test('from 1024px the outlined quantity chip wins over the tonal one: its rule is more specific (DSV-22)', () => {
-  assert.match(block('.item-row-name > .item-row-qty', wide), /background:\s*var\(--surface\)/);
+  assert.match(block('.item-row-name > .item-row-qty', wide), /background:\s*var\(--surface-2\)/);
 });
 
 test('an empty boxed field shows its name once: the placeholder is transparent (DSV-18)', () => {
@@ -250,7 +262,8 @@ test('from 1024px a row has a 28px tick, a 16px semibold name and a monospace qu
 
 test('from 1024px the recurrence is a terracotta pill beside the name, and its mark in the meta line goes (DSV-24)', () => {
   assert.match(block('.item-row-name > .item-row-title > .item-row-repeat', wide), /display:\s*inline-flex/);
-  assert.match(block('.item-row-name > .item-row-title > .item-row-repeat', wide), /border:\s*1px solid currentColor/);
+  assert.match(block('.item-row-name > .item-row-title > .item-row-repeat', wide), /border:\s*1px solid var\(--warning-line\)/);
+  assert.match(block('.item-row-name > .item-row-title > .item-row-repeat', wide), /background:\s*var\(--warning-soft\)/);
   assert.match(block('.item-row-meta > .item-row-repeat-meta', wide), /display:\s*none/);
   assert.match(block('.item-row-title > .item-row-repeat'), /display:\s*none/);
 });
