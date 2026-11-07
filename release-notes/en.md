@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- On wide screens, the list and the panels of **Shopping** follow the design: more room around the list and between the groups, wider panels, lighter tags and quantities, and a thicker green bar for each recipe.
 - Each section has its own address: `#/compra`, `#/recetas`, `#/menu` and `#/ajustes`. A reload keeps you in the same section. The back button of the phone goes to **Shopping** first, then leaves the app.
 - On wide screens, the sidebar follows the design: a little wider, the current section on a stronger background with a green bar, the count of items in a pill and the state of the sync below a line.
 - With a keyboard: 1 to 4 open the sections, N adds and / searches. On a selected item, the menu key or Shift+F10 shows its actions and Delete deletes it.

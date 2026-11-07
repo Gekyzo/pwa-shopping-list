@@ -162,7 +162,7 @@ each part.
   emerald pill. A section row is 40px high with 2px corners, its name 14px. The
   head of a group of `Compra` is the tinted top of its card (`--surface-2`, a `--line` edge, 6px
   top corners); the meta line of a row is a small outlined pill; the quantity chip is outlined on
-  `--surface`. Recipe cards keep their own parts.
+  `--surface-2` (DSV-26). Recipe cards keep their own parts.
 
 ## Parts of the app
 
@@ -178,8 +178,8 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   of **Recetas en la lista** is a bordered tile on `--bg` (LIST-38).
 - **DSV-24** The rows and group cards of the desktop screen of `Compra`, from 1024px: a 28px tick
   (`--tick`), the name at 16px and weight 600 (`--text-row`, `--weight-row`), the quantity in an
-  outlined chip in `--font-mono` at the normal weight, and the recurrence as a terracotta pill
-  with a `currentColor` edge beside the name (`item-row-title`), out of the meta line. The title
+  outlined chip in `--font-mono`, and the recurrence as a terracotta pill on `--warning-soft`
+  with a `--warning-line` edge beside the name (`item-row-title`), out of the meta line. The title
   of a group head is 15px (`--text-label-lg`) at weight 600, with its count pill beside it and the
   chevron at the end. At every width the edit button of a row is the grip `grip` in `--muted`
   (`row-handle`). Below 1024px a row and a head keep the phone screen: the count at the end of
@@ -192,3 +192,15 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   `nav-action`, and the foot is `nav-foot boxed` with its value `nav-foot-value`: optional parts
   of design system 0.9.0. The sidebar is 256px wide with 20px of padding; the foot is an 11px tonal
   chip on `--secondary` below a `--line` across the sidebar.
+- **DSV-26** The main area of the desktop screen of `Compra`, from 1024px. The content is 32px
+  from its edges (`--gutter`), and the panels take a third of it, at least 240px (`--panel-width`),
+  as the 4 of 12 columns of the screen. The list starts 32px below the header and its cards stand
+  24px apart. The head of a group starts its icon 16px from the edge, and its count is an 11px pill
+  on `--secondary` in `--control`, with no edge. A row with a meta line has 10px above and below
+  its text; the meta pill is 11px bold on `--surface-2`. The quantity chip is 13px on `--surface-2`
+  with 2px corners, in `--muted`. The grip is 18px in `--control`. A panel has 20px of padding and
+  a line below its head; its second texts are 11px; a tile of **Recetas en la lista** is on
+  `--surface-2` with 4px corners and an 8px emerald bar on `--surface-high`; the button
+  **Mover todos a la compra actual** has a `--control` edge on `--surface-2`. The card
+  **Almacenamiento IndexedDB** of the screen is not built: the app stores its lists in
+  `localStorage`, not IndexedDB.

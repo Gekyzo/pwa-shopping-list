@@ -161,8 +161,8 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 - **LIST-38** From 600px wide, `Compra` with an item to buy or a postponed item shows the panel
   **Recetas en la lista** when a recipe has a product in `Compra` (REC-41): the count `N activas` in
   a pill, then one bordered tile for each such recipe with its name, the link **Ver** that opens it
-  in `Recetas`, `N de M ingredientes en lista` and a bar at N/M; at N = M the line starts with `✓`
-  and the line and the bar take `--done`. Below 840px the panels stand below the list; from 840px
+  in `Recetas`, `N de M ingredientes en lista` and an emerald bar at N/M; at N = M the line starts with `✓`
+  and takes `--done`. Below 1024px the bar is `--text` until N = M. Below 840px the panels stand below the list; from 840px
   they are a column beside it that stays in sight while the list scrolls. Below 600px there is no
   panel.
 - **LIST-39** Below it, the panel **Próxima compra** · `Pospuestos` lists the postponed items
