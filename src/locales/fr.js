@@ -246,6 +246,8 @@ export default {
   'aisles.usual.frozen': 'Surgelés',
   'aisles.usual.cleaning': 'Entretien et hygiène',
   'settings.install': 'Installer l’application',
+  'settings.installHint': 'Accès rapide hors ligne',
+  'settings.irreversible': 'Irréversible',
   'settings.help': 'Aide',
   'settings.onboarding': 'Voir l’introduction',
   'settings.whatsNew': 'Nouveautés',

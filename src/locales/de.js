@@ -246,6 +246,8 @@ export default {
   'aisles.usual.frozen': 'Tiefkühl',
   'aisles.usual.cleaning': 'Reinigung und Hygiene',
   'settings.install': 'App installieren',
+  'settings.installHint': 'Schneller Zugriff, offline',
+  'settings.irreversible': 'Endgültig',
   'settings.help': 'Hilfe',
   'settings.onboarding': 'Einführung anzeigen',
   'settings.whatsNew': 'Neuigkeiten',

@@ -12,6 +12,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 - **Editar** mostra cada campo como uma caixa com o nome dentro, o interruptor de repetir como um cartão, e as lojas como etiquetas que adicionas com + e tiras com ×.
 - Em **Receitas**, os botões de uma receita ficam ao lado do nome, e os produtos ocupam toda a largura do cartão.
 - **Menu** mostra quantas refeições da semana estão planeadas e quantas livres, um ícone em cada refeição para uma receita ou um prato, e um calendário na semana.
+- **Definições** mostra um ícone em cada grupo, marca **Apagar todos os dados** como irreversível e explica **Instalar a aplicação**.
 
 ## 1.13.0 - 2026-11-05
 

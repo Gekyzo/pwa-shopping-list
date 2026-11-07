@@ -246,6 +246,8 @@ export default {
   'aisles.usual.frozen': 'Frozen',
   'aisles.usual.cleaning': 'Cleaning and hygiene',
   'settings.install': 'Install the app',
+  'settings.installHint': 'Quick access, offline',
+  'settings.irreversible': 'Permanent',
   'settings.help': 'Help',
   'settings.onboarding': 'Show the introduction',
   'settings.whatsNew': "What's new",

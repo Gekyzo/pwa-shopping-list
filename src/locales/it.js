@@ -246,6 +246,8 @@ export default {
   'aisles.usual.frozen': 'Surgelati',
   'aisles.usual.cleaning': 'Pulizia e igiene',
   'settings.install': 'Installa l’app',
+  'settings.installHint': 'Accesso rapido offline',
+  'settings.irreversible': 'Irreversibile',
   'settings.help': 'Aiuto',
   'settings.onboarding': 'Mostra l’introduzione',
   'settings.whatsNew': 'Novità',
