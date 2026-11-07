@@ -37,7 +37,8 @@ manifest when Chrome installs or updates the app.
   (`./?open=menu`).
 - **SHORT-2** A start with `?open=<name>` shows that section. `add` shows `Compra` and opens the
   add sheet there. An unknown name is ignored. While the walkthrough of a first start shows, the
-  section changes below it and the add sheet does not open.
+  section changes below it and the add sheet does not open. `?open=<name>` wins over the hash of
+  the address (NAV-30).
 - **SHORT-3** The names of the shortcuts are the texts `add.item`, `list.active`, `nav.recipes`
   and `nav.menu` in the language of the screen, through the worker (SW-13).
 - **SHORT-4** Each shortcut has an icon of 192 px: the line icon of its action, white on a disc of

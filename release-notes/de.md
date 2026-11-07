@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Jeder Bereich hat seine eigene Adresse: `#/compra`, `#/recetas`, `#/menu` und `#/ajustes`. Nach dem Neuladen bleibst du im selben Bereich. Die Zurück-Taste des Handys führt zuerst zu **Einkauf** und schließt dann die App.
 - Auf breiten Bildschirmen folgt die Seitenleiste dem Design: etwas breiter, der aktuelle Bereich mit kräftigerem Hintergrund und grünem Balken, die Zahl der Artikel in einer Pille und der Stand der Synchronisierung unter einer Linie.
 - Mit der Tastatur: 1 bis 4 öffnen die Bereiche, N fügt hinzu und / sucht. Bei einem ausgewählten Artikel zeigt die Menütaste oder Umschalt+F10 seine Aktionen, und Entf löscht ihn.
 - Mit der Maus: Rechtsklick auf einen Artikel oder seine Schaltfläche ⋮ zeigt seine Aktionen. Das Ziehen der Kopfzeile mit der Maus wechselt den Bereich nicht mehr.

@@ -27,7 +27,7 @@ repository root.
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store.js` |
 | `src/swipe.js` | The rule that settles the swipe of an item row | nothing |
 | `src/device.js` | The width classes of DSV-9, the parts of each class (NAV-28) and the pointers that slide | nothing |
-| `src/sections.js` | The order of the sections, the rule of the slide that changes the section, the start of a launcher shortcut, and what an empty section says and offers, the collapse of the `+` button on a scroll | nothing |
+| `src/sections.js` | The order of the sections, the address of each one, the rule of the slide that changes the section, the start of a launcher shortcut, and what an empty section says and offers, the collapse of the `+` button on a scroll | nothing |
 | `src/layers.js` | The layers over a section: whether a sheet is open, and the top layer that `Escape` and the back close (`closeTop`) | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
 | `src/reorder.js` | The rules of a row move: drop place, gap, new order | nothing |

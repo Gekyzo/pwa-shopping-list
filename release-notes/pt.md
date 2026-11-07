@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Cada secção tem o seu próprio endereço: `#/compra`, `#/recetas`, `#/menu` e `#/ajustes`. Ao recarregar continuas na mesma secção. O botão Voltar do telemóvel volta primeiro a **Compras** e depois sai da app.
 - Em ecrãs largos, a barra lateral segue o design: um pouco mais larga, a secção atual com um fundo mais marcado e uma barra verde, o número de artigos numa pílula e o estado da sincronização por baixo de uma linha.
 - Com um teclado: de 1 a 4 abrem as secções, N adiciona e / pesquisa. Num artigo selecionado, a tecla de menu ou Shift+F10 mostra as suas ações e Delete elimina-o.
 - Com um rato, clica com o botão direito num artigo ou usa o seu botão ⋮ para ver as suas ações. Arrastar o cabeçalho com o rato já não muda de secção.

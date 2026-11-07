@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SECTIONS, SHORTCUTS, canSearch, keyAction, keyMenuEcho, direction, dockShown, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
+import { SECTIONS, SHORTCUTS, ROUTES, canSearch, keyAction, keyMenuEcho, direction, dockShown, emptyAction, fabState, slideDirection, slideTo, shortcutStart, hashOfView, viewOfHash, historyDepth } from '#sections';
 
 // headerOf reads the state of the views; a stub of the page lets node load them.
 const stub = () => new Proxy(function () {}, { get: (_, key) => (key === Symbol.toPrimitive ? () => '' : stub()), apply: () => stub(), set: () => true });
@@ -264,4 +264,37 @@ test('keyMenuEcho: the contextmenu that follows a menu key within a second is it
   assert.equal(keyMenuEcho(1000, 1500), true);
   assert.equal(keyMenuEcho(1000, 2001), false);
   assert.equal(keyMenuEcho(null, 5), false);
+});
+
+test('each section has its own address, the same in every language (NAV-30)', () => {
+  assert.deepEqual(SECTIONS.map(hashOfView), ['#/compra', '#/recetas', '#/menu', '#/ajustes']);
+  assert.deepEqual(Object.keys(ROUTES), SECTIONS);
+});
+
+test('hashOfView gives the address of Compra for an unknown section (NAV-30)', () => {
+  assert.equal(hashOfView('nope'), '#/compra');
+});
+
+test('viewOfHash reads the section of each address (NAV-30)', () => {
+  for (const view of SECTIONS) assert.equal(viewOfHash(hashOfView(view)), view);
+});
+
+test('viewOfHash ignores case, accents and a missing slash (NAV-30)', () => {
+  assert.equal(viewOfHash('#/Recetas'), 'recipes');
+  assert.equal(viewOfHash('#/men%C3%BA'), 'menu');
+  assert.equal(viewOfHash('#/Menú'), 'menu');
+  assert.equal(viewOfHash('#ajustes'), 'settings');
+});
+
+test('viewOfHash gives Compra for no hash, an unknown one or a broken one (NAV-30)', () => {
+  for (const hash of ['', '#', '#/', '#/nope', '#import=abc', '#/%E0%A4%A']) assert.equal(viewOfHash(hash), 'active', hash);
+});
+
+test('historyDepth: one entry for a section other than Compra, one for a layer (NAV-25, NAV-30)', () => {
+  assert.equal(historyDepth('active', false), 0);
+  assert.equal(historyDepth('active', true), 1);
+  for (const view of ['recipes', 'menu', 'settings']) {
+    assert.equal(historyDepth(view, false), 1, view);
+    assert.equal(historyDepth(view, true), 2, view);
+  }
 });

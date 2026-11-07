@@ -37,7 +37,7 @@ const show = (name, { canClose = false } = {}) => {
   screen = name;
   closable = canClose;
   renderAccount(name);
-  // The render gives a screen that can close its entry of the history (holdBack, NAV-25).
+  // The render gives a screen that can close its entry of the history (syncHistory, NAV-25).
   render();
   $(`${name}-title`).focus();
 };

@@ -2,7 +2,7 @@ import * as store from '#store';
 import * as shops from '#shops';
 import { listCounts } from '#lists';
 import { bindSheetDrag } from '#ds/sheet';
-import { shortcutStart, fabState, keyAction, keyMenuEcho } from '#sections';
+import { shortcutStart, fabState, keyAction, keyMenuEcho, hashOfView, viewOfHash, historyDepth } from '#sections';
 import { sheetOpen, closeTop, keysBlocked } from '#layers';
 import {
   ARRIVAL_MS,
@@ -78,23 +78,26 @@ import {
 
 // Screen
 
-// While a layer is open, one entry of the history stands for it, so the back of the phone closes the
-// layer and not the app (NAV-25). A layer closed in another way takes its entry away again: `skipPop`
-// marks the pop of that `history.back()`, which closes nothing. One entry at most.
-let backEntry = false;
+// The history holds the first entry, then one entry while a section other than Compra shows, then
+// one while a layer is open (NAV-25, NAV-30): the back of the phone closes the layer, then goes to
+// Compra, then leaves the app. Each entry has its place in `state.depth` and the hash of the section.
+// A section or a layer closed in another way takes its entries away again: `skipPop` marks the pop
+// of that `history.go()`, which closes nothing.
+let depth = history.state?.depth ?? 0;
 let skipPop = false;
-const holdBack = () => {
-  if (skipPop) return;
+const syncHistory = () => {
+  // The link of a move (ADDR-5) keeps its hash until the move has read it.
+  if (skipPop || location.hash.startsWith('#import=')) return;
   // An account screen that can close back to the list is a layer too, over each other one.
-  const open = accountClosable() || closeTop(ui) !== null;
-  if (open && !backEntry) {
-    history.pushState({ layer: true }, '');
-    backEntry = true;
-  } else if (!open && backEntry) {
-    backEntry = false;
+  const want = historyDepth(ui.view, accountClosable() || closeTop(ui) !== null);
+  const url = `${location.pathname}${location.search}${hashOfView(ui.view)}`;
+  if (want < depth) {
     skipPop = true;
-    history.back();
+    history.go(want - depth);
+    return;
   }
+  history.replaceState({ depth }, '', url);
+  while (depth < want) history.pushState({ depth: ++depth }, '', url);
 };
 
 let debugView = null;
@@ -175,8 +178,10 @@ const renderAll = () => {
   renderShare();
   renderShopPick();
   showDockMatches();
-  holdBack();
+  syncHistory();
 };
+// A start at the address of a section shows it (NAV-30); a shortcut below wins over it.
+ui.view = viewOfHash(location.hash);
 setRender(renderAll);
 // A change of the width class renders again: the recipe pane and the dock follow it (NAV-28).
 bindDevice(render);
@@ -205,7 +210,7 @@ document.addEventListener(
     box.querySelectorAll('.item-row-actions').forEach((side) => {
       side.inert = true;
     });
-    holdBack();
+    syncHistory();
   },
   true,
 );
@@ -253,13 +258,27 @@ const closeLayer = () => {
 
 // The back of the phone closes the top layer first (popstate below).
 window.addEventListener('popstate', () => {
+  const to = history.state?.depth;
   if (skipPop) {
     skipPop = false;
-    // A layer that opened while the entry went away gets its own entry now.
-    holdBack();
+    depth = to ?? 0;
+    // A layer or a section that opened while the entries went away gets its own entry now.
+    syncHistory();
     return;
   }
-  backEntry = false;
+  // An address typed or opened by hand is a new entry with no state: it shows its section.
+  if (to === undefined) {
+    depth += 1;
+    showView(viewOfHash(location.hash));
+    return;
+  }
+  const back = to < depth;
+  depth = to;
+  // A forward goes back again to the entries of the screen.
+  if (!back) {
+    syncHistory();
+    return;
+  }
   // A screen that can go back to the list closes first. One that cannot close has no entry: the
   // back closes the layer below it, so the back never loops.
   if (accountClosable()) {
@@ -268,7 +287,9 @@ window.addEventListener('popstate', () => {
   }
   if (ui.onboarding !== null) return;
   endReorder(false);
-  closeLayer();
+  if (closeLayer() === null && ui.view !== 'active') showView('active');
+  // A back that closed nothing keeps the entries of the screen.
+  else syncHistory();
 });
 
 // The add button collapses while the list scrolls down, and opens on a scroll up or at the top.
@@ -417,7 +438,7 @@ const start = shortcutStart(params.get('open'));
 const oauthReturn = params.has('state') && (params.has('code') || params.has('error'))
   ? { code: params.get('code'), state: params.get('state') }
   : null;
-// The query goes before a sheet opens: the entry of the sheet (holdBack) then comes after an address
+// The query goes before a sheet opens: the entry of the sheet (syncHistory) then comes after an address
 // with no query, and a reload opens nothing.
 const used = ['arrival', 'open', 'moved', ...(oauthReturn ? ['code', 'state', 'error'] : [])];
 if (used.some((name) => params.has(name))) {

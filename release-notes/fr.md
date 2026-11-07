@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Chaque section a sa propre adresse : `#/compra`, `#/recetas`, `#/menu` et `#/ajustes`. Après un rechargement, tu restes dans la même section. Le bouton Retour du téléphone revient d’abord à **Courses**, puis quitte l’app.
 - Sur les grands écrans, la barre latérale suit le design : un peu plus large, la section actuelle sur un fond plus marqué avec une barre verte, le nombre d’articles dans une pastille et l’état de la synchronisation sous une ligne.
 - Avec un clavier : 1 à 4 ouvrent les sections, N ajoute et / recherche. Sur un article sélectionné, la touche de menu ou Maj+F10 affiche ses actions et Suppr le supprime.
 - Avec une souris, faites un clic droit sur un article ou utilisez son bouton ⋮ pour voir ses actions. Faire glisser l’en-tête avec la souris ne change plus de section.
