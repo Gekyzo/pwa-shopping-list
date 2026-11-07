@@ -217,6 +217,16 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **NAV-27** From 840px wide `Ajustes` takes a column of at most 960px, and each group is a row:
   its title and its help at the left, its rows at the right, the groups split by a line.
   **Copia de seguridad** and **Preferencias** have a line of help at every width.
+- **NAV-28** The code knows the four width classes of DSV-9 from `src/device.js`: `phone` below
+  600px, `foldable` from 600px, `tablet` from 840px and `desktop` from 1024px. `FEATURES` gives
+  each class its parts:
+
+  | Class | `nav` | `dock` | `panels` | `recipePane` | `searchField` |
+  |---|---|---|---|---|---|
+  | `phone` | `bar` | yes | `none` | no | no |
+  | `foldable` | `rail` | no | `below` | no | no |
+  | `tablet` | `rail` | no | `beside` | yes | no |
+  | `desktop` | `sidebar` | no | `beside` | yes | yes |
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).
 
