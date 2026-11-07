@@ -13,7 +13,7 @@ description: Where to look first in this component, what to ignore, and which pe
 - `index.html` loads `src/app.js` as a module.
 - `sw.js` is registered by `src/app.js`.
 - `manifest.webmanifest` is the installation data.
-- `vendor/design-system/` is the copy of `pwa-design-system` that `npm run ds` writes; `styles.css` holds the parts of the app only.
+- `design-system/` is the base sheet of the app, owned here (DSV-1, DSV-4); `styles.css` holds the parts of the app.
 
 ## Look here first
 
@@ -21,7 +21,7 @@ description: Where to look first in this component, what to ignore, and which pe
 - `DESIGN.md` for the type, shapes and components of the app, from the Stitch project `Shopping`
   (`projects/6581702173965354921`), with the palette of the Stitch screens of Bodega (DSV-11). It is
   applied in this app only (DSV-10 to DSV-12): the tokens and component versions of `styles.css`
-  override `vendor/design-system/`, and the font is in `fonts/`. Where the Bodega screens disagree
+  override `design-system/`, and the font is in `fonts/`. Where the Bodega screens disagree
   with each other, `docs/bodega-inconsistencies.html` records the choice.
 - `src/store.js` for a list rule.
 - `src/shops.js` for a shop rule.
@@ -38,13 +38,12 @@ description: Where to look first in this component, what to ignore, and which pe
 `npm test` (`node --test`). `src/app.js`, `src/ui/` and the rest of `sw.js` have no unit tests; check them in
 a browser with `npm run serve`. `tests/spec.test.js` checks `docs/spec/` against the code, and
 `tests/layers.test.js` the layer rules of `src/ui/`. `tests/design.test.js` runs the rules of the design system and
-`tests/vendor.test.js` checks its copy.
+`tests/design-files.test.js` checks its files.
 `.githooks/pre-push` and `.githooks/pre-commit` have no test; check them in a scratch clone, the
 first one with a bare remote.
 
 ## Ignore
 
-- `vendor/`: written by `npm run ds`. Change `../pwa-design-system`, then run it again.
 - `icons/icon-*.png`: written by `npm run icons` from `icons/source.png`, the art of the icon.
 - `icons/shortcut-*.png`: written by `npm run icons` from the glyphs of `scripts/make-icons.mjs`.
 - `docs/superpowers/plans/*.progress.md`: written by `plan-current.sh`.

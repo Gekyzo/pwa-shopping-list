@@ -14,8 +14,8 @@ const importMap = () => {
   return JSON.parse(json).imports;
 };
 
-// An alias `#ds/<name>` names a module of the vendored design system.
-const VENDOR = 'vendor/design-system/';
+// An alias `#ds/<name>` names a module of the base design system (design-system/).
+const VENDOR = 'design-system/';
 const isVendor = ([alias]) => alias.startsWith('#ds/');
 
 test('the import map of the page gives each module of src its alias', () => {
@@ -24,7 +24,7 @@ test('the import map of the page gives each module of src its alias', () => {
   assert.deepEqual(own.sort(), Object.entries(expected).sort());
 });
 
-test('each #ds/ alias of the page names a vendored module of the design system', () => {
+test('each #ds/ alias of the page names a module of design-system/', () => {
   const vendored = readdirSync(new URL(VENDOR, root)).filter((file) => file.endsWith('.js'));
   const entries = Object.entries(importMap()).filter(isVendor);
   assert.ok(entries.length > 0);

@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { RULES } from '../vendor/design-system/rules.js';
-import { parseCatalog, classesInScript } from '../vendor/design-system/catalog.js';
+import { RULES } from '../design-system/rules.js';
+import { parseCatalog, classesInScript } from '../design-system/catalog.js';
 
 // The rules of the design system (docs/spec/15-design-system.md) over the files of the app.
 const root = new URL('../', import.meta.url);
@@ -10,7 +10,7 @@ const read = (path) => readFileSync(new URL(path, root), 'utf8');
 const optional = (path) => (existsSync(new URL(path, root)) ? read(path) : '');
 
 const files = {
-  css: [read('vendor/design-system/design-system.css'), read('styles.css')],
+  css: [read('design-system/design-system.css'), read('styles.css')],
   html: read('index.html'),
   scripts: readdirSync(new URL('src/ui/', root)).map((file) => [file, read(`src/ui/${file}`)]),
   sprite: optional('icons.svg'),

@@ -37,7 +37,7 @@ Each rule has an identifier, a prefix and a number, such as `LIST-7`. An identif
 rule that goes away keeps its number, marked as removed, and a new rule gets the next number. Use
 the identifier in a commit body or in a test name to point at a rule.
 
-The rules DS-1 to DS-8 and LAY-1 to LAY-4 belong to the design system, `pwa-design-system`.
+The rules DS-1 to DS-8 and LAY-1 to LAY-5 belong to the base sheet of the app, `design-system/` (DSV-1).
 [15-design-system.md](15-design-system.md) says where they are.
 
 | Prefix | Document |

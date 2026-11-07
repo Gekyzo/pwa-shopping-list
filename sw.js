@@ -1,11 +1,11 @@
-const CACHE = 'shopping-shell-v30';
+const CACHE = 'shopping-shell-v31';
 
 const SHELL = [
   './',
   './index.html',
-  './vendor/design-system/design-system.css',
-  './vendor/design-system/sheet.js',
-  './vendor/design-system/geist.woff2',
+  './design-system/design-system.css',
+  './design-system/sheet.js',
+  './design-system/geist.woff2',
   './styles.css',
   './fonts/hanken-grotesk-latin.woff2',
   './fonts/hanken-grotesk-latin-ext.woff2',
