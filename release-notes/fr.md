@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Dans **Courses**, le nom de chaque article a plus de place : il est moins coupé et prend moins de lignes.
 
 ## 1.13.0 - 2026-11-05
 

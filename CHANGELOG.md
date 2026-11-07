@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- The end slot of a row of `Compra` is one button wide (`--tap`), not two: the name gets 48 px more, and the divider of the left hand starts after one button (ROW-1).
 
 ## 1.13.0 - 2026-11-05
 

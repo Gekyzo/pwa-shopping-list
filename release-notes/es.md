@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- En **Compra**, el nombre de cada producto tiene más sitio: se corta menos y ocupa menos líneas.
 
 ## 1.13.0 - 2026-11-05
 

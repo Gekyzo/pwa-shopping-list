@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- In **Einkauf** hat der Name jedes Artikels mehr Platz: Er wird seltener gekürzt und braucht weniger Zeilen.
 
 ## 1.13.0 - 2026-11-05
 

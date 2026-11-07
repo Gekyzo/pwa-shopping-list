@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- A **Compra**, el nom de cada producte té més espai: es talla menys i ocupa menys línies.
 
 ## 1.13.0 - 2026-11-05
 
