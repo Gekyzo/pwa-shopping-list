@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Sugli schermi larghi, **Ricette**, **Menù** e **Impostazioni** occupano tutta la larghezza, come **Spesa**.
 - Sugli schermi larghi, una piccola scheda sotto i pannelli di **Spesa** mostra quanto spazio occupano le tue liste sul dispositivo.
 - Sugli schermi larghi, i pannelli di **Spesa** seguono il design più da vicino: **Vedi** ha una freccia, i nomi in **Prossima spesa** sono meno marcati e il pulsante che sposta tutto mostra un’icona di elenco.
 - Sugli schermi larghi, l’intestazione di **Spesa** segue il design: sullo sfondo della pagina, un titolo più grande, pulsanti con angoli più squadrati e negozi in caratteri più piccoli. Il pulsante per aggiungere dice **Aggiungi**.

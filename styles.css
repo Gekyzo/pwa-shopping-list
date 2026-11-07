@@ -123,6 +123,9 @@
     :root {
       --gutter: var(--space-7);
       --panel-width: max(240px, (100vw - var(--rail-width) - var(--space-7) * 4) / 3);
+      /* Every screen fills the content area, as the desktop prototypes do (DSV-28). */
+      --page-max: 100%;
+      --settings-max: 100%;
       --tick: 28px;
       --text-row: 1rem;
       --weight-row: 600;

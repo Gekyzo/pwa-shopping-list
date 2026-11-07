@@ -221,6 +221,11 @@ test('from 1024px a group head is the tinted top of its card, and the meta of a 
   assert.match(block('.item-row-name > .item-row-qty', wide), /box-shadow:\s*inset 0 0 0 1px var\(--line\)/);
 });
 
+test('from 1024px every screen fills the content area (DSV-28)', () => {
+  assert.match(block(':root', wide), /--page-max:\s*100%/);
+  assert.match(block(':root', wide), /--settings-max:\s*100%/);
+});
+
 test('from 1024px the content is 32px from its edges and the panels take a third of it (DSV-26)', () => {
   assert.match(block(':root', wide), /--gutter:\s*var\(--space-7\)/);
   assert.match(block(':root', wide), /--panel-width:\s*max\(240px, \(100vw - var\(--rail-width\) - var\(--space-7\) \* 4\) \/ 3\)/);

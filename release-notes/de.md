@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Auf breiten Bildschirmen nutzen **Rezepte**, **Menü** und **Optionen** die ganze Breite, wie **Einkauf**.
 - Auf breiten Bildschirmen zeigt eine kleine Karte unter den Feldern von **Einkauf**, wie viel Platz deine Listen auf dem Gerät belegen.
 - Auf breiten Bildschirmen folgen die Felder von **Einkauf** dem Design genauer: **Ansehen** hat einen Pfeil, die Namen in **Nächster Einkauf** sind weniger fett und die Schaltfläche, die alles verschiebt, zeigt ein Listensymbol.
 - Auf breiten Bildschirmen folgt die Kopfzeile von **Einkauf** dem Design: auf dem Seitenhintergrund, ein größerer Titel, Schaltflächen mit eckigeren Ecken und Geschäfte in kleinerer Schrift. Die Schaltfläche zum Hinzufügen heißt **Hinzufügen**.

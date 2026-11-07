@@ -55,7 +55,8 @@ This document holds the rules of the app only.
   `Compra` and `Menú` (`side-panels`) stand below the content, and from 840px beside it,
   `--gutter` apart, with `--page-max` at `100%` so the content fills the area as a pane does
   (LIST-38, LIST-39, MENU-21). From 840px the recipe sheet is a pane (`side-pane`, REC-39), and
-  `Ajustes` sets `--page-max` to `--settings-max` (NAV-27). The code reads the class from
+  `Ajustes` sets `--page-max` to `--settings-max` (NAV-27). From 1024px every screen fills the
+  area (DSV-28). The code reads the class from
   `ui.device` (NAV-28), which `src/ui/device.js` keeps with one media query for each breakpoint; no
   other module of `src/` has a width query. A media query of the CSS uses only `min-width` at 600px,
   840px or 1024px, and no rule selects on `data-device` (`tests/breakpoints.test.js`).
@@ -217,3 +218,7 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   `--done-fixed` in `--on-done-fixed`. The tools and the chips keep the tap size (TAP-1): only
   their look follows the screen. The button **Más filtros** of the screen is not built: the app
   has no such filter.
+- **DSV-28** From 1024px every screen fills the content area, as the desktop screens do:
+  `--page-max` and `--settings-max` are `100%`, so the header and the main area of `Recetas`,
+  `Menú` and `Ajustes` stand `--gutter` from the rail and from the frame, as those of `Compra` do
+  (DSV-26). Below 1024px the columns of DSV-9 and NAV-27 stay.
