@@ -10,6 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
+- `Ajustes` follows its desktop screen from 1024px (DSV-29): `--settings-max` is `720px` (it was `100%`, DSV-28), the groups are one flex column 24px apart with no line, each head above its rows with its 16px icon (`--icon-xs`) first, the hint at 13px, row names at 600, values at 15px, chevrons in `--struck`, a 20px icon in the 32px tile, danger tiles and the tag on the new `--danger-soft`, and the header with no line. 600-1023px keeps the two-column groups of NAV-27. Cache `shopping-shell-v45`.
 - An open sheet hides only the floating add (`fab`, `dock-add`); `header-add` and `nav-add` stay under the veil, so the header tools and the sidebar no longer shift when a sheet opens (NAV-8). The rule is `addHidden` in `src/layers.js`, tested in `tests/layer-order.test.js`. Cache `shopping-shell-v44`.
 - The shop and list chips of the header are a 30px pill from 1024px, as in the desktop screen of `Compra` (DSV-27): a `::before` draws the edge and the fill `--chip-inset` (9px) inside the 48px hit area, which stays (TAP-1), and the row moves up by that inset. Below 1024px nothing changes. Cache `shopping-shell-v43`.
 - `Recetas`, `Menú` and `Ajustes` fill the content area from 1024px, as `Compra` does (DSV-28): the 1024px `:root` block sets `--page-max` and `--settings-max` to `100%`, so the header and main stand `--gutter` (32px) from the rail and the frame. They were held to 640px (`--content-max`) and 960px (NAV-27). Below 1024px nothing changes. Cache `shopping-shell-v42`.

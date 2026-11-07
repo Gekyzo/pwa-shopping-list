@@ -234,9 +234,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   The foot of the rail shows the offline icon, and from 1024px a chip below a line (`nav-foot boxed`, DSV-25): with no
   session (ACC-13) the text **Sin cuenta · en este dispositivo**, with a session **Sincronización**
   and at its end `Al día`, or `Sin conexión` while the app is offline. The message stays at the side of the hand, inside the frame.
-- **NAV-27** From 840px wide `Ajustes` takes a column of at most 960px (the whole area from 1024px,
-  DSV-28), and each group is a row: its title and its help at the left, its rows at the right, the
-  groups split by a line.
+- **NAV-27** From 840px wide `Ajustes` takes a column of at most 960px, and each group is a row:
+  its title and its help at the left, its rows at the right, the groups split by a line. From
+  1024px it is one centred column of 720px, each title and help above its rows (DSV-29).
   **Copia de seguridad** and **Preferencias** have a line of help at every width.
 - **NAV-28** The code knows the four width classes of DSV-9 from `src/device.js`: `phone` below
   600px, `foldable` from 600px, `tablet` from 840px and `desktop` from 1024px. `FEATURES` gives

@@ -231,9 +231,17 @@ test('from 1024px a chip of the header is a 30px pill inside its tap size (DSV-2
   assert.match(block(chips, wide), /margin-top:\s*calc\(var\(--space-2\) - var\(--chip-inset\)\)/);
 });
 
-test('from 1024px every screen fills the content area (DSV-28)', () => {
+test('from 1024px every screen but Ajustes fills the content area (DSV-28)', () => {
   assert.match(block(':root', wide), /--page-max:\s*100%/);
-  assert.match(block(':root', wide), /--settings-max:\s*100%/);
+});
+
+test('from 1024px Ajustes is one centred 720px column of groups, heads above their rows (DSV-29)', () => {
+  assert.match(block(':root', wide), /--settings-max:\s*720px/);
+  assert.match(block('.settings-section', wide), /flex-direction:\s*column/);
+  assert.match(block('.settings-section + .settings-section', wide), /border-top:\s*0/);
+  assert.match(block('.settings-section > .list-group-head > .list-group-icon', wide), /order:\s*-1/);
+  assert.match(block('.settings .settings-row.danger .settings-row-icon', wide), /var\(--danger-soft\)/);
+  assert.match(block('.settings-row-tag', wide), /background:\s*var\(--danger-soft\)/);
 });
 
 test('from 1024px the content is 32px from its edges and the panels take a third of it (DSV-26)', () => {

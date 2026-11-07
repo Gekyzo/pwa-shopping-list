@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- On wide screens, **Settings** has the desktop design: one centred column, each group below its title.
 - On wide screens, the add buttons no longer disappear when a sheet opens, so the header and the sidebar do not move.
 - On wide screens, the shop filters of **Shopping** are lower.
 - On wide screens, **Recipes**, **Menu** and **Settings** use the full width, as **Shopping** does.

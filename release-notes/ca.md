@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- En pantalles amples, **Configuració** té el disseny d’escriptori: una columna centrada, amb cada grup sota el seu títol.
 - En pantalles amples, els botons d’afegir ja no desapareixen quan s’obre un full, i la capçalera i el menú lateral no es mouen.
 - En pantalles amples, els filtres de botiga de **Compra** són més baixos.
 - En pantalles amples, **Receptes**, **Menú** i **Configuració** ocupen tota l’amplada, com **Compra**.

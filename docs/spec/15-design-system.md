@@ -55,8 +55,8 @@ This document holds the rules of the app only.
   `Compra` and `Menú` (`side-panels`) stand below the content, and from 840px beside it,
   `--gutter` apart, with `--page-max` at `100%` so the content fills the area as a pane does
   (LIST-38, LIST-39, MENU-21). From 840px the recipe sheet is a pane (`side-pane`, REC-39), and
-  `Ajustes` sets `--page-max` to `--settings-max` (NAV-27). From 1024px every screen fills the
-  area (DSV-28). The code reads the class from
+  `Ajustes` sets `--page-max` to `--settings-max` (NAV-27). From 1024px every screen but
+  `Ajustes` fills the area (DSV-28); `Ajustes` is a centred 720px column (DSV-29). The code reads the class from
   `ui.device` (NAV-28), which `src/ui/device.js` keeps with one media query for each breakpoint; no
   other module of `src/` has a width query. A media query of the CSS uses only `min-width` at 600px,
   840px or 1024px, and no rule selects on `data-device` (`tests/breakpoints.test.js`).
@@ -155,7 +155,8 @@ each part.
   (`settings-row-count`). **Instalar la aplicación** has the hint `settings.installHint` below
   its name (`settings-row-hint`). A hint or a tag is the description of its control
   (`aria-describedby`), not part of its name. The update banner is a tonal card on `--secondary` with a
-  `--line` edge. From 1024px each row icon stands in a 32px `--surface-2` tile (`--icon-tile`).
+  `--line` edge. From 1024px each row icon stands in a 32px `--surface-2` tile (`--icon-tile`), and the
+  head shows its icon first (DSV-29).
   The trip-end choice stays two segments: the switch of the screen would be a change of control.
 - **DSV-22** From 1024px, as in the desktop screens. The current section of the rail is a band on
   `--surface-high` (surface-container-highest) with a 4px emerald bar at its start
@@ -219,7 +220,15 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   the tap size (TAP-1): only their look follows the screen. A chip draws its pill inside its 48px
   hit area, `--chip-inset` from its top and bottom, and the focus ring follows the pill. The button **Más filtros** of the screen is not built: the app
   has no such filter.
-- **DSV-28** From 1024px every screen fills the content area, as the desktop screens do:
-  `--page-max` and `--settings-max` are `100%`, so the header and the main area of `Recetas`,
-  `Menú` and `Ajustes` stand `--gutter` from the rail and from the frame, as those of `Compra` do
-  (DSV-26). Below 1024px the columns of DSV-9 and NAV-27 stay.
+- **DSV-28** From 1024px every screen but `Ajustes` fills the content area, as the desktop
+  screens do: `--page-max` is `100%`, so the header and the main area of `Recetas` and `Menú`
+  stand `--gutter` from the rail and from the frame, as those of `Compra` do (DSV-26). Below
+  1024px the columns of DSV-9 and NAV-27 stay.
+- **DSV-29** From 1024px `Ajustes` is its desktop screen: one centred column of 720px
+  (`--settings-max`), the header with no line below. The groups are 24px apart with no line
+  between them; each head stands above its rows, 11px, with its 16px icon (`--icon-xs`) first in
+  `--struck`, and its help below it at 13px. A row name is at weight 600, its value 15px, its
+  chevron in `--struck`, and its icon is 20px in the 32px tile. A danger row draws its tile on
+  `--danger-soft` at half strength, and its tag on `--danger-soft`. The update banner is on
+  `--surface-2`. The **Modo sin conexión** badge of the header is not built: the rail already shows
+  that state (NAV-26).

@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Em ecrãs largos, **Definições** tem o design de computador: uma coluna centrada, com cada grupo sob o seu título.
 - Em ecrãs largos, os botões de adicionar já não desaparecem ao abrir uma folha, e o cabeçalho e o menu lateral não se movem.
 - Em ecrãs largos, os filtros de loja de **Compras** são mais baixos.
 - Em ecrãs largos, **Receitas**, **Menu** e **Definições** ocupam toda a largura, como **Compras**.

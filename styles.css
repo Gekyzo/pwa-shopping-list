@@ -37,6 +37,7 @@
     --secondary: light-dark(#f6ece6, #3d3733); /* surface-container: a chip, a tonal button */
     --surface-high: light-dark(#eae1da, #48423d); /* surface-container-highest: the current section from 1024px */
     --danger: light-dark(#ba1a1a, #ffb4ab); /* error: a destructive action, a failure */
+    --danger-soft: light-dark(#ffdad6, #93000a); /* error-container: the ground of a danger tag or tile */
     --warning: light-dark(#a23e18, #ffb59c); /* secondary, terracotta: an alert, a recurrent item */
     --warning-soft: light-dark(rgb(255 219 207 / 0.4), rgb(130 40 1 / 0.4)); /* secondary-fixed/40: the ground of a recurrent pill */
     --warning-line: light-dark(rgb(162 62 24 / 0.3), rgb(255 181 156 / 0.3)); /* secondary/30: the edge of a recurrent pill */
@@ -65,6 +66,7 @@
     --weight-book: 500; /* font-medium of the screens: the name of a postponed row from 1024px */
     --tick: 32px; /* the round tick of a row */
     --icon-tile: 32px; /* the tile of a row icon of Ajustes from 1024px */
+    --icon-xs: 16px; /* the icon of a group head of Ajustes from 1024px */
     --tick-stroke: 2.5px; /* the mark inside a checked tick */
     --strike: 1.5px; /* the line through a bought name */
     --border-control: 1.5px; /* the border of an input */
@@ -125,7 +127,8 @@
       --panel-width: max(240px, (100vw - var(--rail-width) - var(--space-7) * 4) / 3);
       /* Every screen fills the content area, as the desktop prototypes do (DSV-28). */
       --page-max: 100%;
-      --settings-max: 100%;
+      /* Ajustes is one centred 720px column, as its desktop screen (NAV-27). */
+      --settings-max: 720px;
       --tick: 28px;
       /* A chip of the header is a 30px pill inside its 48px hit area (DSV-27). */
       --chip-inset: calc((var(--tap) - 30px) / 2);
@@ -2468,6 +2471,82 @@
       height: var(--icon-tile);
       padding: var(--space-1);
       border-radius: var(--radius-m);
+      background: var(--surface-2);
+    }
+  }
+
+  /* From 1024px Ajustes is its desktop screen (DSV-29): one column of groups 24px apart, each head
+     above its rows with its icon first, the rows at weight 600 and their values at 15px, and the
+     danger rows on a tinted tile with the tag on --danger-soft. */
+  @media (min-width: 1024px) {
+    body:has(main > .settings:not([hidden])) .app-header {
+      border-bottom-color: transparent;
+    }
+
+    .settings-section {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-2);
+      padding-block: 0;
+    }
+
+    .settings-section + .settings-section {
+      margin-top: var(--space-6);
+      border-top: 0;
+    }
+
+    .settings-section > .list-group-head {
+      justify-content: flex-start;
+      gap: var(--space-2);
+      margin: 0;
+      padding-inline: var(--space-1);
+      font-size: var(--text-label-sm);
+    }
+
+    .settings-section > .list-group-head > .list-group-icon {
+      order: -1;
+      width: var(--icon-xs);
+      height: var(--icon-xs);
+      color: var(--struck);
+    }
+
+    /* A 20px icon in its 32px tile. */
+    .settings .settings-row-icon {
+      padding: calc((var(--icon-tile) - var(--icon-s)) / 2);
+    }
+
+    .settings-section > .settings-hint {
+      margin: 0;
+      padding: 0 var(--space-1);
+      font-size: var(--text-label-md);
+    }
+
+    .settings .settings-row-label {
+      font-weight: var(--weight-medium);
+    }
+
+    .settings .settings-row-value {
+      font-size: var(--text-label-lg);
+    }
+
+    .settings .settings-row .chevron {
+      color: var(--struck);
+    }
+
+    .settings .settings-row.danger .settings-row-icon {
+      background: color-mix(in srgb, var(--danger-soft) 50%, transparent);
+    }
+
+    .settings-row-tag {
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-s);
+      background: var(--danger-soft);
+      line-height: 1;
+    }
+
+    .settings .banner {
+      margin-top: var(--space-7);
       background: var(--surface-2);
     }
   }

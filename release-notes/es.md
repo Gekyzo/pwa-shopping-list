@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En pantallas anchas, **Ajustes** tiene el diseño de escritorio: una columna centrada, con cada grupo bajo su título.
 - En pantallas anchas, los botones de añadir ya no desaparecen al abrir una hoja, y la cabecera y el menú lateral no se mueven.
 - En pantallas anchas, los filtros de tienda de **Compra** son más bajos.
 - En pantallas anchas, **Recetas**, **Menú** y **Ajustes** ocupan todo el ancho, como **Compra**.
