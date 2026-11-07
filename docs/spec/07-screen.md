@@ -191,9 +191,11 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   does not float.
 - **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an account
   screen that can go back to the list (ACC-2), then an open sheet, then an open row, then the
-  search of a list (`closeTop`). While a layer is open, one entry of the
-  history stands for it, so the back closes the layer and not the app. A layer closed in another
-  way takes its entry away, so the next back goes back as the browser does. A start from a
+  search of a list (`closeTop`). With no layer open, the back of `Recetas`, `Menú` or `Ajustes`
+  shows `Compra`, and the back of `Compra` leaves the app. The history holds the first entry, one
+  entry while a section other than `Compra` shows, and one more while a layer is open
+  (`historyDepth`); each entry keeps its place in `state.depth`. A layer or a section closed in
+  another way takes its entries away, and a forward goes back to the entries of the screen. A start from a
   shortcut or an arrival takes its query out of the address before it opens anything.
 
 ## Hand
@@ -245,6 +247,13 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   runs its **Eliminar**, with the undo of the message. The menu of the browser that these keys
   also call does not open over the actions. The section buttons carry
   `aria-keyshortcuts` `1` to `4`, and the add buttons `N`.
+- **NAV-30** Each section has its own address, a hash with the same name in every language:
+  `#/compra`, `#/recetas`, `#/menu` and `#/ajustes` (`ROUTES` of `src/sections.js`). A change of
+  section writes its hash; a start or an address typed by hand shows the section of its hash.
+  Case and accents do not count (`#/Menú` is `Menú`), and no hash or any other hash is `Compra`.
+  A start from a shortcut (SHORT-2) wins over the hash. The link of a move (`#import=`, ADDR-5)
+  keeps its hash until the move has read it. A hash needs no server: the static host and the
+  offline shell (SW-2) serve `index.html` for each address.
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).
 

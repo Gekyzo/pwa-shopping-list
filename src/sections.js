@@ -38,6 +38,27 @@ export const direction = (from, to, sections = SECTIONS) => {
   return a < 0 || b < 0 ? 0 : Math.sign(b - a);
 };
 
+// The address of each section (NAV-30): the hash `#/<name>`, with the same name in every language.
+export const ROUTES = { active: 'compra', recipes: 'recetas', menu: 'menu', settings: 'ajustes' };
+
+export const hashOfView = (view) => `#/${ROUTES[view] ?? ROUTES.active}`;
+
+// The section of a hash. Case and accents do not count (`#/Menú` is Menú); any other hash is Compra.
+export const viewOfHash = (hash) => {
+  let name;
+  try {
+    name = decodeURIComponent(hash.replace(/^#\/?/, ''));
+  } catch {
+    return 'active';
+  }
+  name = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  return SECTIONS.find((view) => ROUTES[view] === name) ?? 'active';
+};
+
+// The entries of the history above the first one (NAV-25, NAV-30): one while a section other than
+// Compra shows, so the back goes to Compra first, and one more while a layer is open.
+export const historyDepth = (view, layer) => (view === 'active' ? 0 : 1) + (layer ? 1 : 0);
+
 // The shortcuts of the launcher, in the order of `shortcuts` of the manifest. Each one opens the
 // app at `?open=<name>`.
 export const SHORTCUTS = ['add', 'active', 'recipes', 'menu'];
