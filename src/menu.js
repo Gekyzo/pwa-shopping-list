@@ -8,6 +8,9 @@ export const MEALS = ['lunch', 'dinner'];
 // MENU-22: the weeks that a put of a meal keeps, its own week included.
 export const KEPT_WEEKS = 26;
 
+// MENU-23: the weeks after this one that Menú can show.
+export const FUTURE_WEEKS = 4;
+
 const pad = (n) => String(n).padStart(2, '0');
 const isoDate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
@@ -133,6 +136,16 @@ export const repeatWeek = (state, from, to) => {
 
 // MENU-23: the weeks that hold a meal, oldest first, each one time.
 export const menuWeeks = (state) => [...new Set(state.menu.map((entry) => entry.week))].sort();
+
+// MENU-23: the weeks that ‹ and › show from the week `shown`, null for a disabled button. `weeks`
+// holds the weeks with a meal and `today` is this week. Before this week the buttons jump between
+// the weeks with a meal; from this week they step one week, up to FUTURE_WEEKS after it.
+export const weekSteps = (weeks, shown, today) => {
+  const past = weeks.filter((week) => week < today);
+  const earlier = shown > today ? addWeeks(shown, -1) : (past.filter((week) => week < shown).at(-1) ?? null);
+  const later = shown < today ? (past.find((week) => week > shown) ?? today) : shown < addWeeks(today, FUTURE_WEEKS) ? addWeeks(shown, 1) : null;
+  return { earlier, later };
+};
 
 // The 7 days of a week, each with its two meals and the recipe and the dish of each meal, or null.
 export const menuWeek = (state, week) =>

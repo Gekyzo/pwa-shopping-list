@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Im **Menü** führt der Pfeil › zu den nächsten Wochen, bis zu vier Wochen voraus. Du kannst ihre Mahlzeiten planen, den Korb damit füllen oder sie leeren, wie in dieser Woche.
 - Auf breiten Bildschirmen hat **Optionen** das Desktop-Design: eine zentrierte Spalte, jede Gruppe unter ihrem Titel.
 - Auf breiten Bildschirmen verschwinden die Hinzufügen-Schaltflächen nicht mehr, wenn sich ein Blatt öffnet, und Kopfzeile und Seitenleiste bewegen sich nicht.
 - Auf breiten Bildschirmen sind die Geschäftsfilter von **Einkauf** niedriger.

@@ -2,7 +2,7 @@ import * as recipes from '#recipes';
 import * as menu from '#menu';
 import { intlTag } from '#i18n';
 import { listOf, listPart } from '#lists';
-import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, onListOf, fillMenus, repeatMenus, thisWeek, shownWeek } from '#ui/context';
+import { $, el, state, ui, t, lang, undoState, showToast, apply, render, onOwn, onListOf, fillMenus, repeatMenus, thisWeek, shownWeek, pastShown } from '#ui/context';
 import { sendText, recipeFromDish } from '#ui/recipes';
 import { showView } from '#ui/nav';
 import { tagNode } from '#ui/rows';
@@ -93,7 +93,7 @@ const pastMealNode = (day, { meal, planned }) => {
 };
 
 const mealNode = (day, { meal, planned }) => {
-  if (ui.pastWeek !== null) return pastMealNode(day, { meal, planned });
+  if (pastShown()) return pastMealNode(day, { meal, planned });
   const dish = planned.length === 1 && planned[0].dish;
   const label = dish ? `${t(`meal.${meal}`)} · ${t('menu.noRecipe')}` : t(`meal.${meal}`);
   const kind = !planned.length ? 'meal free' : planned.every((entry) => entry.dish) ? 'meal dish' : 'meal';
@@ -119,10 +119,12 @@ const dayNode = ({ day, meals }) =>
     el('div', { className: 'meals' }, meals.map((entry) => mealNode(day, entry))),
   ]);
 
-// The days of Menú. A past week that holds no meal any more, or a change of the clock, shows this
-// week again.
+// The days of Menú. A past week that holds no meal any more, or a later week out of reach after a
+// change of the clock, shows this week again.
 export const weekNodes = () => {
-  if (ui.pastWeek !== null && !pastWeeks().includes(ui.pastWeek)) ui.pastWeek = null;
+  const shown = shownWeek();
+  const lost = pastShown() ? !menu.menuWeeks(state).includes(shown) : shown > menu.addWeeks(thisWeek(), menu.FUTURE_WEEKS);
+  if (lost) ui.week = null;
   return week().map(dayNode);
 };
 
@@ -137,33 +139,27 @@ const fillBasket = () => {
 };
 
 export const renderMenuActions = () => {
-  $('menu-clear').disabled = menu.mealCount(listPart(state, 'own'), thisWeek()) === 0;
+  $('menu-clear').disabled = menu.mealCount(listPart(state, 'own'), shownWeek()) === 0;
   // MENU-26: the planned slots of the week in view, of the 14, and the free ones.
   const planned = menu.plannedSlots(state, shownWeek());
   $('menu-summary').textContent = t('menu.summary', { planned, total: menu.SLOTS, free: menu.SLOTS - planned, count: menu.SLOTS - planned });
   // MENU-23, MENU-24: a past week has Repetir esta semana in place of Llenar cesta and Vaciar menú.
-  $('menu-split').hidden = ui.pastWeek !== null;
-  $('menu-repeat').hidden = ui.pastWeek === null;
+  $('menu-split').hidden = pastShown();
+  $('menu-repeat').hidden = !pastShown();
   renderWeekBar();
 };
 
-// MENU-23: the weeks before this one that hold a meal of a list in view, oldest first.
-const pastWeeks = () => {
-  const today = thisWeek();
-  return menu.menuWeeks(state).filter((week) => week < today);
-};
-
-// `Semana del 26 oct` in the language of the screen.
+// `Esta semana`, `Semana que viene` or `Semana del 26 oct` in the language of the screen.
 const weekLabel = (week) => {
-  if (week === null) return t('menu.thisWeek');
+  if (week === thisWeek()) return t('menu.thisWeek');
+  if (week === menu.addWeeks(thisWeek(), 1)) return t('menu.comingWeek');
   const [year, month, day] = week.split('-').map(Number);
   const date = new Intl.DateTimeFormat(intlTag(lang), { day: 'numeric', month: 'short' }).format(new Date(year, month - 1, day));
   return t('menu.weekOf', { date });
 };
 
-// ‹ goes to the nearest earlier week with a meal; › to the nearest later one, or to this week.
-const earlierWeek = () => pastWeeks().filter((week) => ui.pastWeek === null || week < ui.pastWeek).at(-1) ?? null;
-const laterWeek = () => pastWeeks().find((week) => week > ui.pastWeek) ?? null;
+// MENU-23: the weeks of ‹ and ›, from the weeks that hold a meal of a list in view.
+const steps = () => menu.weekSteps(menu.menuWeeks(state), shownWeek(), thisWeek());
 
 const renderWeekBar = () => {
   const shown = ui.view === 'menu';
@@ -171,20 +167,21 @@ const renderWeekBar = () => {
   if (!shown) return;
   // MENU-25: the days of the week after its name, as `20–26 may`.
   const week = shownWeek();
-  $('menu-week-label').replaceChildren(icon('calendar', 'small week-bar-icon'), weekLabel(ui.pastWeek), ' ', el('span', { className: 'week-bar-range', textContent: dateFormat().formatRange(menu.weekDay(week, 0), menu.weekDay(week, 6)) }));
-  $('menu-week-prev').disabled = earlierWeek() === null;
-  $('menu-week-next').disabled = ui.pastWeek === null;
+  $('menu-week-label').replaceChildren(icon('calendar', 'small week-bar-icon'), weekLabel(week), ' ', el('span', { className: 'week-bar-range', textContent: dateFormat().formatRange(menu.weekDay(week, 0), menu.weekDay(week, 6)) }));
+  const { earlier, later } = steps();
+  $('menu-week-prev').disabled = earlier === null;
+  $('menu-week-next').disabled = later === null;
 };
 
 // MENU-24: this week takes the meals of the week in view, then shows.
 const repeatShown = () => {
-  const result = repeatMenus(ui.pastWeek);
-  if (!result.error) ui.pastWeek = null;
+  const result = repeatMenus(shownWeek());
+  if (!result.error) ui.week = null;
   apply(result, { undoText: t('toast.weekRepeated', { count: result.count ?? 0 }) });
 };
 
 const showWeek = (week) => {
-  ui.pastWeek = week;
+  ui.week = week === thisWeek() ? null : week;
   render();
 };
 
@@ -220,7 +217,7 @@ export const renderMeal = () => {
     // MENU-20: the meal goes to the list of the recipe, in place of the meal of that list only.
     const pick = () => {
       ui.mealOpen = null;
-      apply(onListOf(listOf(recipe), (part) => menu.setMeal(part, thisWeek(), day, meal, recipe.id)));
+      apply(onListOf(listOf(recipe), (part) => menu.setMeal(part, shownWeek(), day, meal, recipe.id)));
     };
     const chip = el('button', { type: 'button', className: 'chip', onclick: pick }, tag === null ? [recipe.name] : [recipe.name, tagNode(tag)]);
     chip.setAttribute('aria-pressed', String(planned.some((entry) => entry.recipe?.id === recipe.id)));
@@ -251,7 +248,7 @@ const plannedRow = (day, meal, entry) => {
 // MENU-20: Quitar empties the meal of one list; the meal of the other list stays.
 const clearPlanned = (day, meal, entry) => {
   ui.mealOpen = null;
-  apply(onListOf(entry.which, (part) => menu.clearMeal(part, thisWeek(), day, meal)), { undoText: t('toast.mealCleared', { name: plannedName(entry) }) });
+  apply(onListOf(entry.which, (part) => menu.clearMeal(part, shownWeek(), day, meal)), { undoText: t('toast.mealCleared', { name: plannedName(entry) }) });
 };
 
 // The text of the field as a new dish: not empty and not the name of a recipe, or null.
@@ -266,23 +263,23 @@ const addDish = () => {
   const { day, meal } = ui.mealOpen;
   ui.mealOpen = null;
   // MENU-20: a dish goes to the own menu.
-  apply(onOwn((own) => menu.setDish(own, thisWeek(), day, meal, name)));
+  apply(onOwn((own) => menu.setDish(own, shownWeek(), day, meal, name)));
 };
 
 // The dish becomes a recipe of its list, and its sheet opens in Recetas for the products.
 const dishToRecipe = () => {
   const { dish, which } = plannedOf(ui.mealOpen).find((entry) => entry.dish);
   ui.mealOpen = null;
-  recipeFromDish(dish, which, () => showView('recipes'));
+  recipeFromDish(dish, which, () => showView('recipes'), shownWeek());
 };
 
 export const bind = () => {
   $('menu-fill').addEventListener('click', fillBasket);
-  $('menu-clear').addEventListener('click', () => apply(onOwn((own) => menu.clearMenu(own, thisWeek())), { undoText: t('toast.menuCleared') }));
+  $('menu-clear').addEventListener('click', () => apply(onOwn((own) => menu.clearMenu(own, shownWeek())), { undoText: t('toast.menuCleared') }));
   $('meal-veil').addEventListener('click', closeMeal);
-  $('menu-week-prev').addEventListener('click', () => showWeek(earlierWeek()));
+  $('menu-week-prev').addEventListener('click', () => showWeek(steps().earlier));
   $('menu-repeat').addEventListener('click', repeatShown);
-  $('menu-week-next').addEventListener('click', () => showWeek(laterWeek()));
+  $('menu-week-next').addEventListener('click', () => showWeek(steps().later));
   $('meal-query').addEventListener('input', (event) => {
     ui.mealQuery = event.target.value;
     renderMeal();

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem } from '#store';
 import { addRecipe, addRecipeProduct } from '#recipes';
-import { DAYS, MEALS, KEPT_WEEKS, weekOf, addWeeks, weekDay, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, plannedSlots, SLOTS, menuWeek, fillMenu, basketPreview } from '#menu';
+import { DAYS, MEALS, KEPT_WEEKS, FUTURE_WEEKS, weekSteps, weekOf, addWeeks, weekDay, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, plannedSlots, SLOTS, menuWeek, fillMenu, basketPreview } from '#menu';
 
 // The Monday of the week of the tests.
 const W = '2026-11-02';
@@ -445,4 +445,29 @@ test('a slot with a meal of each list counts once (MENU-26, MENU-20)', () => {
   assert.equal(plannedSlots(both, W), 1);
   assert.equal(plannedSlots(own, W), 1);
   assert.equal(own.menu.length, 1);
+});
+
+test(`weekSteps steps one week at a time from this week up to ${FUTURE_WEEKS} weeks after it (MENU-23)`, () => {
+  const next = addWeeks(W, 1);
+  const last = addWeeks(W, FUTURE_WEEKS);
+  assert.deepEqual(weekSteps([], W, W), { earlier: null, later: next });
+  assert.deepEqual(weekSteps([], next, W), { earlier: W, later: addWeeks(W, 2) });
+  assert.deepEqual(weekSteps([], last, W), { earlier: addWeeks(last, -1), later: null });
+});
+
+test('weekSteps jumps between the past weeks with a meal, and from the last one to this week', () => {
+  const older = addWeeks(W, -5);
+  const weeks = [older, LAST, W, addWeeks(W, 2)];
+  assert.deepEqual(weekSteps(weeks, W, W), { earlier: LAST, later: addWeeks(W, 1) });
+  assert.deepEqual(weekSteps(weeks, LAST, W), { earlier: older, later: W });
+  assert.deepEqual(weekSteps(weeks, older, W), { earlier: null, later: LAST });
+});
+
+test('a put in a later week keeps the meals of this week', () => {
+  const { state: start, lentils, omelette } = kitchen();
+  const now = setMeal(start, W, 0, 'lunch', lentils).state;
+  const later = addWeeks(W, FUTURE_WEEKS);
+  const state = setMeal(now, later, 0, 'lunch', omelette).state;
+  assert.deepEqual(menuWeeks(state), [W, later]);
+  assert.equal(mealCount(state, W), 1);
 });

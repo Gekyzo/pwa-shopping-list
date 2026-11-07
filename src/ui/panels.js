@@ -2,7 +2,7 @@ import { postponedItems } from '#store';
 import { recipeProgress } from '#recipes';
 import { basketPreview, mealCount } from '#menu';
 import { storedBytes, kilobytes } from '#storage';
-import { $, el, state, ui, t, thisWeek, storage } from '#ui/context';
+import { $, el, state, ui, t, shownWeek, pastShown, storage } from '#ui/context';
 import { listState } from '#ui/view';
 import { icon } from '#ui/controls';
 import { showView } from '#ui/nav';
@@ -73,7 +73,7 @@ const renderStorage = () => {
 
 // Para la cesta (MENU-21): what Llenar cesta puts to buy.
 const renderBasket = () => {
-  const products = basketPreview(state, thisWeek());
+  const products = basketPreview(state, shownWeek());
   $('panel-basket').hidden = false;
   $('panel-basket-count').textContent = String(products.length);
   $('panel-basket-note').textContent = t('panels.basketNote', { fill: t('menu.fill') });
@@ -83,13 +83,14 @@ const renderBasket = () => {
 
 // The panels of Compra and Menú, from 600px (DSV-9): below the content until 840px, then beside it.
 // Compra shows them while its list has an item to buy or a postponed item, so that a list with only
-// postponed items can still bring them back; Menú while this week, in view, has a meal (MENU-23).
+// postponed items can still bring them back; Menú while the week in view, this week or a later one,
+// has a meal (MENU-23).
 export const renderPanels = () => {
   const compra = ui.view === 'active';
   const view = listState();
   const shown = compra
     ? view.items.some((item) => item.list === 'active' || item.list === 'postponed')
-    : ui.view === 'menu' && ui.pastWeek === null && mealCount(state, thisWeek()) > 0;
+    : ui.view === 'menu' && !pastShown() && mealCount(state, shownWeek()) > 0;
   $('panels').hidden = !shown;
   for (const id of ['panel-recipes', 'panel-postponed', 'panel-storage', 'panel-basket']) $(id).hidden = true;
   if (!shown) return;

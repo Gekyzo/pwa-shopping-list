@@ -164,8 +164,8 @@ export const ui = {
   editTwin: null,
   // The meal whose sheet is open, as { day, meal }, or null.
   mealOpen: null,
-  // MENU-23: the past week that Menú shows, `YYYY-MM-DD`, or null for this week. Not stored.
-  pastWeek: null,
+  // MENU-23: the week that Menú shows, `YYYY-MM-DD`, or null for this week. Not stored.
+  week: null,
   mealQuery: '',
   // The page of the walkthrough in view, or null while the walkthrough is closed.
   onboarding: firstStart ? 0 : null,
@@ -256,10 +256,13 @@ export const reorderOf = (ids) => reorderList(state, ids, shownBase(), scope());
 export const thisWeek = () => weekOf(new Date());
 
 // The week that Menú shows (MENU-23).
-export const shownWeek = () => ui.pastWeek ?? thisWeek();
+export const shownWeek = () => ui.week ?? thisWeek();
 
-// Llenar cesta: each list from its own menu (MENU-20).
-export const fillMenus = () => fillLists(state, shownBase(), scope(), thisWeek());
+// A week before this one is read only (MENU-23).
+export const pastShown = () => shownWeek() < thisWeek();
+
+// Llenar cesta: each list from its own menu of the week in view (MENU-20, MENU-23).
+export const fillMenus = () => fillLists(state, shownBase(), scope(), shownWeek());
 
 // Repetir esta semana: each list copies its own past week into this week (MENU-24).
 export const repeatMenus = (from) => repeatLists(state, shownBase(), scope(), from, thisWeek());

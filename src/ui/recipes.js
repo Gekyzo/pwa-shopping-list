@@ -147,9 +147,10 @@ export const recipeNode = (recipe) => {
 
 // A dish of the menu with no recipe becomes a recipe, and its sheet opens for the products. `show`
 // runs between the two, to change the section. REC-38: the recipe goes to the list of the dish, so
-// that its meals keep a recipe of their own list: a dish of the own menu gives an own recipe.
-export const recipeFromDish = (name, which = 'own', show = () => {}) => {
-  const result = onListOf(which, (part) => menu.dishRecipe(part, thisWeek(), name));
+// that its meals keep a recipe of their own list: a dish of the own menu gives an own recipe. `week`
+// is the week of the dish.
+export const recipeFromDish = (name, which = 'own', show = () => {}, week = thisWeek()) => {
+  const result = onListOf(which, (part) => menu.dishRecipe(part, week, name));
   if (!apply(result, { undoText: t('toast.recipeCreated', { name }) })) return;
   show();
   openRecipe(recipeOf(result.id));

@@ -24,6 +24,7 @@ export default {
   'menu.toRecipe': 'Crear receta',
   'menu.search': 'Busca una receta o escribe un plato',
   'menu.thisWeek': 'Esta semana',
+  'menu.comingWeek': 'Semana que viene',
   'menu.weekOf': 'Semana del {date}',
   'menu.prevWeek': 'Semana anterior',
   'menu.nextWeek': 'Semana siguiente',

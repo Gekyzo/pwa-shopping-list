@@ -2,7 +2,7 @@
 
 Rules of `src/menu.js`. The menu plans recipes and dishes for the meals of a week and fills
 `Compra` with the products of its recipes in one action. Each week starts empty; the meals of
-past weeks stay, read only.
+past weeks stay, read only, and the next weeks can be planned ahead.
 
 ## Week
 
@@ -10,7 +10,8 @@ past weeks stay, read only.
   (`Comida`) and `dinner` (`Cena`). A week is the date of its Monday, `YYYY-MM-DD` in local
   time, and each meal holds its week. This week is the week of today: on Monday a new week starts
   with no meal, with no tap and with no write of the state. Each operation of the menu acts on
-  one week, this week on the screen; a week that is not a Monday gives `error.unknownMeal`.
+  one week, on the screen the week in view (MENU-23); a week that is not a Monday gives
+  `error.unknownMeal`.
 - **MENU-2** A meal holds one recipe, one dish or nothing. A dish is a name with no recipe. A
   recipe or a dish can be in more than one meal.
 - **MENU-3** A recipe or a dish put in a meal replaces the recipe or the dish that the meal had. A
@@ -56,13 +57,13 @@ past weeks stay, read only.
   puts that recipe in the meal and closes the sheet. A meal with a recipe or a dish also has
   **Quitar**, with `Deshacer` and the message `Quitada del menú: «name».`
 - **MENU-12** An action bar stays at the bottom of the list of `Menú`, above the bottom bar.
-  For this week it has two buttons of equal width: **Llenar cesta** on the side of the hand and **Vaciar
-  menú** beside it. **Llenar cesta** fills `Compra` (MENU-5). It has the icon `cart-add`, the
+  For this week and a later week it has two buttons of equal width: **Llenar cesta** on the side of the hand and **Vaciar
+  menú** beside it. **Llenar cesta** fills `Compra` from the week in view (MENU-5). It has the icon `cart-add`, the
   cart with a plus, before its text. Its message is `Menú: N añadidos, N ya estaban.` with
   `Deshacer`. A fill that changes nothing shows `Menú: todo estaba ya en la lista.` and keeps
   the `Deshacer` that is still on the screen.
-- **MENU-13** **Vaciar menú** is an outline button in the danger color. It empties the menu and
-  shows `Deshacer` with the message `Menú vaciado.` It is disabled while the menu is empty. The
+- **MENU-13** **Vaciar menú** is an outline button in the danger color. It empties the week in view and
+  shows `Deshacer` with the message `Menú vaciado.` It is disabled while the own menu of that week is empty. The
   header of `Menú` has no `⋮` button.
 - **MENU-14** `Menú` shows the week also with no recipe, so that a meal can hold a dish. It has no
   empty text. The `+` button does not show in `Menú`, and below 600px `Menú` shows no dock.
@@ -85,8 +86,8 @@ past weeks stay, read only.
 
 ## Shared menu
 
-- **MENU-21** From 600px wide, `Menú` with a planned meal shows the panel **Para la cesta**: the
-  products that **Llenar cesta** puts to buy, in menu and product order, each one time, with their
+- **MENU-21** From 600px wide, `Menú` with a planned meal in the week in view, this week or a later
+  one, shows the panel **Para la cesta**: the products that **Llenar cesta** puts to buy, in menu and product order, each one time, with their
   count (`basketPreview`); six rows at most, then `y N más`. With nothing to add it says
   `Todo está en Compra`. It stands as the panels of `Compra` do (LIST-38).
 - **MENU-20** For a member with scope `all` (SHARE-12), `Menú` shows the meals of both lists.
@@ -110,15 +111,19 @@ past weeks stay, read only.
 - **MENU-22** A put of a meal (MENU-3) drops the meals of the weeks before the last 26, its own
   week included in the 26. Nothing else drops a past week.
 - **MENU-23** A week bar stands above the days of `Menú`: `‹`, the week in view, `›`. The week in
-  view is `Esta semana`, or `Semana del 26 oct` for a past week, with the short date of the
-  language. `‹` shows the nearest earlier week that holds a meal of a list in view, and is disabled
-  when there is none. `›` shows the nearest later week that holds a meal, or this week; it is
-  disabled on this week. A past week shows its days as this week does (MENU-9), with each meal a
+  view is `Esta semana`, `Semana que viene` (`menu.comingWeek`) for the week after it, or `Semana
+  del 26 oct` for another week, with the short date of the language. On a past week, `‹` shows
+  the nearest earlier week that holds a meal of a list in view, and is disabled when there is none;
+  `›` shows the nearest later past week that holds a meal, or this week. From this week on, `›`
+  shows the week after, up to 4 weeks after this week (`FUTURE_WEEKS`), where it is disabled; `‹`
+  on a later week shows the week before it, and on this week the nearest past week that holds a
+  meal (`weekSteps` of `src/menu.js`). A later week works as this week: its meals take a recipe or
+  a dish, and its action bar, its panel and its header act on it. A past week shows its days as this week does (MENU-9), with each meal a
   tile of no action whose name is `--muted`; an empty meal shows `—`. Its action bar holds
   **Repetir esta semana** alone (MENU-24) in place of **Llenar cesta** and **Vaciar menú**; it has no
   panel **Para la cesta**, and the header counts its meals (MENU-10). The week in view is not
-  stored: the app starts on this week, and a past week that holds no meal any more shows this
-  week.
+  stored: the app starts on this week, and a past week that holds no meal any more, or a later week
+  out of reach after a change of the clock, shows this week.
 
 - **MENU-24** **Repetir esta semana** is a primary button with the icon `repeat` across the action
   bar of a past week. It puts the meals of that week in place of all the meals of this week, each in
@@ -144,4 +149,6 @@ past weeks stay, read only.
 
 ## Limits
 
-No week after this one, no edit of a past week, no third meal. No quantity.
+No week more than 4 weeks after this one, no edit of a past week, no third meal. No quantity.
+**Repetir esta semana** copies into this week only. `Recetas` lists the dishes of this week only
+(REC-36).
