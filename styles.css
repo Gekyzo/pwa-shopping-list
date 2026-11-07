@@ -100,6 +100,15 @@
       --pane-detail: min(480px, (100vw - var(--rail-width) - var(--frame-side)) / 2 - var(--gutter));
     }
   }
+
+  /* The rows of the desktop screen of Compra (DSV-24): a 28px tick and a 16px semibold name. */
+  @media (min-width: 1024px) {
+    :root {
+      --tick: 28px;
+      --text-row: 1rem;
+      --weight-row: 600;
+    }
+  }
 }
 
 @layer base {
@@ -629,7 +638,7 @@
 
   /* @extends group-head
      @part group-head-button  The full-width button that closes and opens the group, with aria-expanded.
-     @part group-head-end     The count and the chevron, at the end of the button.
+     @part group-head-end     The chevron, at the end of the button.
      @part group-head-title   The title with an icon before it, as the head of an aisle has (GROUP-22).
      @part group-head-icon    The icon of the kind of an aisle, in --primary. */
 
@@ -646,7 +655,7 @@
     display: flex;
     flex: 1;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: var(--space-2);
     min-height: var(--tap);
     padding: 0 var(--space-4);
@@ -673,7 +682,7 @@
     opacity: 1;
   }
 
-  /* The count is second text: muted, small and at the normal weight. */
+  /* The chevron is second text: muted, small and at the normal weight. */
   .group-head-end {
     display: flex;
     align-items: center;
@@ -721,7 +730,14 @@
   }
 
   /* @extends item-row
-     @part item-row-repeat  The mark of a recurrent item in the meta line, in the alert accent. */
+     @part item-row-repeat  The mark of a recurrent item in the meta line, in the alert accent; from
+                            1024px a pill beside the name (DSV-24).
+     @part item-row-title   The name of a row and, from 1024px, the pill of a recurrent item.
+     @part item-row-repeat-meta  The mark of a recurrent item in the meta line with its separator;
+                            it goes from 1024px.
+     @part row-handle       The grip at the end of a row of Compra, which opens Editar (DSV-24).
+     @variant repeat-only   On item-row-meta: the meta line holds only the mark of a recurrent item,
+                            so it goes from 1024px. */
   /* The rows of a group stand in a card (DSV-13): an inset box with a border and 6px corners below
      its head. A row that starts a group takes the top of the card, one that ends it the bottom. */
   .item-list:has(> .item-row) {
@@ -780,7 +796,19 @@
       border-start-start-radius: var(--radius-l);
       border-start-end-radius: var(--radius-l);
       background: var(--surface-2);
+      font-size: var(--text-label-lg);
+      font-weight: var(--weight-medium);
     }
+
+    /* More specific than the count at the end of the head, which comes later in this layer. */
+    .group-head-button > .group-head-count {
+      margin-inline-start: 0;
+    }
+
+    .group-head-button > .group-head-end {
+      margin-inline-start: auto;
+    }
+
 
     .item-list:not(:has(> .item-row.recipe)) > .group-head + .item-row {
       border-start-start-radius: 0;
@@ -799,6 +827,25 @@
     .item-row-name > .item-row-qty {
       box-shadow: inset 0 0 0 1px var(--line);
       background: var(--surface);
+      font-family: var(--font-mono);
+      font-size: var(--text-s);
+      font-weight: var(--weight-normal);
+    }
+
+    /* More specific than the hidden pill below 1024px, which comes later in this layer. */
+    .item-row-name > .item-row-title > .item-row-repeat {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+      padding: 0 var(--space-2);
+      border: 1px solid currentColor;
+      border-radius: var(--radius-pill);
+      font-size: var(--text-xs);
+    }
+
+    .item-row-meta > .item-row-repeat-meta,
+    .item-row-meta.repeat-only {
+      display: none;
     }
 
     .item-list:not(:has(> .item-row.recipe)) > .group-head:not(:has(+ .item-row)) {
@@ -893,12 +940,33 @@
     font-weight: var(--weight-strong);
   }
 
+  /* The name and, from 1024px, the pill of a recurrent item beside it (DSV-24). */
+  .item-row-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .item-row-title > .item-row-label {
+    min-width: 0;
+  }
+
+  .item-row-title > .item-row-repeat {
+    display: none;
+  }
+
+  .row-handle {
+    color: var(--muted);
+  }
+
   .item-row.bought .item-row-repeat {
     color: inherit;
   }
 
   /* @extends group-head
-     @part group-head-count  The count of the group, as a pill. */
+     @part group-head-count  The count of the group, as a pill: at the end of the head, and beside
+                             the title from 1024px (DSV-24). */
   /* A head stands on the canvas above its card, with room above it and no line below. */
   .group-head {
     margin-top: var(--space-3);
@@ -911,6 +979,7 @@
   }
 
   .group-head-count {
+    margin-inline-start: auto;
     padding: var(--space-half) var(--space-2);
     border: 1px solid var(--line);
     border-radius: var(--radius-pill);

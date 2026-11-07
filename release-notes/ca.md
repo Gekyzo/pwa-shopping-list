@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- En pantalles amples, les files de **Compra** són com el disseny: nom més compacte, «cada compra» al costat del nom i la quantitat en lletra d’amplada fixa. Cada grup diu quants articles li queden («3 art.»). El llapis de cada fila és ara una nansa de sis punts; en tocar-la s’obre **Edita**.
 - La capçalera de **Compra** diu quant queda per comprar en verd, sense barra. En pantalles amples té un camp de cerca (s’obre amb Ctrl+K o ⌘K), el botó **Acaba la compra** i les botigues sota el títol.
 - A **Compra**, pots posposar un producte per a la propera compra: llisca la fila o fes servir **Posposar** a **Edita**. En pantalles amples, **Propera compra** els llista amb un + per portar-los, i **Receptes a la llista** mostra quants ingredients de cada recepta ja tens.
 - A **Compra**, el nom de cada producte té més espai: es talla menys i ocupa menys línies.

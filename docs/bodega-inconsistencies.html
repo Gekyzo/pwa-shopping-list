@@ -663,7 +663,7 @@ table.next-steps td:first-child { font: 400 1.05rem var(--serif); color: var(--a
 <p class="fix"><strong>Proposal:</strong> <code>--done</code>/<code>--primary</code> = <code>#13734b</code>; <code>#005937</code> only for pressed and text on tint.</p></article>
 <article class="finding" id="f4" data-sev="medium"><header><span class="sev medium">P2</span><h3 id="f4-t"><span class="n">#4</span>Monospace quantities</h3></header>
 <p>Four screens set quantities and IDs in a monospace font that <code>design.md</code> does not define.</p>
-<p class="fix"><strong>Proposal:</strong> Hanken Grotesk with <code>tabular-nums</code>.</p></article>
+<p class="fix"><strong>Proposal:</strong> Hanken Grotesk with <code>tabular-nums</code>. <strong>Changed 2026-11-07:</strong> the quantity chip of a desktop row (1024px and up) uses the system monospace stack <code>--font-mono</code>, as the desktop Compra screen does (DSV-24); the phone row keeps Hanken Grotesk.</p></article>
 <article class="finding" id="f5" data-sev="medium"><header><span class="sev medium">P2</span><h3 id="f5-t"><span class="n">#5</span>No dark design</h3></header>
 <p>The dark values exist only in the Tailwind config; no screen renders them.</p>
 <p class="fix"><strong>Proposal:</strong> Task 0 derives dark from the config and checks AA contrast.</p></article>

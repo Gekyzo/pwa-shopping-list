@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En pantallas anchas, las filas de **Compra** son como el diseño: nombre más compacto, «cada compra» junto al nombre y la cantidad en letra de ancho fijo. Cada grupo dice cuántos artículos le quedan («3 art.»). El lápiz de cada fila es ahora un asa de seis puntos; al tocarla se abre **Editar**.
 - La cabecera de **Compra** dice cuánto queda por comprar en verde, sin barra. En pantallas anchas tiene un campo de búsqueda (abre con Ctrl+K o ⌘K), el botón **Terminar compra** y las tiendas debajo del título.
 - En **Compra**, puedes posponer un producto para la próxima compra: desliza la fila o usa **Posponer** en **Editar**. En pantallas anchas, **Próxima compra** los lista con un + para traerlos, y **Recetas en la lista** muestra cuántos ingredientes de cada receta tienes ya.
 - En **Compra**, el nombre de cada producto tiene más sitio: se corta menos y ocupa menos líneas.

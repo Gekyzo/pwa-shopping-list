@@ -69,7 +69,8 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **ROW-1** A row of `Compra` has a check mark, the name with its quantity as a chip at the end
   of the name button (DSV-13), a line below the name with the shops, `También en «recipes»` for an item of two recipe groups
   (GROUP-20) and `↻ cada compra` for a recurrent item (LIST-7), joined by ` · `, and an
-  edit button **Editar** at its end. The slot of the edit button is one button wide, so the name
+  edit button **Editar** at its end: the grip `grip` of the screens, named `Editar «name»`. From
+  1024px `↻ cada compra` is a pill beside the name instead (DSV-24). The slot of the edit button is one button wide, so the name
   takes the rest of the row; a tag of `Todas` widens it (SHARE-14). The name keeps one line, then ends with an ellipsis (DSV-15). A tap on
   the body of the row ticks or unticks the item (LIST-11); the check mark only shows the state. A
   tap on the edit button opens the edit sheet (ROW-7) and does not tick. With **Izquierda**
