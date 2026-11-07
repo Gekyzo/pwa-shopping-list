@@ -176,7 +176,10 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   puts the sheet back. A drag that starts on a button or a field of the head does nothing.
 - **NAV-9** The trip button of the header has three dots. It shows in `Compra` below 1024px; from
   1024px the header shows in its place the primary button **Terminar compra** with a `check-circle`,
-  disabled when TRIP-1 does not hold, and the add of the header beside it is outlined. A tap
+  disabled when TRIP-1 does not hold, and the add of the header beside it is outlined. From
+  1024px the title keeps its whole text and the subtitle one line, and the tools stay on the line
+  of the title: the search field takes the room that is left, up to 260px; below 180px of content
+  it drops its key `⌘K`, below 100px its text too, and shows the search icon alone. A tap
   opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet has the
   title `Opciones de la compra`, the line of where the items go (TRIP-4), the line of the open items
   (TRIP-6) and the button **Terminar compra**, in this order.
