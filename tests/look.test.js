@@ -238,3 +238,28 @@ test('from 1024px the head of a closed group closes its card (DSV-22)', () => {
 test('Cancelar of the search is a raised tile of the floating dock too (DSV-17)', () => {
   assert.match(block('.dock > :is(.chip, .button.icon, .button.accent):not(.dock-add)'), /background:\s*var\(--surface\)/);
 });
+
+// DSV-24: the rows and group cards of the desktop screen of Compra.
+test('from 1024px a row has a 28px tick, a 16px semibold name and a monospace quantity chip (DSV-24)', () => {
+  const root = block(':root', wide);
+  assert.match(root, /--tick:\s*28px/);
+  assert.match(root, /--text-row:\s*1rem/);
+  assert.match(root, /--weight-row:\s*600/);
+  assert.match(block('.item-row-name > .item-row-qty', wide), /font-family:\s*var\(--font-mono\)/);
+});
+
+test('from 1024px the recurrence is a terracotta pill beside the name, and its mark in the meta line goes (DSV-24)', () => {
+  assert.match(block('.item-row-name > .item-row-title > .item-row-repeat', wide), /display:\s*inline-flex/);
+  assert.match(block('.item-row-name > .item-row-title > .item-row-repeat', wide), /border:\s*1px solid currentColor/);
+  assert.match(block('.item-row-meta > .item-row-repeat-meta', wide), /display:\s*none/);
+  assert.match(block('.item-row-title > .item-row-repeat'), /display:\s*none/);
+});
+
+test('from 1024px the title of a group is 15px, with its count beside it (DSV-24)', () => {
+  assert.match(block('.item-list:not(:has(> .item-row.recipe)) > .group-head', wide), /font-size:\s*var\(--text-label-lg\)/);
+  assert.match(block('.group-head-button > .group-head-count', wide), /margin-inline-start:\s*0/);
+});
+
+test('the edit button of a row is the grip, in --muted (DSV-24)', () => {
+  assert.match(block('.row-handle'), /color:\s*var\(--muted\)/);
+});

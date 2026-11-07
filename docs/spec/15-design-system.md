@@ -173,3 +173,12 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   Stitch screens: **Posponer** of `Editar` and **Mover todos a la compra actual**. The other
   secondary actions stay tonal. The side panels are bordered cards on `--surface`; a recipe tile
   of **Recetas en la lista** is a bordered tile on `--bg` (LIST-38).
+- **DSV-24** The rows and group cards of the desktop screen of `Compra`, from 1024px: a 28px tick
+  (`--tick`), the name at 16px and weight 600 (`--text-row`, `--weight-row`), the quantity in an
+  outlined chip in `--font-mono` at the normal weight, and the recurrence as a terracotta pill
+  with a `currentColor` edge beside the name (`item-row-title`), out of the meta line. The title
+  of a group head is 15px (`--text-label-lg`) at weight 600, with its count pill beside it and the
+  chevron at the end. At every width the edit button of a row is the grip `grip` in `--muted`
+  (`row-handle`). Below 1024px a row and a head keep the phone screen: the count at the end of
+  the head, the recurrence in the meta line, a sans quantity chip. This reverses the "no
+  monospace" choice of `docs/bodega-inconsistencies.html` for the desktop row.

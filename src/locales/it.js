@@ -72,11 +72,12 @@ export default {
   'count.products': { one: '{count} prodotto', other: '{count} prodotti' },
   'count.menuMeals': { one: 'In {count} pasto del menù', other: 'In {count} pasti del menù' },
   'count.bought': { one: 'Comprati ({count})', other: 'Comprati ({count})' },
-  'count.ticked': '{done} di {count}',
 
   'row.delete': 'Elimina {name}',
   'row.createRecipe': 'Crea la ricetta di «{name}»',
   'row.edit': 'Modifica',
+  'row.editName': 'Modifica «{name}»',
+  'count.articles': { one: '{count} art.', other: '{count} art.' },
   'row.repeat': 'Ripeti',
   'row.noRepeat': 'Non ripetere',
   'row.repeats': '↻ a ogni spesa',

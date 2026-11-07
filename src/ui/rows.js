@@ -11,19 +11,26 @@ import { reorder, bindReorder } from '#ui/drag';
 
 // The name of a row, its quantity, and below the name the shops of the item when the list
 // is not by shop, the other recipes of an item of two recipe groups (`also`) and the mark of a
-// recurrent item.
+// recurrent item. The mark is in the meta line below 1024px and a pill beside the name from 1024px
+// (DSV-24): both are in the page, and the CSS shows one, so a screen reader hears it once.
 const nameParts = (item, also) => {
   // The quantity is a chip in its own column at the end of the name button (DSV-13).
   const quantity = item.quantity ? [el('span', { className: 'item-row-qty', textContent: item.quantity })] : [];
-  const parts = [el('span', { className: 'item-row-label', textContent: item.name }), ...quantity];
+  const repeat = () => el('span', { className: 'item-row-repeat', textContent: t('row.repeats') });
+  const title = el('span', { className: 'item-row-title' }, [
+    el('span', { className: 'item-row-label', textContent: item.name }),
+    ...(item.recurrent ? [repeat()] : []),
+  ]);
+  const parts = [title, ...quantity];
   const meta = [
     ...(item.shops.length && shownGroup() !== 'shop' ? [item.shops.join(' · ')] : []),
     ...(also.length ? [t('row.alsoIn', { recipes: also.join(', ') })] : []),
-    ...(item.recurrent ? [el('span', { className: 'item-row-repeat', textContent: t('row.repeats') })] : []),
   ];
-  // The mark of a recurrent item is its own span, so it takes the alert accent (DSV-13).
   const joined = meta.flatMap((part, index) => (index ? [' · ', part] : [part]));
-  if (meta.length) parts.push(el('small', { className: 'item-row-meta' }, joined));
+  // The mark of a recurrent item is its own span, so it takes the alert accent (DSV-13); its
+  // separator goes with it.
+  if (item.recurrent) joined.push(el('span', { className: 'item-row-repeat-meta' }, [...(meta.length ? [' · '] : []), repeat()]));
+  if (joined.length) parts.push(el('small', { className: meta.length ? 'item-row-meta' : 'item-row-meta repeat-only' }, joined));
   return parts;
 };
 
@@ -58,8 +65,9 @@ const editButton = (item) => {
     Object.assign(ui, { openId: null, openSide: null });
     openEdit(item);
   };
-  const button = el('button', { type: 'button', className: 'button icon', title: t('row.edit'), onclick: edit }, [icon('edit')]);
-  button.setAttribute('aria-label', t('row.edit'));
+  // The grip of the screens stands where the pencil was; a tap still opens Editar (DSV-24).
+  const button = el('button', { type: 'button', className: 'button icon row-handle', title: t('row.edit'), onclick: edit }, [icon('grip')]);
+  button.setAttribute('aria-label', t('row.editName', { name: item.name }));
   button.setAttribute('aria-haspopup', 'dialog');
   return button;
 };
@@ -339,7 +347,9 @@ const groupRows = (key) => [...document.querySelectorAll('#items .item-row')].fi
 // stops the slide. `lead` is an icon before the title, as the head of an aisle has (GROUP-22).
 export const groupHead = (title, count, key = null, right = null, lead = null) => {
   const titleNode = lead ? el('span', { className: 'group-head-title' }, [lead, title]) : el('span', { textContent: title });
-  if (key === null) return el('li', { className: 'group-head' }, [titleNode, el('span', { className: 'group-head-end' }, [el('span', { className: 'group-head-count', textContent: count })])]);
+  // The count stands beside the title from 1024px, and at the end of the head below (DSV-24).
+  const countNode = count ? [el('span', { className: 'group-head-count', textContent: count })] : [];
+  if (key === null) return el('li', { className: 'group-head' }, [titleNode, ...countNode]);
   const id = `${ui.view}:${key}`;
   const open = !ui.closedGroups.has(id) || searching();
   const button = el('button', {
@@ -360,7 +370,8 @@ export const groupHead = (title, count, key = null, right = null, lead = null) =
     },
   }, [
     titleNode,
-    el('span', { className: 'group-head-end' }, [el('span', { className: 'group-head-count', textContent: count }), chevron(open)]),
+    ...countNode,
+    el('span', { className: 'group-head-end' }, [chevron(open)]),
   ]);
   button.setAttribute('aria-expanded', String(open));
   if (!right || searching()) return el('li', { className: 'group-head' }, [button]);

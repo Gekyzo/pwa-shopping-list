@@ -72,11 +72,12 @@ export default {
   'count.products': { one: '{count} Produkt', other: '{count} Produkte' },
   'count.menuMeals': { one: 'In {count} Mahlzeit des Menüs', other: 'In {count} Mahlzeiten des Menüs' },
   'count.bought': { one: 'Gekauft ({count})', other: 'Gekauft ({count})' },
-  'count.ticked': '{done} von {count}',
 
   'row.delete': '{name} löschen',
   'row.createRecipe': 'Rezept für „{name}“ erstellen',
   'row.edit': 'Bearbeiten',
+  'row.editName': '„{name}“ bearbeiten',
+  'count.articles': { one: '{count} Art.', other: '{count} Art.' },
   'row.repeat': 'Wiederholen',
   'row.noRepeat': 'Nicht wiederholen',
   'row.repeats': '↻ bei jedem Einkauf',

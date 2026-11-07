@@ -57,8 +57,9 @@ the arrange sheet in `src/ui/arrange.js`.
   `También en «recipes»` below its name: the names of the other groups, in group order, joined by
   `, `. So two rows read as one product. The groups count before a search, so a search keeps the
   text.
-- **GROUP-8** The head of a group shows the name of the recipe and `ticked de total`
-  (`count.ticked`), or `✓` when all its members are ticked, then the icon `chevron-down`. The group lists only the members to buy. A recipe group whose members are
+- **GROUP-8** The head of a group shows the name of the recipe and the members to buy as `N art.`
+  (`count.articles`), or `✓` when all its members are ticked, then the icon `chevron-down`. The
+  count is a pill at the end of the head, and beside the name from 1024px (DSV-24). The group lists only the members to buy. A recipe group whose members are
   all ticked does not show; a member that loses its tick shows it again.
 - **GROUP-21** A slide of the head of a recipe group to the right ticks each member of the group
   that is still to buy, with the rules and the backdrop of ROW-11 and the icon `check`. In a shop
