@@ -1,4 +1,4 @@
-import { addItem, bringToList, findByName, fold, sortItems } from '#store';
+import { addItem, bringToList, compareNames, findByName, fold, sortItems } from '#store';
 
 const NOT_FOUND = 'error.recipeNotFound';
 
@@ -135,6 +135,17 @@ const allIn = (recipe, names) => recipe.products.length > 0 && recipe.products.e
 // True when each product of the recipe is an item of Active, ticked or not. A recipe with no
 // products is never in the list.
 export const inList = (state, recipe) => allIn(recipe, activeNames(state.items));
+
+// Recetas en la lista: each recipe with a product among the items of Active, ticked or not. The
+// sent recipes come first in send order, then the others in name order. `inList` counts the
+// products in Active, `total` all the products.
+export const recipeProgress = (state) => {
+  const names = activeNames(state.items);
+  const progress = (recipe) => ({ recipe, inList: recipe.products.filter((product) => names.has(product.toLowerCase())).length, total: recipe.products.length });
+  const sent = state.sent.map((id) => findRecipe(state, id)).filter(Boolean);
+  const others = state.recipes.filter((recipe) => !state.sent.includes(recipe.id)).sort((a, b) => compareNames(a.name, b.name));
+  return [...sent, ...others].map(progress).filter(({ inList }) => inList > 0);
+};
 
 // The Active list by recipe: the sent recipes in send order, then each other recipe whose
 // products are all in Active. An item of two recipes is in the two groups. `items` are the

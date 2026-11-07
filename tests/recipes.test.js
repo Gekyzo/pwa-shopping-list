@@ -16,6 +16,7 @@ import {
   sharedItems,
   productSuggestions,
   inList,
+  recipeProgress,
   searchRecipes,
   SAMPLE_ID,
   hasSample,
@@ -658,4 +659,43 @@ test('filterRecipes keeps every recipe, the recipes in the list, or the recipes 
   assert.deepEqual(filterRecipes(list, 'unknown', isInList).map((r) => r.id), ['a', 'b', 'c']);
   assert.deepEqual(filterCounts(list, isInList), { all: 3, inList: 1, link: 2 });
   assert.deepEqual(filterCounts([], isInList), { all: 0, inList: 0, link: 0 });
+});
+
+// REC: Recetas en la lista, the progress of each recipe with a product in Compra.
+const progressOf = (state) => recipeProgress(state).map(({ recipe, inList: n, total }) => [recipe.name, n, total]);
+
+test('recipeProgress lists each recipe with a product in Compra, ticked or not', () => {
+  let state = withItem(emptyState(), 'Lentejas', 'active');
+  state = withItem(state, 'Chorizo', 'active', { bought: true });
+  state = withRecipe(state, 'Lentejas con chorizo', ['Lentejas', 'Chorizo', 'Patatas']).state;
+  state = withRecipe(state, 'Gazpacho', ['Tomate']).state;
+  assert.deepEqual(progressOf(state), [['Lentejas con chorizo', 2, 3]]);
+});
+
+test('recipeProgress does not count a saved or postponed product', () => {
+  let state = withItem(emptyState(), 'Lentejas', 'saved');
+  state = withItem(state, 'Chorizo', 'postponed');
+  state = withItem(state, 'Patatas', 'active');
+  state = withRecipe(state, 'Lentejas con chorizo', ['Lentejas', 'Chorizo', 'Patatas']).state;
+  assert.deepEqual(progressOf(state), [['Lentejas con chorizo', 1, 3]]);
+});
+
+test('recipeProgress matches with no case distinction', () => {
+  let state = withItem(emptyState(), 'patatas', 'active');
+  state = withRecipe(state, 'Tortilla', ['Patatas']).state;
+  assert.deepEqual(progressOf(state), [['Tortilla', 1, 1]]);
+});
+
+test('recipeProgress puts the sent recipes first, in send order, then the others by name', () => {
+  let state = withItem(emptyState(), 'Ajo', 'active');
+  state = withRecipe(state, 'Zarzuela', ['Ajo']).state;
+  state = withRecipe(state, 'Alioli', ['Ajo']).state;
+  const sent = withRecipe(state, 'Pisto', ['Ajo']);
+  state = { ...sent.state, sent: [sent.id] };
+  assert.deepEqual(progressOf(state).map(([name]) => name), ['Pisto', 'Alioli', 'Zarzuela']);
+});
+
+test('recipeProgress of a state with no item in Compra is empty', () => {
+  const state = withRecipe(withItem(emptyState(), 'Ajo', 'saved'), 'Alioli', ['Ajo']).state;
+  assert.deepEqual(recipeProgress(state), []);
 });

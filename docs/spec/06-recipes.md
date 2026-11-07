@@ -93,6 +93,10 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   `Deshacer` of the send that is still on the screen.
 - **REC-22** `sent` lasts until **Terminar compra** (TRIP-3). The row of a recipe has no "sent"
   mark.
+- **REC-41** The progress of a recipe in `Compra` (`recipeProgress`) is the number of its products
+  that are items of `Compra`, ticked or not, of all its products. A saved or postponed item does not
+  count. Only a recipe with one product in `Compra` at least has a progress. The sent recipes come
+  first, in send order, then the others in name order.
 
 ## Dishes with no recipe
 
