@@ -201,14 +201,15 @@
       </section>
 
       <aside id="panels" class="side-panels" hidden>
-        <section id="panel-shops" class="side-panel" hidden>
-          <h2 class="side-panel-head"><span data-i18n="panels.shops"></span><small class="side-panel-end" data-i18n="panels.left"></small></h2>
-          <ul id="panel-shops-list" class="side-panel-list"></ul>
+        <section id="panel-recipes" class="side-panel" hidden>
+          <h2 class="side-panel-head"><svg class="icon side-panel-icon" aria-hidden="true"><use href="icons.svg#utensils"/></svg><span data-i18n="panels.recipes"></span><small id="panel-recipes-count" class="pill side-panel-end"></small></h2>
+          <ul id="panel-recipes-list" class="side-panel-list"></ul>
         </section>
-        <section id="panel-next" class="side-panel" hidden>
-          <h2 class="side-panel-head"><span data-i18n="panels.next"></span><small id="panel-next-count" class="side-panel-end"></small></h2>
-          <p class="side-panel-note" data-i18n="panels.nextNote"></p>
-          <ul id="panel-next-list" class="side-panel-list"></ul>
+        <section id="panel-postponed" class="side-panel" hidden>
+          <h2 class="side-panel-head"><svg class="icon side-panel-icon" aria-hidden="true"><use href="icons.svg#clock"/></svg><span data-i18n="panels.next"></span><small class="side-panel-end" data-i18n="panels.postponed"></small></h2>
+          <p class="side-panel-note" data-i18n="panels.postponedNote"></p>
+          <ul id="panel-postponed-list" class="side-panel-list"></ul>
+          <button id="postponed-all" class="button outline wide side-panel-action" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg><span data-i18n="panels.bringAll"></span></button>
         </section>
         <section id="panel-basket" class="side-panel" hidden>
           <h2 class="side-panel-head"><span data-i18n="panels.basket"></span><small id="panel-basket-count" class="side-panel-end"></small></h2>
@@ -383,7 +384,7 @@
           <div id="edit-aisles" class="cluster pick"></div>
           <p id="edit-aisles-empty" class="empty-state inline" data-i18n="edit.noAisles" hidden></p>
         </div>
-        <footer class="sheet-foot"><button id="edit-delete" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"/></svg><span data-i18n="sheet.delete"></span></button><span class="sheet-saved"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="sheet.saved"></span></span></footer>
+        <footer class="sheet-foot"><button id="edit-postpone" class="button outline" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#clock"/></svg><span data-i18n="row.postpone"></span></button><button id="edit-delete" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"/></svg><span data-i18n="sheet.delete"></span></button><span class="sheet-saved"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="sheet.saved"></span></span></footer>
       </form>
     </div>
 

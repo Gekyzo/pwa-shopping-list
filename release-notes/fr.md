@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Dans **Courses**, tu peux reporter un article aux prochaines courses : fais glisser la ligne ou utilise **Reporter** dans **Modifier**. Sur grand écran, **Prochaines courses** les liste avec un + pour les remettre, et **Recettes dans la liste** montre combien d’ingrédients de chaque recette tu as déjà.
 - Dans **Courses**, le nom de chaque article a plus de place : il est moins coupé et prend moins de lignes.
 - Nouvelles couleurs : un fond papier chaud avec des lignes gris-vert douces, en thème clair et en thème sombre.
 - Dans **Courses**, le nom de chaque produit tient sur une ligne, et sa quantité est une étiquette discrète.

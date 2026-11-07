@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En **Compra**, puedes posponer un producto para la próxima compra: desliza la fila o usa **Posponer** en **Editar**. En pantallas anchas, **Próxima compra** los lista con un + para traerlos, y **Recetas en la lista** muestra cuántos ingredientes de cada receta tienes ya.
 - En **Compra**, el nombre de cada producto tiene más sitio: se corta menos y ocupa menos líneas.
 - Colores nuevos: un fondo de papel cálido con líneas gris verdoso suaves, en el tema claro y en el oscuro.
 - En **Compra**, el nombre de cada producto ocupa una línea, y su cantidad es una etiqueta suave.

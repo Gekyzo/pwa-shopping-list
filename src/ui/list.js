@@ -9,7 +9,7 @@ import { listName } from '#shares';
 import { $, el, state, sharing, ui, t, shopLists, tripEnd, apply, render, thisWeek, shownWeek } from '#ui/context';
 import { inList, listChoice, listState, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { icon } from '#ui/controls';
-import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
+import { itemNode, boughtSection, postponedSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
 import { recipeNode, dishNode, sendToList } from '#ui/recipes';
 import { weekNodes } from '#ui/menu';
 import { leaveNode } from '#ui/motion';
@@ -100,7 +100,13 @@ const pendingNodes = () => {
 
 const listNodes = (items) => {
   const bought = items.filter((item) => item.bought && found(item));
-  return bought.length ? [...pendingNodes(), ...boughtSection(bought)] : pendingNodes();
+  // The search finds no postponed item (LIST-41).
+  const postponed = ui.view !== 'active' || searching() ? [] : store.postponedItems(viewState());
+  return [
+    ...pendingNodes(),
+    ...(bought.length ? boughtSection(bought) : []),
+    ...(postponed.length ? postponedSection(postponed) : []),
+  ];
 };
 
 // One part for each place an item goes, in this order; a part with no item does not show (TRIP-4).
@@ -266,7 +272,9 @@ export const renderList = (summary) => {
   $('items').replaceChildren(...nodes);
   if (ui.view === 'active') hintSwipe();
 
-  renderEmpty(ui.view !== 'settings' && nodes.length === 0);
+  // The postponed items are not the list: with only them, Compra still says it is empty (LIST-41).
+  const postponedOnly = nodes.every((node) => node.matches('.postponed-head, .postponed-row'));
+  renderEmpty(ui.view !== 'settings' && postponedOnly);
 
   $('menu-actions').hidden = ui.view !== 'menu';
 

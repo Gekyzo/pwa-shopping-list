@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Em **Compra**, podes adiar um produto para a próxima compra: desliza a linha ou usa **Adiar** em **Editar**. Em ecrãs largos, **Próximas compras** lista-os com um + para os trazer, e **Receitas na lista** mostra quantos ingredientes de cada receita já tens.
 - Em **Compras**, o nome de cada produto tem mais espaço: é cortado menos e ocupa menos linhas.
 - Cores novas: um fundo de papel quente com linhas cinza-esverdeadas suaves, no tema claro e no escuro.
 - Em **Compras**, o nome de cada produto ocupa uma linha, e a quantidade é uma etiqueta suave.

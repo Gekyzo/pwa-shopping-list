@@ -168,6 +168,7 @@ export const ui = {
   // The page of the walkthrough in view, or null while the walkthrough is closed.
   onboarding: firstStart ? 0 : null,
   boughtOpen: false,
+  postponedOpen: false,
   // The groups of a list that the user closed, as `<view>:<group key>`. Not stored.
   closedGroups: new Set(),
   // The recipe whose sheet is open, or null.

@@ -35,6 +35,7 @@ export const renderEdit = () => {
     return;
   }
   $('edit-title').textContent = item.name;
+  $('edit-postpone').hidden = item.list !== 'active' || item.bought;
   $('edit-form').setAttribute('aria-label', t('edit.title'));
   if (document.activeElement !== $('edit-name')) $('edit-name').value = item.name;
   if (document.activeElement !== $('edit-quantity')) $('edit-quantity').value = item.quantity;
@@ -95,6 +96,16 @@ const deleteItem = () => {
   if (apply(result, { undoText: t(deletedKey(item, twinReach), { name: item.name }) })) ui.editId = null;
 };
 
+// Posponer of the foot takes the item out of Compra for the next trip (LIST-40), with Deshacer,
+// and closes the sheet. From a merged row it reaches the twin as the setting says (SHARE-16).
+const postponeItem = () => {
+  const found = editItem();
+  if (!found) return;
+  const twin = state.items.some((entry) => entry.id === ui.editTwin) ? ui.editTwin : undefined;
+  const item = twin ? { ...found, twin } : found;
+  if (apply(acrossTwins(state, twinIds(item, twinReach), store.postpone), { undoText: t('toast.postponed', { name: item.name }) })) closeEdit();
+};
+
 // SHARE-15: a rename runs in the list of its item, so the name rule holds inside that list. The
 // field writes only while the item exists.
 const renameIn = (value) => {
@@ -115,6 +126,7 @@ export const bind = () => {
     if (picked && shops.shopSuggestions(state, ui.editId).includes(event.target.value)) submitShop();
   });
   $('edit-delete').addEventListener('click', deleteItem);
+  $('edit-postpone').addEventListener('click', postponeItem);
   // The switch sets the recurrence of the item (LIST-7), as Repetir of the slide does.
   $('edit-repeat').addEventListener('change', () => {
     if (editItem()) applySaved($('edit-form'), store.toggleRecurrent(state, ui.editId));

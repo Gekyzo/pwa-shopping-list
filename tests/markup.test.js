@@ -97,6 +97,9 @@ test('each of the nine sheets has the grab, then a head with its title and Listo
   }
 });
 
+// LIST-40: the foot of Editar starts with Posponer.
+const POSTPONE = '<button id="edit-postpone" class="button outline" type="button"><svg [^>]*><use href="icons.svg#clock"\\/><\\/svg><span data-i18n="row.postpone"><\\/span><\\/button>';
+
 test('the edit and recipe sheets have a foot with Eliminar and Guardado; the other sheets have none', () => {
   const feet = sheetParts().filter(({ part }) => part.includes('sheet-foot')).map(({ id }) => id);
   assert.deepEqual(feet, ['edit-form', 'recipe-sheet']);
@@ -104,7 +107,7 @@ test('the edit and recipe sheets have a foot with Eliminar and Guardado; the oth
     const { part } = sheetParts().find((sheet) => sheet.id === id);
     assert.match(
       part,
-      new RegExp(`<\\/div>\\s*<footer class="sheet-foot"><button id="${prefix}-delete" class="button outline danger" type="button"><svg [^>]*><use href="icons.svg#trash"\\/><\\/svg><span data-i18n="sheet.delete"><\\/span><\\/button><span class="sheet-saved"><svg [^>]*><use href="icons.svg#check"\\/><\\/svg><span data-i18n="sheet.saved"><\\/span><\\/span><\\/footer>\\s*<\\/(div|form)>`),
+      new RegExp(`<\\/div>\\s*<footer class="sheet-foot">${prefix === 'edit' ? POSTPONE : ''}<button id="${prefix}-delete" class="button outline danger" type="button"><svg [^>]*><use href="icons.svg#trash"\\/><\\/svg><span data-i18n="sheet.delete"><\\/span><\\/button><span class="sheet-saved"><svg [^>]*><use href="icons.svg#check"\\/><\\/svg><span data-i18n="sheet.saved"><\\/span><\\/span><\\/footer>\\s*<\\/(div|form)>`),
       id,
     );
   }
@@ -246,8 +249,14 @@ test('each nav item shows its name', () => {
   assert.doesNotMatch(nav, /nav-item[^>]*aria-label/);
 });
 
-test('an outline button is only a destructive one; other secondary actions are tonal', () => {
-  for (const [, classes] of html.matchAll(/<button[^>]*class="(button outline[^"]*)"/g)) assert.match(classes, /\bdanger\b/, classes);
+// DSV-23: an outline button is a destructive one, or one of the outlined secondary actions of the
+// Bodega screens; other secondary actions are tonal.
+const OUTLINED = ['edit-postpone', 'postponed-all'];
+
+test('an outline button is a destructive one or an outlined action of the screens; other secondary actions are tonal', () => {
+  for (const [, id, classes] of html.matchAll(/<button(?: id="([^"]*)")?[^>]*class="(button outline[^"]*)"/g)) {
+    if (!OUTLINED.includes(id)) assert.match(classes, /\bdanger\b/, classes);
+  }
   for (const id of ['shop-done-all', 'shop-done-next', 'finish-button', 'empty-secondary', 'trip-continue', 'meal-dish', 'aisles-usual']) {
     assert.match(html, new RegExp(`<button id="${id}" class="button tonal`), id);
   }

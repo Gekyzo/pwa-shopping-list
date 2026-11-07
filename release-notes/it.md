@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- In **Spesa** puoi rimandare un prodotto alla prossima spesa: scorri la riga o usa **Rimanda** in **Modifica**. Sugli schermi larghi, **Prossima spesa** li elenca con un + per riportarli, e **Ricette nella lista** mostra quanti ingredienti di ogni ricetta hai già.
 - In **Spesa**, il nome di ogni prodotto ha più spazio: viene tagliato meno e occupa meno righe.
 - Nuovi colori: uno sfondo di carta calda con linee grigio-verdi tenui, nel tema chiaro e in quello scuro.
 - In **Spesa**, il nome di ogni prodotto sta su una riga, e la quantità è un'etichetta tenue.

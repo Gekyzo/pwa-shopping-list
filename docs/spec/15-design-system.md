@@ -169,3 +169,7 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 |---|---|
 | components | versions of `app-header`, `nav-bar`, `sheet`, `dock`, `input`, `item-row`, `section-head`, `group-head`, `empty-state`, `list-group` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |
+- **DSV-23** An outline button that is not a danger one is an outlined secondary action of the
+  Stitch screens: **Posponer** of `Editar` and **Mover todos a la compra actual**. The other
+  secondary actions stay tonal. The side panels are bordered cards on `--surface`; a recipe tile
+  of **Recetas en la lista** is a bordered tile on `--bg` (LIST-38).

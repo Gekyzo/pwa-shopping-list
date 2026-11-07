@@ -35,6 +35,10 @@ const repeatAction = (item) =>
 // SHARE-16: a tick or a delete of a merged row reaches the twin only when the setting says both.
 const onRow = (item, op) => acrossTwins(state, twinIds(item, twinReach), op);
 
+// LIST-40: Posponer takes an item still to buy out of Compra for the next trip.
+const postponeAction = (item) =>
+  iconButton('clock', t('row.postpone'), () => apply(onRow(item, store.postpone), { undoText: t('toast.postponed', { name: item.name }) }), { labelled: true });
+
 // Its visible name is Eliminar; a screen reader also hears the name of the item.
 const deleteAction = (item) => {
   const button = iconButton(
@@ -84,7 +88,7 @@ const itemRow = (item, also) => {
   const row = [check, name, el('div', { className: 'item-row-end' }, end)];
   return {
     row,
-    end: [editAction(item), repeatAction(item), deleteAction(item)],
+    end: [editAction(item), ...(item.bought ? [] : [postponeAction(item)]), repeatAction(item), deleteAction(item)],
     right: { run: toggle, icon: item.bought ? 'undo' : 'check' },
     tap: toggle,
   };
@@ -275,6 +279,55 @@ export const boughtSection = (bought) => {
   button.setAttribute('aria-expanded', String(open));
   // The head is the top of a card that holds the bought rows (DSV-16).
   return [el('li', { className: 'section-head bought-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
+};
+
+// The line below the name of a postponed item: its quantity and its shops.
+export const postponedDetail = (item) => [item.quantity, item.shops.join(', ')].filter(Boolean).join(' · ');
+
+const bringBack = (item) => apply(store.bringToList(state, item.id), { undoText: t('toast.broughtBack', { name: item.name }) });
+
+// The button that brings one postponed item back to Compra (LIST-42).
+export const bringBackButton = (item) => {
+  const label = t('panels.bringBack', { name: item.name });
+  const button = el('button', { type: 'button', className: 'button icon bring-back', title: label, onclick: () => bringBack(item) }, [icon('plus-circle')]);
+  button.setAttribute('aria-label', label);
+  return button;
+};
+
+// Mover todos a la compra actual (LIST-42).
+export const bringAll = () => {
+  const result = store.bringAllBack(state);
+  if (result.count) apply(result, { undoText: t('toast.allBroughtBack', { count: result.count }) });
+};
+
+// Below 600px, where no panel shows, the postponed items close the list of Compra behind one head
+// that opens and closes them, each with its bring back, then Mover todos (LIST-41).
+export const postponedSection = (items) => {
+  const open = ui.postponedOpen;
+  const button = el('button', {
+    type: 'button',
+    className: 'section-head-button',
+    onclick: () => {
+      Object.assign(ui, { postponedOpen: !ui.postponedOpen, animate: true });
+      render();
+    },
+  }, [
+    icon('clock', 'bought-icon'),
+    el('span', { textContent: t('count.postponed', { count: items.length }) }),
+    chevron(open),
+  ]);
+  button.setAttribute('aria-expanded', String(open));
+  const rows = items.map((item) => el('li', { className: 'postponed-row' }, [
+    el('span', { className: 'postponed-row-name' }, [
+      el('span', { textContent: item.name }),
+      ...(postponedDetail(item) ? [el('small', { className: 'item-row-meta', textContent: postponedDetail(item) })] : []),
+    ]),
+    bringBackButton(item),
+  ]));
+  const all = el('li', { className: 'postponed-row' }, [
+    el('button', { type: 'button', className: 'button outline wide', onclick: bringAll }, [icon('cart-add', 'small'), el('span', { textContent: t('panels.bringAll') })]),
+  ]);
+  return [el('li', { className: 'section-head bought-head postponed-head' }, [button]), ...(open ? [...rows, all] : [])];
 };
 
 // The rows of a group carry its key, so that its head can close and open them.
