@@ -11,6 +11,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 - Les boutons en bas de **Courses** flottent sur la liste, et le message après une coche est sombre.
 - **Modifier** affiche chaque champ comme une boîte avec son nom dedans, l'interrupteur de répétition comme une carte, et les magasins comme des étiquettes à ajouter avec + et à retirer avec ×.
 - Dans **Recettes**, les boutons d'une recette sont à côté de son nom, et ses produits prennent toute la largeur de la carte.
+- **Menu** montre combien de repas de la semaine sont prévus et combien sont libres, une icône sur chaque repas pour une recette ou un plat, et un calendrier sur la semaine.
 
 ## 1.13.0 - 2026-11-05
 

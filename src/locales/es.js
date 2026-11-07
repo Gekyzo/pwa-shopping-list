@@ -13,6 +13,7 @@ export default {
   'menu.choose': 'Elegir receta',
   'menu.fill': 'Llenar cesta',
   'menu.clear': 'Vaciar menú',
+  'menu.summary': { one: '{planned} de {total} comidas planificadas · {free} libre', other: '{planned} de {total} comidas planificadas · {free} libres' },
   'menu.remove': 'Quitar',
   'menu.removeMeal': 'Quitar {name}',
   'menu.noRecipe': 'sin receta',

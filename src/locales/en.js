@@ -13,6 +13,7 @@ export default {
   'menu.choose': 'Choose a recipe',
   'menu.fill': 'Fill basket',
   'menu.clear': 'Clear the menu',
+  'menu.summary': { one: '{planned} of {total} meals planned · {free} free', other: '{planned} of {total} meals planned · {free} free' },
   'menu.remove': 'Remove',
   'menu.removeMeal': 'Remove {name}',
   'menu.noRecipe': 'no recipe',

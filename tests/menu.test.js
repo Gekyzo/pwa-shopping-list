@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem } from '#store';
 import { addRecipe, addRecipeProduct } from '#recipes';
-import { DAYS, MEALS, KEPT_WEEKS, weekOf, addWeeks, weekDay, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, menuWeek, fillMenu, basketPreview } from '#menu';
+import { DAYS, MEALS, KEPT_WEEKS, weekOf, addWeeks, weekDay, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, plannedSlots, SLOTS, menuWeek, fillMenu, basketPreview } from '#menu';
 
 // The Monday of the week of the tests.
 const W = '2026-11-02';
@@ -427,4 +427,22 @@ test('weekDay gives the local date of each day of a week, across a month and a y
   assert.deepEqual([0, 6].map((day) => weekDay('2026-11-02', day).toDateString()), ['Mon Nov 02 2026', 'Sun Nov 08 2026']);
   assert.equal(weekDay('2026-12-28', 4).toDateString(), 'Fri Jan 01 2027');
   assert.equal(weekDay('2026-03-30', 6).toDateString(), 'Sun Apr 05 2026');
+});
+
+test('the slots of a week are 14, and a planned slot counts once (MENU-26)', () => {
+  const { state, lentils, omelette } = kitchen();
+  assert.equal(SLOTS, 14);
+  assert.equal(plannedSlots(state, W), 0);
+  const planned = plan(state, [[0, 'lunch', lentils], [0, 'dinner', omelette], [3, 'lunch', lentils]]);
+  assert.equal(plannedSlots(planned, W), 3);
+  assert.equal(plannedSlots(planned, addWeeks(W, 1)), 0);
+});
+
+test('a slot with a meal of each list counts once (MENU-26, MENU-20)', () => {
+  const { state, lentils, omelette } = kitchen();
+  const own = plan(state, [[1, 'lunch', lentils]]);
+  const both = { ...own, menu: [...own.menu, { ...own.menu[0], recipe: omelette, shared: true }] };
+  assert.equal(plannedSlots(both, W), 1);
+  assert.equal(plannedSlots(own, W), 1);
+  assert.equal(own.menu.length, 1);
 });

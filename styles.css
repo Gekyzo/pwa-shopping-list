@@ -1273,6 +1273,7 @@
      @scope menu
      @summary The week of Menú in view, with a button to the week before and to the week after (MENU-23).
      @part week-bar-label  Esta semana, or Semana del 26 oct.
+     @part week-bar-icon   The calendar before the name of the week (DSV-20).
      @part week-bar-range  The days of the week in view after its name, as 20–26 may, in --muted (MENU-25).
      @example <div class="week-bar" style="width: 100%"><button class="button icon" type="button" aria-label="Semana anterior">‹</button><h2 class="week-bar-label">Esta semana</h2><button class="button icon" type="button" aria-label="Semana siguiente" disabled>›</button></div> */
   .week-bar {
@@ -1416,6 +1417,7 @@
      @part meal-name   The recipe, cut with an ellipsis.
      @part meal-entry  A meal of a member with scope all: its name and the tag of its list (MENU-20).
      @part meal-add    The ⊕ icon above the call of a free meal.
+     @part meal-icon   The kind of a planned meal at its top end: cutlery in --done for a recipe, a pencil in --muted for a dish (DSV-20).
      @part meal-status The status line of a slot with one meal, after a dot: Receta lista in --primary, or Anotación rápida in --muted for a dish (MENU-25).
      @example <button class="meal" type="button"><small class="meal-label">Comida</small><span class="meal-name">Tortilla</span></button> */
   .meal {
@@ -2359,6 +2361,74 @@
 
   :root[data-density="compact"] .meal-status {
     display: none;
+  }
+
+  /* DSV-20: the kind of a planned meal at its top end, out of the flow. */
+  .meal {
+    position: relative;
+  }
+
+  .meal-icon {
+    position: absolute;
+    top: var(--space-2);
+    inset-inline-end: var(--space-2);
+    color: var(--done);
+  }
+
+  .meal.dish .meal-icon {
+    color: var(--muted);
+  }
+
+  .meal:has(> .meal-icon) > .meal-label {
+    padding-inline-end: var(--space-5);
+  }
+
+  /* A free meal shows its call first, then the name of the meal, small and faint. */
+  .meal.free .meal-label {
+    order: 1;
+    color: var(--struck);
+  }
+
+  .week-bar-icon {
+    margin-inline-end: var(--space-2);
+    vertical-align: -3px;
+    color: var(--muted);
+  }
+
+  /* @component menu-summary
+     @scope menu
+     @summary The planned slots of the week of Menú, above its actions, in small capitals (MENU-27).
+     @example <p class="menu-summary">9 de 14 comidas planificadas · 5 libres</p> */
+  .menu-summary {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-strong);
+    letter-spacing: var(--tracking-caps);
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* The summary would lie over the last tiles on the fading top of the bar: the bar gets a solid
+     ground and a top line, as in the screens. */
+  .action-bar:has(> .menu-summary) {
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+  }
+
+  /* The count of Menú in the header is a neutral pill. */
+  body:has([data-view="menu"][aria-current="page"]) .app-header-subtitle {
+    align-self: flex-start;
+    width: fit-content;
+    margin-top: var(--space-1);
+    padding: var(--space-half) var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    background: var(--secondary);
+    color: var(--muted);
+    font-weight: var(--weight-strong);
   }
 
   /* The head of an aisle has the icon of its kind before its title (GROUP-22). */

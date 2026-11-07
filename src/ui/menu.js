@@ -98,7 +98,10 @@ const mealNode = (day, { meal, planned }) => {
   const label = dish ? `${t(`meal.${meal}`)} · ${t('menu.noRecipe')}` : t(`meal.${meal}`);
   const kind = !planned.length ? 'meal free' : planned.every((entry) => entry.dish) ? 'meal dish' : 'meal';
   const names = planned.length ? planned.map(plannedNode) : [icon('plus-circle', 'meal-add'), el('span', { className: 'meal-name', textContent: t('menu.choose') })];
+  // DSV-20: the kind of a planned meal as an icon at its top end, cutlery for a recipe, a pencil for a dish.
+  const kindIcon = planned.length ? [icon(planned.every((entry) => entry.dish) ? 'edit' : 'utensils', 'small meal-icon')] : [];
   const button = el('button', { type: 'button', className: kind, onclick: () => openMeal(day, meal) }, [
+    ...kindIcon,
     el('small', { className: 'meal-label', textContent: label }),
     ...names,
     ...statusNode(planned),
@@ -135,6 +138,9 @@ const fillBasket = () => {
 
 export const renderMenuActions = () => {
   $('menu-clear').disabled = menu.mealCount(listPart(state, 'own'), thisWeek()) === 0;
+  // MENU-26: the planned slots of the week in view, of the 14, and the free ones.
+  const planned = menu.plannedSlots(state, shownWeek());
+  $('menu-summary').textContent = t('menu.summary', { planned, total: menu.SLOTS, free: menu.SLOTS - planned, count: menu.SLOTS - planned });
   // MENU-23, MENU-24: a past week has Repetir esta semana in place of Llenar cesta and Vaciar menú.
   $('menu-split').hidden = ui.pastWeek !== null;
   $('menu-repeat').hidden = ui.pastWeek === null;
@@ -165,7 +171,7 @@ const renderWeekBar = () => {
   if (!shown) return;
   // MENU-25: the days of the week after its name, as `20–26 may`.
   const week = shownWeek();
-  $('menu-week-label').replaceChildren(weekLabel(ui.pastWeek), ' ', el('span', { className: 'week-bar-range', textContent: dateFormat().formatRange(menu.weekDay(week, 0), menu.weekDay(week, 6)) }));
+  $('menu-week-label').replaceChildren(icon('calendar', 'small week-bar-icon'), weekLabel(ui.pastWeek), ' ', el('span', { className: 'week-bar-range', textContent: dateFormat().formatRange(menu.weekDay(week, 0), menu.weekDay(week, 6)) }));
   $('menu-week-prev').disabled = earlierWeek() === null;
   $('menu-week-next').disabled = ui.pastWeek === null;
 };

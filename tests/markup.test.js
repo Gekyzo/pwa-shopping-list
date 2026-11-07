@@ -154,7 +154,7 @@ test('the meal sheet has the two meals of a slot, a recipe search between the ti
 });
 
 test('Llenar cesta and Vaciar menú stand together in the action bar of Menú', () => {
-  assert.match(body, /<div id="menu-actions" class="action-bar" hidden>\s*<div id="menu-split" class="split">\s*<button id="menu-fill" class="button primary hand-side"[\s\S]*?<\/button>\s*<button id="menu-clear" class="button outline danger"[^>]*data-i18n="menu.clear"><\/button>\s*<\/div>/);
+  assert.match(body, /<div id="menu-actions" class="action-bar" hidden>\s*<p id="menu-summary" class="menu-summary"><\/p>\s*<div id="menu-split" class="split">\s*<button id="menu-fill" class="button primary hand-side"[\s\S]*?<\/button>\s*<button id="menu-clear" class="button outline danger"[^>]*>[\s\S]*?data-i18n="menu.clear"><\/span><\/button>\s*<\/div>/);
   assert.doesNotMatch(body, /id="menu-more"/);
   // MENU-24: Repetir esta semana stands in the same bar, after the split, for a past week.
   assert.match(body, /<\/div>\s*<button id="menu-repeat" class="button primary" type="button" hidden>[\s\S]*?data-i18n="menu.repeat"/);
@@ -310,4 +310,10 @@ test('the repeat switch of Editar is a card with an icon and a hint (DSV-18)', (
   assert.match(sheet, /<label class="switch toggle-card"><svg class="icon" aria-hidden="true"><use href="icons.svg#repeat"\/><\/svg>/);
   assert.match(sheet, /data-i18n="edit.repeatHint"/);
   assert.match(sheet, /id="edit-chips" class="cluster assign"/);
+});
+
+test('the actions of Menú start with the summary of the week, and Vaciar menú has a bin (MENU-26, DSV-20)', () => {
+  const actions = body.slice(body.indexOf('id="menu-actions"'), body.indexOf('id="menu-repeat"'));
+  assert.match(actions, /<p id="menu-summary" class="menu-summary"><\/p>\s*<div id="menu-split"/);
+  assert.match(actions, /<button id="menu-clear" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"\/><\/svg><span data-i18n="menu.clear"><\/span><\/button>/);
 });
