@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Mit der Maus öffnet ein Klick auf einen Artikel in **Einkauf** **Bearbeiten**. Zum Abhaken klicke auf den Kreis. Ziehen mit der Maus verschiebt den Artikel weiterhin. Mit dem Finger hakt ein Tippen den Artikel weiterhin ab.
 - Auf breiten Bildschirmen von etwa 1024 px wird der Titel der Kopfzeile nicht mehr abgeschnitten: Das Suchfeld wird schmaler und zeigt bei Bedarf nur die Lupe.
 - Auf breiten Bildschirmen folgen Liste und Seitenfelder von **Einkauf** dem Design: mehr Raum um die Liste und zwischen den Gruppen, breitere Seitenfelder, hellere Etiketten und Mengen und ein dickerer grüner Balken für jedes Rezept.
 - Jeder Bereich hat seine eigene Adresse: `#/compra`, `#/recetas`, `#/menu` und `#/ajustes`. Nach dem Neuladen bleibst du im selben Bereich. Die Zurück-Taste des Handys führt zuerst zu **Einkauf** und schließt dann die App.

@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Con il mouse, un clic su un articolo di **Spesa** apre **Modifica**. Per spuntarlo, fai clic sul cerchio. Trascinare con il mouse sposta ancora l’articolo. Con il dito, toccare l’articolo lo spunta ancora.
 - Sugli schermi larghi di circa 1024 px il titolo dell’intestazione non viene più tagliato: il campo di ricerca si restringe e, se serve, mostra solo la lente.
 - Sugli schermi larghi la lista e i pannelli di **Spesa** seguono il design: più spazio intorno alla lista e tra i gruppi, pannelli più larghi, etichette e quantità più chiare e una barra verde più spessa per ogni ricetta.
 - Ogni sezione ha il suo indirizzo: `#/compra`, `#/recetas`, `#/menu` e `#/ajustes`. Ricaricando resti nella stessa sezione. Il tasto Indietro del telefono torna prima a **Spesa** e poi esce dall’app.

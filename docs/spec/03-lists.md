@@ -31,7 +31,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 ## Tick
 
 - **LIST-10** Only an item of `Compra` can be ticked. A saved item gives `error.onlyActiveTick`.
-- **LIST-11** A tap on the body of a row of `Compra` (ROW-1) or a slide to the right (ROW-11)
+- **LIST-11** A tap of a finger on the body of a row of `Compra`, a click of a mouse on its check
+  mark (ROW-1), the keys `Space` and `Enter` on its name, or a slide to the right (ROW-11)
   changes `bought`. A ticked row in `Comprados (N)` unticks the same way.
 - **LIST-12** A tick does not delete the item. The item goes to the section `Comprados (N)` at the
   end of `Compra`, which is closed at first. A tap on that row opens and closes it. The row ends
