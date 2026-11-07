@@ -9,6 +9,7 @@ What changes for you in each version of the app. The newest version is first.
 - In **Compra**, each product name keeps one line, and its quantity is a soft chip.
 - In **Compra**, the bought products stand in a card of their own, under a check.
 - The buttons at the bottom of **Compra** float over the list, and the message after a tick is dark.
+- **Edit** shows each field as a box with its name inside, the repeat switch as a card, and the shops as pills you add with + and remove with ×.
 
 ## 1.13.0 - 2026-11-05
 

@@ -76,6 +76,7 @@ export default {
   'edit.name': 'Nom',
   'edit.quantity': 'Quantité',
   'edit.repeat': 'Répéter à chaque course',
+  'edit.repeatHint': 'Revient sur la liste à chaque course',
   'edit.shops': 'Magasins',
   'edit.aisle': 'Rayon',
   'edit.noAisles': 'Créez les rayons dans Réglages.',

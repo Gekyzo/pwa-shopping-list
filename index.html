@@ -367,11 +367,11 @@
         <div class="sheet-grab"></div>
         <header class="sheet-head"><h2 id="edit-title" class="sheet-title main"></h2><button class="button tonal" type="button" data-i18n="edit.done"></button></header>
         <div class="sheet-body">
-          <label class="field"><input id="edit-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
-          <label class="field"><input id="edit-quantity" class="input field-input" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span class="field-label" data-i18n="edit.quantity"></span></label>
-          <label class="switch"><span data-i18n="edit.repeat"></span><input id="edit-repeat" class="switch-input" type="checkbox" role="switch"></label>
+          <label class="field boxed"><input id="edit-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
+          <label class="field boxed"><input id="edit-quantity" class="input field-input" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span class="field-label" data-i18n="edit.quantity"></span></label>
+          <label class="switch toggle-card"><svg class="icon" aria-hidden="true"><use href="icons.svg#repeat"/></svg><span class="switch-text"><span data-i18n="edit.repeat"></span><small class="switch-hint" data-i18n="edit.repeatHint"></small></span><input id="edit-repeat" class="switch-input" type="checkbox" role="switch"></label>
           <h2 class="sheet-title part" data-i18n="edit.shops"></h2>
-          <div id="edit-chips" class="cluster"></div>
+          <div id="edit-chips" class="cluster assign"></div>
           <p id="edit-empty" class="empty-state inline" data-i18n="shops.empty" hidden></p>
           <div class="input-row">
             <input id="edit-shop" class="input strong" type="text" list="edit-shops" enterkeyhint="done" autocapitalize="words" maxlength="40" data-i18n-attr="placeholder:shops.placeholder,aria-label:shops.placeholder">
@@ -379,7 +379,7 @@
           </div>
           <datalist id="edit-shops"></datalist>
           <h2 class="sheet-title part" data-i18n="edit.aisle"></h2>
-          <div id="edit-aisles" class="cluster"></div>
+          <div id="edit-aisles" class="cluster pick"></div>
           <p id="edit-aisles-empty" class="empty-state inline" data-i18n="edit.noAisles" hidden></p>
         </div>
         <footer class="sheet-foot"><button id="edit-delete" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"/></svg><span data-i18n="sheet.delete"></span></button><span class="sheet-saved"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="sheet.saved"></span></span></footer>

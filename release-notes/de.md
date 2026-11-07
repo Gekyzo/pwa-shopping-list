@@ -9,6 +9,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 - Im **Einkauf** steht jeder Produktname in einer Zeile, und die Menge ist ein dezentes Etikett.
 - Im **Einkauf** stehen die gekauften Produkte in einer eigenen Karte, unter einem Haken.
 - Die Knöpfe unten im **Einkauf** schweben über der Liste, und die Meldung nach dem Abhaken ist dunkel.
+- **Bearbeiten** zeigt jedes Feld als Kasten mit seinem Namen darin, den Schalter zum Wiederholen als Karte und die Geschäfte als Etiketten, die du mit + hinzufügst und mit × entfernst.
 
 ## 1.13.0 - 2026-11-05
 

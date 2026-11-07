@@ -76,6 +76,7 @@ export default {
   'edit.name': 'Name',
   'edit.quantity': 'Menge',
   'edit.repeat': 'Bei jedem Einkauf wiederholen',
+  'edit.repeatHint': 'Kommt bei jedem Einkauf auf die Liste',
   'edit.shops': 'Geschäfte',
   'edit.aisle': 'Abteilung',
   'edit.noAisles': 'Lege die Abteilungen in Optionen an.',

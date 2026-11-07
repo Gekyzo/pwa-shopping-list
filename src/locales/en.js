@@ -76,6 +76,7 @@ export default {
   'edit.name': 'Name',
   'edit.quantity': 'Quantity',
   'edit.repeat': 'Repeat on every trip',
+  'edit.repeatHint': 'Comes back to the list on every trip',
   'edit.shops': 'Shops',
   'edit.aisle': 'Section',
   'edit.noAisles': 'Create the sections in Settings.',
