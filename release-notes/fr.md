@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur grand écran, **Courses** occupe toute la largeur. La barre latérale a un fond doux, une ligne d’état sous **Bodega**, le bouton pour ajouter et en bas une carte avec l’état de la synchronisation.
 - Sur grand écran, les lignes de **Courses** suivent la maquette : un nom plus compact, « à chaque course » à côté du nom et la quantité en police à chasse fixe. Chaque groupe indique combien d’articles il lui reste (« 3 art. »). Le crayon de chaque ligne est maintenant une poignée à six points ; un appui ouvre **Modifier**.
 - L’en-tête de **Courses** indique en vert ce qu’il reste à acheter, sans barre. Sur grand écran, il a un champ de recherche (s’ouvre avec Ctrl+K ou ⌘K), le bouton **Terminer les courses** et les magasins sous le titre.
 - Dans **Courses**, tu peux reporter un article aux prochaines courses : fais glisser la ligne ou utilise **Reporter** dans **Modifier**. Sur grand écran, **Prochaines courses** les liste avec un + pour les remettre, et **Recettes dans la liste** montre combien d’ingrédients de chaque recette tu as déjà.

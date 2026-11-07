@@ -241,7 +241,8 @@
     <button id="fab" class="fab" type="button">+</button>
 
     <nav class="nav-bar" data-i18n-attr="aria-label:nav.label">
-      <div class="nav-brand" aria-hidden="true"><img src="./icons/icon-192.png" alt="" width="28" height="28"><span data-i18n="app.name"></span></div>
+      <div class="nav-brand" aria-hidden="true"><img src="./icons/icon-192.png" alt="" width="40" height="40"><span class="nav-brand-text"><span data-i18n="app.name"></span><small id="nav-status" class="nav-brand-note"></small></span></div>
+      <button id="nav-add" class="button primary nav-action" type="button" hidden><svg class="icon small" aria-hidden="true"><use href="icons.svg#plus"/></svg><span id="nav-add-text"></span></button>
       <button class="nav-item" type="button" data-view="active">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#cart"/></svg>
         <span data-i18n="list.active"></span>
@@ -259,7 +260,7 @@
         <svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg>
         <span data-i18n="nav.settings"></span>
       </button>
-      <p id="nav-account" class="nav-foot" data-i18n-attr="title:nav.local" hidden><svg class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span class="nav-foot-text" data-i18n="nav.local"></span></p>
+      <p id="nav-account" class="nav-foot boxed"><svg class="icon small" aria-hidden="true"><use href="icons.svg#offline"/></svg><span id="nav-account-text" class="nav-foot-text"></span><span id="nav-account-value" class="nav-foot-value"></span></p>
     </nav>
 
     <div id="whatsnew-sheet" class="sheet-layer" hidden>

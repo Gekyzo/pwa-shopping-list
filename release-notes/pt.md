@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Em ecrãs largos, **Compras** ocupa toda a largura. A barra lateral tem um fundo suave, uma linha de estado por baixo de **Bodega**, o botão para adicionar e, em baixo, um cartão com o estado da sincronização.
 - Em ecrãs largos, as linhas de **Compras** seguem o desenho: nome mais compacto, «em cada compra» ao lado do nome e a quantidade em letra de largura fixa. Cada grupo diz quantos artigos lhe faltam («3 art.»). O lápis de cada linha é agora uma pega de seis pontos; um toque abre **Editar**.
 - O cabeçalho de **Compras** diz a verde quanto falta comprar, sem barra. Em ecrãs largos tem um campo de pesquisa (abre com Ctrl+K ou ⌘K), o botão **Terminar compras** e as lojas por baixo do título.
 - Em **Compras**, podes adiar um produto para a próxima compra: desliza a linha ou usa **Adiar** em **Editar**. Em ecrãs largos, **Próximas compras** lista-os com um + para os trazer, e **Receitas na lista** mostra quantos ingredientes de cada receita já tens.
