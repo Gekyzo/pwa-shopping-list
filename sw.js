@@ -1,4 +1,4 @@
-const CACHE = 'shopping-shell-v42';
+const CACHE = 'shopping-shell-v43';
 
 const SHELL = [
   './',

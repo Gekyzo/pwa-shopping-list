@@ -221,6 +221,16 @@ test('from 1024px a group head is the tinted top of its card, and the meta of a 
   assert.match(block('.item-row-name > .item-row-qty', wide), /box-shadow:\s*inset 0 0 0 1px var\(--line\)/);
 });
 
+test('from 1024px a chip of the header is a 30px pill inside its tap size (DSV-27, TAP-1)', () => {
+  const chips = '.app-header > :is(.shop-lists, .list-chips)';
+  assert.match(block(':root', wide), /--chip-inset:\s*calc\(\(var\(--tap\) - 30px\) \/ 2\)/);
+  assert.doesNotMatch(block(`${chips} > .chip`, wide), /min-height/);
+  assert.match(block(`${chips} > .chip`, wide), /background:\s*transparent/);
+  assert.match(block(`${chips} > .chip::before`, wide), /inset:\s*var\(--chip-inset\) 0/);
+  assert.match(block(`${chips} > .chip[aria-pressed="true"]::before`, wide), /background:\s*var\(--done\)/);
+  assert.match(block(chips, wide), /margin-top:\s*calc\(var\(--space-2\) - var\(--chip-inset\)\)/);
+});
+
 test('from 1024px every screen fills the content area (DSV-28)', () => {
   assert.match(block(':root', wide), /--page-max:\s*100%/);
   assert.match(block(':root', wide), /--settings-max:\s*100%/);

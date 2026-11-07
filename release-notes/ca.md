@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- En pantalles amples, els filtres de botiga de **Compra** són més baixos.
 - En pantalles amples, **Receptes**, **Menú** i **Configuració** ocupen tota l’amplada, com **Compra**.
 - En pantalles amples, sota els panells de **Compra**, una targeta petita mostra quant ocupen les teves llistes al dispositiu.
 - En pantalles amples, els panells de **Compra** s’assemblen més al disseny: **Veure** porta una fletxa, els noms de **Propera compra** tenen un traç més fi i el botó per moure-ho tot porta una icona de llista.

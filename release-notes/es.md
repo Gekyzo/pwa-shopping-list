@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En pantallas anchas, los filtros de tienda de **Compra** son más bajos.
 - En pantallas anchas, **Recetas**, **Menú** y **Ajustes** ocupan todo el ancho, como **Compra**.
 - En pantallas anchas, una tarjeta pequeña bajo los paneles de **Compra** muestra cuánto ocupan tus listas en el dispositivo.
 - En pantallas anchas, los paneles de **Compra** se parecen más al diseño: **Ver** lleva una flecha, los nombres de **Próxima compra** tienen un trazo más fino y el botón para moverlo todo lleva un icono de lista.

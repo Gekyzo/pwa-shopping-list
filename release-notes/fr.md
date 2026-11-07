@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur les écrans larges, les filtres de magasin de **Courses** sont moins hauts.
 - Sur les écrans larges, **Recettes**, **Menu** et **Réglages** occupent toute la largeur, comme **Courses**.
 - Sur les écrans larges, une petite carte sous les panneaux de **Courses** montre la place que prennent vos listes sur l’appareil.
 - Sur les écrans larges, les panneaux de **Courses** suivent le design de plus près : **Voir** a une flèche, les noms de **Prochaines courses** sont moins gras et le bouton qui déplace tout montre une icône de liste.

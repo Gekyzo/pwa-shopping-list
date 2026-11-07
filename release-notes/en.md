@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- On wide screens, the shop filters of **Shopping** are lower.
 - On wide screens, **Recipes**, **Menu** and **Settings** use the full width, as **Shopping** does.
 - On wide screens, a small card below the panels of **Shopping** shows how much space your lists take on the device.
 - On wide screens, the panels of **Shopping** follow the design more closely: **See** has an arrow, the names in **Next trip** are less bold and the button that moves everything shows a list icon.

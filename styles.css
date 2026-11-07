@@ -127,6 +127,8 @@
       --page-max: 100%;
       --settings-max: 100%;
       --tick: 28px;
+      /* A chip of the header is a 30px pill inside its 48px hit area (DSV-27). */
+      --chip-inset: calc((var(--tap) - 30px) / 2);
       --text-row: 1rem;
       --weight-row: 600;
     }
@@ -1692,15 +1694,51 @@
   }
 
   /* From 1024px the chips are those of the desktop screen of Compra (DSV-27): 20px below the tools,
-     11px bold labels, the count in --struck, and the count of the pressed chip on --done-fixed. */
+     a 30px pill, 11px bold labels, the count in --struck, and the count of the pressed chip on
+     --done-fixed. The chip keeps the tap size (TAP-1) and the pill is drawn inside it, --chip-inset
+     from its top and bottom; the row moves up by that inset so the pill stands 20px below the tools. */
   @media (min-width: 1024px) {
     .app-header > :is(.shop-lists, .list-chips) {
-      margin-top: var(--space-2);
+      margin-top: calc(var(--space-2) - var(--chip-inset));
     }
 
     .app-header > :is(.shop-lists, .list-chips) > .chip {
+      position: relative;
+      isolation: isolate;
+      border-color: transparent;
+      background: transparent;
       font-size: var(--text-label-sm);
       font-weight: var(--weight-strong);
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip::before {
+      content: "";
+      position: absolute;
+      inset: var(--chip-inset) 0;
+      z-index: -1;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip[aria-pressed="true"] {
+      border-color: transparent;
+      background: transparent;
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip[aria-pressed="true"]::before {
+      border-color: var(--done);
+      background: var(--done);
+    }
+
+    /* The focus ring follows the pill, not the hit area. */
+    .app-header > :is(.shop-lists, .list-chips) > .chip:focus-visible {
+      outline: 0;
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip:focus-visible::before {
+      outline: 2px solid var(--text);
+      outline-offset: 2px;
     }
 
     .app-header > :is(.shop-lists, .list-chips) > .chip > .count {

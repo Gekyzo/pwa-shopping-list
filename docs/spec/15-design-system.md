@@ -214,9 +214,10 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   arrange button on `--surface-2` with a `--line` edge and 20px icons, the field text 13px in
   `--struck` and its key on `--surface-high`; the add is outlined with an emerald `+` and 13px
   text; **Terminar compra** is 15px at weight 600. The chips row stands 20px below the tools; a
-  chip label is 11px bold, its count in `--struck`, and the count of the pressed chip is on
-  `--done-fixed` in `--on-done-fixed`. The tools and the chips keep the tap size (TAP-1): only
-  their look follows the screen. The button **Más filtros** of the screen is not built: the app
+  chip is a 30px pill, as in the screen, its label 11px bold, its count in `--struck`, and the
+  count of the pressed chip is on `--done-fixed` in `--on-done-fixed`. The tools and the chips keep
+  the tap size (TAP-1): only their look follows the screen. A chip draws its pill inside its 48px
+  hit area, `--chip-inset` from its top and bottom, and the focus ring follows the pill. The button **Más filtros** of the screen is not built: the app
   has no such filter.
 - **DSV-28** From 1024px every screen fills the content area, as the desktop screens do:
   `--page-max` and `--settings-max` are `100%`, so the header and the main area of `Recetas`,
