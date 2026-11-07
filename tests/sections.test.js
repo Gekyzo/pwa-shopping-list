@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SECTIONS, SHORTCUTS, canSearch, direction, dockShown, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
+import { SECTIONS, SHORTCUTS, canSearch, keyAction, direction, dockShown, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
 
 // headerOf reads the state of the views; a stub of the page lets node load them.
 const stub = () => new Proxy(function () {}, { get: (_, key) => (key === Symbol.toPrimitive ? () => '' : stub()), apply: () => stub(), set: () => true });
@@ -227,4 +227,35 @@ test('the section slide does not start on the dock', () => {
   const nav = readFileSync(new URL('../src/ui/nav.js', import.meta.url), 'utf8');
   const [exclusion = ''] = nav.match(/event\.target\.closest\('\.item-row-swipe[^']*'\)/) ?? [];
   assert.match(exclusion, /\.dock\b/);
+});
+
+test('keyAction opens a section with the keys 1 to 4, in the order of NAV-1 (NAV-29)', () => {
+  assert.deepEqual(['1', '2', '3', '4'].map((key) => keyAction({ key })), SECTIONS.map((view) => ({ type: 'view', view })));
+});
+
+test('keyAction adds with n or N and searches with /', () => {
+  assert.deepEqual(keyAction({ key: 'n' }), { type: 'add' });
+  assert.deepEqual(keyAction({ key: 'N', shift: true }), { type: 'add' });
+  assert.deepEqual(keyAction({ key: '/' }), { type: 'search' });
+});
+
+test('keyAction opens the actions of a focused row, or deletes it', () => {
+  assert.deepEqual(keyAction({ key: 'ContextMenu', onRow: true }), { type: 'rowMenu' });
+  assert.deepEqual(keyAction({ key: 'F10', shift: true, onRow: true }), { type: 'rowMenu' });
+  assert.deepEqual(keyAction({ key: 'Delete', onRow: true }), { type: 'rowDelete' });
+  for (const input of [{ key: 'ContextMenu' }, { key: 'F10', shift: true }, { key: 'Delete' }]) assert.equal(keyAction({ ...input, onRow: false }), null, input.key);
+  assert.equal(keyAction({ key: 'F10', onRow: true }), null);
+});
+
+test('keyAction does nothing in a text field, over a layer, or with a modifier', () => {
+  const keys = [{ key: '1' }, { key: 'n' }, { key: '/' }, { key: 'ContextMenu', onRow: true }, { key: 'Delete', onRow: true }];
+  for (const input of keys) {
+    assert.equal(keyAction({ ...input, inField: true }), null, `field ${input.key}`);
+    assert.equal(keyAction({ ...input, layer: true }), null, `layer ${input.key}`);
+    for (const modifier of ['ctrl', 'meta', 'alt']) assert.equal(keyAction({ ...input, [modifier]: true }), null, `${modifier} ${input.key}`);
+  }
+});
+
+test('keyAction ignores another key', () => {
+  for (const key of ['5', '0', 'x', 'Enter', 'Escape', undefined]) assert.equal(keyAction({ key }), null, String(key));
 });

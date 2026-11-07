@@ -10,6 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
+- Keys of NAV-29 through `keyAction` of `src/sections.js`: `1` to `4` for the sections, `N` for the add, `/` for the search, and on a focused item row `ContextMenu` or `Shift+F10` for its actions (focus on the first action) and `Delete` for **Eliminar** with the undo. No key acts in a text field, over a sheet, during a lift or with Ctrl, ⌘ or Alt. An item row of a group carries `data-group`. `aria-keyshortcuts` on the section and add buttons. The keyboard limit of the side menu goes from the Limits of `07-screen.md`.
 - A mouse gets its own way to the actions of an item row: a right click (ROW-15) and the button `row-more` with the icon `more`, shown on `(hover: hover) and (pointer: fine)` over the row or with the focus in it (ROW-16, `row.more`). Both call `openRowMenu` of `src/ui/rows.js`. The section slide skips a mouse (`gesturePointer`, NAV-3), so a drag on the header selects text. `tests/rows.test.js`.
 - `src/ui/device.js` keeps `ui.device` and `data-device` of `<html>` on the width class (NAV-28) and renders again on a change of class. `src/app.js` (the recipe pane, REC-39) and `src/ui/list.js` (the dock search) read `features(ui.device)` instead of their own `matchMedia`. `tests/breakpoints.test.js` checks that the CSS uses only the three breakpoints (DSV-9).
 - `src/device.js` gives the code the four width classes of DSV-9 (`BREAKPOINTS`, `deviceClass`), the parts of each class (`FEATURES`, NAV-28) and `gesturePointer`. Cache `shopping-shell-v32`.

@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Mit der Tastatur: 1 bis 4 öffnen die Bereiche, N fügt hinzu und / sucht. Bei einem ausgewählten Artikel zeigt die Menütaste oder Umschalt+F10 seine Aktionen, und Entf löscht ihn.
 - Mit der Maus: Rechtsklick auf einen Artikel oder seine Schaltfläche ⋮ zeigt seine Aktionen. Das Ziehen der Kopfzeile mit der Maus wechselt den Bereich nicht mehr.
 - In **Rezepte** beginnt jede Zutat, die du hinzufügst, mit einem Großbuchstaben: „reis“ wird als „Reis“ gespeichert.
 - Auf breiten Bildschirmen nutzt **Einkauf** die ganze Breite. Die Seitenleiste hat einen sanften Hintergrund, eine Statuszeile unter **Bodega**, die Schaltfläche zum Hinzufügen und unten eine Karte mit dem Stand der Synchronisierung.
