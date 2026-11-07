@@ -139,7 +139,7 @@ test('the edit sheet has a veil, a dialog, the name and quantity fields and the 
   assert.match(layer, /<label class="field boxed"><input id="edit-name"[^>]*><span class="field-label" data-i18n="edit.name"><\/span><\/label>/);
   assert.match(layer, /<label class="field boxed"><input id="edit-quantity"[^>]*><span class="field-label" data-i18n="edit.quantity"><\/span><\/label>/);
   // The switch of the recurrence follows the fields (LIST-7), then a titled part holds the shops of the item.
-  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<label class="switch toggle-card">[\s\S]*?<input id="edit-repeat" class="switch-input" type="checkbox" role="switch"><\/label>\s*<h2 class="sheet-title part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster assign">/);
+  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<label class="switch toggle-card">[\s\S]*?<input id="edit-repeat" aria-describedby="edit-repeat-hint" class="switch-input" type="checkbox" role="switch"><\/label>\s*<h2 class="sheet-title part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster assign">/);
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);
 });
@@ -326,8 +326,18 @@ test('each head of a group of Ajustes ends with its icon (DSV-21)', () => {
 
 test('Borrar todos los datos is tagged irreversible, and Instalar has a hint (DSV-21)', () => {
   const [reset = ''] = settings.match(/<button id="reset"[\s\S]*?<\/button>/) ?? [];
-  assert.match(reset, /<span class="settings-row-tag" data-i18n="settings.irreversible"><\/span><\/button>$/);
+  assert.match(reset, /<span id="reset-tag" class="settings-row-tag" aria-hidden="true" data-i18n="settings.irreversible"><\/span><\/button>$/);
   const [install = ''] = settings.match(/<button id="install"[\s\S]*?<\/button>/) ?? [];
-  assert.match(install, /<span class="settings-row-label"><span data-i18n="settings.install"><\/span><small class="settings-row-hint" data-i18n="settings.installHint"><\/small><\/span>/);
+  assert.match(install, /<span class="settings-row-label"><span data-i18n="settings.install"><\/span><small id="install-hint" class="settings-row-hint" aria-hidden="true" data-i18n="settings.installHint"><\/small><\/span>/);
   assert.match(settings, /id="aisles-count" class="settings-row-value settings-row-count"/);
+});
+
+test('a hint or a tag describes its control and stays out of its name (DSV-18, DSV-21)', () => {
+  const hint = (id) => new RegExp(`<(small|span) id="${id}" class="[\\w-]+" aria-hidden="true" data-i18n="[\\w.]+">`);
+  assert.match(body, /<input id="edit-repeat"[^>]*aria-describedby="edit-repeat-hint"/);
+  assert.match(body, hint('edit-repeat-hint'));
+  assert.match(body, /<button id="install"[^>]*aria-describedby="install-hint"/);
+  assert.match(body, hint('install-hint'));
+  assert.match(body, /<button id="reset"[^>]*aria-describedby="reset-tag"/);
+  assert.match(body, hint('reset-tag'));
 });

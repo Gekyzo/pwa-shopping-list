@@ -262,7 +262,7 @@
     background: transparent;
   }
 
-  .dock > :is(.chip, .button.icon):not(.dock-add) {
+  .dock > :is(.chip, .button.icon, .button.accent):not(.dock-add) {
     border: var(--border-control) solid var(--control);
     background: var(--surface);
     box-shadow: var(--shadow-l);
@@ -363,6 +363,11 @@
     border: 1px solid var(--control);
     border-radius: var(--radius-m);
     background: var(--surface);
+  }
+
+  /* The name stays in the box, so the placeholder of an empty field does not show it again. */
+  .field.boxed > .field-input::placeholder {
+    color: transparent;
   }
 
   .field.boxed > .field-input:focus {
@@ -729,9 +734,15 @@
       border-radius: var(--radius-pill);
     }
 
-    .item-row-qty {
+    /* More specific than the tonal chip, which comes later in this layer. */
+    .item-row-name > .item-row-qty {
       box-shadow: inset 0 0 0 1px var(--line);
       background: var(--surface);
+    }
+
+    .item-list:not(:has(> .item-row.recipe)) > .group-head:not(:has(+ .item-row)) {
+      border-bottom: 1px solid var(--line);
+      border-radius: var(--radius-l);
     }
   }
 
@@ -2507,7 +2518,7 @@
 
   /* @component menu-summary
      @scope menu
-     @summary The planned slots of the week of Menú, above its actions, in small capitals (MENU-27).
+     @summary The planned slots of the week of Menú, above its actions, in small capitals (MENU-26).
      @example <p class="menu-summary">9 de 14 comidas planificadas · 5 libres</p> */
   .menu-summary {
     flex-basis: 100%;

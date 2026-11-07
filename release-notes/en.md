@@ -4,16 +4,15 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-- In **Shopping**, the name of each item has more room: it is cut less and takes fewer lines.
 - New colours: a warm paper background with soft green-grey lines, in the light and the dark theme.
-- In **Compra**, each product name keeps one line, and its quantity is a soft chip.
-- In **Compra**, the bought products stand in a card of their own, under a check.
-- The buttons at the bottom of **Compra** float over the list, and the message after a tick is dark.
+- In **Shopping**, each item name has more room and keeps one line, and its quantity is a soft chip.
+- In **Shopping**, the bought products stand in a card of their own, under a check.
+- The buttons at the bottom of **Shopping** float over the list, and the message after a tick is dark.
 - **Edit** shows each field as a box with its name inside, the repeat switch as a card, and the shops as pills you add with + and remove with ×.
 - In **Recipes**, the buttons of a recipe stand beside its name, and its products take the whole width of the card.
 - **Menu** shows how many meals of the week are planned and how many are free, an icon on each meal for a recipe or a dish, and a calendar on the week.
 - **Settings** shows an icon on each group, marks **Delete all data** as permanent, and explains **Install the app**.
-- On a wide screen, the current section stands out with a green bar, and each group of **Compra** has its title inside its card.
+- On a wide screen, the current section stands out with a green bar, and each group of **Shopping** has its title inside its card.
 
 ## 1.13.0 - 2026-11-05
 

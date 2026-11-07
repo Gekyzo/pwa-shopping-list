@@ -113,7 +113,7 @@
           <div class="list-group card">
             <button id="export" class="settings-row" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#export"/></svg><span class="settings-row-label" data-i18n="settings.export"></span><span class="chevron" aria-hidden="true">›</span></button>
             <button id="import" class="settings-row" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#import"/></svg><span class="settings-row-label" data-i18n="settings.import"></span><span class="chevron" aria-hidden="true">›</span></button>
-            <button id="reset" class="settings-row danger" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#trash"/></svg><span class="settings-row-label" data-i18n="settings.reset"></span><span class="settings-row-tag" data-i18n="settings.irreversible"></span></button>
+            <button id="reset" class="settings-row danger" type="button" aria-describedby="reset-tag"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#trash"/></svg><span class="settings-row-label" data-i18n="settings.reset"></span><span id="reset-tag" class="settings-row-tag" aria-hidden="true" data-i18n="settings.irreversible"></span></button>
           </div>
         </div>
         <div class="settings-section">
@@ -179,7 +179,7 @@
         <div id="install-group" class="settings-section" hidden>
           <h2 class="list-group-head"><span data-i18n="settings.app"></span><svg class="icon small list-group-icon" aria-hidden="true"><use href="icons.svg#download"/></svg></h2>
           <div class="list-group card">
-            <button id="install" class="settings-row" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#download"/></svg><span class="settings-row-label"><span data-i18n="settings.install"></span><small class="settings-row-hint" data-i18n="settings.installHint"></small></span><span class="chevron" aria-hidden="true">›</span></button>
+            <button id="install" class="settings-row" type="button" aria-describedby="install-hint"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#download"/></svg><span class="settings-row-label"><span data-i18n="settings.install"></span><small id="install-hint" class="settings-row-hint" aria-hidden="true" data-i18n="settings.installHint"></small></span><span class="chevron" aria-hidden="true">›</span></button>
           </div>
         </div>
         <div class="settings-section">
@@ -370,7 +370,7 @@
         <div class="sheet-body">
           <label class="field boxed"><input id="edit-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
           <label class="field boxed"><input id="edit-quantity" class="input field-input" type="text" enterkeyhint="done" maxlength="20" data-i18n-attr="aria-label:edit.quantity,placeholder:edit.quantity"><span class="field-label" data-i18n="edit.quantity"></span></label>
-          <label class="switch toggle-card"><svg class="icon" aria-hidden="true"><use href="icons.svg#repeat"/></svg><span class="switch-text"><span data-i18n="edit.repeat"></span><small class="switch-hint" data-i18n="edit.repeatHint"></small></span><input id="edit-repeat" class="switch-input" type="checkbox" role="switch"></label>
+          <label class="switch toggle-card"><svg class="icon" aria-hidden="true"><use href="icons.svg#repeat"/></svg><span class="switch-text"><span data-i18n="edit.repeat"></span><small id="edit-repeat-hint" class="switch-hint" aria-hidden="true" data-i18n="edit.repeatHint"></small></span><input id="edit-repeat" aria-describedby="edit-repeat-hint" class="switch-input" type="checkbox" role="switch"></label>
           <h2 class="sheet-title part" data-i18n="edit.shops"></h2>
           <div id="edit-chips" class="cluster assign"></div>
           <p id="edit-empty" class="empty-state inline" data-i18n="shops.empty" hidden></p>

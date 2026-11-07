@@ -108,7 +108,7 @@ test('the dock floats over the list: no bar, its controls raised (DSV-17)', () =
   const dock = block('.dock');
   assert.match(dock, /background:\s*transparent/);
   assert.match(dock, /border-top:\s*0/);
-  const controls = block('.dock > :is(.chip, .button.icon):not(.dock-add)');
+  const controls = block('.dock > :is(.chip, .button.icon, .button.accent):not(.dock-add)');
   assert.match(controls, /border:\s*var\(--border-control\) solid var\(--control\)/);
   assert.match(controls, /box-shadow:\s*var\(--shadow-l\)/);
   assert.match(block('.dock > .dock-add'), /box-shadow:\s*var\(--shadow-l\)/);
@@ -218,5 +218,23 @@ test('from 1024px the current section has an emerald bar at its start and an eme
 test('from 1024px a group head is the tinted top of its card, and the meta of a row is a pill (DSV-22)', () => {
   assert.match(block('.item-list:not(:has(> .item-row.recipe)) > .group-head', wide), /background:\s*var\(--surface-2\)/);
   assert.match(block('.item-row-body:has(> .item-row-check) > .item-row-name > .item-row-meta', wide), /border-radius:\s*var\(--radius-pill\)/);
-  assert.match(block('.item-row-qty', wide), /box-shadow:\s*inset 0 0 0 1px var\(--line\)/);
+  assert.match(block('.item-row-name > .item-row-qty', wide), /box-shadow:\s*inset 0 0 0 1px var\(--line\)/);
+});
+
+test('from 1024px the outlined quantity chip wins over the tonal one: its rule is more specific (DSV-22)', () => {
+  assert.match(block('.item-row-name > .item-row-qty', wide), /background:\s*var\(--surface\)/);
+});
+
+test('an empty boxed field shows its name once: the placeholder is transparent (DSV-18)', () => {
+  assert.match(block('.field.boxed > .field-input::placeholder'), /color:\s*transparent/);
+});
+
+test('from 1024px the head of a closed group closes its card (DSV-22)', () => {
+  const head = block('.item-list:not(:has(> .item-row.recipe)) > .group-head:not(:has(+ .item-row))', wide);
+  assert.match(head, /border-bottom:\s*1px solid var\(--line\)/);
+  assert.match(head, /border-radius:\s*var\(--radius-l\)/);
+});
+
+test('Cancelar of the search is a raised tile of the floating dock too (DSV-17)', () => {
+  assert.match(block('.dock > :is(.chip, .button.icon, .button.accent):not(.dock-add)'), /background:\s*var\(--surface\)/);
 });

@@ -13,7 +13,7 @@ export default {
   'menu.choose': 'Choisir une recette',
   'menu.fill': 'Remplir panier',
   'menu.clear': 'Vider le menu',
-  'menu.summary': { one: '{planned} repas prévus sur {total} · {free} libre', other: '{planned} repas prévus sur {total} · {free} libres' },
+  'menu.summary': { one: '{planned} sur {total} repas prévus · {free} libre', other: '{planned} sur {total} repas prévus · {free} libres' },
   'menu.remove': 'Retirer',
   'menu.removeMeal': 'Retirer {name}',
   'menu.noRecipe': 'sans recette',
