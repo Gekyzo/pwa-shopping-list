@@ -10,6 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
+- `addRecipeProduct` writes the first letter of a new product in capitals, the rest as typed (REC-8): `arroz` becomes `Arroz`. Stored products do not change.
 - The app owns its design system: `vendor/design-system/` moves to `design-system/`, and `npm run ds`, `SOURCE.json` and its hash checks go. `pwa-design-system` is no longer needed; a change of a base part is made in `design-system/` directly (DSV-1, DSV-4). `tests/vendor.test.js` becomes `tests/design-files.test.js`. Cache `shopping-shell-v31`.
 - Design system 0.9.0. The sidebar from 1024px (NAV-26, DSV-25): the frame fills the width (`--frame-max: 100vw`), the sidebar is tinted `--surface-2` with an end line (`--shadow-sidebar`), the brand has the status line `nav-brand-note` (`nav.offlineMode`, `nav.synced`), the add of the view is the `nav-action` button `#nav-add`, and the foot is `nav-foot boxed` with `nav.sync` and its value `nav.syncOk` or `nav.syncOffline`; it shows also with a session.
 - The rows and group cards of `Compra` from 1024px (DSV-24): `--tick` 28px, `--text-row` 1rem, `--weight-row` 600, the quantity chip in `--font-mono`, the recurrence as a pill beside the name (`item-row-title`; the meta copy `item-row-repeat-meta` and a `repeat-only` meta line go), the group title at `--text-label-lg` with its count beside it. The count of a group head is `N art.` (`count.articles`; `count.ticked` goes, GROUP-8). The edit button of a row is the new icon `grip` (`row-handle`), named `Editar «name»` (`row.editName`, ROW-1).

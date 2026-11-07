@@ -105,6 +105,17 @@ test('addRecipeProduct appends a trimmed product', () => {
   assert.deepEqual(state.recipes[0].products, ['Eggs']);
 });
 
+test('addRecipeProduct writes the first letter of a product in capitals', () => {
+  const { state, id } = withRecipe(emptyState(), 'Paella');
+  const added = ['arroz', ' ñora', 'éclair', 'salsa de tomate', 'aOVE', '7up'].reduce((current, name) => addRecipeProduct(current, id, name).state, state);
+  assert.deepEqual(added.recipes[0].products, ['Arroz', 'Ñora', 'Éclair', 'Salsa de tomate', 'AOVE', '7up']);
+});
+
+test('addRecipeProduct rejects a lower-case duplicate of a capitalised product', () => {
+  const { state, id } = withRecipe(emptyState(), 'Paella', ['arroz']);
+  assert.deepEqual(addRecipeProduct(state, id, 'arroz').error, { key: 'error.duplicateProduct', params: { name: 'Arroz' } });
+});
+
 test('addRecipeProduct rejects a name of spaces only', () => {
   const { state, id } = withRecipe(emptyState(), 'Omelette', ['Eggs']);
   const result = addRecipeProduct(state, id, '   ');
