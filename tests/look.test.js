@@ -21,8 +21,11 @@ const token = (name) => {
   return match ? { light: match[1].toLowerCase(), dark: match[2].toLowerCase() } : null;
 };
 
+// styles.css with no comments, so a selector list never holds the text of a comment.
+const plain = css.replace(/\/\*[\s\S]*?\*\//g, '');
+
 // The declarations of every rule whose selector list holds `selector` exactly, joined.
-export const block = (selector, source = css) =>
+export const block = (selector, source = plain) =>
   [...source.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
     .filter(([, selectors]) => selectors.split(',').map((part) => part.trim()).includes(selector))
     .map(([, , body]) => body)
@@ -57,4 +60,25 @@ test('each token of the palette has a dark value of its own (DSV-11)', () => {
 test('the dark canvas is the ink of the light theme (DSV-11)', () => {
   assert.equal(token('--bg').dark, '#1f1b17');
   assert.equal(token('--done').dark, '#82d8a8');
+});
+
+const ROW_LABEL = '.item-row-body:has(> .item-row-check) .item-row-label';
+
+test('the name of a row of Compra keeps one line, then ends with an ellipsis (DSV-15)', () => {
+  const body = block(ROW_LABEL);
+  assert.match(body, /white-space:\s*nowrap/);
+  assert.match(body, /overflow:\s*hidden/);
+  assert.match(body, /text-overflow:\s*ellipsis/);
+  assert.match(body, /display:\s*block/);
+});
+
+test('the quantity of a row is a tonal chip with no border (DSV-15)', () => {
+  const rules = [...plain.matchAll(/(^|\})\s*\.item-row-qty\s*\{([^{}]*)\}/g)].map(([, , body]) => body);
+  const last = rules.at(-1);
+  assert.match(last, /border:\s*0/);
+  assert.match(last, /background:\s*var\(--secondary\)/);
+});
+
+test('no hex colour outside the tokens layer', () => {
+  assert.deepEqual(css.slice(tokensEnd).match(/#[0-9a-f]{3,8}\b/gi) ?? [], []);
 });

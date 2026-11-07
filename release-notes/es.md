@@ -6,6 +6,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 - En **Compra**, el nombre de cada producto tiene más sitio: se corta menos y ocupa menos líneas.
 - Colores nuevos: un fondo de papel cálido con líneas gris verdoso suaves, en el tema claro y en el oscuro.
+- En **Compra**, el nombre de cada producto ocupa una línea, y su cantidad es una etiqueta suave.
 
 ## 1.13.0 - 2026-11-05
 

@@ -587,21 +587,34 @@
     }
   }
 
-  /* The quantity is a bordered chip, as in the screen of Stitch: a --line edge on --surface-2. */
+  /* The quantity is a tonal chip with no edge, as in the Bodega screens (DSV-15). */
   .item-row-qty {
     justify-self: end;
     padding: var(--space-half) var(--space-2);
-    border: 1px solid var(--line);
+    border: 0;
     border-radius: var(--radius-m);
-    background: var(--surface-2);
+    background: var(--secondary);
     color: var(--text);
+    font-size: var(--text-label-md);
+    font-variant-numeric: tabular-nums;
     font-weight: var(--weight-medium);
   }
 
+  /* A bought quantity is drawn, not filled: a --line edge on --surface, in --struck. */
   .item-row.bought .item-row-qty,
   .item-row.done .item-row-qty {
+    box-shadow: inset 0 0 0 1px var(--line);
     background: var(--surface);
     color: var(--struck);
+  }
+
+  /* The name of a row of Compra keeps one line, then ends with an ellipsis; the quantity chip and
+     the end slot keep their width (DSV-15). */
+  .item-row-body:has(> .item-row-check) .item-row-label {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .item-row-meta {
