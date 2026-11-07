@@ -235,6 +235,13 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   | `foldable` | `rail` | no | `below` | no | no |
   | `tablet` | `rail` | no | `beside` | yes | no |
   | `desktop` | `sidebar` | no | `beside` | yes | yes |
+- **NAV-29** Keys, at every width, while the focus is not in a text field, no sheet is open, no row
+  is lifted and no Ctrl, ⌘ or Alt is held: `1` to `4` open the sections in the order of NAV-1, `N`
+  opens the add of the section (NAV-24) or presses the action of an empty section (NAV-7), and `/`
+  opens the search of the list (LIST-21, LIST-37). On a focused item row of `Compra`, `ContextMenu`
+  or `Shift+F10` opens its actions as ROW-15 does, with the focus on the first action, and `Delete`
+  runs its **Eliminar**, with the undo of the message. The section buttons carry
+  `aria-keyshortcuts` `1` to `4`, and the add buttons `N`.
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).
 
@@ -344,6 +351,6 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 
 ## Limits
 
-No move of a row with the keyboard, and no keyboard way to open a side menu of an item row. The
+No move of a row with the keyboard (NAV-29 opens the actions of a row). The
 walkthrough has no tour of shops, shop lists, quantities, backup or the settings of `Ajustes`,
 and no marks on the real controls. The sample data is one recipe only: no item and no meal.

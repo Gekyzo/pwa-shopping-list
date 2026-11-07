@@ -273,6 +273,8 @@ export const itemNode = (item, groupId = null, also = []) => {
     ].filter(Boolean).join(' '),
   }, [box]);
   node.dataset.id = item.id;
+  // The keys of NAV-29 open the row of its group: an item of two recipe groups has two rows.
+  if (groupId !== null) node.dataset.group = groupId;
   const scope = scopeOf(item, groupId);
   if (scope) node.dataset.scope = scope;
   bindReorder(body, node, item, groupId);

@@ -77,3 +77,16 @@ export const emptyAction = (view, { query, hasRecipes, sample }) => {
   if (sample) return { title: 'empty.activeTitle', text: 'empty.sample', action: 'add-item', secondary: 'add-sample' };
   return { ...none, title: 'empty.activeTitle', text: 'empty.active', action: 'add-item' };
 };
+
+// The action of a key of NAV-29, or null. `inField` is true while the focus is in a text field,
+// `layer` while a sheet or the walkthrough is open, `onRow` while the focus is in an item row.
+// A key with Ctrl, ⌘ or Alt belongs to the browser or to Ctrl+K (LIST-21).
+export const keyAction = ({ key, ctrl = false, meta = false, alt = false, shift = false, inField = false, layer = false, onRow = false }) => {
+  if (inField || layer || ctrl || meta || alt || typeof key !== 'string') return null;
+  if (onRow && (key === 'ContextMenu' || (key === 'F10' && shift))) return { type: 'rowMenu' };
+  if (onRow && key === 'Delete') return { type: 'rowDelete' };
+  const index = ['1', '2', '3', '4'].indexOf(key);
+  if (index !== -1) return { type: 'view', view: SECTIONS[index] };
+  if (key.toLowerCase() === 'n') return { type: 'add' };
+  return key === '/' ? { type: 'search' } : null;
+};

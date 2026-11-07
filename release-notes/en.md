@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- With a keyboard: 1 to 4 open the sections, N adds and / searches. On a selected item, the menu key or Shift+F10 shows its actions and Delete deletes it.
 - With a mouse, right-click an item or use its ⋮ button to see its actions. Dragging the header with the mouse no longer changes the section.
 - In **Recipes**, each product you add starts with a capital letter: “rice” is saved as “Rice”.
 - On wide screens, **Shopping** fills the whole width. The sidebar has a soft background, a status line below **Bodega**, the add button and, at the foot, a card with the state of the sync.

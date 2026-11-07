@@ -230,7 +230,7 @@ test('the dock ends with the add button', () => {
   const [dock = ''] = body.match(/<div id="dock" class="dock"[\s\S]*?<button id="fab"/) ?? [];
   const ids = [...dock.matchAll(/<(?:button|label) id="([^"]+)"/g)].map(([, id]) => id).filter((id) => id !== 'dock-clear');
   assert.deepEqual(ids, ['dock-prev', 'dock-shop', 'dock-next', 'dock-search', 'dock-field', 'dock-cancel', 'dock-add', 'fab']);
-  assert.match(dock, /<button id="dock-add" class="button primary icon dock-add" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#plus"\/><\/svg><\/button>\s*<\/div>\s*<button id="fab"/);
+  assert.match(dock, /<button id="dock-add" aria-keyshortcuts="N" class="button primary icon dock-add" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#plus"\/><\/svg><\/button>\s*<\/div>\s*<button id="fab"/);
 });
 
 test('the shop chip of the dock opens the shop picker, a sheet with a head', () => {

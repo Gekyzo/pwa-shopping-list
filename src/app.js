@@ -2,7 +2,7 @@ import * as store from '#store';
 import * as shops from '#shops';
 import { listCounts } from '#lists';
 import { bindSheetDrag } from '#ds/sheet';
-import { shortcutStart, fabState } from '#sections';
+import { shortcutStart, fabState, keyAction } from '#sections';
 import { sheetOpen, closeTop } from '#layers';
 import {
   ARRIVAL_MS,
@@ -29,8 +29,8 @@ import {
 import { inList, listState, viewState } from '#ui/view';
 import { rowKeys, bringIn, flash, snapshotRows, animateRows } from '#ui/motion';
 import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
-import { endReorder, bind as bindDrag } from '#ui/drag';
-import { moveRow } from '#ui/rows';
+import { reorder, endReorder, bind as bindDrag } from '#ui/drag';
+import { moveRow, openRowMenu } from '#ui/rows';
 import { renderRecipe, closeRecipe, bind as bindRecipe } from '#ui/recipes';
 import { renderPanels, bind as bindPanels } from '#ui/panels';
 import { renderMeal, renderMenuActions, closeMeal, bind as bindMenu } from '#ui/menu';
@@ -58,7 +58,7 @@ import { renderVersion, renderSample, renderTwinReach, readVersion, applyLanguag
 import { renderInstall, bind as bindInstall } from '#ui/install';
 import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
 import { renderShare, closeShare, bind as bindShare } from '#ui/share';
-import { bind as bindNav } from '#ui/nav';
+import { showView, bind as bindNav } from '#ui/nav';
 import { startMove } from '#ui/move';
 import { bind as bindDevice } from '#ui/device';
 import { features } from '#device';
@@ -306,10 +306,48 @@ document.addEventListener('keydown', (event) => {
     else $('query').focus();
     return;
   }
-  if (event.key !== 'Escape') return;
-  endReorder(false);
-  closeLayer();
+  if (event.key === 'Escape') {
+    endReorder(false);
+    closeLayer();
+    return;
+  }
+  runKey(event);
 });
+
+// The keys of NAV-29: a section, the add, the search, and the actions of a focused item row.
+const visible = (id) => !$(id).hidden && $(id).offsetParent !== null;
+const runKey = (event) => {
+  const row = event.target.closest?.('.item-row[data-id]') ?? null;
+  const action = keyAction({
+    key: event.key,
+    ctrl: event.ctrlKey,
+    meta: event.metaKey,
+    alt: event.altKey,
+    shift: event.shiftKey,
+    inField: Boolean(event.target.closest?.('input, textarea, select, [contenteditable]')),
+    layer: sheetOpen(ui) || reorder !== null,
+    onRow: row !== null,
+  });
+  if (!action) return;
+  event.preventDefault();
+  if (action.type === 'view') showView(action.view);
+  else if (action.type === 'add') {
+    if (!$('fab').hidden) openSheet();
+    else if (visible('empty-action')) $('empty-action').click();
+  } else if (action.type === 'search') {
+    const button = ['search-button', 'dock-search'].find(visible);
+    if (button && !ui.searchOpen) $(button).click();
+    else if (ui.searchOpen) $(visible('query') ? 'query' : 'dock-query').focus();
+  } else if (action.type === 'rowMenu') {
+    const { id, group = null } = row.dataset;
+    openRowMenu(id, group);
+    // The render builds the row again: the focus goes to its first action, for the keyboard.
+    const selector = `.item-row[data-id="${CSS.escape(id)}"]${group === null ? ':not([data-group])' : `[data-group="${CSS.escape(group)}"]`} .item-row-actions button`;
+    document.querySelector(selector)?.focus();
+  }
+  // The delete button of the side actions keeps the undo and the reach of a merged row (SHARE-16).
+  else row.querySelector('.item-row-actions .danger')?.click();
+};
 
 $('toast-undo').addEventListener('click', () => {
   if (!undoState) return;
