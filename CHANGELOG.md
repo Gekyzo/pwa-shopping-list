@@ -10,6 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
+- `src/ui/device.js` keeps `ui.device` and `data-device` of `<html>` on the width class (NAV-28) and renders again on a change of class. `src/app.js` (the recipe pane, REC-39) and `src/ui/list.js` (the dock search) read `features(ui.device)` instead of their own `matchMedia`. `tests/breakpoints.test.js` checks that the CSS uses only the three breakpoints (DSV-9).
 - `src/device.js` gives the code the four width classes of DSV-9 (`BREAKPOINTS`, `deviceClass`), the parts of each class (`FEATURES`, NAV-28) and `gesturePointer`. Cache `shopping-shell-v32`.
 - `addRecipeProduct` writes the first letter of a new product in capitals, the rest as typed (REC-8): `arroz` becomes `Arroz`. Stored products do not change.
 - The app owns its design system: `vendor/design-system/` moves to `design-system/`, and `npm run ds`, `SOURCE.json` and its hash checks go. `pwa-design-system` is no longer needed; a change of a base part is made in `design-system/` directly (DSV-1, DSV-4). `tests/vendor.test.js` becomes `tests/design-files.test.js`. Cache `shopping-shell-v31`.

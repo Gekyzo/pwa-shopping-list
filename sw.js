@@ -32,6 +32,7 @@ const SHELL = [
   './src/ui/rows.js',
   './src/ui/settings.js',
   './src/ui/move.js',
+  './src/ui/device.js',
   './src/ui/share.js',
   './src/ui/account.js',
   './src/ui/aisles.js',
