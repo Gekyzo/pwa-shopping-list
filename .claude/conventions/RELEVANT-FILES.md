@@ -18,12 +18,11 @@ description: Where to look first in this component, what to ignore, and which pe
 ## Look here first
 
 - `docs/spec/` for what the app does, one identifier for each rule.
-- `DESIGN.md` for the look of the app, from the Stitch project `Shopping`
-  (`projects/6581702173965354921`). It is the Stitch export with `outline`, `outline-variant` and
-  `on-surface-variant` set by hand to the stone values of its prose; Stitch cannot hold them, so
-  this file, not the Stitch design system, is the source. It is applied in this app only
-  (DSV-10 to DSV-12): the tokens and component versions of `styles.css` override
-  `vendor/design-system/`, and the font is in `fonts/`.
+- `DESIGN.md` for the type, shapes and components of the app, from the Stitch project `Shopping`
+  (`projects/6581702173965354921`), with the palette of the Stitch screens of Bodega (DSV-11). It is
+  applied in this app only (DSV-10 to DSV-12): the tokens and component versions of `styles.css`
+  override `vendor/design-system/`, and the font is in `fonts/`. Where the Bodega screens disagree
+  with each other, `docs/bodega-inconsistencies.html` records the choice.
 - `src/store.js` for a list rule.
 - `src/shops.js` for a shop rule.
 - `src/aisles.js` for an aisle rule (a section of the store).

@@ -21,23 +21,23 @@
 
   :root {
     --font: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    /* The palette of DESIGN.md (DSV-10): warm stone paper in light, warm stone in dark. Where its
-       prose and its frontmatter differ, the prose wins: canvas #f9f8f5, ink #1c1917. */
-    --bg: light-dark(#f9f8f5, #0c0a09); /* base canvas */
-    --surface: light-dark(#ffffff, #1c1917); /* elevated canvas: rows, header, sheets */
-    --surface-2: light-dark(#f5f5f4, #292524); /* a bought row, a field set on --surface */
-    --text: light-dark(#1c1917, #f5f5f4); /* primary ink */
-    --muted: light-dark(#78716c, #a8a29e); /* muted ink */
-    --struck: light-dark(#a8a29e, #78716c); /* struck ink: a bought name, an idle tick */
-    --line: light-dark(#e7e5e4, #292524);
-    --control: light-dark(#d6d3d1, #44403c);
-    --ink: light-dark(#1c1917, #f5f5f4);
-    --on-ink: light-dark(#ffffff, #1c1917);
-    --secondary: light-dark(#ecebe8, #322e2b);
-    /* Terracotta, the alert accent. #c85a32 is 4.2:1 on white, so text takes a darker step. */
-    --danger: light-dark(#ba1a1a, #ffb4ab); /* error red: a destructive action, a failure */
-    --warning: light-dark(#b34a24, #f0906a); /* terracotta: an alert, a recurrent item */
-    --scrim: rgb(28 25 23 / 0.45);
+    /* The palette of the Stitch screens of Bodega (DSV-11): warm parchment with green-grey lines.
+       Light is the tailwind config of the screens; they show no dark theme, so dark is derived
+       from the same roles: the canvas is the light ink, the emerald is inverse-primary. */
+    --bg: light-dark(#fff8f5, #1f1b17); /* background */
+    --surface: light-dark(#ffffff, #2a2521); /* surface-container-lowest: rows, header, sheets */
+    --surface-2: light-dark(#fcf2eb, #342f2b); /* surface-container-low: a bought row, a tonal card */
+    --text: light-dark(#1f1b17, #f9efe8); /* on-surface */
+    --muted: light-dark(#3f4942, #bec9c0); /* on-surface-variant */
+    --struck: light-dark(#6f7a71, #8a948c); /* outline: a bought name, an idle tick */
+    --line: light-dark(#bec9c0, #48423d); /* outline-variant */
+    --control: light-dark(#6f7a71, #7d877f); /* outline: the border of a field */
+    --ink: light-dark(#1f1b17, #f9efe8);
+    --on-ink: light-dark(#ffffff, #1f1b17);
+    --secondary: light-dark(#f6ece6, #3d3733); /* surface-container: a chip, a tonal button */
+    --danger: light-dark(#ba1a1a, #ffb4ab); /* error: a destructive action, a failure */
+    --warning: light-dark(#a23e18, #ffb59c); /* secondary, terracotta: an alert, a recurrent item */
+    --scrim: rgb(31 27 23 / 0.45);
 
     --radius-m: 6px;
     --radius-l: 6px;
@@ -67,8 +67,8 @@
     --dot: 6px; /* the dot before the status of a meal */
 
     /* Emerald: one green for the main action, progress and the checked state. */
-    --done: light-dark(#13734b, #4fbf88);
-    --on-done: light-dark(#ffffff, #0c1a12);
+    --done: light-dark(#13734b, #82d8a8); /* primary-container; dark inverse-primary */
+    --on-done: light-dark(#ffffff, #002112);
     --done-soft: light-dark(#e3f1ea, #163325);
     --primary: var(--done);
     --on-primary: var(--on-done);
