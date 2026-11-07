@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  storedBytes,
+  kilobytes,
   STORAGE_KEY,
   CORRUPT_KEY,
   LANGUAGE_KEY,
@@ -65,6 +67,10 @@ const fakeStorage = (initial = {}) => {
     getItem: (key) => (data.has(key) ? data.get(key) : null),
     setItem: (key, value) => data.set(key, String(value)),
     removeItem: (key) => data.delete(key),
+    get length() {
+      return data.size;
+    },
+    key: (index) => [...data.keys()][index] ?? null,
   };
 };
 
@@ -878,4 +884,22 @@ test('importJson keeps a postponed item (LIST-40)', () => {
 test('importJson never ticks a postponed item (DATA-6)', () => {
   const data = { ...sample(), items: [{ ...sample().items[0], list: 'postponed', bought: true }] };
   assert.equal(importJson(JSON.stringify(data)).state.items[0].bought, false);
+});
+
+test('storedBytes counts the UTF-8 bytes of the keys and values of the app (LIST-43)', () => {
+  const storage = fakeStorage({ [STORAGE_KEY]: 'ñ', [LANGUAGE_KEY]: 'es', other: 'not ours' });
+  // 'shopping.v1' 11 + 'ñ' 2, 'shopping.lang' 13 + 'es' 2.
+  assert.equal(storedBytes(storage), 28);
+});
+
+test('storedBytes is 0 with nothing stored and null when the storage fails', () => {
+  assert.equal(storedBytes(fakeStorage()), 0);
+  assert.equal(storedBytes({ ...brokenStorage(), length: 1, key: () => STORAGE_KEY }), null);
+});
+
+test('kilobytes rounds up, so a stored byte never reads as 0 KB', () => {
+  assert.equal(kilobytes(0), 0);
+  assert.equal(kilobytes(1), 1);
+  assert.equal(kilobytes(1024), 1);
+  assert.equal(kilobytes(1025), 2);
 });

@@ -172,6 +172,11 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
   brings it back (LIST-42), six rows at most, then `y N más`; and the outlined button **Mover todos
   a la compra actual**. Below 600px, where there is no panel, the list of `Compra` ends with a
   closed head `Pospuestos (N)` that opens the same rows and button.
+- **LIST-43** From 1024px, below these panels, the small card **Almacenamiento local** shows
+  `N KB usados`: the keys and values that the app keeps in the storage of the browser (each key
+  that starts with `shopping.`), in UTF-8 bytes, rounded up to the next KB. It follows each save.
+  With no storage it does not show. It says `local`, not `IndexedDB`: the app stores in
+  `localStorage`.
 - **LIST-22** The list shows only the items whose name, one of whose shops or whose aisle
   (AISLE-9) contains the text,
   with no case and no accent distinction. An empty text shows all items.

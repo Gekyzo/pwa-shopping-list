@@ -1,7 +1,8 @@
 import { postponedItems } from '#store';
 import { recipeProgress } from '#recipes';
 import { basketPreview, mealCount } from '#menu';
-import { $, el, state, ui, t, thisWeek } from '#ui/context';
+import { storedBytes, kilobytes } from '#storage';
+import { $, el, state, ui, t, thisWeek, storage } from '#ui/context';
 import { listState } from '#ui/view';
 import { icon } from '#ui/controls';
 import { showView } from '#ui/nav';
@@ -63,6 +64,13 @@ const renderPostponed = (view) => {
   ])));
 };
 
+// Almacenamiento local (LIST-43): what the app keeps in the storage of the browser, from 1024px.
+const renderStorage = () => {
+  const bytes = storage ? storedBytes(storage) : null;
+  $('panel-storage').hidden = bytes === null;
+  if (bytes !== null) $('panel-storage-used').textContent = t('panels.storageUsed', { count: kilobytes(bytes) });
+};
+
 // Para la cesta (MENU-21): what Llenar cesta puts to buy.
 const renderBasket = () => {
   const products = basketPreview(state, thisWeek());
@@ -83,11 +91,12 @@ export const renderPanels = () => {
     ? view.items.some((item) => item.list === 'active' || item.list === 'postponed')
     : ui.view === 'menu' && ui.pastWeek === null && mealCount(state, thisWeek()) > 0;
   $('panels').hidden = !shown;
-  for (const id of ['panel-recipes', 'panel-postponed', 'panel-basket']) $(id).hidden = true;
+  for (const id of ['panel-recipes', 'panel-postponed', 'panel-storage', 'panel-basket']) $(id).hidden = true;
   if (!shown) return;
   if (compra) {
     renderRecipes(view);
     renderPostponed(view);
+    renderStorage();
   } else renderBasket();
 };
 

@@ -56,6 +56,8 @@ export default {
   'panels.postponedNote': 'Productes reservats per a la propera sortida al supermercat:',
   'panels.bringAll': 'Moure-ho tot a la compra actual',
   'panels.bringBack': 'Portar «{name}» a la compra',
+  'panels.storage': 'Emmagatzematge local',
+  'panels.storageUsed': { one: '{count} KB usat', other: '{count} KB usats' },
   'row.postpone': 'Posposar',
   'toast.postponed': '«{name}» posposat.',
   'toast.broughtBack': '«{name}» torna a la compra.',

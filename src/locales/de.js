@@ -56,6 +56,8 @@ export default {
   'panels.postponedNote': 'Für den nächsten Einkauf zurückgelegte Produkte:',
   'panels.bringAll': 'Alle in den aktuellen Einkauf',
   'panels.bringBack': '„{name}“ in den Einkauf holen',
+  'panels.storage': 'Lokaler Speicher',
+  'panels.storageUsed': { one: '{count} KB belegt', other: '{count} KB belegt' },
   'row.postpone': 'Verschieben',
   'toast.postponed': '„{name}“ verschoben.',
   'toast.broughtBack': '„{name}“ ist wieder im Einkauf.',
