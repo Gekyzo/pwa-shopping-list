@@ -231,11 +231,14 @@ export const postpone = (state, id) => {
 
 export const postponedItems = (state) => sortItems(state, state.items.filter((item) => item.list === 'postponed'));
 
-// LIST-42: every postponed item goes back to Compra, not ticked. `count` is the number moved.
-export const bringAllBack = (state) => {
-  const count = state.items.filter((item) => item.list === 'postponed').length;
+// LIST-42: every postponed item goes back to Compra, not ticked, or with `ids` only those, such as
+// the items of the list in view. `count` is the number moved.
+export const bringAllBack = (state, ids = null) => {
+  const wanted = ids === null ? null : new Set(ids);
+  const moves = (item) => item.list === 'postponed' && (wanted === null || wanted.has(item.id));
+  const count = state.items.filter(moves).length;
   if (count === 0) return { state, count };
-  const items = state.items.map((item) => (item.list === 'postponed' ? { ...item, list: 'active', bought: false } : item));
+  const items = state.items.map((item) => (moves(item) ? { ...item, list: 'active', bought: false } : item));
   return { state: { ...state, items }, count };
 };
 

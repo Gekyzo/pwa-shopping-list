@@ -208,9 +208,10 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 - **LIST-41** A postponed item has no row in the list of `Compra` from 600px, counts in no header
   figure and is not found by the search of the list. The add sheet finds it (ADD-3), and an add of
   its name brings it back.
-- **LIST-42** A bring back puts a postponed item in `Compra`, not ticked. **Mover todos a la compra
-  actual** brings back every postponed item. **Terminar compra** brings back every postponed item
-  (TRIP-2).
+- **LIST-42** A bring back puts a postponed item in `Compra`, not ticked; from a merged row of
+  `Todas` it reaches the twin as Posponer does (SHARE-16). **Mover todos a la compra actual** brings
+  back every postponed item of the list in view (the list chip of a member, SHARE-14). **Terminar
+  compra** brings back every postponed item (TRIP-2).
 
 ## Limits
 

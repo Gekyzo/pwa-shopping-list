@@ -300,7 +300,7 @@ document.addEventListener('keydown', (event) => {
     return;
   }
   // Ctrl+K or ⌘K opens the search of the list, as the search field of the header does (LIST-21).
-  if (event.key.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey) && !$('search-button').hidden) {
+  if (event.key?.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey) && !$('search-button').hidden) {
     event.preventDefault();
     if (!ui.searchOpen) $('search-button').click();
     else $('query').focus();

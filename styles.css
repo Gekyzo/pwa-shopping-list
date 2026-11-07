@@ -751,12 +751,13 @@
                             so it goes from 1024px. */
   /* The rows of a group stand in a card (DSV-13): an inset box with a border and 6px corners below
      its head. A row that starts a group takes the top of the card, one that ends it the bottom. */
-  .item-list:has(> .item-row) {
+  /* A list with only the postponed items (LIST-41) keeps the same gutter. */
+  .item-list:has(> :is(.item-row, .postponed-head)) {
     margin-inline: var(--space-4);
   }
 
   @media (min-width: 600px) {
-    .item-list:has(> .item-row) {
+    .item-list:has(> :is(.item-row, .postponed-head)) {
       margin-inline: 0;
     }
   }
