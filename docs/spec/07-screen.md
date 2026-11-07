@@ -121,7 +121,8 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   24 px to the left and back, so the user sees that a row slides. Then `shopping.swipeHint` is
   `1` and the hint does not play again. With `prefers-reduced-motion` it does not play.
 - **ROW-15** A right click of a mouse on an item row of `Compra` opens its actions of ROW-3, as a
-  settled slide to the left does, and the menu of the browser does not open. It ends a lift of the
+  settled slide to the left does, and the menu of the browser does not open. A browser that sends the
+  right click with no pointer type (Safari) counts as a mouse. It ends a lift of the
   row (ROW-10) with no move. A long press of a finger keeps the hold of the reorder.
 - **ROW-16** On a device that hovers with a fine pointer, an item row of `Compra` shows the button
   of more actions (the icon `more`) before the grip while the pointer is over the row or the focus is
@@ -236,11 +237,13 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   | `tablet` | `rail` | no | `beside` | yes | no |
   | `desktop` | `sidebar` | no | `beside` | yes | yes |
 - **NAV-29** Keys, at every width, while the focus is not in a text field, no sheet is open, no row
-  is lifted and no Ctrl, ⌘ or Alt is held: `1` to `4` open the sections in the order of NAV-1, `N`
+  is lifted and no Ctrl, ⌘ or Alt is held (the recipe pane beside the list from 840px, REC-39, is
+  not a sheet here): `1` to `4` open the sections in the order of NAV-1, `N`
   opens the add of the section (NAV-24) or presses the action of an empty section (NAV-7), and `/`
   opens the search of the list (LIST-21, LIST-37). On a focused item row of `Compra`, `ContextMenu`
   or `Shift+F10` opens its actions as ROW-15 does, with the focus on the first action, and `Delete`
-  runs its **Eliminar**, with the undo of the message. The section buttons carry
+  runs its **Eliminar**, with the undo of the message. The menu of the browser that these keys
+  also call does not open over the actions. The section buttons carry
   `aria-keyshortcuts` `1` to `4`, and the add buttons `N`.
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).

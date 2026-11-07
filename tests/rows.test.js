@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 const stub = () => new Proxy(function () {}, { get: (_, key) => (key === Symbol.toPrimitive ? () => '' : stub()), apply: () => stub(), set: () => true });
 Object.assign(globalThis, { document: globalThis.document ?? stub(), window: globalThis.window ?? stub(), location: globalThis.location ?? { search: '' } });
 globalThis.localStorage ??= { getItem: () => null, setItem() {}, removeItem() {} };
-const { openRowMenu } = await import('#ui/rows');
+const { openRowMenu, rowGroup } = await import('#ui/rows');
 const { ui, setRender } = await import('#ui/context');
 
 const keep = () => ({ openId: ui.openId, openSide: ui.openSide, openGroup: ui.openGroup, settleFrom: ui.settleFrom });
@@ -38,4 +38,11 @@ test('openRowMenu takes a row with no group', () => {
   } finally {
     Object.assign(ui, before);
   }
+});
+
+test('rowGroup reads the group of the slide, not the card of groupNodes (NAV-29)', () => {
+  // A row of Otros, Sin tienda or Sin pasillo is in a card with a key but has no group of its own.
+  assert.equal(rowGroup({ id: 'a', group: 'others' }), null);
+  assert.equal(rowGroup({ id: 'a', group: 'r1', swipeGroup: 'r1' }), 'r1');
+  assert.equal(rowGroup({ id: 'a' }), null);
 });

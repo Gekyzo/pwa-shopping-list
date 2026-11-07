@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sheetOpen, closeTop } from '#layers';
+import { sheetOpen, closeTop, keysBlocked } from '#layers';
 
 // A screen with nothing open, as `ui` of src/ui/context.js starts.
 const closed = () => ({
@@ -48,4 +48,14 @@ test('closeTop does not change the screen state', () => {
   const copy = structuredClone(view);
   closeTop(view);
   assert.deepEqual(view, copy);
+});
+
+test('keysBlocked: the recipe pane beside the list does not block the keys of NAV-29', () => {
+  const recipe = { ...closed(), recipeId: 'r1' };
+  assert.equal(keysBlocked(recipe, { recipePane: true }), false);
+  assert.equal(keysBlocked(recipe, { recipePane: false }), true);
+  assert.equal(keysBlocked({ ...recipe, editId: 'i1' }, { recipePane: true }), true);
+  assert.equal(keysBlocked({ ...recipe, sheetOpen: true }, { recipePane: true }), true);
+  assert.equal(keysBlocked(closed(), { recipePane: false }), false);
+  assert.equal(keysBlocked({ ...closed(), mealOpen: { day: 0, meal: 'lunch' } }, { recipePane: true }), true);
 });

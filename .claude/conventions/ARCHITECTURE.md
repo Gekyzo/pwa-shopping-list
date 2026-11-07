@@ -43,8 +43,8 @@ repository root.
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, the rename field and its `Guardado`, the more button | `sheets`, `store`, `ui/context`, `ui/view` |
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `lists`, `shops`, `aisles`, `ui/context` |
-| `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `reorder`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
+| `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `device`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
+| `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `device`, `store`, `swipe`, `storage`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
 | `src/ui/recipes.js` | The section `Recetas` | `recipes`, `menu`, `lists`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/view` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `lists`, `i18n`, `ui/context`, `ui/recipes`, `ui/nav`, `ui/rows`, `ui/view` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |

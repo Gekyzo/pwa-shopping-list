@@ -13,3 +13,7 @@ export const closeTop = (view) => {
   if (view.openId !== null) return 'row';
   return view.searchOpen ? 'search' : null;
 };
+
+// True while the keys of NAV-29 must wait: a sheet is open. From 840px the recipe is a pane beside
+// the list, not a sheet (REC-39), so it does not block them.
+export const keysBlocked = (view, { recipePane }) => sheetOpen(recipePane ? { ...view, recipeId: null } : view);

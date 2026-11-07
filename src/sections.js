@@ -90,3 +90,7 @@ export const keyAction = ({ key, ctrl = false, meta = false, alt = false, shift 
   if (key.toLowerCase() === 'n') return { type: 'add' };
   return key === '/' ? { type: 'search' } : null;
 };
+
+// The menu key and Shift+F10 also send a contextmenu after the keydown that opened the actions of a
+// row (NAV-29): within a second it is that echo, and the menu of the browser must not open.
+export const keyMenuEcho = (at, now) => at !== null && now - at <= 1000;

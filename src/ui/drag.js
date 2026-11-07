@@ -1,5 +1,6 @@
 import { dropIndex, moveTo, shifts } from '#reorder';
 import { HOLD_MS, EDGE, EDGE_STEP, DRAG_START, scroller, state, ui, t, apply, guardClick, reorderOf } from '#ui/context';
+import { mouseMenu } from '#device';
 import { searching, isOpen } from '#ui/view';
 import { rowTops, slide } from '#ui/motion';
 
@@ -143,7 +144,7 @@ export const bindReorder = (rowNode, node, item, groupId) => {
   rowNode.addEventListener('pointercancel', finish(false));
   // A long press of a finger must not open the menu of the browser.
   rowNode.addEventListener('contextmenu', (event) => {
-    if (event.pointerType !== 'mouse') event.preventDefault();
+    if (!mouseMenu(event)) event.preventDefault();
   });
 };
 
