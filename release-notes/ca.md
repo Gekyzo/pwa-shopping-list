@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- En pantalles amples d’uns 1024 px, el títol de la capçalera ja no es talla: el camp de cerca s’estreny i, si cal, mostra només la lupa.
 - En pantalles amples, la llista i els panells de **Compra** són com el disseny: més aire al voltant de la llista i entre els grups, panells més amples, etiquetes i quantitats més clares i la barra de cada recepta més gruixuda i verda.
 - Cada secció té la seva adreça: `#/compra`, `#/recetas`, `#/menu` i `#/ajustes`. En tornar a carregar continues a la mateixa secció. El botó Enrere del mòbil torna primer a **Compra** i després surt de l’app.
 - En pantalles amples, la barra lateral és com el disseny: una mica més ampla, la secció actual amb un fons més marcat i una barra verda, el nombre d’articles en una píndola i l’estat de la sincronització sota una línia.

@@ -227,6 +227,16 @@ test('from 1024px the content is 32px from its edges and the panels take a third
   assert.match(block('.item-list:not(:has(> .item-row.recipe)) > :is(.group-head, .section-head)', wide), /margin-top:\s*var\(--space-6\)/);
 });
 
+test('from 1024px the title keeps its text and the search field takes the room left (NAV-9)', () => {
+  assert.match(block('.app-header > .app-header-text', wide), /min-width:\s*min-content/);
+  const field = block('.app-header > .button.icon.header-search:not([hidden])', wide);
+  assert.match(field, /flex:\s*10 1 0/);
+  assert.match(field, /max-width:\s*var\(--search-field\)/);
+  assert.match(field, /container-type:\s*inline-size/);
+  assert.match(css, /@container \(max-width: 180px\) \{\s*\.header-search > \.header-search-key \{\s*display:\s*none;/);
+  assert.match(css, /@container \(max-width: 100px\) \{\s*\.header-search > \.header-search-text \{\s*display:\s*none;/);
+});
+
 test('from 1024px the panels have a line below their head and an emerald 8px bar (DSV-26)', () => {
   assert.match(block('.side-panel-head', wide), /border-bottom:\s*1px solid var\(--line\)/);
   assert.match(block('.side-panel-card > .side-panel-bar', wide), /height:\s*var\(--space-2\)/);

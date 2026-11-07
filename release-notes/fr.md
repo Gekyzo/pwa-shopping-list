@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur les grands écrans d’environ 1024 px, le titre de l’en-tête n’est plus coupé : le champ de recherche se rétrécit et, si besoin, n’affiche que la loupe.
 - Sur les grands écrans, la liste et les panneaux de **Courses** suivent le design : plus d’espace autour de la liste et entre les groupes, des panneaux plus larges, des étiquettes et des quantités plus claires, et une barre verte plus épaisse pour chaque recette.
 - Chaque section a sa propre adresse : `#/compra`, `#/recetas`, `#/menu` et `#/ajustes`. Après un rechargement, tu restes dans la même section. Le bouton Retour du téléphone revient d’abord à **Courses**, puis quitte l’app.
 - Sur les grands écrans, la barre latérale suit le design : un peu plus large, la section actuelle sur un fond plus marqué avec une barre verte, le nombre d’articles dans une pastille et l’état de la synchronisation sous une ligne.

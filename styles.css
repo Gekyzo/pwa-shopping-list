@@ -192,13 +192,38 @@
   }
 
   @media (min-width: 1024px) {
+    /* The title keeps its whole text and the subtitle one line; the search field takes the room
+       that is left, up to --search-field, so all the tools stay on the line of the title (NAV-9).
+       Its start size is 0, so the header does not wrap before the field shrinks. */
+    .app-header > .app-header-text {
+      flex: 1 1 auto;
+      min-width: min-content;
+    }
+
     .app-header > .button.icon.header-search:not([hidden]) {
+      flex: 10 1 0;
       justify-content: flex-start;
       gap: var(--space-2);
-      width: var(--search-field);
+      width: auto;
+      min-width: var(--tap);
+      max-width: var(--search-field);
       padding-inline: var(--space-3);
       background: var(--surface);
       color: var(--muted);
+      container-type: inline-size;
+    }
+
+    /* A narrow field drops its key, then its text: the search icon alone stays. */
+    @container (max-width: 180px) {
+      .header-search > .header-search-key {
+        display: none;
+      }
+    }
+
+    @container (max-width: 100px) {
+      .header-search > .header-search-text {
+        display: none;
+      }
     }
 
     .header-search-text {

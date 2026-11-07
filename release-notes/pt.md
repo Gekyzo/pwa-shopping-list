@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Em ecrãs largos de cerca de 1024 px, o título do cabeçalho já não é cortado: o campo de pesquisa fica mais estreito e, se for preciso, mostra só a lupa.
 - Em ecrãs largos, a lista e os painéis de **Compras** seguem o design: mais espaço à volta da lista e entre os grupos, painéis mais largos, etiquetas e quantidades mais claras e uma barra verde mais grossa para cada receita.
 - Cada secção tem o seu próprio endereço: `#/compra`, `#/recetas`, `#/menu` e `#/ajustes`. Ao recarregar continuas na mesma secção. O botão Voltar do telemóvel volta primeiro a **Compras** e depois sai da app.
 - Em ecrãs largos, a barra lateral segue o design: um pouco mais larga, a secção atual com um fundo mais marcado e uma barra verde, o número de artigos numa pílula e o estado da sincronização por baixo de uma linha.
