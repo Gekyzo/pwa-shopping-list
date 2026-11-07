@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Em ecrãs largos, os botões de adicionar já não desaparecem ao abrir uma folha, e o cabeçalho e o menu lateral não se movem.
 - Em ecrãs largos, os filtros de loja de **Compras** são mais baixos.
 - Em ecrãs largos, **Receitas**, **Menu** e **Definições** ocupam toda a largura, como **Compras**.
 - Em ecrãs largos, um pequeno cartão sob os painéis de **Compras** mostra quanto espaço as suas listas ocupam no dispositivo.

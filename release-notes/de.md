@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Auf breiten Bildschirmen verschwinden die Hinzufügen-Schaltflächen nicht mehr, wenn sich ein Blatt öffnet, und Kopfzeile und Seitenleiste bewegen sich nicht.
 - Auf breiten Bildschirmen sind die Geschäftsfilter von **Einkauf** niedriger.
 - Auf breiten Bildschirmen nutzen **Rezepte**, **Menü** und **Optionen** die ganze Breite, wie **Einkauf**.
 - Auf breiten Bildschirmen zeigt eine kleine Karte unter den Feldern von **Einkauf**, wie viel Platz deine Listen auf dem Gerät belegen.

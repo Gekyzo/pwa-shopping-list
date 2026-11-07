@@ -166,8 +166,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **NAV-8** There are eight sheets: add, arrange (with the choice of shop lists, SHOP-25), shop
   picker (SHOP-27), trip, meal, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33).
   One is open at a time. A tap on the
-  veil, **Listo** or `Escape` closes it. The `+` button, also the one of the dock, does not show
-  while a sheet is open.
+  veil, **Listo** or `Escape` closes it. The floating `+` button and the one of the dock do not show
+  while a sheet is open. The add of the header and the add of the sidebar stay under the veil,
+  so the header and the sidebar do not move when a sheet opens.
 - **NAV-22** Each sheet has a head: the grab, a title on one line and the button **Listo**, a tonal button. The
   title of the edit sheet is the name of the item, of the recipe sheet the name of the recipe, of
   the add sheet `Añadir artículo a la lista` or `Nombre de la receta` by the section. Only the body

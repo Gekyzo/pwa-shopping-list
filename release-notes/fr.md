@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur les écrans larges, les boutons d’ajout ne disparaissent plus à l’ouverture d’une feuille, et l’en-tête et le menu latéral ne bougent plus.
 - Sur les écrans larges, les filtres de magasin de **Courses** sont moins hauts.
 - Sur les écrans larges, **Recettes**, **Menu** et **Réglages** occupent toute la largeur, comme **Courses**.
 - Sur les écrans larges, une petite carte sous les panneaux de **Courses** montre la place que prennent vos listes sur l’appareil.

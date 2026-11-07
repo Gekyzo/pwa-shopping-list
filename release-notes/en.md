@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- On wide screens, the add buttons no longer disappear when a sheet opens, so the header and the sidebar do not move.
 - On wide screens, the shop filters of **Shopping** are lower.
 - On wide screens, **Recipes**, **Menu** and **Settings** use the full width, as **Shopping** does.
 - On wide screens, a small card below the panels of **Shopping** shows how much space your lists take on the device.

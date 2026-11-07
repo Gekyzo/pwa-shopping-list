@@ -10,6 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
+- An open sheet hides only the floating add (`fab`, `dock-add`); `header-add` and `nav-add` stay under the veil, so the header tools and the sidebar no longer shift when a sheet opens (NAV-8). The rule is `addHidden` in `src/layers.js`, tested in `tests/layer-order.test.js`. Cache `shopping-shell-v44`.
 - The shop and list chips of the header are a 30px pill from 1024px, as in the desktop screen of `Compra` (DSV-27): a `::before` draws the edge and the fill `--chip-inset` (9px) inside the 48px hit area, which stays (TAP-1), and the row moves up by that inset. Below 1024px nothing changes. Cache `shopping-shell-v43`.
 - `Recetas`, `Menú` and `Ajustes` fill the content area from 1024px, as `Compra` does (DSV-28): the 1024px `:root` block sets `--page-max` and `--settings-max` to `100%`, so the header and main stand `--gutter` (32px) from the rail and the frame. They were held to 640px (`--content-max`) and 960px (NAV-27). Below 1024px nothing changes. Cache `shopping-shell-v42`.
 - The card **Almacenamiento local** stands below the panels of `Compra` from 1024px (LIST-43, DSV-26): the prototype's **Almacenamiento IndexedDB**, with a truthful name, as the app stores in `localStorage`. `storedBytes` of `src/storage.js` sums the UTF-8 bytes of each `shopping.` key and its value; `kilobytes` rounds up. `renderPanels` updates it on each render, after the save. New icon `database`, new keys `panels.storage` and `panels.storageUsed` in the seven catalogs; `ui/panels` may import `storage`. Cache `shopping-shell-v41`.

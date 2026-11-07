@@ -3,7 +3,7 @@ import * as shops from '#shops';
 import { listCounts } from '#lists';
 import { bindSheetDrag } from '#ds/sheet';
 import { shortcutStart, fabState, keyAction, keyMenuEcho, hashOfView, viewOfHash, historyDepth } from '#sections';
-import { sheetOpen, closeTop, keysBlocked } from '#layers';
+import { closeTop, keysBlocked, addHidden } from '#layers';
 import {
   ARRIVAL_MS,
   $,
@@ -144,11 +144,12 @@ const renderAll = () => {
   // takes the place of the fab (design-system.css), with the same label and the same conditions.
   // From 840px the recipe is a pane beside the list, not a sheet over it (REC-39): the add stays.
   // From 600px the add is the button of the header (NAV-24); the fab and the dock-add are hidden there.
+  // An open sheet hides only the fab and the dock-add: the header and the sidebar keep their add (NAV-8).
   const recipePane = features(ui.device).recipePane && ui.recipeId !== null && !ui.sheetOpen;
-  const noAdd = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || (sheetOpen(ui) && !recipePane);
+  const emptyAction = !$('empty-action').hidden;
   const addLabel = t(ui.view === 'recipes' ? 'add.recipe' : 'add.item');
-  for (const id of ['fab', 'dock-add', 'header-add', 'nav-add']) {
-    $(id).hidden = noAdd;
+  for (const [id, place] of [['fab', 'float'], ['dock-add', 'float'], ['header-add', 'bar'], ['nav-add', 'bar']]) {
+    $(id).hidden = addHidden(ui, { place, emptyAction, recipePane });
     $(id).setAttribute('aria-label', addLabel);
   }
   // The header names the add of a list with one word, as the desktop screen of Compra; its aria-label

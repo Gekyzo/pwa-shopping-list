@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sheetOpen, closeTop, keysBlocked } from '#layers';
+import { sheetOpen, closeTop, keysBlocked, addHidden } from '#layers';
 
 // A screen with nothing open, as `ui` of src/ui/context.js starts.
 const closed = () => ({
@@ -58,4 +58,27 @@ test('keysBlocked: the recipe pane beside the list does not block the keys of NA
   assert.equal(keysBlocked({ ...recipe, sheetOpen: true }, { recipePane: true }), true);
   assert.equal(keysBlocked(closed(), { recipePane: false }), false);
   assert.equal(keysBlocked({ ...closed(), mealOpen: { day: 0, meal: 'lunch' } }, { recipePane: true }), true);
+});
+
+// NAV-8: an open sheet hides the floating add (fab, dock) but not the add of the header and the
+// sidebar from 600px, so the bars keep their place under the veil.
+test('addHidden hides every add in Ajustes and Menú, and with an empty-state action', () => {
+  for (const place of ['float', 'bar']) {
+    for (const view of ['settings', 'menu']) assert.equal(addHidden({ ...closed(), view }, { place }), true);
+    assert.equal(addHidden({ ...closed(), view: 'list' }, { place, emptyAction: true }), true);
+    assert.equal(addHidden({ ...closed(), view: 'recipes' }, { place }), false);
+  }
+});
+
+test('addHidden hides the floating add while a sheet is open, and keeps the add of the bars', () => {
+  const open = { ...closed(), view: 'list', sheetOpen: true };
+  assert.equal(addHidden(open, { place: 'float' }), true);
+  assert.equal(addHidden(open, { place: 'bar' }), false);
+  assert.equal(addHidden({ ...closed(), view: 'recipes', arrangeOpen: true }, { place: 'bar' }), false);
+});
+
+test('addHidden keeps the floating add beside the recipe pane (REC-39)', () => {
+  const pane = { ...closed(), view: 'recipes', recipeId: 'r-1' };
+  assert.equal(addHidden(pane, { place: 'float', recipePane: true }), false);
+  assert.equal(addHidden(pane, { place: 'float' }), true);
 });

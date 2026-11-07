@@ -17,3 +17,12 @@ export const closeTop = (view) => {
 // True while the keys of NAV-29 must wait: a sheet is open. From 840px the recipe is a pane beside
 // the list, not a sheet (REC-39), so it does not block them.
 export const keysBlocked = (view, { recipePane }) => sheetOpen(recipePane ? { ...view, recipeId: null } : view);
+
+// True when an add button of the section does not show. `place` is 'float' for the fab and the add
+// of the dock, 'bar' for the add of the header and of the sidebar from 600px. An open sheet hides
+// only the floating add (NAV-8): the bars keep their buttons under the veil, so they do not move.
+// Beside the recipe pane (REC-39) the recipe is no sheet, so the add stays.
+export const addHidden = (view, { place, emptyAction = false, recipePane = false }) => {
+  if (['settings', 'menu'].includes(view.view) || emptyAction) return true;
+  return place === 'float' && sheetOpen(recipePane ? { ...view, recipeId: null } : view);
+};

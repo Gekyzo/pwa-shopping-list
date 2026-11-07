@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Sugli schermi larghi, i pulsanti per aggiungere non scompaiono più quando si apre un foglio, e l’intestazione e il menu laterale non si muovono.
 - Sugli schermi larghi, i filtri per negozio di **Spesa** sono più bassi.
 - Sugli schermi larghi, **Ricette**, **Menù** e **Impostazioni** occupano tutta la larghezza, come **Spesa**.
 - Sugli schermi larghi, una piccola scheda sotto i pannelli di **Spesa** mostra quanto spazio occupano le tue liste sul dispositivo.
