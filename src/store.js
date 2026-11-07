@@ -75,7 +75,7 @@ const isOpen = (item) => item.list === 'active' && !item.bought && !item.recurre
 export const openItems = (state) => sortItems(state, state.items.filter(isOpen));
 
 export const canStartNewShopping = (state) =>
-  state.items.some((item) => item.bought || isOpen(item));
+  state.items.some((item) => item.bought || isOpen(item) || item.list === 'postponed');
 
 // The ids of `keep` that name an open item.
 const keptIds = (state, keep) => {
@@ -91,6 +91,8 @@ export const startNewShopping = (state, keep = []) => {
   // recurrent item and a kept open item are in Active at the next trip.
   const items = state.items.map((item) => {
     if (item.list === 'saved') return item;
+    // A postponed item was kept for this next trip (LIST-42).
+    if (item.list === 'postponed') return { ...item, list: 'active', bought: false };
     const saved = !item.recurrent && !kept.has(item.id);
     return { ...item, list: saved ? 'saved' : 'active', bought: false };
   });
@@ -184,7 +186,7 @@ export const searchItems = (state, query, limit = 5) => {
 export const bringToList = (state, id) => {
   const item = findItem(state, id);
   if (!item) return reject(state, 'error.itemNotFound');
-  if (item.list === 'saved') return { ...patchItem(state, id, { list: 'active' }), changed: true };
+  if (item.list !== 'active') return { ...patchItem(state, id, { list: 'active', bought: false }), changed: true };
   if (item.bought) return { ...toggleBought(state, id), changed: true };
   return { state, changed: false };
 };
@@ -215,7 +217,26 @@ export const tripOutcome = (state, keep = []) => {
     kept,
     open: active.filter(isOpen).length - kept,
     bought: active.filter((item) => item.bought && !item.recurrent).length,
+    postponed: state.items.filter((item) => item.list === 'postponed').length,
   };
+};
+
+// LIST-40: an item of Compra that is still to buy leaves Compra for the next trip.
+export const postpone = (state, id) => {
+  const item = findItem(state, id);
+  if (!item) return reject(state, 'error.itemNotFound');
+  if (item.list !== 'active' || item.bought) return reject(state, 'error.onlyOpenPostpone');
+  return patchItem(state, id, { list: 'postponed', bought: false });
+};
+
+export const postponedItems = (state) => sortItems(state, state.items.filter((item) => item.list === 'postponed'));
+
+// LIST-42: every postponed item goes back to Compra, not ticked. `count` is the number moved.
+export const bringAllBack = (state) => {
+  const count = state.items.filter((item) => item.list === 'postponed').length;
+  if (count === 0) return { state, count };
+  const items = state.items.map((item) => (item.list === 'postponed' ? { ...item, list: 'active', bought: false } : item));
+  return { state: { ...state, items }, count };
 };
 
 // The items of Active that come back at the next trip, for the panel Próxima compra (LIST-39):

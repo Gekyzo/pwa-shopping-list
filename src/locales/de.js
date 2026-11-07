@@ -106,6 +106,7 @@ export default {
   'outcome.kept': { one: '{count} nicht gekauft wird verschoben', other: '{count} nicht gekauft werden verschoben' },
   'outcome.open': { one: '{count} nicht gekauft wird gespeichert', other: '{count} nicht gekauft werden gespeichert' },
   'outcome.bought': { one: '{count} gekauft verlässt die Liste', other: '{count} gekauft verlassen die Liste' },
+  'outcome.postponed': { one: '{count} verschobener kommt zurück', other: '{count} verschobene kommen zurück' },
   'trip.hint': 'Was mit nicht Gekauftem passiert, änderst du in den',
   'trip.question': 'Einkauf beenden?',
   'trip.continue': 'Weiter einkaufen',
@@ -151,6 +152,7 @@ export default {
   'where.boughtRepeat': 'schon gekauft · wiederholen',
   'where.inList': 'schon in der Liste',
   'where.saved': 'früher gekauft · hinzufügen',
+  'where.postponed': 'verschoben · hinzufügen',
 
   'arrange.label': 'Gruppieren und sortieren',
   'arrange.groupBy': 'Gruppieren nach',
@@ -306,6 +308,7 @@ export default {
   'error.duplicateItem': '„{name}“ ist schon in {list}.',
   'error.itemNotFound': 'Artikel nicht gefunden.',
   'error.onlyActiveTick': 'Nur die Artikel von {list} können markiert werden.',
+  'error.onlyOpenPostpone': 'Nur noch nicht gekaufte Artikel lassen sich verschieben.',
   'error.nothingToStart': 'Nichts zu beenden: Markiere einen Artikel oder füge einen hinzu.',
   'error.unknownSort': 'Unbekannte Reihenfolge.',
   'error.unknownGroup': 'Unbekannte Gruppierung.',

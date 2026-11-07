@@ -106,6 +106,7 @@ export default {
   'outcome.kept': { one: '{count} sense comprar s\'ajorna', other: '{count} sense comprar s\'ajornen' },
   'outcome.open': { one: '{count} sense comprar es desa', other: '{count} sense comprar es desen' },
   'outcome.bought': { one: '{count} comprat surt de la llista', other: '{count} comprats surten de la llista' },
+  'outcome.postponed': { one: '{count} posposat torna', other: '{count} posposats tornen' },
   'trip.hint': 'Pots canviar què passa amb el que no has comprat a',
   'trip.question': 'Acabar la compra?',
   'trip.continue': 'Seguir comprant',
@@ -151,6 +152,7 @@ export default {
   'where.boughtRepeat': 'ja comprat · repeteix',
   'where.inList': 'ja a la llista',
   'where.saved': 'comprat abans · afegir',
+  'where.postponed': 'posposat · afegir',
 
   'arrange.label': 'Agrupa i ordena',
   'arrange.groupBy': 'Agrupa per',
@@ -306,6 +308,7 @@ export default {
   'error.duplicateItem': '«{name}» ja és a {list}.',
   'error.itemNotFound': 'Article no trobat.',
   'error.onlyActiveTick': 'Només es poden marcar els articles de {list}.',
+  'error.onlyOpenPostpone': 'Només es pot posposar el que queda per comprar.',
   'error.nothingToStart': 'Res per acabar: marca un article o afegeix-ne un.',
   'error.unknownSort': 'Ordre desconegut.',
   'error.unknownGroup': 'Agrupació desconeguda.',

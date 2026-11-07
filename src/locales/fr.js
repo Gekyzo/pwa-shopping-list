@@ -106,6 +106,7 @@ export default {
   'outcome.kept': { one: '{count} non acheté est reporté', other: '{count} non achetés sont reportés' },
   'outcome.open': { one: '{count} non acheté est gardé', other: '{count} non achetés sont gardés' },
   'outcome.bought': { one: '{count} acheté quitte la liste', other: '{count} achetés quittent la liste' },
+  'outcome.postponed': { one: '{count} reporté revient', other: '{count} reportés reviennent' },
   'trip.hint': 'Tu peux changer ce qui arrive aux articles non achetés dans les',
   'trip.question': 'Terminer les courses ?',
   'trip.continue': 'Continuer les courses',
@@ -151,6 +152,7 @@ export default {
   'where.boughtRepeat': 'déjà acheté · répéter',
   'where.inList': 'déjà dans la liste',
   'where.saved': 'déjà acheté · ajouter',
+  'where.postponed': 'reporté · ajouter',
 
   'arrange.label': 'Grouper et trier',
   'arrange.groupBy': 'Grouper par',
@@ -306,6 +308,7 @@ export default {
   'error.duplicateItem': '« {name} » est déjà dans {list}.',
   'error.itemNotFound': 'Article introuvable.',
   'error.onlyActiveTick': 'Seuls les articles de {list} peuvent être cochés.',
+  'error.onlyOpenPostpone': 'Seul un article encore à acheter peut être reporté.',
   'error.nothingToStart': 'Rien à terminer : cochez un article ou ajoutez-en un.',
   'error.unknownSort': 'Ordre inconnu.',
   'error.unknownGroup': 'Regroupement inconnu.',

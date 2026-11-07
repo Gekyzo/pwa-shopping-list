@@ -867,3 +867,15 @@ test('normalizeState dates a meal of version 9 to the week of its date', () => {
   const v9 = { ...sample(), version: 9, menu: [{ day: 2, meal: 'dinner', recipe: 'r1' }] };
   assert.deepEqual(normalizeState(v9, new Date(2026, 10, 8)).menu, [{ week: '2026-11-02', day: 2, meal: 'dinner', recipe: 'r1' }]);
 });
+
+test('importJson keeps a postponed item (LIST-40)', () => {
+  const data = { ...sample(), items: [{ ...sample().items[0], list: 'postponed', bought: false }] };
+  const { state } = importJson(JSON.stringify(data));
+  assert.equal(state.items[0].list, 'postponed');
+  assert.equal(state.items[0].bought, false);
+});
+
+test('importJson never ticks a postponed item (DATA-6)', () => {
+  const data = { ...sample(), items: [{ ...sample().items[0], list: 'postponed', bought: true }] };
+  assert.equal(importJson(JSON.stringify(data)).state.items[0].bought, false);
+});

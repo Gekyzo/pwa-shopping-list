@@ -106,6 +106,7 @@ export default {
   'outcome.kept': { one: '{count} not bought is postponed', other: '{count} not bought are postponed' },
   'outcome.open': { one: '{count} not bought is saved', other: '{count} not bought are saved' },
   'outcome.bought': { one: '{count} bought leaves the list', other: '{count} bought leave the list' },
+  'outcome.postponed': { one: '{count} postponed comes back', other: '{count} postponed come back' },
   'trip.hint': 'You can change what happens to items not bought in',
   'trip.question': 'Finish shopping?',
   'trip.continue': 'Keep shopping',
@@ -151,6 +152,7 @@ export default {
   'where.boughtRepeat': 'already bought · repeat',
   'where.inList': 'already in the list',
   'where.saved': 'bought before · add',
+  'where.postponed': 'postponed · add',
 
   'arrange.label': 'Group and sort',
   'arrange.groupBy': 'Group by',
@@ -306,6 +308,7 @@ export default {
   'error.duplicateItem': '“{name}” is already in {list}.',
   'error.itemNotFound': 'Item not found.',
   'error.onlyActiveTick': 'Only the items of {list} can be ticked.',
+  'error.onlyOpenPostpone': 'Only an item still to buy can be postponed.',
   'error.nothingToStart': 'Nothing to finish: tick an item or add one.',
   'error.unknownSort': 'Unknown order.',
   'error.unknownGroup': 'Unknown grouping.',

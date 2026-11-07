@@ -7,6 +7,7 @@ import { inList, endSearch, addTarget, targetState } from '#ui/view';
 
 const whereText = (item) => {
   if (item.list === 'saved') return t('where.saved');
+  if (item.list === 'postponed') return t('where.postponed');
   return t(item.bought ? 'where.boughtRepeat' : 'where.inList');
 };
 

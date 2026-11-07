@@ -51,7 +51,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 ## Trip
 
-- **TRIP-1** **Terminar compra** is available when an item is ticked or an item is open (TRIP-6).
+- **TRIP-1** **Terminar compra** is available when an item is ticked, an item is open (TRIP-6) or an
+  item is postponed (LIST-40).
   If not, the operation gives `error.nothingToStart`.
 - **TRIP-2** **Terminar compra** does this to each item:
 
@@ -60,6 +61,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   | Ticked, recurrent | Stays in `Compra`, not ticked |
   | Ticked, one-time | Saved: `list: 'saved'`, not ticked (LIST-30) |
   | Saved | Does not change |
+  | Postponed | Back in `Compra`, not ticked (LIST-42) |
   | In `Compra`, not ticked, recurrent | Stays |
   | In `Compra`, not ticked, one-time | Stays in `Compra`, not ticked, with `Aplazar`, or is saved with `Descartar` (TRIP-6) |
 
@@ -74,7 +76,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
      the items of `Compra` by where each one goes, one row for each outcome with an icon and its
      count: recurrent items that come back (icon `repeat`, `2 con ↻ vuelven`), open items kept with
      `Aplazar` (`cart`, `1 sin comprar se aplaza`), open items saved with `Descartar` (`download`,
-     `1 sin comprar se guarda`) and ticked one-time items (`check`, `4 comprados salen de la lista`). An outcome with no item has no row.
+     `1 sin comprar se guarda`), ticked one-time items (`check`, `4 comprados salen de la lista`) and
+     postponed items (`calendar`, `2 pospuestos vuelven`). An outcome with no item has no row.
      The banner and the sheet use the same text for each outcome. Below the rows, the primary
      button **Terminar compra** is disabled when TRIP-1 does not hold, and the tonal button
      **Seguir comprando** closes the sheet.
@@ -125,6 +128,7 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
   | Ticked | `ya comprado · repetir` | Removes the tick |
   | To buy in `Compra` | `ya en la lista` | Nothing |
   | Saved | `comprado antes · añadir` | Goes to `Compra`, not ticked (LIST-32) |
+  | Postponed | `pospuesto · añadir` | Goes to `Compra`, not ticked (LIST-42) |
 
 - **ADD-4** When no item has the typed name, the list ends with `+ Crear «name»`, which does the
   same as **Añadir**.
@@ -189,9 +193,21 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
   button shows when the list has an item.
 - **LIST-33** A saved item counts in no header figure and in no trip figure.
 
+## Postponed items
+
+- **LIST-40** **Posponer** takes an item of `Compra` that is not ticked out of `Compra` for the next
+  trip: `list: 'postponed'`. A ticked or saved item gives `error.onlyOpenPostpone`. `recurrent`, the
+  shops and the quantity do not change.
+- **LIST-41** A postponed item has no row in the list of `Compra` from 600px, counts in no header
+  figure and is not found by the search of the list. The add sheet finds it (ADD-3), and an add of
+  its name brings it back.
+- **LIST-42** A bring back puts a postponed item in `Compra`, not ticked. **Mover todos a la compra
+  actual** brings back every postponed item. **Terminar compra** brings back every postponed item
+  (TRIP-2).
+
 ## Limits
 
-One list for the trip: no list for a later trip, and no mark on an item for a later trip. No unit
+One list for the trip: no list for a later trip. A postponed item (LIST-40) is the one mark for a later trip. No unit
 and no arithmetic of quantities, no quantity on the products of a recipe, no note. No add of
 several items from one text. No ranking of the results of a list search, and no match by the
 recipe of an item.
