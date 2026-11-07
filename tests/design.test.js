@@ -36,7 +36,7 @@ test('the parts of the app are documented in styles.css (DSV-3)', () => {
 
 test('the design test reads the classes of the item rows, states included', () => {
   const rows = classesInScript(read('src/ui/rows.js'));
-  for (const name of ['item-row', 'bought', 'flash', 'gone', 'item-row-swipe', 'open', 'item-row-end', 'item-row-label', 'tick']) assert.ok(rows.includes(name), name);
+  for (const name of ['item-row', 'bought', 'flash', 'gone', 'item-row-swipe', 'open', 'item-row-end', 'item-row-label', 'tick', 'bought-head']) assert.ok(rows.includes(name), name);
 });
 
 test('a recipe row has one send button in the end slot and no mark', () => {

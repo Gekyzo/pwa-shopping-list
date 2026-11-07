@@ -268,11 +268,13 @@ export const boughtSection = (bought) => {
       render();
     },
   }, [
+    icon('check-circle', 'bought-icon'),
     el('span', { textContent: t('count.bought', { count: bought.length }) }),
     chevron(open),
   ]);
   button.setAttribute('aria-expanded', String(open));
-  return [el('li', { className: 'section-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
+  // The head is the top of a card that holds the bought rows (DSV-16).
+  return [el('li', { className: 'section-head bought-head' }, [button]), ...(open ? bought.map((item) => itemNode(item)) : [])];
 };
 
 // The rows of a group carry its key, so that its head can close and open them.
