@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Avec une souris, le bouton ⋮ d’un article ne cache plus sa quantité : il a sa propre place avant la poignée.
 - Avec une souris, un clic sur un article de **Courses** ouvre **Modifier**. Pour le cocher, clique sur son cercle. Glisser avec la souris déplace toujours l’article. Au doigt, toucher l’article le coche toujours.
 - Sur les grands écrans d’environ 1024 px, le titre de l’en-tête n’est plus coupé : le champ de recherche se rétrécit et, si besoin, n’affiche que la loupe.
 - Sur les grands écrans, la liste et les panneaux de **Courses** suivent le design : plus d’espace autour de la liste et entre les groupes, des panneaux plus larges, des étiquettes et des quantités plus claires, et une barre verte plus épaisse pour chaque recette.

@@ -130,6 +130,8 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **ROW-16** On a device that hovers with a fine pointer, an item row of `Compra` shows the button
   of more actions (the icon `more`) before the grip while the pointer is over the row or the focus is
   in it. Its name is `Más acciones de «name»`. A click opens the actions of the row, as ROW-15 does.
+  On such a device the end slot always holds it and the grip, each 32px wide, so the button shows
+  in its own place and covers nothing; while hidden it keeps that place.
   A device with a finger only never shows it.
 
 ## Messages and undo

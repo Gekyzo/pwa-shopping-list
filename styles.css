@@ -944,7 +944,8 @@
       color: var(--control);
     }
 
-    .row-handle > .icon {
+    .row-handle > .icon,
+    .row-more > .icon {
       width: calc(var(--space-4) + var(--space-half));
       height: calc(var(--space-4) + var(--space-half));
     }
@@ -1084,9 +1085,17 @@
     color: var(--muted);
   }
 
+  /* ROW-16: on a device that hovers, the button always takes its place before the grip and only
+     shows over the row or with the focus in it, so nothing moves when it shows. The slot is wider
+     for it (below). A hidden button takes no focus; the focus of the name shows it. */
   @media (hover: hover) and (pointer: fine) {
-    .item-row:is(:hover, :focus-within) .row-more {
+    .row-more {
       display: inline-flex;
+      visibility: hidden;
+    }
+
+    .item-row:is(:hover, :focus-within) .row-more {
+      visibility: visible;
     }
   }
 
@@ -1622,6 +1631,23 @@
   /* `:has()` cannot nest, so the row with no tag is `:not(:has(.pill))`. */
   [data-hand="left"] .item-row:has(.item-row-check):has(.item-row-end):not(:has(.pill)) {
     border-image: linear-gradient(to right, transparent calc(var(--space-4) + var(--space-2) + var(--tap)), var(--line) 0) 0 0 1 0 / 0 0 1px 0;
+  }
+
+  /* ROW-16: on a device that hovers with a mouse, the slot holds the button of more actions and
+     the grip, each 32px wide: a mouse needs no tap size, and the name keeps most of the row. */
+  @media (hover: hover) and (pointer: fine) {
+    .item-row-body:has(> .item-row-check) > .item-row-end:not(:has(.pill)) {
+      width: calc(var(--space-7) * 2);
+    }
+
+    .item-row-end > :is(.row-more, .row-handle) {
+      width: var(--space-7);
+      min-width: 0;
+    }
+
+    [data-hand="left"] .item-row:has(.item-row-check):has(.item-row-end):not(:has(.pill)) {
+      border-image: linear-gradient(to right, transparent calc(var(--space-4) + var(--space-2) + var(--space-7) * 2), var(--line) 0) 0 0 1 0 / 0 0 1px 0;
+    }
   }
 
   /* The tag of a row of Todas widens the end slot up to two buttons more; a longer name ends in

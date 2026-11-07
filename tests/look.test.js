@@ -237,6 +237,13 @@ test('from 1024px the title keeps its text and the search field takes the room l
   assert.match(css, /@container \(max-width: 100px\) \{\s*\.header-search > \.header-search-text \{\s*display:\s*none;/);
 });
 
+test('on a device that hovers, the end slot holds the button of more actions and the grip (ROW-16)', () => {
+  const hover = [...plain.matchAll(/@media \(hover: hover\) and \(pointer: fine\) \{([\s\S]*?)\n  \}\n/g)].map(([, inner]) => inner).join('\n');
+  assert.match(block('.row-more', hover), /visibility:\s*hidden/);
+  assert.match(block('.item-row:is(:hover, :focus-within) .row-more', hover), /visibility:\s*visible/);
+  assert.match(block('.item-row-body:has(> .item-row-check) > .item-row-end:not(:has(.pill))', hover), /width:\s*calc\(var\(--space-7\) \* 2\)/);
+});
+
 test('from 1024px the panels have a line below their head and an emerald 8px bar (DSV-26)', () => {
   assert.match(block('.side-panel-head', wide), /border-bottom:\s*1px solid var\(--line\)/);
   assert.match(block('.side-panel-card > .side-panel-bar', wide), /height:\s*var\(--space-2\)/);
