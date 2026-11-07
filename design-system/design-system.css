@@ -81,7 +81,7 @@
     --rail-width: 80px;
     --frame-side: 0px;
     --frame-max: 1280px;
-    --sidebar-width: 232px;
+    --sidebar-width: 256px;
     --side-sheet: 400px; /* a sheet with a head from 840px */
     --content-max: 640px;
     --page-max: var(--content-max); /* the widest content column; a layout sets it on body */
@@ -776,9 +776,9 @@
      @part nav-brand-note  Optional: a status line below the name, after a --done dot, in --muted.
      @part nav-action  Optional: a "button primary" below nav-brand, the main action of the app, from 1024px only.
      @part nav-foot-value  Optional: a value at the end of nav-foot, from 1024px.
-     @variant boxed  On nav-foot: from 1024px the foot is a card on --surface-2 with a --line edge.
-     @example <nav class="nav-bar" style="position: static; width: 232px; min-height: 280px"><div class="nav-brand"><span>App</span></div><button class="nav-item" type="button" aria-current="page"><svg class="icon" aria-hidden="true"><use href="icons.svg#note"/></svg><span>Notes</span><span class="nav-count">4</span></button><button class="nav-item" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg><span>Settings</span></button><p class="nav-foot"><svg class="icon small" aria-hidden="true"><use href="icons.svg#settings"/></svg><span class="nav-foot-text">On this device</span></p></nav>
-     @example <nav class="nav-bar" style="position: static; width: 232px; min-height: 360px"><div class="nav-brand"><span class="nav-brand-text"><span>App</span><small class="nav-brand-note">Offline mode</small></span></div><button class="button primary nav-action" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#plus"/></svg><span>Add</span></button><button class="nav-item" type="button" aria-current="page"><svg class="icon" aria-hidden="true"><use href="icons.svg#note"/></svg><span>Notes</span><span class="nav-count">4</span></button><p class="nav-foot boxed"><svg class="icon small" aria-hidden="true"><use href="icons.svg#settings"/></svg><span class="nav-foot-text">Sync</span><span class="nav-foot-value">Up to date</span></p></nav>
+     @variant boxed  On nav-foot: from 1024px the foot is a tonal chip on --secondary below a --line across the sidebar.
+     @example <nav class="nav-bar" style="position: static; width: 256px; min-height: 280px"><div class="nav-brand"><span>App</span></div><button class="nav-item" type="button" aria-current="page"><svg class="icon" aria-hidden="true"><use href="icons.svg#note"/></svg><span>Notes</span><span class="nav-count">4</span></button><button class="nav-item" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg><span>Settings</span></button><p class="nav-foot"><svg class="icon small" aria-hidden="true"><use href="icons.svg#settings"/></svg><span class="nav-foot-text">On this device</span></p></nav>
+     @example <nav class="nav-bar" style="position: static; width: 256px; min-height: 360px"><div class="nav-brand"><span class="nav-brand-text"><span>App</span><small class="nav-brand-note">Offline mode</small></span></div><button class="button primary nav-action" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#plus"/></svg><span>Add</span></button><button class="nav-item" type="button" aria-current="page"><svg class="icon" aria-hidden="true"><use href="icons.svg#note"/></svg><span>Notes</span><span class="nav-count">4</span></button><p class="nav-foot boxed"><svg class="icon small" aria-hidden="true"><use href="icons.svg#settings"/></svg><span class="nav-foot-text">Sync</span><span class="nav-foot-value">Up to date</span></p></nav>
      @example <nav class="nav-bar" style="width: 100%"><button class="nav-item" type="button" aria-current="page"><svg class="icon" aria-hidden="true"><use href="icons.svg#note"/></svg><span>Notes</span></button><button class="nav-item" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#settings"/></svg><span>Later</span><em class="badge">2</em></button></nav> */
   .nav-bar {
     display: flex;
@@ -863,15 +863,15 @@
   }
 
   /* From 1024px (LAY-1) the rail is a sidebar of --sidebar-width at the start of the frame: the brand
-     on top, then one row for each section, the current one on a --secondary pill. */
+     on top, then one row for each section of 40px, the current one on a --secondary band. */
   @media (min-width: 1024px) {
     .nav-bar {
       inset-inline-start: var(--frame-side);
       width: var(--sidebar-width);
       justify-content: flex-start;
-      gap: var(--space-half);
-      padding: var(--space-6) var(--space-3);
-      padding-inline-start: calc(var(--space-3) + env(safe-area-inset-left));
+      gap: calc(var(--space-1) + var(--space-half));
+      padding: var(--space-5);
+      padding-inline-start: calc(var(--space-5) + env(safe-area-inset-left));
       border: 0;
     }
 
@@ -879,7 +879,7 @@
       display: flex;
       align-items: center;
       gap: var(--space-3);
-      padding: 0 var(--space-2) var(--space-5);
+      padding-bottom: calc(var(--space-6) - var(--space-1) - var(--space-half));
       font-size: var(--text-h);
       font-weight: var(--weight-strong);
     }
@@ -917,16 +917,17 @@
       align-items: center;
       justify-content: center;
       gap: var(--space-2);
-      margin: 0 0 var(--space-5);
+      margin: 0 0 calc(var(--space-6) - var(--space-1) - var(--space-half));
     }
 
     .nav-item {
       flex-direction: row;
       justify-content: flex-start;
       gap: var(--space-3);
-      height: var(--tap);
+      height: calc(var(--space-6) + 2 * var(--space-2));
+      min-height: 0;
       padding-inline: var(--space-3);
-      border-radius: var(--radius-m);
+      border-radius: var(--space-half);
       font-size: var(--text-m);
     }
 
@@ -955,13 +956,22 @@
       display: inline;
     }
 
+    /* The boxed foot is a tonal chip below a --line across the sidebar, as wide as the add. */
     .nav-bar > .nav-foot.boxed:not([hidden]) {
-      inset-inline: var(--space-3);
-      padding: var(--space-2) var(--space-3);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-m);
-      background: var(--surface-2);
+      inset-inline: var(--space-5);
+      bottom: calc(var(--space-5) + env(safe-area-inset-bottom));
+      padding: calc(var(--space-1) + var(--space-half)) var(--space-2);
+      border-radius: var(--radius-s);
+      background: var(--secondary);
       font-size: var(--text-xs);
+    }
+
+    .nav-bar > .nav-foot.boxed:not([hidden])::before {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      top: calc(-1 * var(--space-4) - 1px);
+      border-top: 1px solid var(--line);
     }
 
     .nav-foot-value {
@@ -972,10 +982,16 @@
     .nav-count {
       display: block;
       margin-inline-start: auto;
+      padding: var(--space-half) var(--space-2);
+      border-radius: var(--radius-pill);
       color: var(--muted);
       font-size: var(--text-s);
       font-weight: var(--weight-normal);
       font-variant-numeric: tabular-nums;
+    }
+
+    .nav-count:empty {
+      display: none;
     }
   }
 

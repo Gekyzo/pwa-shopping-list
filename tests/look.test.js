@@ -204,14 +204,14 @@ test('Ajustes from 1024px: each row icon stands in a tinted tile; the update ban
 // The rules inside `@media (min-width: 1024px)`, as one text.
 const wide = [...plain.matchAll(/@media \(min-width: 1024px\) \{([\s\S]*?)\n  \}\n/g)].map(([, inner]) => inner).join('\n');
 
-test('the shadows of the current section are an emerald bar and an emerald ring (DSV-22)', () => {
-  assert.match(css, /--shadow-current:\s*inset 3px 0 0 var\(--done\);/);
-  assert.match(css, /--shadow-count:\s*0 0 0 0\.25em var\(--done\);/);
+test('the shadow of the current section is a 4px emerald bar (DSV-22)', () => {
+  assert.match(css, /--shadow-current:\s*inset 4px 0 0 var\(--done\);/);
+  assert.doesNotMatch(css, /--shadow-count/);
 });
 
 test('from 1024px the current section has an emerald bar at its start and an emerald count (DSV-22)', () => {
   assert.match(block('.nav-item[aria-current="page"]', wide), /box-shadow:\s*var\(--shadow-current\)/);
-  assert.match(block('.nav-item[aria-current="page"]', wide), /background:\s*var\(--secondary\)/);
+  assert.match(block('.nav-item[aria-current="page"]', wide), /background:\s*var\(--surface-high\)/);
   assert.match(block('.nav-item[aria-current="page"] .nav-count', wide), /background:\s*var\(--done\)/);
 });
 
@@ -262,4 +262,15 @@ test('from 1024px the title of a group is 15px, with its count beside it (DSV-24
 
 test('the edit button of a row is the grip, in --muted (DSV-24)', () => {
   assert.match(block('.row-handle'), /color:\s*var\(--muted\)/);
+});
+
+test('from 1024px the foot of the sidebar is a tonal chip below a line (DSV-25)', () => {
+  const ds = readFileSync(new URL('../design-system/design-system.css', import.meta.url), 'utf8');
+  assert.match(ds, /--sidebar-width:\s*256px;/);
+  assert.match(ds, /\.nav-bar > \.nav-foot\.boxed:not\(\[hidden\]\) \{[^}]*background:\s*var\(--secondary\)/);
+  assert.match(ds, /\.nav-bar > \.nav-foot\.boxed:not\(\[hidden\]\)::before \{[^}]*border-top:\s*1px solid var\(--line\)/);
+});
+
+test('an empty count of the sidebar takes no room (NAV-26)', () => {
+  assert.match(readFileSync(new URL('../design-system/design-system.css', import.meta.url), 'utf8'), /\.nav-count:empty \{\s*display:\s*none;/);
 });

@@ -157,8 +157,9 @@ each part.
   `--line` edge. From 1024px each row icon stands in a 32px `--surface-2` tile (`--icon-tile`).
   The trip-end choice stays two segments: the switch of the screen would be a change of control.
 - **DSV-22** From 1024px, as in the desktop screens. The current section of the rail is a band on
-  `--secondary` with a 3px emerald bar at its start (`--shadow-current`), and its count an
-  emerald pill (`--shadow-count`); both are shadows, so the rail keeps its layout (DSV-8). The
+  `--surface-high` (surface-container-highest) with a 4px emerald bar at its start
+  (`--shadow-current`, a shadow, so the rail keeps its layout, DSV-8), and its count an 11px
+  emerald pill. A section row is 40px high with 2px corners, its name 14px. The
   head of a group of `Compra` is the tinted top of its card (`--surface-2`, a `--line` edge, 6px
   top corners); the meta line of a row is a small outlined pill; the quantity chip is outlined on
   `--surface`. Recipe cards keep their own parts.
@@ -187,5 +188,7 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 - **DSV-25** The sidebar of the desktop screens of Bodega, from 1024px: the frame fills the width
   (`--frame-max: 100vw`), the sidebar is tinted `--surface-2` with a `--line` at its end drawn as a
   shadow (`--shadow-sidebar`), so the rail keeps the layout of the design system (DSV-8). The
-  brand is a 40px mark with the status line `nav-brand-note`, the add is `nav-action`, and the
-  foot is `nav-foot boxed` with its value `nav-foot-value`: optional parts of design system 0.9.0.
+  brand is a 40px mark with an 18px name and the 11px status line `nav-brand-note`, the add is
+  `nav-action`, and the foot is `nav-foot boxed` with its value `nav-foot-value`: optional parts
+  of design system 0.9.0. The sidebar is 256px wide with 20px of padding; the foot is an 11px tonal
+  chip on `--secondary` below a `--line` across the sidebar.

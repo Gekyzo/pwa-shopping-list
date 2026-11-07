@@ -214,13 +214,13 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
 
 - **NAV-26** From 600px wide the bottom bar is a rail at the left with `Derecha` and with
-  `Izquierda`. From 1024px it is a sidebar of 232px at the left of a frame that fills the width
+  `Izquierda`. From 1024px it is a sidebar of 256px at the left of a frame that fills the width
   (DSV-9, DSV-25). It shows the mark and the name of the app with the status line below it
   (`Modo sin conexión`, or `Sincronizada` with a session online), then the primary button of the
   add of the view (`nav-action`, as the add of the header), then one row for each section with its
-  icon and its name, and the current section on a pill. The row of `Compra` ends with the count of the items left, as the header counts
+  icon and its name, and the current section on a band (DSV-22). The row of `Compra` ends with the count of the items left, as the header counts
   them; with no item left it shows no count. The count is not part of the name for a screen reader.
-  The foot of the rail shows the offline icon, and from 1024px a card (`nav-foot boxed`): with no
+  The foot of the rail shows the offline icon, and from 1024px a chip below a line (`nav-foot boxed`, DSV-25): with no
   session (ACC-13) the text **Sin cuenta · en este dispositivo**, with a session **Sincronización**
   and at its end `Al día`, or `Sin conexión` while the app is offline. The message stays at the side of the hand, inside the frame.
 - **NAV-27** From 840px wide `Ajustes` takes a column of at most 960px, and each group is a row:
