@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Bodega is a shopping list for one person on one Android phone. It works in the shop with no
+Bodega is a shopping list, mobile first. It is a PWA to install on an Android phone, and it also
+works in any browser, on a phone, a tablet or a desktop. It works in the shop with no
 connection. It keeps one list, `Compra`, for the trip. At the end of a trip it keeps
 the products that the user buys each time and the products not bought, so that the list for the
 next trip is almost ready.
@@ -12,10 +13,11 @@ next trip is almost ready.
 - **PROD-1** One owner for each account, with one device or more (ACC-1,
   [18-account-sync.md](18-account-sync.md)). The owner can share the data of the account with
   other people by email (SHARE-1, [19-sharing.md](19-sharing.md)).
-- **PROD-2** The target is Chrome on Android, with the app installed on the home screen. The app
-  also works in a desktop browser with a mouse.
-- **PROD-3** The layout is for a phone in portrait. The manifest locks the installed app to
-  portrait.
+- **PROD-2** The app is mobile first. The main target is Chrome on Android, with the app installed
+  on the home screen. The app also works in a browser with no install, on any device, with touch or
+  with a mouse and a keyboard.
+- **PROD-3** The layout starts from a phone in portrait and adapts to the four width classes of
+  DSV-9: phone, foldable, tablet and desktop. The installed app turns with the device (INS-4).
 
 ## Constraints
 
