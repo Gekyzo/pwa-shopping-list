@@ -10,6 +10,7 @@ What changes for you in each version of the app. The newest version is first.
 - In **Compra**, the bought products stand in a card of their own, under a check.
 - The buttons at the bottom of **Compra** float over the list, and the message after a tick is dark.
 - **Edit** shows each field as a box with its name inside, the repeat switch as a card, and the shops as pills you add with + and remove with ×.
+- In **Recipes**, the buttons of a recipe stand beside its name, and its products take the whole width of the card.
 
 ## 1.13.0 - 2026-11-05
 

@@ -10,6 +10,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 - En **Compra**, los productos comprados están en una tarjeta propia, bajo una marca de hecho.
 - Los botones de abajo de **Compra** flotan sobre la lista, y el aviso tras marcar es oscuro.
 - **Editar** muestra cada campo como una caja con su nombre dentro, el interruptor de repetir como una tarjeta, y las tiendas como etiquetas que añades con + y quitas con ×.
+- En **Recetas**, los botones de una receta están junto a su nombre, y sus productos ocupan todo el ancho de la tarjeta.
 
 ## 1.13.0 - 2026-11-05
 

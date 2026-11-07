@@ -10,6 +10,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 - A **Compra**, els productes comprats són en una targeta pròpia, sota una marca de fet.
 - Els botons de baix de **Compra** suren sobre la llista, i l'avís després de marcar és fosc.
 - **Edita** mostra cada camp com una caixa amb el nom a dins, l'interruptor de repetir com una targeta, i les botigues com etiquetes que afegeixes amb + i treus amb ×.
+- A **Receptes**, els botons d'una recepta són al costat del nom, i els productes ocupen tota l'amplada de la targeta.
 
 ## 1.13.0 - 2026-11-05
 

@@ -2144,6 +2144,53 @@
     background: var(--primary);
   }
 
+  /* DSV-19: the actions of a recipe card stand at its top end, beside the name, and the products
+     take the full width of the card below them. The name, its count and its badge keep clear of
+     the actions: one tile wide, or two when the recipe has a link. */
+  .item-row.recipe .item-row-body {
+    position: relative;
+  }
+
+  .item-row.recipe .item-row-end {
+    position: absolute;
+    top: var(--space-2);
+    inset-inline-end: var(--space-2);
+  }
+
+  .item-row.recipe .item-row-name > :not(.recipe-products) {
+    padding-inline-end: var(--tap);
+  }
+
+  .item-row.recipe .item-row-body:has(.item-row-end > :nth-child(2)) .item-row-name > :not(.recipe-products) {
+    padding-inline-end: calc(var(--tap) * 2);
+  }
+
+  [data-hand="left"] .item-row.recipe .item-row-end {
+    inset-inline: var(--space-2) auto;
+  }
+
+  [data-hand="left"] .item-row.recipe .item-row-name > :not(.recipe-products) {
+    padding-inline-start: var(--tap);
+    padding-inline-end: 0;
+  }
+
+  [data-hand="left"] .item-row.recipe .item-row-body:has(.item-row-end > :nth-child(2)) .item-row-name > :not(.recipe-products) {
+    padding-inline-start: calc(var(--tap) * 2);
+    padding-inline-end: 0;
+  }
+
+  /* The count of Recetas in the header is an emerald pill. */
+  body:has([data-view="recipes"][aria-current="page"]) .app-header-subtitle {
+    align-self: flex-start;
+    width: fit-content;
+    margin-top: var(--space-1);
+    padding: var(--space-half) var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--done-soft);
+    color: var(--done);
+    font-weight: var(--weight-strong);
+  }
+
   /* REC-40: the badge of a recipe in its list, and the products of a recipe on a tinted line. */
   .recipe-in-list {
     display: inline-flex;
