@@ -159,3 +159,30 @@ test('the count of Recetas in the header is an emerald pill (DSV-19)', () => {
   assert.match(pill, /background:\s*var\(--done-soft\)/);
   assert.match(pill, /border-radius:\s*var\(--radius-pill\)/);
 });
+
+test('a meal shows its kind as an icon at its top end, out of the flow (DSV-20)', () => {
+  assert.match(block('.meal-icon'), /position:\s*absolute/);
+  assert.match(block('.meal-icon'), /color:\s*var\(--done\)/);
+  assert.match(block('.meal.dish .meal-icon'), /color:\s*var\(--muted\)/);
+});
+
+test('a free meal shows its call first and its name below, small (DSV-20)', () => {
+  assert.match(block('.meal.free .meal-label'), /order:\s*1/);
+});
+
+test('the summary of the week is a muted line in small capitals (DSV-20)', () => {
+  assert.match(block('.menu-summary'), /text-transform:\s*uppercase/);
+  assert.match(block('.menu-summary'), /color:\s*var\(--muted\)/);
+});
+
+test('the count of Menú in the header is a neutral pill (DSV-20)', () => {
+  const pill = block('body:has([data-view="menu"][aria-current="page"]) .app-header-subtitle');
+  assert.match(pill, /background:\s*var\(--secondary\)/);
+  assert.match(pill, /border-radius:\s*var\(--radius-pill\)/);
+});
+
+test('with its summary the action bar of Menú has a solid ground and a top line (DSV-20)', () => {
+  const bar = block('.action-bar:has(> .menu-summary)');
+  assert.match(bar, /background:\s*var\(--bg\)/);
+  assert.match(bar, /border-top:\s*1px solid var\(--line\)/);
+});

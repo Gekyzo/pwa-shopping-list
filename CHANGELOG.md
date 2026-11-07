@@ -17,6 +17,7 @@ no change has no entry.
 - The dock floats: no bar, each control a level 2 tile; the header tools are tiles on `--secondary`; the toast is the inverse surface with its action in `--inverse-primary` (DSV-17).
 - `Editar`: the fields are `field boxed` (name inside the box), the recurrence switch a `toggle-card` with the hint `edit.repeatHint`, the shop chips `cluster assign` (× on a shop of the item, a dashed + on the others), the aisle chips `cluster pick`, `Eliminar` a text button; an idle switch is a light track (DSV-18, ROW-7).
 - A recipe card holds its actions at its top end, beside the name, and its products full width below; the count of `Recetas` in the header is an emerald pill (DSV-19).
+- `Menú`: a summary of the planned and free slots of the week above its actions (`menu.summary`, `plannedSlots` and `SLOTS` of `src/menu.js`, MENU-26); a `calendar` icon in the week bar (new in `icons.svg`), the kind of a planned meal as an icon, a free meal with its call first, a bin on **Vaciar menú**, the header count as a neutral pill (DSV-20).
 
 ## 1.13.0 - 2026-11-05
 

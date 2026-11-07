@@ -115,6 +115,11 @@ export const clearMenu = (state, week) => {
 
 export const mealCount = (state, week) => ofWeek(state, week).length;
 
+// MENU-26: the slots of a week, and the slots that hold a meal. A slot with a meal of each list
+// counts once.
+export const SLOTS = DAYS * MEALS.length;
+export const plannedSlots = (state, week) => new Set(ofWeek(state, week).map((entry) => `${entry.day}:${entry.meal}`)).size;
+
 // MENU-24: the meals of `from` in place of the meals of `to`, each in its day and meal. `count` is the
 // number of meals copied. A week with no meal gives `error.menuEmpty`.
 export const repeatWeek = (state, from, to) => {

@@ -134,6 +134,13 @@ past weeks stay, read only.
   (`menu.statusRecipe`) for a recipe, **Anotación rápida** (`menu.statusDish`) for a dish; a slot
   with two meals (MENU-20) has none, and Compacta (NAV-20) hides it. The status line is hidden from
   a screen reader, as the label of the tile already says it.
+- **MENU-26** Above **Llenar cesta** and **Vaciar menú**, a line counts the slots of the week in
+  view that hold a meal, of the 14, and the free ones, in small capitals (`menu.summary`:
+  `9 de 14 comidas planificadas · 5 libres`). A slot with a meal of each list (MENU-20) counts
+  once (`plannedSlots` of `src/menu.js`). The week bar starts with the icon `calendar`; a planned
+  meal shows its kind at its top end (cutlery for a recipe, a pencil for a dish); a free meal
+  shows `Elegir receta` first and the name of the meal below it; **Vaciar menú** has the icon
+  `trash` (DSV-20).
 
 ## Limits
 

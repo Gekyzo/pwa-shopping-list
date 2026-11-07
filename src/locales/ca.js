@@ -13,6 +13,7 @@ export default {
   'menu.choose': 'Tria una recepta',
   'menu.fill': 'Omple cistella',
   'menu.clear': 'Buida el menú',
+  'menu.summary': { one: '{planned} de {total} àpats planificats · {free} lliure', other: '{planned} de {total} àpats planificats · {free} lliures' },
   'menu.remove': 'Treu',
   'menu.removeMeal': 'Treu {name}',
   'menu.noRecipe': 'sense recepta',

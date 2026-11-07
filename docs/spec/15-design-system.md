@@ -137,6 +137,13 @@ each part.
   badge keep clear of them; the products take the full width of the card below. With the left
   hand the actions stand at the top start. The count of `Recetas` in the header is a pill on
   `--done-soft` in `--done`.
+- **DSV-20** `Menú` (MENU-26). The count in the header is a neutral pill: `--secondary` with a
+  `--line` edge, in `--muted`. The week bar starts with a muted `calendar`. A planned meal shows
+  its kind at its top end, out of the flow: `utensils` in `--done` for a recipe, `edit` in
+  `--muted` for a dish; Compacta keeps the tile with no least height. A free meal shows the
+  `plus-circle`, `Elegir receta`, then the name of the meal in `--struck`. The summary of the week
+  (`menu-summary`) is a muted line in small capitals above the actions. **Vaciar menú** has the
+  icon `trash`.
 
 ## Parts of the app
 
