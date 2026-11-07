@@ -13,6 +13,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 - In **Rezepte** stehen die Knöpfe eines Rezepts neben seinem Namen, und die Produkte nutzen die ganze Breite der Karte.
 - **Menü** zeigt, wie viele Mahlzeiten der Woche geplant und wie viele frei sind, ein Symbol an jeder Mahlzeit für ein Rezept oder ein Gericht und einen Kalender an der Woche.
 - **Optionen** zeigt ein Symbol an jeder Gruppe, markiert **Alle Daten löschen** als endgültig und erklärt **App installieren**.
+- Auf einem breiten Bildschirm hebt ein grüner Balken den aktuellen Bereich hervor, und jede Gruppe im **Einkauf** hat ihren Titel in ihrer Karte.
 
 ## 1.13.0 - 2026-11-05
 

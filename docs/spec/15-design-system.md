@@ -91,7 +91,7 @@ This document holds the rules of the app only.
   of `Ajustes` are `list-group card`, under a head in small capitals. The quantity of a row is a
   tonal chip, and the mark of a recurrent item (`item-row-repeat`) is `--warning`. The header is
   `--surface` with its tools as bordered tiles. The bar is `--surface`, and its current section is
-  emerald with no pill, on `--done-soft` from 1024px. The name of a day of `Menú` is 18px after an
+  emerald with no pill, on `--secondary` with an emerald bar from 1024px (DSV-22). The name of a day of `Menú` is 18px after an
   emerald bar.
 - **DSV-14** The detail of the Stitch screens, with no change of behaviour. The name of a recipe card is 18px at weight 600; its link button is
   a bordered tile and its send button an emerald tile, both 40px inside the 48px target (`--tap`).
@@ -152,6 +152,12 @@ each part.
   its name (`settings-row-hint`). The update banner is a tonal card on `--secondary` with a
   `--line` edge. From 1024px each row icon stands in a 32px `--surface-2` tile (`--icon-tile`).
   The trip-end choice stays two segments: the switch of the screen would be a change of control.
+- **DSV-22** From 1024px, as in the desktop screens. The current section of the rail is a band on
+  `--secondary` with a 3px emerald bar at its start (`--shadow-current`), and its count an
+  emerald pill (`--shadow-count`); both are shadows, so the rail keeps its layout (DSV-8). The
+  head of a group of `Compra` is the tinted top of its card (`--surface-2`, a `--line` edge, 6px
+  top corners); the meta line of a row is a small outlined pill; the quantity chip is outlined on
+  `--surface`. Recipe cards keep their own parts.
 
 ## Parts of the app
 

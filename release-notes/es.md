@@ -13,6 +13,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 - En **Recetas**, los botones de una receta están junto a su nombre, y sus productos ocupan todo el ancho de la tarjeta.
 - **Menú** muestra cuántas comidas de la semana están planificadas y cuántas libres, un icono en cada comida para una receta o un plato, y un calendario en la semana.
 - **Ajustes** muestra un icono en cada grupo, marca **Borrar todos los datos** como irreversible y explica **Instalar la aplicación**.
+- En una pantalla ancha, la sección actual destaca con una barra verde, y cada grupo de **Compra** tiene su título dentro de su tarjeta.
 
 ## 1.13.0 - 2026-11-05
 

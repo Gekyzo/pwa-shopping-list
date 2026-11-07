@@ -200,3 +200,23 @@ test('Ajustes from 1024px: each row icon stands in a tinted tile; the update ban
   assert.match(block('.settings .settings-row-icon'), /background:\s*var\(--surface-2\)/);
   assert.match(block('.settings .banner'), /border:\s*1px solid var\(--line\)/);
 });
+
+// The rules inside `@media (min-width: 1024px)`, as one text.
+const wide = [...plain.matchAll(/@media \(min-width: 1024px\) \{([\s\S]*?)\n  \}\n/g)].map(([, inner]) => inner).join('\n');
+
+test('the shadows of the current section are an emerald bar and an emerald ring (DSV-22)', () => {
+  assert.match(css, /--shadow-current:\s*inset 3px 0 0 var\(--done\);/);
+  assert.match(css, /--shadow-count:\s*0 0 0 0\.25em var\(--done\);/);
+});
+
+test('from 1024px the current section has an emerald bar at its start and an emerald count (DSV-22)', () => {
+  assert.match(block('.nav-item[aria-current="page"]', wide), /box-shadow:\s*var\(--shadow-current\)/);
+  assert.match(block('.nav-item[aria-current="page"]', wide), /background:\s*var\(--secondary\)/);
+  assert.match(block('.nav-item[aria-current="page"] .nav-count', wide), /background:\s*var\(--done\)/);
+});
+
+test('from 1024px a group head is the tinted top of its card, and the meta of a row is a pill (DSV-22)', () => {
+  assert.match(block('.item-list:not(:has(> .item-row.recipe)) > .group-head', wide), /background:\s*var\(--surface-2\)/);
+  assert.match(block('.item-row-body:has(> .item-row-check) > .item-row-name > .item-row-meta', wide), /border-radius:\s*var\(--radius-pill\)/);
+  assert.match(block('.item-row-qty', wide), /box-shadow:\s*inset 0 0 0 1px var\(--line\)/);
+});
