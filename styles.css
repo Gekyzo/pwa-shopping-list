@@ -38,6 +38,10 @@
     --danger: light-dark(#ba1a1a, #ffb4ab); /* error: a destructive action, a failure */
     --warning: light-dark(#a23e18, #ffb59c); /* secondary, terracotta: an alert, a recurrent item */
     --scrim: rgb(31 27 23 / 0.45);
+    /* The toast is the inverse surface of the screens: dark on light, light on dark (DSV-17). */
+    --toast-bg: light-dark(#342f2b, #eae1da); /* inverse-surface */
+    --toast-text: light-dark(#f9efe8, #1f1b17); /* inverse-on-surface */
+    --inverse-primary: light-dark(#82d8a8, #13734b); /* the action of the toast */
 
     --radius-m: 6px;
     --radius-l: 6px;
@@ -148,14 +152,15 @@
     flex: none;
   }
 
-  /* The header of DESIGN.md (DSV-13): an elevated band, and its tools as bordered square tiles. */
+  /* The header of DESIGN.md (DSV-13): an elevated band, and its tools as bordered square tiles,
+     tinted as in the Bodega screens (DSV-17). */
   .app-header {
     background: var(--surface);
   }
 
   .app-header .button.icon {
     border: 1px solid var(--line);
-    background: var(--bg);
+    background: var(--secondary);
   }
 
   .app-header .button.icon:not([hidden]) ~ .button.icon:not([hidden]) {
@@ -244,6 +249,32 @@
 
   .dock > .dock-add {
     margin-inline: 0;
+  }
+
+  /* The dock floats over the list, as in the Bodega screens (DSV-17): no bar behind it, and each
+     control a raised level 2 tile, so it reads over any row. */
+  .dock {
+    border-top: 0;
+    background: transparent;
+  }
+
+  .dock > :is(.chip, .button.icon):not(.dock-add) {
+    border: var(--border-control) solid var(--control);
+    background: var(--surface);
+    box-shadow: var(--shadow-l);
+  }
+
+  .dock > .dock-add {
+    box-shadow: var(--shadow-l);
+  }
+
+  .dock > .dock-field {
+    box-shadow: var(--shadow-l);
+  }
+
+  /* The action of the toast is the light emerald on the dark inverse surface. */
+  .toast .button.strong {
+    color: var(--inverse-primary);
   }
 
   /* @extends dock */

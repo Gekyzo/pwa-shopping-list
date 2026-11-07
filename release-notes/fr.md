@@ -8,6 +8,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 - Nouvelles couleurs : un fond papier chaud avec des lignes gris-vert douces, en thème clair et en thème sombre.
 - Dans **Courses**, le nom de chaque produit tient sur une ligne, et sa quantité est une étiquette discrète.
 - Dans **Courses**, les produits achetés sont dans une carte à part, sous une coche.
+- Les boutons en bas de **Courses** flottent sur la liste, et le message après une coche est sombre.
 
 ## 1.13.0 - 2026-11-05
 

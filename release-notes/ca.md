@@ -8,6 +8,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 - Colors nous: un fons de paper càlid amb línies gris verdós suaus, en el tema clar i en el fosc.
 - A **Compra**, el nom de cada producte ocupa una línia, i la seva quantitat és una etiqueta suau.
 - A **Compra**, els productes comprats són en una targeta pròpia, sota una marca de fet.
+- Els botons de baix de **Compra** suren sobre la llista, i l'avís després de marcar és fosc.
 
 ## 1.13.0 - 2026-11-05
 

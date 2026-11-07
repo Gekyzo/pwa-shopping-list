@@ -8,6 +8,7 @@ What changes for you in each version of the app. The newest version is first.
 - New colours: a warm paper background with soft green-grey lines, in the light and the dark theme.
 - In **Compra**, each product name keeps one line, and its quantity is a soft chip.
 - In **Compra**, the bought products stand in a card of their own, under a check.
+- The buttons at the bottom of **Compra** float over the list, and the message after a tick is dark.
 
 ## 1.13.0 - 2026-11-05
 

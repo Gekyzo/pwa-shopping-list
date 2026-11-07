@@ -8,6 +8,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 - Cores novas: um fundo de papel quente com linhas cinza-esverdeadas suaves, no tema claro e no escuro.
 - Em **Compras**, o nome de cada produto ocupa uma linha, e a quantidade é uma etiqueta suave.
 - Em **Compras**, os produtos comprados ficam num cartão próprio, sob uma marca de feito.
+- Os botões em baixo de **Compras** flutuam sobre a lista, e o aviso depois de marcar é escuro.
 
 ## 1.13.0 - 2026-11-05
 
