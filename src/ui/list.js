@@ -102,7 +102,8 @@ const pendingNodes = () => {
 const listNodes = (items) => {
   const bought = items.filter((item) => item.bought && found(item));
   // The search finds no postponed item (LIST-41).
-  const postponed = ui.view !== 'active' || searching() ? [] : store.postponedItems(viewState());
+  // The same items as the panel Próxima compra: those of the list chip, with no shop filter (LIST-39).
+  const postponed = ui.view !== 'active' || searching() ? [] : store.postponedItems(listState());
   return [
     ...pendingNodes(),
     ...(bought.length ? boughtSection(bought) : []),

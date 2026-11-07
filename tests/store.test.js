@@ -756,3 +756,10 @@ test('postponed items count in no header figure and no list view', () => {
   assert.deepEqual(tripSummary(start), { total: 1, left: 1, back: 0, saved: 1 });
   assert.equal(openItems(start).length, 1);
 });
+
+test('bringAllBack with ids brings back only those postponed items (LIST-42, the list in view)', () => {
+  const start = build(['Pan', 'postponed'], ['Té', 'postponed']);
+  const { state, count } = bringAllBack(start, [idOf(start, 'Té'), 'nope']);
+  assert.equal(count, 1);
+  assert.deepEqual(state.items.map((item) => item.list), ['postponed', 'active']);
+});

@@ -3,7 +3,7 @@ import { reached, settle } from '#swipe';
 import { loadSwipeHint, saveSwipeHint } from '#storage';
 import { SIDE_BUTTON, DRAG_START, HINT_WAIT_MS, HINT_SHIFT, el, storage, state, ui, t, twinReach, apply, render, guardClick } from '#ui/context';
 import { twinIds, acrossTwins, deletedKey } from '#lists';
-import { isOpen, searching, shownGroup, mixed, tagsOf } from '#ui/view';
+import { isOpen, searching, shownGroup, mixed, tagsOf, listState } from '#ui/view';
 import { leave, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
@@ -292,7 +292,8 @@ export const boughtSection = (bought) => {
 // The line below the name of a postponed item: its quantity and its shops.
 export const postponedDetail = (item) => [item.quantity, item.shops.join(', ')].filter(Boolean).join(' · ');
 
-const bringBack = (item) => apply(store.bringToList(state, item.id), { undoText: t('toast.broughtBack', { name: item.name }) });
+// SHARE-16: from a merged row the bring back reaches the twin as the setting says, as Posponer does.
+const bringBack = (item) => apply(onRow(item, store.bringToList), { undoText: t('toast.broughtBack', { name: item.name }) });
 
 // The button that brings one postponed item back to Compra (LIST-42).
 export const bringBackButton = (item) => {
@@ -303,8 +304,11 @@ export const bringBackButton = (item) => {
 };
 
 // Mover todos a la compra actual (LIST-42).
+// It brings back the postponed items of the list in view (the list chip of a member), with their
+// twins (SHARE-14).
 export const bringAll = () => {
-  const result = store.bringAllBack(state);
+  const ids = store.postponedItems(listState()).flatMap((item) => twinIds(item, twinReach));
+  const result = store.bringAllBack(state, ids);
   if (result.count) apply(result, { undoText: t('toast.allBroughtBack', { count: result.count }) });
 };
 
