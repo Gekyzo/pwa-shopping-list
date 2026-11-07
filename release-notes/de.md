@@ -12,6 +12,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 - **Bearbeiten** zeigt jedes Feld als Kasten mit seinem Namen darin, den Schalter zum Wiederholen als Karte und die Geschäfte als Etiketten, die du mit + hinzufügst und mit × entfernst.
 - In **Rezepte** stehen die Knöpfe eines Rezepts neben seinem Namen, und die Produkte nutzen die ganze Breite der Karte.
 - **Menü** zeigt, wie viele Mahlzeiten der Woche geplant und wie viele frei sind, ein Symbol an jeder Mahlzeit für ein Rezept oder ein Gericht und einen Kalender an der Woche.
+- **Optionen** zeigt ein Symbol an jeder Gruppe, markiert **Alle Daten löschen** als endgültig und erklärt **App installieren**.
 
 ## 1.13.0 - 2026-11-05
 

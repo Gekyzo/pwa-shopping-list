@@ -246,6 +246,8 @@ export default {
   'aisles.usual.frozen': 'Congelados',
   'aisles.usual.cleaning': 'Limpeza e higiene',
   'settings.install': 'Instalar a aplicação',
+  'settings.installHint': 'Acesso rápido sem ligação',
+  'settings.irreversible': 'Irreversível',
   'settings.help': 'Ajuda',
   'settings.onboarding': 'Ver a introdução',
   'settings.whatsNew': 'Novidades',

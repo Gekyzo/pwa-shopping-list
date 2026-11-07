@@ -12,6 +12,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 - **Modifica** mostra ogni campo come un riquadro con il nome dentro, l'interruttore di ripetizione come una scheda, e i negozi come etichette da aggiungere con + e togliere con ×.
 - In **Ricette**, i pulsanti di una ricetta stanno accanto al nome, e i prodotti occupano tutta la larghezza della scheda.
 - **Menù** mostra quanti pasti della settimana sono pianificati e quanti liberi, un'icona su ogni pasto per una ricetta o un piatto, e un calendario sulla settimana.
+- **Impostazioni** mostra un'icona su ogni gruppo, segna **Elimina tutti i dati** come irreversibile e spiega **Installa l’app**.
 
 ## 1.13.0 - 2026-11-05
 

@@ -12,6 +12,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 - **Edita** mostra cada camp com una caixa amb el nom a dins, l'interruptor de repetir com una targeta, i les botigues com etiquetes que afegeixes amb + i treus amb ×.
 - A **Receptes**, els botons d'una recepta són al costat del nom, i els productes ocupen tota l'amplada de la targeta.
 - **Menú** mostra quants àpats de la setmana són planificats i quants lliures, una icona a cada àpat per a una recepta o un plat, i un calendari a la setmana.
+- **Configuració** mostra una icona a cada grup, marca **Esborrar totes les dades** com a irreversible i explica **Instal·la l’aplicació**.
 
 ## 1.13.0 - 2026-11-05
 

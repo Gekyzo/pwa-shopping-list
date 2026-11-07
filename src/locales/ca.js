@@ -246,6 +246,8 @@ export default {
   'aisles.usual.frozen': 'Congelats',
   'aisles.usual.cleaning': 'Neteja i higiene',
   'settings.install': 'Instal·la l’aplicació',
+  'settings.installHint': 'Accés ràpid sense connexió',
+  'settings.irreversible': 'Irreversible',
   'settings.help': 'Ajuda',
   'settings.onboarding': 'Mostra la introducció',
   'settings.whatsNew': 'Novetats',

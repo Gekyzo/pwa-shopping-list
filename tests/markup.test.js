@@ -317,3 +317,17 @@ test('the actions of Menú start with the summary of the week, and Vaciar menú 
   assert.match(actions, /<p id="menu-summary" class="menu-summary"><\/p>\s*<div id="menu-split"/);
   assert.match(actions, /<button id="menu-clear" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"\/><\/svg><span data-i18n="menu.clear"><\/span><\/button>/);
 });
+
+test('each head of a group of Ajustes ends with its icon (DSV-21)', () => {
+  const heads = [...settings.matchAll(/<h2 class="list-group-head">([\s\S]*?)<\/h2>/g)].map(([, inner]) => inner);
+  assert.equal(heads.length, 8);
+  for (const inner of heads) assert.match(inner, /^<span data-i18n="[\w.]+"><\/span><svg class="icon small list-group-icon" aria-hidden="true"><use href="icons.svg#[\w-]+"\/><\/svg>$/);
+});
+
+test('Borrar todos los datos is tagged irreversible, and Instalar has a hint (DSV-21)', () => {
+  const [reset = ''] = settings.match(/<button id="reset"[\s\S]*?<\/button>/) ?? [];
+  assert.match(reset, /<span class="settings-row-tag" data-i18n="settings.irreversible"><\/span><\/button>$/);
+  const [install = ''] = settings.match(/<button id="install"[\s\S]*?<\/button>/) ?? [];
+  assert.match(install, /<span class="settings-row-label"><span data-i18n="settings.install"><\/span><small class="settings-row-hint" data-i18n="settings.installHint"><\/small><\/span>/);
+  assert.match(settings, /id="aisles-count" class="settings-row-value settings-row-count"/);
+});

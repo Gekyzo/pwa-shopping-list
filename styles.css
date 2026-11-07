@@ -58,6 +58,7 @@
     --text-l: 1.625rem; /* headline-lg-mobile: 26px, the screen title */
     --weight-row: 500;
     --tick: 32px; /* the round tick of a row */
+    --icon-tile: 32px; /* the tile of a row icon of Ajustes from 1024px */
     --tick-stroke: 2.5px; /* the mark inside a checked tick */
     --strike: 1.5px; /* the line through a bought name */
     --border-control: 1.5px; /* the border of an input */
@@ -848,7 +849,8 @@
     opacity: 0.7;
   }
 
-  /* @extends list-group */
+  /* @extends list-group
+     @part list-group-icon  The icon at the end of a group head, in --muted (DSV-21). */
   /* The head of a group of Ajustes is a category tag of DESIGN.md: small capitals, spaced. */
   .settings .list-group-head {
     color: var(--muted);
@@ -1610,6 +1612,9 @@
      @part settings-hint    A line of help below a group head, on a hint.
      @part settings-section A group head, its hint and its group. From 840px (NAV-27) the head and the hint form a column beside the group.
      @part settings-row-icon The icon at the start of a settings row, in --muted; a danger row draws it in --danger.
+     @part settings-row-tag   A small capital tag at the end of a danger row, such as Irreversible, in --danger (DSV-21).
+     @part settings-row-count The count of a row as a pill, such as the aisles (DSV-21).
+     @part settings-row-hint  A muted line below the name of a row (DSV-21).
      @example <section class="settings" style="width: 100%"><h2 class="list-group-head">Preferencias</h2><div class="list-group"><div class="settings-row"><span class="settings-row-label">Idioma</span><span class="settings-row-value">Español</span><span class="chevron" aria-hidden="true">›</span><select class="select" aria-label="Idioma"><option>Español</option></select></div></div></section> */
   .settings-hint {
     padding: 0 var(--space-4) var(--space-2);
@@ -1656,6 +1661,64 @@
   /* @extends list-group */
   .settings .settings-row {
     position: relative;
+  }
+
+  /* DSV-21: the parts of the Ajustes of the Bodega screens. */
+  .settings .list-group-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .list-group-icon {
+    color: var(--muted);
+  }
+
+  .settings-row-tag {
+    flex: none;
+    color: var(--danger);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-strong);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  .settings-row-count {
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--secondary);
+    color: var(--text);
+    font-size: var(--text-s);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .settings-row-label:has(> .settings-row-hint) {
+    display: flex;
+    flex-direction: column;
+    padding-block: var(--space-2);
+  }
+
+  .settings-row-hint {
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
+  /* The update banner of Ajustes is a tonal card with an edge. */
+  .settings .banner {
+    border: 1px solid var(--line);
+    background: var(--secondary);
+  }
+
+  /* From 1024px each row icon stands in a tinted 32px tile. */
+  @media (min-width: 1024px) {
+    .settings .settings-row-icon {
+      box-sizing: border-box;
+      width: var(--icon-tile);
+      height: var(--icon-tile);
+      padding: var(--space-1);
+      border-radius: var(--radius-m);
+      background: var(--surface-2);
+    }
   }
 
   /* @component account-row

@@ -144,6 +144,14 @@ each part.
   `plus-circle`, `Elegir receta`, then the name of the meal in `--struck`. The summary of the week
   (`menu-summary`) is a muted line in small capitals above the actions. **Vaciar menú** has the
   icon `trash`.
+- **DSV-21** `Ajustes` (NAV-6). The head of each group ends with its icon in `--muted`
+  (`list-group-icon`): `users`, `export`, `filter`, `cart`, `users`, `aisle`, `download`, `info`.
+  **Borrar todos los datos** ends with the tag `settings.irreversible` in small capitals in
+  `--danger` (`settings-row-tag`). The count of the aisles is a pill on `--secondary`
+  (`settings-row-count`). **Instalar la aplicación** has the hint `settings.installHint` below
+  its name (`settings-row-hint`). The update banner is a tonal card on `--secondary` with a
+  `--line` edge. From 1024px each row icon stands in a 32px `--surface-2` tile (`--icon-tile`).
+  The trip-end choice stays two segments: the switch of the screen would be a change of control.
 
 ## Parts of the app
 

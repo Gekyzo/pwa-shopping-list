@@ -186,3 +186,17 @@ test('with its summary the action bar of Menú has a solid ground and a top line
   assert.match(bar, /background:\s*var\(--bg\)/);
   assert.match(bar, /border-top:\s*1px solid var\(--line\)/);
 });
+
+test('Ajustes: the icon of a group head, the irreversible tag and the count pill (DSV-21)', () => {
+  assert.match(block('.list-group-icon'), /color:\s*var\(--muted\)/);
+  assert.match(block('.settings-row-tag'), /text-transform:\s*uppercase/);
+  assert.match(block('.settings-row-tag'), /color:\s*var\(--danger\)/);
+  assert.match(block('.settings-row-count'), /border-radius:\s*var\(--radius-pill\)/);
+  assert.match(block('.settings-row-count'), /background:\s*var\(--secondary\)/);
+  assert.match(block('.settings-row-hint'), /color:\s*var\(--muted\)/);
+});
+
+test('Ajustes from 1024px: each row icon stands in a tinted tile; the update banner is tonal (DSV-21)', () => {
+  assert.match(block('.settings .settings-row-icon'), /background:\s*var\(--surface-2\)/);
+  assert.match(block('.settings .banner'), /border:\s*1px solid var\(--line\)/);
+});
