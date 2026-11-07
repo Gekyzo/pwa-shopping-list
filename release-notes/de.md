@@ -5,6 +5,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 ## Unreleased
 
 - In **Einkauf** hat der Name jedes Artikels mehr Platz: Er wird seltener gekürzt und braucht weniger Zeilen.
+- Neue Farben: ein warmer Papierhintergrund mit sanften grüngrauen Linien, im hellen und im dunklen Design.
 
 ## 1.13.0 - 2026-11-05
 

@@ -5,6 +5,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 ## Unreleased
 
 - Em **Compras**, o nome de cada produto tem mais espaço: é cortado menos e ocupa menos linhas.
+- Cores novas: um fundo de papel quente com linhas cinza-esverdeadas suaves, no tema claro e no escuro.
 
 ## 1.13.0 - 2026-11-05
 

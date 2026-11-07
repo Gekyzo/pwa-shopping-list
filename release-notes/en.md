@@ -5,6 +5,7 @@ What changes for you in each version of the app. The newest version is first.
 ## Unreleased
 
 - In **Shopping**, the name of each item has more room: it is cut less and takes fewer lines.
+- New colours: a warm paper background with soft green-grey lines, in the light and the dark theme.
 
 ## 1.13.0 - 2026-11-05
 

@@ -66,15 +66,18 @@ This document holds the rules of the app only.
   `fonts/hanken-grotesk-latin.woff2` and `fonts/hanken-grotesk-latin-ext.woff2` of the app (SIL OFL,
   `fonts/OFL.txt`), both in `SHELL` of `sw.js` (SW-2), so it shows offline. No font comes from the
   network.
-- **DSV-11** The palette is warm stone paper with one emerald and one terracotta, in both themes.
-  Light: canvas `#f9f8f5` (`--bg`), rows and sheets `#ffffff`, ink `#1c1917`, muted ink `#78716c`,
-  struck ink `#a8a29e` (`--struck`), borders `#e7e5e4` and `#d6d3d1`. Dark: canvas `#0c0a09`, rows
-  `#1c1917`, ink `#f5f5f4`, muted ink `#a8a29e`. Emerald `#13734b` (dark `#4fbf88`) is `--done` and
-  `--primary`: the main action, progress and the checked state. Error red `#ba1a1a` (dark
-  `#ffb4ab`) is `--danger`: a destructive action and a failure. Terracotta `#b34a24` (dark
-  `#f0906a`) is `--warning`: an alert and the mark of a recurrent item. Controls, buttons and cards have 6px corners; depth
-  comes from borders, and only a sheet or a lifted row has a shadow. The body text is 16px with
-  tabular figures.
+- **DSV-11** The palette is the one of the Stitch screens of Bodega: warm parchment, green-grey
+  lines, one emerald and one terracotta. Light: canvas `#fff8f5` (`--bg`), rows and sheets
+  `#ffffff` (`--surface`), tonal fill `#fcf2eb` (`--surface-2`), chip fill `#f6ece6`
+  (`--secondary`), ink `#1f1b17`, muted ink `#3f4942`, struck ink `#6f7a71` (`--struck`), borders
+  `#bec9c0` (`--line`) and `#6f7a71` (`--control`). The screens show no dark theme, so dark is
+  derived from the same roles: canvas `#1f1b17`, rows `#2a2521`, tonal fill `#342f2b`, ink
+  `#f9efe8`, muted ink `#bec9c0`. Emerald `#13734b` (dark `#82d8a8`) is `--done` and `--primary`:
+  the main action, progress and the checked state. Error red `#ba1a1a` (dark `#ffb4ab`) is
+  `--danger`: a destructive action and a failure. Terracotta `#a23e18` (dark `#ffb59c`) is
+  `--warning`: an alert and the mark of a recurrent item. Controls, buttons and cards have 6px
+  corners; depth comes from borders, and only a sheet or a lifted row has a shadow. The body text
+  is 16px with tabular figures. `tests/look.test.js` checks the values.
 - **DSV-12** The components of `DESIGN.md`, as versions of the app (DSV-3). The name of a row is
   18px at weight 500 (`--text-row`, `--weight-row`), and its quantity keeps one line. The check of
   a row is a round tick of 32px (`--tick`) with a `--struck` border, filled with `--done` when

@@ -11,6 +11,7 @@ no change has no entry.
 ## Unreleased
 
 - The end slot of a row of `Compra` is one button wide (`--tap`), not two: the name gets 48 px more, and the divider of the left hand starts after one button (ROW-1).
+- The palette is the one of the Stitch screens of Bodega (DSV-11): canvas `#fff8f5`, borders `#bec9c0` and `#6f7a71`, muted ink `#3f4942`, terracotta `#a23e18`; dark is derived from the same roles. `DESIGN.md` holds the Stitch outline values again.
 
 ## 1.13.0 - 2026-11-05
 

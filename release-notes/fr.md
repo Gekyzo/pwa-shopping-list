@@ -5,6 +5,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 ## Unreleased
 
 - Dans **Courses**, le nom de chaque article a plus de place : il est moins coupé et prend moins de lignes.
+- Nouvelles couleurs : un fond papier chaud avec des lignes gris-vert douces, en thème clair et en thème sombre.
 
 ## 1.13.0 - 2026-11-05
 
