@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- Amb un ratolí, el botó ⋮ d’un article ja no tapa la quantitat: té el seu lloc abans de la nansa.
 - Amb un ratolí, un clic en un article de **Compra** obre **Edita**. Per marcar-lo com a comprat, fes clic al cercle. Arrossegar amb el ratolí continua movent l’article. Amb el dit, tocar l’article continua marcant-lo.
 - En pantalles amples d’uns 1024 px, el títol de la capçalera ja no es talla: el camp de cerca s’estreny i, si cal, mostra només la lupa.
 - En pantalles amples, la llista i els panells de **Compra** són com el disseny: més aire al voltant de la llista i entre els grups, panells més amples, etiquetes i quantitats més clares i la barra de cada recepta més gruixuda i verda.

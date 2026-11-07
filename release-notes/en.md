@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- With a mouse, the ⋮ button of an item no longer covers its quantity: it has its own place before the handle.
 - With a mouse, a click on an item of **Shopping** opens **Edit**. To tick it, click its circle. A drag with the mouse still moves the item. With a finger, a tap on the item still ticks it.
 - On wide screens of about 1024 px, the title of the header is no longer cut: the search field gets narrower and, when needed, shows only the magnifier.
 - On wide screens, the list and the panels of **Shopping** follow the design: more room around the list and between the groups, wider panels, lighter tags and quantities, and a thicker green bar for each recipe.
