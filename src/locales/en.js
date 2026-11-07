@@ -56,6 +56,8 @@ export default {
   'panels.postponedNote': 'Products kept for the next trip to the shop:',
   'panels.bringAll': 'Move all to this trip',
   'panels.bringBack': 'Bring “{name}” to this trip',
+  'panels.storage': 'Local storage',
+  'panels.storageUsed': { one: '{count} KB used', other: '{count} KB used' },
   'row.postpone': 'Postpone',
   'toast.postponed': '“{name}” postponed.',
   'toast.broughtBack': '“{name}” is back in the list.',

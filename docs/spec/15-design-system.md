@@ -203,9 +203,10 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   `--surface-2` with 4px corners and an 8px emerald bar on `--surface-high`, and its link **Ver**
   ends with the icon `arrow-right`; the name of a row of **Próxima compra** is at weight 500
   (`--weight-book`); the button **Mover todos a la compra actual** has a `--control` edge on
-  `--surface-2` and the icon `list-add`, at every width. The card
-  **Almacenamiento IndexedDB** of the screen is not built: the app stores its lists in
-  `localStorage`, not IndexedDB.
+  `--surface-2` and the icon `list-add`, at every width. The card **Almacenamiento IndexedDB** of
+  the screen is **Almacenamiento local** (LIST-43), as the app stores in `localStorage`: 14px of
+  padding, 4px corners, a `--line` edge on `--surface-2`, 11px text in `--control`, the icon
+  `database` and the figure in `--font-mono`.
 - **DSV-27** The header of the desktop screen of `Compra`, from 1024px. It is on the canvas
   (`--bg`) with its `--line` below, 20px above and below its content, and the title is 32px
   (`--text-headline-l`). The tools stand 12px apart with 4px corners: the search field and the

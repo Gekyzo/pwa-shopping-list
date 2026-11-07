@@ -56,6 +56,8 @@ export default {
   'panels.postponedNote': 'Produits gardés pour les prochaines courses :',
   'panels.bringAll': 'Tout mettre dans les courses actuelles',
   'panels.bringBack': 'Remettre « {name} » dans les courses',
+  'panels.storage': 'Stockage local',
+  'panels.storageUsed': { one: '{count} Ko utilisé', other: '{count} Ko utilisés' },
   'row.postpone': 'Reporter',
   'toast.postponed': '« {name} » reporté.',
   'toast.broughtBack': '« {name} » revient dans les courses.',

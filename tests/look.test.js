@@ -250,6 +250,14 @@ test('from 1024px the panels have a line below their head and an emerald 8px bar
   assert.match(block('.side-panel-card .side-panel-fill', wide), /background:\s*var\(--done\)/);
 });
 
+test('from 1024px Almacenamiento local is a small tinted card with its figure in monospace (DSV-26, LIST-43)', () => {
+  assert.match(block('.side-panel-storage'), /display:\s*none/);
+  const card = block('.side-panel-storage:not([hidden])', wide);
+  assert.match(card, /display:\s*flex/);
+  assert.match(card, /border-radius:\s*var\(--radius-s\)/);
+  assert.match(block('.side-panel-storage-used', wide), /font-family:\s*var\(--font-mono\)/);
+});
+
 test('from 1024px the outlined quantity chip wins over the tonal one: its rule is more specific (DSV-22)', () => {
   assert.match(block('.item-row-name > .item-row-qty', wide), /background:\s*var\(--surface-2\)/);
 });

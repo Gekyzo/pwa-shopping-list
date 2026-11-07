@@ -56,6 +56,8 @@ export default {
   'panels.postponedNote': 'Productos reservados para la siguiente salida al supermercado:',
   'panels.bringAll': 'Mover todos a la compra actual',
   'panels.bringBack': 'Traer «{name}» a la compra',
+  'panels.storage': 'Almacenamiento local',
+  'panels.storageUsed': { one: '{count} KB usado', other: '{count} KB usados' },
   'row.postpone': 'Posponer',
   'toast.postponed': '"{name}" pospuesto.',
   'toast.broughtBack': '"{name}" vuelve a la compra.',

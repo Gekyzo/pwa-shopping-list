@@ -56,6 +56,8 @@ export default {
   'panels.postponedNote': 'Prodotti tenuti per la prossima spesa:',
   'panels.bringAll': 'Sposta tutto nella spesa attuale',
   'panels.bringBack': 'Riporta «{name}» nella spesa',
+  'panels.storage': 'Archiviazione locale',
+  'panels.storageUsed': { one: '{count} KB usato', other: '{count} KB usati' },
   'row.postpone': 'Rimanda',
   'toast.postponed': '«{name}» rimandato.',
   'toast.broughtBack': '«{name}» torna nella spesa.',

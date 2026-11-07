@@ -210,6 +210,22 @@ export const save = (storage, state) => {
   }
 };
 
+// The bytes the app keeps in the storage, its keys and values in UTF-8 (LIST-43); null when the
+// storage cannot be read.
+const bytesOf = (text) => new TextEncoder().encode(text).length;
+export const storedBytes = (storage) => {
+  try {
+    return Array.from({ length: storage.length }, (_, index) => storage.key(index))
+      .filter((key) => key?.startsWith('shopping.'))
+      .reduce((sum, key) => sum + bytesOf(key) + bytesOf(storage.getItem(key) ?? ''), 0);
+  } catch {
+    return null;
+  }
+};
+
+// Rounded up, so a stored byte never reads as 0 KB.
+export const kilobytes = (bytes) => Math.ceil(bytes / 1024);
+
 export const exportJson = (state) => JSON.stringify(state, null, 2);
 
 // Local time, to the second, so two exports of one day get two names.

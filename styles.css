@@ -1324,6 +1324,8 @@
      @part side-panel-link   The emerald text button Ver of a tile, with its arrow.
      @part side-panel-action The button across the panel below its list: Mover todos.
      @part bring-back        The emerald plus that brings a postponed item back to Compra (LIST-42).
+     @part side-panel-storage The small card below the panels of Compra from 1024px: the bytes the app stores (LIST-43).
+     @part side-panel-storage-used The figure at its end, in monospace.
      @example <aside class="side-panels" style="display: grid"><section class="side-panel"><h2 class="side-panel-head"><span>Por tienda</span><small class="side-panel-end">quedan</small></h2><ul class="side-panel-list"><li class="side-panel-row"><span>Mercadona</span><span class="side-panel-value">5 de 7</span><span class="side-panel-bar"><span class="side-panel-fill" style="width: 100%"></span></span></li></ul></section></aside> */
   .side-panels {
     display: none;
@@ -1473,6 +1475,10 @@
     background: var(--done);
   }
 
+  .side-panel-storage {
+    display: none;
+  }
+
   .side-panel-more {
     padding-top: var(--space-2);
     color: var(--muted);
@@ -1518,7 +1524,8 @@
 
   /* DSV-26: from 1024px the panels of the desktop screen of Compra. A panel has 20px of padding and
      a line below its head; the tiles of Recetas en la lista are tinted with an 8px bar; the rows of
-     Próxima compra are 14px with 11px details; the second texts are 11px. */
+     Próxima compra are 14px with 11px details; the second texts are 11px; Almacenamiento local is
+     a small tinted card with 14px of padding (LIST-43). */
   @media (min-width: 1024px) {
     main > .side-panels:not([hidden]) {
       top: var(--space-7);
@@ -1610,6 +1617,27 @@
       color: var(--control);
       font-size: var(--text-label-sm);
       font-weight: var(--weight-medium);
+    }
+
+    .side-panel-storage:not([hidden]) {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin: 0;
+      padding: calc(var(--space-3) + var(--space-half));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-s);
+      background: var(--surface-2);
+      color: var(--control);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-medium);
+    }
+
+    .side-panel-storage-used {
+      margin-inline-start: auto;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
 
     .side-panel-action {
