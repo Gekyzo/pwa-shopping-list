@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- En pantalles amples, els panells de **Compra** s’assemblen més al disseny: **Veure** porta una fletxa, els noms de **Propera compra** tenen un traç més fi i el botó per moure-ho tot porta una icona de llista.
 - En pantalles amples, la capçalera de **Compra** és com el disseny: sobre el fons de la pàgina, un títol més gran, botons amb cantonades més rectes i botigues amb lletra més petita. El botó d’afegir diu **Afegeix**.
 - Amb un ratolí, el botó ⋮ d’un article ja no tapa la quantitat: té el seu lloc abans de la nansa.
 - Amb un ratolí, un clic en un article de **Compra** obre **Edita**. Per marcar-lo com a comprat, fes clic al cercle. Arrossegar amb el ratolí continua movent l’article. Amb el dit, tocar l’article continua marcant-lo.

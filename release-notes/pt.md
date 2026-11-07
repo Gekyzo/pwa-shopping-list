@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Em ecrãs largos, os painéis de **Compras** seguem o design mais de perto: **Ver** tem uma seta, os nomes em **Próximas compras** são menos carregados e o botão que move tudo mostra um ícone de lista.
 - Em ecrãs largos, o cabeçalho de **Compras** segue o design: sobre o fundo da página, um título maior, botões com cantos mais retos e lojas em letra mais pequena. O botão de adicionar diz **Adicionar**.
 - Com um rato, o botão ⋮ de um artigo já não tapa a quantidade: tem o seu próprio lugar antes da pega.
 - Com um rato, um clique num artigo de **Compras** abre **Editar**. Para o marcar como comprado, clica no círculo. Arrastar com o rato continua a mover o artigo. Com o dedo, tocar no artigo continua a marcá-lo.

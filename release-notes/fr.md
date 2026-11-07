@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur les écrans larges, les panneaux de **Courses** suivent le design de plus près : **Voir** a une flèche, les noms de **Prochaines courses** sont moins gras et le bouton qui déplace tout montre une icône de liste.
 - Sur les écrans larges, l’en-tête de **Courses** suit le design : sur le fond de la page, un titre plus grand, des boutons aux coins plus droits et des magasins en plus petit. Le bouton d’ajout dit **Ajouter**.
 - Avec une souris, le bouton ⋮ d’un article ne cache plus sa quantité : il a sa propre place avant la poignée.
 - Avec une souris, un clic sur un article de **Courses** ouvre **Modifier**. Pour le cocher, clique sur son cercle. Glisser avec la souris déplace toujours l’article. Au doigt, toucher l’article le coche toujours.

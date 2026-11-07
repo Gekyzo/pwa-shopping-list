@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Auf breiten Bildschirmen folgen die Felder von **Einkauf** dem Design genauer: **Ansehen** hat einen Pfeil, die Namen in **Nächster Einkauf** sind weniger fett und die Schaltfläche, die alles verschiebt, zeigt ein Listensymbol.
 - Auf breiten Bildschirmen folgt die Kopfzeile von **Einkauf** dem Design: auf dem Seitenhintergrund, ein größerer Titel, Schaltflächen mit eckigeren Ecken und Geschäfte in kleinerer Schrift. Die Schaltfläche zum Hinzufügen heißt **Hinzufügen**.
 - Mit der Maus verdeckt die Schaltfläche ⋮ eines Artikels die Menge nicht mehr: Sie hat ihren eigenen Platz vor dem Griff.
 - Mit der Maus öffnet ein Klick auf einen Artikel in **Einkauf** **Bearbeiten**. Zum Abhaken klicke auf den Kreis. Ziehen mit der Maus verschiebt den Artikel weiterhin. Mit dem Finger hakt ein Tippen den Artikel weiterhin ab.

@@ -200,8 +200,10 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   its text; the meta pill is 11px bold on `--surface-2`. The quantity chip is 13px on `--surface-2`
   with 2px corners, in `--muted`. The grip is 18px in `--control`. A panel has 20px of padding and
   a line below its head; its second texts are 11px; a tile of **Recetas en la lista** is on
-  `--surface-2` with 4px corners and an 8px emerald bar on `--surface-high`; the button
-  **Mover todos a la compra actual** has a `--control` edge on `--surface-2`. The card
+  `--surface-2` with 4px corners and an 8px emerald bar on `--surface-high`, and its link **Ver**
+  ends with the icon `arrow-right`; the name of a row of **Próxima compra** is at weight 500
+  (`--weight-book`); the button **Mover todos a la compra actual** has a `--control` edge on
+  `--surface-2` and the icon `list-add`, at every width. The card
   **Almacenamiento IndexedDB** of the screen is not built: the app stores its lists in
   `localStorage`, not IndexedDB.
 - **DSV-27** The header of the desktop screen of `Compra`, from 1024px. It is on the canvas
