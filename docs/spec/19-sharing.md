@@ -139,7 +139,8 @@ person of a share.
 
 ## The member's screen
 
-- **SHARE-14** For a member, `Compra` shows a row of list chips below the header, at every width:
+- **SHARE-14** For a member, `Compra` shows a row of list chips at the foot of the header, above the
+  shop chips, at every width:
   **Todas**, **Mi lista** and the shared list, named as in SHARE-11. Each chip counts the items to
   buy of its list. **Todas** shows the items of both lists; the other chips show the items of one
   list. The shop lists work inside the list chip: their chips, the dock and its picker show the

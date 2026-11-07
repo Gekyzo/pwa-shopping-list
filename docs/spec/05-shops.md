@@ -38,9 +38,10 @@ in [04-arrange.md](04-arrange.md).
 A shop list is a view of `Compra`, not a list in the data. The rules of the list
 apply in it.
 
-- **SHOP-16** From 600px wide `Compra` has a row of chips below the header: **Todas**, then each
+- **SHOP-16** From 600px wide `Compra` has a row of chips at the foot of the header, below the title: **Todas**, then each
   shop of the view in name order (SHOP-6), then **Sin tienda**. A tap on a chip shows that list.
-  The chip of the list in view is pressed. Below 600px the dock holds the shop lists instead
+  The chip of the list in view is pressed: a pill filled with `--done`, its count on `--done-soft`;
+  the other chips are outlined pills. Below 600px the dock holds the shop lists instead
   (SHOP-26).
 - **SHOP-17** The row shows when an item of the view has a shop. **Sin tienda** shows when an item
   of the view has no shop. The row scrolls horizontally, and a slide on it does not change the

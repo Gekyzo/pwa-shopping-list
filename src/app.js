@@ -7,6 +7,7 @@ import { sheetOpen, closeTop } from '#layers';
 import {
   ARRIVAL_MS,
   $,
+  el,
   scroller,
   storage,
   t,
@@ -121,10 +122,7 @@ const renderAll = () => {
   renderShopChips();
   renderRecipeChips();
   $('title').textContent = header.title;
-  $('subtitle').textContent = header.subtitle;
-  $('progress').hidden = header.pct === null;
-  $('progress').style.setProperty('--pct', `${header.pct ?? 0}%`);
-  $('progress').setAttribute('aria-valuenow', String(header.pct ?? 0));
+  $('subtitle').replaceChildren(...(header.strong ? [el('strong', { className: 'app-header-count', textContent: header.strong })] : []), header.subtitle);
 
   renderList(summary);
   renderDock();
@@ -301,6 +299,13 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeOnboarding();
     else if (event.key === 'ArrowRight') turnOnboarding(1);
     else if (event.key === 'ArrowLeft') turnOnboarding(-1);
+    return;
+  }
+  // Ctrl+K or ⌘K opens the search of the list, as the search field of the header does (LIST-21).
+  if (event.key.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey) && !$('search-button').hidden) {
+    event.preventDefault();
+    if (!ui.searchOpen) $('search-button').click();
+    else $('query').focus();
     return;
   }
   if (event.key !== 'Escape') return;

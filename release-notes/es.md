@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- La cabecera de **Compra** dice cuánto queda por comprar en verde, sin barra. En pantallas anchas tiene un campo de búsqueda (abre con Ctrl+K o ⌘K), el botón **Terminar compra** y las tiendas debajo del título.
 - En **Compra**, puedes posponer un producto para la próxima compra: desliza la fila o usa **Posponer** en **Editar**. En pantallas anchas, **Próxima compra** los lista con un + para traerlos, y **Recetas en la lista** muestra cuántos ingredientes de cada receta tienes ya.
 - En **Compra**, el nombre de cada producto tiene más sitio: se corta menos y ocupa menos líneas.
 - Colores nuevos: un fondo de papel cálido con líneas gris verdoso suaves, en el tema claro y en el oscuro.

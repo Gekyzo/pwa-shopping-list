@@ -103,7 +103,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 | Section | Title | Subtitle | Bar |
 |---|---|---|---|
-| `Compra` | `Compra de hoy` | `La lista está vacía`, `Todo comprado` or `T de N comprados` (ticked of total) | The share ticked, in `Compra` only; a screen reader names it with the subtitle |
+| `Compra` | `Compra` | `La lista está vacía`, `Todo comprado` or `N por comprar · M comprados`, with `N por comprar` in bold `--done` | None |
 | `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | None |
 | `Ajustes` | `Ajustes` | `Bodega` | None |
 
@@ -147,7 +147,9 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 
 - **LIST-20** From 600px wide the header of `Compra` has a search button, at the left of the
   arrange button. It shows when the view has one item at least. Below 600px the search button is
-  in the dock (SHOP-26), and the header has none.
+  in the dock (SHOP-26), and the header has none. From 1024px it is a field: a white box with the
+  icon, `Buscar artículo o tienda` and the key `⌘K`. `Ctrl+K` or `⌘K` opens the search as a tap
+  does, or puts the focus in the open field. Its icon of the arrange button is `sort`.
 - **LIST-21** A tap on the button of the header opens the field **Buscar artículo o tienda** below
   the header, with the focus. A second tap, `Escape` (NAV-25), or a loss of focus with an empty
   field closes it. A close clears the text.

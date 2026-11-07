@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- L’intestazione di **Spesa** dice in verde quanto resta da comprare, senza barra. Sugli schermi larghi ha un campo di ricerca (si apre con Ctrl+K o ⌘K), il pulsante **Termina la spesa** e i negozi sotto il titolo.
 - In **Spesa** puoi rimandare un prodotto alla prossima spesa: scorri la riga o usa **Rimanda** in **Modifica**. Sugli schermi larghi, **Prossima spesa** li elenca con un + per riportarli, e **Ricette nella lista** mostra quanti ingredienti di ogni ricetta hai già.
 - In **Spesa**, il nome di ogni prodotto ha più spazio: viene tagliato meno e occupa meno righe.
 - Nuovi colori: uno sfondo di carta calda con linee grigio-verdi tenui, nel tema chiaro e in quello scuro.

@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Die Kopfzeile von **Einkauf** zeigt grün, wie viel noch zu kaufen ist, ohne Balken. Auf breiten Bildschirmen hat sie ein Suchfeld (öffnet mit Strg+K oder ⌘K), die Schaltfläche **Einkauf beenden** und die Geschäfte unter dem Titel.
 - In **Einkauf** kannst du einen Artikel auf den nächsten Einkauf verschieben: wische die Zeile oder nutze **Verschieben** in **Bearbeiten**. Auf breiten Bildschirmen listet **Nächster Einkauf** sie mit einem + zum Zurückholen, und **Rezepte auf der Liste** zeigt, wie viele Zutaten jedes Rezepts du schon hast.
 - In **Einkauf** hat der Name jedes Artikels mehr Platz: Er wird seltener gekürzt und braucht weniger Zeilen.
 - Neue Farben: ein warmer Papierhintergrund mit sanften grüngrauen Linien, im hellen und im dunklen Design.

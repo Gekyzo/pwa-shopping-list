@@ -11,11 +11,14 @@ const textKeys = [...body.matchAll(/data-i18n="([^"]+)"/g)].map(([, key]) => key
 const attrKeys = [...body.matchAll(/data-i18n-attr="([^"]+)"/g)].flatMap(([, pairs]) =>
   pairs.split(',').map((pair) => pair.split(':')[1]));
 
-test('the header has a progress bar and no ring', () => {
+test('the header has no bar and no ring; from 1024px it holds the search field, Terminar compra and the chips rows', () => {
   const header = body.slice(body.indexOf('<header'), body.indexOf('</header>'));
-  assert.match(header, /<div id="progress" class="progress" role="progressbar" aria-labelledby="subtitle" aria-valuemin="0" aria-valuemax="100" hidden><\/div>/);
-  assert.ok(header.indexOf('app-header-text') < header.indexOf('id="progress"'));
+  assert.ok(!header.includes('id="progress"'));
   assert.ok(!body.includes('id="ring"') && !body.includes('ring-text'));
+  assert.match(header, /<button id="search-button" class="button icon header-search"[^>]*>[\s\S]*?<span class="header-search-text" data-i18n="search.items"><\/span><kbd class="header-search-key" data-i18n="search.key"><\/kbd><\/button>/);
+  assert.match(header, /<button id="header-finish" class="button primary header-finish" type="button" aria-haspopup="dialog" aria-controls="trip" hidden><svg [^>]*><use href="icons.svg#check-circle"\/><\/svg><span data-i18n="finish.button"><\/span><\/button>/);
+  assert.ok(header.indexOf('id="list-chips"') < header.indexOf('id="shop-chips"'));
+  assert.ok(header.indexOf('id="header-finish"') < header.indexOf('id="list-chips"'));
 });
 
 test('the page has translated text and translated attributes', () => {
