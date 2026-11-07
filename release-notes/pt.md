@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Em ecrãs largos, **Receitas**, **Menu** e **Definições** ocupam toda a largura, como **Compras**.
 - Em ecrãs largos, um pequeno cartão sob os painéis de **Compras** mostra quanto espaço as suas listas ocupam no dispositivo.
 - Em ecrãs largos, os painéis de **Compras** seguem o design mais de perto: **Ver** tem uma seta, os nomes em **Próximas compras** são menos carregados e o botão que move tudo mostra um ícone de lista.
 - Em ecrãs largos, o cabeçalho de **Compras** segue o design: sobre o fundo da página, um título maior, botões com cantos mais retos e lojas em letra mais pequena. O botão de adicionar diz **Adicionar**.
