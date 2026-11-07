@@ -93,8 +93,7 @@ This document holds the rules of the app only.
   `--surface` with its tools as bordered tiles. The bar is `--surface`, and its current section is
   emerald with no pill, on `--done-soft` from 1024px. The name of a day of `Menú` is 18px after an
   emerald bar.
-- **DSV-14** The detail of the Stitch screens, with no change of behaviour. The quantity chip of a
-  row has a 1px `--line` border. The name of a recipe card is 18px at weight 600; its link button is
+- **DSV-14** The detail of the Stitch screens, with no change of behaviour. The name of a recipe card is 18px at weight 600; its link button is
   a bordered tile and its send button an emerald tile, both 40px inside the 48px target (`--tap`).
   From 840px a card fills the height of its grid row. The week of `Menú` is a bordered bar on
   `--surface`. A meal is a tile of at least 88px (`--meal-min`, none in Compacta): a 13px label,
@@ -103,6 +102,16 @@ This document holds the rules of the app only.
   drawn 24px mark. The bar shows crossed cutlery (`utensils`) for `Recetas` and an open book
   (`menu`) for `Menú`, as in the screens. Each row of `Ajustes` starts with an icon
   (`settings-row-icon`) in `--muted`, or in `--danger` on a danger row.
+
+## The screens of Bodega
+
+The Stitch export `stitch_bodega_shopping_list` (2026-11-07), with no change of behaviour. Where
+its screens disagree, `docs/bodega-inconsistencies.html` records the choice: the phone screen sets
+each part.
+
+- **DSV-15** The name of a row of `Compra` keeps one line, then ends with an ellipsis; its
+  quantity is a tonal chip on `--secondary` with no edge, 13px with tabular figures. A bought
+  quantity is drawn: a `--line` edge on `--surface`, in `--struck`.
 
 ## Parts of the app
 
