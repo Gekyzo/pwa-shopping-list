@@ -11,6 +11,7 @@
 | `src/aisles.js` | Pure aisle operations and the list by aisle | `store` |
 | `src/menu.js` | Pure menu operations and the fill of `Compra` | `store`, `recipes` |
 | `src/swipe.js` | The rule that settles the slide of an item row | nothing |
+| `src/device.js` | The width classes of DSV-9, the parts of each class (NAV-28) and the pointers that slide | nothing |
 | `src/sections.js` | The order of the sections, the rule of the slide between them, the start of a shortcut and what an empty section says and offers, the collapse of the `+` button on a scroll | nothing |
 | `src/layers.js` | The layers over a section: whether a sheet is open, and the top layer that `Escape` and the back close (`closeTop`) | nothing |
 | `src/onboarding.js` | The pages of the walkthrough, the rule that shows it and the step between pages | nothing |
@@ -124,6 +125,7 @@
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sw.test.js` | The manifest text that the worker puts in place, with the names of the shortcuts (SW-13); the release notes of each language in `SHELL` (VER-20) |
 | `tests/layer-order.test.js` | The open sheet and the order of the layers that `Escape` and the back close (NAV-25) |
+| `tests/device.test.js` | The width classes of DSV-9 and the parts of each class (NAV-28); the pointers that slide |
 | `tests/sections.test.js` | The slide between sections; the start of each shortcut and its place in the manifest (SHORT-1, SHORT-2) |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |
