@@ -124,3 +124,26 @@ test('the toast is dark on the light theme, its action in the light emerald (DSV
   assert.deepEqual(token('--inverse-primary'), { light: '#82d8a8', dark: '#13734b' });
   assert.match(block('.toast .button.strong'), /color:\s*var\(--inverse-primary\)/);
 });
+
+test('a field of a sheet is an outlined box with its name inside, in small capitals (DSV-18)', () => {
+  assert.match(block('.field.boxed > .field-label'), /position:\s*absolute/);
+  assert.match(block('.field.boxed > .field-label'), /text-transform:\s*uppercase/);
+  assert.match(block('.field.boxed > .field-input'), /border:\s*1px solid var\(--control\)/);
+  assert.match(block('.field.boxed > .field-input:focus'), /border-color:\s*var\(--done\)/);
+});
+
+test('the repeat switch of Editar is a tonal card, and an idle switch is light (DSV-18)', () => {
+  assert.match(block('.toggle-card'), /background:\s*var\(--surface-2\)/);
+  assert.match(block('.toggle-card'), /border:\s*1px solid var\(--line\)/);
+  assert.match(block('.switch-input'), /background:\s*var\(--secondary\)/);
+});
+
+test('an assigned shop is a pill with a cross, another shop a dashed suggestion (DSV-18)', () => {
+  assert.match(block('.cluster.assign > .chip[aria-pressed="true"]::after'), /content:\s*"\\00d7"/);
+  assert.match(block('.cluster.assign > .chip:not([aria-pressed="true"])'), /border-style:\s*dashed/);
+  assert.match(block('.cluster.assign > .chip:not([aria-pressed="true"])::before'), /content:\s*"\+ "/);
+});
+
+test('Eliminar of a sheet is a text button in --danger (DSV-18)', () => {
+  assert.match(block('.sheet-foot > .button.outline.danger'), /border-color:\s*transparent/);
+});

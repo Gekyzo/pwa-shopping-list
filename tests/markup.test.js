@@ -136,10 +136,10 @@ test('the edit sheet has a veil, a dialog, the name and quantity fields and the 
   assert.match(layer, /<input id="edit-name"[^>]*maxlength="80"/);
   assert.match(layer, /<input id="edit-quantity"[^>]*maxlength="20"/);
   // Each field keeps its name in sight: a label that floats onto the border once the field has a value.
-  assert.match(layer, /<label class="field"><input id="edit-name"[^>]*><span class="field-label" data-i18n="edit.name"><\/span><\/label>/);
-  assert.match(layer, /<label class="field"><input id="edit-quantity"[^>]*><span class="field-label" data-i18n="edit.quantity"><\/span><\/label>/);
+  assert.match(layer, /<label class="field boxed"><input id="edit-name"[^>]*><span class="field-label" data-i18n="edit.name"><\/span><\/label>/);
+  assert.match(layer, /<label class="field boxed"><input id="edit-quantity"[^>]*><span class="field-label" data-i18n="edit.quantity"><\/span><\/label>/);
   // The switch of the recurrence follows the fields (LIST-7), then a titled part holds the shops of the item.
-  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<label class="switch"><span data-i18n="edit.repeat"><\/span><input id="edit-repeat" class="switch-input" type="checkbox" role="switch"><\/label>\s*<h2 class="sheet-title part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster">/);
+  assert.match(layer, /<span class="field-label" data-i18n="edit.quantity"><\/span><\/label>\s*<label class="switch toggle-card">[\s\S]*?<input id="edit-repeat" class="switch-input" type="checkbox" role="switch"><\/label>\s*<h2 class="sheet-title part" data-i18n="edit.shops"><\/h2>\s*<div id="edit-chips" class="cluster assign">/);
   assert.match(layer, /<input id="edit-shop"[^>]*maxlength="40"/);
   assert.doesNotMatch(body, /id="shops/);
 });
@@ -303,4 +303,11 @@ test('Ajustes starts with the group Cuenta: the email and the last sync, Cerrar 
   assert.match(settings, /<div id="account-group" class="settings-section" hidden>/);
   assert.match(first, /<div id="account-row" class="settings-row account-row"><span id="account-email" class="settings-row-label"><\/span><span id="account-sync" class="settings-row-value"><\/span><\/div>/);
   assert.match(first, /<button id="logout" class="settings-row danger" type="button"><svg class="icon settings-row-icon" aria-hidden="true"><use href="icons.svg#log-out"\/><\/svg><span class="settings-row-label" data-i18n="account.logout"><\/span><\/button>/);
+});
+
+test('the repeat switch of Editar is a card with an icon and a hint (DSV-18)', () => {
+  const sheet = body.slice(body.indexOf('id="edit-form"'), body.indexOf('</form>', body.indexOf('id="edit-form"')));
+  assert.match(sheet, /<label class="switch toggle-card"><svg class="icon" aria-hidden="true"><use href="icons.svg#repeat"\/><\/svg>/);
+  assert.match(sheet, /data-i18n="edit.repeatHint"/);
+  assert.match(sheet, /id="edit-chips" class="cluster assign"/);
 });

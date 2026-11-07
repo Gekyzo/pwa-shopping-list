@@ -76,6 +76,7 @@ export default {
   'edit.name': 'Nom',
   'edit.quantity': 'Quantitat',
   'edit.repeat': 'Repeteix a cada compra',
+  'edit.repeatHint': 'Torna a la llista a cada compra',
   'edit.shops': 'Botigues',
   'edit.aisle': 'Secció',
   'edit.noAisles': 'Crea les seccions a Configuració.',

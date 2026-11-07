@@ -92,9 +92,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   does its own work. A tap on the body of the open row only closes it. An action closes the row,
   then runs.
 - **ROW-7** The edit sheet `Editar` has the field **Nombre**, 80 characters at most, the field
-  **Cantidad**, 20 characters at most (LIST-27), the switch **Repetir en cada compra** (LIST-7), then the shops (SHOP-9 to SHOP-15). The name of
-  a field shows inside it while it is empty, and moves onto its top border when it has a value or
-  the focus. `Enter` or a
+  **Cantidad**, 20 characters at most (LIST-27), the switch **Repetir en cada compra** (LIST-7) with the hint `Vuelve a la lista en cada compra`,
+  then the shops (SHOP-9 to SHOP-15). The name of a field stays inside its box, above the value
+  (DSV-18). `Enter` or a
   loss of focus saves a field (LIST-5); an error shows its message and the field shows the old
   value again. `Escape` in a field puts the value back and keeps the sheet open. A change of
   quantity has no message and no `Deshacer`. The sheet opens with no focus in a field.

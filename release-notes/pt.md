@@ -9,6 +9,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 - Em **Compras**, o nome de cada produto ocupa uma linha, e a quantidade é uma etiqueta suave.
 - Em **Compras**, os produtos comprados ficam num cartão próprio, sob uma marca de feito.
 - Os botões em baixo de **Compras** flutuam sobre a lista, e o aviso depois de marcar é escuro.
+- **Editar** mostra cada campo como uma caixa com o nome dentro, o interruptor de repetir como um cartão, e as lojas como etiquetas que adicionas com + e tiras com ×.
 
 ## 1.13.0 - 2026-11-05
 

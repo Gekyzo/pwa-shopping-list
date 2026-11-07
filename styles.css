@@ -333,6 +333,122 @@
     align-self: flex-end;
   }
 
+  /* @extends field
+     @variant boxed  An outlined box with its name inside, above the value, in small capitals, as in
+                     the Bodega screens (DSV-18). */
+  .field.boxed {
+    position: relative;
+  }
+
+  .field.boxed > .field-label {
+    position: absolute;
+    top: var(--space-2);
+    inset-inline-start: calc(var(--space-4) + 1px);
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-strong);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  .field.boxed > .field-input {
+    min-height: 56px;
+    padding: var(--space-5) var(--space-4) var(--space-2);
+    border: 1px solid var(--control);
+    border-radius: var(--radius-m);
+    background: var(--surface);
+  }
+
+  .field.boxed > .field-input:focus {
+    border-color: var(--done);
+    box-shadow: inset 0 0 0 1px var(--done);
+  }
+
+  .field.boxed > .field-input[aria-invalid="true"] {
+    border-color: var(--danger);
+    box-shadow: inset 0 0 0 1px var(--danger);
+  }
+
+  /* @extends switch
+     @variant toggle-card  A switch as a tonal card: an icon, the name with a hint below, the switch.
+     @part switch-text     The name and the hint, in one column.
+     @part switch-hint     The muted line below the name. */
+  /* An idle switch is a light track with an edge; on, it is emerald (DSV-18). */
+  .switch-input {
+    background: var(--secondary);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  .switch-input:checked {
+    box-shadow: none;
+  }
+
+  .toggle-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background: var(--surface-2);
+  }
+
+  .sheet-body > .switch.toggle-card {
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .toggle-card > .icon {
+    flex: none;
+    color: var(--done);
+  }
+
+  .switch-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .switch-hint {
+    color: var(--muted);
+    font-size: var(--text-s);
+  }
+
+  /* @extends cluster
+     @variant assign  Each pressed chip is a pill with a cross, each other chip a dashed suggestion
+                      with a plus; a tap toggles it as before (DSV-18).
+     @variant pick    The pressed chip of a single choice is a tinted emerald chip. */
+  .cluster.assign > .chip {
+    border-radius: var(--radius-pill);
+  }
+
+  .cluster.assign > .chip[aria-pressed="true"] {
+    border-color: var(--control);
+    background: var(--secondary);
+    color: var(--text);
+  }
+
+  .cluster.assign > .chip[aria-pressed="true"]::after {
+    content: "\00d7" / "";
+    margin-inline-start: var(--space-2);
+    color: var(--muted);
+  }
+
+  .cluster.assign > .chip:not([aria-pressed="true"]) {
+    border-style: dashed;
+    border-color: var(--control);
+    background: transparent;
+    color: var(--done);
+  }
+
+  .cluster.assign > .chip:not([aria-pressed="true"])::before {
+    content: "+ " / "";
+  }
+
+  .cluster.pick > .chip[aria-pressed="true"] {
+    border-color: var(--done);
+    background: var(--done-soft);
+    color: var(--text);
+  }
+
   /* Guardado holds a check icon before its text. */
   .sheet-saved {
     display: inline-flex;
@@ -2128,6 +2244,13 @@
   .button.outline.danger {
     border-color: currentColor;
     background: var(--surface);
+  }
+
+  /* Eliminar of a sheet is a text button in --danger, with its icon (DSV-18). */
+  .sheet-foot > .button.outline.danger {
+    border-color: transparent;
+    background: transparent;
+    font-weight: var(--weight-strong);
   }
 
   /* MENU-25: the range of the week, the date of a day and the status line of a meal. */

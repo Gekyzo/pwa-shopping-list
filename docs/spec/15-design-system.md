@@ -122,6 +122,16 @@ each part.
   tiles on `--secondary`. The toast is the inverse surface (`--toast-bg` `#342f2b`, text
   `#f9efe8`; dark `#eae1da` and `#1f1b17`), its action in `--inverse-primary` (`#82d8a8`, dark
   `#13734b`). It has no icon, because it also shows errors.
+- **DSV-18** The sheet `Editar` (ROW-7). A field is `field boxed`: an outlined box, 1px
+  `--control` and 6px corners, with its name inside above the value in small capitals; the focus
+  draws a 2px `--done` edge. The switch of the recurrence is a tonal card (`toggle-card`): the
+  icon `repeat` in `--done`, the name with a muted hint below, the switch at the end. An idle
+  switch is a light track (`--secondary`) with a `--line` edge. The shop chips are `cluster
+  assign`: a shop of the item is a pill on `--secondary` with a cross, another shop a dashed pill
+  in `--done` with a plus; a tap toggles it as before (SHOP-9). The aisle chips are `cluster
+  pick`: the aisle of the item is tinted `--done-soft` with a `--done` edge. `Eliminar` is a text
+  button in `--danger`. The quick quantities, the counter of characters and the select of the
+  section of the Stitch screen are not taken: the app has no such behaviour.
 
 ## Parts of the app
 

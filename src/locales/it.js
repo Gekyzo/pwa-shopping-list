@@ -76,6 +76,7 @@ export default {
   'edit.name': 'Nome',
   'edit.quantity': 'Quantità',
   'edit.repeat': 'Ripeti a ogni spesa',
+  'edit.repeatHint': 'Torna in lista a ogni spesa',
   'edit.shops': 'Negozi',
   'edit.aisle': 'Reparto',
   'edit.noAisles': 'Crea i reparti in Impostazioni.',

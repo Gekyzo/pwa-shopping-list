@@ -9,6 +9,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 - Dans **Courses**, le nom de chaque produit tient sur une ligne, et sa quantité est une étiquette discrète.
 - Dans **Courses**, les produits achetés sont dans une carte à part, sous une coche.
 - Les boutons en bas de **Courses** flottent sur la liste, et le message après une coche est sombre.
+- **Modifier** affiche chaque champ comme une boîte avec son nom dedans, l'interrupteur de répétition comme une carte, et les magasins comme des étiquettes à ajouter avec + et à retirer avec ×.
 
 ## 1.13.0 - 2026-11-05
 
