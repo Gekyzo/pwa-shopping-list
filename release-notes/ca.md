@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- Amb un ratolí, fes clic dret en un article o fes servir el seu botó ⋮ per veure'n les accions. Arrossegar la capçalera amb el ratolí ja no canvia de secció.
 - A **Receptes**, cada producte que afegeixes comença amb majúscula: «arròs» es desa com «Arròs».
 - En pantalles amples, **Compra** ocupa tota l’amplada. La barra lateral té un fons suau, una línia d’estat sota **Bodega**, el botó per afegir i a baix una targeta amb l’estat de la sincronització.
 - En pantalles amples, les files de **Compra** són com el disseny: nom més compacte, «cada compra» al costat del nom i la quantitat en lletra d’amplada fixa. Cada grup diu quants articles li queden («3 art.»). El llapis de cada fila és ara una nansa de sis punts; en tocar-la s’obre **Edita**.

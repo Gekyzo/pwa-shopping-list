@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- With a mouse, right-click an item or use its ⋮ button to see its actions. Dragging the header with the mouse no longer changes the section.
 - In **Recipes**, each product you add starts with a capital letter: “rice” is saved as “Rice”.
 - On wide screens, **Shopping** fills the whole width. The sidebar has a soft background, a status line below **Bodega**, the add button and, at the foot, a card with the state of the sync.
 - On wide screens, the rows of **Shopping** follow the design: a more compact name, “every trip” beside the name and the quantity in a fixed-width font. Each group says how many items it has left (“3 items”). The pencil of each row is now a six-dot handle; a tap on it opens **Edit**.

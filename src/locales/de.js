@@ -82,6 +82,7 @@ export default {
   'row.createRecipe': 'Rezept für „{name}“ erstellen',
   'row.edit': 'Bearbeiten',
   'row.editName': '„{name}“ bearbeiten',
+  'row.more': 'Weitere Aktionen für „{name}“',
   'count.articles': { one: '{count} Art.', other: '{count} Art.' },
   'row.repeat': 'Wiederholen',
   'row.noRepeat': 'Nicht wiederholen',

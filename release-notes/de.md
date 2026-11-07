@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Mit der Maus: Rechtsklick auf einen Artikel oder seine Schaltfläche ⋮ zeigt seine Aktionen. Das Ziehen der Kopfzeile mit der Maus wechselt den Bereich nicht mehr.
 - In **Rezepte** beginnt jede Zutat, die du hinzufügst, mit einem Großbuchstaben: „reis“ wird als „Reis“ gespeichert.
 - Auf breiten Bildschirmen nutzt **Einkauf** die ganze Breite. Die Seitenleiste hat einen sanften Hintergrund, eine Statuszeile unter **Bodega**, die Schaltfläche zum Hinzufügen und unten eine Karte mit dem Stand der Synchronisierung.
 - Auf breiten Bildschirmen folgen die Zeilen von **Einkauf** dem Entwurf: ein kompakterer Name, „bei jedem Einkauf“ neben dem Namen und die Menge in Festbreitenschrift. Jede Gruppe zeigt, wie viele Artikel noch fehlen („3 Art.“). Der Stift jeder Zeile ist jetzt ein Griff mit sechs Punkten; ein Tipp darauf öffnet **Bearbeiten**.

@@ -1,4 +1,5 @@
 import { direction, slideTo } from '#sections';
+import { gesturePointer } from '#device';
 import { sheetOpen } from '#layers';
 import { $, scroller, ui, render, guardClick } from '#ui/context';
 import { reorder } from '#ui/drag';
@@ -36,7 +37,8 @@ export const bind = () => {
   let sectionSlide = null;
   document.addEventListener('pointerdown', (event) => {
     sectionSlide = null;
-    if (!event.isPrimary || event.button !== 0 || reorder || sheetOpen(ui)) return;
+    // A mouse drag selects text: only a finger or a pen changes the section (NAV-3).
+    if (!event.isPrimary || event.button !== 0 || !gesturePointer(event.pointerType) || reorder || sheetOpen(ui)) return;
     if (!event.target.closest('.app-header, main') || event.target.closest('.item-row-swipe, .shop-lists, .dock, input, textarea')) return;
     sectionSlide = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
   });

@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Con il mouse, fai clic destro su un articolo o usa il suo pulsante ⋮ per vederne le azioni. Trascinare l’intestazione con il mouse non cambia più sezione.
 - In **Ricette**, ogni prodotto che aggiungi inizia con la maiuscola: «riso» viene salvato come «Riso».
 - Sugli schermi larghi **Spesa** occupa tutta la larghezza. La barra laterale ha uno sfondo tenue, una riga di stato sotto **Bodega**, il pulsante per aggiungere e in basso una scheda con lo stato della sincronizzazione.
 - Sugli schermi larghi le righe di **Spesa** seguono il design: nome più compatto, «a ogni spesa» accanto al nome e la quantità in carattere a larghezza fissa. Ogni gruppo dice quanti articoli gli restano («3 art.»). La matita di ogni riga è ora una maniglia a sei punti; un tocco apre **Modifica**.

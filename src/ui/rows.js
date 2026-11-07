@@ -7,7 +7,7 @@ import { isOpen, searching, shownGroup, mixed, tagsOf, listState } from '#ui/vie
 import { leave, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
-import { reorder, bindReorder } from '#ui/drag';
+import { reorder, bindReorder, endReorder } from '#ui/drag';
 
 // The name of a row, its quantity, and below the name the shops of the item when the list
 // is not by shop, the other recipes of an item of two recipe groups (`also`) and the mark of a
@@ -72,10 +72,25 @@ const editButton = (item) => {
   return button;
 };
 
+// Opens the actions of a row, as a settled slide to the left does: for a right click and the
+// button of more actions (ROW-15, ROW-16), and the keys of NAV-29. One row is open at a time (ROW-6).
+export const openRowMenu = (id, groupId = null) => {
+  Object.assign(ui, { openId: id, openSide: 'end', openGroup: groupId, settleFrom: null });
+  render();
+};
+
+// The button of more actions, for a mouse (ROW-16). The CSS shows it only on a device that hovers,
+// while the pointer is over the row or the focus is in it.
+const moreButton = (item, groupId) => {
+  const button = el('button', { type: 'button', className: 'button icon row-more', title: t('row.more', { name: item.name }), onclick: () => openRowMenu(item.id, groupId) }, [icon('more')]);
+  button.setAttribute('aria-label', t('row.more', { name: item.name }));
+  return button;
+};
+
 // A row of Compra: a tap on its body ticks the item (D1), the check only shows the state, and the
 // edit button stays at the end. The name is the checkbox for the keyboard and a screen reader: a
 // button gives it Space and Enter, and its click reaches the body like a tap.
-const itemRow = (item, also) => {
+const itemRow = (item, also, groupId) => {
   const toggle = () => {
     if (item.bought) {
       apply(store.toggleBought(state, item.id));
@@ -92,7 +107,7 @@ const itemRow = (item, also) => {
   name.setAttribute('aria-checked', String(item.bought));
   // SHARE-14: in Todas the end slot shows the list of the item, or both lists of a merged row,
   // before the edit button.
-  const end = [...tagsOf(item).map(tagNode), editButton(item)];
+  const end = [...tagsOf(item).map(tagNode), moreButton(item, groupId), editButton(item)];
   const row = [check, name, el('div', { className: 'item-row-end' }, end)];
   return {
     row,
@@ -247,7 +262,7 @@ export const swipeBox = ({ id, groupId = null, row, end, right, tap = null }) =>
 
 // `also` names the other recipe groups that show the item (GROUP-20).
 export const itemNode = (item, groupId = null, also = []) => {
-  const { row, end, right, tap } = itemRow(item, also);
+  const { row, end, right, tap } = itemRow(item, also, groupId);
   const { box, body } = swipeBox({ id: item.id, groupId, row, end, right, tap });
   const node = el('li', {
     className: [
@@ -261,6 +276,14 @@ export const itemNode = (item, groupId = null, also = []) => {
   const scope = scopeOf(item, groupId);
   if (scope) node.dataset.scope = scope;
   bindReorder(body, node, item, groupId);
+  // A right click of a mouse opens the actions of the row (ROW-15); a long press of a finger keeps
+  // the hold of the reorder (src/ui/drag.js).
+  body.addEventListener('contextmenu', (event) => {
+    if (event.pointerType !== 'mouse') return;
+    event.preventDefault();
+    if (reorder) endReorder(false);
+    openRowMenu(item.id, groupId);
+  });
   return node;
 };
 
