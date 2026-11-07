@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Com um rato, clica com o botão direito num artigo ou usa o seu botão ⋮ para ver as suas ações. Arrastar o cabeçalho com o rato já não muda de secção.
 - Em **Receitas**, cada produto que adicionas começa com maiúscula: «arroz» fica guardado como «Arroz».
 - Em ecrãs largos, **Compras** ocupa toda a largura. A barra lateral tem um fundo suave, uma linha de estado por baixo de **Bodega**, o botão para adicionar e, em baixo, um cartão com o estado da sincronização.
 - Em ecrãs largos, as linhas de **Compras** seguem o desenho: nome mais compacto, «em cada compra» ao lado do nome e a quantidade em letra de largura fixa. Cada grupo diz quantos artigos lhe faltam («3 art.»). O lápis de cada linha é agora uma pega de seis pontos; um toque abre **Editar**.

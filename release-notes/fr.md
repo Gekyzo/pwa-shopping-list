@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Avec une souris, faites un clic droit sur un article ou utilisez son bouton ⋮ pour voir ses actions. Faire glisser l’en-tête avec la souris ne change plus de section.
 - Dans **Recettes**, chaque produit ajouté commence par une majuscule : « riz » est enregistré comme « Riz ».
 - Sur grand écran, **Courses** occupe toute la largeur. La barre latérale a un fond doux, une ligne d’état sous **Bodega**, le bouton pour ajouter et en bas une carte avec l’état de la synchronisation.
 - Sur grand écran, les lignes de **Courses** suivent la maquette : un nom plus compact, « à chaque course » à côté du nom et la quantité en police à chasse fixe. Chaque groupe indique combien d’articles il lui reste (« 3 art. »). Le crayon de chaque ligne est maintenant une poignée à six points ; un appui ouvre **Modifier**.

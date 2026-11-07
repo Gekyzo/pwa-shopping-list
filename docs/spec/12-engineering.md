@@ -54,7 +54,7 @@
 | `src/ui/device.js` | The width class of the window in `ui.device` (NAV-28) | `device`, `ui/context` |
 | `src/ui/move.js` | The screen of the old address and its button, the import of a moved backup on the new address (ADDR-1 to ADDR-8) | `move`, `storage`, `ui/context`, `ui/account`, `ui/onboarding` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding`, `ui/account` |
-| `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
+| `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `device`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
 
@@ -128,6 +128,7 @@
 | `tests/layer-order.test.js` | The open sheet and the order of the layers that `Escape` and the back close (NAV-25) |
 | `tests/breakpoints.test.js` | The widths of the media queries of the CSS against the breakpoints of DSV-9; the class that `src/ui/device.js` reads (NAV-28) |
 | `tests/device.test.js` | The width classes of DSV-9 and the parts of each class (NAV-28); the pointers that slide |
+| `tests/rows.test.js` | The open of the actions of a row for a right click and the button of more actions (ROW-15, ROW-16) |
 | `tests/sections.test.js` | The slide between sections; the start of each shortcut and its place in the manifest (SHORT-1, SHORT-2) |
 | `tests/onboarding.test.js` | The show rule and the page steps of the walkthrough |
 | `tests/reorder.test.js` | The geometry of a row move |

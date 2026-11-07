@@ -747,6 +747,9 @@
      @part item-row-repeat-meta  The mark of a recurrent item in the meta line with its separator;
                             it goes from 1024px.
      @part row-handle       The grip at the end of a row of Compra, which opens Editar (DSV-24).
+     @part row-more         The button of more actions before the grip, which opens the actions of
+                            the row; only on a device that hovers, over the row or with the focus
+                            in it (ROW-16).
      @variant repeat-only   On item-row-meta: the meta line holds only the mark of a recurrent item,
                             so it goes from 1024px. */
   /* The rows of a group stand in a card (DSV-13): an inset box with a border and 6px corners below
@@ -970,6 +973,18 @@
 
   .row-handle {
     color: var(--muted);
+  }
+
+  /* A finger slides the row for its actions: the button is for a mouse (ROW-16). */
+  .row-more {
+    display: none;
+    color: var(--muted);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .item-row:is(:hover, :focus-within) .row-more {
+      display: inline-flex;
+    }
   }
 
   .item-row.bought .item-row-repeat {

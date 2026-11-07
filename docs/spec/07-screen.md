@@ -29,7 +29,8 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   edit, and closes the search (LIST-24, REC-26).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
-  vertical part at least. It stops at `Compra` and at `Ajustes`.
+  vertical part at least. It stops at `Compra` and at `Ajustes`. It is a slide of a finger or a
+  pen: a drag of a mouse does not change the section, so it can select text (NAV-28).
 - **NAV-4** The slide starts on the header or on the content, but not on an item row, not on the
   row of shop lists (SHOP-17), not on the dock (SHOP-26) and not on a text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
   (ONB-10).
@@ -119,6 +120,13 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **ROW-14** The first time `Compra` shows a row, after 600 ms the body of its first row slides
   24 px to the left and back, so the user sees that a row slides. Then `shopping.swipeHint` is
   `1` and the hint does not play again. With `prefers-reduced-motion` it does not play.
+- **ROW-15** A right click of a mouse on an item row of `Compra` opens its actions of ROW-3, as a
+  settled slide to the left does, and the menu of the browser does not open. It ends a lift of the
+  row (ROW-10) with no move. A long press of a finger keeps the hold of the reorder.
+- **ROW-16** On a device that hovers with a fine pointer, an item row of `Compra` shows the button
+  of more actions (the icon `more`) before the grip while the pointer is over the row or the focus is
+  in it. Its name is `Más acciones de «name»`. A click opens the actions of the row, as ROW-15 does.
+  A device with a finger only never shows it.
 
 ## Messages and undo
 

@@ -53,7 +53,7 @@ repository root.
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `store`, `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |
-| `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
+| `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `device`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document | all of the above |
 | `sw.js` | Offline cache of the app shell | nothing; it is not a module of the app |
 
