@@ -147,3 +147,15 @@ test('an assigned shop is a pill with a cross, another shop a dashed suggestion 
 test('Eliminar of a sheet is a text button in --danger (DSV-18)', () => {
   assert.match(block('.sheet-foot > .button.outline.danger'), /border-color:\s*transparent/);
 });
+
+test('the actions of a recipe card stand at its top end, the products below them full width (DSV-19)', () => {
+  assert.match(block('.item-row.recipe .item-row-end'), /position:\s*absolute/);
+  assert.match(block('.item-row.recipe .item-row-name > :not(.recipe-products)'), /padding-inline-end:/);
+  assert.match(block('[data-hand="left"] .item-row.recipe .item-row-name > :not(.recipe-products)'), /padding-inline-start:/);
+});
+
+test('the count of Recetas in the header is an emerald pill (DSV-19)', () => {
+  const pill = block('body:has([data-view="recipes"][aria-current="page"]) .app-header-subtitle');
+  assert.match(pill, /background:\s*var\(--done-soft\)/);
+  assert.match(pill, /border-radius:\s*var\(--radius-pill\)/);
+});

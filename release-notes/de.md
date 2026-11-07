@@ -10,6 +10,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 - Im **Einkauf** stehen die gekauften Produkte in einer eigenen Karte, unter einem Haken.
 - Die Knöpfe unten im **Einkauf** schweben über der Liste, und die Meldung nach dem Abhaken ist dunkel.
 - **Bearbeiten** zeigt jedes Feld als Kasten mit seinem Namen darin, den Schalter zum Wiederholen als Karte und die Geschäfte als Etiketten, die du mit + hinzufügst und mit × entfernst.
+- In **Rezepte** stehen die Knöpfe eines Rezepts neben seinem Namen, und die Produkte nutzen die ganze Breite der Karte.
 
 ## 1.13.0 - 2026-11-05
 

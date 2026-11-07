@@ -132,6 +132,11 @@ each part.
   pick`: the aisle of the item is tinted `--done-soft` with a `--done` edge. `Eliminar` is a text
   button in `--danger`. The quick quantities, the counter of characters and the select of the
   section of the Stitch screen are not taken: the app has no such behaviour.
+- **DSV-19** A recipe card of `Recetas` (REC-40). Its actions stand at its top end, beside the
+  name: the link tile, if the recipe has a link, then the send tile. The name, its count and its
+  badge keep clear of them; the products take the full width of the card below. With the left
+  hand the actions stand at the top start. The count of `Recetas` in the header is a pill on
+  `--done-soft` in `--done`.
 
 ## Parts of the app
 
