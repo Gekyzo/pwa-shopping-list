@@ -32,7 +32,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 ## Products
 
 - **REC-8** A product is a name, trimmed and not empty (`error.productRequired`), unique in its
-  recipe with no case distinction (`error.duplicateProduct`).
+  recipe with no case distinction (`error.duplicateProduct`). An add writes its first letter in
+  capitals and keeps the rest as typed: `arroz` becomes `Arroz`, `AOVE` stays `AOVE`.
 - **REC-9** The sheet of a recipe lists its products under **Productos**, with no line above
   it, each with a `✕` button, and the field **Añadir producto**. The removal of a product has `Deshacer`; the add does not.
 - **REC-39** From 840px wide (DSV-9) the sheet of a recipe is a pane at the end of the frame, at

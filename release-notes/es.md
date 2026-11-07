@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En **Recetas**, cada producto que añades empieza por mayúscula: «arroz» se guarda como «Arroz».
 - En pantallas anchas, **Compra** ocupa todo el ancho. La barra lateral tiene un fondo suave, una línea de estado bajo **Bodega**, el botón para añadir y abajo una tarjeta con el estado de la sincronización.
 - En pantallas anchas, las filas de **Compra** son como el diseño: nombre más compacto, «cada compra» junto al nombre y la cantidad en letra de ancho fijo. Cada grupo dice cuántos artículos le quedan («3 art.»). El lápiz de cada fila es ahora un asa de seis puntos; al tocarla se abre **Editar**.
 - La cabecera de **Compra** dice cuánto queda por comprar en verde, sin barra. En pantallas anchas tiene un campo de búsqueda (abre con Ctrl+K o ⌘K), el botón **Terminar compra** y las tiendas debajo del título.

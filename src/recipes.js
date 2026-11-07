@@ -88,10 +88,17 @@ export const setRecipeUrl = (state, id, rawUrl) => {
   return isWebUrl(url) ? patchRecipe(state, id, { url }) : reject(state, 'error.invalidLink');
 };
 
+// The first letter in capitals and the rest as typed (REC-8): `arroz` becomes `Arroz`, `AOVE`
+// stays. The first character is a code point, so a letter outside the BMP is not split.
+const capitalize = (text) => {
+  const [first = '', ...rest] = text;
+  return first.toLocaleUpperCase('es') + rest.join('');
+};
+
 export const addRecipeProduct = (state, id, rawName) => {
   const recipe = findRecipe(state, id);
   if (!recipe) return reject(state, NOT_FOUND);
-  const name = String(rawName ?? '').trim();
+  const name = capitalize(String(rawName ?? '').trim());
   if (!name) return reject(state, 'error.productRequired');
   const key = name.toLowerCase();
   const duplicate = recipe.products.find((product) => product.toLowerCase() === key);
