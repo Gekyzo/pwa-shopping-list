@@ -5,7 +5,7 @@ import { DAYS, MEALS, isWeek, weekOf, mealOrder } from '#menu';
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
 
-const LISTS = ['active', 'saved'];
+const LISTS = ['active', 'saved', 'postponed'];
 
 // Versions 1 to 7 have a second list, `next`, and `again`, the mark of a ticked one-time item that
 // comes back at the next trip. Both are items to buy at the next trip now: they go to Compra, not
@@ -47,7 +47,7 @@ const normalizeItem = (item) => {
     id,
     name: name.trim(),
     recurrent,
-    list: list === 'saved' ? 'saved' : 'active',
+    list: list === 'saved' || list === 'postponed' ? list : 'active',
     bought: list === 'active' && bought && !comesBack,
     shops: normalizeShops(shops),
     quantity: typeof quantity === 'string' ? quantity.trim() : '',

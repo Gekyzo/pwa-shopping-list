@@ -26,7 +26,7 @@ The empty state is `{ version: 10, items: [], recipes: [], sent: [], group: 'rec
   id: string,         // crypto.randomUUID()
   name: string,       // trimmed, not empty
   recurrent: boolean, // comes back at each trip
-  list: 'active' | 'saved', // 'saved': kept after a trip, out of Compra
+  list: 'active' | 'saved' | 'postponed', // 'saved': kept after a trip, out of Compra; 'postponed': out of Compra until the next trip (LIST-40)
   bought: boolean,    // ticked
   shops: [string],    // shop names
   quantity: string,   // free text, such as '2' or '1 kg'; trimmed; '' for none
@@ -67,7 +67,7 @@ A meal has a `recipe` or a `dish`, never both. A meal with no recipe and no dish
   `leche` are one name; `Cafe` and `Café` are two.
 - **DATA-4** Recipe names are unique with no case distinction.
 - **DATA-5** The products of one recipe are unique with no case distinction.
-- **DATA-6** `bought` is true only for an item of `list: 'active'`. A saved item is never ticked.
+- **DATA-6** `bought` is true only for an item of `list: 'active'`. A saved or postponed item is never ticked.
 - **DATA-7** Removed: an item has no `again` field (STORE-8).
 - **DATA-8** The shops of one item are unique with no case distinction, trimmed and not empty.
 - **DATA-9** One shop has one spelling in the full state: the spelling of its first use.

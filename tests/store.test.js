@@ -27,6 +27,9 @@ import {
   compareNames,
   setQuantity,
   comingBack,
+  postpone,
+  postponedItems,
+  bringAllBack,
 } from '#store';
 
 let counter = 0;
@@ -357,9 +360,9 @@ test('tripOutcome counts each item of Actual by where it goes', () => {
     ['Salt', 'active'],
     ['Rice', 'saved'],
   );
-  assert.deepEqual(tripOutcome(state), { recurrent: 2, kept: 0, open: 2, bought: 1 });
+  assert.deepEqual(tripOutcome(state), { recurrent: 2, kept: 0, open: 2, bought: 1, postponed: 0 });
   assert.deepEqual(tripOutcome(state, [find(state, 'Bread').id, find(state, 'Milk').id]),
-    { recurrent: 2, kept: 1, open: 1, bought: 1 });
+    { recurrent: 2, kept: 1, open: 1, bought: 1, postponed: 0 });
 });
 
 test('tripOutcome adds up to the items of Actual', () => {
@@ -371,13 +374,13 @@ test('tripOutcome adds up to the items of Actual', () => {
     ['Pepperoni', 'active', { bought: true }],
   );
   const outcome = tripOutcome(state, [find(state, 'Base pizza').id]);
-  assert.deepEqual(outcome, { recurrent: 2, kept: 1, open: 0, bought: 2 });
+  assert.deepEqual(outcome, { recurrent: 2, kept: 1, open: 0, bought: 2, postponed: 0 });
   const sum = Object.values(outcome).reduce((a, b) => a + b, 0);
   assert.equal(sum, tripSummary(state).total);
 });
 
 test('tripOutcome of an empty state is all zero', () => {
-  assert.deepEqual(tripOutcome(emptyState()), { recurrent: 0, kept: 0, open: 0, bought: 0 });
+  assert.deepEqual(tripOutcome(emptyState()), { recurrent: 0, kept: 0, open: 0, bought: 0, postponed: 0 });
 });
 
 test('tripSummary of an empty state is all zero', () => {
@@ -674,4 +677,82 @@ test('comingBack adds the open items that the trip keeps, and ignores a bought o
 test('comingBack follows the sort by name', () => {
   const state = setSort(build(['Water', 'active', { recurrent: true }], ['Bread', 'active', { recurrent: true }]), 'name').state;
   assert.deepEqual(names(comingBack(state)), ['Bread', 'Water']);
+});
+
+// Postponed items (LIST-40 to LIST-42).
+const idOf = (state, name) => state.items.find((item) => item.name === name).id;
+
+test('postpone moves an open item out of Compra', () => {
+  const start = build(['Pan', 'active']);
+  const { state, error } = postpone(start, idOf(start, 'Pan'));
+  assert.equal(error, undefined);
+  assert.equal(state.items[0].list, 'postponed');
+  assert.equal(state.items[0].bought, false);
+  assert.equal(start.items[0].list, 'active');
+});
+
+test('postpone keeps a recurrent item recurrent', () => {
+  const start = build(['Pan', 'active', { recurrent: true }]);
+  const { state } = postpone(start, idOf(start, 'Pan'));
+  assert.equal(state.items[0].recurrent, true);
+  assert.equal(state.items[0].list, 'postponed');
+});
+
+test('postpone rejects a ticked item, a saved item and an unknown id', () => {
+  const start = build(['Pan', 'active', { bought: true }], ['Sal', 'saved']);
+  for (const [id, key] of [[idOf(start, 'Pan'), 'error.onlyOpenPostpone'], [idOf(start, 'Sal'), 'error.onlyOpenPostpone'], ['nope', 'error.itemNotFound']]) {
+    const { state, error } = postpone(start, id);
+    assert.equal(state, start);
+    assert.deepEqual(error, { key });
+  }
+});
+
+test('postponedItems lists the postponed items only', () => {
+  const start = build(['Pan', 'postponed'], ['Sal', 'saved'], ['Té', 'active']);
+  assert.deepEqual(postponedItems(start).map((item) => item.name), ['Pan']);
+});
+
+test('bringToList brings back a postponed item', () => {
+  const start = build(['Pan', 'postponed']);
+  const result = bringToList(start, idOf(start, 'Pan'));
+  assert.equal(result.changed, true);
+  assert.equal(result.state.items[0].list, 'active');
+  assert.equal(result.state.items[0].bought, false);
+});
+
+test('bringAllBack brings every postponed item back and leaves saved items', () => {
+  const start = build(['Pan', 'postponed'], ['Sal', 'saved'], ['Té', 'postponed']);
+  const { state, count } = bringAllBack(start);
+  assert.equal(count, 2);
+  assert.deepEqual(state.items.map((item) => item.list), ['active', 'saved', 'active']);
+  assert.equal(start.items[0].list, 'postponed');
+});
+
+test('bringAllBack with nothing postponed returns the same state', () => {
+  const start = build(['Pan', 'active']);
+  const { state, count } = bringAllBack(start);
+  assert.equal(count, 0);
+  assert.equal(state, start);
+});
+
+test('startNewShopping brings postponed items back, not ticked, in place', () => {
+  const start = build(['Pan', 'postponed'], ['Sal', 'active', { bought: true }], ['Té', 'postponed', { recurrent: true }]);
+  const { state } = startNewShopping(start);
+  assert.deepEqual(state.items.map((item) => [item.name, item.list, item.bought]), [['Pan', 'active', false], ['Sal', 'saved', false], ['Té', 'active', false]]);
+});
+
+test('canStartNewShopping is true with only postponed items', () => {
+  assert.equal(canStartNewShopping(build(['Pan', 'postponed'])), true);
+  assert.equal(startNewShopping(build(['Pan', 'postponed'])).error, undefined);
+});
+
+test('tripOutcome counts the postponed items', () => {
+  const start = build(['Pan', 'postponed'], ['Té', 'postponed'], ['Sal', 'active', { bought: true }]);
+  assert.equal(tripOutcome(start).postponed, 2);
+});
+
+test('postponed items count in no header figure and no list view', () => {
+  const start = build(['Pan', 'postponed'], ['Sal', 'active']);
+  assert.deepEqual(tripSummary(start), { total: 1, left: 1, back: 0, saved: 1 });
+  assert.equal(openItems(start).length, 1);
 });

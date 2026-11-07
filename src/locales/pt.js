@@ -106,6 +106,7 @@ export default {
   'outcome.kept': { one: '{count} sem comprar é adiado', other: '{count} sem comprar são adiados' },
   'outcome.open': { one: '{count} sem comprar é guardado', other: '{count} sem comprar são guardados' },
   'outcome.bought': { one: '{count} comprado sai da lista', other: '{count} comprados saem da lista' },
+  'outcome.postponed': { one: '{count} adiado volta', other: '{count} adiados voltam' },
   'trip.hint': 'Podes mudar o que acontece ao que não compraste nas',
   'trip.question': 'Terminar as compras?',
   'trip.continue': 'Continuar a comprar',
@@ -151,6 +152,7 @@ export default {
   'where.boughtRepeat': 'já comprado · repetir',
   'where.inList': 'já na lista',
   'where.saved': 'comprado antes · adicionar',
+  'where.postponed': 'adiado · adicionar',
 
   'arrange.label': 'Agrupar e ordenar',
   'arrange.groupBy': 'Agrupar por',
@@ -306,6 +308,7 @@ export default {
   'error.duplicateItem': '«{name}» já está em {list}.',
   'error.itemNotFound': 'Artigo não encontrado.',
   'error.onlyActiveTick': 'Só os artigos de {list} podem ser marcados.',
+  'error.onlyOpenPostpone': 'Só se pode adiar o que falta comprar.',
   'error.nothingToStart': 'Nada para terminar: marque um artigo ou adicione um.',
   'error.unknownSort': 'Ordem desconhecida.',
   'error.unknownGroup': 'Agrupamento desconhecido.',
