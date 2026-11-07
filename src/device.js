@@ -22,3 +22,7 @@ export const features = (cls) => (Object.hasOwn(FEATURES, cls) ? FEATURES[cls] :
 
 // A finger or a pen slides; a mouse drag selects. An empty type is an old browser: treat it as touch.
 export const gesturePointer = (pointerType) => pointerType !== 'mouse';
+
+// The contextmenu of a right click of a mouse. Safari sends a plain MouseEvent with no pointer type;
+// the menu key and Shift+F10 send button 0 (ROW-15).
+export const mouseMenu = ({ pointerType, button }) => pointerType === 'mouse' || (pointerType === undefined && button === 2);

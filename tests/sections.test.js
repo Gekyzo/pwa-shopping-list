@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { SECTIONS, SHORTCUTS, canSearch, keyAction, direction, dockShown, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
+import { SECTIONS, SHORTCUTS, canSearch, keyAction, keyMenuEcho, direction, dockShown, emptyAction, fabState, slideDirection, slideTo, shortcutStart } from '#sections';
 
 // headerOf reads the state of the views; a stub of the page lets node load them.
 const stub = () => new Proxy(function () {}, { get: (_, key) => (key === Symbol.toPrimitive ? () => '' : stub()), apply: () => stub(), set: () => true });
@@ -258,4 +258,10 @@ test('keyAction does nothing in a text field, over a layer, or with a modifier',
 
 test('keyAction ignores another key', () => {
   for (const key of ['5', '0', 'x', 'Enter', 'Escape', undefined]) assert.equal(keyAction({ key }), null, String(key));
+});
+
+test('keyMenuEcho: the contextmenu that follows a menu key within a second is its echo', () => {
+  assert.equal(keyMenuEcho(1000, 1500), true);
+  assert.equal(keyMenuEcho(1000, 2001), false);
+  assert.equal(keyMenuEcho(null, 5), false);
 });

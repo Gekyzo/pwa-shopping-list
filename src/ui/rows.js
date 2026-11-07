@@ -8,6 +8,7 @@ import { leave, collapse, expand } from '#ui/motion';
 import { icon, iconButton } from '#ui/controls';
 import { openEdit } from '#ui/edit';
 import { reorder, bindReorder, endReorder } from '#ui/drag';
+import { mouseMenu } from '#device';
 
 // The name of a row, its quantity, and below the name the shops of the item when the list
 // is not by shop, the other recipes of an item of two recipe groups (`also`) and the mark of a
@@ -71,6 +72,9 @@ const editButton = (item) => {
   button.setAttribute('aria-haspopup', 'dialog');
   return button;
 };
+
+// The group of the slide of a row, from its `dataset`: null for a row with no group of its own.
+export const rowGroup = (dataset) => dataset.swipeGroup ?? null;
 
 // Opens the actions of a row, as a settled slide to the left does: for a right click and the
 // button of more actions (ROW-15, ROW-16), and the keys of NAV-29. One row is open at a time (ROW-6).
@@ -274,14 +278,15 @@ export const itemNode = (item, groupId = null, also = []) => {
   }, [box]);
   node.dataset.id = item.id;
   // The keys of NAV-29 open the row of its group: an item of two recipe groups has two rows.
-  if (groupId !== null) node.dataset.group = groupId;
+  // `data-group` is the card of groupNodes, also for a row of Otros with no group of its own.
+  if (groupId !== null) node.dataset.swipeGroup = groupId;
   const scope = scopeOf(item, groupId);
   if (scope) node.dataset.scope = scope;
   bindReorder(body, node, item, groupId);
   // A right click of a mouse opens the actions of the row (ROW-15); a long press of a finger keeps
   // the hold of the reorder (src/ui/drag.js).
   body.addEventListener('contextmenu', (event) => {
-    if (event.pointerType !== 'mouse') return;
+    if (!mouseMenu(event)) return;
     event.preventDefault();
     if (reorder) endReorder(false);
     openRowMenu(item.id, groupId);

@@ -2,8 +2,8 @@ import * as store from '#store';
 import * as shops from '#shops';
 import { listCounts } from '#lists';
 import { bindSheetDrag } from '#ds/sheet';
-import { shortcutStart, fabState, keyAction } from '#sections';
-import { sheetOpen, closeTop } from '#layers';
+import { shortcutStart, fabState, keyAction, keyMenuEcho } from '#sections';
+import { sheetOpen, closeTop, keysBlocked } from '#layers';
 import {
   ARRIVAL_MS,
   $,
@@ -30,7 +30,7 @@ import { inList, listState, viewState } from '#ui/view';
 import { rowKeys, bringIn, flash, snapshotRows, animateRows } from '#ui/motion';
 import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { reorder, endReorder, bind as bindDrag } from '#ui/drag';
-import { moveRow, openRowMenu } from '#ui/rows';
+import { moveRow, openRowMenu, rowGroup } from '#ui/rows';
 import { renderRecipe, closeRecipe, bind as bindRecipe } from '#ui/recipes';
 import { renderPanels, bind as bindPanels } from '#ui/panels';
 import { renderMeal, renderMenuActions, closeMeal, bind as bindMenu } from '#ui/menu';
@@ -315,6 +315,14 @@ document.addEventListener('keydown', (event) => {
 });
 
 // The keys of NAV-29: a section, the add, the search, and the actions of a focused item row.
+let keyMenuAt = null;
+// The contextmenu that the menu key or Shift+F10 sends after it opened a row lands on the focused
+// action, out of the row: the menu of the browser must not cover the actions.
+document.addEventListener('contextmenu', (event) => {
+  if (!keyMenuEcho(keyMenuAt, Date.now())) return;
+  keyMenuAt = null;
+  event.preventDefault();
+});
 const visible = (id) => !$(id).hidden && $(id).offsetParent !== null;
 const runKey = (event) => {
   const row = event.target.closest?.('.item-row[data-id]') ?? null;
@@ -325,7 +333,7 @@ const runKey = (event) => {
     alt: event.altKey,
     shift: event.shiftKey,
     inField: Boolean(event.target.closest?.('input, textarea, select, [contenteditable]')),
-    layer: sheetOpen(ui) || reorder !== null,
+    layer: keysBlocked(ui, features(ui.device)) || reorder !== null,
     onRow: row !== null,
   });
   if (!action) return;
@@ -339,10 +347,12 @@ const runKey = (event) => {
     if (button && !ui.searchOpen) $(button).click();
     else if (ui.searchOpen) $(visible('query') ? 'query' : 'dock-query').focus();
   } else if (action.type === 'rowMenu') {
-    const { id, group = null } = row.dataset;
+    const { id } = row.dataset;
+    const group = rowGroup(row.dataset);
+    keyMenuAt = Date.now();
     openRowMenu(id, group);
     // The render builds the row again: the focus goes to its first action, for the keyboard.
-    const selector = `.item-row[data-id="${CSS.escape(id)}"]${group === null ? ':not([data-group])' : `[data-group="${CSS.escape(group)}"]`} .item-row-actions button`;
+    const selector = `.item-row[data-id="${CSS.escape(id)}"]${group === null ? ':not([data-swipe-group])' : `[data-swipe-group="${CSS.escape(group)}"]`} .item-row-actions button`;
     document.querySelector(selector)?.focus();
   }
   // The delete button of the side actions keeps the undo and the reach of a merged row (SHARE-16).

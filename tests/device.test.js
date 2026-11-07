@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { BREAKPOINTS, CLASSES, FEATURES, deviceClass, features, gesturePointer } from '#device';
+import { BREAKPOINTS, CLASSES, FEATURES, deviceClass, features, gesturePointer, mouseMenu } from '#device';
 
 test('deviceClass gives the class of each width of DSV-9', () => {
   const widths = [0, 599, 600, 839, 840, 1023, 1024, 1440];
@@ -44,4 +44,14 @@ test('the tables do not change', () => {
   assert.ok(Object.isFrozen(CLASSES));
   assert.ok(Object.isFrozen(FEATURES));
   assert.ok(Object.isFrozen(FEATURES.desktop));
+});
+
+test('mouseMenu is true for the right click of a mouse, also as a plain MouseEvent (Safari)', () => {
+  assert.equal(mouseMenu({ pointerType: 'mouse', button: 2 }), true);
+  assert.equal(mouseMenu({ pointerType: undefined, button: 2 }), true);
+  assert.equal(mouseMenu({ pointerType: 'touch', button: 0 }), false);
+  assert.equal(mouseMenu({ pointerType: 'pen', button: 2 }), false);
+  // The menu key and Shift+F10 send a contextmenu with no pointer type and button 0.
+  assert.equal(mouseMenu({ pointerType: '', button: 0 }), false);
+  assert.equal(mouseMenu({ pointerType: undefined, button: 0 }), false);
 });

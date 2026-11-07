@@ -37,8 +37,8 @@
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, icon buttons, the save of a sheet field and the `Guardado` of a sheet save | `sheets`, `ui/context` |
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `lists`, `shops`, `aisles`, `ui/context`, `ui/controls` |
-| `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `reorder`, `ui/context`, `ui/view`, `ui/motion` |
-| `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `store`, `swipe`, `storage`, `lists`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
+| `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `device`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
+| `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `device`, `store`, `swipe`, `storage`, `lists`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
 | `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `store`, `recipes`, `menu`, `lists`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/view` |
 | `src/ui/panels.js` | The panels of `Compra` and `Menú` from 600px: Recetas en la lista, Próxima compra (the postponed items), Para la cesta | `store`, `recipes`, `menu`, `ui/context`, `ui/view`, `ui/controls`, `ui/nav`, `ui/recipes`, `ui/rows` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `lists`, `i18n`, `ui/context`, `ui/controls`, `ui/recipes`, `ui/nav`, `ui/rows`, `ui/view` |
