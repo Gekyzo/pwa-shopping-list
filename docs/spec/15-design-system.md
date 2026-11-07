@@ -116,6 +116,12 @@ each part.
   of a box with a 1px `--line` border, 6px corners and a `--surface-2` ground, with a check in
   `--done` before the title at 18px and the chevron at its end; the bought rows close the box. A
   bought tick is filled at 70% opacity.
+- **DSV-17** The dock floats over the list: no bar and no top line behind it. Each of its controls
+  is a level 2 tile on `--surface`, with a `--border-control` `--control` border and `--shadow-l`;
+  the add button keeps its emerald fill and takes the same shadow. The tools of the header are
+  tiles on `--secondary`. The toast is the inverse surface (`--toast-bg` `#342f2b`, text
+  `#f9efe8`; dark `#eae1da` and `#1f1b17`), its action in `--inverse-primary` (`#82d8a8`, dark
+  `#13734b`). It has no icon, because it also shows errors.
 
 ## Parts of the app
 

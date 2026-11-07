@@ -14,6 +14,7 @@ no change has no entry.
 - The palette is the one of the Stitch screens of Bodega (DSV-11): canvas `#fff8f5`, borders `#bec9c0` and `#6f7a71`, muted ink `#3f4942`, terracotta `#a23e18`; dark is derived from the same roles. `DESIGN.md` holds the Stitch outline values again.
 - The name of a row of `Compra` keeps one line, then ends with an ellipsis; its quantity is a tonal chip on `--secondary` with no edge, and a bought quantity is drawn with a `--line` edge (DSV-15, ROW-1).
 - `Comprados (N)` is a card of its own: the head `bought-head` on `--surface-2` with a `check-circle` in `--done`, and the bought rows close the box; a bought tick is filled at 70% (DSV-16).
+- The dock floats: no bar, each control a level 2 tile; the header tools are tiles on `--secondary`; the toast is the inverse surface with its action in `--inverse-primary` (DSV-17).
 
 ## 1.13.0 - 2026-11-05
 

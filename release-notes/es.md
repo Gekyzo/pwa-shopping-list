@@ -8,6 +8,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 - Colores nuevos: un fondo de papel cálido con líneas gris verdoso suaves, en el tema claro y en el oscuro.
 - En **Compra**, el nombre de cada producto ocupa una línea, y su cantidad es una etiqueta suave.
 - En **Compra**, los productos comprados están en una tarjeta propia, bajo una marca de hecho.
+- Los botones de abajo de **Compra** flotan sobre la lista, y el aviso tras marcar es oscuro.
 
 ## 1.13.0 - 2026-11-05
 

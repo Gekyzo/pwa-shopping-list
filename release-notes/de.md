@@ -8,6 +8,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 - Neue Farben: ein warmer Papierhintergrund mit sanften grüngrauen Linien, im hellen und im dunklen Design.
 - Im **Einkauf** steht jeder Produktname in einer Zeile, und die Menge ist ein dezentes Etikett.
 - Im **Einkauf** stehen die gekauften Produkte in einer eigenen Karte, unter einem Haken.
+- Die Knöpfe unten im **Einkauf** schweben über der Liste, und die Meldung nach dem Abhaken ist dunkel.
 
 ## 1.13.0 - 2026-11-05
 
