@@ -60,6 +60,8 @@ import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
 import { renderShare, closeShare, bind as bindShare } from '#ui/share';
 import { bind as bindNav } from '#ui/nav';
 import { startMove } from '#ui/move';
+import { bind as bindDevice } from '#ui/device';
+import { features } from '#device';
 import {
   syncer,
   renderSync,
@@ -94,9 +96,6 @@ const holdBack = () => {
     history.back();
   }
 };
-
-// The tablet width of DSV-9, from which the recipe sheet is a pane.
-const desktop = matchMedia('(min-width: 840px)');
 
 let debugView = null;
 const renderAll = () => {
@@ -142,7 +141,7 @@ const renderAll = () => {
   // takes the place of the fab (design-system.css), with the same label and the same conditions.
   // From 840px the recipe is a pane beside the list, not a sheet over it (REC-39): the add stays.
   // From 600px the add is the button of the header (NAV-24); the fab and the dock-add are hidden there.
-  const recipePane = desktop.matches && ui.recipeId !== null && !ui.sheetOpen;
+  const recipePane = features(ui.device).recipePane && ui.recipeId !== null && !ui.sheetOpen;
   const noAdd = ['settings', 'menu'].includes(ui.view) || !$('empty-action').hidden || (sheetOpen(ui) && !recipePane);
   const addLabel = t(ui.view === 'recipes' ? 'add.recipe' : 'add.item');
   for (const id of ['fab', 'dock-add', 'header-add', 'nav-add']) {
@@ -179,7 +178,8 @@ const renderAll = () => {
   holdBack();
 };
 setRender(renderAll);
-desktop.addEventListener('change', render);
+// A change of the width class renders again: the recipe pane and the dock follow it (NAV-28).
+bindDevice(render);
 // The sheets from 840px start below the header, level with the panels (DSV-6).
 new ResizeObserver(([entry]) => {
   document.documentElement.style.setProperty('--header-height', `${Math.round(entry.borderBoxSize[0].blockSize)}px`);

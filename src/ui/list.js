@@ -4,6 +4,7 @@ import * as shops from '#shops';
 import * as aisles from '#aisles';
 import * as menu from '#menu';
 import { canSearch, dockShown, emptyAction } from '#sections';
+import { features } from '#device';
 import { listCounts, listPart, listOf } from '#lists';
 import { listName } from '#shares';
 import { $, el, state, sharing, ui, t, shopLists, tripEnd, apply, render, thisWeek, shownWeek } from '#ui/context';
@@ -431,7 +432,7 @@ export const closeShopPick = () => {
 // a tick, leaves the scroll where it is.
 let scrolledQuery = null;
 export const showDockMatches = () => {
-  if (!ui.searchOpen || $('dock').hidden || matchMedia('(min-width: 600px)').matches) {
+  if (!ui.searchOpen || $('dock').hidden || !features(ui.device).dock) {
     scrolledQuery = null;
     return;
   }

@@ -140,6 +140,8 @@ if (DEV) debugLog(`start v${state.version}`, state.items.map((item) => `  = ${de
 // `view` is the screen of the bottom menu.
 export const ui = {
   view: 'active',
+  // The width class of the window (NAV-28), kept by src/ui/device.js. `phone` until it binds.
+  device: 'phone',
   // The install offer: `idle`, `available` or `installed` (INS-1).
   install: 'idle',
   openId: null,

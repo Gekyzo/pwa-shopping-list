@@ -55,7 +55,10 @@ This document holds the rules of the app only.
   `Compra` and `Menú` (`side-panels`) stand below the content, and from 840px beside it,
   `--gutter` apart, with `--page-max` at `100%` so the content fills the area as a pane does
   (LIST-38, LIST-39, MENU-21). From 840px the recipe sheet is a pane (`side-pane`, REC-39), and
-  `Ajustes` sets `--page-max` to `--settings-max` (NAV-27).
+  `Ajustes` sets `--page-max` to `--settings-max` (NAV-27). The code reads the class from
+  `ui.device` (NAV-28), which `src/ui/device.js` keeps with one media query for each breakpoint; no
+  other module of `src/` has a width query. A media query of the CSS uses only `min-width` at 600px,
+  840px or 1024px, and no rule selects on `data-device` (`tests/breakpoints.test.js`).
 
 ## The look of the app
 

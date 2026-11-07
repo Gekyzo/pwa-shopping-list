@@ -39,6 +39,7 @@ repository root.
 | `src/locales/<lang>.js` | The text of one language: a flat object from key to a text or to `{ one, other }` | nothing |
 | `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render`, the combined state of a member, the week of today | `store`, `storage`, `session`, `lists`, `menu`, `i18n`, `onboarding` |
 | `src/ui/view.js` | What the screen shows of the state: the list chip and the list in view, the tag of a row, the target of an add, the search, the open row, the grouping | `store`, `recipes`, `shops`, `lists`, `shares`, `ui/context` |
+| `src/ui/device.js` | The width class of the window in `ui.device` (NAV-28) | `device`, `ui/context` |
 | `src/ui/motion.js` | The motion of rows: close, open, slide to a new place | `ui/context` |
 | `src/ui/controls.js` | The controls that several views use: icons, the rename field and its `Guardado`, the more button | `sheets`, `store`, `ui/context`, `ui/view` |
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `lists`, `shops`, `aisles`, `ui/context` |
