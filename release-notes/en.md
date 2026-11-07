@@ -4,7 +4,8 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-- In **Compra**, you can postpone an item to the next trip: slide the row or use **Postpone** in **Edit**. On wide screens, **Next trip** lists them with a + to bring them back, and **Recipes in the list** shows how many ingredients of each recipe you already have.
+- The header of **Shopping** says how much is left to buy in green, with no bar. On wide screens it has a search field (opens with Ctrl+K or ⌘K), the **Finish shopping** button and the shops below the title.
+- In **Shopping**, you can postpone an item to the next trip: slide the row or use **Postpone** in **Edit**. On wide screens, **Next trip** lists them with a + to bring them back, and **Recipes in the list** shows how many ingredients of each recipe you already have.
 - New colours: a warm paper background with soft green-grey lines, in the light and the dark theme.
 - In **Shopping**, each item name has more room and keeps one line, and its quantity is a soft chip.
 - In **Shopping**, the bought products stand in a card of their own, under a check.

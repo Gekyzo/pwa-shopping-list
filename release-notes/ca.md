@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- La capçalera de **Compra** diu quant queda per comprar en verd, sense barra. En pantalles amples té un camp de cerca (s’obre amb Ctrl+K o ⌘K), el botó **Acaba la compra** i les botigues sota el títol.
 - A **Compra**, pots posposar un producte per a la propera compra: llisca la fila o fes servir **Posposar** a **Edita**. En pantalles amples, **Propera compra** els llista amb un + per portar-los, i **Receptes a la llista** mostra quants ingredients de cada recepta ja tens.
 - A **Compra**, el nom de cada producte té més espai: es talla menys i ocupa menys línies.
 - Colors nous: un fons de paper càlid amb línies gris verdós suaus, en el tema clar i en el fosc.

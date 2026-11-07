@@ -119,29 +119,28 @@ const outcomeRows = () => {
 
 const finishText = () => outcomeRows().map(({ text }) => text).join(' · ');
 
-// The subtitle of Compra holds the full figures; the bar holds the share ticked.
-const activeSubtitle = ({ total, left }) => {
-  if (!total) return t('header.empty');
-  if (!left) return t('header.allBought');
-  return t('header.bought', { done: total - left, count: total });
+// The subtitle of Compra: the items to buy in bold, then the bought ones (`strong` is the bold
+// start of the line, `subtitle` the rest). An empty list and a list all bought have one plain line.
+const activeHeader = ({ total, left }) => {
+  const title = t('list.active');
+  if (!total) return { title, strong: '', subtitle: t('header.empty') };
+  if (!left) return { title, strong: '', subtitle: t('header.allBought') };
+  return { title, strong: t('header.toBuy', { count: left }), subtitle: ` · ${t('header.boughtCount', { count: total - left })}` };
 };
 
 export const headerOf = (summary) => {
-  // Only Compra has a bar: `pct` is null in the other sections.
-  if (ui.view === 'settings') return { title: t('nav.settings'), subtitle: t('header.settingsSubtitle'), pct: null };
+  if (ui.view === 'settings') return { title: t('nav.settings'), strong: '', subtitle: t('header.settingsSubtitle') };
   if (ui.view === 'menu') {
     const count = menu.mealCount(state, shownWeek());
     const subtitle = count ? t('header.menuMeals', { count }) : t('header.noMeals');
-    return { title: t('nav.menu'), subtitle, pct: null };
+    return { title: t('nav.menu'), strong: '', subtitle };
   }
   if (ui.view === 'recipes') {
     const count = state.recipes.length;
     const subtitle = count ? t('count.recipes', { count }) : t('header.noRecipes');
-    return { title: t('nav.recipes'), subtitle, pct: null };
+    return { title: t('nav.recipes'), strong: '', subtitle };
   }
-  const { total, left } = summary;
-  const pct = total ? Math.round(((total - left) / total) * 100) : 0;
-  return { title: t('header.today'), subtitle: activeSubtitle(summary), pct };
+  return activeHeader(summary);
 };
 
 // The button text of each action of an empty section.
@@ -287,8 +286,11 @@ export const renderList = (summary) => {
 export const renderTrip = () => {
   if (ui.view !== 'active') ui.tripOpen = false;
   $('trip-button').hidden = ui.view !== 'active';
+  // From 1024px Terminar compra is a button of its own in the header, in place of the three dots (NAV-9).
+  $('header-finish').hidden = ui.view !== 'active';
+  $('header-finish').disabled = !store.canStartNewShopping(state);
   $('finish-menu').disabled = !store.canStartNewShopping(state);
-  $('trip-button').setAttribute('aria-expanded', String(ui.tripOpen));
+  for (const id of ['trip-button', 'header-finish']) $(id).setAttribute('aria-expanded', String(ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
   $('trip-outcomes').replaceChildren(...outcomeRows().map(({ icon: name, text }) => el('li', { className: 'list-row' }, [
     icon(name),
@@ -440,7 +442,8 @@ export const showDockMatches = () => {
 export const closeTrip = () => {
   Object.assign(ui, { tripOpen: false });
   render();
-  $('trip-button').focus();
+  // The button that opened the sheet is the one in view: the three dots, or Terminar compra from 1024px.
+  ($('header-finish').offsetParent ? $('header-finish') : $('trip-button')).focus();
 };
 
 export const bind = () => {
@@ -466,11 +469,13 @@ export const bind = () => {
   $('query').addEventListener('blur', () => {
     if (ui.searchOpen && !ui.query.trim()) closeSearch();
   });
-  $('trip-button').addEventListener('click', () => {
+  const openTrip = () => {
     Object.assign(ui, { tripOpen: true, openId: null });
     render();
     $('finish-menu').focus();
-  });
+  };
+  $('trip-button').addEventListener('click', openTrip);
+  $('header-finish').addEventListener('click', openTrip);
   $('dock-shop').addEventListener('click', () => {
     Object.assign(ui, { shopPickOpen: true, openId: null, openSide: null });
     render();

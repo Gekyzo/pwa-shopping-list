@@ -10,17 +10,17 @@ globalThis.localStorage ??= { getItem: () => null, setItem() {}, removeItem() {}
 const { headerOf } = await import('#ui/list');
 const { ui } = await import('#ui/context');
 
-test('headerOf gives the ticked share in Compra only', () => {
-  const summary = { total: 15, left: 12 };
+test('headerOf gives Compra its counts to buy and bought, and no bar', () => {
   const view = ui.view;
   try {
     ui.view = 'active';
-    assert.equal(headerOf(summary).pct, 20);
-    assert.equal(headerOf({ total: 0, left: 0 }).pct, 0);
+    assert.deepEqual(headerOf({ total: 15, left: 12 }), { title: 'Shopping', strong: '12 to buy', subtitle: ' · 3 bought' });
+    assert.equal(headerOf({ total: 0, left: 0 }).strong, '');
+    assert.equal(headerOf({ total: 4, left: 0 }).strong, '');
     for (const other of ['recipes', 'menu', 'settings']) {
       ui.view = other;
-      assert.equal(headerOf(summary).pct, null, other);
-      assert.ok(!('ring' in headerOf(summary)), other);
+      assert.equal(headerOf({ total: 15, left: 12 }).strong, '', other);
+      assert.ok(!('pct' in headerOf({ total: 15, left: 12 })), other);
     }
   } finally {
     ui.view = view;

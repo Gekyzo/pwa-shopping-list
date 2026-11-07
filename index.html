@@ -18,17 +18,18 @@
         <h1 id="title" class="app-header-title"></h1>
         <p id="subtitle" class="app-header-subtitle"></p>
       </div>
-      <button id="search-button" class="button icon" type="button" data-i18n-attr="aria-label:search.label" aria-controls="search" hidden>
-        <svg class="icon" aria-hidden="true"><use href="icons.svg#search"/></svg>
-      </button>
+      <button id="search-button" class="button icon header-search" type="button" data-i18n-attr="aria-label:search.label" aria-controls="search" aria-keyshortcuts="Control+K Meta+K" hidden>
+        <svg class="icon" aria-hidden="true"><use href="icons.svg#search"/></svg><span class="header-search-text" data-i18n="search.items"></span><kbd class="header-search-key" data-i18n="search.key"></kbd></button>
       <button id="arrange-button" class="button icon" type="button" data-i18n-attr="aria-label:arrange.label" aria-haspopup="dialog" hidden>
-        <svg class="icon" aria-hidden="true"><use href="icons.svg#filter"/></svg>
+        <svg class="icon" aria-hidden="true"><use href="icons.svg#sort"/></svg>
       </button>
-      <button id="trip-button" class="button icon" type="button" data-i18n-attr="aria-label:trip.menu" aria-haspopup="dialog" aria-controls="trip" hidden>
+      <button id="trip-button" class="button icon header-trip" type="button" data-i18n-attr="aria-label:trip.menu" aria-haspopup="dialog" aria-controls="trip" hidden>
         <svg class="icon" aria-hidden="true"><use href="icons.svg#more"/></svg>
       </button>
       <button id="header-add" class="button primary header-add" type="button" hidden><svg class="icon small" aria-hidden="true"><use href="icons.svg#plus"/></svg><span id="header-add-text"></span></button>
-      <div id="progress" class="progress" role="progressbar" aria-labelledby="subtitle" aria-valuemin="0" aria-valuemax="100" hidden></div>
+      <button id="header-finish" class="button primary header-finish" type="button" aria-haspopup="dialog" aria-controls="trip" hidden><svg class="icon small" aria-hidden="true"><use href="icons.svg#check-circle"/></svg><span data-i18n="finish.button"></span></button>
+      <div id="list-chips" class="cluster scroll list-chips" role="group" data-i18n-attr="aria-label:lists.label" hidden></div>
+      <div id="shop-chips" class="cluster scroll shop-lists" role="group" data-i18n-attr="aria-label:shops.lists" hidden></div>
     </header>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden>
@@ -50,9 +51,7 @@
         <button id="share-banner-open" class="button tonal wide" type="button" data-i18n="share.bannerOpen"></button>
       </section>
 
-      <div id="list-chips" class="cluster scroll list-chips" role="group" data-i18n-attr="aria-label:lists.label" hidden></div>
 
-      <div id="shop-chips" class="cluster scroll shop-lists" role="group" data-i18n-attr="aria-label:shops.lists" hidden></div>
 
       <div id="recipe-chips" class="cluster scroll recipe-chips" role="group" data-i18n-attr="aria-label:recipes.filters" hidden></div>
 

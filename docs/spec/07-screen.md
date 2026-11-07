@@ -5,7 +5,7 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/ui/`, `src/swipe.js` and
 ## Layout
 
 From top to bottom: the header (title, subtitle, search button, arrange button, trip
-button, and the bar of `Compra`), the content of the section, the `+` button above the bottom bar, and the bottom bar.
+button, and in `Compra` the rows of list chips and shop chips), the content of the section, the `+` button above the bottom bar, and the bottom bar.
 Below 600px wide the dock of `Compra` and `Recetas` stands above the bottom bar (SHOP-26) and holds
 the `+` button at its end, and no `+` button floats over the list. The header has no search button
 while the dock shows. The title keeps one line, with an
@@ -164,7 +164,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **NAV-23** A drag down of the grab or the head of a sheet closes it when the drag passes 30 % of
   the height of the sheet, or when the release is faster than 0.5 px/ms. A shorter, slower drag
   puts the sheet back. A drag that starts on a button or a field of the head does nothing.
-- **NAV-9** The trip button of the header has three dots. It shows in `Compra`. A tap
+- **NAV-9** The trip button of the header has three dots. It shows in `Compra` below 1024px; from
+  1024px the header shows in its place the primary button **Terminar compra** with a `check-circle`,
+  disabled when TRIP-1 does not hold, and the add of the header beside it is outlined. A tap
   opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet has the
   title `Opciones de la compra`, the line of where the items go (TRIP-4), the line of the open items
   (TRIP-6) and the button **Terminar compra**, in this order.

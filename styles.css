@@ -73,6 +73,7 @@
     --chevron-box: 24px; /* the box of the chevron of a settings row */
     --chevron-mark: 8px; /* the drawn mark inside it */
     --dot: 6px; /* the dot before the status of a meal */
+    --search-field: 260px; /* the search field of the header from 1024px */
 
     /* Emerald: one green for the main action, progress and the checked state. */
     --done: light-dark(#13734b, #82d8a8); /* primary-container; dark inverse-primary */
@@ -145,15 +146,75 @@
 }
 
 @layer components {
-  /* @extends app-header */
-  /* The progress bar of Compra is the last child and takes a full line below the title and the
-     buttons. */
+  /* @extends app-header
+     @part app-header-count      The count to buy at the start of the subtitle of Compra, in bold --done.
+     @part header-search        The search button; from 1024px a field with its text and its key.
+     @part header-search-text   The text of the search field, from 1024px.
+     @part header-search-key    The key ⌘K of the search field, from 1024px.
+     @part header-finish        Terminar compra of Compra from 1024px, in place of the three dots (NAV-9).
+     @part header-trip          The three dots of Compra, which open the trip sheet below 1024px. */
+  /* The chips rows of Compra are the last children and each takes a full line below the title and
+     the buttons. */
   .app-header {
     flex-wrap: wrap;
   }
 
-  .app-header .progress {
-    flex: none;
+  .app-header-count {
+    color: var(--done);
+    font-weight: var(--weight-strong);
+  }
+
+  .header-search-text,
+  .header-search-key,
+  .app-header > .header-finish {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .app-header > .button.icon.header-search:not([hidden]) {
+      justify-content: flex-start;
+      gap: var(--space-2);
+      width: var(--search-field);
+      padding-inline: var(--space-3);
+      background: var(--surface);
+      color: var(--muted);
+    }
+
+    .header-search-text {
+      display: inline;
+      flex: 1;
+      overflow: hidden;
+      font-size: var(--text-s);
+      text-align: start;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .header-search-key {
+      display: inline;
+      padding: var(--space-half) var(--space-1);
+      border-radius: var(--radius-s);
+      background: var(--secondary);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+    }
+
+    .app-header > .header-finish:not([hidden]) {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .app-header:has(> .header-finish:not([hidden])) > .header-trip {
+      display: none;
+    }
+
+    /* Beside Terminar compra the add of Compra is the outlined second action of the screen. */
+    .app-header:has(> .header-finish:not([hidden])) > .header-add {
+      border: 1px solid var(--control);
+      background: var(--surface);
+      color: var(--text);
+    }
   }
 
   /* The header of DESIGN.md (DSV-13): an elevated band, and its tools as bordered square tiles,
@@ -1198,6 +1259,36 @@
     margin: 0;
     padding: var(--space-2) var(--space-3);
     border-bottom: 1px solid var(--line);
+  }
+
+  /* In the header the chips rows take a full line each, with no edge of their own: the header has
+     one (gap 2 of the desktop review: the row of main clipped its chips from 1024px). From 600px
+     a chip is a pill at the tap size (TAP-1), and the pressed one is filled emerald, as in the screen. */
+  .app-header > :is(.shop-lists, .list-chips) {
+    flex: 1 0 100%;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  @media (min-width: 600px) {
+    .app-header > :is(.shop-lists, .list-chips) > .chip {
+      padding-inline: var(--space-3);
+      border-color: var(--line);
+      border-radius: var(--radius-pill);
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip[aria-pressed="true"] {
+      border-color: var(--done);
+      background: var(--done);
+      color: var(--on-done);
+    }
+
+    .app-header > :is(.shop-lists, .list-chips) > .chip[aria-pressed="true"] > .count {
+      padding-inline: var(--space-1);
+      border-radius: var(--radius-pill);
+      background: var(--done-soft);
+      color: var(--done);
+    }
   }
 
   /* @component recipe-chips
