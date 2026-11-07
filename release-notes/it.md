@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- In **Spesa**, il nome di ogni prodotto ha più spazio: viene tagliato meno e occupa meno righe.
 
 ## 1.13.0 - 2026-11-05
 

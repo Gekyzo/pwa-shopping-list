@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- In **Shopping**, the name of each item has more room: it is cut less and takes fewer lines.
 
 ## 1.13.0 - 2026-11-05
 
