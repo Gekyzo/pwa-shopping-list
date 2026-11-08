@@ -76,6 +76,11 @@
     --text-label-md: 0.8125rem; /* label-md: 13px, the label of a meal */
     --text-label-sm: 0.6875rem; /* label-sm: 11px, the count and the foot of the sidebar */
     --meal-min: 88px; /* the least height of a meal tile */
+    --meal-min-desk: 84px; /* the least height of a meal row of the desktop screen (DSV-30) */
+    --meal-tile: 28px; /* the tile of the kind of a meal from 1024px (DSV-30) */
+    --day-bar-desk: 6px; /* the emerald bar before the name of a day from 1024px */
+    --day-bar-tall: 24px;
+    --progress-width: 192px; /* the bar of the planned slots of Menú from 1024px */
     --chevron-box: 24px; /* the box of the chevron of a settings row */
     --chevron-mark: 8px; /* the drawn mark inside it */
     --dot: 6px; /* the dot before the status of a meal */
@@ -3369,5 +3374,199 @@
     border-top: 2px solid currentColor;
     border-right: 2px solid currentColor;
     transform: translateX(-2px) rotate(45deg);
+  }
+  /* The main area of the desktop screen of Menú, from 1024px (DSV-30). Each day is a card with its
+     name in a column of its own, after a short emerald bar. The summary and the actions stand on a
+     tinted card, the summary with a bar of the planned slots. A meal is a tile with its label above
+     its name and its status as a pill below; when the two meals of a day have room (480px), a meal
+     is a row: the kind in a 28px tile, the label above the name, and the pill at the end, and a
+     free meal centres its call on one line. */
+  @media (min-width: 1024px) {
+    .item-list:has(> .day) {
+      grid-template-columns: max(8rem, max-content) minmax(0, 1fr);
+      row-gap: var(--space-2);
+      padding: var(--space-4) 0 var(--space-2);
+    }
+
+    .day {
+      margin-inline: var(--space-4);
+      padding: var(--space-3);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-s);
+      background: var(--surface);
+      column-gap: var(--space-4);
+    }
+
+    .day-title {
+      position: relative;
+      padding-inline-start: var(--space-3);
+      border-inline-start: 0;
+      font-size: var(--text-label);
+    }
+
+    .day-title::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: var(--day-bar-desk);
+      height: var(--day-bar-tall);
+      margin-block: auto;
+      border-radius: var(--radius-pill);
+      background: var(--primary);
+    }
+
+    .day-date {
+      color: var(--struck);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-strong);
+    }
+
+    .meals {
+      container-type: inline-size;
+      gap: var(--space-3);
+    }
+
+    .meal {
+      min-height: var(--meal-min-desk);
+      padding: var(--space-2) var(--space-3);
+      border-color: var(--line);
+      border-radius: var(--radius-s);
+      background: var(--surface-2);
+    }
+
+    .meal.dish {
+      border-color: var(--line);
+      background: var(--surface);
+    }
+
+    .meal.free {
+      background: none;
+    }
+
+    .meal-label {
+      color: var(--struck);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-strong);
+    }
+
+    .meal.dish .meal-label {
+      color: var(--muted);
+    }
+
+    .meal-name {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      font-size: var(--text-row);
+      font-weight: var(--weight-strong);
+      line-height: 1.4;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .meal.free > .meal-name {
+      font-size: var(--text-label-md);
+      font-weight: var(--weight-medium);
+    }
+
+    .meal.free > .meal-label {
+      font-weight: var(--weight-medium);
+    }
+
+    .meal.past.free > .meal-name {
+      color: var(--struck);
+    }
+
+    .meal-icon {
+      color: var(--primary);
+    }
+
+    .meal-status {
+      margin-top: var(--space-1);
+      padding: var(--space-half) var(--space-2);
+      border-radius: var(--radius-pill);
+      background: var(--primary-soft);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-strong);
+      line-height: 1.3;
+    }
+
+    .meal-status::before {
+      display: none;
+    }
+
+    .meal-status.dish {
+      background: var(--surface-high);
+      font-weight: var(--weight-medium);
+    }
+
+    @container (min-width: 480px) {
+      .meal:not(.free) {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-content: center;
+        align-items: center;
+        gap: 0;
+      }
+
+      .meal > .meal-label,
+      .meal > .meal-name,
+      .meal > .meal-entry,
+      .meal:has(> .meal-icon) > .meal-label {
+        grid-column: 2;
+        padding-inline-end: var(--space-2);
+      }
+
+      .meal-icon {
+        position: static;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        box-sizing: border-box;
+        width: var(--meal-tile);
+        height: var(--meal-tile);
+        margin-inline-end: var(--space-3);
+        padding: var(--space-1);
+        border-radius: var(--radius-s);
+        background: var(--surface-high);
+      }
+
+      .meal-status {
+        grid-column: 3;
+        grid-row: 1 / span 2;
+        margin: 0;
+      }
+
+      .meal.free {
+        flex-direction: row;
+        gap: var(--space-2);
+      }
+    }
+
+    .action-bar:has(> .menu-summary) {
+      gap: var(--space-3) var(--space-4);
+      margin: 0 var(--space-4) var(--space-4);
+      padding: var(--space-4);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-s);
+      background: var(--surface-2);
+    }
+
+    .menu-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      text-align: start;
+    }
+
+    .menu-summary::after {
+      content: "";
+      flex: none;
+      width: var(--progress-width);
+      height: var(--space-2);
+      border-radius: var(--radius-pill);
+      background: linear-gradient(to right, var(--primary) calc(var(--planned, 0) * 100%), var(--surface-high) 0);
+    }
   }
 }

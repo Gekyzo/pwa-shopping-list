@@ -143,6 +143,8 @@ export const renderMenuActions = () => {
   // MENU-26: the planned slots of the week in view, of the 14, and the free ones.
   const planned = menu.plannedSlots(state, shownWeek());
   $('menu-summary').textContent = t('menu.summary', { planned, total: menu.SLOTS, free: menu.SLOTS - planned, count: menu.SLOTS - planned });
+  // DSV-30: the bar of the planned slots on the desktop screen.
+  $('menu-summary').style.setProperty('--planned', String(planned / menu.SLOTS));
   // MENU-23, MENU-24: a past week has Repetir esta semana in place of Llenar cesta and Vaciar menú.
   $('menu-split').hidden = pastShown();
   $('menu-repeat').hidden = !pastShown();

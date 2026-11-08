@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Su schermi ampi, **Menù** somiglia di più al progetto: ogni giorno è una scheda, ogni pasto mostra il suo tipo in un riquadro e il suo stato in una pillola, e il riepilogo della settimana ha una barra di avanzamento.
 - In **Menù**, la freccia › porta alle prossime settimane, fino a quattro settimane avanti. Puoi pianificarne i pasti, riempire il cestino con essi o svuotarli, come per questa settimana.
 - Sugli schermi larghi, **Impostazioni** ha il design desktop: una colonna centrata, ogni gruppo sotto il suo titolo.
 - Sugli schermi larghi, i pulsanti per aggiungere non scompaiono più quando si apre un foglio, e l’intestazione e il menu laterale non si muovono.

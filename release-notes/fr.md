@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur grand écran, **Menu** ressemble davantage à la maquette : chaque jour est une carte, chaque repas montre son type dans une vignette et son état dans une pastille, et le résumé de la semaine a une barre de progression.
 - Dans **Menu**, la flèche › mène aux semaines suivantes, jusqu’à quatre semaines à l’avance. Tu peux planifier leurs repas, remplir le panier avec eux ou les vider, comme pour cette semaine.
 - Sur les écrans larges, **Réglages** a le design de bureau : une colonne centrée, chaque groupe sous son titre.
 - Sur les écrans larges, les boutons d’ajout ne disparaissent plus à l’ouverture d’une feuille, et l’en-tête et le menu latéral ne bougent plus.

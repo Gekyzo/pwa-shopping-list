@@ -232,3 +232,18 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   `--danger-soft` at half strength, and its tag on `--danger-soft`. The update banner is on
   `--surface-2`. The **Modo sin conexión** badge of the header is not built: the rail already shows
   that state (NAV-26).
+- **DSV-30** The main area of the desktop screen of `Menú`, from 1024px. Each day is a card on
+  `--surface` with a `--line` edge and 4px corners, 8px apart; its name stands in a column of at
+  least 128px after a 6px by 24px emerald pill, the name 14px, the date 11px bold in `--struck`. A
+  meal has 4px corners: a recipe on `--surface-2`, a dish on `--surface`, a free meal on no ground;
+  its label is 11px bold in `--struck`, its name 16px at weight 700 on two lines at most, and its
+  status (MENU-25) is an 11px pill: on `--primary-soft` for a recipe, on `--surface-high` for a
+  dish. When the meals of a day are at least 480px wide (a container query on `meals`), a meal is a
+  row: its kind in a 28px `--surface-high` tile at the start, the label above the name, the pill at
+  the end, and a free meal shows its call on one line; narrower, the kind stays at the top end and
+  the pill stands below the name. The summary and the actions stand on a `--surface-2` card with a
+  `--line` edge: the summary at the start, then a 192px bar of the planned slots of the 14
+  (`--planned`, set by `src/ui/menu.js`). The week switcher in the header, the **Ajustar
+  raciones** button, the **Semanas anteriores** panel and the card **Generación automática de
+  cesta** of the screen are not built: the week bar of MENU-23 stays above the days, the app has no
+  portions, and the panel **Para la cesta** (MENU-21) stays.

@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- A pantalles amples, **Menú** s’assembla més al disseny: cada dia és una targeta, cada àpat mostra el seu tipus en un requadre i el seu estat en una píndola, i el resum de la setmana té una barra de progrés.
 - A **Menú**, la fletxa › porta a les setmanes següents, fins a quatre setmanes endavant. Pots planificar-ne els àpats, omplir la cistella amb ells o buidar-los, com a la setmana actual.
 - En pantalles amples, **Configuració** té el disseny d’escriptori: una columna centrada, amb cada grup sota el seu títol.
 - En pantalles amples, els botons d’afegir ja no desapareixen quan s’obre un full, i la capçalera i el menú lateral no es mouen.
