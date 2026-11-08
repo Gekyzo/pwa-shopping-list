@@ -26,6 +26,7 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   the past week keeps it (MENU-23). It has `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation. Below 600px wide they stand in one column; from
   600px in two, filled row by row, so more of them fit on the screen of a tablet or an unfolded phone.
+  From 1024px they fill as many columns as fit (REC-39).
 - **REC-35** A recipe whose products are all items of `Compra`, ticked or not, with no case
   distinction, shows the badge `en la lista` (REC-4, REC-40). A recipe with no products has no
   such badge. The rule of "all in `Compra`" is the one of the groups by recipe (GROUP-5).
@@ -43,8 +44,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   the recipe.
 - **REC-39** From 840px wide (DSV-9) the sheet of a recipe is a pane at the end of the frame, at
   most 480px wide, with no veil. The recipes stand in one column beside it, and the row of the open
-  recipe is on a pill. From 1024px the recipes stand in two columns while each column is 280px wide
-  at least, beside the pane too, and the card of the open recipe has an emerald edge (DSV-31). A tap on another recipe shows it in the pane. **Listo**, `Escape` and the back
+  recipe is on a pill. From 1024px the recipes fill as many columns as fit, each 288px wide at least,
+  as the cards of the desktop screen, beside the pane too, and the card of the open recipe has an emerald edge (DSV-31). A tap on another recipe shows it in the pane. **Listo**, `Escape` and the back
   close the pane as they close the sheet (NAV-25). The add of the header stays (NAV-24). Below
   840px the recipe is the sheet of NAV-8.
 - **REC-40** The detail of a recipe card and the filters of `Recetas`, as the Stitch screens show

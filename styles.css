@@ -3804,8 +3804,8 @@
 
   /* The desktop screen of Recetas, from 1024px (DSV-31). The count of the header is plain text. A
      recipe is a card: the name at 20px, a dot and the count, the products, then a foot below a
-     line with the link button and the labelled send. The cards stand in two columns while each has
-     280px, beside the pane too. The pane is a form: the name as its title, the link beside its
+     line with the link button and the labelled send. The cards fill as many columns as fit, each
+     288px at least, beside the pane too. The pane is a form: the name as its title, the link beside its
      Abrir, the products with their count and dots, and the send across its foot (REC-42). */
   @media (min-width: 1024px) {
     body:has([data-view="recipes"][aria-current="page"]) .app-header-subtitle {
@@ -3818,7 +3818,7 @@
 
     .item-list:has(> .item-row.recipe),
     body:has(.side-pane:not([hidden])) .item-list:has(> .item-row.recipe) {
-      grid-template-columns: repeat(auto-fill, minmax(max(17.5rem, (100% - var(--space-4)) / 2), 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
       column-gap: var(--space-4);
       margin-top: var(--space-6);
     }

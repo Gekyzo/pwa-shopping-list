@@ -255,8 +255,8 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   `--text-h`, then a meta line that starts with an 8px dot (`--struck`, emerald for a recipe in
   the list) and ends with `· en la lista` as plain text (REC-40), then the line of products, then a
   foot below a `--line` with the link button and the send button, both 4px tiles on
-  `--surface-2`, the send with its text **Añadir** (`recipe-send-text`). The cards stand in two
-  columns while each has 280px, beside the pane too (REC-39); the open card has a 2px emerald edge
+  `--surface-2`, the send with its text **Añadir** (`recipe-send-text`). The cards fill as many
+  columns as fit, each 288px at least, beside the pane too (REC-39); the open card has a 2px emerald edge
   and its **Añadir** is emerald. The pane is a form: its head holds **Listo** alone, under a line;
   the name is its title, a 24px field with no box until the focus; the names of the fields are
   11px small capitals; the link card is an **Abrir enlace** button beside the field **Enlace**;

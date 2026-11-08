@@ -294,12 +294,12 @@ test('from 1024px the card of the fill has its storage as a foot, with a line ab
   assert.match(block('.side-panel-auto > .side-panel-head', wide), /border-bottom:\s*0/);
 });
 
-test('from 1024px a recipe card ends with a foot of its actions, and the cards keep two columns beside the pane (DSV-31)', () => {
+test('from 1024px a recipe card ends with a foot of its actions, and the cards fill as many 288px columns as fit, beside the pane too (DSV-31)', () => {
   const end = block('.item-row.recipe .item-row-end', wide);
   assert.match(end, /position:\s*static/);
   assert.match(end, /border-top:\s*1px solid var\(--line\)/);
   assert.match(block('.recipe-send-text', wide), /display:\s*inline/);
-  assert.match(block('body:has(.side-pane:not([hidden])) .item-list:has(> .item-row.recipe)', wide), /minmax\(max\(17\.5rem, \(100% - var\(--space-4\)\) \/ 2\), 1fr\)/);
+  assert.match(block('body:has(.side-pane:not([hidden])) .item-list:has(> .item-row.recipe)', wide), /repeat\(auto-fill, minmax\(min\(100%, 18rem\), 1fr\)\)/);
   assert.match(block('.item-row.recipe.current', wide), /box-shadow:\s*0 0 0 1px var\(--primary\)/);
 });
 
