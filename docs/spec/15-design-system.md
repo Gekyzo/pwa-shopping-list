@@ -175,7 +175,8 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 | components | versions of `app-header`, `nav-bar`, `sheet`, `dock`, `input`, `item-row`, `section-head`, `group-head`, `empty-state`, `list-group` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |
 - **DSV-23** An outline button that is not a danger one is an outlined secondary action of the
-  Stitch screens: **Posponer** of `Editar` and **Mover todos a la compra actual**. The other
+  Stitch screens: **Posponer** of `Editar`, **Mover todos a la compra actual** and **Filtros** of
+  `Recetas` (DSV-32). The other
   secondary actions stay tonal. The side panels are bordered cards on `--surface`; a recipe tile
   of **Recetas en la lista** is a bordered tile on `--bg` (LIST-38).
 - **DSV-24** The rows and group cards of the desktop screen of `Compra`, from 1024px: a 28px tick
@@ -261,8 +262,17 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   11px small capitals; the link card is an **Abrir enlace** button beside the field **Enlace**;
   the products have their count and their dots (REC-9); the add button is tonal; the foot starts
   with **Añadir a Compra** and its hint (REC-42). The parts of the screen with no data in the app
-  are not built: the category label and the **Activa** pill of a card, the recipe code of the foot of a card, the
-  **Filtros** and print buttons (the chips of REC-40 are the filters), the quantities of the
-  products, the **Receta activa** and **Modo edición** pills and the expand button of the pane, and
+  are not built: the category label and the **Activa** pill of a card, the recipe code of the
+  foot of a card, the print button (DSV-32), the quantities of the products, the **Receta activa** and **Modo edición** pills and the expand button of the pane, and
   the storage strip at the foot of the screen (the rail shows the offline state, NAV-26). The
-  search stays in the header tools (DSV-27).
+  search stands on its own line of the header (DSV-32).
+- **DSV-32** The header of the desktop screen of `Recetas`, from 1024px. The title and **Crear
+  receta** stand on the first line; the search field takes the second line, 48px high, on
+  `--surface` with a `--control` edge and 4px corners, its text 15px in `--muted`, and
+  **Filtros** ends that line: an outlined button with the icon `filter`, on `--primary-soft` with
+  an emerald edge while open. A filter other than Todas puts an emerald `1` on it. The chips of
+  REC-40 show only while **Filtros** is open (`ui.recipeFiltersOpen`, not saved, closed at the
+  start); below 1024px there is no **Filtros** and the chips show as before. The subtitle ends with
+  `· guardadas localmente` with no account and `· sincronizadas` with one (NAV-26), and a narrow
+  header cuts it with an ellipsis, so the title and the add keep one line. The print button of
+  the screen is not built: the app does not print.

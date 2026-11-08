@@ -84,6 +84,8 @@ export default {
   'header.boughtCount': { one: '{count} gekauft', other: '{count} gekauft' },
   'header.left': { one: 'Noch {count} Artikel', other: 'Noch {count} Artikel' },
   'header.noRecipes': 'Keine Rezepte',
+  'header.recipesLocal': 'lokal gespeichert',
+  'header.recipesSynced': 'synchronisiert',
   'count.items': { one: '{count} Artikel', other: '{count} Artikel' },
   'count.recipes': { one: '{count} Rezept', other: '{count} Rezepte' },
   'count.products': { one: '{count} Produkt', other: '{count} Produkte' },
@@ -141,6 +143,7 @@ export default {
 
   'recipes.search': 'Rezept oder Produkt suchen',
   'recipes.filters': 'Rezeptfilter',
+  'recipes.filter': 'Filter',
   'recipes.filterAll': 'Alle',
   'recipes.filterInList': 'Auf der Liste',
   'recipes.filterLink': 'Mit Link',

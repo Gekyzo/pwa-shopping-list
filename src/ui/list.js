@@ -131,7 +131,8 @@ const activeHeader = ({ total, left }) => {
   return { title, strong: t('header.toBuy', { count: left }), subtitle: ` · ${t('header.boughtCount', { count: total - left })}` };
 };
 
-export const headerOf = (summary) => {
+// `signedIn` gives the note of Recetas: where its recipes are kept (DSV-32).
+export const headerOf = (summary, { signedIn = false } = {}) => {
   if (ui.view === 'settings') return { title: t('nav.settings'), strong: '', subtitle: t('header.settingsSubtitle') };
   if (ui.view === 'menu') {
     const count = menu.mealCount(state, shownWeek());
@@ -141,7 +142,8 @@ export const headerOf = (summary) => {
   if (ui.view === 'recipes') {
     const count = state.recipes.length;
     const subtitle = count ? t('count.recipes', { count }) : t('header.noRecipes');
-    return { title: t('nav.recipes'), strong: '', subtitle };
+    const note = count ? t(signedIn ? 'header.recipesSynced' : 'header.recipesLocal') : '';
+    return { title: t('nav.recipes'), strong: '', subtitle, note };
   }
   return activeHeader(summary);
 };
@@ -213,6 +215,12 @@ export const renderRecipeChips = () => {
   const filters = recipes.RECIPE_FILTERS.filter((filter) => filter === 'all' || counts[filter] > 0);
   const shown = ui.view === 'recipes' && filters.length > 1;
   $('recipe-chips').hidden = !shown;
+  // DSV-32: Filtros of the header shows or hides the chips from 1024px, and counts a filter in use.
+  $('filter-button').hidden = !shown;
+  $('filter-button').setAttribute('aria-expanded', String(ui.recipeFiltersOpen));
+  $('recipe-chips').classList.toggle('folded', !ui.recipeFiltersOpen);
+  $('filter-count').hidden = ui.recipeFilter === 'all';
+  $('filter-count').textContent = '1';
   if (!shown) return;
   $('recipe-chips').replaceChildren(...filters.map((filter) => {
     const pick = () => {
@@ -460,6 +468,10 @@ export const bind = () => {
   });
   // The press must not take the focus out of the field: the blur would close the search, and the
   // click would then open it again.
+  $('filter-button').addEventListener('click', () => {
+    ui.recipeFiltersOpen = !ui.recipeFiltersOpen;
+    render();
+  });
   $('search-button').addEventListener('mousedown', (event) => event.preventDefault());
   $('search-button').addEventListener('click', () => {
     if (ui.searchOpen) {

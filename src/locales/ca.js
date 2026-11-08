@@ -84,6 +84,8 @@ export default {
   'header.boughtCount': { one: '{count} comprat', other: '{count} comprats' },
   'header.left': { one: 'Queda {count} article', other: 'Queden {count} articles' },
   'header.noRecipes': 'Sense receptes',
+  'header.recipesLocal': 'desades localment',
+  'header.recipesSynced': 'sincronitzades',
   'count.items': { one: '{count} article', other: '{count} articles' },
   'count.recipes': { one: '{count} recepta', other: '{count} receptes' },
   'count.products': { one: '{count} producte', other: '{count} productes' },
@@ -141,6 +143,7 @@ export default {
 
   'recipes.search': 'Cerca recepta o producte',
   'recipes.filters': 'Filtres de receptes',
+  'recipes.filter': 'Filtres',
   'recipes.filterAll': 'Totes',
   'recipes.filterInList': 'A la llista',
   'recipes.filterLink': 'Amb enllaç',

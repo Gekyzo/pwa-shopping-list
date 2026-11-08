@@ -56,6 +56,7 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   `filterRecipes` of `src/recipes.js`. A filter with no recipe has no chip, a row with Todas alone
   does not show, and a filter that loses its last recipe gives way to Todas. A filter other than
   Todas shows no dishes (REC-38). The choice is `ui.recipeFilter`, not saved.
+  From 1024px the chips show only while the button **Filtros** of the header is open (DSV-32).
 - **REC-10** While the user types a product, the recipe lists up to 5 names that contain the text,
   with no case and no accent distinction: the names of the items, then the products of the
   recipes, each name one time with no case distinction, with the spelling of the item first. The

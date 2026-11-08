@@ -64,6 +64,7 @@ import { bind as bindDevice } from '#ui/device';
 import { features } from '#device';
 import {
   syncer,
+  signedIn,
   renderSync,
   startAccount,
   finishOAuth,
@@ -116,14 +117,14 @@ const renderAll = () => {
   // The preview of Terminar compra counts the open items with the setting's choice (TRIP-7).
   const kept = tripEnd === 'keep' ? store.openItems(state).map((item) => item.id) : [];
   const summary = store.tripSummary(state, kept);
-  const header = headerOf(store.tripSummary(viewState()));
+  const header = headerOf(store.tripSummary(viewState()), { signedIn: signedIn() });
   if (inList() && ui.shop !== null) header.title = shopLabel(ui.shop);
 
   renderListChips();
   renderShopChips();
   renderRecipeChips();
   $('title').textContent = header.title;
-  $('subtitle').replaceChildren(...(header.strong ? [el('strong', { className: 'app-header-count', textContent: header.strong })] : []), header.subtitle);
+  $('subtitle').replaceChildren(...(header.strong ? [el('strong', { className: 'app-header-count', textContent: header.strong })] : []), header.subtitle, ...(header.note ? [el('span', { className: 'app-header-note', textContent: ` · ${header.note}` })] : []));
 
   renderList(summary);
   renderDock();

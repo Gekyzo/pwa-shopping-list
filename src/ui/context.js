@@ -177,6 +177,8 @@ export const ui = {
   recipeId: null,
   // The filter of Recetas (REC-40): `all`, `inList` or `link`.
   recipeFilter: 'all',
+  // DSV-32: from 1024px the chips of Recetas show only while Filtros is open. Not saved.
+  recipeFiltersOpen: false,
   // The text of the search field, which Recetas shows always and a list shows on demand. It is
   // not stored.
   query: '',

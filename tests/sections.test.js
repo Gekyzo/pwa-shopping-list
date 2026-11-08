@@ -8,7 +8,7 @@ const stub = () => new Proxy(function () {}, { get: (_, key) => (key === Symbol.
 Object.assign(globalThis, { document: stub(), window: stub(), location: { search: '' } });
 globalThis.localStorage ??= { getItem: () => null, setItem() {}, removeItem() {} };
 const { headerOf } = await import('#ui/list');
-const { ui } = await import('#ui/context');
+const { ui, state, replaceState } = await import('#ui/context');
 
 test('headerOf gives Compra its counts to buy and bought, and no bar', () => {
   const view = ui.view;
@@ -23,6 +23,22 @@ test('headerOf gives Compra its counts to buy and bought, and no bar', () => {
       assert.ok(!('pct' in headerOf({ total: 15, left: 12 })), other);
     }
   } finally {
+    ui.view = view;
+  }
+});
+
+test('headerOf ends the subtitle of Recetas with where the recipes are kept, by the account state (DSV-32)', () => {
+  const view = ui.view;
+  const before = state;
+  try {
+    ui.view = 'recipes';
+    assert.equal(headerOf({ total: 0, left: 0 }).note, '');
+    replaceState({ ...before, recipes: [{ id: 'r1', name: 'Soup', products: [], url: '' }] });
+    assert.equal(headerOf({ total: 0, left: 0 }).note, 'saved on this device');
+    assert.equal(headerOf({ total: 0, left: 0 }, { signedIn: true }).note, 'synced');
+    assert.equal(headerOf({ total: 0, left: 0 }).subtitle, '1 recipe');
+  } finally {
+    replaceState(before);
     ui.view = view;
   }
 });

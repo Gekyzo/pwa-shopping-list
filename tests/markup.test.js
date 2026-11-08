@@ -257,7 +257,7 @@ test('each nav item shows its name', () => {
 
 // DSV-23: an outline button is a destructive one, or one of the outlined secondary actions of the
 // Bodega screens; other secondary actions are tonal.
-const OUTLINED = ['edit-postpone', 'postponed-all'];
+const OUTLINED = ['edit-postpone', 'postponed-all', 'filter-button'];
 
 test('an outline button is a destructive one or an outlined action of the screens; other secondary actions are tonal', () => {
   for (const [, id, classes] of html.matchAll(/<button(?: id="([^"]*)")?[^>]*class="(button outline[^"]*)"/g)) {

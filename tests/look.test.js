@@ -310,6 +310,15 @@ test('from 1024px the recipe pane shows its send across the foot; below it the s
   assert.match(block('.side-pane .sheet-head > .sheet-title.main', wide), /display:\s*none/);
 });
 
+test('from 1024px Recetas puts its search on a second line with Filtros, and the chips fold (DSV-32)', () => {
+  const recipes = 'body:has([data-view="recipes"][aria-current="page"])';
+  assert.match(block(`${recipes} .app-header::after`, wide), /flex-basis:\s*100%/);
+  assert.match(block(`${recipes} .app-header > .button.icon.header-search:not([hidden])`, wide), /order:\s*3/);
+  assert.match(block('.app-header > .header-filter:not([hidden])', wide), /display:\s*inline-flex/);
+  assert.match(block('.recipe-chips.folded', wide), /display:\s*none/);
+  assert.match(block('.app-header-note', wide), /display:\s*inline/);
+});
+
 test('a product of a recipe starts with a dot, emerald when it is in Compra (REC-9)', () => {
   assert.match(block('.product::before'), /background:\s*var\(--line\)/);
   assert.match(block('.product.listed::before'), /background:\s*var\(--primary\)/);
