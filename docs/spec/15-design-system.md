@@ -249,3 +249,20 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   panel **Para la cesta** is gone. The week switcher in the header and the **Ajustar raciones**
   button of the screen are not built: the week bar of MENU-23 stays above the days, and the app has
   no portions.
+- **DSV-31** The desktop screen of `Recetas`, from 1024px. The count of the header is plain 15px
+  text in `--muted`, not a pill. A recipe card has `--radius-m` corners and 20px of padding: the name at
+  `--text-h`, then a meta line that starts with an 8px dot (`--struck`, emerald for a recipe in
+  the list) and ends with `· en la lista` as plain text (REC-40), then the line of products, then a
+  foot below a `--line` with the link button and the send button, both 4px tiles on
+  `--surface-2`, the send with its text **Añadir** (`recipe-send-text`). The cards stand in two
+  columns while each has 280px, beside the pane too (REC-39); the open card has a 2px emerald edge
+  and its **Añadir** is emerald. The pane is a form: its head holds **Listo** alone, under a line;
+  the name is its title, a 24px field with no box until the focus; the names of the fields are
+  11px small capitals; the link card is an **Abrir enlace** button beside the field **Enlace**;
+  the products have their count and their dots (REC-9); the add button is tonal; the foot starts
+  with **Añadir a Compra** and its hint (REC-42). The parts of the screen with no data in the app
+  are not built: the category label and the **Activa** pill of a card, the recipe code of the foot of a card, the
+  **Filtros** and print buttons (the chips of REC-40 are the filters), the quantities of the
+  products, the **Receta activa** and **Modo edición** pills and the expand button of the pane, and
+  the storage strip at the foot of the screen (the rail shows the offline state, NAV-26). The
+  search stays in the header tools (DSV-27).

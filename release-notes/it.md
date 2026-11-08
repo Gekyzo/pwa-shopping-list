@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Sugli schermi larghi, **Ricette** somiglia di più al design: ogni ricetta è una scheda con i pulsanti in basso, e il pannello di una ricetta ha il pulsante **Aggiungi a Spesa**, che dice quanti prodotti aggiunge. Su tutti gli schermi, una ricetta mostra quanti dei suoi prodotti sono nella lista e segna ciascuno con un punto verde.
 - In **Menù**, su schermi più larghi di un telefono, il pannello **Settimane precedenti** mostra le ultime tre settimane con pasti, ognuna con il pulsante **Ripeti questa settimana**. La scheda **Cestino automatico** dice quanti prodotti aggiunge **Riempi cestino** e sostituisce il pannello **Per il cestino**.
 - Su schermi ampi, **Menù** somiglia di più al progetto: ogni giorno è una scheda, ogni pasto mostra il suo tipo in un riquadro e il suo stato in una pillola, e il riepilogo della settimana ha una barra di avanzamento.
 - In **Menù**, la freccia › porta alle prossime settimane, fino a quattro settimane avanti. Puoi pianificarne i pasti, riempire il cestino con essi o svuotarli, come per questa settimana.

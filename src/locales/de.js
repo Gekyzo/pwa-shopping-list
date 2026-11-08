@@ -159,6 +159,8 @@ export default {
   'recipe.inList': 'Alles im Einkauf',
   'recipe.send': 'Zum Einkauf hinzufügen',
   'recipe.inListShort': 'in der Liste',
+  'recipe.inListCount': { one: '{count} in der Liste', other: '{count} in der Liste' },
+  'recipe.sendHint': { one: '{count} Produkt kommt zum Einkauf', other: '{count} Produkte kommen zum Einkauf' },
   'sheet.delete': 'Löschen',
   'sheet.saved': 'Gespeichert',
   'recipe.products': 'Produkte',

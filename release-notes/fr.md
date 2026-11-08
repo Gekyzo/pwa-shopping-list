@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur les grands écrans, **Recettes** ressemble davantage au design : chaque recette est une carte avec ses boutons en bas, et le panneau d’une recette a le bouton **Ajouter à Courses**, qui indique combien de produits il ajoute. Sur tous les écrans, une recette montre combien de ses produits sont dans la liste et marque chacun d’un point vert.
 - Dans **Menu**, sur les écrans plus larges qu’un téléphone, le panneau **Semaines précédentes** montre les trois dernières semaines avec des repas, chacune avec un bouton **Répéter cette semaine**. La carte **Panier automatique** dit combien de produits **Remplir panier** ajoute, et remplace le panneau **Pour le panier**.
 - Sur grand écran, **Menu** ressemble davantage à la maquette : chaque jour est une carte, chaque repas montre son type dans une vignette et son état dans une pastille, et le résumé de la semaine a une barre de progression.
 - Dans **Menu**, la flèche › mène aux semaines suivantes, jusqu’à quatre semaines à l’avance. Tu peux planifier leurs repas, remplir le panier avec eux ou les vider, comme pour cette semaine.

@@ -4,6 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+- En pantalles amples, **Receptes** s’assembla més al disseny: cada recepta és una targeta amb els botons al peu, i el panell d’una recepta té el botó **Afegeix a Compra**, que diu quants productes afegeix. A totes les pantalles, la recepta mostra quants dels seus productes són a la llista i marca cadascun amb un punt verd.
 - A **Menú**, en pantalles més amples que un mòbil, el panell **Setmanes anteriors** mostra les tres darreres setmanes amb àpats, cadascuna amb un botó **Repetir aquesta setmana**. La targeta **Generació automàtica de cistella** diu quants productes afegeix **Omple cistella** i substitueix el panell **Per a la cistella**.
 - A pantalles amples, **Menú** s’assembla més al disseny: cada dia és una targeta, cada àpat mostra el seu tipus en un requadre i el seu estat en una píndola, i el resum de la setmana té una barra de progrés.
 - A **Menú**, la fletxa › porta a les setmanes següents, fins a quatre setmanes endavant. Pots planificar-ne els àpats, omplir la cistella amb ells o buidar-los, com a la setmana actual.

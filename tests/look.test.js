@@ -294,6 +294,27 @@ test('from 1024px the card of the fill has its storage as a foot, with a line ab
   assert.match(block('.side-panel-auto > .side-panel-head', wide), /border-bottom:\s*0/);
 });
 
+test('from 1024px a recipe card ends with a foot of its actions, and the cards keep two columns beside the pane (DSV-31)', () => {
+  const end = block('.item-row.recipe .item-row-end', wide);
+  assert.match(end, /position:\s*static/);
+  assert.match(end, /border-top:\s*1px solid var\(--line\)/);
+  assert.match(block('.recipe-send-text', wide), /display:\s*inline/);
+  assert.match(block('body:has(.side-pane:not([hidden])) .item-list:has(> .item-row.recipe)', wide), /minmax\(max\(17\.5rem, \(100% - var\(--space-4\)\) \/ 2\), 1fr\)/);
+  assert.match(block('.item-row.recipe.current', wide), /box-shadow:\s*0 0 0 1px var\(--primary\)/);
+});
+
+test('from 1024px the recipe pane shows its send across the foot; below it the send is hidden (REC-42, DSV-31)', () => {
+  assert.match(block('.recipe-send'), /display:\s*none/);
+  assert.match(block('.side-pane .recipe-send', wide), /display:\s*inline-flex/);
+  assert.match(block('.side-pane .recipe-send-hint', wide), /display:\s*block/);
+  assert.match(block('.side-pane .sheet-head > .sheet-title.main', wide), /display:\s*none/);
+});
+
+test('a product of a recipe starts with a dot, emerald when it is in Compra (REC-9)', () => {
+  assert.match(block('.product::before'), /background:\s*var\(--line\)/);
+  assert.match(block('.product.listed::before'), /background:\s*var\(--primary\)/);
+});
+
 test('from 1024px the outlined quantity chip wins over the tonal one: its rule is more specific (DSV-22)', () => {
   assert.match(block('.item-row-name > .item-row-qty', wide), /background:\s*var\(--surface-2\)/);
 });

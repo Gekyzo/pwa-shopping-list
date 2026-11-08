@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En pantallas anchas, **Recetas** se parece más al diseño: cada receta es una tarjeta con sus botones al pie, y el panel de una receta tiene el botón **Añadir a Compra**, que dice cuántos productos añade. En todas las pantallas, la receta muestra cuántos de sus productos están en la lista y marca cada uno con un punto verde.
 - En **Menú**, en pantallas más anchas que un móvil, el panel **Semanas anteriores** muestra las tres últimas semanas con comidas y un botón **Repetir esta semana** en cada una. La tarjeta **Generación automática de cesta** dice cuántos productos añade **Llenar cesta** y sustituye al panel **Para la cesta**.
 - En pantallas anchas, **Menú** se parece más al diseño: cada día es una tarjeta, cada comida muestra su tipo en un recuadro y su estado en una píldora, y el resumen de la semana lleva una barra de progreso.
 - En **Menú**, la flecha › lleva a las próximas semanas, hasta cuatro semanas por delante. Puedes planificar sus comidas, llenar la cesta con ellas o vaciarlas, como en la semana actual.

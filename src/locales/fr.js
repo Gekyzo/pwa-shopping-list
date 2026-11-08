@@ -159,6 +159,8 @@ export default {
   'recipe.inList': 'Tout est dans Courses',
   'recipe.send': 'Ajouter à Courses',
   'recipe.inListShort': 'dans la liste',
+  'recipe.inListCount': { one: '{count} dans la liste', other: '{count} dans la liste' },
+  'recipe.sendHint': { one: '{count} produit sera ajouté à Courses', other: '{count} produits seront ajoutés à Courses' },
   'sheet.delete': 'Supprimer',
   'sheet.saved': 'Enregistré',
   'recipe.products': 'Produits',

@@ -19,7 +19,7 @@
         <p id="subtitle" class="app-header-subtitle"></p>
       </div>
       <button id="search-button" class="button icon header-search" type="button" data-i18n-attr="aria-label:search.label" aria-controls="search" aria-keyshortcuts="Control+K Meta+K" hidden>
-        <svg class="icon" aria-hidden="true"><use href="icons.svg#search"/></svg><span class="header-search-text" data-i18n="search.items"></span><kbd class="header-search-key" data-i18n="search.key"></kbd></button>
+        <svg class="icon" aria-hidden="true"><use href="icons.svg#search"/></svg><span id="search-text" class="header-search-text"></span><kbd class="header-search-key" data-i18n="search.key"></kbd></button>
       <button id="arrange-button" class="button icon" type="button" data-i18n-attr="aria-label:arrange.label" aria-haspopup="dialog" hidden>
         <svg class="icon" aria-hidden="true"><use href="icons.svg#sort"/></svg>
       </button>
@@ -455,10 +455,10 @@
           <label class="field"><input id="recipe-name" class="input field-input" type="text" enterkeyhint="done" maxlength="80" autocapitalize="sentences" data-i18n-attr="aria-label:edit.name,placeholder:edit.name"><span class="field-label" data-i18n="edit.name"></span></label>
           <a id="recipe-open" class="link-card" href="#" target="_blank" rel="noopener noreferrer" hidden></a>
           <label class="field"><input id="recipe-url" class="input field-input" type="url" inputmode="url" enterkeyhint="done" autocapitalize="off" data-i18n-attr="aria-label:recipe.link,placeholder:recipe.link"><span class="field-label" data-i18n="recipe.link"></span></label>
-          <h2 class="sheet-title" data-i18n="recipe.products"></h2>
+          <div class="recipe-head"><h2 class="sheet-title"><span data-i18n="recipe.products"></span><span id="recipe-count" class="recipe-count"></span></h2><small id="recipe-listed" class="recipe-listed"></small></div>
           <div id="recipe-products"></div>
         </div>
-        <footer class="sheet-foot"><button id="recipe-delete" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"/></svg><span data-i18n="sheet.delete"></span></button><span class="sheet-saved"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="sheet.saved"></span></span></footer>
+        <footer class="sheet-foot"><button id="recipe-send" class="button primary recipe-send" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#cart-add"/></svg><span data-i18n="recipe.send"></span></button><p id="recipe-send-hint" class="recipe-send-hint"></p><button id="recipe-delete" class="button outline danger" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#trash"/></svg><span data-i18n="sheet.delete"></span></button><span class="sheet-saved"><svg class="icon small" aria-hidden="true"><use href="icons.svg#check"/></svg><span data-i18n="sheet.saved"></span></span></footer>
       </div>
     </div>
 

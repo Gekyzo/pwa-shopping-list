@@ -15,7 +15,7 @@ test('the header has no bar and no ring; from 1024px it holds the search field, 
   const header = body.slice(body.indexOf('<header'), body.indexOf('</header>'));
   assert.ok(!header.includes('id="progress"'));
   assert.ok(!body.includes('id="ring"') && !body.includes('ring-text'));
-  assert.match(header, /<button id="search-button" class="button icon header-search"[^>]*>[\s\S]*?<span class="header-search-text" data-i18n="search.items"><\/span><kbd class="header-search-key" data-i18n="search.key"><\/kbd><\/button>/);
+  assert.match(header, /<button id="search-button" class="button icon header-search"[^>]*>[\s\S]*?<span id="search-text" class="header-search-text"><\/span><kbd class="header-search-key" data-i18n="search.key"><\/kbd><\/button>/);
   assert.match(header, /<button id="header-finish" class="button primary header-finish" type="button" aria-haspopup="dialog" aria-controls="trip" hidden><svg [^>]*><use href="icons.svg#check-circle"\/><\/svg><span data-i18n="finish.button"><\/span><\/button>/);
   assert.ok(header.indexOf('id="list-chips"') < header.indexOf('id="shop-chips"'));
   assert.ok(header.indexOf('id="header-finish"') < header.indexOf('id="list-chips"'));
@@ -103,6 +103,9 @@ test('each of the nine sheets has the grab, then a head with its title and Listo
 // LIST-40: the foot of Editar starts with Posponer.
 const POSTPONE = '<button id="edit-postpone" class="button outline" type="button"><svg [^>]*><use href="icons.svg#clock"\\/><\\/svg><span data-i18n="row.postpone"><\\/span><\\/button>';
 
+// REC-42: the foot of a recipe starts with its send and the hint of what the send adds.
+const SEND = '<button id="recipe-send" class="button primary recipe-send" type="button"><svg [^>]*><use href="icons.svg#cart-add"\\/><\\/svg><span data-i18n="recipe.send"><\\/span><\\/button><p id="recipe-send-hint" class="recipe-send-hint"><\\/p>';
+
 test('the edit and recipe sheets have a foot with Eliminar and Guardado; the other sheets have none', () => {
   const feet = sheetParts().filter(({ part }) => part.includes('sheet-foot')).map(({ id }) => id);
   assert.deepEqual(feet, ['edit-form', 'recipe-sheet']);
@@ -110,7 +113,7 @@ test('the edit and recipe sheets have a foot with Eliminar and Guardado; the oth
     const { part } = sheetParts().find((sheet) => sheet.id === id);
     assert.match(
       part,
-      new RegExp(`<\\/div>\\s*<footer class="sheet-foot">${prefix === 'edit' ? POSTPONE : ''}<button id="${prefix}-delete" class="button outline danger" type="button"><svg [^>]*><use href="icons.svg#trash"\\/><\\/svg><span data-i18n="sheet.delete"><\\/span><\\/button><span class="sheet-saved"><svg [^>]*><use href="icons.svg#check"\\/><\\/svg><span data-i18n="sheet.saved"><\\/span><\\/span><\\/footer>\\s*<\\/(div|form)>`),
+      new RegExp(`<\\/div>\\s*<footer class="sheet-foot">${prefix === 'edit' ? POSTPONE : SEND}<button id="${prefix}-delete" class="button outline danger" type="button"><svg [^>]*><use href="icons.svg#trash"\\/><\\/svg><span data-i18n="sheet.delete"><\\/span><\\/button><span class="sheet-saved"><svg [^>]*><use href="icons.svg#check"\\/><\\/svg><span data-i18n="sheet.saved"><\\/span><\\/span><\\/footer>\\s*<\\/(div|form)>`),
       id,
     );
   }

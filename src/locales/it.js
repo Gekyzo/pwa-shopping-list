@@ -159,6 +159,8 @@ export default {
   'recipe.inList': 'Tutto è in Spesa',
   'recipe.send': 'Aggiungi a Spesa',
   'recipe.inListShort': 'nella lista',
+  'recipe.inListCount': { one: '{count} nella lista', other: '{count} nella lista' },
+  'recipe.sendHint': { one: 'Verrà aggiunto {count} prodotto a Spesa', other: 'Verranno aggiunti {count} prodotti a Spesa' },
   'sheet.delete': 'Elimina',
   'sheet.saved': 'Salvato',
   'recipe.products': 'Prodotti',

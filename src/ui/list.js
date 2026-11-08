@@ -193,6 +193,8 @@ const renderSearch = () => {
   $('search-button').setAttribute('aria-expanded', String(ui.searchOpen));
   $('search').hidden = !ui.searchOpen;
   $('query').placeholder = searchLabel();
+  // The text of the search button names what the section searches (LIST-20, REC-23).
+  $('search-text').textContent = searchLabel();
   $('query').setAttribute('aria-label', searchLabel());
   // The field is not built again by a render, so it keeps the cursor. Write it only after a reset.
   if ($('query').value !== ui.query) $('query').value = ui.query;

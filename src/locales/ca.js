@@ -159,6 +159,8 @@ export default {
   'recipe.inList': 'Tot és a Compra',
   'recipe.send': 'Afegeix a Compra',
   'recipe.inListShort': 'a la llista',
+  'recipe.inListCount': { one: '{count} a la llista', other: '{count} a la llista' },
+  'recipe.sendHint': { one: 'S’afegirà {count} producte a Compra', other: 'S’afegiran {count} productes a Compra' },
   'sheet.delete': 'Elimina',
   'sheet.saved': 'Desat',
   'recipe.products': 'Productes',

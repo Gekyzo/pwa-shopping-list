@@ -2461,6 +2461,7 @@
      @part product-text  Its name.
      @state leaving  On product: a row that closes before it leaves.
      @state flash    On product: a row that has just come: it flashes.
+     @state listed   On product: the product is an item of Compra, so its dot is emerald (REC-9).
      @variant flush  On products: rows across the sheet, as the rows of a list. A name field with no box,
        one line below each row, from the start of the name to the end. The aisles of Ajustes.
      @example <ul class="products" style="width: 100%"><li class="product"><span class="product-text">Patatas</span><button class="button icon" type="button" aria-label="Quitar">✕</button></li></ul> */
@@ -3300,6 +3301,67 @@
     display: none;
   }
 
+  /* @component recipe-head
+     @scope recipes
+     @summary The head of the products of a recipe sheet (REC-9): Productos with its count, and how many of them are in Compra.
+     @part recipe-count   The number of products, a pill on --secondary.
+     @part recipe-listed  N en la lista: the products that are items of Compra.
+     @example <div class="recipe-head" style="width: 100%"><h2 class="sheet-title"><span>Productos</span><span class="recipe-count">7</span></h2><small class="recipe-listed">7 en la lista</small></div> */
+  .recipe-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .recipe-count {
+    margin-inline-start: var(--space-2);
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--secondary);
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-strong);
+    vertical-align: middle;
+  }
+
+  .recipe-listed {
+    flex: none;
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  .recipe-listed[hidden] {
+    display: none;
+  }
+
+  /* @component recipe-send
+     @scope recipes
+     @summary The send of the foot of a recipe pane, from 1024px (REC-42): Añadir a Compra across the pane, with what it adds below it.
+     @part recipe-send-hint  Se añadirán N productos a Compra, Todo está en Compra, or the error of an empty recipe.
+     @part recipe-send-text  Añadir, the text of the send button of a recipe card from 1024px (DSV-31).
+     @example <div style="width: 100%"><button class="button primary recipe-send" type="button" style="display: inline-flex"><span>Añadir a Compra</span></button><p class="recipe-send-hint" style="display: block">Se añadirán 3 productos a Compra</p></div> */
+  .recipe-send,
+  .recipe-send-hint,
+  .recipe-send-text {
+    display: none;
+  }
+
+  /* REC-9: a dot before each product, emerald when the product is an item of Compra. */
+  .product::before {
+    content: "";
+    flex: none;
+    width: var(--space-2);
+    height: var(--space-2);
+    margin-inline-end: var(--space-3);
+    border-radius: var(--radius-round);
+    background: var(--line);
+  }
+
+  .product.listed::before {
+    background: var(--primary);
+  }
+
   /* The week of Menú is a bordered bar on --surface. */
   .week-bar {
     margin: var(--space-2) var(--space-4) 0;
@@ -3731,6 +3793,278 @@
       height: var(--space-2);
       border-radius: var(--radius-pill);
       background: linear-gradient(to right, var(--primary) calc(var(--planned, 0) * 100%), var(--surface-high) 0);
+    }
+  }
+
+  /* The desktop screen of Recetas, from 1024px (DSV-31). The count of the header is plain text. A
+     recipe is a card: the name at 20px, a dot and the count, the products, then a foot below a
+     line with the link button and the labelled send. The cards stand in two columns while each has
+     280px, beside the pane too. The pane is a form: the name as its title, the link beside its
+     Abrir, the products with their count and dots, and the send across its foot (REC-42). */
+  @media (min-width: 1024px) {
+    body:has([data-view="recipes"][aria-current="page"]) .app-header-subtitle {
+      padding: 0;
+      background: none;
+      color: var(--muted);
+      font-size: var(--text-label-lg);
+      font-weight: var(--weight-normal);
+    }
+
+    .item-list:has(> .item-row.recipe),
+    body:has(.side-pane:not([hidden])) .item-list:has(> .item-row.recipe) {
+      grid-template-columns: repeat(auto-fill, minmax(max(17.5rem, (100% - var(--space-4)) / 2), 1fr));
+      column-gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
+
+    .item-list:has(> .item-row.recipe) > .item-row {
+      margin-bottom: var(--space-4);
+      border-radius: var(--radius-m);
+    }
+
+    .item-row.recipe.current {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    .item-row.recipe.current .item-row-body {
+      background: var(--surface);
+    }
+
+    .item-row.recipe .item-row-body {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: var(--space-5) var(--space-5) var(--space-3);
+    }
+
+    .item-row.recipe .item-row-name {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: flex-start;
+      column-gap: var(--space-1);
+      min-height: 0;
+      padding: 0;
+    }
+
+    .item-row.recipe .item-row-name > :not(.recipe-products),
+    .item-row.recipe .item-row-body:has(.item-row-end > :nth-child(2)) .item-row-name > :not(.recipe-products),
+    [data-hand="left"] .item-row.recipe .item-row-name > :not(.recipe-products),
+    [data-hand="left"] .item-row.recipe .item-row-body:has(.item-row-end > :nth-child(2)) .item-row-name > :not(.recipe-products) {
+      padding-inline: 0;
+    }
+
+    .item-row.recipe .item-row-label {
+      flex-basis: 100%;
+      margin-bottom: var(--space-1);
+      font-size: var(--text-h);
+    }
+
+    .item-row.recipe .item-row-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--muted);
+      font-size: var(--text-label-lg);
+    }
+
+    .item-row.recipe .item-row-meta::before {
+      content: "";
+      width: var(--space-2);
+      height: var(--space-2);
+      border-radius: var(--radius-round);
+      background: var(--struck);
+    }
+
+    .item-row.recipe .item-row-name:has(> .recipe-in-list) > .item-row-meta::before {
+      background: var(--primary);
+    }
+
+    .item-row.recipe .recipe-in-list {
+      order: 1;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--muted);
+      font-size: var(--text-label-lg);
+      font-weight: var(--weight-normal);
+    }
+
+    .item-row.recipe .recipe-in-list::before {
+      content: "·";
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      background: none;
+    }
+
+    .item-row.recipe .recipe-products {
+      order: 2;
+      margin-top: var(--space-3);
+    }
+
+    .item-row.recipe .item-row-end,
+    [data-hand="left"] .item-row.recipe .item-row-end {
+      position: static;
+      align-self: stretch;
+      width: auto;
+      justify-content: flex-end;
+      gap: var(--space-1);
+      margin-top: var(--space-4);
+      padding-top: var(--space-2);
+      border-top: 1px solid var(--line);
+    }
+
+    .item-row.recipe .item-row-end > .list-tag {
+      margin-inline-end: auto;
+    }
+
+    .item-row.recipe .item-row-end > .button.icon::before {
+      border-radius: var(--radius-s);
+      background: var(--surface-2);
+    }
+
+    .item-row.recipe .item-row-end > .button.icon:last-child {
+      gap: var(--space-2);
+      width: auto;
+      padding-inline: var(--space-4);
+      color: var(--text);
+      font-size: var(--text-label);
+      font-weight: var(--weight-medium);
+    }
+
+    .item-row.recipe .item-row-end > .button.icon:last-child::before {
+      border-color: var(--line);
+      background: var(--surface-2);
+    }
+
+    .item-row.recipe.current .item-row-end > .button.icon:last-child {
+      color: var(--primary);
+    }
+
+    .recipe-send-text {
+      display: inline;
+    }
+
+    .side-pane .sheet-head {
+      justify-content: flex-end;
+      padding: var(--space-4) var(--space-6);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-pane .sheet-head > .sheet-title.main {
+      display: none;
+    }
+
+    .side-pane .sheet-body {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      column-gap: var(--space-2);
+      padding: var(--space-5) var(--space-6);
+    }
+
+    .side-pane .sheet-body > .field {
+      flex: 1 0 100%;
+    }
+
+    .side-pane .sheet-body > .link-card:not([hidden]) + .field {
+      flex: 1 1 0;
+    }
+
+    .side-pane .sheet-body > :not(.field, .link-card) {
+      flex: 1 0 100%;
+      order: 2;
+    }
+
+    .side-pane .field-label {
+      color: var(--muted);
+      font-size: var(--text-label-sm);
+      font-weight: var(--weight-strong);
+      letter-spacing: var(--tracking-caps);
+      text-transform: uppercase;
+    }
+
+    .side-pane .sheet-body > .field:first-child > .field-input {
+      min-height: 0;
+      margin-inline: calc(-1 * var(--space-2));
+      padding: var(--space-1) var(--space-2);
+      border-color: transparent;
+      background: none;
+      font-size: var(--text-l);
+      font-weight: var(--weight-medium);
+    }
+
+    .side-pane .sheet-body > .field:first-child > .field-input:focus {
+      border-color: var(--done);
+    }
+
+    .side-pane .sheet-body > .link-card {
+      order: 1;
+      align-self: flex-end;
+      gap: var(--space-2);
+      min-height: var(--tap);
+      margin: 0;
+      padding: 0 var(--space-3);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-s);
+      background: var(--surface);
+      font-size: var(--text-label);
+    }
+
+    .side-pane .link-card-host,
+    .side-pane .link-card > .icon.small {
+      display: none;
+    }
+
+    .side-pane .recipe-head {
+      margin-top: var(--space-6);
+      padding-bottom: var(--space-3);
+    }
+
+    .side-pane .recipe-head > .sheet-title {
+      margin: 0;
+      font-size: var(--text-label-lg);
+      font-weight: var(--weight-strong);
+    }
+
+    .side-pane .product {
+      min-height: var(--tap-l);
+      font-size: var(--text-m);
+    }
+
+    .side-pane .product > .button.icon {
+      color: var(--struck);
+    }
+
+    .side-pane .product-form > .button.primary {
+      border: 1px solid var(--line);
+      background: var(--secondary);
+      color: var(--text);
+    }
+
+    .side-pane .sheet-foot {
+      flex-wrap: wrap;
+      padding: var(--space-5) var(--space-6);
+    }
+
+    .side-pane .recipe-send {
+      display: inline-flex;
+      flex: 1 0 100%;
+      justify-content: center;
+      min-height: var(--tap-l);
+      font-size: var(--text-label-lg);
+    }
+
+    .side-pane .recipe-send-hint {
+      display: block;
+      flex: 1 0 100%;
+      margin: 0;
+      color: var(--muted);
+      font-size: var(--text-xs);
+      text-align: center;
     }
   }
 }

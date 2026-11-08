@@ -143,6 +143,19 @@ const allIn = (recipe, names) => recipe.products.length > 0 && recipe.products.e
 // products is never in the list.
 export const inList = (state, recipe) => allIn(recipe, activeNames(state.items));
 
+// The products of the recipe that are items of Active, ticked or not, in recipe order (REC-9).
+export const listedProducts = (state, recipe) => {
+  const names = activeNames(state.items);
+  return recipe.products.filter((product) => names.has(product.toLowerCase()));
+};
+
+// The number of items a send of the recipe would add or bring back to Active (REC-42). It
+// changes nothing: the send runs on the state and its result is thrown away.
+export const sendCount = (state, id) => {
+  const result = sendRecipe(state, id, () => 'count');
+  return result.error ? 0 : result.added;
+};
+
 // Recetas en la lista: each recipe with a product among the items of Active, ticked or not. The
 // sent recipes come first in send order, then the others in name order. `inList` counts the
 // products in Active, `total` all the products.

@@ -16,6 +16,8 @@ import {
   sharedItems,
   productSuggestions,
   inList,
+  listedProducts,
+  sendCount,
   recipeProgress,
   searchRecipes,
   SAMPLE_ID,
@@ -645,6 +647,34 @@ test('inList is false for a product that is missing or saved, and for a recipe w
     [false, false, false],
   );
   assert.deepEqual(state, before);
+});
+
+test('listedProducts gives the products that are items of active, ticked or not, in recipe order (REC-9)', () => {
+  const items = withItem(withItem(withItem(emptyState(), 'EGGS', 'active'), 'Milk', 'saved'), 'Salt', 'active');
+  const { state, id } = withRecipe(items, 'Flan', ['Salt', 'Milk', 'Sugar', 'Eggs']);
+  const ticked = toggleBought(state, find(state, 'Salt').id).state;
+  assert.deepEqual(listedProducts(ticked, ticked.recipes.find((recipe) => recipe.id === id)), ['Salt', 'Eggs']);
+});
+
+test('listedProducts is empty for a recipe with no products', () => {
+  const { state, id } = withRecipe(withItem(emptyState(), 'Eggs', 'active'), 'Soup');
+  assert.deepEqual(listedProducts(state, state.recipes.find((recipe) => recipe.id === id)), []);
+});
+
+test('sendCount is the number of items a send adds or brings back, with no change of state (REC-42)', () => {
+  const items = withItem(withItem(emptyState(), 'Eggs', 'active'), 'Milk', 'saved');
+  const { state, id } = withRecipe(items, 'Flan', ['Eggs', 'Milk', 'Sugar']);
+  const before = structuredClone(state);
+  assert.equal(sendCount(state, id), 2);
+  assert.deepEqual(state, before);
+});
+
+test('sendCount is 0 when every product is pending in active, and for an empty or missing recipe', () => {
+  const { state, id } = withRecipe(withItem(emptyState(), 'Eggs', 'active'), 'Boiled eggs', ['Eggs']);
+  const empty = withRecipe(state, 'Soup');
+  assert.equal(sendCount(state, id), 0);
+  assert.equal(sendCount(empty.state, empty.id), 0);
+  assert.equal(sendCount(state, 'nope'), 0);
 });
 
 test('deleteRecipe keeps the meals of the recipe in a past week as dishes of its name (REC-6)', () => {

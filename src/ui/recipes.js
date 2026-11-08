@@ -28,7 +28,7 @@ export const sendToList = (recipe) => {
   else showToast(t('toast.sentNothing', { name: recipe.name }), { undo: undoState });
 };
 
-const productNode = (recipe, product) => {
+const productNode = (recipe, product, listed) => {
   const key = `product:${recipe.id}:${product.toLowerCase()}`;
   const remove = el('button', {
     type: 'button',
@@ -42,7 +42,8 @@ const productNode = (recipe, product) => {
       ),
   });
   remove.setAttribute('aria-label', t('recipe.removeProduct', { name: product }));
-  const node = el('li', { className: 'product' }, [el('span', { className: 'product-text', textContent: product }), remove]);
+  // REC-9: the dot of a product that is an item of Compra is emerald.
+  const node = el('li', { className: listed ? 'product listed' : 'product' }, [el('span', { className: 'product-text', textContent: product }), remove]);
   node.dataset.key = key;
   return node;
 };
@@ -88,9 +89,12 @@ const productForm = (recipe) => {
 };
 
 // The send button at the end of a recipe row. It is out of the name and runs what the slide to the
-// right runs.
+// right runs. From 1024px it shows its text Añadir (DSV-31).
 const sendButton = (recipe) => {
-  const button = el('button', { type: 'button', className: 'button icon', title: t('recipe.send'), onclick: () => sendToList(recipe) }, [icon('cart-add')]);
+  const button = el('button', { type: 'button', className: 'button icon', title: t('recipe.send'), onclick: () => sendToList(recipe) }, [
+    icon('cart-add'),
+    el('span', { className: 'recipe-send-text', textContent: t('add.submit') }),
+  ]);
   button.setAttribute('aria-label', t('recipe.send'));
   return button;
 };
@@ -226,13 +230,26 @@ export const renderRecipe = () => {
         ]
       : []),
   );
-  const products = el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product)));
+  // REC-9: the count of the products, and how many of them are items of Compra. REC-38: Compra is
+  // the list of the recipe.
+  const part = listPart(state, listOf(recipe));
+  const listed = recipes.listedProducts(part, recipe);
+  const listedKey = listed.join('\n').toLowerCase();
+  $('recipe-count').textContent = String(recipe.products.length);
+  $('recipe-listed').textContent = t('recipe.inListCount', { count: listed.length });
+  $('recipe-listed').hidden = !recipe.products.length;
+  // REC-42: the send of the foot, with what it would do.
+  const adds = recipes.sendCount(part, recipe.id);
+  $('recipe-send').disabled = !recipe.products.length;
+  $('recipe-send-hint').textContent = !recipe.products.length ? t('error.recipeEmpty') : adds ? t('recipe.sendHint', { count: adds }) : t('recipe.inList');
+  const isListed = new Set(listed.map((product) => product.toLowerCase()));
+  const products = el('ul', { className: 'products' }, recipe.products.map((product) => productNode(recipe, product, isListed.has(product.toLowerCase()))));
   if (shown?.id !== recipe.id || shown.name !== recipe.name) {
     $('recipe-products').replaceChildren(products, productForm(recipe));
-  } else if (shown.products !== recipe.products) {
+  } else if (shown.products !== recipe.products || shown.listed !== listedKey) {
     $('recipe-products').firstChild.replaceWith(products);
   }
-  shown = { id: recipe.id, name: recipe.name, products: recipe.products };
+  shown = { id: recipe.id, name: recipe.name, products: recipe.products, listed: listedKey };
 };
 
 // Eliminar of the foot deletes the recipe, with Deshacer, and closes the sheet.
@@ -246,6 +263,10 @@ const deleteOpenRecipe = () => {
 export const bind = () => {
   $('recipe-veil').addEventListener('click', closeRecipe);
   $('recipe-delete').addEventListener('click', deleteOpenRecipe);
+  $('recipe-send').addEventListener('click', () => {
+    const recipe = openRecipeOf();
+    if (recipe) sendToList(recipe);
+  });
   const onSaved = () => flashSaved($('recipe-sheet'));
   bindField($('recipe-name'), {
     read: () => openRecipeOf()?.name,

@@ -15,7 +15,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-4** A recipe row shows the name, the badge `en la lista` when REC-35 applies, the meta
   line `N productos` and the line of its products (REC-40). A tap on the name opens the sheet of the
   recipe (REC-33). The link button of REC-15, when the recipe has a link, and the send button of
-  REC-17 stay at the end of the row.
+  REC-17 stay at the end of the row. From 1024px they stand in the foot of the card, below a line,
+  and the send button shows its text **Añadir** (DSV-31).
 - **REC-5** A recipe row slides as an item row (ROW-4 to ROW-6, ROW-8, ROW-10). A slide to the
   left shows **Eliminar**, an icon button 64 px wide with its name under the icon. Its text for a screen reader
   is `Eliminar {name}`. A slide to the right sends the recipe at the
@@ -36,9 +37,14 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   capitals and keeps the rest as typed: `arroz` becomes `Arroz`, `AOVE` stays `AOVE`.
 - **REC-9** The sheet of a recipe lists its products under **Productos**, with no line above
   it, each with a `✕` button, and the field **Añadir producto**. The removal of a product has `Deshacer`; the add does not.
+  The head shows the number of products in a pill and, at its end, `N en la lista`: the products
+  that are items of `Compra`, ticked or not, with no case distinction (`listedProducts`). Each
+  product starts with a dot, emerald for a product in `Compra`. REC-38: `Compra` is the list of
+  the recipe.
 - **REC-39** From 840px wide (DSV-9) the sheet of a recipe is a pane at the end of the frame, at
   most 480px wide, with no veil. The recipes stand in one column beside it, and the row of the open
-  recipe is on a pill. A tap on another recipe shows it in the pane. **Listo**, `Escape` and the back
+  recipe is on a pill. From 1024px the recipes stand in two columns while each column is 280px wide
+  at least, beside the pane too, and the card of the open recipe has an emerald edge (DSV-31). A tap on another recipe shows it in the pane. **Listo**, `Escape` and the back
   close the pane as they close the sheet (NAV-25). The add of the header stays (NAV-24). Below
   840px the recipe is the sheet of NAV-8.
 - **REC-40** The detail of a recipe card and the filters of `Recetas`, as the Stitch screens show
@@ -116,7 +122,9 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   the header (LIST-20, LIST-21), below 600px with the search button of the dock (SHOP-26, LIST-37).
   Below 600px the dock shows also with no search, for its `+` button, while `Recetas` has no empty
   text with a button (NAV-7).
-  The field is **Buscar receta o producto**. It filters the list while the user types.
+  The field is **Buscar receta o producto**. It filters the list while the user types. From
+  1024px the search button of the header shows that text, as the one of `Compra` shows its own
+  (LIST-20).
 - **REC-24** A recipe matches when its name or one of its products contains the text, with no case
   and no accent distinction. A dish matches when its name contains the text. An empty text shows
   all recipes and all dishes.
@@ -151,6 +159,13 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   sheet open. A rename has no `Deshacer`.
 - **REC-34** A tap on the veil or `Escape` closes the sheet. It closes when its recipe goes, by a
   `Deshacer` or an import, and when the section changes.
+
+- **REC-42** From 1024px the foot of the recipe pane starts with the button **Añadir a Compra**
+  across the pane, which sends the recipe as REC-17 does. Below it a line says what the send does:
+  `Se añadirán N productos a Compra` with the number of items it adds or brings back
+  (`sendCount`), `Todo está en Compra` when that number is 0, or `La receta no tiene productos.`
+  for a recipe with no products, whose button is off. **Eliminar** stays below. Below 1024px the
+  foot keeps **Eliminar** alone.
 
 ## Shared recipes
 
