@@ -211,10 +211,14 @@
           <button id="postponed-all" class="button outline wide side-panel-action" type="button"><svg class="icon small" aria-hidden="true"><use href="icons.svg#list-add"/></svg><span data-i18n="panels.bringAll"></span></button>
         </section>
         <p id="panel-storage" class="side-panel-storage" hidden><svg class="icon small" aria-hidden="true"><use href="icons.svg#database"/></svg><span data-i18n="panels.storage"></span><span id="panel-storage-used" class="side-panel-storage-used"></span></p>
-        <section id="panel-basket" class="side-panel" hidden>
-          <h2 class="side-panel-head"><span data-i18n="panels.basket"></span><small id="panel-basket-count" class="side-panel-end"></small></h2>
-          <p id="panel-basket-note" class="side-panel-note"></p>
-          <ul id="panel-basket-list" class="side-panel-list"></ul>
+        <section id="panel-weeks" class="side-panel" hidden>
+          <h2 class="side-panel-head"><span class="side-panel-tile"><svg class="icon small" aria-hidden="true"><use href="icons.svg#history"/></svg></span><span class="side-panel-title"><span data-i18n="panels.weeks"></span><small class="side-panel-subtitle" data-i18n="panels.weeksNote"></small></span></h2>
+          <ul id="panel-weeks-list" class="side-panel-list"></ul>
+        </section>
+        <section id="panel-auto" class="side-panel side-panel-auto" hidden>
+          <h2 class="side-panel-head"><svg class="icon small side-panel-icon" aria-hidden="true"><use href="icons.svg#sparkles"/></svg><span data-i18n="panels.fill"></span></h2>
+          <p id="panel-auto-note" class="side-panel-note"></p>
+          <p id="panel-auto-storage" class="side-panel-storage" hidden><svg class="icon small" aria-hidden="true"><use href="icons.svg#database"/></svg><span data-i18n="panels.storage"></span><span id="panel-auto-used" class="side-panel-storage-used"></span></p>
         </section>
       </aside>
     </main>

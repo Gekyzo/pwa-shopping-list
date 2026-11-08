@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Im **Menü** zeigt auf Bildschirmen, die breiter als ein Handy sind, das Feld **Frühere Wochen** die letzten drei Wochen mit Mahlzeiten, jede mit der Schaltfläche **Diese Woche wiederholen**. Die Karte **Automatischer Korb** sagt, wie viele Produkte **Korb füllen** hinzufügt, und ersetzt das Feld **Für den Korb**.
 - Auf breiten Bildschirmen sieht das **Menü** mehr wie der Entwurf aus: Jeder Tag ist eine Karte, jede Mahlzeit zeigt ihre Art in einer Kachel und ihren Status in einer Pille, und die Wochenübersicht hat einen Fortschrittsbalken.
 - Im **Menü** führt der Pfeil › zu den nächsten Wochen, bis zu vier Wochen voraus. Du kannst ihre Mahlzeiten planen, den Korb damit füllen oder sie leeren, wie in dieser Woche.
 - Auf breiten Bildschirmen hat **Optionen** das Desktop-Design: eine zentrierte Spalte, jede Gruppe unter ihrem Titel.

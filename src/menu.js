@@ -159,6 +159,31 @@ export const menuWeek = (state, week) =>
 
 const weekRecipes = (state, week) => [...new Set(ofWeek(state, week).filter((entry) => entry.recipe).map((entry) => entry.recipe))];
 
+// MENU-21: the recipes of the week that give a product to Llenar cesta, each one time.
+export const filledRecipes = (state, week) => weekRecipes(state, week).filter((id) => findRecipe(state, id)?.products.length).length;
+
+// MENU-27: the past weeks of Semanas anteriores, newest first, at most `count`, with no week of
+// `skip`: each week before `today` that holds a meal, its planned slots (MENU-26) and the names of
+// its meals in menu order, each name one time with no case distinction.
+export const pastWeeks = (state, today, skip = null, count = 3) =>
+  menuWeeks(state)
+    .filter((week) => week < today && week !== skip)
+    .reverse()
+    .slice(0, count)
+    .map((week) => {
+      const seen = new Set();
+      const names = ofWeek(state, week)
+        .sort(mealOrder)
+        .map((entry) => (entry.recipe ? findRecipe(state, entry.recipe)?.name : entry.dish))
+        .filter((name) => {
+          const key = name?.toLowerCase();
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      return { week, planned: plannedSlots(state, week), names };
+    });
+
 // Sends each recipe of the week to Active, one time, in menu order, as `sendRecipe` sends one.
 // A dish and a recipe with no product are skipped. `added` and `already` are the sums of the sends. A fill
 // that changes nothing returns the same state object.
@@ -180,7 +205,7 @@ export const fillMenu = (state, week, newId) => {
   return { state: next, added, already };
 };
 
-// The products that `Llenar cesta` puts to buy, for the panel Para la cesta (MENU-21): in menu and
+// The products that `Llenar cesta` puts to buy, for the card Generación automática de cesta (MENU-21): in menu and
 // product order, each name one time, those that are not to buy in Active yet. Empty when the fill
 // has nothing to send.
 export const basketPreview = (state, week) => {

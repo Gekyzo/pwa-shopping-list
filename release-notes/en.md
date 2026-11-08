@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- In **Menu**, on screens wider than a phone, the **Previous weeks** panel shows the last three weeks with meals, each with a **Repeat this week** button. The **Automatic basket** card says how many products **Fill basket** adds, and replaces the **For the basket** panel.
 - On wide screens, **Menu** looks more like the design: each day is a card, each meal shows its kind in a small tile and its status in a pill, and the week summary has a progress bar.
 - In **Menu**, the › arrow goes to the next weeks, up to four weeks ahead. You can plan their meals, fill the basket from them or empty them, as with this week.
 - On wide screens, **Settings** has the desktop design: one centred column, each group below its title.

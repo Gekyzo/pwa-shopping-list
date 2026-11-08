@@ -281,6 +281,19 @@ test('from 1024px Almacenamiento local is a small tinted card with its figure in
   assert.match(block('.side-panel-storage-used', wide), /font-family:\s*var\(--font-mono\)/);
 });
 
+test('a past week of Semanas anteriores is a 4px tile, its names bordered pills (MENU-27, DSV-30)', () => {
+  assert.match(block('.side-panel-week'), /border-radius:\s*var\(--radius-s\)/);
+  assert.match(block('.side-panel-chip'), /border-radius:\s*var\(--radius-pill\)/);
+  assert.match(block('.side-panel-count.done'), /background:\s*var\(--primary-soft\)/);
+});
+
+test('from 1024px the card of the fill has its storage as a foot, with a line above it (MENU-21, DSV-30)', () => {
+  const foot = block('.side-panel-auto > .side-panel-storage:not([hidden])', wide);
+  assert.match(foot, /border-top:\s*1px solid var\(--line\)/);
+  assert.match(foot, /background:\s*none/);
+  assert.match(block('.side-panel-auto > .side-panel-head', wide), /border-bottom:\s*0/);
+});
+
 test('from 1024px the outlined quantity chip wins over the tonal one: its rule is more specific (DSV-22)', () => {
   assert.match(block('.item-row-name > .item-row-qty', wide), /background:\s*var\(--surface-2\)/);
 });

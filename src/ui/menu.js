@@ -39,7 +39,7 @@ const shortDay = (day) => {
 
 // The short date of the language, as `20 may` (MENU-25).
 const shortDate = new Map();
-const dateFormat = () => {
+export const dateFormat = () => {
   if (!shortDate.has(lang)) shortDate.set(lang, new Intl.DateTimeFormat(intlTag(lang), { day: 'numeric', month: 'short' }));
   return shortDate.get(lang);
 };
@@ -175,12 +175,14 @@ const renderWeekBar = () => {
   $('menu-week-next').disabled = later === null;
 };
 
-// MENU-24: this week takes the meals of the week in view, then shows.
-const repeatShown = () => {
-  const result = repeatMenus(shownWeek());
-  if (!result.error) ui.week = null;
+// MENU-24, MENU-27: week `to` takes the meals of the past week `from`, then shows.
+export const repeatInto = (from, to = thisWeek()) => {
+  const result = repeatMenus(from, to);
+  if (!result.error) ui.week = to === thisWeek() ? null : to;
   apply(result, { undoText: t('toast.weekRepeated', { count: result.count ?? 0 }) });
 };
+
+const repeatShown = () => repeatInto(shownWeek());
 
 const showWeek = (week) => {
   ui.week = week === thisWeek() ? null : week;

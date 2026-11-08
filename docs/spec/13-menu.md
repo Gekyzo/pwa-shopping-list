@@ -87,9 +87,16 @@ past weeks stay, read only, and the next weeks can be planned ahead.
 ## Shared menu
 
 - **MENU-21** From 600px wide, `Menú` with a planned meal in the week in view, this week or a later
-  one, shows the panel **Para la cesta**: the products that **Llenar cesta** puts to buy, in menu and product order, each one time, with their
-  count (`basketPreview`); six rows at most, then `y N más`. With nothing to add it says
-  `Todo está en Compra`. It stands as the panels of `Compra` do (LIST-38).
+  one, shows the card **Generación automática de cesta** (`panels.fill`), with the icon `sparkles`
+  and an emerald title on `--surface-2`. Its text says what **Llenar cesta** adds to `Compra`: the
+  products of the recipes of the week that are not to buy yet (`basketPreview`) and the recipes of
+  the week with a product (`filledRecipes`), as `Al pulsar «Llenar cesta», la app añade a «Compra»
+  los 13 productos que faltan de las 6 recetas planificadas.`, the two names in bold. With no such
+  recipe it says `panels.fillNone`; with each product already to buy, `panels.fillDone`. From 1024px
+  its foot is **Almacenamiento local** (LIST-43), after a `--line`. It does not say "IndexedDB" or
+  "agrupados por pasillo": the app stores in `localStorage`, and a new item of the fill has no
+  aisle. It stands as the panels of `Compra` do (LIST-38), after **Semanas anteriores**
+  (MENU-27).
 - **MENU-20** For a member with scope `all` (SHARE-12), `Menú` shows the meals of both lists.
   Each list has its own week, so a slot holds one meal of each list at most: a slot with two
   shows both, the own one first, each name with the tag of its list (SHARE-14). The chips of the
@@ -121,7 +128,7 @@ past weeks stay, read only, and the next weeks can be planned ahead.
   a dish, and its action bar, its panel and its header act on it. A past week shows its days as this week does (MENU-9), with each meal a
   tile of no action whose name is `--muted`; an empty meal shows `—`. Its action bar holds
   **Repetir esta semana** alone (MENU-24) in place of **Llenar cesta** and **Vaciar menú**; it has no
-  panel **Para la cesta**, and the header counts its meals (MENU-10). The week in view is not
+  card **Generación automática de cesta** (MENU-21), and the header counts its meals (MENU-10). The week in view is not
   stored: the app starts on this week, and a past week that holds no meal any more, or a later week
   out of reach after a change of the clock, shows this week.
 
@@ -146,6 +153,16 @@ past weeks stay, read only, and the next weeks can be planned ahead.
   meal shows its kind at its top end (cutlery for a recipe, a pencil for a dish); a free meal
   shows `Elegir receta` first and the name of the meal below it; **Vaciar menú** has the icon
   `trash` (DSV-20).
+- **MENU-27** From 600px wide, `Menú` shows the panel **Semanas anteriores** (`panels.weeks`) on any
+  week while a past week other than the week in view holds a meal, also on an empty week. Its head
+  has the icon `history` in a 32px `--surface-2` tile, the title and `Menús guardados de otras
+  semanas`. It lists the 3 latest such weeks, newest first (`pastWeeks` of `src/menu.js`), each a
+  tile with its days (`19–25 oct`, MENU-25), the planned slots as a pill (`8 comidas`; `14 comidas
+  completas` on `--primary-soft` when the 14 are planned, MENU-26), the first 3 names of its meals in
+  menu order, each name one time, as bordered pills, then `+N más` for the other names, and the
+  outlined button **Repetir esta semana** with the icon `repeat`, labelled `Repetir la semana
+  19–25 oct`. The button puts the meals of that week in place of all the meals of the week in view,
+  or of this week when the week in view is past, as MENU-24 says, then shows that week.
 
 ## Limits
 

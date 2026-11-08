@@ -4,6 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+- Em **Menu**, em ecrãs mais largos do que um telemóvel, o painel **Semanas anteriores** mostra as três últimas semanas com refeições, cada uma com o botão **Repetir esta semana**. O cartão **Cesto automático** diz quantos produtos **Encher cesto** adiciona e substitui o painel **Para o cesto**.
 - Em ecrãs largos, **Menu** fica mais parecido com o design: cada dia é um cartão, cada refeição mostra o seu tipo num quadrado e o seu estado numa pílula, e o resumo da semana tem uma barra de progresso.
 - Em **Menu**, a seta › leva às próximas semanas, até quatro semanas à frente. Podes planear as suas refeições, encher o cesto com elas ou esvaziá-las, como na semana atual.
 - Em ecrãs largos, **Definições** tem o design de computador: uma coluna centrada, com cada grupo sob o seu título.

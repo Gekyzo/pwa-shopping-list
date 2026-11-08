@@ -54,7 +54,7 @@ This document holds the rules of the app only.
 - **DSV-9** The app has the four width classes of LAY-1. Its own columns: from 600px the panels of
   `Compra` and `Menú` (`side-panels`) stand below the content, and from 840px beside it,
   `--gutter` apart, with `--page-max` at `100%` so the content fills the area as a pane does
-  (LIST-38, LIST-39, MENU-21). From 840px the recipe sheet is a pane (`side-pane`, REC-39), and
+  (LIST-38, LIST-39, MENU-21, MENU-27). From 840px the recipe sheet is a pane (`side-pane`, REC-39), and
   `Ajustes` sets `--page-max` to `--settings-max` (NAV-27). From 1024px every screen but
   `Ajustes` fills the area (DSV-28); `Ajustes` is a centred 720px column (DSV-29). The code reads the class from
   `ui.device` (NAV-28), which `src/ui/device.js` keeps with one media query for each breakpoint; no
@@ -243,7 +243,9 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   the end, and a free meal shows its call on one line; narrower, the kind stays at the top end and
   the pill stands below the name. The summary and the actions stand on a `--surface-2` card with a
   `--line` edge: the summary at the start, then a 192px bar of the planned slots of the 14
-  (`--planned`, set by `src/ui/menu.js`). The week switcher in the header, the **Ajustar
-  raciones** button, the **Semanas anteriores** panel and the card **Generación automática de
-  cesta** of the screen are not built: the week bar of MENU-23 stays above the days, the app has no
-  portions, and the panel **Para la cesta** (MENU-21) stays.
+  (`--planned`, set by `src/ui/menu.js`). The right column holds the panel **Semanas
+  anteriores** (MENU-27), its weeks 4px `--bg` tiles with a `--line` edge, and the card
+  **Generación automática de cesta** (MENU-21) on `--surface-2` with no line below its head; the
+  panel **Para la cesta** is gone. The week switcher in the header and the **Ajustar raciones**
+  button of the screen are not built: the week bar of MENU-23 stays above the days, and the app has
+  no portions.

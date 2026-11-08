@@ -1,13 +1,14 @@
 import { postponedItems } from '#store';
 import { recipeProgress } from '#recipes';
-import { basketPreview, mealCount } from '#menu';
+import { SLOTS, basketPreview, filledRecipes, pastWeeks, mealCount, weekDay } from '#menu';
 import { storedBytes, kilobytes } from '#storage';
-import { $, el, state, ui, t, shownWeek, pastShown, storage } from '#ui/context';
+import { $, el, state, ui, t, thisWeek, shownWeek, pastShown, storage } from '#ui/context';
 import { listState } from '#ui/view';
 import { icon } from '#ui/controls';
 import { showView } from '#ui/nav';
 import { openRecipe } from '#ui/recipes';
 import { bringBackButton, bringAll, postponedDetail } from '#ui/rows';
+import { dateFormat, repeatInto } from '#ui/menu';
 
 // The rows a panel shows before its `y N más` line.
 const ROWS = 6;
@@ -64,41 +65,89 @@ const renderPostponed = (view) => {
   ])));
 };
 
-// Almacenamiento local (LIST-43): what the app keeps in the storage of the browser, from 1024px.
-const renderStorage = () => {
+// Almacenamiento local (LIST-43): what the app keeps in the storage of the browser, from 1024px. On
+// Menú it is the foot of the card Generación automática de cesta (MENU-21).
+const renderStorage = (id, used) => {
   const bytes = storage ? storedBytes(storage) : null;
-  $('panel-storage').hidden = bytes === null;
-  if (bytes !== null) $('panel-storage-used').textContent = t('panels.storageUsed', { count: kilobytes(bytes) });
+  $(id).hidden = bytes === null;
+  if (bytes !== null) $(used).textContent = t('panels.storageUsed', { count: kilobytes(bytes) });
 };
 
-// Para la cesta (MENU-21): what Llenar cesta puts to buy.
-const renderBasket = () => {
-  const products = basketPreview(state, shownWeek());
-  $('panel-basket').hidden = false;
-  $('panel-basket-count').textContent = String(products.length);
-  $('panel-basket-note').textContent = t('panels.basketNote', { fill: t('menu.fill') });
-  const entries = products.map((name) => el('li', { className: 'side-panel-row' }, [el('span', { textContent: name })]));
-  rows($('panel-basket-list'), entries.length ? entries : [el('li', { className: 'side-panel-more', textContent: t('recipe.inList') })]);
+// The names of a past week before its `+N más`.
+const NAMES = 3;
+
+// Semanas anteriores (MENU-27): the last past weeks with a meal, each with its planned slots, the names
+// of its meals and Repetir esta semana into the week in view, or into this week from a past week.
+const renderWeeks = () => {
+  const weeks = pastWeeks(state, thisWeek(), pastShown() ? shownWeek() : null);
+  $('panel-weeks').hidden = weeks.length === 0;
+  const to = pastShown() ? thisWeek() : shownWeek();
+  $('panel-weeks-list').replaceChildren(...weeks.map(({ week, planned, names }) => {
+    const range = dateFormat().formatRange(weekDay(week, 0), weekDay(week, 6));
+    const full = planned === SLOTS;
+    const more = names.length - NAMES;
+    const repeat = el('button', { type: 'button', className: 'button outline wide side-panel-repeat', onclick: () => repeatInto(week, to) }, [
+      icon('repeat', 'small'),
+      el('span', { textContent: t('menu.repeat') }),
+    ]);
+    repeat.setAttribute('aria-label', t('panels.repeatWeek', { range }));
+    return el('li', { className: 'side-panel-week' }, [
+      el('span', { className: 'side-panel-name', textContent: range }),
+      el('small', { className: full ? 'side-panel-count done' : 'side-panel-count', textContent: t(full ? 'panels.weekFull' : 'panels.weekMeals', { count: planned }) }),
+      el('span', { className: 'side-panel-chips' }, [
+        ...names.slice(0, NAMES).map((name) => el('span', { className: 'side-panel-chip', textContent: name })),
+        ...(more > 0 ? [el('span', { className: 'side-panel-chips-more', textContent: t('panels.moreNames', { count: more }) })] : []),
+      ]),
+      repeat,
+    ]);
+  }));
+};
+
+// The text of a translation with the names of `names` in bold, as nodes.
+const MARK = '\u0000';
+const withNames = (key, params, names) => {
+  const marked = Object.fromEntries(Object.keys(names).map((name) => [name, `${MARK}${name}${MARK}`]));
+  return t(key, { ...params, ...marked })
+    .split(MARK)
+    .map((part, index) => (index % 2 ? el('strong', { className: 'side-panel-strong', textContent: names[part] }) : part));
+};
+
+// Generación automática de cesta (MENU-21): what Llenar cesta adds to Compra, from the recipes of the
+// week in view, and the storage of the app at its foot.
+const renderAuto = () => {
+  const week = shownWeek();
+  const products = basketPreview(state, week).length;
+  const count = filledRecipes(state, week);
+  const recipes = t('panels.fillRecipes', { count });
+  const names = { fill: t('menu.fill'), list: t('list.active') };
+  const key = count === 0 ? 'panels.fillNone' : products === 0 ? 'panels.fillDone' : 'panels.fillNote';
+  $('panel-auto').hidden = false;
+  $('panel-auto-note').replaceChildren(...withNames(key, { count: products, recipes }, names));
+  renderStorage('panel-auto-storage', 'panel-auto-used');
 };
 
 // The panels of Compra and Menú, from 600px (DSV-9): below the content until 840px, then beside it.
 // Compra shows them while its list has an item to buy or a postponed item, so that a list with only
-// postponed items can still bring them back; Menú while the week in view, this week or a later one,
-// has a meal (MENU-23).
+// postponed items can still bring them back. Menú shows Semanas anteriores while a past week other
+// than the week in view has a meal, and the card of the fill while the week in view, this week or a
+// later one, has a meal (MENU-21, MENU-27).
 export const renderPanels = () => {
   const compra = ui.view === 'active';
   const view = listState();
-  const shown = compra
-    ? view.items.some((item) => item.list === 'active' || item.list === 'postponed')
-    : ui.view === 'menu' && !pastShown() && mealCount(state, shownWeek()) > 0;
+  const fill = ui.view === 'menu' && !pastShown() && mealCount(state, shownWeek()) > 0;
+  const weeks = ui.view === 'menu' && pastWeeks(state, thisWeek(), pastShown() ? shownWeek() : null, 1).length > 0;
+  const shown = compra ? view.items.some((item) => item.list === 'active' || item.list === 'postponed') : fill || weeks;
   $('panels').hidden = !shown;
-  for (const id of ['panel-recipes', 'panel-postponed', 'panel-storage', 'panel-basket']) $(id).hidden = true;
+  for (const id of ['panel-recipes', 'panel-postponed', 'panel-storage', 'panel-weeks', 'panel-auto']) $(id).hidden = true;
   if (!shown) return;
   if (compra) {
     renderRecipes(view);
     renderPostponed(view);
-    renderStorage();
-  } else renderBasket();
+    renderStorage('panel-storage', 'panel-storage-used');
+    return;
+  }
+  if (weeks) renderWeeks();
+  if (fill) renderAuto();
 };
 
 export const bind = () => {

@@ -264,8 +264,8 @@ export const pastShown = () => shownWeek() < thisWeek();
 // Llenar cesta: each list from its own menu of the week in view (MENU-20, MENU-23).
 export const fillMenus = () => fillLists(state, shownBase(), scope(), shownWeek());
 
-// Repetir esta semana: each list copies its own past week into this week (MENU-24).
-export const repeatMenus = (from) => repeatLists(state, shownBase(), scope(), from, thisWeek());
+// Repetir esta semana: each list copies its own past week into week `to` (MENU-24, MENU-27).
+export const repeatMenus = (from, to = thisWeek()) => repeatLists(state, shownBase(), scope(), from, to);
 
 // `options` go to the after-commit function: an import is `explicit` (SYNC-9).
 export const commit = (next, options = {}) => {

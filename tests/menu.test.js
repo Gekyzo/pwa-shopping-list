@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { emptyState, addItem } from '#store';
 import { addRecipe, addRecipeProduct } from '#recipes';
-import { DAYS, MEALS, KEPT_WEEKS, FUTURE_WEEKS, weekSteps, weekOf, addWeeks, weekDay, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, plannedSlots, SLOTS, menuWeek, fillMenu, basketPreview } from '#menu';
+import { DAYS, MEALS, KEPT_WEEKS, FUTURE_WEEKS, weekSteps, weekOf, addWeeks, weekDay, isWeek, menuWeeks, repeatWeek, setMeal, setDish, dishRecipe, menuDishes, clearMeal, clearMenu, mealCount, plannedSlots, SLOTS, menuWeek, fillMenu, basketPreview, filledRecipes, pastWeeks } from '#menu';
 
 // The Monday of the week of the tests.
 const W = '2026-11-02';
@@ -470,4 +470,40 @@ test('a put in a later week keeps the meals of this week', () => {
   const state = setMeal(now, later, 0, 'lunch', omelette).state;
   assert.deepEqual(menuWeeks(state), [W, later]);
   assert.equal(mealCount(state, W), 1);
+});
+
+test('filledRecipes counts the recipes of the week with a product, each one time (MENU-21)', () => {
+  const { state, lentils, omelette, empty } = kitchen();
+  const planned = plan(state, [[0, 'lunch', lentils], [1, 'lunch', lentils], [2, 'dinner', omelette], [3, 'lunch', empty]]);
+  assert.equal(filledRecipes(planned, W), 2);
+  assert.equal(filledRecipes(setDish(state, W, 0, 'lunch', 'Pizza').state, W), 0);
+  assert.equal(filledRecipes(state, W), 0);
+});
+
+test('pastWeeks lists the weeks before today with a meal, newest first, at most three (MENU-27)', () => {
+  const { state, lentils } = kitchen();
+  const weeks = [-5, -4, -3, -1, 0, 1].map((n) => addWeeks(W, n));
+  const planned = weeks.reduce((current, week) => setMeal(current, week, 0, 'lunch', lentils).state, state);
+  const before = structuredClone(planned);
+  assert.deepEqual(pastWeeks(planned, W).map(({ week }) => week), [addWeeks(W, -1), addWeeks(W, -3), addWeeks(W, -4)]);
+  assert.deepEqual(pastWeeks(planned, W, addWeeks(W, -1)).map(({ week }) => week), [addWeeks(W, -3), addWeeks(W, -4), addWeeks(W, -5)]);
+  assert.deepEqual(pastWeeks(planned, W, null, 1).map(({ week }) => week), [addWeeks(W, -1)]);
+  assert.deepEqual(planned, before);
+});
+
+test('pastWeeks gives the planned slots and the names of the meals, each one time, in menu order', () => {
+  const { state, lentils, omelette } = kitchen();
+  const past = addWeeks(W, -1);
+  let planned = setMeal(state, past, 2, 'lunch', omelette).state;
+  planned = setMeal(planned, past, 0, 'dinner', lentils).state;
+  planned = setDish(planned, past, 1, 'lunch', 'pizza').state;
+  planned = setDish(planned, past, 3, 'lunch', 'Pizza').state;
+  planned = setMeal(planned, past, 4, 'lunch', omelette).state;
+  assert.deepEqual(pastWeeks(planned, W), [{ week: past, planned: 5, names: ['Lentils', 'pizza', 'Omelette'] }]);
+});
+
+test('pastWeeks is empty with no past meal', () => {
+  const { state, lentils } = kitchen();
+  assert.deepEqual(pastWeeks(state, W), []);
+  assert.deepEqual(pastWeeks(setMeal(state, W, 0, 'lunch', lentils).state, W), []);
 });
