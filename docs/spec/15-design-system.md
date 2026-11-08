@@ -113,18 +113,23 @@ its screens disagree, `docs/bodega-inconsistencies.html` records the choice: the
 each part.
 
 - **DSV-15** The name of a row of `Compra` keeps one line, then ends with an ellipsis; its
-  quantity is a tonal chip on `--secondary` with no edge, 13px with tabular figures. A bought
-  quantity is drawn: a `--line` edge on `--surface`, in `--struck`.
+  quantity is a tonal chip on `--secondary` with no edge and 4px corners, 15px with tabular
+  figures (DSV-33). Below 1024px a bought quantity keeps the tonal chip and fades with its row
+  (DSV-33); from 1024px it is drawn: a `--line` edge on `--surface`, in `--struck`.
 - **DSV-16** `Comprados (N)` (LIST-12) is a card of its own: its head (`bought-head`) is the top
   of a box with a 1px `--line` border, 6px corners and a `--surface-2` ground, with a check in
   `--done` before the title at 18px and the chevron at its end; the bought rows close the box. A
-  bought tick is filled at 70% opacity.
+  bought tick is filled. Below 1024px the content of a bought row is at 65% opacity, the tick
+  with it, and only the name is struck (DSV-33); from 1024px the tick is at 70% opacity, and the
+  name and its meta line are struck.
 - **DSV-17** The dock floats over the list: no bar and no top line behind it. Each of its controls
   is a level 2 tile on `--surface`, with a `--border-control` `--control` border and `--shadow-l`;
   the add button keeps its emerald fill and takes the same shadow. The tools of the header are
   tiles on `--secondary`. The toast is the inverse surface (`--toast-bg` `#342f2b`, text
   `#f9efe8`; dark `#eae1da` and `#1f1b17`), its action in `--inverse-primary` (`#82d8a8`, dark
-  `#13734b`). It has no icon, because it also shows errors.
+  `#13734b`). A toast with `Deshacer` reports a change that took place, so it starts with the
+  check `check-circle` in `--inverse-primary` (the state `done`). A toast with no `Deshacer` has
+  no icon, because it also shows errors. Below 600px the toast stands at the top (DSV-33).
 - **DSV-18** The sheet `Editar` (ROW-7). A field is `field boxed`: an outlined box, 1px
   `--control` and 6px corners, with its name inside above the value in small capitals; the focus
   draws a 2px `--done` edge. The switch of the recurrence is a tonal card (`toggle-card`): the
@@ -184,8 +189,8 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   outlined chip in `--font-mono`, and the recurrence as a terracotta pill on `--warning-soft`
   with a `--warning-line` edge beside the name (`item-row-title`), out of the meta line. The title
   of a group head is 15px (`--text-label-lg`) at weight 600, with its count pill beside it and the
-  chevron at the end. At every width the edit button of a row is the grip `grip` in `--muted`
-  (`row-handle`). Below 1024px a row and a head keep the phone screen: the count at the end of
+  chevron at the end. At every width the edit button of a row is the grip `grip`, an 18px mark in
+  `--struck` (`row-handle`, DSV-33), and a bought row has none. Below 1024px a row and a head keep the phone screen: the count at the end of
   the head, the recurrence in the meta line, a sans quantity chip. This reverses the "no
   monospace" choice of `docs/bodega-inconsistencies.html` for the desktop row.
 - **DSV-25** The sidebar of the desktop screens of Bodega, from 1024px: the frame fills the width
@@ -276,3 +281,26 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   `· guardadas localmente` with no account and `· sincronizadas` with one (NAV-26), and a narrow
   header cuts it with an ellipsis, so the title and the add keep one line. The print button of
   the screen is not built: the app does not print.
+- **DSV-33** The phone screen of `Compra`, below 600px (the Stitch screen `compra_m_vil_lista_de_supermercado`).
+  1. A bar stands above the title of `Compra`: 56px high, with a `--line` line below it. It shows
+     the icon `basket` in `--done` and the name of the app (`app.name`, 18px, weight 700) at the
+     start, and **Terminar compra** at the end: a text button in `--done`, 15px, that opens the
+     trip sheet (TRIP-4) and is disabled when TRIP-1 does not hold. It takes the place of the
+     three dots of NAV-9. The other sections have no bar. With `Izquierda` the bar is mirrored
+     (NAV-13).
+  2. The toast stands 8px below the top of the screen, over the bar, and comes in from above.
+     From 600px it stands at the bottom, as in the design system.
+  3. The dock holds the shop chip at its start: a white pill with the icon `store` in `--done`, the
+     name of the list, its count and `▾`. The search button and the `+` stand at its end (SHOP-26).
+  4. Below 1024px a row is 60px: the 32px tick with 14px above and below it. The quantity chip is
+     15px (DSV-15) and the grip an 18px mark in `--struck`. A bought row has no grip: **Editar**
+     stays in its side actions (ROW-7). Its content is at 65% opacity on its opaque ground, so
+     the action below it never shows through, and only its name is struck.
+  5. `Comprados (N)` is open at first (LIST-12).
+
+  The parts of the screen with no behaviour or no data in the app are not built: the search tile
+  of the header (the search stays in the dock, LIST-37), the drag of a row by its grip (the grip
+  opens **Editar**), and the units of the quantities beyond the text of the item. The aisle groups
+  keep their chevron (GROUP-16), and the sign-in banner stays (ACC-11). The emerald quantity chip
+  of the first row of the screen is not taken: no other row has it. The grip keeps its 48px tap
+  target (TAP-1), so a long name ends in an ellipsis sooner than in the screen.

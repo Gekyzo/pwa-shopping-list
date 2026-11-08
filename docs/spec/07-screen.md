@@ -4,8 +4,10 @@ Rules of `index.html`, `styles.css`, `src/app.js`, `src/ui/`, `src/swipe.js` and
 
 ## Layout
 
-From top to bottom: the header (title, subtitle, search button, arrange button, trip
-button, and in `Compra` the rows of list chips and shop chips), the content of the section, the `+` button above the bottom bar, and the bottom bar.
+From top to bottom: the header (below 600px in `Compra` the bar with **Terminar compra**
+(DSV-33), then the title, subtitle, search button, arrange button, trip button, and in `Compra`
+the rows of list chips and shop chips), the content of the section, the `+` button above the
+bottom bar, and the bottom bar.
 Below 600px wide the dock of `Compra` and `Recetas` stands above the bottom bar (SHOP-26) and holds
 the `+` button at its end, and no `+` button floats over the list. The header has no search button
 while the dock shows. The title keeps one line, with an
@@ -70,7 +72,8 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **ROW-1** A row of `Compra` has a check mark, the name with its quantity as a chip at the end
   of the name button (DSV-13), a line below the name with the shops, `También en «recipes»` for an item of two recipe groups
   (GROUP-20) and `↻ cada compra` for a recurrent item (LIST-7), joined by ` · `, and an
-  edit button **Editar** at its end: the grip `grip` of the screens, named `Editar «name»`. From
+  edit button **Editar** at its end: the grip `grip` of the screens, named `Editar «name»`. A
+  bought row has no edit button; **Editar** is in its side actions (DSV-33). From
   1024px `↻ cada compra` is a pill beside the name instead (DSV-24). The slot of the edit button is one button wide, so the name
   takes the rest of the row; a tag of `Todas` widens it (SHARE-14). The name keeps one line, then ends with an ellipsis (DSV-15). A tap of
   a finger or a pen on the body of the row ticks or unticks the item (LIST-11). A click of a mouse
@@ -180,7 +183,8 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **NAV-23** A drag down of the grab or the head of a sheet closes it when the drag passes 30 % of
   the height of the sheet, or when the release is faster than 0.5 px/ms. A shorter, slower drag
   puts the sheet back. A drag that starts on a button or a field of the head does nothing.
-- **NAV-9** The trip button of the header has three dots. It shows in `Compra` below 1024px; from
+- **NAV-9** The trip button of the header has three dots. It shows in `Compra` from 600px to
+  1023px; below 600px **Terminar compra** of the bar of `Compra` takes its place (DSV-33); from
   1024px the header shows in its place the primary button **Terminar compra** with a `check-circle`,
   disabled when TRIP-1 does not hold, and the add of the header beside it is outlined. From
   1024px the title keeps its whole text and the subtitle one line, and the tools stay on the line
@@ -221,6 +225,7 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   | Rail, from 600px wide (DSV-9) | Left | Left |
   | Dock, below 600px wide (SHOP-26) | Search, then `+`, at the right | `+`, then search, at the left |
   | Header | Text, buttons | Buttons, text |
+  | Bar of `Compra`, below 600px wide (DSV-33) | Name of the app, then **Terminar compra** at the right | **Terminar compra** at the left, then the name of the app |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
   | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
 

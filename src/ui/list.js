@@ -302,8 +302,11 @@ export const renderTrip = () => {
   // From 1024px Terminar compra is a button of its own in the header, in place of the three dots (NAV-9).
   $('header-finish').hidden = ui.view !== 'active';
   $('header-finish').disabled = !store.canStartNewShopping(state);
+  // Below 600px Compra has a bar above its title with Terminar compra, in place of the three dots (DSV-33).
+  $('app-bar').hidden = ui.view !== 'active';
+  $('bar-finish').disabled = !store.canStartNewShopping(state);
   $('finish-menu').disabled = !store.canStartNewShopping(state);
-  for (const id of ['trip-button', 'header-finish']) $(id).setAttribute('aria-expanded', String(ui.tripOpen));
+  for (const id of ['trip-button', 'header-finish', 'bar-finish']) $(id).setAttribute('aria-expanded', String(ui.tripOpen));
   $('trip').hidden = !ui.tripOpen;
   $('trip-outcomes').replaceChildren(...outcomeRows().map(({ icon: name, text }) => el('li', { className: 'list-row' }, [
     icon(name),
@@ -369,13 +372,8 @@ export const closeSearch = () => {
   render();
 };
 
-const pickShop = (shop) => {
-  Object.assign(ui, { openId: null, openSide: null, shop });
-  render();
-};
-
-// The dock below 600px (styles.css hides it from 600px): in Compra the shop list in view between the
-// arrows of the previous and the next list, the search button and the add button at the end; while
+// The dock below 600px (styles.css hides it from 600px): in Compra the pill of the shop list in view
+// at the start, the search button and the add button at the end; while
 // the search is open, the search field, Cancelar and the add button. It shows in Compra with an item
 // and in Recetas while the action of the empty state does not show (`dockShown`), so after the empty
 // state (renderList); Recetas has no shop list. The app shows and labels the add button as the fab.
@@ -386,7 +384,7 @@ export const renderDock = () => {
   const chips = shopChipsInView();
   const search = ui.searchOpen;
   $('dock').classList.toggle('searching', search);
-  for (const id of ['dock-prev', 'dock-shop', 'dock-next']) $(id).hidden = search || chips.length === 0;
+  $('dock-shop').hidden = search || chips.length === 0;
   $('dock-search').hidden = search || !searchable();
   $('dock-search').setAttribute('aria-expanded', String(search));
   $('dock-field').hidden = !search;
@@ -398,17 +396,12 @@ export const renderDock = () => {
   if (!chips.length) return;
   const current = chips.find((chip) => chip.shop === ui.shop) ?? chips[0];
   $('dock-shop').replaceChildren(
+    icon('store', 'small dock-shop-icon'),
     el('span', { className: 'dock-shop-name', textContent: shopLabel(current.shop) }),
     el('span', { className: 'count', textContent: current.count === 0 ? '✓' : String(current.count) }),
     el('span', { className: 'chevron', textContent: '▾', ariaHidden: 'true' }),
   );
   $('dock-shop').setAttribute('aria-expanded', String(ui.shopPickOpen));
-  const previous = shops.previousShop(listState(), ui.shop);
-  const next = shops.nextShop(listState(), ui.shop);
-  $('dock-prev').disabled = previous === null;
-  $('dock-next').disabled = next === null;
-  $('dock-prev').onclick = () => previous && pickShop(previous.shop);
-  $('dock-next').onclick = () => next && pickShop(next.shop);
 };
 
 // The shop picker of the dock: one entry for each shop list, with the count of its items to buy.
@@ -455,8 +448,9 @@ export const showDockMatches = () => {
 export const closeTrip = () => {
   Object.assign(ui, { tripOpen: false });
   render();
-  // The button that opened the sheet is the one in view: the three dots, or Terminar compra from 1024px.
-  ($('header-finish').offsetParent ? $('header-finish') : $('trip-button')).focus();
+  // The button that opened the sheet is the one in view: Terminar compra of the bar below 600px, the
+  // three dots, or Terminar compra of the header from 1024px.
+  (['bar-finish', 'header-finish'].map($).find((button) => button.offsetParent) ?? $('trip-button')).focus();
 };
 
 export const bind = () => {
@@ -493,6 +487,7 @@ export const bind = () => {
   };
   $('trip-button').addEventListener('click', openTrip);
   $('header-finish').addEventListener('click', openTrip);
+  $('bar-finish').addEventListener('click', openTrip);
   $('dock-shop').addEventListener('click', () => {
     Object.assign(ui, { shopPickOpen: true, openId: null, openSide: null });
     render();

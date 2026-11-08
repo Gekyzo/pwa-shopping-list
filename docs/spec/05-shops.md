@@ -71,14 +71,13 @@ apply in it.
   gets the shop too, with the message and `Deshacer` of ADD-6. From **Todas** and **Sin tienda**
   the add puts no shop.
 - **SHOP-26** Below 600px wide a dock stands above the bottom bar while `Compra` has an item, in
-  thumb reach. It holds `‹`, a chip with the name of the list in view, its count of items to buy
-  (`✓` for none) and `▾`, then `›`, then the search button (LIST-37) and the `+` button, at the end.
-  `›` shows the next list after
-  the one in view, in chip order and from the start after the end, that has an item to buy
-  (`nextShop`); `‹` the one before it (`previousShop`). An arrow with no such list is off. With no
+  thumb reach. It holds at its start a chip with the icon `store`, the name of the list in view,
+  its count of items to buy (`✓` for none) and `▾` (DSV-33), and at its end the search button
+  (LIST-37) and the `+` button. The chip is the one way to change the list in the dock (SHOP-27):
+  the dock has no arrows. With no
   chip (SHOP-17) or with the row hidden (SHOP-25) the dock holds only the search button and the `+`
   button. A slide on the dock does not change the section (NAV-4). With `Izquierda` the `+` button
-  is at the left end, the search button follows it, and `‹` stays before the chip. In
+  is at the left end, the search button follows it, and the chip is at the right end. In
   `Recetas` the dock shows while `Recetas` has no empty text with a button (NAV-7); it holds the `+`
   and, while the section has a search, the search button (REC-23). The `+` button of the dock
   shows and does not show as the `+` button of NAV-24.

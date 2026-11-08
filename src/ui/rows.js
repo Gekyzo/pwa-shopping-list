@@ -114,7 +114,8 @@ const itemRow = (item, also, groupId) => {
   name.setAttribute('aria-checked', String(item.bought));
   // SHARE-14: in Todas the end slot shows the list of the item, or both lists of a merged row,
   // before the edit button.
-  const end = [...tagsOf(item).map(tagNode), moreButton(item, groupId), editButton(item)];
+  // A bought row has no grip (DSV-33): Editar stays in its side actions.
+  const end = [...tagsOf(item).map(tagNode), moreButton(item, groupId), ...(item.bought ? [] : [editButton(item)])];
   const row = [check, name, el('div', { className: 'item-row-end' }, end)];
   return {
     row,

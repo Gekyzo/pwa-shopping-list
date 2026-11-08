@@ -21,6 +21,17 @@ test('the header has no bar and no ring; from 1024px it holds the search field, 
   assert.ok(header.indexOf('id="header-finish"') < header.indexOf('id="list-chips"'));
 });
 
+test('the header starts with the bar of the phone: the name of the app and Terminar compra (DSV-33)', () => {
+  const header = body.slice(body.indexOf('<header'), body.indexOf('</header>'));
+  assert.match(header, /^<header class="app-header">\s*<div id="app-bar" class="app-bar" hidden>/);
+  assert.match(header, /<span class="app-bar-brand"><svg class="icon" aria-hidden="true"><use href="icons.svg#basket"\/><\/svg><span data-i18n="app.name"><\/span><\/span>/);
+  assert.match(header, /<button id="bar-finish" class="button accent app-bar-finish" type="button" aria-haspopup="dialog" aria-controls="trip" data-i18n="finish.button"><\/button>\s*<\/div>\s*<div class="app-header-text">/);
+});
+
+test('the toast has a check before its text, which shows only on a done toast (DSV-17)', () => {
+  assert.match(body, /<div id="toast" class="toast"[^>]*>\s*<svg class="icon small toast-icon" aria-hidden="true"><use href="icons.svg#check-circle"\/><\/svg>\s*<span id="toast-text"/);
+});
+
 test('the page has translated text and translated attributes', () => {
   assert.ok(textKeys.length > 0);
   assert.ok(attrKeys.length > 0);
@@ -221,10 +232,11 @@ test('the update notice is a banner with a wide primary button above the version
   assert.ok(settings.indexOf('id="update-banner"') < settings.indexOf('id="version"'));
 });
 
-test('the dock stands before the add button with the shop arrows, the shop chip and the search', () => {
+test('the dock stands before the add button with the shop chip and the search, and no shop arrows (DSV-33)', () => {
   const [dock = ''] = body.match(/<div id="dock" class="dock"[\s\S]*?<button id="fab"/) ?? [];
   const ids = [...dock.matchAll(/<button id="([^"]+)"/g)].map(([, id]) => id);
-  assert.deepEqual(ids.slice(0, 4), ['dock-prev', 'dock-shop', 'dock-next', 'dock-search']);
+  assert.deepEqual(ids.slice(0, 2), ['dock-shop', 'dock-search']);
+  assert.ok(!body.includes('dock-prev') && !body.includes('dock-next'));
   assert.match(dock, /<label id="dock-field" class="dock-field"[^>]*>[\s\S]*<input id="dock-query" class="dock-input" type="search"[\s\S]*<button id="dock-clear" class="dock-clear"/);
   assert.match(dock, /<button id="dock-cancel" class="button accent" type="button" data-i18n="search.cancel"/);
 });
@@ -232,7 +244,7 @@ test('the dock stands before the add button with the shop arrows, the shop chip 
 test('the dock ends with the add button', () => {
   const [dock = ''] = body.match(/<div id="dock" class="dock"[\s\S]*?<button id="fab"/) ?? [];
   const ids = [...dock.matchAll(/<(?:button|label) id="([^"]+)"/g)].map(([, id]) => id).filter((id) => id !== 'dock-clear');
-  assert.deepEqual(ids, ['dock-prev', 'dock-shop', 'dock-next', 'dock-search', 'dock-field', 'dock-cancel', 'dock-add', 'fab']);
+  assert.deepEqual(ids, ['dock-shop', 'dock-search', 'dock-field', 'dock-cancel', 'dock-add', 'fab']);
   assert.match(dock, /<button id="dock-add" aria-keyshortcuts="N" class="button primary icon dock-add" type="button"><svg class="icon" aria-hidden="true"><use href="icons.svg#plus"\/><\/svg><\/button>\s*<\/div>\s*<button id="fab"/);
 });
 

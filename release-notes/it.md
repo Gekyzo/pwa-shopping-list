@@ -4,6 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+- Sul telefono, **Spesa** somiglia di più al design: una barra in alto con il pulsante **Termina la spesa** (al posto dei tre puntini), un dock con il negozio a sinistra e senza frecce, righe più alte con la quantità più grande, e **Comprati** aperto fin dall’inizio. Un articolo comprato non mostra più la maniglia: **Modifica** resta quando lo fai scorrere. Il messaggio con **Annulla** appare in alto, con un segno di spunta.
 - Sugli schermi larghi, l’intestazione di **Ricette** somiglia di più al design: la ricerca ha una riga propria, il pulsante **Filtri** mostra o nasconde i filtri, e sotto il titolo si vede se le ricette restano su questo dispositivo o sono sincronizzate.
 - Sugli schermi larghi, **Ricette** somiglia di più al design: ogni ricetta è una scheda con i pulsanti in basso, e il pannello di una ricetta ha il pulsante **Aggiungi a Spesa**, che dice quanti prodotti aggiunge. Su tutti gli schermi, una ricetta mostra quanti dei suoi prodotti sono nella lista e segna ciascuno con un punto verde.
 - In **Menù**, su schermi più larghi di un telefono, il pannello **Settimane precedenti** mostra le ultime tre settimane con pasti, ognuna con il pulsante **Ripeti questa settimana**. La scheda **Cestino automatico** dice quanti prodotti aggiunge **Riempi cestino** e sostituisce il pannello **Per il cestino**.

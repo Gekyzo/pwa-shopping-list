@@ -153,8 +153,6 @@ export default {
   'search.key': '⌘K',
   'search.clear': 'Esborra la cerca',
   'search.cancel': 'Cancel·la',
-  'dock.previous': 'Botiga anterior',
-  'dock.next': 'Botiga següent',
   'recipe.openLink': 'Obre l’enllaç de {name}',
   'recipe.watchLink': 'Mira el vídeo de {name}',
   'recipe.watch': 'Mira el vídeo',

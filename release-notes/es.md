@@ -4,6 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+- En el móvil, **Compra** se parece más al diseño: una barra arriba con el botón **Terminar compra** (en lugar de los tres puntos), un dock con la tienda a la izquierda y sin flechas, filas más altas con la cantidad más grande, y **Comprados** abierto desde el principio. Un artículo comprado ya no muestra el asa: **Editar** sigue al deslizarlo. El aviso con **Deshacer** sale arriba y lleva una marca de hecho.
 - En pantallas anchas, la cabecera de **Recetas** se parece más al diseño: el buscador ocupa su propia línea, el botón **Filtros** muestra u oculta los filtros, y bajo el título se ve si las recetas se guardan en este dispositivo o se sincronizan.
 - En pantallas anchas, **Recetas** se parece más al diseño: cada receta es una tarjeta con sus botones al pie, y el panel de una receta tiene el botón **Añadir a Compra**, que dice cuántos productos añade. En todas las pantallas, la receta muestra cuántos de sus productos están en la lista y marca cada uno con un punto verde.
 - En **Menú**, en pantallas más anchas que un móvil, el panel **Semanas anteriores** muestra las tres últimas semanas con comidas y un botón **Repetir esta semana** en cada una. La tarjeta **Generación automática de cesta** dice cuántos productos añade **Llenar cesta** y sustituye al panel **Para la cesta**.

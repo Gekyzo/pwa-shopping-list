@@ -169,7 +169,8 @@ export const ui = {
   mealQuery: '',
   // The page of the walkthrough in view, or null while the walkthrough is closed.
   onboarding: firstStart ? 0 : null,
-  boughtOpen: false,
+  // Comprados (N) is open at first (LIST-12).
+  boughtOpen: true,
   postponedOpen: false,
   // The groups of a list that the user closed, as `<view>:<group key>`. Not stored.
   closedGroups: new Set(),
@@ -213,6 +214,8 @@ export const showToast = (text, { undo = null, ms = undo ? UNDO_MS : MESSAGE_MS 
   undoState = undo;
   $('toast-text').textContent = text;
   $('toast-undo').hidden = !undo;
+  // A toast with Deshacer reports a change that took place: it shows a check (DSV-17).
+  $('toast').classList.toggle('done', Boolean(undo));
   $('toast').hidden = false;
   toastTimer = setTimeout(hideToast, ms);
 };

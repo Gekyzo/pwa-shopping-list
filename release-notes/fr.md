@@ -4,6 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+- Sur téléphone, **Courses** ressemble davantage au design : une barre en haut avec le bouton **Terminer les courses** (à la place des trois points), un dock avec le magasin à gauche et sans flèches, des lignes plus hautes avec une quantité plus grande, et **Achetés** ouvert dès le départ. Un article acheté n’affiche plus la poignée : **Modifier** reste disponible en le faisant glisser. Le message avec **Annuler** s’affiche en haut, avec une coche.
 - Sur les grands écrans, l’en-tête de **Recettes** ressemble davantage au design : la recherche a sa propre ligne, le bouton **Filtres** affiche ou masque les filtres, et sous le titre on voit si les recettes restent sur cet appareil ou sont synchronisées.
 - Sur les grands écrans, **Recettes** ressemble davantage au design : chaque recette est une carte avec ses boutons en bas, et le panneau d’une recette a le bouton **Ajouter à Courses**, qui indique combien de produits il ajoute. Sur tous les écrans, une recette montre combien de ses produits sont dans la liste et marque chacun d’un point vert.
 - Dans **Menu**, sur les écrans plus larges qu’un téléphone, le panneau **Semaines précédentes** montre les trois dernières semaines avec des repas, chacune avec un bouton **Répéter cette semaine**. La carte **Panier automatique** dit combien de produits **Remplir panier** ajoute, et remplace le panneau **Pour le panier**.

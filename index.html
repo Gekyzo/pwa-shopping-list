@@ -14,6 +14,10 @@
   </head>
   <body>
     <header class="app-header">
+      <div id="app-bar" class="app-bar" hidden>
+        <span class="app-bar-brand"><svg class="icon" aria-hidden="true"><use href="icons.svg#basket"/></svg><span data-i18n="app.name"></span></span>
+        <button id="bar-finish" class="button accent app-bar-finish" type="button" aria-haspopup="dialog" aria-controls="trip" data-i18n="finish.button"></button>
+      </div>
       <div class="app-header-text">
         <h1 id="title" class="app-header-title"></h1>
         <p id="subtitle" class="app-header-subtitle"></p>
@@ -34,6 +38,7 @@
     </header>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden>
+      <svg class="icon small toast-icon" aria-hidden="true"><use href="icons.svg#check-circle"/></svg>
       <span id="toast-text" class="toast-text"></span>
       <button id="toast-undo" class="button strong" type="button" data-i18n="toast.undo" hidden></button>
     </div>
@@ -225,13 +230,7 @@
     </main>
 
     <div id="dock" class="dock" hidden>
-      <button id="dock-prev" class="button icon" type="button" data-i18n-attr="aria-label:dock.previous">
-        <svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg>
-      </button>
       <button id="dock-shop" class="chip" type="button" aria-haspopup="dialog" aria-controls="shop-pick"></button>
-      <button id="dock-next" class="button icon" type="button" data-i18n-attr="aria-label:dock.next">
-        <svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
-      </button>
       <button id="dock-search" class="button icon" type="button" data-i18n-attr="aria-label:search.label" aria-controls="dock-field">
         <svg class="icon" aria-hidden="true"><use href="icons.svg#search"/></svg>
       </button>

@@ -35,7 +35,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   mark (ROW-1), the keys `Space` and `Enter` on its name, or a slide to the right (ROW-11)
   changes `bought`. A ticked row in `Comprados (N)` unticks the same way.
 - **LIST-12** A tick does not delete the item. The item goes to the section `Comprados (N)` at the
-  end of `Compra`, which is closed at first. A tap on that row opens and closes it. The row ends
+  end of `Compra`, which is open at first (DSV-33). A tap on that row opens and closes it. The row ends
   with the icon `chevron-right` while closed and `chevron-down` while open.
 - **LIST-13** A tick has `Deshacer`, because the row leaves the place where the finger is. A tap
   on a ticked item removes the tick with no `Deshacer`.

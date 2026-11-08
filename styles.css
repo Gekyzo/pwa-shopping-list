@@ -426,6 +426,7 @@
 
   /* @extends dock
      @state searching  The search is open: the field and Cancelar take the dock.
+     @part dock-shop-icon  The shop before the name of the list in the chip of the dock, in --done (DSV-33).
      @part dock-shop-name  The name of the list in the chip of the dock, cut with an ellipsis. */
   /* The search button and the add button stay at the end of the dock, also with no shop list:
      the add button keeps no auto margin, so it closes the group beside the search button. */
@@ -464,9 +465,8 @@
   }
 
   /* @extends dock */
-  /* Left hand: the shared mirror would read the arrows backwards, so ‹ chip › keep their order and
-     only the search button and the add button move to the start side, the add button first. The
-     search mode mirrors as the shared dock. */
+  /* Left hand: the search button and the add button move to the start side, the add button first,
+     and the chip goes to the end. The search mode mirrors as the shared dock. */
   [data-hand="left"] .dock {
     flex-direction: row;
     justify-content: flex-start;
@@ -478,6 +478,10 @@
 
   [data-hand="left"] .dock:not(.searching) > .dock-add {
     order: -2;
+  }
+
+  [data-hand="left"] .dock > .chip {
+    margin-inline: auto 0;
   }
 
   [data-hand="left"] .dock.searching {
@@ -494,13 +498,24 @@
     padding-inline-start: var(--space-2);
   }
 
-  /* The dock holds five controls below 600px: the chip shrinks, and a long name ends in an ellipsis. */
-  /* A flex chip, so that a long name (`Todas las tiendas`, a long shop) ends in an ellipsis and the
-     count and the chevron stay inside the chip. */
+  /* The chip is the shop pill of the phone screen of Compra (DSV-33): white, round, at the start of
+     the dock, as wide as its text. A long name (`Todas las tiendas`, a long shop) ends in an
+     ellipsis, and the icon, the count and the chevron stay inside the pill. */
   .dock .chip {
     display: flex;
+    flex: 0 1 auto;
     align-items: center;
+    gap: var(--space-2);
     min-width: 0;
+    margin-inline-end: auto;
+    padding-inline: var(--space-4);
+    border-radius: var(--radius-pill);
+    font-weight: var(--weight-strong);
+  }
+
+  .dock-shop-icon {
+    flex: none;
+    color: var(--done);
   }
 
   .dock-shop-name {
@@ -511,7 +526,7 @@
   }
 
   .dock .chip .chevron {
-    margin-inline-start: var(--space-2);
+    color: var(--muted);
   }
 
   /* An icon button beside an input stands at its bottom edge. */
@@ -1095,15 +1110,16 @@
     }
   }
 
-  /* The quantity is a tonal chip with no edge, as in the Bodega screens (DSV-15). */
+  /* The quantity is a 15px tonal chip with no edge and 4px corners, as in the Bodega screens
+     (DSV-15, DSV-33). */
   .item-row-qty {
     justify-self: end;
-    padding: var(--space-half) var(--space-2);
+    padding: var(--space-1) calc(var(--space-2) + var(--space-half));
     border: 0;
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-s);
     background: var(--secondary);
     color: var(--text);
-    font-size: var(--text-label-md);
+    font-size: var(--text-label-lg);
     font-variant-numeric: tabular-nums;
     font-weight: var(--weight-medium);
   }
@@ -1150,8 +1166,14 @@
     display: none;
   }
 
+  /* The grip is an 18px mark in the outline colour (DSV-33). */
   .row-handle {
-    color: var(--muted);
+    color: var(--struck);
+  }
+
+  .row-handle > .icon {
+    width: calc(var(--space-4) + var(--space-half));
+    height: calc(var(--space-4) + var(--space-half));
   }
 
   /* A finger slides the row for its actions: the button is for a mouse (ROW-16). */
@@ -1288,6 +1310,179 @@
   /* A bought tick is filled, but quieter than the rows still to buy. */
   .item-row.bought .item-row-check {
     opacity: 0.7;
+  }
+
+  /* @extends toast
+     @state done       The toast has Deshacer: the change took place (DSV-17).
+     @part toast-icon  The check before the text of a done toast, in --inverse-primary. */
+  .toast-icon {
+    display: none;
+    flex: none;
+    color: var(--inverse-primary);
+  }
+
+  .toast.done > .toast-icon {
+    display: block;
+  }
+
+  /* @extends app-header
+     @part app-bar         The bar above the title of Compra below 600px: the name of the app and
+                           Terminar compra, in place of the three dots (DSV-33).
+     @part app-bar-brand   The basket and the name of the app, at the start of the bar.
+     @part app-bar-finish  Terminar compra, a text button in --done that opens the trip sheet. */
+  .app-bar {
+    display: none;
+  }
+
+  /* DSV-33: the phone screen of Compra. The bar and the toast at the top are for a phone only, so
+     the screens from 600px reset them. The rows below hold below 1024px, where the desktop screen
+     of Compra takes over (DSV-24). */
+  /* The bar is a 56px band across the top of the header, with a line below it. Its outer width is
+     the full header, so the title and the tools wrap to the next line. */
+  .app-bar:not([hidden]) {
+    display: flex;
+    flex: 0 0 calc(100% + var(--space-4) * 2);
+    align-items: center;
+    justify-content: space-between;
+    height: calc(56px + env(safe-area-inset-top));
+    margin: calc((var(--space-4) + env(safe-area-inset-top)) * -1) calc(var(--space-4) * -1) var(--space-1);
+    padding: env(safe-area-inset-top) var(--space-2) 0 var(--space-4);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .app-bar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-group);
+    font-weight: var(--weight-strong);
+  }
+
+  .app-bar-brand > .icon {
+    color: var(--done);
+  }
+
+  .app-bar > .app-bar-finish {
+    color: var(--done);
+    font-size: var(--text-label-lg);
+    font-weight: var(--weight-strong);
+  }
+
+  /* Left hand: Terminar compra at the start of the bar, in reach of the thumb (NAV-13). */
+  [data-hand="left"] .app-bar:not([hidden]) {
+    flex-direction: row-reverse;
+    padding-inline: var(--space-2) var(--space-4);
+  }
+
+  /* Terminar compra of the bar takes the place of the three dots. */
+  .app-bar:not([hidden]) ~ .header-trip {
+    display: none;
+  }
+
+  /* The toast stands at the top of the screen, over the bar, and enters from above. */
+  .toast,
+  body:has(.dock:not([hidden])) .toast {
+    top: calc(var(--space-2) + env(safe-area-inset-top));
+    bottom: auto;
+  }
+
+  .toast[hidden] {
+    transform: translateY(-12px);
+  }
+
+  @starting-style {
+    .toast {
+      transform: translateY(-12px);
+    }
+  }
+
+  /* From 600px: no bar, the three dots, and the toast at the bottom as in the design system. The
+     selector of the three dots is as specific as the one above, so Terminar compra of the header
+     still takes their place from 1024px (NAV-9). */
+  @media (min-width: 600px) {
+    .app-bar:not([hidden]) {
+      display: none;
+    }
+
+    .app-bar:not([hidden]) ~ .header-trip {
+      display: inline-flex;
+    }
+
+    .toast,
+    body:has(.dock:not([hidden])) .toast {
+      top: auto;
+      bottom: calc(env(safe-area-inset-bottom) + var(--tap-l) + var(--space-6));
+    }
+
+    .toast[hidden] {
+      transform: translateY(12px);
+    }
+
+    @starting-style {
+      .toast {
+        transform: translateY(12px);
+      }
+    }
+  }
+
+  /* After the rules above: an open sheet has the bottom of the screen at each width, so the toast
+     goes to the top, as in the design system. */
+  body:has(.sheet-layer:not([hidden])) .toast {
+    top: calc(var(--space-2) + env(safe-area-inset-top));
+    bottom: auto;
+  }
+
+  /* A row is 60px: the 32px tick with 14px above and below it. */
+  .item-row-check {
+    margin-block: calc(var(--space-3) + var(--space-half));
+  }
+
+  /* A bought row fades as a whole on its opaque ground, so the action below it never shows
+     through. Only its name is struck; the shops and the quantity are faded, not struck. */
+  .item-row.bought .item-row-body > * {
+    opacity: 0.65;
+  }
+
+  .item-row.bought .item-row-name {
+    text-decoration: none;
+  }
+
+  .item-row.bought .item-row-label {
+    text-decoration: line-through var(--strike) var(--struck);
+  }
+
+  .item-row.bought .item-row-qty {
+    box-shadow: none;
+    background: var(--secondary);
+  }
+
+  /* From 1024px the rows of the desktop screen (DSV-24): the tick with 12px above and below it, and
+     a bought row as before, with its name and meta struck and its quantity drawn. */
+  @media (min-width: 1024px) {
+    .item-row-check {
+      margin-block: var(--space-3);
+    }
+
+    .item-row.bought .item-row-body > * {
+      opacity: 1;
+    }
+
+    .item-row.bought .item-row-body > .item-row-check {
+      opacity: 0.7;
+    }
+
+    .item-row.bought .item-row-name {
+      text-decoration: line-through var(--strike) var(--struck);
+    }
+
+    .item-row.bought .item-row-label {
+      text-decoration: none;
+    }
+
+    .item-row.bought .item-row-qty {
+      box-shadow: inset 0 0 0 1px var(--line);
+      background: var(--surface);
+    }
   }
 
   /* @extends list-group

@@ -364,8 +364,48 @@ test('from 1024px the title of a group is 15px, with its count beside it (DSV-24
   assert.match(block('.group-head-button > .group-head-count', wide), /margin-inline-start:\s*0/);
 });
 
-test('the edit button of a row is the grip, in --muted (DSV-24)', () => {
-  assert.match(block('.row-handle'), /color:\s*var\(--muted\)/);
+test('the edit button of a row is the grip, an 18px mark in --struck (DSV-33)', () => {
+  assert.match(block('.row-handle'), /color:\s*var\(--struck\)/);
+  assert.match(block('.row-handle > .icon'), /width:\s*calc\(var\(--space-4\) \+ var\(--space-half\)\)/);
+});
+
+// DSV-33: the phone screen of Compra. `narrow` is styles.css outside its width queries.
+const narrow = plain.replace(/@media \(min-width: \d+px\) \{[\s\S]*?\n  \}\n/g, '');
+const from600 = [...plain.matchAll(/@media \(min-width: 600px\) \{([\s\S]*?)\n  \}\n/g)].map(([, inner]) => inner).join('\n');
+
+test('below 600px the bar of Compra is a 56px band with a line below it, in place of the three dots (DSV-33)', () => {
+  const bar = block('.app-bar:not([hidden])', narrow);
+  assert.match(bar, /display:\s*flex/);
+  assert.match(bar, /height:\s*calc\(56px \+ env\(safe-area-inset-top\)\)/);
+  assert.match(bar, /border-bottom:\s*1px solid var\(--line\)/);
+  assert.match(block('.app-bar', narrow), /display:\s*none/);
+  assert.match(block('.app-bar > .app-bar-finish', narrow), /color:\s*var\(--done\)/);
+  assert.match(block('.app-bar:not([hidden]) ~ .header-trip', narrow), /display:\s*none/);
+  assert.match(block('.app-bar:not([hidden])', from600), /display:\s*none/);
+  assert.match(block('.app-bar:not([hidden]) ~ .header-trip', from600), /display:\s*inline-flex/);
+});
+
+test('below 600px the toast stands at the top, and from 600px at the bottom (DSV-33)', () => {
+  assert.match(block('.toast', narrow), /top:\s*calc\(var\(--space-2\) \+ env\(safe-area-inset-top\)\);\s*bottom:\s*auto/);
+  assert.match(block('.toast', from600), /top:\s*auto/);
+  assert.match(block('body:has(.sheet-layer:not([hidden])) .toast', narrow), /bottom:\s*auto/);
+  assert.match(block('.toast.done > .toast-icon'), /display:\s*block/);
+});
+
+test('below 1024px a row is 60px, its quantity a 15px chip, and a bought row fades with only its name struck (DSV-33)', () => {
+  assert.match(block('.item-row-check', narrow), /margin-block:\s*calc\(var\(--space-3\) \+ var\(--space-half\)\)/);
+  assert.match(block('.item-row-qty', narrow), /font-size:\s*var\(--text-label-lg\)/);
+  assert.match(block('.item-row.bought .item-row-body > *', narrow), /opacity:\s*0\.65/);
+  assert.match(block('.item-row.bought .item-row-label', narrow), /line-through/);
+  assert.match(block('.item-row.bought .item-row-name', wide), /line-through/);
+  assert.match(block('.item-row.bought .item-row-body > *', wide), /opacity:\s*1/);
+});
+
+test('the shop chip of the dock is a round pill at its start, with the shop icon in --done (DSV-33)', () => {
+  const chip = block('.dock .chip', narrow);
+  assert.match(chip, /border-radius:\s*var\(--radius-pill\)/);
+  assert.match(chip, /margin-inline-end:\s*auto/);
+  assert.match(block('.dock-shop-icon', narrow), /color:\s*var\(--done\)/);
 });
 
 test('from 1024px the foot of the sidebar is a tonal chip below a line (DSV-25)', () => {

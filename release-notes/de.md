@@ -4,6 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+- Auf dem Handy sieht **Einkauf** mehr wie der Entwurf aus: oben eine Leiste mit der Schaltfläche **Einkauf beenden** (statt der drei Punkte), ein Dock mit dem Geschäft links und ohne Pfeile, höhere Zeilen mit größerer Menge, und **Gekauft** ist von Anfang an offen. Ein gekaufter Artikel zeigt keinen Griff mehr: **Bearbeiten** bleibt beim Wischen. Die Meldung mit **Rückgängig** erscheint oben, mit einem Häkchen.
 - Auf breiten Bildschirmen sieht der Kopf von **Rezepte** mehr wie der Entwurf aus: die Suche hat eine eigene Zeile, die Schaltfläche **Filter** zeigt oder verbirgt die Filter, und unter dem Titel steht, ob die Rezepte auf diesem Gerät bleiben oder synchronisiert werden.
 - Auf breiten Bildschirmen sieht **Rezepte** mehr wie der Entwurf aus: jedes Rezept ist eine Karte mit seinen Schaltflächen unten, und das Feld eines Rezepts hat die Schaltfläche **Zum Einkauf hinzufügen**, die sagt, wie viele Produkte sie hinzufügt. Auf jedem Bildschirm zeigt ein Rezept, wie viele seiner Produkte in der Liste sind, und markiert jedes mit einem grünen Punkt.
 - Im **Menü** zeigt auf Bildschirmen, die breiter als ein Handy sind, das Feld **Frühere Wochen** die letzten drei Wochen mit Mahlzeiten, jede mit der Schaltfläche **Diese Woche wiederholen**. Die Karte **Automatischer Korb** sagt, wie viele Produkte **Korb füllen** hinzufügt, und ersetzt das Feld **Für den Korb**.

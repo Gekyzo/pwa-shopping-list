@@ -4,6 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
+- On a phone, **Shopping** looks more like the design: a bar at the top with the **Finish shopping** button (in place of the three dots), a dock with the shop at the left and no arrows, taller rows with a larger quantity, and **Bought** open from the start. A bought item no longer shows the grip: **Edit** is still there when you slide it. The message with **Undo** shows at the top, with a check mark.
 - On wide screens, the **Recipes** header looks more like the design: the search has its own line, the **Filters** button shows or hides the filters, and below the title you see whether the recipes are kept on this device or synced.
 - On wide screens, **Recipes** looks more like the design: each recipe is a card with its buttons at the foot, and the panel of a recipe has the **Add to Shopping** button, which says how many products it adds. On every screen, a recipe shows how many of its products are in the list and marks each one with a green dot.
 - In **Menu**, on screens wider than a phone, the **Previous weeks** panel shows the last three weeks with meals, each with a **Repeat this week** button. The **Automatic basket** card says how many products **Fill basket** adds, and replaces the **For the basket** panel.
