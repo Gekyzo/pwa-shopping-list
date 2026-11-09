@@ -14,6 +14,9 @@ export const createWorld = () => {
     copy: null,
     newId: () => `id-${(counter += 1)}`,
     storage: fakeStorage(),
+    // Monday: the week of today is "2026-11-09".
+    today: '2026-11-09',
+    shared: null,
   };
 };
 
@@ -40,3 +43,6 @@ export const yesNo = (text) => {
 
 // A comma-separated list of names; an empty text is an empty list.
 export const names = (text) => text.split(',').map((name) => name.trim()).filter(Boolean);
+
+// The Monday of the week of a date `YYYY-MM-DD`, at noon local time so no time zone moves it.
+export const dateOf = (text) => new Date(`${text}T12:00:00`);

@@ -34,7 +34,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | 4 | Arrange: groups, order and moves (`04-arrange.md`) | ☑ |  | 2026-11-09 |  |
 | 5 | Shops (`05-shops.md`) | ☑ |  | 2026-11-09 |  |
 | 6 | Aisles (`17-aisles.md`) | ☑ |  | 2026-11-09 |  |
-| 7 | Recipes (`06-recipes.md`) | ☐ |  |  |  |
+| 7 | Recipes (`06-recipes.md`) | ☑ |  | 2026-11-09 |  |
 | 8 | Menu (`13-menu.md`) | ☐ |  |  |  |
 | 9 | Screen rules a pure module owns (`07-screen.md`) | ☐ |  |  |  |
 | 10 | Languages, version, install and integrations (`09`, `10`, `11`, `16`) | ☐ |  |  |  |

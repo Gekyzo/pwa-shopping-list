@@ -77,3 +77,21 @@ AISLE-15 screen The message and Deshacer of a delete.
 AISLE-16 screen The aisle chips of the edit sheet.
 AISLE-17 screen A tap on an aisle chip sets or clears it; the set is AISLE-7.
 AISLE-18 screen The text of the edit sheet with no aisle.
+
+# 06-recipes.md
+REC-3 screen The + button of Recetas, its add sheet and the open of the new recipe; the add is REC-2.
+REC-4 screen The recipe row: name, badge, meta line, link and send buttons.
+REC-5 screen The slide of a recipe row; the send is REC-17.
+REC-11 screen The product field is empty and keeps the focus after an add.
+REC-16 screen The Deshacer of a save or a removal of a link.
+REC-23 screen The search field of Recetas, where it opens and when it shows; the match is REC-24.
+REC-25 screen The text of a search with no match.
+REC-26 screen The search text is not stored; a section change closes it.
+REC-29 screen A new recipe row opens, flashes and scrolls into view.
+REC-30 screen A delete closes the row before the recipe goes.
+REC-31 screen The motion of a new or a removed product row.
+REC-32 screen A row that Deshacer puts back opens and flashes.
+REC-33 screen The sheet Receta: its fields, Enter, Escape and the save on a loss of focus.
+REC-34 screen The veil, Escape and the cases that close the sheet.
+REC-37 screen The dish row and its chef's hat button; the turn into a recipe is MENU-17.
+REC-39 screen The recipe pane from 840px and the columns of the cards.

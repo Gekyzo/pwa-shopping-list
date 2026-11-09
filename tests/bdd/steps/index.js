@@ -6,6 +6,8 @@ import { defineRecipeSteps } from './recipes.js';
 import { defineAisleSteps } from './aisles.js';
 import { defineArrangeSteps } from './arrange.js';
 import { defineShopSteps } from './shops.js';
+import { defineMenuSteps } from './menu.js';
+import { defineSharedSteps } from './shared.js';
 
 export const defineAllSteps = (registry) => {
   defineCommonSteps(registry);
@@ -16,4 +18,6 @@ export const defineAllSteps = (registry) => {
   defineAisleSteps(registry);
   defineArrangeSteps(registry);
   defineShopSteps(registry);
+  defineMenuSteps(registry);
+  defineSharedSteps(registry);
 };
