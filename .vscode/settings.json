@@ -1,0 +1,7 @@
+{
+  "cucumber.features": ["tests/features/**/*.feature"],
+  "cucumber.glue": ["tests/bdd/steps/**/*.js"],
+  "cucumberautocomplete.steps": ["tests/bdd/steps/**/*.js"],
+  "cucumberautocomplete.syncfeatures": "tests/features/**/*.feature",
+  "cucumberautocomplete.strictGherkinCompletion": false
+}

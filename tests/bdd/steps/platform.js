@@ -87,8 +87,7 @@ export const definePlatformSteps = ({ Given, When, Then }) => {
     const shown = parseNotes(world.notes).map(({ version, date, notes }) => ({ version, date, notes: notes.join(' · ') }));
     assert.deepEqual(shown, table.hashes);
   });
-  Then(
-    /at a start with the seen version (\S+), the running version (\S+), notes (read|lost) and (no cover|a cover), Novedades shows "([^"]*)" and stores (\S+)/,
+  Then(/at a start with the seen version (\S+), the running version (\S+), notes (read|lost) and (no cover|a cover), Novedades shows "([^"]*)" and stores (\S+)/,
     (world, seen, running, loaded, cover, show, store) => {
       const result = nextSeen({
         entries: parseNotes(world.notes),
@@ -111,8 +110,7 @@ export const definePlatformSteps = ({ Given, When, Then }) => {
     assert.deepEqual(textParts(note), expected);
   });
 
-  Then(
-    'from the install state {word} the event {word} gives {word}, and the Install button shows: {word}',
+  Then('from the install state {word} the event {word} gives {word}, and the Install button shows: {word}',
     (world, from, event, to, button) => {
       const next = installNext(from, event);
       assert.equal(next, to);
@@ -144,8 +142,7 @@ export const definePlatformSteps = ({ Given, When, Then }) => {
   When('the worker answers the manifest with the text:', (world, json) => {
     world.manifest = plain(worker.localizeManifest(world.manifest, JSON.parse(json)));
   });
-  Then(
-    'the manifest has the name {string}, the short name {string}, the language {string} and the description {string}',
+  Then('the manifest has the name {string}, the short name {string}, the language {string} and the description {string}',
     (world, name, shortName, lang, description) => {
       const { manifest } = world;
       assert.deepEqual(

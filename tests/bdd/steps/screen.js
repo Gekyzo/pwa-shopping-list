@@ -54,8 +54,7 @@ export const defineScreenSteps = ({ Given, When, Then }) => {
   Then('a {word} drag slides the screen: {word}', (world, pointer, answer) => {
     assert.equal(gesturePointer(pointerOf(pointer)), yesNo(answer));
   });
-  Then(
-    /the empty section (\w+) with the search "([^"]*)", recipes (yes|no) and the sample (yes|no) shows (\S+), (\S+), (\S+) and (\S+)/,
+  Then(/the empty section (\w+) with the search "([^"]*)", recipes (yes|no) and the sample (yes|no) shows (\S+), (\S+), (\S+) and (\S+)/,
     (world, view, query, recipes, sample, title, text, action, secondary) => {
       const shown = emptyAction(view, { query, hasRecipes: yesNo(recipes), sample: yesNo(sample) });
       assert.deepEqual(
@@ -103,8 +102,7 @@ export const defineScreenSteps = ({ Given, When, Then }) => {
     assert.equal(fabState(from, to, before), after);
   });
 
-  Then(
-    'a window of {int} px is a {word} with the nav {word}, the dock {word}, the panels {word}, the recipe pane {word} and the search field {word}',
+  Then('a window of {int} px is a {word} with the nav {word}, the dock {word}, the panels {word}, the recipe pane {word} and the search field {word}',
     (world, width, cls, nav, dock, panels, pane, field) => {
       assert.equal(deviceClass(width), cls);
       assert.deepEqual(features(cls), { nav, dock: yesNo(dock), panels, recipePane: yesNo(pane), searchField: yesNo(field) });
@@ -125,8 +123,7 @@ export const defineScreenSteps = ({ Given, When, Then }) => {
   Then(/a click of a (\w+) with detail (\d+) on the (body|check mark) does (\w+)/, (world, pointer, detail, where, action) => {
     assert.equal(rowClick({ pointerType: pointerOf(pointer), detail: Number(detail), onCheck: where === 'check mark' }), action);
   });
-  Then(
-    'a drag of {int} px of a row with sides of {int} and {int} px and {word} open settles on {word}',
+  Then('a drag of {int} px of a row with sides of {int} and {int} px and {word} open settles on {word}',
     (world, dx, start, end, open, settles) => {
       assert.equal(orNone(settle(dx, { start, end }, open === 'none' ? null : open)), settles);
     },
@@ -147,8 +144,7 @@ export const defineScreenSteps = ({ Given, When, Then }) => {
   Then('the pages of the walkthrough are {string}', (world, text) => {
     assert.deepEqual(PAGES, names(text));
   });
-  Then(
-    'a move {word} from page {int} of the walkthrough shows page {int}, with Atrás {word} and the last page {word}',
+  Then('a move {word} from page {int} of the walkthrough shows page {int}, with Atrás {word} and the last page {word}',
     (world, move, page, to, back, last) => {
       const index = step(page - 1, { forward: 1, back: -1, nowhere: 0 }[move]);
       assert.equal(index + 1, to);
@@ -163,8 +159,7 @@ export const defineScreenSteps = ({ Given, When, Then }) => {
   When('the walkthrough closes', (world) => {
     saveOnboarded(world.storage);
   });
-  Then(
-    'the page {word} with {int} items and {int} recipes offers the sample: {word}, with the text {string}',
+  Then('the page {word} with {int} items and {int} recipes offers the sample: {word}, with the text {string}',
     (world, page, items, recipes, answer, key) => {
       const offer = offersSample({ page, items, recipes });
       assert.equal(offer, yesNo(answer));
