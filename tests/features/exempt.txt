@@ -105,3 +105,46 @@ MENU-14 screen Menú shows the week with no recipe, no empty text, no + button a
 MENU-16 screen The field of the meal sheet that filters its chips, and its texts.
 MENU-18 screen The row Añadir «text» sin receta and Enter in the field; the dish is MENU-3.
 MENU-19 screen The buttons Crear receta and Quitar of a dish; the turn is MENU-17.
+
+# 07-screen.md
+NAV-2 screen A tap on the bottom bar changes the section and closes the open layers.
+NAV-4 screen Where a section slide may start.
+NAV-5 screen The motion of the content of a new section.
+NAV-6 screen The groups and rows of Ajustes.
+NAV-9 screen The trip button of the header and the trip sheet.
+NAV-10 screen The trip sheet closes as each sheet does, and its focus.
+NAV-11 screen The choice Mano of Ajustes; the stored hand is NAV-12.
+NAV-13 screen The controls that change side with Izquierda.
+NAV-14 screen What Izquierda does not change.
+NAV-15 screen The choice Tema of Ajustes; the stored theme is NAV-17.
+NAV-16 screen The colours of Automático, Claro and Oscuro.
+NAV-18 prose Retired: the Ledger look of design system 0.7.0.
+NAV-19 screen The choice Densidad of Ajustes; the stored density is NAV-21.
+NAV-20 screen The compact token set of the rows.
+NAV-22 static tests/sheets.test.js proves when a sheet save shows Guardado; the head, the foot and the scroll of a sheet are a browser check.
+NAV-23 screen A drag down of the head of a sheet closes it.
+NAV-26 screen The rail and the sidebar from 600px; the classes are NAV-28.
+NAV-27 screen The column and the group rows of Ajustes from 840px.
+ROW-3 screen The actions of a slide to the left.
+ROW-4 screen A drag becomes a slide after 10 px; a vertical drag scrolls.
+ROW-6 screen One row is open at a time; a tap out closes it.
+ROW-7 screen The edit sheet Editar and its fields.
+ROW-8 screen The click after a drag, a hold or a section slide is ignored for 350 ms.
+ROW-9 screen The motion of a row that appears or goes.
+ROW-10 screen A long press does not open the menu of the browser.
+ROW-12 screen A recipe row slides with the rules of an item row.
+ROW-16 screen The button of more actions on a device that hovers.
+MSG-1 screen One message shows at a time.
+MSG-2 screen How long a message stays.
+MSG-3 screen Deshacer puts back the full state of before and saves it.
+MSG-4 screen A later change hides the message and the earlier undo.
+MSG-5 screen The changes that have Deshacer.
+MSG-6 screen The changes that have no Deshacer.
+MSG-7 screen A rejected operation shows its error; each operation of the scenarios that is refused leaves the state as it was.
+MSG-8 screen The message of a save that fails; the failed save is STORE-9.
+ONB-2 screen The drawing, the title and the text of a page.
+ONB-5 screen Saltar, Empezar and Escape close the walkthrough.
+ONB-9 screen Ver la introducción of Ajustes opens the walkthrough from page 1.
+ONB-10 screen The app below the walkthrough is inert.
+ONB-11 screen The dialog role and label of the walkthrough.
+ONB-12 screen A page changes with no animation under reduced motion.

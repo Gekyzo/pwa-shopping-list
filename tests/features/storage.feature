@@ -221,3 +221,30 @@ Feature: Browser storage
     Given the browser storage fails
     When the app loads the state
     Then the state is empty
+
+  @NAV-12 @NAV-17 @NAV-21
+  Scenario Outline: The <preference> <value> is stored under <key> as "<stored>"
+    Then the <preference> is <default>
+    When I choose the <preference> <value>
+    Then the <preference> is <value>
+    And the key "<key>" holds the text "<stored>"
+    When I choose the <preference> <default>
+    Then the key "<key>" is not stored
+
+    Examples:
+      | preference | default | value   | key              | stored  |
+      | hand       | right   | left    | shopping.hand    | left    |
+      | theme      | system  | dark    | shopping.theme   | dark    |
+      | theme      | system  | light   | shopping.theme   | light   |
+      | density    | normal  | compact | shopping.density | compact |
+
+  @NAV-12 @NAV-17 @NAV-21
+  Scenario Outline: An unknown stored <preference> reads as <default>
+    Given the key "<key>" holds "other"
+    Then the <preference> is <default>
+
+    Examples:
+      | preference | key              | default |
+      | hand       | shopping.hand    | right   |
+      | theme      | shopping.theme   | system  |
+      | density    | shopping.density | normal  |

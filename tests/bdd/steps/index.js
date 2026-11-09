@@ -8,6 +8,7 @@ import { defineArrangeSteps } from './arrange.js';
 import { defineShopSteps } from './shops.js';
 import { defineMenuSteps } from './menu.js';
 import { defineSharedSteps } from './shared.js';
+import { defineScreenSteps } from './screen.js';
 
 export const defineAllSteps = (registry) => {
   defineCommonSteps(registry);
@@ -20,4 +21,5 @@ export const defineAllSteps = (registry) => {
   defineShopSteps(registry);
   defineMenuSteps(registry);
   defineSharedSteps(registry);
+  defineScreenSteps(registry);
 };
