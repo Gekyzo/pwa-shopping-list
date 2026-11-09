@@ -10,7 +10,7 @@ Feature: Postponed items
       | Bread | active | no        | yes    |       |          |
       | Pilas | saved  | no        | no     |       |          |
 
-  @LIST-40
+  @LIST-40 @ENG-1
   Scenario: Posponer keeps recurrent, the shops and the quantity
     When I postpone "Milk"
     Then there is no error
@@ -21,7 +21,7 @@ Feature: Postponed items
       | Pilas | saved     | no        | no     |       |          |
     And the input state did not change
 
-  @LIST-40
+  @LIST-40 @ENG-2
   Scenario Outline: A <case> item cannot be postponed
     When I postpone "<name>"
     Then the error is "error.onlyOpenPostpone"
@@ -82,7 +82,7 @@ Feature: Postponed items
     Then 2 items came back
     And the postponed items are ""
 
-  @LIST-42
+  @LIST-42 @ENG-3
   Scenario: With no postponed item nothing comes back
     When I bring back all postponed items
     Then 0 items came back

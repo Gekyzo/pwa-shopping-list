@@ -2,6 +2,7 @@
 
 Feature: The world of a scenario
 
+  @ENG-8
   Scenario: The first scenario counts ids from 1
     Given an empty list
     When I add "Milk"
@@ -9,6 +10,7 @@ Feature: The world of a scenario
       | id   | name |
       | id-1 | Milk |
 
+  @ENG-8
   Scenario: The second scenario counts ids from 1 again
     Given an empty list
     When I add "Bread"

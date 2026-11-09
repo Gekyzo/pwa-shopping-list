@@ -152,7 +152,7 @@
 | `tests/changelog.test.js` | The release of `CHANGELOG.md` and of the release notes by `scripts/changelog.mjs`, which the version bump uses (VER-17, VER-19) |
 | `tests/pair.test.js` | The users, origins and options of `scripts/pair.mjs`, which `npm run pair` runs for a local test between two people |
 | `tests/spec.test.js` | The facts of this specification that the code can prove (ENG-12) |
-| `tests/features.test.js` | The scenarios of `tests/features/*.feature` with the steps of `tests/bdd/steps/`; each rule tag names a rule of this specification (ENG-18) |
+| `tests/features.test.js` | The scenarios of `tests/features/*.feature` with the steps of `tests/bdd/steps/`; each live rule of this specification has a scenario or an exempt line, and each tag names a rule (ENG-18) |
 | `tests/gherkin.test.js` | The Gherkin parser, the step registry, the scenario run and the rule coverage check of `tests/bdd/` (ENG-18) |
 
 A unit test uses `node:test` with `node:assert/strict`, one behaviour for each test, and checks
@@ -167,9 +167,10 @@ that the input state does not change.
   in `tests/bdd/steps/<module>.js`. A scenario names the rules it proves as tags, such as `@TRIP-2`,
   and each such tag must name a rule of this specification. A step with no definition, or with two,
   fails the scenario, and so does a Then step that meets a Given or When definition, or the
-  reverse. `@skip` skips a scenario and `@todo` marks it as to do. Each live rule of a
-  checked document of this specification has a scenario, or a line in `tests/features/exempt.txt`
-  with its kind (`screen`, `static` or `prose`) and its reason (`tests/bdd/coverage.js`).
+  reverse. `@skip` skips a scenario and `@todo` marks it as to do. Each live rule of this
+  specification has a scenario, or a line in `tests/features/exempt.txt` with its kind (`screen`,
+  `static` or `prose`) and its reason (`tests/bdd/coverage.js`). A new rule thus needs one of the
+  two before `npm test` passes.
 - **ENG-19** A change of behaviour starts with its acceptance scenario: the rule changes first, then
   its scenario, which fails, then the code with its unit tests. A bug fix starts with a scenario that
   shows the bug. A rule that only the screen proves gets no scenario; its browser check (ENG-9) stays.

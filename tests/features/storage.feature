@@ -209,7 +209,7 @@ Feature: Browser storage
     When the app loads the state
     Then the menu has 1 meal, in the week of today
 
-  @STORE-9
+  @STORE-9 @ENG-5
   Scenario: A write that fails tells the caller
     Given the list has "Milk"
     And the browser storage fails

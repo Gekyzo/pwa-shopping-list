@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { createRegistry } from './bdd/steps.js';
 import { runFeatures, featureFiles } from './bdd/run.js';
 import { parseFeature } from './bdd/gherkin.js';
@@ -12,16 +12,11 @@ const root = new URL('../', import.meta.url).pathname;
 const dir = `${root}tests/features/`;
 const specDir = `${root}docs/spec/`;
 
-// The spec documents that the coverage check reads. A task of the BDD coverage plan adds its
-// documents; the others are pending.
-const CHECKED = ['02-data-model.md', '03-lists.md', '04-arrange.md', '05-shops.md', '06-recipes.md', '07-screen.md', '08-storage.md', '09-languages.md', '10-offline-version.md', '11-integrations.md', '13-menu.md', '16-install.md', '17-aisles.md', '18-account-sync.md', '19-sharing.md', '20-address.md'];
-const PENDING = new Set(readdirSync(specDir).filter((file) => file.endsWith('.md') && !CHECKED.includes(file)));
-
 const registry = createRegistry();
 defineAllSteps(registry);
 runFeatures({ dir, registry, world: createWorld });
 
-test('the features cover each live rule of a checked spec document', () => {
+test('the features cover each live rule of the specification', () => {
   const tags = featureFiles(dir).flatMap((path) =>
     parseFeature(readFileSync(path, 'utf8'), path).scenarios.flatMap((scenario) => scenario.tags),
   );
@@ -29,7 +24,7 @@ test('the features cover each live rule of a checked spec document', () => {
     rules: readSpec(specDir),
     tags,
     exempt: parseExempt(readFileSync(`${dir}exempt.txt`, 'utf8')),
-    pending: PENDING,
+    pending: new Set(),
     exists: (path) => existsSync(root + path),
   });
   assert.deepEqual(gaps, { untested: [], both: [], unknown: [], removed: [], noEvidence: [] });

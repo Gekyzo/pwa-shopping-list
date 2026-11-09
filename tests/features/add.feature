@@ -62,7 +62,7 @@ Feature: Add sheet
       | saved     | empanada | yes        | active        | postponed   |
       | postponed | Panela   | yes        | saved         | active      |
 
-  @ADD-3 @ADD-5
+  @ADD-3 @ADD-5 @ENG-3
   Scenario: An add of the name of an item to buy in Compra changes nothing
     When I add "pan de molde" from the add sheet
     Then the bring back changed nothing

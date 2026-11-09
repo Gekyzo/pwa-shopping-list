@@ -23,7 +23,7 @@ Feature: Quantity
       | empty  | ""        |         |
       | spaces | "   "     |         |
 
-  @LIST-27
+  @LIST-27 @ENG-3
   Scenario: The same quantity changes nothing
     Given the list has items:
       | name  | quantity |

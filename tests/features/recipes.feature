@@ -13,7 +13,7 @@ Feature: Recipes
         | name     | products | link |
         | Tortilla |          |      |
 
-    @REC-2 @DATA-4
+    @REC-2 @DATA-4 @ENG-2
     Scenario Outline: The recipe name <name> is refused with <error>
       Given a recipe "Tortilla" with ""
       When I add the recipe <name>
@@ -49,7 +49,7 @@ Feature: Recipes
         | name   | products                   | link |
         | Paella | Arroz, AOVE, Gambas rojas  |      |
 
-    @REC-8 @DATA-5
+    @REC-8 @DATA-5 @ENG-2
     Scenario Outline: The product <product> is refused with <error>
       Given a recipe "Paella" with "Arroz"
       When I add the product <product> to "Paella"
@@ -128,7 +128,7 @@ Feature: Recipes
         | http://cocina.es              | http://cocina.es                |
         |                               |                                 |
 
-    @REC-14
+    @REC-14 @ENG-2
     Scenario Outline: The link "<typed>" is refused
       Given a recipe "Tortilla" with ""
       When I set the link of "Tortilla" to "<typed>"
@@ -170,7 +170,7 @@ Feature: Recipes
 
   Rule: Send
 
-    @REC-17
+    @REC-17 @ENG-2
     Scenario: A recipe with no product cannot be sent
       Given a recipe "Tortilla" with ""
       When I send the recipe "Tortilla"
@@ -356,7 +356,7 @@ Feature: Recipes
       Then the items shown are "Pasta, Sal"
       And the sent recipes are "Pasta con salsa de tomate"
 
-    @REC-28
+    @REC-28 @ENG-3
     Scenario Outline: The add of the sample changes nothing when <case>
       Given a recipe "<name>" with ""
       When I add the sample recipe "Pasta con salsa de tomate" with "Pasta"

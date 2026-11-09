@@ -65,7 +65,7 @@ Feature: Backup
     Then the delete of all data succeeded
     And the browser storage holds only "other.app"
 
-  @BACKUP-7
+  @BACKUP-7 @ENG-5
   Scenario: A delete that fails tells the caller
     Given the browser storage fails
     When I delete all data

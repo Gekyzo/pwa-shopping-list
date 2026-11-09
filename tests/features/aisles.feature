@@ -16,7 +16,7 @@ Feature: Aisles
     Then there is no error
     And the aisles are now "Fruta, Lácteos, Limpieza, Panadería"
 
-  @AISLE-2
+  @AISLE-2 @ENG-2
   Scenario Outline: The aisle name <name> is refused with <error>
     When I add the aisle <name>
     Then the error is "<error>"
@@ -29,7 +29,7 @@ Feature: Aisles
       | "LÁCTEOS"  | error.duplicateAisle |
       | " fruta "  | error.duplicateAisle |
 
-  @AISLE-4 @DATA-15
+  @AISLE-4 @DATA-15 @ENG-1
   Scenario: A rename also renames the aisle of each item that has it
     When I rename the aisle "lácteos" to "Lácteos y huevos"
     Then the aisles are now "Fruta, Lácteos y huevos, Limpieza"
@@ -45,13 +45,13 @@ Feature: Aisles
     Then there is no error
     And the aisles are now "FRUTA, Lácteos, Limpieza"
 
-  @AISLE-4
+  @AISLE-4 @ENG-3
   Scenario: A rename to the same name changes nothing
     When I rename the aisle "Fruta" to " Fruta "
     Then there is no error
     And the state did not change
 
-  @AISLE-4 @AISLE-2
+  @AISLE-4 @AISLE-2 @ENG-2
   Scenario: A rename to the name of another aisle is refused
     When I rename the aisle "Fruta" to "limpieza"
     Then the error is "error.duplicateAisle"
@@ -79,7 +79,7 @@ Feature: Aisles
       | Fruta    | up        | Fruta, Lácteos, Limpieza |
       | Limpieza | down      | Fruta, Lácteos, Limpieza |
 
-  @AISLE-6
+  @AISLE-6 @ENG-3
   Scenario: A move past an end changes nothing
     When I move the aisle "Fruta" up
     Then the state did not change
@@ -105,7 +105,7 @@ Feature: Aisles
       | Yogur | Fruta |
       | Sal   |       |
 
-  @AISLE-7
+  @AISLE-7 @ENG-2
   Scenario Outline: An unknown aisle gives error.aisleNotFound to <action>
     When I <action>
     Then the error is "error.aisleNotFound"
@@ -123,7 +123,7 @@ Feature: Aisles
     When I add the usual aisles "Fruta, Panadería, lácteos, Bebidas"
     Then the aisles are now "Fruta, Lácteos, Limpieza, Panadería, Bebidas"
 
-  @AISLE-8
+  @AISLE-8 @ENG-3
   Scenario: The usual aisles that are all there change nothing
     When I add the usual aisles "fruta, Limpieza"
     Then the state did not change

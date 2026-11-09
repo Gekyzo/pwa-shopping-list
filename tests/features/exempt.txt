@@ -213,3 +213,65 @@ ACC-11 screen The banner of a device with no session; its route is the banner ca
 
 # 19-sharing.md: no line; the scenarios tag each rule, and the sheet, the chips and the tags of
 # SHARE-5, SHARE-9 and SHARE-14 keep the browser check of ENG-9.
+
+# 01-product.md
+PROD-1 prose A product statement: one owner for each account, on one device or more.
+PROD-2 prose A product statement: mobile first, Chrome on Android.
+PROD-3 prose A product statement: the layout starts from a phone; the classes are NAV-28.
+PROD-4 prose A product statement: the data lives on the device first.
+PROD-5 prose A product statement: the network requests of the app.
+PROD-6 prose A product statement: each function works offline after the first load.
+PROD-7 prose A product statement: plain HTML, CSS and ES modules, with no build step and no dependency.
+PROD-8 prose A product statement: relative URLs; tests/aliases.test.js checks the import map.
+PROD-9 screen A destructive action has no confirmation; Deshacer restores the state for 5 seconds.
+
+# 12-engineering.md
+ENG-4 screen The screen applies an operation, saves, then builds the page again.
+ENG-6 static tests/layers.test.js checks that no module imports src/app.js.
+ENG-7 static tests/aliases.test.js checks the import map against the imports of package.json.
+ENG-9 prose A way of work: the screen code and sw.js are checked in a browser.
+ENG-10 prose A way of work: the git hooks are checked by hand in a scratch clone.
+ENG-11 prose A way of work: the definition of done.
+ENG-12 static tests/spec.test.js compares the specification with the code.
+ENG-13 prose A way of work: .githooks/pre-commit has no test (ENG-10).
+ENG-14 prose A way of work: a commit that changes no rule.
+ENG-15 prose A way of work: a rule changes in the same commit as its code.
+ENG-16 static tests/layers.test.js checks the layer rules of src/ui/.
+ENG-17 screen The debug log of the dev server, in the console of the browser.
+ENG-18 static tests/gherkin.test.js checks the parser, the registry, the run and the coverage check.
+ENG-19 prose A way of work: acceptance first.
+
+# 15-design-system.md
+DSV-1 static tests/design-files.test.js checks the files of design-system/.
+DSV-2 static tests/spec.test.js checks the links of the base sheet.
+DSV-3 static tests/design.test.js checks the layer statement and the parts of styles.css.
+DSV-4 static tests/design-files.test.js checks that styles.css copies no base rule.
+DSV-5 prose Retired: the rail at the side of the hand of design system 0.5.0.
+DSV-6 screen The sheet as a card from 840px.
+DSV-7 screen The layout of a window of at most 480px height.
+DSV-8 static tests/design.test.js runs each rule of design-system/rules.js and skips none.
+DSV-9 static tests/breakpoints.test.js and tests/device.test.js check the four width classes.
+DSV-10 static tests/layers.test.js checks the font files in SHELL; the type is a browser check.
+DSV-11 static tests/look.test.js checks the palette in both themes.
+DSV-12 screen The components of DESIGN.md as versions of the app.
+DSV-13 static tests/design.test.js checks the classes of the item rows.
+DSV-14 screen The detail of the Stitch screens.
+DSV-15 static tests/look.test.js checks the row name and its quantity chip.
+DSV-16 static tests/look.test.js checks the card Comprados (N).
+DSV-17 static tests/look.test.js and tests/markup.test.js check the dock.
+DSV-18 static tests/markup.test.js and tests/look.test.js check the sheet Editar.
+DSV-19 static tests/look.test.js checks the recipe card.
+DSV-20 static tests/markup.test.js and tests/look.test.js check Menú.
+DSV-21 static tests/look.test.js and tests/markup.test.js check Ajustes.
+DSV-22 static tests/look.test.js checks the rail from 1024px.
+DSV-23 static tests/markup.test.js checks the outline buttons.
+DSV-24 static tests/look.test.js checks the rows and group cards of Compra from 1024px.
+DSV-25 static tests/look.test.js checks the sidebar from 1024px.
+DSV-26 static tests/look.test.js checks the main area of Compra from 1024px.
+DSV-27 static tests/look.test.js checks the header of Compra from 1024px.
+DSV-28 static tests/look.test.js checks that every screen but Ajustes fills the content area.
+DSV-29 static tests/look.test.js checks Ajustes from 1024px.
+DSV-30 static tests/look.test.js checks Menú from 1024px.
+DSV-31 static tests/look.test.js checks Recetas from 1024px.
+DSV-32 static tests/look.test.js checks the header of Recetas from 1024px.
+DSV-33 static tests/look.test.js and tests/markup.test.js check the phone screen of Compra.

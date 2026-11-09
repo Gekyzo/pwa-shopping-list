@@ -19,7 +19,7 @@ Feature: Terminar compra
       | saved            | saved     | no        | no     | no      |
       | recurrent to buy | active    | yes       | no     | no      |
 
-  @TRIP-1
+  @TRIP-1 @ENG-2
   Scenario: Nothing to finish when no item is ticked, open or postponed
     Given the list has items:
       | name      | list   | recurrent |
@@ -29,7 +29,7 @@ Feature: Terminar compra
     Then the error is "error.nothingToStart"
     And the state did not change
 
-  @TRIP-2 @TRIP-3 @LIST-30 @LIST-42
+  @TRIP-2 @TRIP-3 @LIST-30 @LIST-42 @ENG-1
   Scenario: Each item goes where TRIP-2 says, in the same order
     Given the list has items:
       | name      | list      | recurrent | bought |

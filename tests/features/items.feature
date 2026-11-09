@@ -7,7 +7,7 @@ Feature: Items of the list
   Background:
     Given the list has "Milk"
 
-  @LIST-3 @LIST-4
+  @LIST-3 @LIST-4 @ENG-1
   Scenario: A new item is one-time and goes to the end of Compra
     When I add "  Bread  "
     Then there is no error
@@ -17,7 +17,7 @@ Feature: Items of the list
       | Bread | active | no        | no     |          |
     And the input state did not change
 
-  @LIST-1
+  @LIST-1 @ENG-2
   Scenario Outline: A blank name is rejected (<case>)
     When I add <name>
     Then the error is "error.nameRequired"
@@ -48,7 +48,7 @@ Feature: Items of the list
     Then there is no error
     And the list has 3 items
 
-  @LIST-10
+  @LIST-10 @ENG-2
   Scenario: Only an item of Compra can be ticked
     Given the list has items:
       | name      | list  |
@@ -57,7 +57,7 @@ Feature: Items of the list
     Then the error is "error.onlyActiveTick"
     And the state did not change
 
-  @LIST-8
+  @LIST-8 @ENG-1
   Scenario: A delete removes the item
     When I delete "Milk"
     Then the list has 0 items
@@ -98,6 +98,7 @@ Feature: Items of the list
         | Milk      |
         | Rye bread |
 
+    @ENG-2
     Scenario: A rename to the name of another item is rejected
       When I rename "Bread" to "milk"
       Then the error is "error.duplicateItem" for "Milk" in active

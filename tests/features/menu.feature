@@ -28,7 +28,7 @@ Feature: Menu
       Then the week "2026-11-09" has 0 meals
       And the week "2026-11-02" has 1 meal
 
-    @MENU-1 @MENU-3
+    @MENU-1 @MENU-3 @ENG-2
     Scenario Outline: A put in <what> gives error.unknownMeal
       When I put the recipe "Tortilla" in the <meal> of <day> in the week "<week>"
       Then the error is "error.unknownMeal"
@@ -58,13 +58,13 @@ Feature: Menu
         | 2026-11-09 | Tuesday | lunch  |          | Ensalada |
         | 2026-11-09 | Friday  | dinner | Tortilla |          |
 
-    @MENU-3 @DATA-13
+    @MENU-3 @DATA-13 @ENG-2
     Scenario: A recipe that does not exist is refused
       When I put the recipe "Paella" in the lunch of Monday in the week "2026-11-09"
       Then the error is "error.recipeNotFound"
       And the state did not change
 
-    @MENU-3
+    @MENU-3 @ENG-2
     Scenario: A dish with an empty name is refused
       When I put the dish "  " in the lunch of Monday in the week "2026-11-09"
       Then the error is "error.nameRequired"
@@ -130,14 +130,14 @@ Feature: Menu
       When I fill the basket from the week "2026-11-09"
       Then the items shown are "Huevos, Patata"
 
-    @MENU-6
+    @MENU-6 @ENG-2
     Scenario: A week with no meal gives error.menuEmpty
       Given the lunch of Monday in the week "2026-11-02" is the recipe "Tortilla"
       When I fill the basket from the week "2026-11-09"
       Then the error is "error.menuEmpty"
       And the state did not change
 
-    @MENU-6
+    @MENU-6 @ENG-2
     Scenario: A week whose meals give no product gives error.menuNoProducts
       Given the lunch of Monday in the week "2026-11-09" is the dish "Pizza"
       And the dinner of Monday in the week "2026-11-09" is the recipe "Sopa"
@@ -195,7 +195,7 @@ Feature: Menu
         | week       | day    | meal  | recipe | dish |
         | 2026-11-09 | Monday | lunch | Flan   |      |
 
-    @MENU-17
+    @MENU-17 @ENG-2
     Scenario: A name that is no dish of the week gives error.dishNotFound
       Given the lunch of Monday in the week "2026-11-16" is the dish "Pizza"
       When I turn the dish "Pizza" of the week "2026-11-09" into a recipe
@@ -232,7 +232,7 @@ Feature: Menu
         | 2026-11-09 | Monday | lunch  | Tortilla |       |
         | 2026-11-09 | Friday | dinner |          | Pizza |
 
-    @MENU-24
+    @MENU-24 @ENG-2
     Scenario: A week with no meal cannot be repeated
       When I repeat the week "2026-11-02" into "2026-11-09"
       Then the error is "error.menuEmpty"

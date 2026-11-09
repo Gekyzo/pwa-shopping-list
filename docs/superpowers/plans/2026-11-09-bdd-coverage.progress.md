@@ -40,7 +40,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | 10 | Languages, version, install and integrations (`09`, `10`, `11`, `16`) | ☑ |  | 2026-11-09 |  |
 | 11 | Account, sync and sharing (`18-account-sync.md`, `19-sharing.md`) | ☑ |  | 2026-11-09 |  |
 | 12 | Address move (`20-address.md`) | ☑ |  | 2026-11-09 |  |
-| 13 | Product, engineering, modules and design system; close the check | ☐ |  |  |  |
+| 13 | Product, engineering, modules and design system; close the check | ☑ |  | 2026-11-09 |  |
 
 ## Blockers
 

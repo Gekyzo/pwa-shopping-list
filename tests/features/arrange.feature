@@ -13,7 +13,7 @@ Feature: Arrange
       Then the items shown are "Pan, arroz, Ñame"
       And the list is still grouped by recipe in custom order
 
-    @SORT-4
+    @SORT-4 @ENG-2
     Scenario: An unknown order is refused
       When I sort by size
       Then the error is "error.unknownSort"
@@ -74,7 +74,7 @@ Feature: Arrange
         | aisle  |
         | none   |
 
-    @GROUP-1
+    @GROUP-1 @ENG-2
     Scenario: An unknown grouping is refused
       When I group by colour
       Then the error is "error.unknownGroup"
@@ -163,7 +163,7 @@ Feature: Arrange
       Then 1 item was ticked
       And the items shown are "Patata, Huevos"
 
-    @GROUP-21
+    @GROUP-21 @ENG-3
     Scenario: A slide with nothing left to buy changes nothing
       Given the list has items:
         | name   | bought |
@@ -225,7 +225,7 @@ Feature: Arrange
 
   Rule: Move a row
 
-    @MOVE-8
+    @MOVE-8 @ENG-1
     Scenario: A release writes the new order: the moved items exchange their places
       Given the list has items:
         | name | bought |
@@ -237,7 +237,7 @@ Feature: Arrange
       Then the order of the items is "D, B, A, C"
       And the input state did not change
 
-    @MOVE-8
+    @MOVE-8 @ENG-3
     Scenario: A release at the start place writes nothing
       Given the list has items:
         | name |

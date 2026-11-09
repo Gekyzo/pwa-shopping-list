@@ -17,7 +17,7 @@ Feature: Shops
       Then there is no error
       And the shops of "Pan" are "Dia"
 
-    @SHOP-2
+    @SHOP-2 @ENG-2
     Scenario Outline: An empty shop name is refused (<case>)
       When I add the shop <name> to "Pan"
       Then the error is "error.shopRequired"
@@ -34,19 +34,19 @@ Feature: Shops
       Then the shops of "Pan" are "Lidl"
       And the shops in use are "Aldi, Lidl"
 
-    @SHOP-4 @DATA-8
+    @SHOP-4 @DATA-8 @ENG-3
     Scenario: An add of a shop that the item has already changes nothing
       When I add the shop "aldi" to "Leche"
       Then there is no error
       And the state did not change
 
-    @SHOP-5
+    @SHOP-5 @ENG-3
     Scenario: A removal of a shop that the item does not have changes nothing
       When I remove the shop "Dia" from "Leche"
       Then there is no error
       And the state did not change
 
-    @SHOP-5
+    @SHOP-5 @ENG-1
     Scenario: A removal takes the shop off the item, with no case distinction
       When I remove the shop "LIDL" from "Leche"
       Then the shops of "Leche" are "Aldi"
