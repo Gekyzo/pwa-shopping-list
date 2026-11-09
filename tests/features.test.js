@@ -12,9 +12,10 @@ const root = new URL('../', import.meta.url).pathname;
 const dir = `${root}tests/features/`;
 const specDir = `${root}docs/spec/`;
 
-// The spec documents that the coverage check does not read yet. A task of the BDD coverage plan
-// removes its documents from this set.
-const PENDING = new Set(readdirSync(specDir).filter((file) => file.endsWith('.md') && file !== 'README.md'));
+// The spec documents that the coverage check reads. A task of the BDD coverage plan adds its
+// documents; the others are pending.
+const CHECKED = ['03-lists.md'];
+const PENDING = new Set(readdirSync(specDir).filter((file) => file.endsWith('.md') && !CHECKED.includes(file)));
 
 const registry = createRegistry();
 defineAllSteps(registry);

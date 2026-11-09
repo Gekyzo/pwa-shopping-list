@@ -3,10 +3,18 @@
 
 import assert from 'node:assert/strict';
 import { emptyState } from '#store';
+import { fakeStorage } from '../fakes.js';
 
 export const createWorld = () => {
   let counter = 0;
-  return { state: emptyState(), result: null, input: null, copy: null, newId: () => `id-${(counter += 1)}` };
+  return {
+    state: emptyState(),
+    result: null,
+    input: null,
+    copy: null,
+    newId: () => `id-${(counter += 1)}`,
+    storage: fakeStorage(),
+  };
 };
 
 // Applies an operation to the state as a user action: keeps the input and a deep copy of it, to

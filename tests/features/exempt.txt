@@ -4,3 +4,22 @@
 #         of ENG-9 stays.
 # static  another test proves it from the files; the reason names it as tests/<name>.test.js.
 # prose   no behaviour to prove: a product statement or a scope note.
+
+# 03-lists.md
+ADD-1 screen The add sheet has a name field and the button Añadir, and no target choice.
+ADD-6 screen The toast of an add that brings an item back, with Deshacer.
+ADD-7 screen The toast of a new item, with no Deshacer.
+ADD-8 screen The sheet stays open with an empty, focused field; a tap out or Escape closes it.
+ADD-9 screen The row that the sheet brought flashes and scrolls into view.
+LIST-6 screen The name field of the screen takes 80 characters at most (maxlength); the store has no limit.
+LIST-11 screen The gestures and keys that tick a row.
+LIST-13 screen Deshacer of a tick, and a tap that unticks with none.
+LIST-20 screen The search button of the header, its place by width, and Ctrl+K.
+LIST-21 screen The search field below the header: open, focus and close.
+LIST-24 screen The search text is not stored; a section change or an add closes it.
+LIST-26 screen The text of a search with no match.
+LIST-37 screen The search field of the dock below 600px and its Cancelar.
+LIST-38 screen The panel Recetas en la lista; its counts are recipe rules (REC-41).
+LIST-39 screen The panel Próxima compra and the head Pospuestos (N); the postponed items are LIST-40 to LIST-42.
+TRIP-5 screen After Terminar compra the screen shows Compra; Deshacer restores the full state.
+TRIP-7 screen The buttons Descartar and Aplazar of Ajustes; the stored choice is TRIP-8.

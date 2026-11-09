@@ -1,0 +1,43 @@
+# Saved items, docs/spec/03-lists.md.
+
+Feature: Saved items
+  Terminar compra saves the one-time items. A saved item keeps its name, and an add brings it back.
+
+  @LIST-30
+  Scenario: A saved item keeps its name, its shops and its quantity
+    Given the list has items:
+      | name  | bought | shops        | quantity |
+      | Bread | yes    | Lidl, Aldi   | 2        |
+    When I finish the trip
+    Then the items are:
+      | name  | list  | shops      | quantity |
+      | Bread | saved | Lidl, Aldi | 2        |
+
+  @LIST-31 @LIST-32
+  Scenario: A bring back puts a saved item in Compra, not ticked, and keeps recurrent
+    Given the list has items:
+      | name  | list  | recurrent | bought |
+      | Pilas | saved | yes       | yes    |
+    When I bring back "Pilas"
+    Then the bring back changed the list
+    And the items are:
+      | name  | list   | recurrent | bought |
+      | Pilas | active | yes       | no     |
+
+  @LIST-31
+  Scenario: A saved item keeps its name: a new item with that name is refused
+    Given the list has items:
+      | name  | list  |
+      | Pilas | saved |
+    When I add "pilas"
+    Then the error is "error.duplicateItem" for "Pilas" in saved
+
+  @LIST-33
+  Scenario: A saved item counts in no header figure
+    Given the list has items:
+      | name  | list   | bought |
+      | Pilas | saved  | no     |
+      | Bread | active | no     |
+    Then the trip figures are:
+      | total | left | back | saved |
+      | 1     | 1    | 0    | 1     |

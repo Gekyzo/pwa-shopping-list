@@ -29,7 +29,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | # | Task | Status | Commit (subject) | Landed | Notes |
 |---|---|---|---|---|---|
 | 1 | Coverage check, shared world and common steps | ☑ |  | 2026-11-09 |  |
-| 2 | Lists, trip, quantity, postpone, search and add (`03-lists.md`) | ☐ |  |  |  |
+| 2 | Lists, trip, quantity, postpone, search and add (`03-lists.md`) | ☑ |  | 2026-11-09 |  |
 | 3 | Data model, storage and backup (`02-data-model.md`, `08-storage.md`) | ☐ |  |  |  |
 | 4 | Arrange: groups, order and moves (`04-arrange.md`) | ☐ |  |  |  |
 | 5 | Shops (`05-shops.md`) | ☐ |  |  |  |

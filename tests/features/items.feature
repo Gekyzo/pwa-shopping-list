@@ -56,6 +56,27 @@ Feature: Items of the list
     Then the list has 0 items
     And the input state did not change
 
+  @LIST-7
+  Scenario: Repetir makes an item recurrent, and No repetir makes it one-time again
+    When I toggle Repetir on "Milk"
+    Then the items are:
+      | name | recurrent |
+      | Milk | yes       |
+    When I toggle Repetir on "Milk"
+    Then the items are:
+      | name | recurrent |
+      | Milk | no        |
+
+  @LIST-12
+  Scenario: A ticked item stays, at the end of Compra
+    Given the list has items:
+      | name  | list   |
+      | Bread | active |
+      | Eggs  | active |
+    When I tick "Milk"
+    Then the list has 3 items
+    And the items shown are "Bread, Eggs, Milk"
+
   @LIST-5
   Rule: A rename has the rules of a new name
 
