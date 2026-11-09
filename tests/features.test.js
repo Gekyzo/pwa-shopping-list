@@ -1,28 +1,35 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createRegistry } from './bdd/steps.js';
 import { runFeatures, featureFiles } from './bdd/run.js';
 import { parseFeature } from './bdd/gherkin.js';
-import { defineStoreSteps, storeWorld } from './bdd/steps/store.js';
+import { readSpec, parseExempt, coverageGaps } from './bdd/coverage.js';
+import { createWorld } from './bdd/world.js';
+import { defineAllSteps } from './bdd/steps/index.js';
 
-const dir = new URL('./features/', import.meta.url).pathname;
+const root = new URL('../', import.meta.url).pathname;
+const dir = `${root}tests/features/`;
+const specDir = `${root}docs/spec/`;
+
+// The spec documents that the coverage check does not read yet. A task of the BDD coverage plan
+// removes its documents from this set.
+const PENDING = new Set(readdirSync(specDir).filter((file) => file.endsWith('.md') && file !== 'README.md'));
+
 const registry = createRegistry();
-defineStoreSteps(registry);
+defineAllSteps(registry);
+runFeatures({ dir, registry, world: createWorld });
 
-runFeatures({ dir, registry, world: storeWorld });
-
-test('each rule tag of a feature names a rule of docs/spec/', () => {
-  const specDir = new URL('../docs/spec/', import.meta.url).pathname;
-  const spec = readdirSync(specDir)
-    .filter((file) => file.endsWith('.md'))
-    .map((file) => readFileSync(specDir + file, 'utf8'))
-    .join('\n');
-  const defined = new Set([...spec.matchAll(/\*\*([A-Z]+-\d+)\*\*/g)].map(([, id]) => id));
+test('the features cover each live rule of a checked spec document', () => {
   const tags = featureFiles(dir).flatMap((path) =>
     parseFeature(readFileSync(path, 'utf8'), path).scenarios.flatMap((scenario) => scenario.tags),
   );
-  const rules = [...new Set(tags.filter((tag) => /^@[A-Z]+-\d+$/.test(tag)).map((tag) => tag.slice(1)))];
-  assert.ok(rules.length > 0);
-  assert.deepEqual(rules.filter((id) => !defined.has(id)), []);
+  const gaps = coverageGaps({
+    rules: readSpec(specDir),
+    tags,
+    exempt: parseExempt(readFileSync(`${dir}exempt.txt`, 'utf8')),
+    pending: PENDING,
+    exists: (path) => existsSync(root + path),
+  });
+  assert.deepEqual(gaps, { untested: [], both: [], unknown: [], removed: [], noEvidence: [] });
 });

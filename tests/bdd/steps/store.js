@@ -1,25 +1,8 @@
-// The steps of the list rules of `src/store.js`. The world holds the state, the result of the
-// last operation, and the input of that operation with a deep copy of it, to prove ENG-1.
+// The steps of the list rules of `src/store.js`.
 
 import assert from 'node:assert/strict';
+import { apply, findItem as find, names as list, yesNo as yes } from '../world.js';
 import { emptyState, addItem, renameItem, toggleBought, toggleRecurrent, postpone, startNewShopping, deleteItem } from '#store';
-
-export const storeWorld = () => {
-  let counter = 0;
-  return { state: emptyState(), result: null, input: null, copy: null, newId: () => `id-${(counter += 1)}` };
-};
-
-const yes = (text) => {
-  if (text === 'yes') return true;
-  if (text === 'no') return false;
-  throw new Error(`Expected yes or no, got "${text}"`);
-};
-
-const find = (world, name) => {
-  const item = world.state.items.find((candidate) => candidate.name === name);
-  assert.ok(item, `No item named "${name}"`);
-  return item;
-};
 
 const add = (world, name) => {
   const { state, error } = addItem(world.state, name, world.newId);
@@ -28,17 +11,7 @@ const add = (world, name) => {
   return state.items.at(-1);
 };
 
-// Applies an operation to the state as a user action: keeps the input to check that it does not
-// change, and keeps the result for the Then steps.
-const apply = (world, operation) => {
-  world.input = world.state;
-  world.copy = structuredClone(world.state);
-  world.result = operation(world.state);
-  world.state = world.result.state;
-};
-
 const ids = (world, names) => names.map((name) => find(world, name).id);
-const list = (text) => text.split(',').map((name) => name.trim()).filter(Boolean);
 
 export const defineStoreSteps = ({ Given, When, Then }) => {
   Given('an empty list', (world) => {
@@ -92,20 +65,8 @@ export const defineStoreSteps = ({ Given, When, Then }) => {
     apply(world, (state) => startNewShopping(state, keep));
   });
 
-  Then('there is no error', (world) => {
-    assert.equal(world.result.error, undefined);
-  });
-  Then('the error is {string}', (world, key) => {
-    assert.equal(world.result.error?.key, key);
-  });
   Then('the error is {string} for {string} in {word}', (world, key, name, listId) => {
     assert.deepEqual(world.result.error, { key, params: { name, list: listId } });
-  });
-  Then('the state did not change', (world) => {
-    assert.equal(world.state, world.input, 'The operation returned a new state object');
-  });
-  Then('the input state did not change', (world) => {
-    assert.deepEqual(world.input, world.copy);
   });
   Then('the list has {int} item(s)', (world, count) => {
     assert.equal(world.state.items.length, count);

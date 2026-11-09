@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { parseFeature, parseRow } from './bdd/gherkin.js';
 import { compile, createRegistry, dataTable } from './bdd/steps.js';
 import { runScenario } from './bdd/run.js';
+import { specRules, parseExempt, coverageGaps } from './bdd/coverage.js';
 
 const texts = (scenario) => scenario.steps.map((step) => `${step.keyword} ${step.text}`);
 
@@ -246,4 +247,42 @@ test('runScenario names the step and its line when a step fails, and runs no lat
   const [scenario] = parseFeature('Feature: F\n  Scenario: S\n    Given a step\n    When it fails\n    Then never\n').scenarios;
   await assert.rejects(runScenario(scenario, registry, {}, 'x.feature'), /When it fails\n {2}at x\.feature:4\nboom/);
   assert.deepEqual(ran, ['a']);
+});
+
+test('specRules finds each rule and marks the removed ones', () => {
+  assert.deepEqual(specRules('- **A-1** Text.\n- **A-2** Removed: gone.', 'x.md'), [
+    { id: 'A-1', doc: 'x.md', removed: false },
+    { id: 'A-2', doc: 'x.md', removed: true },
+  ]);
+});
+
+test('parseExempt reads id, kind and reason', () => {
+  const exempt = parseExempt('# c\n\nA-1 screen The DOM only\n');
+  assert.deepEqual([...exempt], [['A-1', { kind: 'screen', reason: 'The DOM only' }]]);
+  assert.throws(() => parseExempt('A-1 maybe x'), /exempt\.txt:1: unknown kind maybe/);
+  assert.throws(() => parseExempt('\nA-1'), /exempt\.txt:2: /);
+});
+
+test('coverageGaps reports each kind of gap', () => {
+  const rules = [
+    ...['A-1', 'A-2', 'A-3', 'A-4'].map((id) => ({ id, doc: 'a.md', removed: false })),
+    { id: 'A-5', doc: 'a.md', removed: true },
+    { id: 'B-1', doc: 'b.md', removed: false },
+  ];
+  const exempt = parseExempt('A-2 screen x\nA-3 static see tests/x.test.js\nZ-9 prose y\n');
+  const gaps = coverageGaps({
+    rules,
+    tags: ['@A-1', '@A-2', '@A-5'],
+    exempt,
+    pending: new Set(['b.md']),
+    exists: () => false,
+  });
+  assert.deepEqual(gaps, { untested: ['A-4'], both: ['A-2'], unknown: ['Z-9'], removed: ['A-5'], noEvidence: ['A-3'] });
+});
+
+test('coverageGaps accepts a static exempt whose test file exists', () => {
+  const rules = [{ id: 'A-1', doc: 'a.md', removed: false }];
+  const exempt = parseExempt('A-1 static tests/x.test.js proves it\n');
+  const gaps = coverageGaps({ rules, tags: [], exempt, pending: new Set(), exists: (path) => path === 'tests/x.test.js' });
+  assert.deepEqual(gaps, { untested: [], both: [], unknown: [], removed: [], noEvidence: [] });
 });

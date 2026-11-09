@@ -153,7 +153,7 @@
 | `tests/pair.test.js` | The users, origins and options of `scripts/pair.mjs`, which `npm run pair` runs for a local test between two people |
 | `tests/spec.test.js` | The facts of this specification that the code can prove (ENG-12) |
 | `tests/features.test.js` | The scenarios of `tests/features/*.feature` with the steps of `tests/bdd/steps/`; each rule tag names a rule of this specification (ENG-18) |
-| `tests/gherkin.test.js` | The Gherkin parser, the step registry and the scenario run of `tests/bdd/` (ENG-18) |
+| `tests/gherkin.test.js` | The Gherkin parser, the step registry, the scenario run and the rule coverage check of `tests/bdd/` (ENG-18) |
 
 A unit test uses `node:test` with `node:assert/strict`, one behaviour for each test, and checks
 that the input state does not change.
@@ -166,7 +166,9 @@ that the input state does not change.
   `tests/bdd/run.js` runs it with a new world for each scenario. The step definitions of a module are
   in `tests/bdd/steps/<module>.js`. A scenario names the rules it proves as tags, such as `@TRIP-2`,
   and each such tag must name a rule of this specification. A step with no definition, or with two,
-  fails the scenario. `@skip` skips a scenario and `@todo` marks it as to do.
+  fails the scenario. `@skip` skips a scenario and `@todo` marks it as to do. Each live rule of a
+  checked document of this specification has a scenario, or a line in `tests/features/exempt.txt`
+  with its kind (`screen`, `static` or `prose`) and its reason (`tests/bdd/coverage.js`).
 - **ENG-19** A change of behaviour starts with its acceptance scenario: the rule changes first, then
   its scenario, which fails, then the code with its unit tests. A bug fix starts with a scenario that
   shows the bug. A rule that only the screen proves gets no scenario; its browser check (ENG-9) stays.

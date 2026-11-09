@@ -1,0 +1,6 @@
+# The live rules of docs/spec/ that no scenario of tests/features/ proves, one per line:
+#   <ID> <kind> <reason>
+# screen  only the screen proves it (DOM, CSS, gestures, the fetch of sw.js); the browser check
+#         of ENG-9 stays.
+# static  another test proves it from the files; the reason names it as tests/<name>.test.js.
+# prose   no behaviour to prove: a product statement or a scope note.
