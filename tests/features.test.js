@@ -14,7 +14,7 @@ const specDir = `${root}docs/spec/`;
 
 // The spec documents that the coverage check reads. A task of the BDD coverage plan adds its
 // documents; the others are pending.
-const CHECKED = ['02-data-model.md', '03-lists.md', '04-arrange.md', '05-shops.md', '06-recipes.md', '07-screen.md', '08-storage.md', '09-languages.md', '10-offline-version.md', '11-integrations.md', '13-menu.md', '16-install.md', '17-aisles.md'];
+const CHECKED = ['02-data-model.md', '03-lists.md', '04-arrange.md', '05-shops.md', '06-recipes.md', '07-screen.md', '08-storage.md', '09-languages.md', '10-offline-version.md', '11-integrations.md', '13-menu.md', '16-install.md', '17-aisles.md', '20-address.md'];
 const PENDING = new Set(readdirSync(specDir).filter((file) => file.endsWith('.md') && !CHECKED.includes(file)));
 
 const registry = createRegistry();

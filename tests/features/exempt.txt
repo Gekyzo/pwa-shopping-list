@@ -200,3 +200,7 @@ VOICE-8 prose Not built: src/voice-commands.js and src/voice.js do not exist.
 
 # 16-install.md
 INS-4 static tests/spec.test.js checks that the manifest has orientation any.
+
+# 20-address.md
+ADDR-6 screen The import of a moved backup on the new address, its question, message and undo; the decode is ADDR-5.
+ADDR-8 screen The note to install the new address and to remove the old icon.

@@ -10,6 +10,7 @@ import { defineMenuSteps } from './menu.js';
 import { defineSharedSteps } from './shared.js';
 import { defineScreenSteps } from './screen.js';
 import { definePlatformSteps } from './platform.js';
+import { defineAddressSteps } from './address.js';
 
 export const defineAllSteps = (registry) => {
   defineCommonSteps(registry);
@@ -24,4 +25,5 @@ export const defineAllSteps = (registry) => {
   defineSharedSteps(registry);
   defineScreenSteps(registry);
   definePlatformSteps(registry);
+  defineAddressSteps(registry);
 };
