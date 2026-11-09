@@ -26,6 +26,7 @@ export const defineAddressSteps = ({ Given, When, Then }) => {
   });
   When('I pack the backup for the move', async (world) => {
     world.before = world.state;
+    world.beforeCopy = structuredClone(world.state);
     const saved = globalThis.CompressionStream;
     if (world.noCompression) globalThis.CompressionStream = undefined;
     try {
@@ -34,11 +35,13 @@ export const defineAddressSteps = ({ Given, When, Then }) => {
       globalThis.CompressionStream = saved;
     }
   });
+  // The order of the calls proves that the fragment goes before the decode (ADDR-5): the decode
+  // runs in a microtask, so `clear` must run first in the same turn.
   When('the new address reads the fragment', async (world) => {
-    world.cleared = false;
-    world.moved = await takeMove(world.hash, () => {
-      world.cleared = true;
-    });
+    world.calls = [];
+    const reading = takeMove(world.hash, () => world.calls.push('clear'));
+    world.calls.push('after the call');
+    world.moved = await reading;
   });
   When('the new address reads the fragment {string}', async (world, hash) => {
     world.moved = await decodeMove(hash);
@@ -52,13 +55,14 @@ export const defineAddressSteps = ({ Given, When, Then }) => {
     assert.equal(moveUrl(world.hash, search), url + world.hash);
   });
   Then('the fragment was removed before the read', (world) => {
-    assert.equal(world.cleared, true);
+    assert.deepEqual(world.calls, ['clear', 'after the call']);
   });
   Then('the move brings the state of before', (world) => {
     assert.deepEqual(world.moved, { state: world.before });
   });
   Then('the old address keeps its state', (world) => {
     assert.equal(world.state, world.before);
+    assert.deepEqual(world.state, world.beforeCopy);
   });
   Then('a fragment of {int} characters opens an address: {word}', (world, length, answer) => {
     assert.equal(moveUrl('#'.padEnd(length, 'x'), '') !== null, yesNo(answer));
