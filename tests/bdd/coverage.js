@@ -50,3 +50,11 @@ export const coverageGaps = ({ rules, tags, exempt, pending, exists }) => {
     ),
   };
 };
+
+// The tags that count as coverage: those of the scenarios that run. A scenario tagged `@skip` or
+// `@todo` proves nothing yet.
+export const coverageTags = (features) =>
+  features
+    .flatMap((feature) => feature.scenarios)
+    .filter((scenario) => !scenario.tags.includes('@skip') && !scenario.tags.includes('@todo'))
+    .flatMap((scenario) => scenario.tags);

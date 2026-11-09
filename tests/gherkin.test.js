@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { parseFeature, parseRow } from './bdd/gherkin.js';
 import { compile, createRegistry, dataTable } from './bdd/steps.js';
 import { runScenario } from './bdd/run.js';
-import { specRules, parseExempt, coverageGaps } from './bdd/coverage.js';
+import { specRules, parseExempt, coverageGaps, coverageTags } from './bdd/coverage.js';
 
 const texts = (scenario) => scenario.steps.map((step) => `${step.keyword} ${step.text}`);
 
@@ -305,4 +305,19 @@ test('runScenario rejects a Then step that matches a Given or When definition, a
   await assert.rejects(run('    When I act\n    Then it is done\n    And the key "a" holds "b"\n'), /A Then step must check/);
   await assert.rejects(run('    Given it is done\n'), /A Given step must act: it is done is a Then step/);
   await run('    Given the key "a" holds "b"\n    And I act\n    When I act\n    Then it is done\n    But it is done\n    * it is done\n');
+});
+
+test('coverageTags leaves out the tags of a skipped or a to-do scenario', () => {
+  const feature = parseFeature(`Feature: F
+  @A-1
+  Scenario: Runs
+    Given x
+  @A-2 @skip
+  Scenario: Skipped
+    Given x
+  @todo @A-3
+  Scenario: To do
+    Given x
+`);
+  assert.deepEqual(coverageTags([feature]), ['@A-1']);
 });

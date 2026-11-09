@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { createRegistry } from './bdd/steps.js';
 import { runFeatures, featureFiles } from './bdd/run.js';
 import { parseFeature } from './bdd/gherkin.js';
-import { readSpec, parseExempt, coverageGaps } from './bdd/coverage.js';
+import { readSpec, parseExempt, coverageGaps, coverageTags } from './bdd/coverage.js';
 import { createWorld } from './bdd/world.js';
 import { defineAllSteps } from './bdd/steps/index.js';
 
@@ -17,9 +17,7 @@ defineAllSteps(registry);
 runFeatures({ dir, registry, world: createWorld });
 
 test('the features cover each live rule of the specification', () => {
-  const tags = featureFiles(dir).flatMap((path) =>
-    parseFeature(readFileSync(path, 'utf8'), path).scenarios.flatMap((scenario) => scenario.tags),
-  );
+  const tags = coverageTags(featureFiles(dir).map((path) => parseFeature(readFileSync(path, 'utf8'), path)));
   const gaps = coverageGaps({
     rules: readSpec(specDir),
     tags,
