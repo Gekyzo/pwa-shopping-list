@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.13.1 - 2026-11-09
+
 - Al mòbil, **Compra** s’assembla més al disseny: una barra a dalt amb el botó **Acaba la compra** (en lloc dels tres punts), un dock amb la botiga a l’esquerra i sense fletxes, files més altes amb la quantitat més gran, i **Comprats** obert des del principi. Un article comprat ja no mostra la nansa: **Edita** continua en lliscar-lo. L’avís amb **Desfés** surt a dalt i porta una marca de fet.
 - En pantalles amples, la capçalera de **Receptes** s’assembla més al disseny: el cercador ocupa la seva pròpia línia, el botó **Filtres** mostra o amaga els filtres, i sota el títol es veu si les receptes es desen en aquest dispositiu o se sincronitzen.
 - En pantalles amples, **Receptes** s’assembla més al disseny: cada recepta és una targeta amb els botons al peu, i el panell d’una recepta té el botó **Afegeix a Compra**, que diu quants productes afegeix. A totes les pantalles, la recepta mostra quants dels seus productes són a la llista i marca cadascun amb un punt verd.

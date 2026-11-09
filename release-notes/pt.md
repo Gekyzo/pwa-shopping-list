@@ -4,6 +4,10 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+No change.
+
+## 1.13.1 - 2026-11-09
+
 - No telemóvel, **Compras** parece-se mais com o design: uma barra em cima com o botão **Terminar compras** (em vez dos três pontos), um dock com a loja à esquerda e sem setas, linhas mais altas com a quantidade maior, e **Comprados** aberto desde o início. Um artigo comprado já não mostra a pega: **Editar** continua ao deslizá-lo. A mensagem com **Anular** aparece em cima, com um visto.
 - Em ecrãs largos, o cabeçalho de **Receitas** parece-se mais com o design: a pesquisa tem a sua própria linha, o botão **Filtros** mostra ou esconde os filtros, e por baixo do título vê-se se as receitas ficam neste dispositivo ou são sincronizadas.
 - Em ecrãs largos, **Receitas** parece-se mais com o design: cada receita é um cartão com os botões em baixo, e o painel de uma receita tem o botão **Adicionar a Compras**, que diz quantos produtos adiciona. Em todos os ecrãs, uma receita mostra quantos dos seus produtos estão na lista e marca cada um com um ponto verde.

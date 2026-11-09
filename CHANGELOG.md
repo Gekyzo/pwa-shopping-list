@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.13.1 - 2026-11-09
+
 - Every live rule of `docs/spec/` now has a Gherkin scenario or an exempt line (ENG-18): 350 scenarios (653 tests with the examples) tag 255 rules; `tests/features/exempt.txt` lists the other 234 by kind: 154 screen, 48 static and 32 prose. The coverage check reads every document. VOICE-1 to VOICE-8 are exempt as not built: `src/voice-commands.js` does not exist.
 - The features check their coverage of `docs/spec/` (ENG-18): each live rule of a checked document has a scenario or a line in `tests/features/exempt.txt` (`screen`, `static` or `prose`). The step files share one world (`tests/bdd/world.js`) and the common steps (`tests/bdd/steps/common.js`).
 - Behaviour tests in Gherkin (ENG-18): `tests/features/*.feature` run under `npm test` through `tests/features.test.js`, with a parser, a step registry and a runner on `node:test` in `tests/bdd/` and no dependency. The first features cover the item rules (LIST-1 to LIST-5, LIST-8, LIST-10) and **Terminar compra** (TRIP-1 to TRIP-3, TRIP-6) of `src/store.js`; a rule tag such as `@TRIP-2` must name a rule of `docs/spec/`. Tested in `tests/gherkin.test.js`.
