@@ -1,7 +1,8 @@
 // The step registry: a step definition is an expression and a function. An expression is a
-// regular expression, or a text with the parameters `{string}`, `{int}`, `{float}` and `{word}`
-// and optional text in parentheses, such as `{int} item(s)`. As in Cucumber, the keyword of a
-// step (Given, When, Then) does not take part in the match.
+// regular expression, or a text with the parameters `{string}`, `{int}`, `{float}` and `{word}`,
+// optional text in parentheses, such as `{int} item(s)`, and words joined by `/` as an
+// alternation, such as `was/were`. As in Cucumber, the keyword of a step (Given, When, Then) does
+// not take part in the match.
 
 const PARAMETERS = {
   string: { pattern: `"([^"]*)"|'([^']*)'`, groups: 2, parse: (a, b) => a ?? b },
@@ -32,7 +33,10 @@ export const compile = (expression) => {
     } else if (optional) {
       source += `(?:${escape(optional[1])})?`;
     } else {
-      source += escape(token).replace(/[{}()]/g, '\\$&');
+      // A run of words joined by `/` is an alternation: `was/were`.
+      source += escape(token)
+        .replace(/[{}()]/g, '\\$&')
+        .replace(/[^\s/]+(?:\/[^\s/]+)+/g, (words) => `(?:${words.split('/').join('|')})`);
     }
   }
   const parse = (groups) => {

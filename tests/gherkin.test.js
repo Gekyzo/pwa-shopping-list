@@ -286,3 +286,11 @@ test('coverageGaps accepts a static exempt whose test file exists', () => {
   const gaps = coverageGaps({ rules, tags: [], exempt, pending: new Set(), exists: (path) => path === 'tests/x.test.js' });
   assert.deepEqual(gaps, { untested: [], both: [], unknown: [], removed: [], noEvidence: [] });
 });
+
+test('compile reads an alternation of words', () => {
+  const { regex, parse } = compile('{int} item(s) was/were ticked');
+  assert.deepEqual(parse(regex.exec('1 item was ticked').slice(1)), [1]);
+  assert.deepEqual(parse(regex.exec('2 items were ticked').slice(1)), [2]);
+  assert.equal(regex.exec('2 items are ticked'), null);
+  assert.ok(compile('a/b/c').regex.test('c'));
+});

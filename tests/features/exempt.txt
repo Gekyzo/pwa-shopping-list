@@ -30,3 +30,26 @@ STORE-4 screen The start asks navigator.storage.persist() and ignores the answer
 STORE-11 prose A limit: the app does not read the change of another tab.
 BACKUP-5 screen The question before an import, with or without a session; the replace itself is BACKUP-4.
 BACKUP-6 screen The Deshacer and the message of an import.
+
+# 04-arrange.md
+SORT-1 screen The arrange button of the header and when it shows.
+SORT-2 screen The sheet stays open after a choice; a tap out or Escape closes it.
+SORT-3 screen Ordenar por shows when the view has two items or more.
+SORT-9 screen A change of order has no message and animates the rows.
+GROUP-2 screen The choices that the sheet shows for the view (arrangeChoices of src/ui/view.js).
+GROUP-3 screen A view that cannot show the stored grouping is flat and marks Nada (shownGroup of src/ui/view.js).
+GROUP-4 screen A tap on the choice that the view shows already changes nothing.
+GROUP-14 screen A row in a list by shop does not show its shops.
+GROUP-15 screen The motion of the heads when a grouping opens or closes.
+GROUP-16 screen A tap on a group head closes and opens its rows.
+GROUP-19 screen A row in a list by aisle shows its shops.
+GROUP-20 screen The text También en «recipes» below a row of two recipe groups; the groups are GROUP-7.
+MOVE-1 screen The hold or the drag that lifts a row, and the vibration.
+MOVE-2 screen A finger that moves before the hold ends scrolls or slides.
+MOVE-3 screen The scopes in which a row moves (src/ui/drag.js).
+MOVE-4 screen The rows that do not move: ticked, in edit, alone, or during a search.
+MOVE-5 screen A move stays in the run of rows of its scope.
+MOVE-7 screen A pointer near the edge of the list scrolls it.
+MOVE-10 screen The message of a move, with Deshacer.
+MOVE-11 screen Escape, a lost pointer or a render ends the move with no change.
+MOVE-12 screen The click after a release does not tick the item.
