@@ -3,7 +3,7 @@
 
 import assert from 'node:assert/strict';
 import { emptyState } from '#store';
-import { fakeStorage } from '../fakes.js';
+import { fakeStorage, fakeServer } from '../fakes.js';
 
 export const createWorld = () => {
   let counter = 0;
@@ -17,6 +17,20 @@ export const createWorld = () => {
     // Monday: the week of today is "2026-11-09".
     today: '2026-11-09',
     shared: null,
+    // The devices of a scenario and the server they sync with (18-account-sync.md, 19-sharing.md).
+    server: fakeServer(),
+    devices: new Map(),
+    // The clock of the devices, in ms: the token expiry and the 10 minutes of a refresh read it.
+    clock: Date.parse('2026-10-24T08:00:00Z'),
+    // The name of each item and recipe id that a step made, to name a change that has no data.
+    labels: new Map(),
+    // The shares of the rules of src/shares.js.
+    shares: [],
+    // ACC-3: the apps of the server and the access rows of its accounts, and the session of a sign-in.
+    access: { apps: [{ id: 'app1', slug: 'shopping' }, { id: 'app2', slug: 'bodega' }], rows: [] },
+    session: null,
+    // The key of the toast of the last delete of a row of Todas (SHARE-16).
+    toast: null,
   };
 };
 

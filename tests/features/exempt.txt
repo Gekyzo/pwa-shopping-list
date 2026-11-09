@@ -204,3 +204,12 @@ INS-4 static tests/spec.test.js checks that the manifest has orientation any.
 # 20-address.md
 ADDR-6 screen The import of a moved backup on the new address, its question, message and undo; the decode is ADDR-5.
 ADDR-8 screen The note to install the new address and to remove the old icon.
+
+# 18-account-sync.md
+ACC-2 screen The screens Iniciar sesión and Esperando aprobación, their buttons, texts, errors and layer.
+ACC-5 screen The Google redirect, its sessionStorage and the clean-up of the URL; tests/pocketbase.test.js checks oauthStart and oauthFinish.
+ACC-10 screen The row Cuenta of Ajustes: the email, the time of the last sync and Cerrar sesión.
+ACC-11 screen The banner of a device with no session; its route is the banner case of ACC-1.
+
+# 19-sharing.md: no line; the scenarios tag each rule, and the sheet, the chips and the tags of
+# SHARE-5, SHARE-9 and SHARE-14 keep the browser check of ENG-9.

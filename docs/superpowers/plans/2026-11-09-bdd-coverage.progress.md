@@ -38,7 +38,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | 8 | Menu (`13-menu.md`) | ☑ |  | 2026-11-09 |  |
 | 9 | Screen rules a pure module owns (`07-screen.md`) | ☑ |  | 2026-11-09 |  |
 | 10 | Languages, version, install and integrations (`09`, `10`, `11`, `16`) | ☑ |  | 2026-11-09 |  |
-| 11 | Account, sync and sharing (`18-account-sync.md`, `19-sharing.md`) | ☐ |  |  |  |
+| 11 | Account, sync and sharing (`18-account-sync.md`, `19-sharing.md`) | ☑ |  | 2026-11-09 |  |
 | 12 | Address move (`20-address.md`) | ☑ |  | 2026-11-09 |  |
 | 13 | Product, engineering, modules and design system; close the check | ☐ |  |  |  |
 

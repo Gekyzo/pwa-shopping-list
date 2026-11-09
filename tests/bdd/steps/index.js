@@ -11,6 +11,7 @@ import { defineSharedSteps } from './shared.js';
 import { defineScreenSteps } from './screen.js';
 import { definePlatformSteps } from './platform.js';
 import { defineAddressSteps } from './address.js';
+import { defineSyncSteps } from './sync.js';
 
 export const defineAllSteps = (registry) => {
   defineCommonSteps(registry);
@@ -26,4 +27,5 @@ export const defineAllSteps = (registry) => {
   defineScreenSteps(registry);
   definePlatformSteps(registry);
   defineAddressSteps(registry);
+  defineSyncSteps(registry);
 };
