@@ -108,6 +108,7 @@ Plain HTML, CSS and ES modules, with no build step and no dependencies. Node 20 
 ```sh
 npm run hooks    # enable the git hooks of .githooks/ (one time)
 npm test         # unit tests
+npm run test:features  # the Gherkin scenarios of tests/features/, as a tree
 npm run serve    # http://localhost:8080
 npm run pair     # two users on :8081 and :8082 (docs/two-users.md)
 npm run release  # bump, commit and tag vX.Y.Z; git push --follow-tags deploys

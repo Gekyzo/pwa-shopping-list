@@ -10,6 +10,7 @@
   },
   "scripts": {
     "test": "node --test",
+    "test:features": "node --test --test-reporter=spec tests/features.test.js",
     "serve": "python3 -m http.server 8080",
     "pair": "node scripts/pair.mjs",
     "icons": "node scripts/make-icons.mjs",

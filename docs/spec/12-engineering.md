@@ -207,6 +207,7 @@ of a rule is correct; that stays a review by the author.
 
 ```sh
 npm test         # unit tests
+npm run test:features  # the Gherkin scenarios of tests/features/, as a tree
 npm run serve    # http://localhost:8080
 npm run pair     # user A on :8081 and user B on :8082, on the local pwa-server
 npm run icons    # write the PNG icons again

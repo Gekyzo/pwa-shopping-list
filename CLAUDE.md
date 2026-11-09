@@ -8,6 +8,7 @@ build step and no dependencies.
 
 ```sh
 npm test         # unit tests (node --test)
+npm run test:features  # the Gherkin scenarios of tests/features/, as a tree
 npm run serve    # http://localhost:8080
 npm run pair     # user A on :8081 and user B on :8082, on the local pwa-server (docs/two-users.md)
 npm run icons    # write the PNG icons again
