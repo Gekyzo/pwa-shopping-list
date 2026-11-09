@@ -33,7 +33,7 @@ the 🎯 indicators (terminal status bar, tab ring, overlord tile) draw from thi
 | 3 | Data model, storage and backup (`02-data-model.md`, `08-storage.md`) | ☑ |  | 2026-11-09 |  |
 | 4 | Arrange: groups, order and moves (`04-arrange.md`) | ☑ |  | 2026-11-09 |  |
 | 5 | Shops (`05-shops.md`) | ☑ |  | 2026-11-09 |  |
-| 6 | Aisles (`17-aisles.md`) | ☐ |  |  |  |
+| 6 | Aisles (`17-aisles.md`) | ☑ |  | 2026-11-09 |  |
 | 7 | Recipes (`06-recipes.md`) | ☐ |  |  |  |
 | 8 | Menu (`13-menu.md`) | ☐ |  |  |  |
 | 9 | Screen rules a pure module owns (`07-screen.md`) | ☐ |  |  |  |

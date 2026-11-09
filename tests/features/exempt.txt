@@ -66,3 +66,14 @@ SHOP-20 screen The header of a shop list: its title, subtitle and bar.
 SHOP-21 screen Terminar compra runs on the full state from any list; the banner shows only in Todas.
 SHOP-26 screen The dock below 600px: its chip, the search button and the + button.
 SHOP-27 screen The shop picker sheet of the dock chip.
+
+# 17-aisles.md
+AISLE-10 screen The group Secciones of Ajustes, its row and count, and the open of the sheet.
+AISLE-11 screen The rows of the aisle sheet: name field, up, down and delete buttons.
+AISLE-12 static tests/controls.test.js checks that each name field passes read and write to bindField; the blur, Enter and Escape are a browser check.
+AISLE-13 screen The field Nueva sección, its limit of 40 characters and its focus.
+AISLE-14 screen The text and the button Usar secciones habituales with no aisle; the add is AISLE-8.
+AISLE-15 screen The message and Deshacer of a delete.
+AISLE-16 screen The aisle chips of the edit sheet.
+AISLE-17 screen A tap on an aisle chip sets or clears it; the set is AISLE-7.
+AISLE-18 screen The text of the edit sheet with no aisle.

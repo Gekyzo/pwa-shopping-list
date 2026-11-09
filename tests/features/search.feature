@@ -12,7 +12,7 @@ Feature: Search of a list
       | Té verde    |           |          | postponed | no     |
       | Pilas       |           |          | saved     | no     |
 
-  @LIST-22 @LIST-25
+  @LIST-22 @LIST-25 @AISLE-9
   Scenario Outline: The search for "<text>" ignores case and accents
     Then the list search for "<text>" finds "<found>"
 
