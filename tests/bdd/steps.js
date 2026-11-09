@@ -2,7 +2,7 @@
 // regular expression, or a text with the parameters `{string}`, `{int}`, `{float}` and `{word}`,
 // optional text in parentheses, such as `{int} item(s)`, and words joined by `/` as an
 // alternation, such as `was/were`. As in Cucumber, the keyword of a step (Given, When, Then) does
-// not take part in the match.
+// not take part in the match; the run then checks that a Then step meets a Then definition.
 
 const PARAMETERS = {
   string: { pattern: `"([^"]*)"|'([^']*)'`, groups: 2, parse: (a, b) => a ?? b },
@@ -58,8 +58,8 @@ export const dataTable = (raw) => {
 
 export const createRegistry = () => {
   const definitions = [];
-  const define = (expression, fn) => {
-    definitions.push({ expression, fn, ...compile(expression) });
+  const define = (keyword) => (expression, fn) => {
+    definitions.push({ expression, fn, keyword, ...compile(expression) });
   };
 
   // The definition that matches the text of a step, with its arguments. Throws when no definition
@@ -81,5 +81,5 @@ export const createRegistry = () => {
     return matches[0];
   };
 
-  return { Given: define, When: define, Then: define, define, find, definitions };
+  return { Given: define('Given'), When: define('When'), Then: define('Then'), find, definitions };
 };

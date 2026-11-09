@@ -20,7 +20,7 @@ Feature: Browser storage
   @TRIP-8
   Scenario: Descartar stores save, and Aplazar removes the key
     When I choose save at the end of a trip
-    Then the key "shopping.tripEnd" holds "save"
+    Then the key "shopping.tripEnd" holds the text "save"
     When I choose keep at the end of a trip
     Then the key "shopping.tripEnd" is not stored
 
@@ -62,7 +62,7 @@ Feature: Browser storage
     When the app loads the state
     Then the state is empty
     And the load lost the stored state
-    And the key "shopping.v1.corrupt" holds "{not json"
+    And the key "shopping.v1.corrupt" holds the text "{not json"
 
   @STORE-6 @DATA-2 @DATA-3
   Scenario Outline: A stored state is not valid when <case>

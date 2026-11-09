@@ -5,6 +5,8 @@ import assert from 'node:assert/strict';
 import { emptyState } from '#store';
 import { weekOf } from '#menu';
 import {
+  loadShopLists,
+  saveShopLists,
   loadTripEnd,
   saveTripEnd,
   storedBytes,
@@ -39,6 +41,12 @@ export const defineStorageSteps = ({ Given, When, Then }) => {
     APP_KEYS.forEach((key) => world.storage.setItem(key, '1'));
   });
 
+  When('I hide the shop lists', (world) => {
+    assert.equal(saveShopLists(world.storage, 'hide'), true);
+  });
+  When('I show the shop lists', (world) => {
+    assert.equal(saveShopLists(world.storage, 'show'), true);
+  });
   When('I choose {word} at the end of a trip', (world, choice) => {
     assert.equal(saveTripEnd(world.storage, choice), true);
   });
@@ -65,11 +73,20 @@ export const defineStorageSteps = ({ Given, When, Then }) => {
     world.reset = resetAll(world.storage);
   });
 
+  Then('the key {string} holds the text {string}', (world, key, value) => {
+    assert.equal(world.storage.getItem(key), value);
+  });
   Then('the key {string} is not stored', (world, key) => {
     assert.equal(world.storage.getItem(key), null);
   });
   Then('the key {string} holds the current state', (world, key) => {
     assert.deepEqual(JSON.parse(world.storage.getItem(key)), world.state);
+  });
+  Then('the shop lists are shown', (world) => {
+    assert.equal(loadShopLists(world.storage), 'show');
+  });
+  Then('the shop lists are hidden', (world) => {
+    assert.equal(loadShopLists(world.storage), 'hide');
   });
   Then('the trip end choice is {word}', (world, choice) => {
     assert.equal(loadTripEnd(world.storage), choice);

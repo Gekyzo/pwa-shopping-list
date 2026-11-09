@@ -294,3 +294,15 @@ test('compile reads an alternation of words', () => {
   assert.equal(regex.exec('2 items are ticked'), null);
   assert.ok(compile('a/b/c').regex.test('c'));
 });
+
+test('runScenario rejects a Then step that matches a Given or When definition, and the reverse', async () => {
+  const registry = createRegistry();
+  registry.Given('the key {string} holds {string}', () => {});
+  registry.When('I act', () => {});
+  registry.Then('it is done', () => {});
+  const run = (steps) => runScenario(parseFeature(`Feature: F\n  Scenario: S\n${steps}`).scenarios[0], registry, {});
+  await assert.rejects(run('    Given I act\n    Then the key "a" holds "b"\n'), /A Then step must check: the key "a" holds "b" is a Given step/);
+  await assert.rejects(run('    When I act\n    Then it is done\n    And the key "a" holds "b"\n'), /A Then step must check/);
+  await assert.rejects(run('    Given it is done\n'), /A Given step must act: it is done is a Then step/);
+  await run('    Given the key "a" holds "b"\n    And I act\n    When I act\n    Then it is done\n    But it is done\n    * it is done\n');
+});

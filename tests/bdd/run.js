@@ -15,11 +15,29 @@ export const featureFiles = (dir) =>
     .sort()
     .map((file) => join(dir, file));
 
+// The keyword that a step has in effect: And, But and * take the one of the step before.
+const CONTINUE = ['And', 'But', '*'];
+
+// Unlike Cucumber, a Then step must meet a Then definition, and a Given or When step a Given or
+// When definition: a check that sets state, or an action that checks, proves nothing.
+const checkKeyword = (step, effective, definition) => {
+  const checks = effective === 'Then';
+  if (checks && definition.keyword !== 'Then') {
+    throw new Error(`A Then step must check: ${step.text} is a ${definition.keyword} step`);
+  }
+  if (!checks && definition.keyword === 'Then') {
+    throw new Error(`A ${effective} step must act: ${step.text} is a Then step`);
+  }
+};
+
 export const runScenario = async (scenario, registry, world, file = '<feature>') => {
+  let effective = 'Given';
   for (const step of scenario.steps) {
+    if (!CONTINUE.includes(step.keyword)) effective = step.keyword;
     const extra = step.table ? [dataTable(step.table)] : step.docString !== undefined ? [step.docString] : [];
     try {
       const { definition, args } = registry.find(step.text);
+      checkKeyword(step, effective, definition);
       await definition.fn(world, ...args, ...extra);
     } catch (error) {
       error.message = `${step.keyword} ${step.text}\n  at ${file}:${step.line}\n${error.message}`;

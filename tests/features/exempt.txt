@@ -53,3 +53,16 @@ MOVE-7 screen A pointer near the edge of the list scrolls it.
 MOVE-10 screen The message of a move, with Deshacer.
 MOVE-11 screen Escape, a lost pointer or a render ends the move with no change.
 MOVE-12 screen The click after a release does not tick the item.
+
+# 05-shops.md
+SHOP-8 screen The shops of an item are in the edit sheet Editar, below its fields.
+SHOP-9 screen The chips of the sheet; a tap adds or removes a shop (SHOP-4, SHOP-5).
+SHOP-10 screen The field Nueva tienda and its limit of 40 characters.
+SHOP-12 screen The sheet stays open after each change; a tap out or Escape closes it.
+SHOP-13 screen The text of the sheet with no shop in use.
+SHOP-14 screen A change of shops is saved at once, with no message and no Deshacer.
+SHOP-15 screen The edit sheet closes when its item goes away.
+SHOP-20 screen The header of a shop list: its title, subtitle and bar.
+SHOP-21 screen Terminar compra runs on the full state from any list; the banner shows only in Todas.
+SHOP-26 screen The dock below 600px: its chip, the search button and the + button.
+SHOP-27 screen The shop picker sheet of the dock chip.

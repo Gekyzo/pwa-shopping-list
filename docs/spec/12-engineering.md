@@ -166,7 +166,8 @@ that the input state does not change.
   `tests/bdd/run.js` runs it with a new world for each scenario. The step definitions of a module are
   in `tests/bdd/steps/<module>.js`. A scenario names the rules it proves as tags, such as `@TRIP-2`,
   and each such tag must name a rule of this specification. A step with no definition, or with two,
-  fails the scenario. `@skip` skips a scenario and `@todo` marks it as to do. Each live rule of a
+  fails the scenario, and so does a Then step that meets a Given or When definition, or the
+  reverse. `@skip` skips a scenario and `@todo` marks it as to do. Each live rule of a
   checked document of this specification has a scenario, or a line in `tests/features/exempt.txt`
   with its kind (`screen`, `static` or `prose`) and its reason (`tests/bdd/coverage.js`).
 - **ENG-19** A change of behaviour starts with its acceptance scenario: the rule changes first, then
