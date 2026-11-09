@@ -1,6 +1,7 @@
 // Fakes that several tests share. Not a test file: `node --test` runs only `*.test.js`.
 
-// A `localStorage` in memory, with `length` and `key` for the code that walks the keys.
+// A `localStorage` in memory, with `length` and `key` for the code that walks the keys, and
+// `keys()` for a test that reads them all.
 export const fakeStorage = (initial = {}) => {
   const data = new Map(Object.entries(initial));
   return {
@@ -11,6 +12,7 @@ export const fakeStorage = (initial = {}) => {
       return data.size;
     },
     key: (index) => [...data.keys()][index] ?? null,
+    keys: () => [...data.keys()],
   };
 };
 

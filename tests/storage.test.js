@@ -56,23 +56,12 @@ import {
 } from '#storage';
 import { emptyState } from '#store';
 import { weekOf } from '#menu';
+import { fakeStorage } from './fakes.js';
 
 // The Monday of the meals of the samples, and the week that a load gives to a meal with no week.
 const W = '2026-10-26';
 const TODAY = weekOf(new Date());
 
-const fakeStorage = (initial = {}) => {
-  const data = new Map(Object.entries(initial));
-  return {
-    getItem: (key) => (data.has(key) ? data.get(key) : null),
-    setItem: (key, value) => data.set(key, String(value)),
-    removeItem: (key) => data.delete(key),
-    get length() {
-      return data.size;
-    },
-    key: (index) => [...data.keys()][index] ?? null,
-  };
-};
 
 const brokenStorage = () => ({
   getItem: () => {

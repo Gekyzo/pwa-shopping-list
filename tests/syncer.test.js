@@ -6,6 +6,7 @@ import { emptyState } from '#store';
 import { normalizeState, BEFORE_LOGIN_KEY, STORAGE_KEY } from '#storage';
 import { saveSession, loadSession, loadQueue, saveQueue, saveSyncState, loadSyncState, loadSharedState, SESSION_KEY, SHARED_STORAGE_KEY } from '#session';
 import { recordKey, toRecords } from '#records';
+import { fakeStorage } from './fakes.js';
 
 // The Monday of the week of the meals of the tests.
 const W = '2026-11-02';
@@ -18,15 +19,6 @@ const base64url = (value) => Buffer.from(JSON.stringify(value)).toString('base64
 const tokenOf = (id, n = 0) => `${base64url({ alg: 'none' })}.${base64url({ id, exp: 4_000_000_000, n })}.sig`;
 const sessionOf = (id, approved = true) => ({ token: tokenOf(id), user: { id, email: `${id}@example.test`, name: id, approved } });
 
-const fakeStorage = (initial = {}) => {
-  const map = new Map(Object.entries(initial));
-  return {
-    getItem: (key) => (map.has(key) ? map.get(key) : null),
-    setItem: (key, value) => map.set(key, String(value)),
-    removeItem: (key) => map.delete(key),
-    keys: () => [...map.keys()],
-  };
-};
 
 // An in-memory server: it assigns ids and increasing `updated` strings. A push with no id creates a
 // new row, as a POST does, so a resent change shows up as a duplicate.
