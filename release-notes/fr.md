@@ -4,6 +4,10 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
+No change.
+
+## 1.13.2 - 2026-11-09
+
 - **Mettre à jour** dans les **Réglages** fonctionne de nouveau après une version qui déplace des fichiers de l’app. Avant, il pouvait afficher « La mise à jour a échoué. » alors que la nouvelle version était prête.
 
 ## 1.13.1 - 2026-11-09

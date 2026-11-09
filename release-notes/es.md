@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.13.2 - 2026-11-09
+
 - **Actualizar** de **Ajustes** vuelve a funcionar tras una versión que mueve archivos de la app. Antes podía decir «No se pudo actualizar.» aunque la versión nueva estuviera lista.
 
 ## 1.13.1 - 2026-11-09

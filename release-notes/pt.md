@@ -4,6 +4,10 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+No change.
+
+## 1.13.2 - 2026-11-09
+
 - **Atualizar** em **Definições** volta a funcionar depois de uma versão que muda ficheiros da app de sítio. Antes podia dizer «Não foi possível atualizar.» mesmo com a versão nova pronta.
 
 ## 1.13.1 - 2026-11-09
