@@ -183,3 +183,54 @@ export const fakeClient = (server, { approved = true } = {}) => {
   };
   return client;
 };
+
+// A `navigator.serviceWorker` for the update of the shell (VER-8). `old` is the worker in control,
+// or none with `controlled: false`. `next` says what the `sw.js` of the host does at
+// `registration.update()`: `same` (no new worker), `installs` (a new worker that takes control),
+// `fails` (a new worker that goes redundant), `stalls` (a new worker that never takes control) or
+// `offline` (the check throws) or `hangs` (the check never ends, as with no server). `answer` is the reply of the old worker to `refresh`: `ok`,
+// `fail` or `none`.
+export const fakeServiceWorkers = ({ controlled = true, next = 'same', answer = 'ok' } = {}) => {
+  const listeners = (target) => {
+    const map = new Map();
+    target.addEventListener = (type, fn) => map.set(fn, type);
+    target.removeEventListener = (type, fn) => map.delete(fn);
+    target.dispatch = (type) => [...map].filter(([, kind]) => kind === type).forEach(([fn]) => fn());
+    return target;
+  };
+  const refreshes = [];
+  const old = {
+    state: 'activated',
+    postMessage: (message, [port] = []) => {
+      refreshes.push(message);
+      if (answer !== 'none') port.postMessage({ ok: answer === 'ok' });
+    },
+  };
+  const container = listeners({ controller: controlled ? old : null });
+  const fresh = listeners({ state: 'installing' });
+  const registration = {
+    installing: null,
+    waiting: null,
+    active: container.controller,
+    update: async () => {
+      if (next === 'offline') throw new TypeError('Failed to fetch');
+      if (next === 'hangs') return new Promise(() => {});
+      if (next === 'same') return;
+      registration.installing = fresh;
+      setTimeout(() => {
+        if (next === 'installs') {
+          fresh.state = 'activated';
+          Object.assign(registration, { installing: null, active: fresh });
+          container.controller = fresh;
+          container.dispatch('controllerchange');
+        } else if (next === 'fails') {
+          fresh.state = 'redundant';
+          registration.installing = null;
+          fresh.dispatch('statechange');
+        }
+      }, 1);
+    },
+  };
+  container.getRegistration = async () => registration;
+  return { container, refreshes };
+};

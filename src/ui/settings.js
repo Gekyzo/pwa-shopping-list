@@ -1,10 +1,10 @@
 import { exportJson, exportFilename, importJson, resetAll } from '#storage';
 import { parseVersion, versionStatus } from '#version';
+import { updateShell } from '#update';
 import { LANGUAGES, LANGUAGE_NAMES, intlTag } from '#i18n';
 import { SAMPLE_ID, hasSample, deleteRecipe } from '#recipes';
 import { SHORTCUTS } from '#sections';
 import {
-  REFRESH_MS,
   CHECK_MS,
   $,
   el,
@@ -92,23 +92,6 @@ export const checkVersion = async () => {
   Object.assign(ui.version, { latest, checking: false });
   renderVersion();
 };
-
-// Asks the service worker to load the shell of the new deploy. Resolves to false when it cannot.
-const refreshShell = () =>
-  new Promise((resolve) => {
-    const worker = navigator.serviceWorker?.controller;
-    if (!worker) {
-      resolve(true);
-      return;
-    }
-    const channel = new MessageChannel();
-    const timer = setTimeout(() => resolve(false), REFRESH_MS);
-    channel.port1.onmessage = (event) => {
-      clearTimeout(timer);
-      resolve(Boolean(event.data?.ok));
-    };
-    worker.postMessage({ type: 'refresh' }, [channel.port2]);
-  });
 
 // The text of each shortcut of the launcher (SHORT-3).
 const SHORTCUT_KEYS = { add: 'add.item', active: 'list.active', recipes: 'nav.recipes', menu: 'nav.menu' };
@@ -221,7 +204,7 @@ export const bind = () => {
 
   $('update').addEventListener('click', async () => {
     $('update').disabled = true;
-    if (await refreshShell()) {
+    if ((await updateShell({ container: navigator.serviceWorker })) === 'reload') {
       location.reload();
       return;
     }

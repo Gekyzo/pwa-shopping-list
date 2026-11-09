@@ -171,7 +171,6 @@ SW-12 screen A deploy shows at the second start, or at once with Actualizar.
 VER-1 static tests/version.test.js checks the shape of a version, and tests/release.test.js that a release writes it to version.json and package.json.
 VER-4 screen The foot of Ajustes shows the running version and its status.
 VER-5 screen The read of the deployed version when Ajustes opens, and its time limit.
-VER-8 screen Actualizar sends refresh to the worker and loads the page again.
 VER-9 prose The host of the app and the deploy of a release tag.
 VER-10 static tests/release.test.js checks the bump commit and the tag of npm run release.
 VER-11 static tests/release.test.js checks a minor and a major release.

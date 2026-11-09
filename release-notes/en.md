@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- **Update** in **Settings** works again after a version that moves files of the app. Before, it could say “The update failed.” even when the new version was ready.
 
 ## 1.13.1 - 2026-11-09
 

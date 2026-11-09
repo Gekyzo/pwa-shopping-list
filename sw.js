@@ -1,4 +1,4 @@
-const CACHE = 'shopping-shell-v52';
+const CACHE = 'shopping-shell-v53';
 
 const SHELL = [
   './',
@@ -60,6 +60,7 @@ const SHELL = [
   './src/syncer.js',
   './src/config.js',
   './src/version.js',
+  './src/update.js',
   './src/whatsnew.js',
   './src/i18n.js',
   './src/locales/ca.js',

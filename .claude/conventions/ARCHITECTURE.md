@@ -35,6 +35,7 @@ repository root.
 | `src/suggest.js` | The rows above the add input: create first, then the matching items, and which are in the list | `store` |
 | `src/storage.js` | Load, save, export, import, validation | `store.js`, `recipes.js` |
 | `src/version.js` | Pure version rules: validation, comparison, the next version | nothing |
+| `src/update.js` | Actualizar: a new worker of the host takes control, or the worker in control loads its shell again (VER-8) | nothing |
 | `src/i18n.js` | The language to show (`resolveLanguage`) and the function `t(key, params)` of one language (`translator`) | `locales/*` |
 | `src/locales/<lang>.js` | The text of one language: a flat object from key to a text or to `{ one, other }` | nothing |
 | `src/ui/context.js` | The values that the views share, their setters, the toast, the save and `render`, the combined state of a member, the week of today | `store`, `storage`, `session`, `lists`, `menu`, `i18n`, `onboarding` |
@@ -52,7 +53,7 @@ repository root.
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
-| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `store`, `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding` |
+| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `store`, `recipes`, `sections`, `storage`, `version`, `update`, `i18n`, `ui/context`, `ui/onboarding` |
 | `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `device`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document | all of the above |
 | `sw.js` | Offline cache of the app shell | nothing; it is not a module of the app |
@@ -79,7 +80,7 @@ state are in `docs/superpowers/specs/2026-10-13-shops-design.md`.
   shared lane of a member (SHARE-12). The first is a plain state of version 10 (the shared part, with no
   `shared` marker); the others are the sync state, with the `scope` of the share, and the queue of the
   shared space. `src/session.js` reads and writes them; `clearAccountData` and `resetAll` remove them.
-- **Cache API**, cache `shopping-shell-v17`: the app shell, served
+- **Cache API**, cache `shopping-shell-v53`: the app shell, served
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers
   `{ ok }` on the message port.

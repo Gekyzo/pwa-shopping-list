@@ -48,7 +48,7 @@ Feature: Shortcuts, arrival and offline shell
 
   @SW-4
   Scenario: The activation deletes the old caches of the app, and keeps the current, the manifest and other apps
-    Then of the caches "shopping-shell-v1, shopping-shell-v52, shopping-manifest, lists-v3, other" the activation deletes "shopping-shell-v1"
+    Then of the caches "shopping-shell-v1, current, shopping-manifest, lists-v3, other" the activation deletes "shopping-shell-v1"
 
   # The cache key only; SW-6 itself, stale-while-revalidate, is the fetch path of sw.js (exempt.txt).
   Scenario Outline: The cache key of <url> is <key>

@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- **Actualitza** de **Configuració** torna a funcionar després d’una versió que mou fitxers de l’app. Abans podia dir «No s’ha pogut actualitzar.» encara que la versió nova estigués a punt.
 
 ## 1.13.1 - 2026-11-09
 

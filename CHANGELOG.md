@@ -10,7 +10,7 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- **Actualizar** no longer asks the worker in control to load its own file list again: that list can name a file that the new deploy moved, as v1.13.1 moved `vendor/design-system/` to `design-system/`, and `cache.addAll` then failed with `No se pudo actualizar.` `updateShell` of the new module `src/update.js` first calls `registration.update()` and waits for the new worker, which installs with the list of its own deploy, to take control; only with no new worker does it send `refresh` (VER-8). One deadline of 15 seconds covers the whole update, the check of `sw.js` too: with no server Chrome leaves `registration.update()` pending, and the button stayed off. Tested in `tests/update.test.js` and the VER-8 scenarios. `REFRESH_MS` of `src/ui/context.js` is gone (`UPDATE_MS` of `src/update.js`). The stale-cache checks read the cache name of `sw.js`. Cache `shopping-shell-v53`.
 
 ## 1.13.1 - 2026-11-09
 

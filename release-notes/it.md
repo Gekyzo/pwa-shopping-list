@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- **Aggiorna** nelle **Impostazioni** funziona di nuovo dopo una versione che sposta file dell’app. Prima poteva dire «Aggiornamento non riuscito.» anche quando la nuova versione era pronta.
 
 ## 1.13.1 - 2026-11-09
 

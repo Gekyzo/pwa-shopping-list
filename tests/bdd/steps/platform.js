@@ -18,7 +18,7 @@ import { names, yesNo } from '../world.js';
 // sw.js is a classic script: run it with a stub `self` and take its pure functions, as
 // tests/sw.test.js does.
 const source = readFileSync(new URL('../../../sw.js', import.meta.url), 'utf8');
-const worker = vm.runInNewContext(`${source}\n;({ localizeManifest, staleCaches, keyOf })`, {
+const worker = vm.runInNewContext(`${source}\n;({ localizeManifest, staleCaches, keyOf, CACHE })`, {
   self: { addEventListener: () => {} },
   URL,
 });
@@ -154,8 +154,10 @@ export const definePlatformSteps = ({ Given, When, Then }) => {
   Then('the manifest shortcuts are {string}', (world, text) => {
     assert.deepEqual(world.manifest.shortcuts.map((shortcut) => shortcut.name), names(text));
   });
+  // `current` stands for the cache name of this sw.js, which each release of the shell changes.
   Then('of the caches {string} the activation deletes {string}', (world, keys, deleted) => {
-    assert.deepEqual(plain(worker.staleCaches(names(keys))), names(deleted));
+    const current = (list) => names(list).map((key) => (key === 'current' ? worker.CACHE : key));
+    assert.deepEqual(plain(worker.staleCaches(current(keys))), current(deleted));
   });
   Then('the cache key of {string} is {string}', (world, url, key) => {
     assert.equal(worker.keyOf(url), key);

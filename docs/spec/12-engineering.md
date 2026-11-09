@@ -28,6 +28,7 @@
 | `src/config.js` | The API URL for the host that serves the app (ACC-12) | nothing |
 | `src/move.js` | The old and the new address, the backup packed into a URL fragment, what the move button does (ADDR-1 to ADDR-5) | `storage` |
 | `src/version.js` | Pure version rules | nothing |
+| `src/update.js` | Actualizar: a new worker of the host takes control, or the worker in control loads its shell again (VER-8) | nothing |
 | `src/whatsnew.js` | The parse of the release notes and the versions that a user has not seen | `version` |
 | `src/install.js` | The install offer state machine | nothing |
 | `src/i18n.js` | The language to show and the translator | `locales/*` |
@@ -53,7 +54,7 @@
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |
 | `src/ui/device.js` | The width class of the window in `ui.device` (NAV-28) | `device`, `ui/context` |
 | `src/ui/move.js` | The screen of the old address and its button, the import of a moved backup on the new address (ADDR-1 to ADDR-8) | `move`, `storage`, `ui/context`, `ui/account`, `ui/onboarding` |
-| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `recipes`, `sections`, `storage`, `version`, `i18n`, `ui/context`, `ui/onboarding`, `ui/account` |
+| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `recipes`, `sections`, `storage`, `version`, `update`, `i18n`, `ui/context`, `ui/onboarding`, `ui/account` |
 | `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `device`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
@@ -135,6 +136,7 @@
 | `tests/sheets.test.js` | When a save of a sheet shows `Guardado` (NAV-22) |
 | `tests/suggest.test.js` | The rows above the add input: create first, the cap of 6, which are in the list (ADD-2) |
 | `tests/version.test.js` | Version rules |
+| `tests/update.test.js` | Actualizar: the wait for a new worker, its failed install, the refresh of the worker in control (VER-8) |
 | `tests/whatsnew.test.js` | The parse of the release notes and the unseen versions |
 | `tests/release-notes-files.test.js` | One release-notes file for each language, with the same versions (VER-18) |
 | `tests/install.test.js` | The install offer states (INS-1) |

@@ -6,7 +6,7 @@ import { LANGUAGES } from '#i18n';
 
 // sw.js is a classic script: run it with a stub `self` and return its pure functions.
 const source = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
-const { localizeManifest, staleCaches, keyOf, SHELL } = vm.runInNewContext(`${source}\n;({ localizeManifest, staleCaches, keyOf, SHELL })`, {
+const { localizeManifest, staleCaches, keyOf, SHELL, CACHE } = vm.runInNewContext(`${source}\n;({ localizeManifest, staleCaches, keyOf, SHELL, CACHE })`, {
   self: { addEventListener: () => {} },
   URL,
 });
@@ -90,7 +90,7 @@ test('localizeManifest does not change the shortcuts of its input', () => {
 });
 
 test('the activate keeps the caches of another app', () => {
-  const keys = ['shopping-shell-v21', 'shopping-shell-v52', 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
+  const keys = ['shopping-shell-v21', CACHE, 'shopping-manifest', 'lists-shell-v1', 'lists-manifest'];
   assert.deepEqual(plain(staleCaches(keys)), ['shopping-shell-v21']);
 });
 

@@ -15,7 +15,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   never a mix of two deploys. It then takes control at once (`skipWaiting`, `clients.claim`).
 - **SW-4** At its activation the worker deletes each cache whose name starts with `shopping-`
   and is not the current one or `shopping-manifest` (SW-13). The cache name is
-  `shopping-shell-v52`. A cache of another app of the same origin stays, such as those of Stash
+  `shopping-shell-v53`. A cache of another app of the same origin stays, such as those of Stash
   (`lists-`).
 - **SW-5** The worker answers only `GET` requests of its own origin.
 - **SW-6** A request is answered stale-while-revalidate: the cached copy at once, and a fresh copy
@@ -71,9 +71,14 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   | One of the two is not known | Struck-out cloud | Red (danger) | `Sin conexión` | Hidden |
 
 - **VER-7** Two versions compare by number, part by part: `1.10.0` is newer than `1.9.0`.
-- **VER-8** **Actualizar** sends `refresh` to the worker and waits 15 seconds at most. On success
-  the page loads again, with the new shell. On failure the message is `No se pudo actualizar.`
-  With no worker in control the page loads again at once.
+- **VER-8** **Actualizar** first asks the browser for the `sw.js` of the host
+  (`registration.update()`). A new worker installs with the shell of its own deploy (SW-3), and the
+  page loads again when it takes control. With no new worker, it sends `refresh` to the worker in
+  control. Either way it waits 15 seconds at most (`updateShell` of `src/update.js`). On success
+  the page loads again, with the new shell. On failure, or when the new worker fails its install,
+  the message is `No se pudo actualizar.` With no worker in control the page loads again at once.
+  The old worker never loads the files of the new deploy: its list can name a file that the new
+  deploy moved.
 
 ## Deploy
 

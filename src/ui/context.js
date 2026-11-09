@@ -45,8 +45,6 @@ export const HOLD_MS = 400;
 export const EDGE = 56;
 export const EDGE_STEP = 8;
 export const LEAVE_MS = 200;
-// The wait for the service worker to load the new deploy.
-export const REFRESH_MS = 15000;
 // The wait for the deployed version: a weak network can leave the request open.
 export const CHECK_MS = 8000;
 

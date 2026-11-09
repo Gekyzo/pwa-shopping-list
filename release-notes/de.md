@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- **Aktualisieren** in den **Optionen** funktioniert wieder nach einer Version, die Dateien der App verschiebt. Vorher konnte es „Die Aktualisierung ist fehlgeschlagen.“ melden, obwohl die neue Version bereit war.
 
 ## 1.13.1 - 2026-11-09
 

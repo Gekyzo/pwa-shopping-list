@@ -119,3 +119,72 @@ Feature: Version and release notes
       | A **bold** word         | text "A ", bold "bold", text " word"     |
       | An odd ** marker        | text "An odd ** marker"                  |
       | Use `#repeat Repetir`   | text "Use ", key "Repetir" with the icon repeat |
+
+  Rule: Actualizar
+
+    @VER-8
+    Scenario: A new deploy installs its own worker, and the page loads again when it takes control
+      Given a worker of the old deploy is in control
+      And the host has a new sw.js whose worker installs
+      When I tap Actualizar
+      Then the update gives reload
+      And the old worker got no refresh
+
+    @VER-8
+    Scenario: The old worker is not asked to load a file list that the new deploy moved
+      Given a worker of the old deploy is in control
+      And the worker in control fails its refresh
+      And the host has a new sw.js whose worker installs
+      When I tap Actualizar
+      Then the update gives reload
+
+    @VER-8
+    Scenario: A new worker that fails its install fails the update
+      Given a worker of the old deploy is in control
+      And the host has a new sw.js whose worker fails its install
+      When I tap Actualizar
+      Then the update gives failed
+
+    @VER-8
+    Scenario Outline: With no new worker the worker in control refreshes the shell: <case>
+      Given a worker of the old deploy is in control
+      And the host has the same sw.js
+      And the worker in control <answer>
+      When I tap Actualizar
+      Then the update gives <result>
+      And the old worker got a refresh
+
+      Examples:
+        | case     | answer                 | result |
+        | it loads | refreshes the shell    | reload |
+        | it fails | fails its refresh      | failed |
+        | silent   | never answers          | failed |
+
+    @VER-8
+    Scenario: A new worker that never takes control fails the update after the wait
+      Given a worker of the old deploy is in control
+      And the host has a new sw.js whose worker never takes control
+      When I tap Actualizar
+      Then the update gives failed
+
+    @VER-8
+    Scenario: With no worker in control the page loads again at once
+      Given no worker is in control
+      When I tap Actualizar
+      Then the update gives reload
+
+    @VER-8
+    Scenario: With no connection the check of sw.js fails, and the refresh decides
+      Given a worker of the old deploy is in control
+      And the check of sw.js fails
+      And the worker in control fails its refresh
+      When I tap Actualizar
+      Then the update gives failed
+
+    @VER-8
+    Scenario: A check of sw.js that never ends still ends the update within the wait
+      Given a worker of the old deploy is in control
+      And the check of sw.js never ends
+      And the worker in control never answers
+      When I tap Actualizar
+      Then the update gives failed
