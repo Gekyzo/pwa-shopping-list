@@ -152,13 +152,13 @@
 | `tests/changelog.test.js` | The release of `CHANGELOG.md` and of the release notes by `scripts/changelog.mjs`, which the version bump uses (VER-17, VER-19) |
 | `tests/pair.test.js` | The users, origins and options of `scripts/pair.mjs`, which `npm run pair` runs for a local test between two people |
 | `tests/spec.test.js` | The facts of this specification that the code can prove (ENG-12) |
-| `tests/features.test.js` | The scenarios of `tests/features/*.feature` with the steps of `tests/bdd/steps/`; each live rule of this specification has a scenario or an exempt line, and each tag names a rule (ENG-18) |
+| `tests/features.test.js` | The scenarios of `tests/features/**/*.feature`, one folder for each area, with the steps of `tests/bdd/steps/`; each live rule of this specification has a scenario or an exempt line, and each tag names a rule (ENG-18) |
 | `tests/gherkin.test.js` | The Gherkin parser, the step registry, the scenario run and the rule coverage check of `tests/bdd/` (ENG-18) |
 
 A unit test uses `node:test` with `node:assert/strict`, one behaviour for each test, and checks
 that the input state does not change.
 
-- **ENG-18** A behaviour test is a scenario of a `.feature` file of `tests/features/`, in English
+- **ENG-18** A behaviour test is a scenario of a `.feature` file in a folder of its area under `tests/features/`, in English
   Gherkin: `Feature`, `Rule`, `Background`, `Scenario`, `Scenario Outline` with `Examples`, data
   tables and doc strings. `npm test` runs it through `tests/features.test.js`, as one test for each
   scenario, with no dependency: `tests/bdd/gherkin.js` parses it, `tests/bdd/steps.js` matches each

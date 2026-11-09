@@ -160,7 +160,7 @@ LANG-12 static tests/markup.test.js checks that index.html holds no text of its 
 SW-1 screen src/app.js registers sw.js at each start.
 SW-2 static tests/layers.test.js checks that each module of src/ is in SHELL; tests/sw.test.js checks the release notes in it.
 SW-3 screen The install of the worker downloads the shell past the HTTP cache and takes control.
-SW-6 screen Stale-while-revalidate is the fetch path of sw.js; the cache key with no query is a scenario of shortcuts.feature and of tests/sw.test.js.
+SW-6 screen Stale-while-revalidate is the fetch path of sw.js; the cache key with no query is a scenario of app/shortcuts.feature and of tests/sw.test.js.
 SW-5 screen The worker answers only GET requests of its origin.
 SW-7 screen A request with no cached copy goes to the network; a failed navigation gets index.html.
 SW-8 screen A request with the latest parameter goes to the network only.
