@@ -41,6 +41,13 @@ Feature: Items of the list
       | MILK   |
       |  Milk  |
 
+  @DATA-3
+  Scenario: Accents count in a name: Cafe and Café are two items
+    Given the list has "Cafe"
+    When I add "Café"
+    Then there is no error
+    And the list has 3 items
+
   @LIST-10
   Scenario: Only an item of Compra can be ticked
     Given the list has items:

@@ -41,3 +41,14 @@ Feature: Saved items
     Then the trip figures are:
       | total | left | back | saved |
       | 1     | 1    | 0    | 1     |
+
+  @DATA-1
+  Scenario: An item is one record: a bring back moves it, it does not copy it
+    Given the list has items:
+      | name  | list  |
+      | Pilas | saved |
+    When I bring back "Pilas"
+    Then the list has 1 item
+    And the items are:
+      | id   | name  | list   |
+      | id-1 | Pilas | active |

@@ -23,3 +23,10 @@ LIST-38 screen The panel Recetas en la lista; its counts are recipe rules (REC-4
 LIST-39 screen The panel Próxima compra and the head Pospuestos (N); the postponed items are LIST-40 to LIST-42.
 TRIP-5 screen After Terminar compra the screen shows Compra; Deshacer restores the full state.
 TRIP-7 screen The buttons Descartar and Aplazar of Ajustes; the stored choice is TRIP-8.
+
+# 08-storage.md
+STORE-3 screen A render builds the lists from the state in memory; the page holds no data.
+STORE-4 screen The start asks navigator.storage.persist() and ignores the answer.
+STORE-11 prose A limit: the app does not read the change of another tab.
+BACKUP-5 screen The question before an import, with or without a session; the replace itself is BACKUP-4.
+BACKUP-6 screen The Deshacer and the message of an import.
