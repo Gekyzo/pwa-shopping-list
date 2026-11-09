@@ -152,9 +152,21 @@
 | `tests/changelog.test.js` | The release of `CHANGELOG.md` and of the release notes by `scripts/changelog.mjs`, which the version bump uses (VER-17, VER-19) |
 | `tests/pair.test.js` | The users, origins and options of `scripts/pair.mjs`, which `npm run pair` runs for a local test between two people |
 | `tests/spec.test.js` | The facts of this specification that the code can prove (ENG-12) |
+| `tests/features.test.js` | The scenarios of `tests/features/*.feature` with the steps of `tests/bdd/steps/`; each rule tag names a rule of this specification (ENG-18) |
+| `tests/gherkin.test.js` | The Gherkin parser, the step registry and the scenario run of `tests/bdd/` (ENG-18) |
 
 A unit test uses `node:test` with `node:assert/strict`, one behaviour for each test, and checks
 that the input state does not change.
+
+- **ENG-18** A behaviour test is a scenario of a `.feature` file of `tests/features/`, in English
+  Gherkin: `Feature`, `Rule`, `Background`, `Scenario`, `Scenario Outline` with `Examples`, data
+  tables and doc strings. `npm test` runs it through `tests/features.test.js`, as one test for each
+  scenario, with no dependency: `tests/bdd/gherkin.js` parses it, `tests/bdd/steps.js` matches each
+  step to its definition (`{string}`, `{int}`, `{float}`, `{word}`, optional text in parentheses), and
+  `tests/bdd/run.js` runs it with a new world for each scenario. The step definitions of a module are
+  in `tests/bdd/steps/<module>.js`. A scenario names the rules it proves as tags, such as `@TRIP-2`,
+  and each such tag must name a rule of this specification. A step with no definition, or with two,
+  fails the scenario. `@skip` skips a scenario and `@todo` marks it as to do.
 
 ## Checks with no test
 
