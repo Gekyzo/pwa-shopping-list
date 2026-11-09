@@ -99,7 +99,7 @@
 | A new module of `src/` | Its alias in the import map of `index.html`, and its file in `SHELL` of `sw.js` |
 | A new file that the app loads | Its path in `SHELL` of `sw.js` |
 | A stored state that an old module cannot read | A new cache name in `sw.js` |
-| A change of behaviour | The rule in this specification, in the same commit |
+| A change of behaviour | The rule in this specification, then its scenario in `tests/features/` that fails, then the code, in the same commit (ENG-19) |
 
 ## Tests
 
@@ -167,6 +167,9 @@ that the input state does not change.
   in `tests/bdd/steps/<module>.js`. A scenario names the rules it proves as tags, such as `@TRIP-2`,
   and each such tag must name a rule of this specification. A step with no definition, or with two,
   fails the scenario. `@skip` skips a scenario and `@todo` marks it as to do.
+- **ENG-19** A change of behaviour starts with its acceptance scenario: the rule changes first, then
+  its scenario, which fails, then the code with its unit tests. A bug fix starts with a scenario that
+  shows the bug. A rule that only the screen proves gets no scenario; its browser check (ENG-9) stays.
 
 ## Checks with no test
 
