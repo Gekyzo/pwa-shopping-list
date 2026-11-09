@@ -39,14 +39,24 @@ const errorOf = (word) => {
 
 const expiredToken = (id) => `${base64url({})}.${base64url({ id, exp: 1 })}.sig`;
 
-// The syncer logs a refused state and a bug with console.error: the scenarios expect them.
+// The syncer logs a refused state and an error of a sync with console.error. The scenarios expect
+// three kinds: the refusal of SYNC-2 (a text that starts with `sync:`), an error of the client
+// (`PocketBaseError`) and the `bug` that a scenario injects. Any other log is a real fault of the
+// syncer or of a fake, so the step fails instead of hiding it behind an `offline` result.
+const expectedLog = (value) =>
+  (typeof value === 'string' && value.startsWith('sync:')) ||
+  value instanceof PocketBaseError ||
+  (value instanceof TypeError && value.message === 'a bug');
+
 const quiet = async (fn) => {
   const original = console.error;
-  console.error = () => {};
+  const unexpected = [];
+  console.error = (...values) => unexpected.push(...values.filter((value) => !expectedLog(value)));
   try {
     return await fn();
   } finally {
     console.error = original;
+    assert.deepEqual(unexpected, [], `The sync logged an error that no scenario expects: ${unexpected.join('; ')}`);
   }
 };
 
