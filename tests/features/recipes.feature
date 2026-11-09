@@ -307,7 +307,7 @@ Feature: Recipes
 
   Rule: Delete
 
-    @REC-6
+    @REC-6 @DATA-10
     Scenario: A delete removes the recipe, its sent id and its meals from this week on; a past meal keeps its name
       Given a recipe "Tortilla" with "Huevos"
       And a recipe "Flan" with "Leche"
@@ -328,7 +328,7 @@ Feature: Recipes
         | 2026-11-09 | Monday | dinner | Flan   |          |
       And the items shown are "Huevos"
 
-    @REC-6
+    @REC-6 @DATA-10
     Scenario: A past meal of a long name keeps 80 characters of it
       Given a recipe "Guiso de garbanzos con espinacas, bacalao y huevo duro de la abuela de Rosa, receta" with "Garbanzos"
       And the lunch of Monday in the week "2026-11-02" is the recipe "Guiso de garbanzos con espinacas, bacalao y huevo duro de la abuela de Rosa, receta"

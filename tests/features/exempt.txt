@@ -95,3 +95,13 @@ REC-33 screen The sheet Receta: its fields, Enter, Escape and the save on a loss
 REC-34 screen The veil, Escape and the cases that close the sheet.
 REC-37 screen The dish row and its chef's hat button; the turn into a recipe is MENU-17.
 REC-39 screen The recipe pane from 840px and the columns of the cards.
+
+# 13-menu.md
+MENU-9 screen The day rows of Menú and the look of each meal by width and density.
+MENU-11 screen The meal sheet: its recipe chips and Quitar with Deshacer; the put is MENU-3.
+MENU-12 screen The action bar and the messages of Llenar cesta; the fill is MENU-5 to MENU-7.
+MENU-13 screen The button Vaciar menú, its message and when it is disabled; the empty is MENU-4.
+MENU-14 screen Menú shows the week with no recipe, no empty text, no + button and no dock.
+MENU-16 screen The field of the meal sheet that filters its chips, and its texts.
+MENU-18 screen The row Añadir «text» sin receta and Enter in the field; the dish is MENU-3.
+MENU-19 screen The buttons Crear receta and Quitar of a dish; the turn is MENU-17.
