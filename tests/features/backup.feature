@@ -3,7 +3,7 @@
 Feature: Backup
   Exportar downloads the state as a JSON file; Importar replaces the state with a valid file.
 
-  @BACKUP-1
+  @BACKUP-1 @LANG-17
   Scenario Outline: The export file is named by the local date and time
     Then the export file name at "<time>" is "<name>"
 
@@ -12,7 +12,7 @@ Feature: Backup
       | 2026-11-09T08:05:03 | compra-2026-11-09-080503.json |
       | 2026-01-02T23:59:59 | compra-2026-01-02-235959.json |
 
-  @BACKUP-1 @BACKUP-2
+  @BACKUP-1 @BACKUP-2 @LANG-5
   Scenario: The export is the state as JSON with an indent of 2, and nothing else
     Given the list has "Milk"
     And the key "shopping.lang" holds "en"

@@ -19,7 +19,7 @@ Feature: Arrange
       Then the error is "error.unknownSort"
       And the state did not change
 
-    @SORT-6
+    @SORT-6 @LANG-15
     Scenario: Nombre orders with no case and no accent distinction, and keeps items
       Given the list has "nata"
       And the list has "Árbol"

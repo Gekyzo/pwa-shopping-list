@@ -148,3 +148,55 @@ ONB-9 screen Ver la introducción of Ajustes opens the walkthrough from page 1.
 ONB-10 screen The app below the walkthrough is inert.
 ONB-11 screen The dialog role and label of the walkthrough.
 ONB-12 screen A page changes with no animation under reduced motion.
+
+# 09-languages.md
+LANG-3 screen The list Idioma of Ajustes and a choice that applies with no reload; the stored choice is LANG-4.
+LANG-6 screen The lang attribute of the page.
+LANG-7 static tests/i18n.test.js checks the shape of each catalog of src/locales/.
+LANG-8 static tests/i18n.test.js checks that each catalog has the keys, forms and placeholders of es.js.
+LANG-12 static tests/markup.test.js checks that index.html holds no text of its own.
+
+# 10-offline-version.md
+SW-1 screen src/app.js registers sw.js at each start.
+SW-2 static tests/layers.test.js checks that each module of src/ is in SHELL; tests/sw.test.js checks the release notes in it.
+SW-3 screen The install of the worker downloads the shell past the HTTP cache and takes control.
+SW-5 screen The worker answers only GET requests of its origin.
+SW-7 screen A request with no cached copy goes to the network; a failed navigation gets index.html.
+SW-8 screen A request with the latest parameter goes to the network only.
+SW-9 screen The message refresh downloads the shell again and answers on its port.
+SW-10 prose A rule for the author: a state that an old module cannot read needs a new cache name.
+SW-11 screen The app starts and works with no connection after the first load.
+SW-12 screen A deploy shows at the second start, or at once with Actualizar.
+VER-1 static tests/version.test.js checks the shape of a version, and tests/release.test.js that a release writes it to version.json and package.json.
+VER-4 screen The foot of Ajustes shows the running version and its status.
+VER-5 screen The read of the deployed version when Ajustes opens, and its time limit.
+VER-8 screen Actualizar sends refresh to the worker and loads the page again.
+VER-9 prose The host of the app and the deploy of a release tag.
+VER-10 static tests/release.test.js checks the bump commit and the tag of npm run release.
+VER-11 static tests/release.test.js checks a minor and a major release.
+VER-12 static tests/release.test.js checks each refusal of npm run release.
+VER-13 prose The hook .githooks/pre-push has no test; it is checked by hand in a scratch clone (ENG-10).
+VER-14 static tests/spec.test.js checks the id, the scope and the orientation of the manifest.
+VER-15 prose The icon files and their art; npm run icons writes them from icons/source.png.
+VER-16 prose The installed app and the site share one storage.
+VER-17 static tests/changelog.test.js checks the release of CHANGELOG.md.
+VER-19 static tests/release.test.js and tests/changelog.test.js check the release of the release notes.
+VER-22 screen The row of Novedades in Ajustes and when it hides.
+
+# 11-integrations.md
+ARR-2 screen The message of an arrival stays 10 seconds.
+ARR-4 screen The app removes arrival from the URL at once.
+ARR-5 prose The repository holds no coordinates; they belong to the automation app.
+SHORT-4 static tests/glyph.test.js checks the line icons that npm run icons draws for the shortcuts.
+SHORT-5 screen The app removes open from the URL at once.
+VOICE-1 prose Not built: no file of src/ answers a voice command (finding of the BDD coverage plan).
+VOICE-2 prose Not built: no file of src/ answers a voice command.
+VOICE-3 prose Not built: no file of src/ answers a voice command.
+VOICE-4 prose Not built: no file of src/ answers a voice command.
+VOICE-5 prose Not built: no file of src/ answers a voice command.
+VOICE-6 prose Not built: no file of src/ answers a voice command.
+VOICE-7 prose Not built: no file of src/ reads ?voice, and the manifest has no Hablar shortcut.
+VOICE-8 prose Not built: src/voice-commands.js and src/voice.js do not exist.
+
+# 16-install.md
+INS-4 static tests/spec.test.js checks that the manifest has orientation any.

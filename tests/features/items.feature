@@ -28,7 +28,7 @@ Feature: Items of the list
       | empty  | ""    |
       | spaces | "   " |
 
-  @LIST-2
+  @LIST-2 @LANG-13
   Scenario Outline: A name that an item has already is rejected, with no case distinction
     When I add "<name>"
     Then the error is "error.duplicateItem" for "Milk" in active
@@ -41,7 +41,7 @@ Feature: Items of the list
       | MILK   |
       |  Milk  |
 
-  @DATA-3
+  @DATA-3 @LANG-14
   Scenario: Accents count in a name: Cafe and Café are two items
     Given the list has "Cafe"
     When I add "Café"

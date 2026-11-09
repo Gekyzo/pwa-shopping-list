@@ -9,6 +9,7 @@ import { defineShopSteps } from './shops.js';
 import { defineMenuSteps } from './menu.js';
 import { defineSharedSteps } from './shared.js';
 import { defineScreenSteps } from './screen.js';
+import { definePlatformSteps } from './platform.js';
 
 export const defineAllSteps = (registry) => {
   defineCommonSteps(registry);
@@ -22,4 +23,5 @@ export const defineAllSteps = (registry) => {
   defineMenuSteps(registry);
   defineSharedSteps(registry);
   defineScreenSteps(registry);
+  definePlatformSteps(registry);
 };
