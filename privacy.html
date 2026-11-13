@@ -64,7 +64,7 @@
   <body>
     <main>
       <h1>Privacy</h1>
-      <p class="updated">Bodega, the shopping list app. Last updated 24 October 2026.</p>
+      <p class="updated">Bodega, the shopping list app. Last updated 13 November 2026.</p>
 
       <p>
         Bodega is a personal app. One person runs it for family and friends. It has no
@@ -81,7 +81,10 @@
       <p>An account is optional. It keeps your data in sync between your devices. The server stores:</p>
       <ul>
         <li>your email address and, if you give one, your name;</li>
-        <li>a hash of your password, if you sign in with a password;</li>
+        <li>
+          a hash of your password, only for an account made with a password before Google sign-in
+          replaced it on 25 October 2026;
+        </li>
         <li>
           if you sign in with Google: your Google account ID, email address and name. Bodega asks
           Google only for these (the <code>openid</code>, <code>email</code> and
@@ -90,6 +93,10 @@
         </li>
         <li>whether the administrator approved your account;</li>
         <li>your lists, recipes, menu and settings, with the time of each change;</li>
+        <li>
+          the people you share your data with: their email address, whether they share only the list
+          or also the recipes and the menu, and whether the invite is pending, accepted or cancelled;
+        </li>
         <li>
           a log of requests to the server: time, address, IP address and browser. The log is
           deleted after 5 days.
@@ -107,15 +114,18 @@
 
       <h2>Who can see it</h2>
       <p>
-        Only you, through the app, and the administrator who runs Bodega. The data is not sold,
-        shared or used for any other purpose.
+        You, through the app, and the administrator who runs Bodega. When you share your data, the
+        people you invite also see and change the part you share with them: the list only, or also
+        the recipes and the menu. The data is not sold, shared with anyone else or used for any
+        other purpose.
       </p>
 
       <h2>Email</h2>
-      <p>Bodega sends two kinds of email, through Gmail:</p>
+      <p>Bodega sends three kinds of email, through Gmail:</p>
       <ul>
         <li>to the administrator, when someone asks for an account;</li>
-        <li>to you, when your account is approved.</li>
+        <li>to you, when your account is approved;</li>
+        <li>to a person you invite to share your data.</li>
       </ul>
 
       <h2>Delete your data</h2>
