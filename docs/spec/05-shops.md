@@ -7,9 +7,10 @@ in [04-arrange.md](04-arrange.md).
 
 - **SHOP-1** An item has zero, one or more shops. A shop is a name; it exists while an item has
   it (DATA-12).
-- **SHOP-2** A shop name is trimmed. An empty name gives `error.shopRequired`.
-- **SHOP-3** Two spellings that differ only by case are one shop. A typed name that is a shop in
-  use takes the spelling of that shop.
+- **SHOP-2** A shop name is trimmed. An empty name gives `error.shopRequired`. An add or a removal
+  of a shop for an item that does not exist gives `error.itemNotFound`.
+- **SHOP-3** Two spellings that differ only by case are one shop; accents count, so `Cafe` and
+  `Café` are two shops. A typed name that is a shop in use takes the spelling of that shop.
 - **SHOP-4** An add of a shop that the item has already changes nothing and gives no error.
 - **SHOP-5** A removal of a shop that the item does not have changes nothing and gives no error.
 - **SHOP-6** The shops in use show in name order, with no case and no accent distinction.
@@ -19,17 +20,19 @@ in [04-arrange.md](04-arrange.md).
 ## Shops of an item
 
 - **SHOP-8** The shops of an item are in the edit sheet `Editar` (ROW-7), below the
-  fields, under a line and the title **Tiendas**. A tap on the name of a row opens it.
+  fields, under a line and the title **Tiendas**. The edit button of a row, the action **Editar** of
+  its side menu, or a click of a mouse on its body opens it (ROW-1).
 - **SHOP-9** The sheet shows each shop in use as a chip. A chip is pressed when the item has the
   shop. A tap on a chip adds or removes the shop for this item.
 - **SHOP-10** The field **Nueva tienda** with **Añadir** adds a shop. The field takes 40
-  characters at most.
+  characters at most. **Añadir** is disabled while the field has no text.
 - **SHOP-11** The field offers the shops in use that the item does not have. A pick of one adds it
   at once.
 - **SHOP-12** The sheet stays open after each change, so that an item gets several shops in one
   visit. A tap out of the sheet or `Escape` closes it.
 - **SHOP-13** With no shop in use, the sheet shows `Escribe la primera tienda.`
-- **SHOP-14** A change of shops is saved at once and has no message and no `Deshacer`.
+- **SHOP-14** A change of shops is saved at once and has no message and no `Deshacer`. The foot of
+  the sheet shows `Guardado` (NAV-22).
 - **SHOP-15** The edit sheet closes when its item goes away, for example by `Deshacer` or by an
   import.
 
@@ -43,7 +46,8 @@ apply in it.
   The chip of the list in view is pressed: a pill filled with `--done`, its count on `--done-soft`;
   the other chips are outlined pills. Below 600px the dock holds the shop lists instead
   (SHOP-26).
-- **SHOP-17** The row shows when an item of the view has a shop. **Sin tienda** shows when an item
+- **SHOP-17** The row shows when an item of `Compra` in the view has a shop: a shop of a saved or
+  postponed item gives no chip. **Sin tienda** shows when an item
   of the view has no shop. The row scrolls horizontally, and a slide on it does not change the
   section (NAV-4). `Izquierda` does not change the row.
 - **SHOP-18** A chip shows the count of its items to buy, or `✓` for none.
@@ -56,7 +60,7 @@ apply in it.
 - **SHOP-21** **Terminar compra** stays one operation on the full state (TRIP-2). The banner
   `¿Has terminado?` shows only in **Todas**.
 - **SHOP-22** The choice is a state of the screen and is not stored. A start shows **Todas**. The
-  choice stays while the app runs. A choice whose chip goes, for
+  choice stays while the app runs, in the spelling of its chip. A choice whose chip goes, for
   example by a removal of a shop, `Deshacer`, **Terminar compra** or an import, goes back to
   **Todas**.
 - **SHOP-23** A shop list of `Compra` with no item to buy, while items of `Compra` are still to
@@ -88,7 +92,8 @@ apply in it.
 - **SHOP-25** The arrange sheet has the choice **Listas por tienda**, **Mostrar** or **Ocultar**,
   when the view has the row of SHOP-17. **Ocultar** hides the row in `Compra` and shows
   **Todas**. The choice is a preference of the device, stored in `shopping.shopLists`;
-  **Mostrar** removes the key. `Deshacer` and an import do not change it. The row closes and opens
+  **Mostrar** removes the key, and any stored value other than `hide` reads as **Mostrar**.
+  `Deshacer` and an import do not change it. The row closes and opens
   as a head of GROUP-15 does, and the rows below move with it.
 
 ## Limits

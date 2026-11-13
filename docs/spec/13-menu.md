@@ -42,10 +42,12 @@ past weeks stay, read only, and the next weeks can be planned ahead.
 - **MENU-9** `Menú` shows one row for each day, with the name of the day in the language of the
   screen, and its two meals side by side. A meal shows `Comida` or `Cena` and the name of its
   recipe or its dish, or `Elegir receta`. The name of the day is a head in sentence case, in the
-  colour of the text, at 14px (`--text-label`) as the other heads. A meal with a recipe is a `--surface` tile with a `--line` border and a
-  `--muted` label. A meal with a dish has a solid `--muted` border and the label `Comida · sin
-  receta`. A meal with neither has a dashed `--control` border on the ground and a `--muted`
-  `Elegir receta`. A full day looks the same as the other days.
+  colour of the text, at 18px (`--text-group`), after a 4px emerald bar (`--day-bar`). A meal
+  with a recipe is a `--surface` tile with a `--line` border and a `--muted` label. A meal with a
+  dish is a tile on `--surface-2` with a `--line` border and the label `Comida · sin receta`. A
+  meal with neither has a dashed `--control` border on the ground and a `--muted` `Elegir
+  receta`, centred. A full day looks the same as the other days. From 1024px the day and its meals
+  follow the desktop screen (DSV-30).
   Below 600px wide the name stands above the meals; from 600px it stands at the start of the row,
   with the width of the longest name, so the week fits on the screen of a tablet or an unfolded
   phone. In the compact density below 600px the name above the meals is the short weekday of
@@ -71,7 +73,7 @@ past weeks stay, read only, and the next weeks can be planned ahead.
 - **MENU-16** The meal sheet has the field **Busca una receta o escribe un plato** above the
   chips. It filters the chips while the user types, with the match of REC-24. With no match the
   sheet shows `Ninguna receta coincide con «text».` With no recipe and no text it shows `Escribe
-  el nombre de un plato.` The text is empty each time the sheet opens. The sheet keeps the height of its first render while
+  el nombre de un plato.` The field takes 80 characters at most. The text is empty each time the sheet opens. The sheet keeps the height of its first render while
   it is open, so that the sheet does not shrink as the matches fall.
 
 - **MENU-18** When the text of the field is not empty and no recipe has that name, with no case
@@ -82,7 +84,8 @@ past weeks stay, read only, and the next weeks can be planned ahead.
   half of the line, with **Crear receta**, a primary button, at the side of the hand (NAV-12). The **Quitar** of a
   meal with a recipe takes the full line. A tap turns the dish
   into a recipe (MENU-17), closes the sheet, shows `Recetas` and opens the sheet of the recipe,
-  with `Deshacer` and the message `Receta creada: «name».`
+  with `Deshacer` and the message `Receta creada: «name».` The message is the same when the meals
+  take a recipe that exists.
 
 ## Shared menu
 
@@ -167,5 +170,6 @@ past weeks stay, read only, and the next weeks can be planned ahead.
 ## Limits
 
 No week more than 4 weeks after this one, no edit of a past week, no third meal. No quantity.
-**Repetir esta semana** copies into this week only. `Recetas` lists the dishes of this week only
+**Repetir esta semana** of a past week copies into this week only (MENU-24); only the panel of
+MENU-27 copies into a later week. `Recetas` lists the dishes of this week only
 (REC-36).

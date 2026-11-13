@@ -39,7 +39,7 @@
 | `src/ui/edit.js` | The edit sheet `Editar` | `store`, `lists`, `shops`, `aisles`, `ui/context`, `ui/controls` |
 | `src/ui/drag.js` | The manual order: the lift of a row, its move and its drop | `device`, `reorder`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/rows.js` | The item rows, their side menus, their swipe and the hint of the swipe | `device`, `store`, `swipe`, `storage`, `lists`, `ui/context`, `ui/view`, `ui/motion`, `ui/controls`, `ui/edit`, `ui/drag` |
-| `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `store`, `recipes`, `menu`, `lists`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/view` |
+| `src/ui/recipes.js` | The section `Recetas` and the recipe sheet | `recipes`, `menu`, `lists`, `ui/context`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/view` |
 | `src/ui/panels.js` | The panels of `Compra` and `Menú` from 600px: Recetas en la lista, Próxima compra (the postponed items), Almacenamiento local, Semanas anteriores, Generación automática de cesta | `store`, `recipes`, `menu`, `storage`, `ui/context`, `ui/view`, `ui/controls`, `ui/nav`, `ui/recipes`, `ui/rows`, `ui/menu` |
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `lists`, `i18n`, `ui/context`, `ui/controls`, `ui/recipes`, `ui/nav`, `ui/rows`, `ui/view` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
@@ -52,7 +52,7 @@
 | `src/ui/share.js` | The sheet `Compartir lista` of `Ajustes`: the people and the invite, the accept and the decline, the leave (SHARE-5, SHARE-8, SHARE-9) | `shares`, `ui/context`, `ui/account` |
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |
 | `src/ui/device.js` | The width class of the window in `ui.device` (NAV-28) | `device`, `ui/context` |
-| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `recipes`, `sections`, `storage`, `version`, `update`, `i18n`, `ui/context`, `ui/onboarding`, `ui/account` |
+| `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, density, **Al terminar la compra**, **Artículo en las dos listas**, export and import, **Borrar todos los datos**, the delete of the sample recipe | `recipes`, `sections`, `storage`, `version`, `update`, `i18n`, `ui/context`, `ui/onboarding`, `ui/account` |
 | `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `device`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
 | `sw.js` | Offline cache of the app shell. Not a module of the app | nothing |
@@ -62,11 +62,14 @@
 - **ENG-1** A state operation is a pure function `(state, …) → { state }`. It never changes its
   input.
 - **ENG-2** A rejected operation returns `{ state, error }` with the same state object. Nothing
-  throws for a user error. `error` is a message `{ key, params }`.
+  throws for a user error. `error` is a message `{ key, params }`; with no params it is `{ key }`.
 - **ENG-3** An operation that changes nothing returns the same state object, where a caller needs
   to know that (`reorderItems`, `sendRecipe`, `addItemShop`, `removeItemShop`, `bringToList` with
   `changed`).
-- **ENG-4** The screen applies an operation, saves, then builds the page again from the state.
+- **ENG-4** The screen applies an operation, saves, then builds the page again from the state
+  (`apply` of `src/ui/context.js`). A rejection shows its message and saves nothing. A failed save
+  shows `error.notSaved`. A success with an undo text shows that text with `Deshacer`; any other
+  success hides the message.
 - **ENG-5** A module with a side effect takes the object of that effect as a parameter (the
   storage object), so that a test passes a fake.
 - **ENG-6** No module imports `src/app.js`. A view of `src/ui/` renders the screen through
@@ -193,9 +196,12 @@ of a rule is correct; that stays a review by the author.
 
 - **ENG-12** `tests/spec.test.js` compares the specification with the code: each rule identifier is
   defined one time and each named rule exists; each link has its file and the index lists each
-  document; the state version, the groups and the orders; the storage keys and the cache name; the
-  languages; each `error.*` and `toast.*` key that a document names; the module table against
-  `src/` and against the imports of each module; the test table against `tests/`.
+  document; each rule prefix against the prefix table of the index; the state version, the groups
+  and the orders; the storage keys and the cache name; the keys that **Borrar todos los datos**
+  removes against the key table; the files of `design-system/` (DSV-1); the manifest `id`
+  (VER-14) and `orientation` (INS-4); the languages; each `error.*` and `toast.*` key that a
+  document names; the module table against `src/` and against the imports of each module; the
+  test table against `tests/`.
 - **ENG-13** `.githooks/pre-commit`, enabled with `npm run hooks`, stops a commit that stages a
   change of the app with no staged change of `docs/spec/`. The app is `src/`, `sw.js`,
   `index.html` and `manifest.webmanifest`. Of the catalogs of `src/locales/`, only `es.js` counts.
@@ -214,4 +220,5 @@ npm run pair     # user A on :8081 and user B on :8082, on the local pwa-server
 npm run icons    # write the PNG icons again
 npm run hooks    # enable .githooks/ in this clone
 npm run release  # bump the version, commit it and tag it vX.Y.Z
+npm run apk      # build the signed APK and AAB of the Android wrapper in twa/out/ (INS-7)
 ```

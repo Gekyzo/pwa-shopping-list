@@ -32,7 +32,9 @@ next trip is almost ready.
 - **PROD-8** All URLs are relative, so the app works below a subpath of its host. The one absolute
   URL is the API (ACC-12).
 - **PROD-9** A destructive action has no confirmation. `Deshacer` restores the state for 5 seconds
-  instead. The import of a backup is the exception: it asks first, and it also has `Deshacer`.
+  instead. Two actions ask first: the import of a backup, which also has `Deshacer`, and
+  **Borrar todos los datos** (BACKUP-7), which has none. A logout with changes not sent asks too
+  (ACC-9).
   A state that the sync puts in place (SYNC-4) removes the message and its `Deshacer`: the old
   state would undo the change of the other device and send that as a change of the user.
 
@@ -41,6 +43,7 @@ next trip is almost ready.
 | Function | Document |
 |---|---|
 | The list `Compra` and the trip cycle | [03-lists.md](03-lists.md) |
+| Postpone an item to the next trip | [03-lists.md](03-lists.md) |
 | Add with search, with no duplicate | [03-lists.md](03-lists.md) |
 | Search in `Compra` | [03-lists.md](03-lists.md) |
 | Order by name or custom, with a manual move | [04-arrange.md](04-arrange.md) |

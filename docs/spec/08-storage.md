@@ -26,6 +26,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.shared.v1` | The state of the shared space of a member, as JSON, beside `shopping.v1` ([19-sharing.md](19-sharing.md), SHARE-12) |
 | `localStorage` | `shopping.shared.sync` | The sync state of the shared space, and the `scope` of its share (SHARE-12) |
 | `localStorage` | `shopping.shared.queue` | The changes of the shared space not sent to the server (SHARE-12) |
+| `sessionStorage` | `shopping.oauth` | The state and the verifier of a Google sign-in, from the redirect to the return ([18-account-sync.md](18-account-sync.md), ACC-5) |
 | Cache API | `shopping-shell-v53` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 | Cache API | `shopping-manifest` | The name, the description and the shortcut names of the manifest in the language of the screen (SW-13) |
 
@@ -47,27 +48,28 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   to `shopping.v1.corrupt` and starts with the empty state. The first change then replaces
   `shopping.v1`. With a session the sync then pulls the account again (ACC-1).
 - **STORE-6** A state is not valid when one of these is true:
-  - it is not an object, its `version` is not 1 to 9, or `items` is not a list;
-  - `recipes` is not a list, in version 2 to 9;
-  - an item has no string `id`, no name, a `list` that is not `active`, `saved` or the
-    old `next` (STORE-8), a flag (`recurrent`, `bought`) that is not a boolean, or an `again` that
-    is present and not a boolean;
-  - a recipe has no string `id`, no name, an empty product, a product that is not text, or two
-    products with the same name;
+  - it is not an object, its `version` is not the number 1 to 10 (the text `"9"` is not valid),
+    or `items` is not a list;
+  - `recipes` is not a list, in version 2 to 10;
+  - an item has no non-empty string `id`, no name, a `list` that is not `active`, `saved`,
+    `postponed` or the old `next` (STORE-8), a flag (`recurrent`, `bought`) that is not a boolean,
+    or an `again` that is present and not a boolean;
+  - a recipe has no non-empty string `id`, no name, a `products` that is not a list, an empty
+    product, a product that is not text, or two products with the same name;
   - two items or two recipes have the same id or the same name (DATA-2 to DATA-4).
 - **STORE-7** A valid state is cleaned when it is read. These defects are repaired with no error:
 
   | Field | Repair |
   |---|---|
   | Names of items, recipes, products, shops | Trimmed |
-  | `bought` of an item of `list: 'saved'` | `false` |
+  | `bought` of an item of `list: 'saved'` or `list: 'postponed'` | `false` |
   | `quantity` | Not text: `''`. Text: trimmed |
   | `shops` | Not a list: empty. An entry that is not text, is empty or is a duplicate: dropped |
   | `aisles` | Not a list: empty. An entry that is not text, is empty or is a duplicate with no case distinction: dropped. The rest trimmed |
   | `aisle` of an item | Not text, or not an aisle of `aisles`: `''`. An aisle: the spelling of `aisles` |
   | Shop spellings | Each shop gets the spelling of its first use |
   | `url` of a recipe | Not a valid link (REC-14): `''` |
-  | `sent` | An id that is not text, is unknown or is a duplicate: dropped |
+  | `sent` | Not a list: empty. An id that is not text, is unknown or is a duplicate: dropped |
   | `menu` | Not a list: empty. A meal with an unknown day, meal or recipe, a dish that is not text, is empty, is longer than 80 characters or comes with a recipe, or a second record of one meal: dropped. A dish trimmed. The rest in day and meal order |
   | `group` | Unknown: from `grouped` (STORE-8) |
   | `sort` | Unknown: `custom` |
@@ -78,13 +80,13 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 
   | From | Change |
   |---|---|
-  | Version 1 | `recipes: []`, `sent: []` |
+  | Version 1 | `recipes: []`, `sent: []`. A `recipes` field of a version 1 state is ignored |
   | Version 1 or 2 | `group` is `none` when `grouped` is `false`, and `recipe` if not. Each item gets `shops: []`. `sort` is `custom` when absent |
   | Version 1, 2 or 3 | `menu: []` |
   | Version 1 to 4 | Each item gets `quantity: ''` |
   | Version 1 to 5 | No change of the data: version 6 adds `list: 'saved'` |
   | Version 1 to 6 | `aisles: []`, and each item gets `aisle: ''` |
-  | Version 1 to 7 | An item of `list: 'next'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. Each item loses `again` |
+  | Version 1 to 7 | An item of `list: 'next'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. A ticked recurrent item keeps its tick. Each item loses `again` |
   | Version 1 to 8 | No change of the data: version 9 adds the dish of a meal |
   | Version 1 to 9 | Each meal gets `week`: the Monday of the week of the load (MENU-1). A meal whose `week` is not a Monday `YYYY-MM-DD` is dropped |
 
@@ -104,13 +106,14 @@ The `v1` of the key is the version of the key, not of the state. The state has i
 - **BACKUP-1** **Exportar** downloads the file `compra-YYYY-MM-DD-HHMMSS.json`, with the
   local date and time. Two exports of one day get two names.
   Its content is the state, as JSON with an indent of 2 spaces.
-- **BACKUP-2** The backup holds the items with their shops, the recipes, `sent`, `group`,
-  `sort` and the menu. It does not hold the language, the hand, the theme, the density, **Al terminar la compra** or the flag of the
-  walkthrough.
+- **BACKUP-2** The backup holds the items with their shops, quantity and aisle, the recipes,
+  `sent`, `group`, `sort`, the menu and the aisles. It does not hold the language, the hand, the
+  theme, the density, **Al terminar la compra**, the row of shop lists, the flag of the
+  walkthrough or the hint of the swipe.
 - **BACKUP-3** **Importar** opens a file choice for a JSON file. A file that is not JSON
   gives `error.invalidJson`. A JSON that is not a valid state (STORE-6) gives `error.notBackup`.
 - **BACKUP-4** A valid file is cleaned and migrated as a stored state is (STORE-7, STORE-8). A
-  backup of version 1, 2 or 3 is thus accepted.
+  backup of an older version, 1 to 9, is thus accepted.
 - **BACKUP-5** Before the import the app asks: `¿Sustituir los datos actuales por los de la copia
   (N artículos y N recetas)?` A yes replaces the full state. It does not merge. With a session the
   question is `import.confirmAccount`: `¿Sustituir los datos de tu cuenta por los de la copia (N

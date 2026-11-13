@@ -23,8 +23,9 @@ This document holds the rules of the app only.
   in the same layer, so that it wins; the block documents the parts, variants and states that the
   app adds. A version holds only the rules that differ from the shared ones, so that a change of
   the shared sheet reaches the app. No other rule of `components` or `layouts` repeats a selector of the shared sheet. The
-  app has its own versions of `app-header`, `sheet`, `dock`, `input`, `item-row`, `group-head`,
-  `section-head`, `empty-state`, `list-group` and `nav-bar` (colour only, DSV-13).
+  app has its own versions of `app-header`, `sheet`, `dock`, `field`, `switch`, `cluster`,
+  `input`, `item-row`, `group-head`, `section-head`, `empty-state`, `list-group`, `toast` and
+  `nav-bar` (colour only, DSV-13).
 - **DSV-4** A change of a base part is made in `design-system/` directly, with its test in
   `tests/design.test.js` or `tests/design-files.test.js`. `styles.css` keeps the parts of the app
   and its versions of base parts (DSV-3); a change of the layout of the rail goes to
@@ -37,7 +38,8 @@ This document holds the rules of the app only.
 - **DSV-6** From 840px a sheet with a head is the card of LAY-5, `--panel-width` wide, so it takes
   the column of the panels of `Compra` (LIST-38). The content of a view with no panels makes room
   for that column while the sheet is open, so the sheet covers no row. The recipe sheet is a pane
-  instead (REC-39). The walkthrough content also keeps the width of the column.
+  instead (REC-39). The walkthrough content also keeps the width of the column. A side sheet
+  hides its grab and does not close by a drag (NAV-23).
 - **DSV-7** A window of at most 480px height (a phone on its side) gives more height to the
   content. The header has less padding, and the walkthrough has no logo.
 
@@ -177,7 +179,7 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 
 | Layer | Parts |
 |---|---|
-| components | versions of `app-header`, `nav-bar`, `sheet`, `dock`, `input`, `item-row`, `section-head`, `group-head`, `empty-state`, `list-group` (DSV-3) |
+| components | versions of `app-header`, `nav-bar`, `sheet`, `dock`, `field`, `switch`, `cluster`, `input`, `item-row`, `section-head`, `group-head`, `empty-state`, `list-group`, `toast` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |
 - **DSV-23** An outline button that is not a danger one is an outlined secondary action of the
   Stitch screens: **Posponer** of `Editar`, **Mover todos a la compra actual** and **Filtros** of

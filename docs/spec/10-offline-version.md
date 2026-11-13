@@ -8,8 +8,8 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **SW-1** `src/app.js` registers `sw.js` at each start. With no service worker the app works with
   a connection only.
 - **SW-2** The app shell is the list `SHELL` of `sw.js`: the page, the two stylesheets (DSV-2),
-  the font of the design system (`geist.woff2`), the font files of the app (`fonts/*.woff2`, DSV-10), the manifest, each module of `src/`, each catalog, `version.json`, the release notes of each language (VER-20), the icons of the app and the
-  icon sprite `icons.svg`. A file that the app loads and that is not in `SHELL` does not work offline at the
+  the font of the design system (`geist.woff2`), the font files of the app (`fonts/*.woff2`, DSV-10), the manifest, each module of `src/`, each catalog, `version.json`, the release notes of each language (VER-20), the icons of the app, `icons/logo.png`, the four
+  shortcut icons (VER-15) and the icon sprite `icons.svg`. A file that the app loads and that is not in `SHELL` does not work offline at the
   first start.
 - **SW-3** At its install the worker downloads the full shell past the HTTP cache, so the shell is
   never a mix of two deploys. It then takes control at once (`skipWaiting`, `clients.claim`).
@@ -56,7 +56,8 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   version".
 - **VER-4** At the start the app reads `version.json` from the cache: the running version.
   The foot of **Ajustes** shows `Versión X.Y.Z · date` and the status (VER-6) as plain text,
-  outside a group and with no heading, the date in the form of the language. With no version it
+  outside a group and with no heading. The date is the day, the short month and the time in hours
+  and minutes, in the form of the language: `en` shows a 12-hour clock. With no version it
   shows `Versión desconocida`.
 - **VER-5** When `Ajustes` opens, the app reads `version.json?latest=<time>` from the host: the
   deployed version. The request ends after 8 seconds at most. `Comprobando…` shows in that time.
@@ -69,6 +70,10 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   | The deployed version is newer than the running one | Down arrow in a circle | Amber | `Versión X.Y.Z disponible` | Shows |
   | It is the same or older | Check in a circle | Green (`--done`) | `Al día` | Hidden |
   | One of the two is not known | Struck-out cloud | Red (danger) | `Sin conexión` | Hidden |
+
+  When the deployed version is newer, a banner shows above the version line: the title
+  `version.available` with the deployed version, the text `settings.updateReady`
+  (`Tienes la X.Y.Z.`) with the running version, and **Actualizar**. Else it is hidden.
 
 - **VER-7** Two versions compare by number, part by part: `1.10.0` is newer than `1.9.0`.
 - **VER-8** **Actualizar** first asks the browser for the `sw.js` of the host
@@ -154,11 +159,13 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
   install for them.
 - **VER-15** The icons are `icons/icon-192.png`, `icon-512.png` and `icon-maskable-512.png`,
   written by `npm run icons` from the art of `icons/source.png`: an orange shopping bag with bread, greens, a tomato and milk, on white.
-  The tab shows `icon-192.png`. The art of the maskable icon stays in the safe zone, a circle
-  of radius 0.4 of the side. `icons/logo.png`, 288 px, is the same art with its white background
+  The tab shows `icon-192.png`. In `icon-192.png` and `icon-512.png` the art is 0.84 of the side,
+  on a square with corners of radius 0.22 of the side. In the maskable icon the art is 0.64 of the
+  side, with no round corners, so it stays in the safe zone, a circle of radius 0.4 of the side. `icons/logo.png`, 288 px, is the same art with its white background
   made transparent: the white that touches the edge goes, a white inside the art stays. The
   icons of the shortcuts, `icons/shortcut-<name>.png` at 192 px, are a white line icon of
-  `icons.svg` on a disc of the theme colour, drawn by `npm run icons` (SHORT-4).
+  `icons.svg`, half the side wide, on an emerald disc (`#1f7a4d`), drawn by `npm run icons`
+  (SHORT-4).
 - **VER-16** The installed app and the site in Chrome share one storage. The data of the installed
   app goes away with **Clear site data** and with the uninstall.
 

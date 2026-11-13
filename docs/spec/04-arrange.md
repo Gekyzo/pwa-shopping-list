@@ -7,8 +7,8 @@ the arrange sheet in `src/ui/arrange.js`.
 ## Arrange sheet
 
 - **SORT-1** The button at the right of the header opens the sheet **Agrupar y ordenar**. It shows
-  only in `Compra`, and only when the sheet has a choice to offer: a grouping
-  (GROUP-2) or an order (SORT-3).
+  only in `Compra`, and only when the sheet has a part to show: a grouping (GROUP-2), an order
+  (SORT-3) or **Listas por tienda** (SHOP-25).
 - **SORT-2** The sheet stays open after a choice, so that the group and the order change in one
   visit. A tap out of the sheet or `Escape` closes it.
 
@@ -37,7 +37,8 @@ the arrange sheet in `src/ui/arrange.js`.
   - **Secciones**: when an item of the view has an aisle, also in a shop list (GROUP-17).
   - **Nada**: each time that one of the others shows.
 
-  The sheet also has the choice of the row of shop lists (SHOP-25). The arrange button shows when
+  **Agrupar por** holds only the choices that show; its pressed mark has the width and the place
+  of one shown choice. The sheet also has the choice of the row of shop lists (SHOP-25). The arrange button shows when
   the sheet has one choice at least.
 - **GROUP-3** A view that cannot show the stored choice shows a flat list, and the sheet marks
   **Nada**. The stored choice does not change. Example: with `group: 'shop'` and no
@@ -49,13 +50,14 @@ the arrange sheet in `src/ui/arrange.js`.
 
 - **GROUP-5** The groups of `Compra` are, in this order:
   1. each recipe of `sent`, in send order;
-  2. each other recipe that has products and whose products are all in `Compra`, ticked or not.
+  2. each other recipe that has products and whose products are all in `Compra`, ticked or not,
+     in the order of `recipes`.
 - **GROUP-6** The members of a group are the items of `Compra` whose name is a product of the
   recipe, with no case distinction. A group with no member does not show.
 - **GROUP-7** An item of two recipes shows in the two groups. One tick takes it out of both.
 - **GROUP-20** A row of an item to buy that shows in two recipe groups or more adds
-  `También en «recipes»` below its name: the names of the other groups, in group order, joined by
-  `, `. So two rows read as one product. The groups count before a search, so a search keeps the
+  `También en <recipes>` below its name: the names of the other groups, in group order, joined by
+  `, `, with no quotes. So two rows read as one product. The groups count before a search, so a search keeps the
   text.
 - **GROUP-8** The head of a group shows the name of the recipe and the members to buy as `N art.`
   (`count.articles`), or `✓` when all its members are ticked, then the icon `chevron-down`. The
@@ -72,24 +74,27 @@ the arrange sheet in `src/ui/arrange.js`.
   `fish`, `dairy`, `pantry`, `drinks`, `frozen` and `cleaning`, each with its symbol
   `aisle-<kind>`; the usual aisles of each catalog have their kind. A name with no known word has
   the symbol `aisle`. The head of the items with no aisle has no icon.
-- **GROUP-9** The items to buy that are in no group show below the head `Otros`.
+- **GROUP-9** The items to buy that are in no group show below the head `Otros`. Its head has no
+  count.
 - **GROUP-10** The ticked items show one time each in `Comprados (N)`, with no group.
 
 ### By shop
 
 - **GROUP-11** The groups are the shops of the items of the view, in name order. The head of a
-  group has the count of GROUP-8.
+  group has the count of GROUP-8. Unlike a recipe group, a group whose members are all ticked
+  stays: its head shows `✓` and it has no rows. A search with no match in it removes it.
 - **GROUP-12** An item of two shops shows in the two groups.
-- **GROUP-13** The items with no shop show below the head `Sin tienda`.
+- **GROUP-13** The items with no shop show below the head `Sin tienda`, with no count (GROUP-9).
 - **GROUP-14** A row in a list by shop does not show the shops of the item below its name.
 
 ### By aisle
 
 - **GROUP-17** The groups are the aisles of the items of the view, in the order of `aisles`
-  (AISLE-1), not in name order. The heads have the counts of GROUP-11. A shop list can show its
+  (AISLE-1), not in name order. The heads have the counts of GROUP-11, and a group whose members
+  are all ticked stays as in GROUP-11. A shop list can show its
   items by aisle: at one shop, the list follows the walk through it.
 - **GROUP-18** An aisle with no item in the view does not show. The items with no aisle show last,
-  below the head `Sin sección`.
+  below the head `Sin sección`, with no count (GROUP-9).
 - **GROUP-19** A row in a list by aisle shows its shops (SHOP-7), as in a flat list.
 
 ### Effect
@@ -104,8 +109,8 @@ the arrange sheet in `src/ui/arrange.js`.
 
 ## Manual move
 
-- **MOVE-1** A hold of a finger of 400 ms on a row lifts it. With a mouse, a vertical drag of
-  10 px lifts it with no hold. The phone vibrates for 10 ms.
+- **MOVE-1** A hold of a finger of 400 ms on a row lifts it. With a mouse, a drag of 10 px that is
+  more vertical than horizontal lifts it with no hold; a more horizontal drag slides the row. The phone vibrates for 10 ms.
 - **MOVE-2** A finger that moves 10 px before the hold ends does not lift the row: it scrolls the
   list or slides the row.
 - **MOVE-3** A row moves only among the rows of its scope:
@@ -115,14 +120,17 @@ the arrange sheet in `src/ui/arrange.js`.
   | `Compra`, flat | Items to buy | The items to buy |
   | `Compra`, grouped | Items to buy | The group of the row, or `Otros` / `Sin tienda` / `Sin sección` |
 
-- **MOVE-4** A ticked row does not move. A row does not move while its side
-  menu is open or its name is in edit. A scope of one row does not move. No row moves while the
-  search field of the list has a text (LIST-22): the hidden rows have no place on the screen.
+- **MOVE-4** A ticked row does not move. A row does not move while its side menu is open. No row
+  lifts while another row is lifted. A scope of one row does not move. No row moves while the
+  search field of the list has a text (LIST-22): the hidden rows have no place on the screen. No
+  row moves in **Todas** of a member (SHARE-14).
 - **MOVE-5** The scope is the run of rows of the same scope that are next to the lifted row. A
   move does not pass a row of another scope.
-- **MOVE-6** The lifted row follows the pointer and stays inside its scope. It takes the place of a
+- **MOVE-6** The lifted row follows the pointer and stays inside its scope. A horizontal move does
+  not slide it and does not change the section. It takes the place of a
   neighbour when its leading edge passes the centre of that neighbour. The other rows open a gap.
-- **MOVE-7** A pointer within 56 px of the top or the bottom of the list scrolls the list.
+- **MOVE-7** A pointer within 56 px of the top or the bottom of the list scrolls the list by 8 px
+  each frame.
 - **MOVE-8** The release writes the new order: the moved items exchange their places in `items`,
   and each other item keeps its place. A release at the start place writes nothing.
 - **MOVE-9** A move in the order **Nombre** changes `sort` to `custom`. The custom order then

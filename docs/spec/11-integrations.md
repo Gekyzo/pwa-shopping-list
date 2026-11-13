@@ -53,9 +53,10 @@ ignores the query of the URL.
 
 Status: **not on `main`**. The work is on the branch `voice-commands` (3 commits:
 `Add the rules of the spoken commands`, `Add the wrapper of the speech classes of the browser`,
-`Add voice commands to the app`). On 2026-10-13 that branch is 28 commits behind `main`: it has no
-languages, no shops and no state version 3. The rules below state the design of that branch. They
-become rules of the app when the branch is merged, and they need a review at that time.
+`Add voice commands to the app`). On 2026-11-13 that branch is 566 commits behind `main`: it has no
+languages, no shops and no state version 3, so it needs a rework before a merge. The rules below
+state the design of that branch. They become rules of the app when the branch is merged, and they
+need a review at that time.
 
 - **VOICE-1** The user speaks one command in Spanish (`es-ES`) for each tap, and the app says the
   answer.

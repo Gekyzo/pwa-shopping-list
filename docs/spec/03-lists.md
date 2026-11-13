@@ -9,7 +9,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 - **LIST-2** A name that an item has already, in `Compra` or saved, gives `error.duplicateItem` with
   the name and the list of that item (DATA-3).
 - **LIST-3** A new item is one-time and goes to `Compra`.
-- **LIST-4** A new item goes to the end of `items`, with no shop, no quantity, not ticked.
+- **LIST-4** A new item goes to the end of `items`, with no shop, no quantity, no aisle, not ticked.
 - **LIST-5** A rename has the rules LIST-1 and LIST-2. The item keeps its own name without an
   error. A rename to the same text changes nothing.
 - **LIST-6** A name field of the screen takes 80 characters at most. The store has no limit.
@@ -23,7 +23,8 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 ## Quantity
 
 - **LIST-27** An item has a quantity: free text, such as `2`, `1 kg` or `3 latas`, or none. The
-  quantity is trimmed; an empty text clears it. The same text changes nothing.
+  quantity is trimmed; an empty text clears it. The same text changes nothing. The field
+  **Cantidad** takes 20 characters at most (ROW-7); the store has no limit.
 - **LIST-28** A tick, **Terminar compra** and a bring back of a saved item keep the quantity. A
   delete removes it with the item.
 - **LIST-29** The search of a list does not match the quantity (LIST-22).
@@ -70,7 +71,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   order of the items that stay does not change.
 - **TRIP-4** The control shows in two places:
   1. A banner `¿Has terminado?` in `Compra`, on the green ground of done work, when the list has
-     items and all are ticked. Its text is the outcome parts of the trip sheet, joined by ` · `.
+     items and all are ticked. It shows only in **Todas** (SHOP-21). Its text is the outcome parts of the trip sheet, joined by ` · `.
      Its button **Terminar compra** is a tonal button across its width: the `+` of the dock stays
      the one primary button of the view.
   2. The trip sheet of `Compra` (NAV-9). Its title is the question `¿Terminar la compra?`. It lists
@@ -81,9 +82,10 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
      postponed items (`calendar`, `2 pospuestos vuelven`). An outcome with no item has no row.
      The banner and the sheet use the same text for each outcome. Below the rows, the primary
      button **Terminar compra** is disabled when TRIP-1 does not hold, and the tonal button
-     **Seguir comprando** closes the sheet.
-- **TRIP-5** After **Terminar compra** the screen shows `Compra`. `Deshacer` restores the full
-  state of before.
+     **Seguir comprando** closes the sheet. The trip button of the header shows in `Compra` at all
+     times, also with an empty list.
+- **TRIP-5** After **Terminar compra** the screen shows `Compra` and the message `Compra terminada.`
+  with `Deshacer`. `Deshacer` restores the full state of before.
 - **TRIP-6** An open item is an item of `Compra`, not ticked and not recurrent. **Terminar compra**
   keeps the open items in `Compra`, not ticked, when the choice of TRIP-7 is `Aplazar`. It saves
   them (LIST-30) when the choice is `Descartar`. The button of the trip sheet finishes at once.
@@ -102,18 +104,24 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 ## Header figures
 
+In a shop list the title is the name of the list, and the figures are those of its items
+(SHOP-20).
+
 | Section | Title | Subtitle | Bar |
 |---|---|---|---|
 | `Compra` | `Compra` | `La lista está vacía`, `Todo comprado` or `N por comprar · M comprados`, with `N por comprar` in bold `--done` | None |
-| `Recetas` | `Recetas` | `N recetas` or `Sin recetas` | None |
+| `Recetas` | `Recetas` | `N recetas` or `Sin recetas`; with a recipe, then ` · sincronizadas` with a session or ` · guardadas localmente` without one | None |
+| `Menú` | `Menú` | `N comidas planificadas` or `Sin comidas planificadas`, for the week in view | None |
 | `Ajustes` | `Ajustes` | `Bodega` | None |
 
 ## Add sheet
 
 The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it creates a recipe (see
-[06-recipes.md](06-recipes.md)). Below 600px it is the last button of the dock (SHOP-26), from
-600px it floats above the list (NAV-24). The button does not show in `Ajustes`. While a sheet is open the floating
-`+` and the one of the dock do not show; the add of the header and of the sidebar stays (NAV-8).
+[06-recipes.md](06-recipes.md)). Below 600px it is the last button of the dock (SHOP-26), or it
+floats above the list while the dock does not show; from 600px it is the button **Añadir** of the
+header (NAV-24). The button does not show in `Ajustes` and `Menú`, or while an empty state shows its
+own action. While a sheet is open the floating `+` and the one of the dock do not show; the add of
+the header and of the sidebar stays (NAV-8).
 
 - **ADD-1** The sheet has a name field and the button **Añadir**. It has no target choice: an add
   always goes to `Compra`.
@@ -143,7 +151,8 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
 - **ADD-7** A new item shows `"name" añadido a <list>.` with no `Deshacer`.
 - **ADD-8** After each add the sheet stays open, with an empty field that has the focus, so that
   the user adds several items in one visit. A tap out of the sheet or `Escape` closes it.
-- **ADD-9** The row of an item that the sheet brought flashes and scrolls into view.
+- **ADD-9** The row of an existing item that the sheet brought flashes and scrolls into view. A new
+  item comes in with the motion of its row (ROW-9), with no flash and no scroll.
 
 ## Search
 
@@ -160,11 +169,11 @@ The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it create
   **Cancelar**. **Cancelar**, `Escape` and the back of the phone (NAV-25), or a loss of focus with an
   empty field close it; a close clears the text. The list keeps its place at the top while the
   field is open. A group head keeps its colour.
-- **LIST-38** From 600px wide, `Compra` with an item to buy or a postponed item shows the panel
+- **LIST-38** From 600px wide, `Compra` with an item or a postponed item shows the panel
   **Recetas en la lista** when a recipe has a product in `Compra` (REC-41): the count `N activas` in
   a pill, then one bordered tile for each such recipe with its name, the link **Ver** that opens it
   in `Recetas`, `N de M ingredientes en lista` and an emerald bar at N/M; at N = M the line starts with `✓`
-  and takes `--done`. Below 1024px the bar is `--text` until N = M. Below 840px the panels stand below the list; from 840px
+  and takes `--done`. The panel shows six tiles at most, then `y N más`. Below 1024px the bar is `--text` until N = M. Below 840px the panels stand below the list; from 840px
   they are a column beside it that stays in sight while the list scrolls. Below 600px there is no
   panel.
 - **LIST-39** Below it, the panel **Próxima compra** · `Pospuestos` lists the postponed items

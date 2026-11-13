@@ -26,7 +26,8 @@ Android wrapper of `twa/`.
   the upload key, and on Play the app signing key of Play too. Its fingerprints are those of
   `twa/twa-manifest.json`. Without a match, Chrome shows the app with a URL bar.
 - **INS-7** `twa/twa-manifest.json` is the only source of the wrapper. Its name, launcher name,
-  colours, icons, orientation and shortcuts are those of `manifest.webmanifest`; Android adds one
+  colours, icons, orientation and shortcuts are those of `manifest.webmanifest`, and its dark
+  colours are the dark `theme-color` of `index.html`; Android adds one
   more shortcut, the site settings of Chrome, which the launcher of the wrapper needs. `npm run apk`
   builds the project from it, and the project is never committed.
 - **INS-8** A wrapper release is a build of `npm run apk` with a new version in both

@@ -74,6 +74,7 @@ The rules DS-1 to DS-8 and LAY-1 to LAY-5 belong to the base sheet of the app, `
 | Recurrent | An item that comes back at each trip |
 | One-time | An item that is not recurrent |
 | Saved | An item that a trip took out of `Compra`; the screen does not show it. List id `saved` |
+| Postponed | An item that **Posponer** took out of `Compra` until the next trip (LIST-40). List id `postponed` |
 | Recipe | A name and a list of product names |
 | Product | A name in a recipe. It is text, not an item |
 | Shop | A name that one item or more have. It has no record of its own |

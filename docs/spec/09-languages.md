@@ -7,7 +7,9 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
 - **LANG-1** The screen is in one of seven languages: Catalan (`ca`), German (`de`), English
   (`en`), Spanish (`es`), French (`fr`), Italian (`it`) and Portuguese (`pt`, European).
 - **LANG-2** With no stored choice, the app takes the first language of `navigator.languages`
-  whose base language it has. `es-MX` gives `es`. With no match it shows English.
+  whose base language it has. Only the base subtag counts, with no case distinction: `es-MX` and
+  `EN-us` give `es` and `en`, `ca-ES-valencia` gives `ca`, and `pt-BR` gives the European `pt`
+  catalog. With no match it shows English.
 - **LANG-3** **Ajustes → Idioma** lists **Automático** and the seven languages, each name in its
   own language. A choice applies at once, with no reload.
 - **LANG-4** The choice is stored in `shopping.lang`. **Automático** removes the key. A stored
@@ -24,13 +26,16 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
   key and the same placeholders. `tests/i18n.test.js` fails if not.
 - **LANG-9** A text takes parameters as `{name}`. A parameter goes in as typed, in one pass: user
   text that holds `{name}` or `$&` is not read again.
-- **LANG-10** A plural is selected by `count` with `Intl.PluralRules` of the language. Portuguese
-  uses the tag `pt-PT`, for the plural rule and for the form of the date.
+- **LANG-10** A plural is selected by `count` with `Intl.PluralRules` of the language. A category
+  that has no form (`many` for 1 000 000 in `es`), and a call with no `count`, take the `other`
+  form. Portuguese uses the tag `pt-PT`, for the plural rule and for the form of the date.
 - **LANG-11** A key that the catalog of the language does not have takes the English text. A key
   that no catalog has shows as the key.
 - **LANG-12** No module of `src/` apart from the catalogs, and no element of `index.html`, holds
   text for the user. A fixed text of the page is a `data-i18n="key"` attribute; an attribute is
-  `data-i18n-attr="attribute:key"`. `tests/markup.test.js` checks this.
+  `data-i18n-attr="attribute:key"`. `tests/markup.test.js` checks this. Exception: the screen
+  joins catalog texts and user names with the fixed separators `, `, `; ` and ` · `, which are in
+  no catalog (`sendText` of `src/ui/recipes.js`, the meal label of `src/ui/menu.js`).
 - **LANG-13** A pure module returns an error as a message `{ key, params }`. Only the screen code,
   `src/app.js` and `src/ui/`, turns a message into text. A `list` parameter holds a list id, which the screen replaces with
   the name of the list in the language.
@@ -47,7 +52,8 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
 - **LANG-14** The data of the user: the names of items, recipes, products and shops stay as typed.
 - **LANG-15** The order by name uses the Spanish collation in each language (SORT-6).
 - **LANG-16** The name of the app is `Bodega` in each language: the short name of
-  `manifest.webmanifest` and the subtitle of `Ajustes`. The title of the page is `Lista de la
+  `manifest.webmanifest`, the subtitle of `Ajustes`, the brand of the sidebar (NAV-26) and of the
+  bar of `Compra` below 600px (DSV-33). The title of the page is `Lista de la
   compra - Bodega`, with the first part in the language of the screen (`app.title`). The title
   before the script runs is in Spanish. The name, the description and the shortcut names of the manifest
   follow the language of the screen (`app.title`, `app.description`, SHORT-3) through the worker (SW-13); before the

@@ -45,6 +45,10 @@ The empty state is `{ version: 10, items: [], recipes: [], sent: [], group: 'rec
 }
 ```
 
+A `url` is a web address when `isWebUrl` of `src/recipes.js` accepts it: no white space, the
+scheme `http` or `https`, and a host of two labels or more whose last label has two letters or
+more.
+
 ## Meal
 
 ```js
@@ -89,18 +93,20 @@ No view is stored.
 |---|---|---|
 | `Compra` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
 | Trip figures | `tripSummary` | `total`, `left`, `back`, `saved` |
-| Trip outcome | `tripOutcome` | `recurrent`, `kept`, `open`, `bought` |
+| Trip outcome | `tripOutcome` | `recurrent`, `kept`, `open`, `bought`, `postponed` |
 | Recipe groups | `recipeGroups` | `Compra` by recipe |
 | Shop groups | `shopGroups` | `Compra` by shop |
 | Shops in use | `shopNames` | Each shop of an item, in name order |
 | Aisle groups | `aisleGroups` | `Compra` by aisle, in the order of `aisles` |
+| Postponed | `postponedItems` | The items of `list: 'postponed'` (LIST-40) |
 
 `tripSummary` gives: `total`, the items of `Compra`; `left`, those not ticked; `back`, the
 recurrent items, ticked or not, and the open items kept with `Aplazar` (TRIP-6); `saved`, the
 other one-time items of `Compra`, ticked or not. `tripOutcome` splits the items of `Compra` by
 where each one goes (TRIP-4): `recurrent` come back; `kept`, open items kept with `Aplazar`;
 `open`, the other open items, saved; `bought`, ticked one-time items, saved. The four add up to
-`total`.
+`total`. `postponed` counts the postponed items, which are out of `Compra` and come back
+(LIST-42).
 
 ## Name rules
 
@@ -109,6 +115,12 @@ where each one goes (TRIP-4): `recurrent` come back; `kept`, open items kept wit
 | Identity of an item, a recipe, a product, a shop, an aisle | `toLowerCase()`: no case distinction, accents count |
 | Search of items and of recipes | `fold`: trimmed, lower case, accents removed |
 | Order by name | `localeCompare(…, 'es', { sensitivity: 'base' })`: no case and no accent distinction, in each language of the screen |
+
+## Length
+
+The state has no length limit, except the dish of a meal (80 characters). The fields of the
+screen set the other limits: 80 characters for the name of an item, of a recipe and of a product,
+20 for a quantity, 40 for a shop or an aisle.
 
 ## Not in the state
 

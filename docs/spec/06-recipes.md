@@ -18,15 +18,15 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   REC-17 stay at the end of the row. From 1024px they stand in the foot of the card, below a line,
   and the send button shows its text **Añadir** (DSV-31).
 - **REC-5** A recipe row slides as an item row (ROW-4 to ROW-6, ROW-8, ROW-10). A slide to the
-  left shows **Eliminar**, an icon button 64 px wide with its name under the icon. Its text for a screen reader
+  left shows **Eliminar**, an icon button 72 px wide with its name under the icon. Its text for a screen reader
   is `Eliminar {name}`. A slide to the right sends the recipe at the
   release (REC-17), with the rule and the backdrop of ROW-11 and the icon `cart-add`.
 - **REC-6** A delete removes the recipe, its id from `sent` and its meals of this week from the
   menu. Each of its meals of a past week becomes a dish of its name, cut to 80 characters, so that
   the past week keeps it (MENU-23). It has `Deshacer`. The items that the recipe sent stay in the lists.
-- **REC-7** The recipes show in the order of their creation. Below 600px wide they stand in one column; from
-  600px in two, filled row by row, so more of them fit on the screen of a tablet or an unfolded phone.
-  From 1024px they fill as many columns as fit (REC-39).
+- **REC-7** The recipes show in the order of their creation. Below 840px wide they stand in one column; from
+  840px in two, filled row by row, so more of them fit on the screen of a tablet. An unfolded phone
+  keeps one column. From 1024px they fill as many columns as fit (REC-39).
 - **REC-35** A recipe whose products are all items of `Compra`, ticked or not, with no case
   distinction, shows the badge `en la lista` (REC-4, REC-40). A recipe with no products has no
   such badge. The rule of "all in `Compra`" is the one of the groups by recipe (GROUP-5).
@@ -35,9 +35,10 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 
 - **REC-8** A product is a name, trimmed and not empty (`error.productRequired`), unique in its
   recipe with no case distinction (`error.duplicateProduct`). An add writes its first letter in
-  capitals and keeps the rest as typed: `arroz` becomes `Arroz`, `AOVE` stays `AOVE`.
+  capitals and keeps the rest as typed: `arroz` becomes `Arroz`, `AOVE` stays `AOVE`. A removal
+  compares the exact spelling; a product that is not in the recipe gives `error.productNotFound`.
 - **REC-9** The sheet of a recipe lists its products under **Productos**, with no line above
-  it, each with a `✕` button, and the field **Añadir producto**. The removal of a product has `Deshacer`; the add does not.
+  it, each with a `✕` button, and the field **Añadir producto**, 80 characters at most. The removal of a product has `Deshacer`; the add does not.
   The head shows the number of products in a pill and, at its end, `N en la lista`: the products
   that are items of `Compra`, ticked or not, with no case distinction (`listedProducts`). Each
   product starts with a dot, emerald for a product in `Compra`. REC-38: `Compra` is the list of
@@ -60,7 +61,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   From 1024px the chips show only while the button **Filtros** of the header is open (DSV-32).
 - **REC-10** While the user types a product, the recipe lists up to 5 names that contain the text,
   with no case and no accent distinction: the names of the items, then the products of the
-  recipes, each name one time with no case distinction, with the spelling of the item first. The
+  recipes, each name one time with no case distinction, with the spelling of the item first. Two
+  names that differ by an accent both show (`Azúcar`, `Azucar`). Saved and postponed items count too. The
   products of the recipe do not show. The exact match goes first, then the names that start with
   the text. A tap adds that name.
 - **REC-11** After an add the product field is empty and keeps the focus, for the next product.
@@ -74,7 +76,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   changes nothing.
 - **REC-14** A text with no scheme gets `https://`. Only an `http` or `https` address is valid,
   with no space and a host name of two parts at least, such as `example.com`; another text gives
-  `error.invalidLink`. A stored link that is not valid becomes empty (STORE-7).
+  `error.invalidLink`. The stored link is the trimmed text, with `https://` added when it has no
+  scheme; the app does not normalise it. A stored link that is not valid becomes empty (STORE-7).
 - **REC-15** A link to a video site is a video: a host of `youtube.com`, `youtu.be`, `vimeo.com`,
   `tiktok.com`, `instagram.com`, `dailymotion.com`, `dai.ly` or `fb.watch`, or a subdomain of one.
   A recipe with a link shows an icon button before its send button (REC-4): the symbol `play` and
@@ -91,13 +94,14 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   button `cart-add` at the end of the row, named `Añadir a Compra`, with the same toast. A recipe with no product gives `error.recipeEmpty`.
 - **REC-18** For each product, in order:
   - an item with that name exists, with no case distinction: the item becomes "to buy" in `Compra`
-    (it comes back from the saved items, or it loses its tick, or it stays as it is);
+    (it comes back from the saved or postponed items, or it loses its tick, or it stays as it is);
   - no such item exists: a one-time item with that name is created in `Compra`.
 - **REC-19** The send adds the id of the recipe to `sent`, one time. A send never makes a
   duplicate item.
 - **REC-20** The message is `«name»: N añadidos, N ya estaban.` with `Deshacer`. `añadidos` counts
   the items that were created or changed; `ya estaban` counts those that were to buy in `Compra`
-  already.
+  already. A part with a count of 0 does not show, and a count of 1 takes the singular (`1
+  añadido`, `1 ya estaba`).
 - **REC-21** A send that changes nothing shows `«name»: todo estaba ya en la lista.` and keeps the
   `Deshacer` of the send that is still on the screen.
 - **REC-22** `sent` lasts until **Terminar compra** (TRIP-3). The row of a recipe has no "sent"
@@ -114,7 +118,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   meal, in menu order. With no dish the head does not show.
 - **REC-37** A dish row shows the name and the meta line `En N comidas del menú`. It has no slide.
   A tap on the name or on the button with a chef's hat at the end turns the dish into a recipe
-  (MENU-17) and opens its sheet (REC-33), with `Deshacer` and the message `Receta creada: «name».`
+  (MENU-17) and opens its sheet (REC-33), with `Deshacer` and the message `Receta creada: «name».`,
+  also when the meals take a recipe that exists.
   The text of that button for a screen reader is `Crear la receta de «name»`.
 
 ## Search

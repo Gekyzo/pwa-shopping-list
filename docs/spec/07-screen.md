@@ -11,8 +11,8 @@ bottom bar, and the bottom bar.
 Below 600px wide the dock of `Compra` and `Recetas` stands above the bottom bar (SHOP-26) and holds
 the `+` button at its end, and no `+` button floats over the list. The header has no search button
 while the dock shows. The title keeps one line, with an
-ellipsis. The message shows below the top
-edge. A sheet comes up from the bottom, over a veil. The walkthrough of the first start covers all
+ellipsis. Below 600px the message shows below the top edge. From 600px it shows near the bottom,
+above the room of the `+` button, and goes to the top while a sheet is open. A sheet comes up from the bottom, over a veil. The walkthrough of the first start covers all
 of it.
 
 The screen has four width classes (DSV-9): a phone below 600px, a foldable (an unfolded phone, a
@@ -24,11 +24,12 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 ## Sections
 
 - **NAV-1** The bottom bar has four sections, in this order: `Compra`, `Recetas`, `Menú`,
-  `Ajustes`. The app starts in `Compra`. A
+  `Ajustes`. The app starts in `Compra`, or in the section of its address (NAV-30). A
   section shows its icon and its name, and no count, except `Compra` in the sidebar (NAV-26). Its
   name is also the name of its button for a screen reader.
-- **NAV-2** A tap on the bottom bar changes the section. A change closes each open row, ends an
-  edit, and closes the search (LIST-24, REC-26).
+- **NAV-2** A tap on the bottom bar changes the section. A change closes the open row, the search
+  (LIST-24, REC-26), the meal sheet, the recipe sheet and the shop picker. The trip sheet closes
+  outside `Compra` (NAV-9).
 - **NAV-3** A horizontal slide changes the section: to the left for the next one, to the right for
   the previous one. The slide is 60 px long at least and its horizontal part is two times its
   vertical part at least. It stops at `Compra` and at `Ajustes`. It is a slide of a finger or a
@@ -37,11 +38,15 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   row of shop lists (SHOP-17), not on the dock (SHOP-26) and not on a text field. It does nothing while a sheet is open, a row is lifted or the walkthrough is open
   (ONB-10).
 - **NAV-5** The content of the new section comes in from its side of the bottom bar, after a slide
-  and after a tap.
-- **NAV-6** `Ajustes` has six groups, each a title above one card of rows (an inset box with a border, DSV-13): **Copia de seguridad**
-  (**Exportar**, **Importar**, **Borrar todos los datos**), **Preferencias** (**Idioma**, **Mano**, **Tema**, **Densidad**),
-  **Al terminar la compra** (TRIP-7), **Secciones**, **Aplicación** (**Instalar la aplicación**) and
-  **Ayuda** (**Ver la introducción**, **Borrar la receta de ejemplo**). A row is 56 px high or more.
+  and after a tap: it moves 48 px and fades in, in 250 ms (`--motion`).
+- **NAV-6** `Ajustes` has these groups, in this order, each a title above one card of rows (an
+  inset box with a border, DSV-13): **Cuenta** (ACC-10, SHARE-9), only with a sync server;
+  **Copia de seguridad** (**Exportar**, **Importar**, **Borrar todos los datos**); **Preferencias**
+  (**Idioma**, **Mano**, **Tema**, **Densidad**); **Al terminar la compra** (TRIP-7); **Artículo en
+  las dos listas** (SHARE-16), only for a member of a share; **Secciones** (**Secciones de la
+  tienda**); **Aplicación** (**Instalar la aplicación**); and **Ayuda** (**Ver la introducción**,
+  **Novedades** (VER-22), **Borrar la receta de ejemplo**). A group title ends with an icon, and
+  each row starts with one (DSV-21). A row is `--tap-l` high or more: 56 px, 48 px in `Compacta`.
   It has its name at the start. A row that opens something ends with a `›`; **Exportar**,
   **Importar**, **Secciones de la tienda** and **Ver la introducción** do. A row of **Preferencias**
   also shows its current value before the `›`, and a tap on the row opens the picker of the device
@@ -57,8 +62,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   artículo**, which opens the add sheet. As in `Recetas`, the title and the text stand in the
   middle of the room above the buttons, and the buttons at the bottom. With the sample recipe in
   the state it says `Añade tu primer artículo, o empieza con la receta «name».`; the button **+ Añadir artículo** opens the add sheet, and a second,
-  tonal button **Añadir la receta de ejemplo** below it sends that recipe to `Compra`. `Recetas` says `Aún no hay
-  recetas` in the middle of the room above its button, and the button **+ Crear receta**, at the
+  tonal button **Añadir la receta de ejemplo** below it sends that recipe to `Compra`. `Recetas` has
+  the title `Aún no hay recetas` and the text `Guarda una receta y envía sus productos a Compra con
+  un toque.` in the middle of the room above its button, and the button **+ Crear receta**, at the
   bottom, opens the add sheet. `Menú` always shows its week
   (MENU-14). A search with no match says `Ningún artículo
   coincide con «text».` in `Compra`, with the button **+ Añadir «text»**, which adds the name as
@@ -101,7 +107,8 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   then runs.
 - **ROW-7** The edit sheet `Editar` has the field **Nombre**, 80 characters at most, the field
   **Cantidad**, 20 characters at most (LIST-27), the switch **Repetir en cada compra** (LIST-7) with the hint `Vuelve a la lista en cada compra`,
-  then the shops (SHOP-9 to SHOP-15). The name of a field stays inside its box, above the value
+  then the shops (SHOP-9 to SHOP-15) and the aisle **Sección** (AISLE-16). Its foot has
+  **Posponer** for an item still to buy (LIST-40) and **Eliminar** (NAV-22). The name of a field stays inside its box, above the value
   (DSV-18). `Enter` or a
   loss of focus saves a field (LIST-5); an error shows its message and the field shows the old
   value again. `Escape` in a field puts the value back and keeps the sheet open. A change of
@@ -117,14 +124,19 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   `prefers-reduced-motion` nothing moves.
 - **ROW-10** A long press of a finger on a row does not open the menu of the browser.
 - **ROW-11** A slide of a row to the right runs an action at the release: in `Compra` it ticks or
-  unticks the item (LIST-11), with `Deshacer` for a tick (LIST-13). It runs when the slide passed 35 % of the width of the row, 80 px at least; a
+  unticks the item (LIST-11), with `Deshacer` for a tick (LIST-13). The icon is `check` for a tick
+  and `undo` for an untick. It runs when the slide passed 35 % of the width of the row, 80 px at least; a
   shorter slide puts the row back. The row slides over a backdrop with the icon of the action,
   which fills with the done colour (`--done`) once the slide is long enough. At that moment the phone
-  vibrates for 10 ms, for a tick and for an untick. A row with its left side open closes it.
-- **ROW-12** A recipe row of `Recetas` slides with the same rules (REC-5).
+  vibrates for 10 ms, for a tick and for an untick. A row with its left side open closes it and
+  runs no action.
+- **ROW-12** A recipe row of `Recetas` slides with the same rules (REC-5): its left side holds
+  **Eliminar**, and a slide to the right sends the recipe. The head of a recipe group of `Compra`
+  slides to the right to buy the group (GROUP-21).
 - **ROW-13** Removed: a saved item has no row (LIST-35).
 - **ROW-14** The first time `Compra` shows a row, after 600 ms the body of its first row slides
-  24 px to the left and back, so the user sees that a row slides. Then `shopping.swipeHint` is
+  24 px to the left and back in 500 ms (two times `--motion`), so the user sees that a row slides.
+  A change of section in the wait leaves the hint for a later time. Then `shopping.swipeHint` is
   `1` and the hint does not play again. With `prefers-reduced-motion` it does not play.
 - **ROW-15** A right click of a mouse on an item row of `Compra` opens its actions of ROW-3, as a
   settled slide to the left does, and the menu of the browser does not open. A browser that sends the
@@ -151,23 +163,27 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 
   | Area | Changes |
   |---|---|
-  | Items | Tick, by a tap on the row (ROW-1) or by a slide (ROW-11), delete, an existing item brought by the add sheet, a saved item brought back (LIST-35), a manual move |
+  | Items | Tick, by a tap on the row (ROW-1) or by a slide (ROW-11), delete, an existing item brought by the add sheet, a saved item brought back (LIST-35), a postpone and a bring back of one or all postponed items (LIST-40 to LIST-42), a manual move |
+  | Groups | The slide of a recipe head that buys the group (GROUP-21) |
   | Trip | **Terminar compra** |
-  | Recipes | Send, delete, removal of a product, save and removal of a link |
-  | Menu | **Llenar cesta**, **Quitar** of a meal, **Vaciar menú** |
+  | Recipes | Send, delete, removal of a product, save and removal of a link, a recipe made from a dish (REC-37, MENU-19) |
+  | Menu | **Llenar cesta**, **Quitar** of a meal, **Vaciar menú**, **Repetir esta semana** (MENU-24, MENU-27) |
+  | Aisles | Delete |
+  | Sample | **Borrar la receta de ejemplo** (ONB-14) |
   | Backup | Import |
 
 - **MSG-6** These changes have no `Deshacer`: a new item, a rename, the recurrent mark,
-  the removal of a tick, a new recipe, a new product, the shops, the order, the
-  grouping and a recipe put in a meal.
+  the removal of a tick, a new recipe from the add sheet, a new product, the shops and a recipe or
+  a dish put in a meal. The order and the grouping keep the message and its undo (MSG-4).
 - **MSG-7** A rejected operation shows the text of its error and changes nothing.
 - **MSG-8** When a save fails, the change stays on the screen and the message is `El cambio no se
   ha guardado: el almacenamiento no está disponible.` (STORE-9).
 
 ## Sheets
 
-- **NAV-8** There are eight sheets: add, arrange (with the choice of shop lists, SHOP-25), shop
-  picker (SHOP-27), trip, meal, edit (ROW-7), aisles (AISLE-10) and recipe (REC-33).
+- **NAV-8** There are ten sheets: add, arrange (with the choice of shop lists, SHOP-25), shop
+  picker (SHOP-27), trip, meal, edit (ROW-7), aisles (AISLE-10), share (SHARE-9), **Novedades**
+  (VER-21) and recipe (REC-33).
   One is open at a time. A tap on the
   veil, **Listo** or `Escape` closes it. The floating `+` button and the one of the dock do not show
   while a sheet is open. The add of the header and the add of the sidebar stay under the veil,
@@ -182,7 +198,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   `Guardado`.
 - **NAV-23** A drag down of the grab or the head of a sheet closes it when the drag passes 30 % of
   the height of the sheet, or when the release is faster than 0.5 px/ms. A shorter, slower drag
-  puts the sheet back. A drag that starts on a button or a field of the head does nothing.
+  puts the sheet back. The release speed is taken over the last 100 ms of the drag; a pause of
+  more than 100 ms before the release counts as 0. A drag that starts on a button or a field of
+  the head does nothing. A side sheet, with its grab hidden (DSV-6), does not drag.
 - **NAV-9** The trip button of the header has three dots. It shows in `Compra` from 600px to
   1023px; below 600px **Terminar compra** of the bar of `Compra` takes its place (DSV-33); from
   1024px the header shows in its place the primary button **Terminar compra** with a `check-circle`,
@@ -190,18 +208,23 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   1024px the title keeps its whole text and the subtitle one line, and the tools stay on the line
   of the title: the search field takes the room that is left, up to 260px; below 180px of content
   it drops its key `⌘K`, below 100px its text too, and shows the search icon alone. A tap
-  opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet has the
-  title `Opciones de la compra`, the line of where the items go (TRIP-4), the line of the open items
-  (TRIP-6) and the button **Terminar compra**, in this order.
-- **NAV-10** The trip sheet closes as each sheet does (NAV-8). The open puts the focus on
-  **Terminar compra**, and the close puts it back on the trip button.
+  opens the trip sheet from the bottom, as the arrange button opens its sheet. The sheet, named
+  `Opciones de la compra` for a screen reader, has the title `¿Terminar la compra?`, the rows of
+  where the items go (TRIP-4), the line of the open items with the button **Ajustes** (TRIP-6), the
+  primary button **Terminar compra** and the tonal button **Seguir comprando**, in this order. The
+  trip sheet closes when the section is not `Compra`.
+- **NAV-10** The trip sheet closes as each sheet does (NAV-8), and also by **Seguir comprando**.
+  **Ajustes** of the sheet closes it and shows `Ajustes`. The open puts the focus on **Terminar
+  compra** of the sheet, and the close puts it back on the button in view that opens the sheet:
+  **Terminar compra** of the bar or of the header, or the three dots.
 
 - **NAV-24** Below 600px the `+` is the last button of the dock; while the dock does not show it
   floats above the bottom right of the list, and it collapses to a square of the tap size (48 px)
   after a scroll of the list of more than 24 px down, and opens again on any scroll up and at the
   top of the list (`fabState`). From 600px the add is the button **Añadir** (in `Recetas`
   **Crear receta**) of the header, after its other buttons, with the same conditions, and the `+`
-  does not float. Its accessible name stays **Añadir artículo**.
+  does not float. Its accessible name is **Añadir artículo**, or **Crear receta** in `Recetas`. No
+  add shows in `Ajustes` and in `Menú`, or while the action of an empty section shows (NAV-7).
 - **NAV-25** `Escape` and the back of the phone close one layer, the top one first: an account
   screen that can go back to the list (ACC-2), then an open sheet, then an open row, then the
   search of a list (`closeTop`). With no layer open, the back of `Recetas`, `Menú` or `Ajustes`
@@ -227,7 +250,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   | Header | Text, buttons | Buttons, text |
   | Bar of `Compra`, below 600px wide (DSV-33) | Name of the app, then **Terminar compra** at the right | **Terminar compra** at the left, then the name of the app |
   | Row | Checkbox at the left, other controls at the right | Checkbox at the right, other controls at the left |
-  | Walkthrough bar | **Saltar**, **Siguiente** | **Siguiente**, **Saltar** |
+  | Head and foot of a sheet | Title, then **Listo** | **Listo**, then title; the foot mirrored |
+  | Field and its add button (`input-row`) | Field, then button | Button, then field |
+  | Two buttons side by side (`split`) | Primary at the right | Primary at the left |
 
 - **NAV-26** From 600px wide the bottom bar is a rail at the left with `Derecha` and with
   `Izquierda`. From 1024px it is a sidebar of 256px at the left of a frame that fills the width
@@ -238,7 +263,7 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   them; with no item left it shows no count. The count is not part of the name for a screen reader.
   The foot of the rail shows the offline icon, and from 1024px a chip below a line (`nav-foot boxed`, DSV-25): with no
   session (ACC-13) the text **Sin cuenta · en este dispositivo**, with a session **Sincronización**
-  and at its end `Al día`, or `Sin conexión` while the app is offline. The message stays at the side of the hand, inside the frame.
+  and at its end `Al día`, or `Sin conexión` while the app is offline. From 600px the message stands inside the frame, between the rail and the end of the frame.
 - **NAV-27** From 840px wide `Ajustes` takes a column of at most 960px, and each group is a row:
   its title and its help at the left, its rows at the right, the groups split by a line. From
   1024px it is one centred column of 720px, each title and help above its rows (DSV-29).
@@ -268,8 +293,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   Case and accents do not count (`#/Menú` is `Menú`), and no hash or any other hash is `Compra`.
   A start from a shortcut (SHORT-2) wins over the hash. A hash needs no server: the static host and the
   offline shell (SW-2) serve `index.html` for each address.
-- **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
-  sheets or the sides of a slide of a row (ROW-3, ROW-11).
+- **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the
+  bottom bar, the sides of a slide of a row (ROW-3, ROW-11), the place of the message or the
+  walkthrough (ONB-12).
 
 ## Theme
 
@@ -286,11 +312,12 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 
 - **NAV-19** **Densidad** of `Ajustes` has two values: `Normal` and `Compacta`. An app with no
   choice uses `Normal`.
-- **NAV-20** `Compacta` is the compact token set of the design system: the rows of `Compra` and of
-  `Recetas` and the `+` button are 48 px high in place of 56 px, the bottom bar 56 px in place of
-  64 px and the dock 48 px in place of 56 px, so more rows fit on one screen. A tap target stays
-  48 px at the least. In `Menú` the head of each day is shorter, and a meal is 48 px high at the
-  least. The sheets and `Ajustes` do not change. A change shows at once, with no restart.
+- **NAV-20** `Compacta` is the compact token set of the design system: `--tap-l` is 48 px in place
+  of 56 px, so the rows of `Recetas` and of `Ajustes` and the large buttons are 48 px high; the
+  check mark of a row of `Compra` takes less room. The bottom bar is 56 px in place of 64 px and
+  the dock 48 px in place of 56 px, so more rows fit on one screen. The floating `+` stays 56 px.
+  A tap target stays 48 px at the least. In `Menú` the head of each day is shorter, and a meal is
+  48 px high at the least. A change shows at once, with no restart.
 - **NAV-21** The choice is stored in `shopping.density`. `Normal` removes the key. It is a
   preference of the device, not a part of the state: `Deshacer` and an import do not change it.
 
@@ -361,12 +388,13 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 
 ## Access and display
 
-- **A11Y-1** Each icon button has an `aria-label` with the action and the name of its object, in
-  the language of the screen.
+- **A11Y-1** Each icon button has an `aria-label` in the language of the screen. A button that
+  acts on one item, recipe, product or meal also names it (`Editar «name»`, `Eliminar {name}`,
+  `Quitar {name}`); the buttons of the header, the dock and the bottom bar have fixed names.
 - **A11Y-2** A toggle states its value with `aria-pressed`. A control that opens something states
   it with `aria-expanded`. The section in view has `aria-current="page"`.
 - **A11Y-3** The message is a live region (`role="status"`, `aria-live="polite"`).
-- **A11Y-4** The side menu that is closed is `inert`.
+- **A11Y-4** The side actions of a closed row (ROW-3) are `inert`.
 - **A11Y-5** With `prefers-reduced-motion: reduce`, the rows and the groups change with no
   animation.
 - **A11Y-6** With `prefers-color-scheme: dark` and **Tema** at `Automático`, the app shows dark

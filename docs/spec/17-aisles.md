@@ -25,7 +25,7 @@ bottom bar (NAV-1).
 ## Sheet `Secciones de la tienda`
 
 - **AISLE-10** `Ajustes` has the group **Secciones** with the row **Secciones de la tienda** and the
-  count of the aisles. A tap opens the sheet of the aisles. A tap out of the sheet or `Escape`
+  count of the aisles. With no aisle the row shows no count. A tap opens the sheet of the aisles. A tap out of the sheet or `Escape`
   closes it.
 - **AISLE-11** The sheet lists each aisle in its order, as a name field, `↑`, `↓` and `✕`. The `↑`
   of the first aisle and the `↓` of the last are disabled. The rows go across the sheet, as the rows
@@ -34,7 +34,8 @@ bottom bar (NAV-1).
 - **AISLE-12** The name field renames the aisle when it loses the focus or on `Enter` (AISLE-4).
   `Escape` puts the name back. An error keeps the old name.
 - **AISLE-13** The field **Nueva sección** with **Añadir** adds an aisle (AISLE-3). The field takes
-  40 characters at most and keeps the focus after an add.
+  40 characters at most and keeps the focus after an add. **Añadir** is disabled while the field
+  has no text.
 - **AISLE-14** With no aisle, the sheet shows `Añade las secciones en el orden de tu tienda.` and the
   button **Usar secciones habituales**, which adds eight aisles in the language of the screen, in
   the order of a common walk (AISLE-8).
@@ -48,7 +49,7 @@ bottom bar (NAV-1).
   pressed.
 - **AISLE-17** A tap on a chip sets that aisle on the item (AISLE-7). A tap on the pressed chip
   clears it. The sheet stays open. The change is saved at once and has no message and no
-  `Deshacer`.
+  `Deshacer`. The foot of the sheet shows `Guardado` (NAV-22).
 - **AISLE-18** With no aisle, the sheet shows `Crea las secciones en Ajustes.`
 
 ## Limits
