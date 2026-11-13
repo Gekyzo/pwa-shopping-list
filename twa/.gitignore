@@ -1,0 +1,4 @@
+# Bubblewrap generates everything else here from twa-manifest.json (INS-7).
+*
+!twa-manifest.json
+!.gitignore

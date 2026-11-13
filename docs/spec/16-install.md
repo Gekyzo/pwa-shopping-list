@@ -1,6 +1,7 @@
 # Install
 
-Rules of `src/install.js`, `src/ui/install.js` and the `orientation` of `manifest.webmanifest`.
+Rules of `src/install.js`, `src/ui/install.js`, the `orientation` of `manifest.webmanifest` and the
+Android wrapper of `twa/`.
 
 - **INS-1** The install offer has three states: `idle` (no offer), `available` (Chrome gave
   `beforeinstallprompt`) and `installed`. `installNext` moves among them: `prompt` makes it
@@ -13,6 +14,16 @@ Rules of `src/install.js`, `src/ui/install.js` and the `orientation` of `manifes
 - **INS-4** The installed app turns with the device (`orientation: any` in `manifest.webmanifest`),
   so a tablet or an unfolded phone shows it the right way up on its side. The layout of each width
   is in DSV-8.
+
+## Android app
+
+- **INS-5** The Android app is a Trusted Web Activity with id `io.github.polarisworks.bodega`. It opens
+  `https://bodega.artisandevs.duckdns.org/` in Chrome, full screen, with Chrome's storage for that
+  origin (VER-16). It holds no code and no copy of the shell: a site release reaches it as it
+  reaches the installed PWA.
+- **INS-7** `twa/twa-manifest.json` is the only source of the wrapper. Its name, launcher name,
+  colours, icons, orientation and shortcuts are those of `manifest.webmanifest`. `npm run apk`
+  builds the project from it, and the project is never committed.
 
 ## Limits
 

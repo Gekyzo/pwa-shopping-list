@@ -1,0 +1,68 @@
+{
+  "packageId": "io.github.polarisworks.bodega",
+  "host": "bodega.artisandevs.duckdns.org",
+  "name": "Lista de la compra - Bodega",
+  "launcherName": "Bodega",
+  "display": "standalone",
+  "themeColor": "#F4F3F1",
+  "themeColorDark": "#0F0F0E",
+  "navigationColor": "#F4F3F1",
+  "navigationColorDark": "#0F0F0E",
+  "navigationDividerColor": "#00000000",
+  "navigationDividerColorDark": "#00000000",
+  "backgroundColor": "#F4F3F1",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://bodega.artisandevs.duckdns.org/icons/icon-512.png",
+  "maskableIconUrl": "https://bodega.artisandevs.duckdns.org/icons/icon-maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "~/.local/share/bodega/android.keystore",
+    "alias": "bodega"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [
+    {
+      "name": "Añadir artículo",
+      "shortName": "Añadir artículo",
+      "url": "https://bodega.artisandevs.duckdns.org/?open=add",
+      "chosenIconUrl": "https://bodega.artisandevs.duckdns.org/icons/shortcut-add.png"
+    },
+    {
+      "name": "Compra",
+      "shortName": "Compra",
+      "url": "https://bodega.artisandevs.duckdns.org/?open=active",
+      "chosenIconUrl": "https://bodega.artisandevs.duckdns.org/icons/shortcut-active.png"
+    },
+    {
+      "name": "Recetas",
+      "shortName": "Recetas",
+      "url": "https://bodega.artisandevs.duckdns.org/?open=recipes",
+      "chosenIconUrl": "https://bodega.artisandevs.duckdns.org/icons/shortcut-recipes.png"
+    },
+    {
+      "name": "Menú",
+      "shortName": "Menú",
+      "url": "https://bodega.artisandevs.duckdns.org/?open=menu",
+      "chosenIconUrl": "https://bodega.artisandevs.duckdns.org/icons/shortcut-menu.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://bodega.artisandevs.duckdns.org/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": false,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://bodega.artisandevs.duckdns.org/",
+  "minSdkVersion": 21,
+  "orientation": "any",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1.0.0"
+}
