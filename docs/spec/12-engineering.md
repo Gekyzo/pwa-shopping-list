@@ -141,7 +141,7 @@
 | `tests/release-notes-files.test.js` | One release-notes file for each language, with the same versions (VER-18) |
 | `tests/install.test.js` | The install offer states (INS-1) |
 | `tests/apk.test.js` | The file names and the signing secrets of `scripts/apk.mjs` (INS-7) |
-| `tests/twa.test.js` | The Android wrapper `twa/twa-manifest.json` against `manifest.webmanifest` (INS-5, INS-7) |
+| `tests/twa.test.js` | The Android wrapper `twa/twa-manifest.json` against `manifest.webmanifest`, and `.well-known/assetlinks.json` against the wrapper (INS-5 to INS-7) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own; the sheets, `Ajustes` and the walkthrough markup, also the **Novedades** sheet and its row (VER-21, VER-22) |
 | `tests/controls.test.js` | Each call of `bindField` in `src/ui/` passes `read` and `write` as one object (AISLE-12) |

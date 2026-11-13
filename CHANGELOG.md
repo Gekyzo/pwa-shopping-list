@@ -10,7 +10,8 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- `.well-known/assetlinks.json` grants the site to the Android app `io.github.polarisworks.bodega`
+  with the SHA-256 of its upload key, so the Trusted Web Activity opens with no URL bar (INS-6).
 
 ## 1.13.2 - 2026-11-09
 

@@ -8,8 +8,8 @@
   "themeColorDark": "#0F0F0E",
   "navigationColor": "#F4F3F1",
   "navigationColorDark": "#0F0F0E",
-  "navigationDividerColor": "#00000000",
-  "navigationDividerColorDark": "#00000000",
+  "navigationDividerColor": "#F4F3F1",
+  "navigationDividerColorDark": "#0F0F0E",
   "backgroundColor": "#F4F3F1",
   "enableNotifications": false,
   "startUrl": "/",
@@ -61,8 +61,14 @@
   "fullScopeUrl": "https://bodega.artisandevs.duckdns.org/",
   "minSdkVersion": 24,
   "orientation": "any",
-  "fingerprints": [],
+  "fingerprints": [
+    {
+      "name": "upload",
+      "value": "25:F4:9C:8E:6D:FA:8B:FA:F1:4F:97:4C:FB:DB:B0:A7:C2:00:FB:93:30:F7:4E:0E:97:0A:BC:7E:E6:39:E3:50"
+    }
+  ],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
+  "displayOverride": [],
   "appVersion": "1.0.0"
 }

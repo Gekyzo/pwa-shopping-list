@@ -32,6 +32,10 @@ test('the wrapper has the colours and orientation of the web manifest', () => {
   assert.equal(colour(twa.navigationColor), web.background_color);
   assert.equal(colour(twa.themeColorDark), darkTheme);
   assert.equal(colour(twa.navigationColorDark), darkTheme);
+  // Bubblewrap saves colours with no alpha, so a transparent divider comes back black: the divider
+  // takes the colour of the navigation bar instead.
+  assert.equal(colour(twa.navigationDividerColor), colour(twa.navigationColor));
+  assert.equal(colour(twa.navigationDividerColorDark), colour(twa.navigationColorDark));
   assert.equal(twa.orientation, 'any');
   assert.equal(twa.orientation, web.orientation);
 });
@@ -75,4 +79,23 @@ test('the wrapper signs with the key outside the repository', () => {
 test('the generated project is not committed', () => {
   const lines = read('twa/.gitignore').split('\n').map((line) => line.trim()).filter(Boolean);
   for (const pattern of ['*', '!twa-manifest.json', '!.gitignore']) assert.ok(lines.includes(pattern), pattern);
+});
+
+// Chrome shows the app with no URL bar only when the site names the package and its key (INS-6).
+test('the asset links grant the app to the package of the wrapper', () => {
+  const links = json('.well-known/assetlinks.json');
+  assert.ok(Array.isArray(links) && links.length > 0);
+  for (const { relation, target } of links) {
+    assert.deepEqual(relation, ['delegate_permission/common.handle_all_urls']);
+    assert.equal(target.namespace, 'android_app');
+    assert.equal(target.package_name, twa.packageId);
+  }
+});
+
+test('the asset links and the wrapper list the same fingerprints', () => {
+  const links = json('.well-known/assetlinks.json');
+  const listed = links.flatMap(({ target }) => target.sha256_cert_fingerprints).sort();
+  assert.ok(listed.length > 0);
+  assert.deepEqual(listed, twa.fingerprints.map(({ value }) => value).sort());
+  for (const value of listed) assert.match(value, /^([0-9A-F]{2}:){31}[0-9A-F]{2}$/);
 });

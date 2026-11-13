@@ -201,6 +201,7 @@ VOICE-8 prose Not built: src/voice-commands.js and src/voice.js do not exist.
 # 16-install.md
 INS-4 static tests/spec.test.js checks that the manifest has orientation any.
 INS-5 static tests/twa.test.js checks the package id, the host and the start URL of the wrapper.
+INS-6 static tests/twa.test.js checks .well-known/assetlinks.json against the package and the fingerprints of the wrapper.
 INS-7 static tests/twa.test.js checks the wrapper against manifest.webmanifest and that twa/ ignores the generated project.
 
 # 20-address.md

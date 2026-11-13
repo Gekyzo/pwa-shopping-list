@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.polarisworks.bodega",
+        "sha256_cert_fingerprints": ["25:F4:9C:8E:6D:FA:8B:FA:F1:4F:97:4C:FB:DB:B0:A7:C2:00:FB:93:30:F7:4E:0E:97:0A:BC:7E:E6:39:E3:50"]
+      }
+    }]

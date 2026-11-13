@@ -21,6 +21,10 @@ Android wrapper of `twa/`.
   `https://bodega.artisandevs.duckdns.org/` in Chrome, full screen, with Chrome's storage for that
   origin (VER-16). It holds no code and no copy of the shell: a site release reaches it as it
   reaches the installed PWA.
+- **INS-6** `.well-known/assetlinks.json` grants `delegate_permission/common.handle_all_urls` to
+  `io.github.polarisworks.bodega`, with the SHA-256 fingerprint of each key that signs a published build:
+  the upload key, and on Play the app signing key of Play too. Its fingerprints are those of
+  `twa/twa-manifest.json`. Without a match, Chrome shows the app with a URL bar.
 - **INS-7** `twa/twa-manifest.json` is the only source of the wrapper. Its name, launcher name,
   colours, icons, orientation and shortcuts are those of `manifest.webmanifest`. `npm run apk`
   builds the project from it, and the project is never committed.
