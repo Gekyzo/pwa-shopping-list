@@ -66,6 +66,13 @@ test('the wrapper version is semver and its code is a positive integer', () => {
   assert.equal(twa.appVersion, twa.appVersionName);
 });
 
+// LauncherActivity of android-browser-helper 2.7.4 always enables ManageDataLauncherActivity. With
+// the shortcut off, Bubblewrap leaves that activity out of the manifest, R8 renames the class, and
+// the app crashes at start ("Component class R.u does not exist").
+test('the wrapper keeps the site settings shortcut, which the launcher needs', () => {
+  assert.equal(twa.enableSiteSettingsShortcut, true);
+});
+
 // android-browser-helper 2.7.4, which Bubblewrap 1.27 builds with, declares minSdk 24.
 test('the wrapper min SDK is the one of android-browser-helper', () => {
   assert.equal(twa.minSdkVersion, 24);

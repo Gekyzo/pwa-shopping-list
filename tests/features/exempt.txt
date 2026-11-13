@@ -203,6 +203,7 @@ INS-4 static tests/spec.test.js checks that the manifest has orientation any.
 INS-5 static tests/twa.test.js checks the package id, the host and the start URL of the wrapper.
 INS-6 static tests/twa.test.js checks .well-known/assetlinks.json against the package and the fingerprints of the wrapper.
 INS-7 static tests/twa.test.js checks the wrapper against manifest.webmanifest and that twa/ ignores the generated project.
+INS-8 prose A wrapper release is a manual step: npm run apk, the tag twa-vX.Y.Z and gh release create.
 
 # 20-address.md
 ADDR-6 screen The import of a moved backup on the new address, its question, message and undo; the decode is ADDR-5.
