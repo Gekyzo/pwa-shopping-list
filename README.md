@@ -1,169 +1,84 @@
 # Bodega
 
-A shopping list that works offline. It is mobile first: install it as a PWA on an Android phone,
-or use it in any browser, on a phone, a tablet or a desktop. It keeps one list, `Compra`, for the
-current trip. At the end of a trip it keeps the recurrent items and, if you choose, the items you
-did not buy, so the list for the next trip is almost ready.
+**A shopping list that gets ready by itself for next time.** It works offline, on your phone,
+tablet or computer.
 
-- App: https://bodega.polarisworks.duckdns.org/
-- Specification: [`docs/spec/`](docs/spec/README.md). Each rule has an identifier, such as `TRIP-2`.
-- Changes by version: [`CHANGELOG.md`](CHANGELOG.md). What a user reads in the app:
-  [`release-notes/`](release-notes/).
+[**Open Bodega →**](https://bodega.polarisworks.duckdns.org/)
 
-## What it does
+![Bodega on a phone, a tablet and a desktop](docs/images/devices.svg)
 
-### One list for the trip
+## Contents
 
-`Compra` holds what to buy. Add an item with search, with no duplicates, then tick it in the shop.
-Search the list, order it by name or by hand, and group it by recipe, by shop or by store
-section. **Terminar compra** ends the trip: recurrent items (↻) come back for the next trip, the
-one-time items you bought leave the list, and the items not bought stay or go, as **Al terminar
-la compra** in `Ajustes` sets. `Deshacer` restores the list for 5 seconds.
+- [Install it](#install-it)
+- [Your first trip in 1 minute](#your-first-trip-in-1-minute)
+- [Plan the meals of the week](#plan-the-meals-of-the-week)
+- [Shop with someone else](#shop-with-someone-else)
+- [Keep your lists safe](#keep-your-lists-safe)
+- [Questions](#questions)
 
-![Compra and the end of a trip](docs/images/compra.svg)
+## Install it
 
-### Recipes and the menu of the week
+| Where | How |
+|---|---|
+| Android, as an app | Download `bodega-<version>.apk` from [Releases](https://github.com/polaris-works/shopping-list/releases/latest) and open it. |
+| Android, from Chrome | Open the link, then **⋮ → Add to Home screen → Install**. Or **Settings → Install the app**. |
+| Any other device | Open the link in a browser. No install needed. |
 
-A recipe is a name and a list of products. One tap sends its products to `Compra`. In `Menú`, put
-a recipe or a dish in the lunch and the dinner of each day. **Llenar cesta** sends the products of
-all the recipes of the week to `Compra`, with no duplicate item.
+After the first open, Bodega works with no connection.
 
-![Menú fills Compra with the products of its recipes](docs/images/recetas-menu.svg)
+## Your first trip in 1 minute
 
-### Share with another person
+1. Tap **Add** and type a product. If it is already on the list, Bodega shows it instead of adding it twice.
+2. For what you buy every time, slide the item to the left and tap **Repeat**. It shows ↻.
+3. In the shop, tap each item as you put it in the basket.
+4. At the checkout, tap **Finish shopping**.
 
-Invite a person by email in **Compartir lista**. Share `Compra` only, or `Compra`, `Recetas` and
-`Menú`. The person accepts or declines. A member sees their own list beside the shared one, with a
-chip for each: **Todas**, **Mi lista** and the name of the owner. The language, the hand and the
-theme stay on each device.
+Recurring items come back. Items bought once leave. Items you did not find stay or go — you choose
+in **Settings → When the trip ends**. Tapped the wrong thing? **Undo** is there for 5 seconds.
+
+![The list and the end of a trip](docs/images/compra.svg)
+
+**Tip:** give each item its shop and its section. Then see only the list for one shop, in the
+order you walk through it.
+
+## Plan the meals of the week
+
+1. In **Recipes**, save a dish with its products.
+2. In **Menu**, put a recipe in the lunch or the dinner of each day.
+3. Tap **Fill basket**. All the products go to your list, each one once.
+
+![The menu fills the list](docs/images/recetas-menu.svg)
+
+## Shop with someone else
+
+Sign in, then open **Settings → Share list** and type their email. Share only the list, or also
+your recipes and menu. They accept, and you both see the same list. Language and theme stay your
+own.
 
 ![Share the list by email](docs/images/share.svg)
 
-### Any device, online or not
+## Keep your lists safe
 
-Bodega is mobile first. Install it on an Android phone, or open it in any browser on a phone, a
-tablet or a desktop; the layout adapts to each width. It works with no connection after the first
-load. Sign in with Google to sync the data between your devices, or use the app with no account.
+| You use Bodega… | Your lists live… | Do this |
+|---|---|---|
+| without an account | only on this device | **Settings → Export** from time to time |
+| signed in with Google | on this device and your account | nothing — they sync |
 
-![The same list on a phone, a tablet and a desktop](docs/images/devices.svg)
+Without an account, clearing Chrome's site data or uninstalling the app deletes your lists.
 
-### More
+## Questions
 
-- **Shops and sections** — give an item its shops and its section of the store, then see the list
-  for one shop or in the order of the walk through the store.
-- **Backup** — export the data to a JSON file and import it again.
-- **Languages** — Spanish, Catalan, English, French, German, Italian and Portuguese.
-- **Integrations** — launcher shortcuts, a reminder at the shop opened by an automation app
-  (`?arrival`), and voice commands in Spanish.
-- **Walkthrough** — a new install starts with six pages that teach the app.
+**Is my data tracked?** No ads, no analytics, no tracking. See the [privacy policy](https://bodega.polarisworks.duckdns.org/privacy.html).
 
-Not in the product, by decision: quantities, units, prices, photos, more than one list for the
-trip, a history of past trips, and system notifications. The full list is in
-[01-product](docs/spec/01-product.md).
+**Why must I wait after I sign up?** An administrator approves each new account. You can use Bodega without an account meanwhile.
 
-## Use it
+**Which languages?** Spanish, Catalan, English, French, German, Italian and Portuguese.
 
-In a browser, open the app URL. The layout adapts to a phone, a foldable, a tablet and a desktop,
-and works with a mouse and a keyboard.
+**Can I add prices?** No, on purpose. Bodega stays a quick list, not a budget app.
 
-To install it on Android:
+**Something does not work?** [Tell us](https://github.com/polaris-works/shopping-list/issues).
+What changed lately: [release notes](release-notes/en.md).
 
-1. Open the app URL in Chrome.
-2. Open the Chrome menu and tap **Add to Home screen → Install**, or tap **Install the app** in
-   `Ajustes`.
-3. Start the app from the home screen. It works with no network connection after the first load.
+---
 
-Or install the Android app: download `bodega-<version>.apk` from the
-[GitHub releases](https://github.com/polaris-works/shopping-list/releases) (tags `twa-v*`) and open
-it on the phone. It is the same site in Chrome, full screen, with the same lists (INS-5). Remove
-the icon that Chrome installed only after the app shows your lists, and never clear the site data
-of Chrome: the app keeps its lists there.
-
-The data lives on the device first, in the `localStorage` of the browser. With an account it also
-syncs to the server. Without an account, **Clear site data** in Chrome and the uninstall of the
-app delete the lists: export a backup in `Ajustes` before you do that.
-
-## Specification
-
-| Subject | Document |
-|---|---|
-| Purpose, user, constraints, what the app does not do | [01-product](docs/spec/01-product.md) |
-| The list `Compra`, the trip and the add sheet | [03-lists](docs/spec/03-lists.md) |
-| Order, groups, shops and store sections | [04-arrange](docs/spec/04-arrange.md), [05-shops](docs/spec/05-shops.md), [17-aisles](docs/spec/17-aisles.md) |
-| Recipes and the menu of the week | [06-recipes](docs/spec/06-recipes.md), [13-menu](docs/spec/13-menu.md) |
-| Sections, gestures, messages, undo and the walkthrough | [07-screen](docs/spec/07-screen.md) |
-| Accounts, sync and sharing | [18-account-sync](docs/spec/18-account-sync.md), [19-sharing](docs/spec/19-sharing.md) |
-| The stored format and the backup | [02-data-model](docs/spec/02-data-model.md), [08-storage](docs/spec/08-storage.md) |
-| Languages | [09-languages](docs/spec/09-languages.md) |
-| Offline use, version, update and installation | [10-offline-version](docs/spec/10-offline-version.md), [16-install](docs/spec/16-install.md) |
-| Reminder at the shop, shortcuts and voice | [11-integrations](docs/spec/11-integrations.md) |
-| Modules, code rules, tests and the design system | [12-engineering](docs/spec/12-engineering.md), [15-design-system](docs/spec/15-design-system.md) |
-
-The full index, with the rule prefixes and the words of the app, is
-[`docs/spec/README.md`](docs/spec/README.md).
-
-## Develop
-
-Plain HTML, CSS and ES modules, with no build step and no dependencies. Node 20 or later.
-
-```sh
-npm run hooks    # enable the git hooks of .githooks/ (one time)
-npm test         # unit tests
-npm run test:features  # the Gherkin scenarios of tests/features/, as a tree
-npm run serve    # http://localhost:8080
-npm run pair     # two users on :8081 and :8082 (docs/two-users.md)
-npm run release  # bump, commit and tag vX.Y.Z; git push --follow-tags deploys
-npm run apk      # build the signed APK and AAB of the Android app into twa/out/
-```
-
-A change of behaviour changes its rule in `docs/spec/` in the same commit. The deploy is in
-[10-offline-version](docs/spec/10-offline-version.md) (VER-9), the design system in
-[15-design-system](docs/spec/15-design-system.md).
-
-## Android app
-
-The Android app is a Trusted Web Activity: Chrome opens the deployed site full screen
-([16-install](docs/spec/16-install.md), INS-5). `twa/twa-manifest.json` is its only source; Bubblewrap
-generates the rest of `twa/`, which git ignores (INS-7).
-
-Prerequisites, one time:
-
-- JDK 17 at `/usr/lib/jvm/java-17-openjdk-amd64` and the Android SDK at `~/Android/Sdk`, named in
-  `~/.bubblewrap/config.json`. Bubblewrap 1.27 wants `tools/` at the SDK root
-  (`ln -s cmdline-tools/latest ~/Android/Sdk/tools`) and build-tools `36.1.0`.
-- The signing key `~/.local/share/bodega/android.keystore`, alias `bodega`, outside the
-  repository. Keep the keystore file and its password in the password manager: a lost key means
-  no update can be published again.
-
-Set the password from the password manager, with no quoting and no shell history:
-
-```sh
-read -rsp 'Keystore password: ' BUBBLEWRAP_KEYSTORE_PASSWORD; echo
-export BUBBLEWRAP_KEYSTORE_PASSWORD BUBBLEWRAP_KEY_PASSWORD="$BUBBLEWRAP_KEYSTORE_PASSWORD"
-```
-
-The key was made from that variable, so the keystore and the password manager cannot differ:
-
-```sh
-keytool -genkeypair -keystore ~/.local/share/bodega/android.keystore -alias bodega \
-  -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Bodega" \
-  -storepass:env BUBBLEWRAP_KEYSTORE_PASSWORD
-```
-
-Build:
-
-```sh
-npm run apk      # twa/out/bodega-<version>.apk and .aab, both signed
-```
-
-Release a new wrapper (INS-8), only when `twa/` changes; a site release needs none:
-
-1. In `twa/twa-manifest.json`, set `appVersionName` and `appVersion` to the new version and add 1
-   to `appVersionCode`.
-2. `npm run apk`, then install the APK on the phone and check it.
-3. Commit, then `git tag -a twa-vX.Y.Z -m "Android wrapper X.Y.Z"` and `git push --follow-tags`.
-   Never a `vX.Y.Z` tag: that one deploys the site.
-4. `gh release create twa-vX.Y.Z twa/out/bodega-X.Y.Z.apk --title "Bodega Android X.Y.Z"`.
-
-`npm run apk` signs the files itself: Bubblewrap 1.27 passes the passwords through a shell, which
-changes a `$`, a backtick or a `\` in them.
+<sub>Developers: [CONTRIBUTING.md](CONTRIBUTING.md) · Specification: [docs/spec/](docs/spec/README.md)</sub>
