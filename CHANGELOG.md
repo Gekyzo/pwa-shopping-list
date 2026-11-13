@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.13.4 - 2026-11-13
+
 - The repository moves to the organization `polaris-works`: GitHub Pages serves it from
   `https://polaris-works.github.io/pwa-shopping-list/`, and Caddy proxies the address from there (VER-9).
 - The Android app id is `io.github.polarisworks.bodega` (INS-5, INS-6), and the wrapper names its

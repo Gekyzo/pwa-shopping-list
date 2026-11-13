@@ -4,6 +4,10 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
+No change.
+
+## 1.13.4 - 2026-11-13
+
 - O Bodega também é uma app Android. Descarrega o ficheiro `bodega-1.0.0.apk` de github.com/polaris-works/pwa-shopping-list/releases e instala-o: vês as mesmas listas.
 
 ## 1.13.2 - 2026-11-09
