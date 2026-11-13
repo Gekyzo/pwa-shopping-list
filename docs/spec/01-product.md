@@ -61,8 +61,8 @@ next trip is almost ready.
 
 These are decisions, not gaps.
 
-- Units, prices, categories, notes and photos of an item. An item has a quantity, but only as
-  free text (LIST-27), such as `1 kg`.
+- Units, prices, notes and photos of an item. An item has a quantity, but only as free text
+  (LIST-27), such as `1 kg`, and a section of the store (AISLE-1).
 - More than one list for the trip, a list for a later trip, and a history of past trips.
 - Google Tasks as a shared list: it was rejected for the share of SHARE-1.
 - Geolocation in the app and system notifications.

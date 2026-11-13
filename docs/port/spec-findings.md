@@ -29,7 +29,7 @@ Proposed changes to `docs/spec/`, found while the port spec was checked against 
 
 ### Other text of `docs/spec/` that the code contradicts
 
-- `01-product.md` "Not in the product" lists "Quantities" and "categories" of an item. Code: an item has a free-text `quantity` (`src/store.js:46-52`) and one `aisle` (17-aisles). Proposed: remove both; write "Units, prices, notes and photos of an item."
+- `01-product.md` "Not in the product" lists "Quantities" and "categories" of an item. Code: an item has a free-text `quantity` (`src/store.js:46-52`) and one `aisle` (17-aisles). Proposed: remove both; write "Units, prices, notes and photos of an item." **Applied on 2026-11-13.**
 - `01-product.md` "Functions": "Groups by recipe or by shop" misses the aisle group (`src/store.js:6`), and the table has no row for 17-aisles. Proposed: "Groups by recipe, by shop or by aisle" and a row "Aisles of the store | 17-aisles.md".
 - `08-storage.md` BACKUP-2 lists the backup content without `quantity`, `aisle`, `aisles`; the "not held" list misses the row of shop lists and the swipe hint. Proposed: "The backup holds the items with their shops, quantity and aisle, the recipes, `sent`, `group`, `sort`, the menu and the aisles. It does not hold the language, the hand, the theme, the density, **Al terminar la compra**, the row of shop lists, the flag of the walkthrough or the swipe hint."
 - `08-storage.md` BACKUP-4: "A backup of version 1, 2 or 3 is thus accepted." Code accepts 1 to 8 (`src/storage.js:140`). Proposed: "A backup of version 1 to 8 is thus accepted."

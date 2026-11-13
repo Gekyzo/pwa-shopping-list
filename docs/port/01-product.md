@@ -76,13 +76,14 @@ The aisle grouping and the aisles document are not in the table of `docs/spec/01
 
 ## Not in the product
 
-These are decisions, not gaps. The spec list holds two entries that the code contradicts:
+These are decisions, not gaps. The spec list held two entries that the code contradicts; both
+were removed from `docs/spec/` on 2026-11-13:
 
-- An item has a free-text quantity (`quantity`, `src/store.js:46-52`). The spec says
-  "Quantities … of an item" are not in the product (finding). Units, prices, notes and photos
+- An item has a free-text quantity (`quantity`, `src/store.js:46-52`). The spec said
+  "Quantities … of an item" were not in the product. Units, prices, notes and photos
   stay out.
-- An item has one aisle (`aisle`, 17-aisles). The spec says "categories" are not in the product;
-  an aisle is a section of the store, used as a category of the item (finding).
+- An item has one aisle (`aisle`, 17-aisles). The spec said "categories" were not in the product;
+  an aisle is a section of the store, used as a category of the item.
 
 The rest holds in the code:
 
