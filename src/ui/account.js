@@ -97,7 +97,7 @@ if (syncer && syncer.status().shared) setSharing(syncer.status().shared, sharedB
 // state, since each render asks.
 let dataOf = null;
 let dataValue = false;
-export const hasLocalData = () => {
+const hasLocalData = () => {
   if (dataOf !== state) {
     dataOf = state;
     dataValue = diffRecords(toRecords(emptyState()), toRecords(ownState())).length > 0;

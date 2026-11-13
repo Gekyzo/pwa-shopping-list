@@ -9,7 +9,7 @@ the launcher shortcuts (`?open=<name>`), and the voice commands (not on `main`).
 ## Reminder at the shop
 
 A PWA gets no position while it is closed, so an Android automation app (MacroDroid, Tasker) owns
-the geofence and opens `https://polaris-works.github.io/pwa-shopping-list/?arrival`. The app holds no
+the geofence and opens `https://bodega.artisandevs.duckdns.org/?arrival`. The app holds no
 coordinates. A native port can own the geofence itself (Q-platform-8).
 
 **ARR-1** [adapted] [verified] A start with the parameter `arrival` (any value or none) shows the message `toast.arrival` with `count` = the number of items of `Compra` that are not ticked (recurrent items included) and `list` = the name of `Compra` in the language of the screen: `N artículos por comprar en Compra.` (plural by N). The message has no **Deshacer**.

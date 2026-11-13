@@ -10,6 +10,12 @@ no change has no entry.
 
 ## Unreleased
 
+- The repository moves to the organization `polaris-works`: GitHub Pages serves it from
+  `https://polaris-works.github.io/pwa-shopping-list/`, and Caddy proxies the address from there (VER-9).
+- The Android app id is `io.github.polarisworks.bodega` (INS-5, INS-6), and the wrapper names its
+  key from the home folder (`~/…`).
+- The move screen of the old address and the import of a moved backup are removed (ADDR-1 to
+  ADDR-8), because the old address no longer serves the app.
 - The Android app 1.0.0 (`twa-v1.0.0`): a Trusted Web Activity built by `npm run apk`, released
   on GitHub with its signed APK (INS-5, INS-7, INS-8).
 
@@ -250,7 +256,7 @@ no change has no entry.
 
 ## 1.4.1 - 2026-10-24
 
-- `Solicitar acceso` and `Esperando aprobación` name the administrator, not Polaris Works, as the one who approves an account; the 1.4.0 release notes say the same.
+- `Solicitar acceso` and `Esperando aprobación` name the administrator, not the owner, as the one who approves an account; the 1.4.0 release notes say the same.
 - A 429 of the server is the client error `rate`, not `server`. The syncer keeps the queue and the online status on it, and retries after 5 s, 15 s, 30 s and then every 60 s; a 5xx also retries, and still shows the offline note (`src/pocketbase.js`, `src/syncer.js`, SYNC-3, SYNC-11).
 - The row `Cuenta` of `Ajustes` stacks the email and the last sync (`account-row`, ACC-10): the two spans overlapped at 390 px; a long email wraps anywhere in the row.
 - The offline note clears when a sync reaches the server (the `reached` counter of the sync status grows while the note shows), and at `visibilitychange` to visible when `navigator.onLine` is true: some Android phones send no `online` event after airplane mode (`src/ui/account.js`, `src/app.js`, SYNC-11).

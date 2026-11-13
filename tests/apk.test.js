@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { apkName, bundleName, missingSecrets, apksignerArgs, jarsignerArgs, versionMismatch } from '../scripts/apk.mjs';
+import { apkName, bundleName, missingSecrets, apksignerArgs, jarsignerArgs, versionMismatch, keystorePath } from '../scripts/apk.mjs';
 
 // The pure parts of npm run apk (INS-7); the build itself runs Bubblewrap.
 test('the build files are named after the wrapper version', () => {
@@ -50,4 +50,13 @@ test('a wrapper whose two version names differ is refused, with both names', () 
   const message = versionMismatch({ appVersionName: '1.1.0', appVersion: '1.0.0' });
   assert.match(message, /appVersionName 1\.1\.0/);
   assert.match(message, /appVersion 1\.0\.0/);
+});
+
+// The wrapper names the key from the home folder, so the repository holds no user name.
+test('a key path that starts with ~ is read from the home folder', () => {
+  assert.equal(keystorePath('~/.local/share/bodega/android.keystore', '/home/someone'), '/home/someone/.local/share/bodega/android.keystore');
+});
+
+test('an absolute key path stays as it is', () => {
+  assert.equal(keystorePath('/keys/android.keystore', '/home/someone'), '/keys/android.keystore');
 });

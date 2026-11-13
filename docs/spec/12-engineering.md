@@ -26,7 +26,6 @@
 | `src/shares.js` | The rules of a shared space: the space to sync, the case of the sheet **Compartir lista** and the pending invite (SHARE-5, SHARE-6, SHARE-9, SHARE-11) | nothing |
 | `src/syncer.js` | The sync driver: it queues each save, sends the queue, pulls and merges the account, in an own lane and a shared lane, runs the login and the logout of the account, and the share requests (ACC-4, ACC-7 to ACC-9, SYNC-2 to SYNC-9, SHARE-6 to SHARE-8, SHARE-13) | `records`, `sync`, `pocketbase`, `session`, `shares`, `storage`, `store` |
 | `src/config.js` | The API URL for the host that serves the app (ACC-12) | nothing |
-| `src/move.js` | The old and the new address, the backup packed into a URL fragment, what the move button does (ADDR-1 to ADDR-5) | `storage` |
 | `src/version.js` | Pure version rules | nothing |
 | `src/update.js` | Actualizar: a new worker of the host takes control, or the worker in control loads its shell again (VER-8) | nothing |
 | `src/whatsnew.js` | The parse of the release notes and the versions that a user has not seen | `version` |
@@ -53,7 +52,6 @@
 | `src/ui/share.js` | The sheet `Compartir lista` of `Ajustes`: the people and the invite, the accept and the decline, the leave (SHARE-5, SHARE-8, SHARE-9) | `shares`, `ui/context`, `ui/account` |
 | `src/ui/install.js` | The Install button of `Ajustes` | `install`, `ui/context` |
 | `src/ui/device.js` | The width class of the window in `ui.device` (NAV-28) | `device`, `ui/context` |
-| `src/ui/move.js` | The screen of the old address and its button, the import of a moved backup on the new address (ADDR-1 to ADDR-8) | `move`, `storage`, `ui/context`, `ui/account`, `ui/onboarding` |
 | `src/ui/settings.js` | `Ajustes`: version and update, language, hand, theme, export and import, the delete of the sample recipe | `recipes`, `sections`, `storage`, `version`, `update`, `i18n`, `ui/context`, `ui/onboarding`, `ui/account` |
 | `src/ui/nav.js` | The bottom bar and the change of section | `sections`, `device`, `layers`, `ui/context`, `ui/drag`, `ui/settings` |
 | `src/app.js` | The start of the app: the render of the screen, the bind of each view, the listeners of the document. With `src/ui/`, the only code that touches the page | all of the above |
@@ -122,7 +120,6 @@
 | `tests/syncer.test.js` | The sync driver against a fake server: the queue, the push and the pull, two devices, the errors, the token refresh, the login and the logout, the import, the own lane and the shared lane of a member (start, end, scope, upgrade of v1.5.0) |
 | `tests/context.test.js` | The save of `commit` and the function that it calls after a save |
 | `tests/config.test.js` | The API URL for each host |
-| `tests/move.test.js` | The old origin, the fragment of a move and its errors, the size limit, the move mode |
 | `tests/sync.test.js` | The queue, the merge of pulled records, the duplicates and the cursor |
 | `tests/swipe.test.js` | The settle rule of a row slide |
 | `tests/sw.test.js` | The manifest text that the worker puts in place, with the names of the shortcuts (SW-13); the release notes of each language in `SHELL` (VER-20) |

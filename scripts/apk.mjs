@@ -13,6 +13,9 @@ const KEY_SECRET = 'BUBBLEWRAP_KEY_PASSWORD';
 
 export const apkName = ({ appVersionName }) => `bodega-${appVersionName}.apk`;
 export const bundleName = ({ appVersionName }) => `bodega-${appVersionName}.aab`;
+// The wrapper names the key from the home folder (`~/…`), so the repository holds no user name.
+export const keystorePath = (path, home) => (path.startsWith('~/') ? `${home}${path.slice(1)}` : path);
+
 export const missingSecrets = (env) => [STORE_SECRET, KEY_SECRET].filter((name) => !env[name]);
 
 // Bubblewrap 1.27 builds with `appVersion`; the file names come from `appVersionName`.
@@ -67,9 +70,10 @@ const main = () => {
   mkdirSync(`${twa}out`, { recursive: true });
   const apk = `${twa}out/${apkName(manifest)}`;
   const bundle = `${twa}out/${bundleName(manifest)}`;
+  const key = { ...manifest.signingKey, path: keystorePath(manifest.signingKey.path, homedir()) };
   const run = (command, args) => execFileSync(command, args, { env, stdio: 'inherit' });
-  run(`${androidSdkPath}/build-tools/${BUILD_TOOLS}/apksigner`, apksignerArgs(manifest.signingKey, unsigned.apk, apk));
-  run(`${jdkPath}/bin/jarsigner`, jarsignerArgs(manifest.signingKey, unsigned.bundle, bundle));
+  run(`${androidSdkPath}/build-tools/${BUILD_TOOLS}/apksigner`, apksignerArgs(key, unsigned.apk, apk));
+  run(`${jdkPath}/bin/jarsigner`, jarsignerArgs(key, unsigned.bundle, bundle));
   console.log(`apk: ${apk}\napk: ${bundle}`);
 };
 

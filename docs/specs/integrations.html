@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es" data-repo-root="~/code/personal/pwa-shopping-list" data-kind="spec" data-layout="spec">
+<html lang="es" data-repo-root="../.." data-kind="spec" data-layout="spec">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -436,7 +436,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="arrival">Aviso al llegar a la tienda</h3>
 <p>Una apertura con <code>?arrival</code> en la dirección muestra <code>N artículos por comprar en Compra.</code> en el idioma de la pantalla, o <code>1 artículo por comprar en Compra.</code> para uno. N es el número de artículos de <code>Compra</code> sin marcar (ARR-1). El mensaje dura 10 segundos, porque la app se abrió sola, y no tiene <code>Deshacer</code> (ARR-2). Sin nada por comprar no hay mensaje (ARR-3). La app quita <code>arrival</code> de la dirección al momento y mantiene el resto de parámetros, así que una recarga no repite el mensaje (ARR-4).</p>
-<p>La app de automatización (MacroDroid, Tasker) tiene el lugar, el radio y la precisión (ARR-5). Su configuración: una geovalla de entrada de 100 a 150 m y la acción de abrir <code>https://polaris-works.github.io/pwa-shopping-list/?arrival</code>. La app debe estar instalada desde Chrome, para que Android abra la dirección en la app instalada y con sus datos.</p>
+<p>La app de automatización (MacroDroid, Tasker) tiene el lugar, el radio y la precisión (ARR-5). Su configuración: una geovalla de entrada de 100 a 150 m y la acción de abrir <code>https://bodega.artisandevs.duckdns.org/?arrival</code>. La app debe estar instalada desde Chrome, para que Android abra la dirección en la app instalada y con sus datos.</p>
 
 <h3 id="shortcuts">Accesos directos del icono</h3>
 <p>Una pulsación larga en el icono de la app instalada muestra cuatro accesos directos, en este orden: <code>Añadir artículo</code> (<code>./?open=add</code>), <code>Compra</code> (<code>./?open=active</code>), <code>Recetas</code> (<code>./?open=recipes</code>) y <code>Menú</code> (<code>./?open=menu</code>) (SHORT-1). Una apertura con <code>?open=&lt;nombre&gt;</code> muestra esa sección; <code>add</code> muestra <code>Compra</code> y abre allí la hoja de añadir. Un nombre desconocido se ignora (SHORT-2).</p>

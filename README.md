@@ -83,10 +83,6 @@ The data lives on the device first, in the `localStorage` of the browser. With a
 syncs to the server. Without an account, **Clear site data** in Chrome and the uninstall of the
 app delete the lists: export a backup in `Ajustes` before you do that.
 
-The app moved from `https://polaris-works.github.io/pwa-shopping-list/`. The old address shows a screen
-with **Mover mis datos**, which carries the data to the new address
-([20-address](docs/spec/20-address.md)).
-
 ## Specification
 
 | Subject | Document |
@@ -101,7 +97,6 @@ with **Mover mis datos**, which carries the data to the new address
 | Languages | [09-languages](docs/spec/09-languages.md) |
 | Offline use, version, update and installation | [10-offline-version](docs/spec/10-offline-version.md), [16-install](docs/spec/16-install.md) |
 | Reminder at the shop, shortcuts and voice | [11-integrations](docs/spec/11-integrations.md) |
-| The move to the new address | [20-address](docs/spec/20-address.md) |
 | Modules, code rules, tests and the design system | [12-engineering](docs/spec/12-engineering.md), [15-design-system](docs/spec/15-design-system.md) |
 
 The full index, with the rule prefixes and the words of the app, is

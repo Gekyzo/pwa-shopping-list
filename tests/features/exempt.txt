@@ -205,10 +205,6 @@ INS-6 static tests/twa.test.js checks .well-known/assetlinks.json against the pa
 INS-7 static tests/twa.test.js checks the wrapper against manifest.webmanifest and that twa/ ignores the generated project.
 INS-8 prose A wrapper release is a manual step: npm run apk, the tag twa-vX.Y.Z and gh release create.
 
-# 20-address.md
-ADDR-6 screen The import of a moved backup on the new address, its question, message and undo; the decode is ADDR-5.
-ADDR-8 screen The note to install the new address and to remove the old icon.
-
 # 18-account-sync.md
 ACC-2 screen The screens Iniciar sesión and Esperando aprobación, their buttons, texts, errors and layer.
 ACC-5 screen The Google redirect, its sessionStorage and the clean-up of the URL; tests/pocketbase.test.js checks oauthStart and oauthFinish.

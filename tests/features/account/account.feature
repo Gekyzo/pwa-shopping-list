@@ -279,4 +279,3 @@ Feature: Account
         | 127.0.0.1                      | http://localhost:8090              |
         | [::1]                          | http://localhost:8090              |
         | bodega.artisandevs.duckdns.org | https://api.artisandevs.duckdns.org |
-        | polaris-works.github.io               | https://api.artisandevs.duckdns.org |

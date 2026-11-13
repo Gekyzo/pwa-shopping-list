@@ -59,7 +59,6 @@ import { renderInstall, bind as bindInstall } from '#ui/install';
 import { renderAisles, closeAisles, bind as bindAisles } from '#ui/aisles';
 import { renderShare, closeShare, bind as bindShare } from '#ui/share';
 import { showView, bind as bindNav } from '#ui/nav';
-import { startMove } from '#ui/move';
 import { bind as bindDevice } from '#ui/device';
 import { features } from '#device';
 import {
@@ -87,8 +86,7 @@ import {
 let depth = history.state?.depth ?? 0;
 let skipPop = false;
 const syncHistory = () => {
-  // The link of a move (ADDR-5) keeps its hash until the move has read it.
-  if (skipPop || location.hash.startsWith('#import=')) return;
+  if (skipPop) return;
   // An account screen that can close back to the list is a layer too, over each other one.
   const want = historyDepth(ui.view, accountClosable() || closeTop(ui) !== null);
   const url = `${location.pathname}${location.search}${hashOfView(ui.view)}`;
@@ -444,7 +442,7 @@ const oauthReturn = params.has('state') && (params.has('code') || params.has('er
   : null;
 // The query goes before a sheet opens: the entry of the sheet (syncHistory) then comes after an address
 // with no query, and a reload opens nothing.
-const used = ['arrival', 'open', 'moved', ...(oauthReturn ? ['code', 'state', 'error'] : [])];
+const used = ['arrival', 'open', ...(oauthReturn ? ['code', 'state', 'error'] : [])];
 if (used.some((name) => params.has(name))) {
   const rest = new URLSearchParams(params);
   for (const name of used) rest.delete(name);
@@ -457,9 +455,6 @@ if (start) {
   else render();
 }
 if (!storage) showToast(t('error.noStorage'));
-// ADDR-1, ADDR-5: before the account starts, so its route (ACC-1) sees the moved data.
-// A failed move must not stop the start of the app.
-await startMove({ moved: params.has('moved') }).catch((error) => console.error(error));
 // The account and the sync (ACC-1, SYNC-3): each save queues its change, and the sync runs at the start,
 // at `online` and at a change of the account.
 if (syncer) {

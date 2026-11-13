@@ -615,7 +615,7 @@ Related entries that one answer settles together:
 **Weight**: medium
 
 ### Q-platform-11 The address of the arrival link
-**Evidence**: existing automations open `https://polaris-works.github.io/pwa-shopping-list/?arrival`. An Android App Link for it needs `/.well-known/assetlinks.json` at the root of `polaris-works.github.io`, outside this repository.
+**Evidence**: existing automations open `https://bodega.artisandevs.duckdns.org/?arrival`. An Android App Link for it needs `/.well-known/assetlinks.json` at the root of `bodega.artisandevs.duckdns.org`, which this repository serves (INS-6).
 **Options**: (a) a custom scheme (`bodega://arrival`) and a change of the automation; (b) App Link with `assetlinks.json` in the user site repository; (c) an explicit intent from the automation app (package + extra), no URL.
 **Blocks**: ARR-1, SHORT-1.
 **Weight**: low

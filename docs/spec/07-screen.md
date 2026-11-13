@@ -266,8 +266,7 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   `#/compra`, `#/recetas`, `#/menu` and `#/ajustes` (`ROUTES` of `src/sections.js`). A change of
   section writes its hash; a start or an address typed by hand shows the section of its hash.
   Case and accents do not count (`#/Menú` is `Menú`), and no hash or any other hash is `Compra`.
-  A start from a shortcut (SHORT-2) wins over the hash. The link of a move (`#import=`, ADDR-5)
-  keeps its hash until the move has read it. A hash needs no server: the static host and the
+  A start from a shortcut (SHORT-2) wins over the hash. A hash needs no server: the static host and the
   offline shell (SW-2) serve `index.html` for each address.
 - **NAV-14** `Izquierda` does not change the alignment of text, the order of the sections in the bottom bar, the
   sheets or the sides of a slide of a row (ROW-3, ROW-11).

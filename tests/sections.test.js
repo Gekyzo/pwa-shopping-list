@@ -303,7 +303,7 @@ test('viewOfHash ignores case, accents and a missing slash (NAV-30)', () => {
 });
 
 test('viewOfHash gives Compra for no hash, an unknown one or a broken one (NAV-30)', () => {
-  for (const hash of ['', '#', '#/', '#/nope', '#import=abc', '#/%E0%A4%A']) assert.equal(viewOfHash(hash), 'active', hash);
+  for (const hash of ['', '#', '#/', '#/nope', '#other=abc', '#/%E0%A4%A']) assert.equal(viewOfHash(hash), 'active', hash);
 });
 
 test('historyDepth: one entry for a section other than Compra, one for a layer (NAV-25, NAV-30)', () => {

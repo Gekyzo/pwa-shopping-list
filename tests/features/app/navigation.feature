@@ -75,7 +75,7 @@ Feature: Navigation
         | #/men%C3%BA  | menu     |
         | #/nada       | active   |
         | #/%E0%A4%A   | active   |
-        | #import=abc  | active   |
+        | #other=abc   | active   |
 
   Rule: Layers
 

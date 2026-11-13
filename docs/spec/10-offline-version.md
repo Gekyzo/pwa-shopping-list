@@ -84,7 +84,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 
 - **VER-9** The app is a static site: the repository root, served over HTTPS at
   `https://bodega.artisandevs.duckdns.org/`. Caddy on pwa-server serves that address from the
-  Pages site `https://polaris-works.github.io/pwa-shopping-list/`, the old address (ADDR-1). A release tag `vX.Y.Z` is a deploy: its push runs
+  Pages site `https://polaris-works.github.io/pwa-shopping-list/`. A release tag `vX.Y.Z` is a deploy: its push runs
   `.github/workflows/pages.yml`, which publishes the tagged commit to GitHub Pages. A push to
   `main` deploys nothing. The Pages source of the repository is GitHub Actions, and its
   `github-pages` environment allows the tags `v*`.
@@ -148,7 +148,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **VER-14** The manifest makes the app installable from Chrome: **Add to Home screen →
   Install**, or the **Install** button of `Ajustes` (INS-2). It runs `standalone`, in any orientation (INS-4), with `start_url` and `scope` `./` and `id`
   `/shopping-list/`. The `id` resolves against the origin of `start_url`, so `./` would be the
-  root of `polaris-works.github.io`, the same id as each other app there, and Chrome would offer no
+  root of the GitHub Pages origin `polaris-works.github.io`, the same id as each other app there, and Chrome would offer no
   install for them.
 - **VER-15** The icons are `icons/icon-192.png`, `icon-512.png` and `icon-maskable-512.png`,
   written by `npm run icons` from the art of `icons/source.png`: an orange shopping bag with bread, greens, a tomato and milk, on white.
