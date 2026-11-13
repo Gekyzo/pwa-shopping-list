@@ -1,6 +1,6 @@
 {
   "name": "shopping",
-  "version": "1.13.7",
+  "version": "1.13.8",
   "description": "Offline shopping list PWA with one list for the trip, recipes, a weekly menu, shops and store sections, and lists synced and shared through a Google account",
   "private": true,
   "type": "module",

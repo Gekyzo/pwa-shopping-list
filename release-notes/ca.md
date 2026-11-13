@@ -4,6 +4,10 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
+No change.
+
+## 1.13.8 - 2026-11-14
+
 - Quan inicies sessió amb Google entres al moment: ja no cal esperar l’aprovació d’un compte.
 
 ## 1.13.7 - 2026-11-14

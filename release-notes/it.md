@@ -4,6 +4,10 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+No change.
+
+## 1.13.8 - 2026-11-14
+
 - Quando accedi con Google entri subito: un account non deve più attendere l’approvazione.
 
 ## 1.13.7 - 2026-11-14

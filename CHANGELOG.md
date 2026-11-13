@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.13.8 - 2026-11-14
+
 - ACC-3: Bodega is an open app of the server (pwa-server migration 20): the own `pending` row of a
   sign-in is saved and answered as `approved`, so a Google sign-in gets in at once. Only a `revoked`
   row reaches the screen, now **Sin acceso**. No client code change: the app already reads the
