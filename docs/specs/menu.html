@@ -515,53 +515,96 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-10-23">2026-10-23</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Menú</h1>
 <p class="meta">
   <span><b>Estado</b> en uso</span>
   <span><b>Responsable</b> Polaris Works</span>
-  <span><b>Código</b> <code>src/menu.js</code>, <code>src/ui/menu.js</code>, <code>tests/menu.test.js</code></span>
-  <span><b>Reglas</b> <a href="../spec/13-menu.md">MENU-1 a MENU-19</a></span>
+  <span><b>Código</b> <code>src/menu.js</code>, <code>src/ui/menu.js</code>, <code>src/ui/panels.js</code>, <code>tests/menu.test.js</code></span>
+  <span><b>Reglas</b> <a href="../spec/13-menu.md">MENU-1 a MENU-27</a></span>
 </p>
 
 <h2 id="proposito">Propósito</h2>
-<p><code>Menú</code> planifica las recetas y los platos de una semana, dos comidas al día. Un toque en <strong>Llenar cesta</strong> envía a <code>Compra</code> los productos de cada receta planificada. Las reglas, con sus identificadores, están en <a href="../spec/13-menu.md"><code>docs/spec/13-menu.md</code></a>. Si esta página y ese archivo no coinciden, manda el archivo.</p>
+<p><code>Menú</code> planifica las recetas y los platos de las semanas, dos comidas al día. Cada semana empieza vacía. Las comidas de las semanas pasadas se guardan y se consultan sin editar, y las 4 semanas siguientes se planifican por adelantado. Un toque en <strong>Llenar cesta</strong> envía a <code>Compra</code> los productos de las recetas de la semana en pantalla. Las reglas, con sus identificadores, están en <a href="../spec/13-menu.md"><code>docs/spec/13-menu.md</code></a>. Si esta página y ese archivo no coinciden, manda el archivo.</p>
 
 <h2 id="fuera-de-alcance">Fuera de alcance</h2>
 <ul>
-  <li>La semana no tiene fecha y no hay semana siguiente (MENU-1).</li>
+  <li>No hay semana más allá de 4 semanas después de esta (<code>FUTURE_WEEKS</code>, MENU-23).</li>
+  <li>Una semana pasada no se edita: solo se consulta o se repite (MENU-23, MENU-24).</li>
   <li>No hay tercera comida: solo <code>Comida</code> y <code>Cena</code> (MENU-1).</li>
   <li>Una comida no tiene cantidad ni número de personas. Llenar la cesta envía los productos de una receta una sola vez, esté en las comidas que esté (MENU-5).</li>
-  <li>El menú nunca cambia solo: ni llenar la cesta (MENU-8) ni <strong>Terminar compra</strong> (MENU-15) lo modifican.</li>
+  <li>El menú nunca cambia solo: ni llenar la cesta (MENU-8), ni <strong>Terminar compra</strong> (MENU-15), ni el cambio de semana del lunes (MENU-1) lo modifican.</li>
+  <li><strong>Repetir esta semana</strong> de la barra de una semana pasada copia solo en esta semana. Solo el panel <strong>Semanas anteriores</strong> copia en una semana posterior (MENU-24, MENU-27).</li>
 </ul>
 
 <h2 id="comportamiento">Comportamiento</h2>
-<h3 id="week">La semana</h3>
-<p>La semana tiene 7 días, empieza en lunes, y 2 comidas al día: <code>Comida</code> y <code>Cena</code> (MENU-1). Una comida contiene una receta, un plato o nada. Un plato es un nombre sin receta. La misma receta o el mismo plato puede estar en varias comidas (MENU-2). Una receta o un plato nuevo en una comida sustituye lo que tenía (MENU-3). <strong>Quitar</strong> vacía una comida; <strong>Vaciar menú</strong> las vacía todas (MENU-4). Las dos acciones muestran <code>Deshacer</code>.</p>
+<h3 id="week">La semana y sus comidas</h3>
+<p>Una semana tiene 7 días, empieza en lunes, y 2 comidas al día: <code>Comida</code> y <code>Cena</code> (MENU-1). Una semana es la fecha de su lunes, <code>YYYY-MM-DD</code> en hora local, y cada comida guarda su semana. Esta semana es la semana de hoy. El lunes empieza una semana nueva sin comidas, sin un toque y sin escribir el estado (MENU-1). Cada operación actúa sobre la semana en pantalla (MENU-23).</p>
+<p>Una comida contiene una receta, un plato o nada. Un plato es un nombre sin receta. La misma receta o el mismo plato puede estar en varias comidas (MENU-2). Una receta o un plato nuevo en una comida sustituye lo que tenía (MENU-3). <strong>Quitar</strong> vacía una comida, con <code>Deshacer</code> y el mensaje <code>Quitada del menú: «nombre».</code> (MENU-11). <strong>Vaciar menú</strong> vacía todas las comidas de la semana en pantalla, con <code>Deshacer</code> y el mensaje <code>Menú vaciado.</code> (MENU-4, MENU-13).</p>
+<p>Una comida cuya receta no existe (un borrado en otro dispositivo y después una sincronización) no está planificada. <code>Menú</code> la muestra libre, con <code>Elegir receta</code>, y ningún recuento la cuenta: ni la cabecera, ni el resumen, ni <strong>Vaciar menú</strong>, ni <strong>Llenar cesta</strong> (<code>mealCount</code> de <code>src/menu.js</code>, MENU-10). <strong>Vaciar menú</strong> también vacía esa comida (MENU-4).</p>
 
 <h3 id="fill">Llenar la cesta</h3>
-<p><strong>Llenar cesta</strong> envía a <code>Compra</code> cada receta del menú una sola vez, en el orden de día y comida de su primera aparición (MENU-5). Cada envío funciona igual que el envío de una receta desde <code>Recetas</code> (REC-18, REC-19). Se omiten los platos y las recetas sin productos (MENU-6). El mensaje es <code>Menú: N añadidos, N ya estaban.</code> con <code>Deshacer</code>. Los recuentos son la suma de los envíos: un producto de dos recetas cuenta como añadido en el primer envío y como ya presente en el segundo (MENU-7, MENU-12). Un segundo toque que no cambia nada muestra <code>Menú: todo estaba ya en la lista.</code> y mantiene el <code>Deshacer</code> del primero (MENU-12).</p>
+<p>Una barra de acciones queda al final de la lista de <code>Menú</code>, encima de la barra inferior. En esta semana y en una semana posterior tiene dos botones del mismo ancho: <strong>Llenar cesta</strong>, con el icono <code>cart-add</code>, del lado de la mano, y <strong>Vaciar menú</strong>, un botón de contorno en el color de peligro con el icono <code>trash</code> (MENU-12, MENU-13, MENU-26). <strong>Vaciar menú</strong> está desactivado mientras el menú propio de esa semana no tiene ninguna comida planificada (MENU-13).</p>
+<p><strong>Llenar cesta</strong> envía a <code>Compra</code> cada receta de la semana en pantalla una sola vez, en el orden de día y comida de su primera aparición (MENU-5, MENU-12). Cada envío funciona igual que el envío de una receta desde <code>Recetas</code> (REC-18, REC-19). Se omiten los platos y las recetas sin productos (MENU-6). El mensaje es <code>Menú: N añadidos, N ya estaban.</code> con <code>Deshacer</code>. Los recuentos son la suma de los envíos: un producto de dos recetas cuenta como añadido en el primer envío y como ya presente en el segundo (MENU-7). Un segundo toque que no cambia nada muestra <code>Menú: todo estaba ya en la lista.</code> y mantiene el <code>Deshacer</code> que sigue en pantalla (MENU-12).</p>
 
 <h3 id="dishes">Platos y paso a receta</h3>
-<p>En la hoja de la comida, un texto que no es el nombre de una receta (sin distinguir mayúsculas) muestra <strong>Añadir «texto» sin receta</strong>. Un toque en ese botón, o <code>Enter</code>, pone el texto en la comida como plato (MENU-18). La hoja de una comida con plato tiene <strong>Crear receta</strong>. Esta acción convierte el plato en una receta con ese nombre y sin productos, y todas las comidas con ese plato pasan a tener la receta. Si ya existe una receta con ese nombre, las comidas la toman y no se crea otra (MENU-17). Después la app muestra <code>Recetas</code> con la hoja de la receta abierta, para añadir sus productos (MENU-19). <code>Recetas</code> lista los platos del menú bajo <code>Platos sin receta</code> (REC-36).</p>
+<p>En la hoja de la comida, un texto que no es el nombre de una receta (sin distinguir mayúsculas) muestra <strong>Añadir «texto» sin receta</strong> debajo de los chips. Un toque en ese botón, o <code>Enter</code>, pone el texto en la comida como plato y cierra la hoja (MENU-18). La hoja de una comida con plato tiene <strong>Crear receta</strong>, un botón primario del lado de la mano, y <strong>Quitar</strong>, cada uno con la mitad de la línea (MENU-19). <strong>Crear receta</strong> convierte el plato en una receta con ese nombre, sin productos ni enlace, y cada comida de la semana con ese plato pasa a tener la receta. Si ya existe una receta con ese nombre, las comidas la toman y no se crea otra (MENU-17, <code>src/menu.js:83</code>). Después la app cierra la hoja, muestra <code>Recetas</code> con la hoja de la receta abierta y el mensaje <code>Receta creada: «nombre».</code> con <code>Deshacer</code> (MENU-19). <code>Recetas</code> lista los platos de esta semana bajo <code>Platos sin receta</code> (REC-36).</p>
 
 <h3 id="screen">Pantalla</h3>
-<p><code>Menú</code> muestra una fila por día, con sus dos comidas una al lado de la otra (MENU-9). El nombre del día es un encabezado en minúsculas con la inicial en mayúscula, del color del texto, a 14 px (<code>--text-label</code>) como las demás cabeceras. Una comida con receta es una baldosa con el color de superficie (<code>--surface</code>), un borde de línea (<code>--line</code>) y una etiqueta atenuada. Una comida con plato tiene un borde continuo atenuado y la etiqueta <code>Comida · sin receta</code>. Una comida vacía tiene un borde discontinuo (<code>--control</code>) sobre el fondo y muestra <code>Elegir receta</code> atenuado. Un día con las dos comidas planificadas se ve igual que los demás. Por debajo de 600px el nombre del día va encima de las comidas; en la densidad compacta es el día corto del idioma, también con inicial en mayúscula (<code>Lun</code>), y el nombre de una comida ocupa hasta dos líneas; desde 600px va al principio de la fila, para que la semana quepa en una tableta.</p>
-<p>La cabecera muestra <code>N comidas planificadas</code> o <code>Sin comidas planificadas</code>, (MENU-10). Un toque en una comida abre su hoja, con un chip por receta; el chip de la receta actual está activo (MENU-11). El campo <strong>Busca una receta o escribe un plato</strong> filtra los chips mientras se escribe, y la hoja mantiene su altura inicial aunque cambien los resultados (MENU-16). El botón <code>⋮</code> abre la hoja <code>Menú</code> con <strong>Vaciar menú</strong>, que está desactivado mientras el menú está vacío (MENU-13). <code>Menú</code> muestra la semana aunque no haya recetas, y no tiene botón <code>+</code>; por debajo de 600px tampoco muestra dock (MENU-14).</p>
+<p><code>Menú</code> muestra una fila por día, con sus dos comidas una al lado de la otra (MENU-9). El nombre del día es un encabezado con la inicial en mayúscula, del color del texto, a 18px (<code>--text-group</code>), detrás de una barra esmeralda de 4px (<code>--day-bar</code>). Termina con su fecha en versalitas (<code>2 NOV</code>); desde 600px la fecha va debajo del nombre (MENU-25).</p>
+<ul>
+  <li>Una comida con receta es una baldosa <code>--surface</code> con borde <code>--line</code>, una etiqueta <code>--muted</code> y el icono de cubiertos en su esquina final (MENU-9, MENU-26).</li>
+  <li>Una comida con plato es una baldosa sobre <code>--surface-2</code> con borde <code>--line</code>, la etiqueta <code>Comida · sin receta</code> y el icono de lápiz (MENU-9, MENU-26).</li>
+  <li>Una comida libre tiene un borde discontinuo <code>--control</code> sobre el fondo, el icono <code>plus-circle</code> y <code>Elegir receta</code> en <code>--muted</code>, centrado, con el nombre de la comida debajo (MENU-9, MENU-25, MENU-26).</li>
+  <li>Una franja con una comida termina con una línea de estado tras un punto: <strong>Receta lista</strong> o <strong>Anotación rápida</strong>. <code>Compacta</code> la oculta, y un lector de pantalla no la lee (MENU-25).</li>
+</ul>
+<p>Un día con las dos comidas planificadas se ve igual que los demás. Por debajo de 600px el nombre del día va encima de las comidas; en la densidad compacta es el día corto del idioma (<code>Lun</code>), y el nombre de una comida ocupa hasta dos líneas. Desde 600px el nombre va al principio de la fila, con el ancho del nombre más largo, para que la semana quepa en una tableta o en un móvil desplegado. Desde 1024px el día y sus comidas siguen la pantalla de escritorio (MENU-9, DSV-30).</p>
+<p>La cabecera muestra <code>Menú</code> y <code>N comidas planificadas</code> o <code>Sin comidas planificadas</code> para la semana en pantalla (MENU-10). Encima de los botones de la barra de acciones, una línea en versalitas cuenta las franjas planificadas de las 14 y las libres: <code>9 de 14 comidas planificadas · 5 libres</code>. Una franja con una comida de cada lista cuenta una vez (<code>plannedSlots</code>, MENU-26). La cabecera no tiene botón <code>⋮</code> (MENU-13). <code>Menú</code> muestra la semana aunque no haya recetas, no tiene texto de vacío ni botón <code>+</code>, y por debajo de 600px no muestra dock (MENU-14).</p>
+<p>Un toque en una comida abre su hoja, con el título <code>Comida del lunes</code> y un chip por receta, en el orden de las recetas. El chip de la receta de la comida está activo, y un toque en un chip pone esa receta y cierra la hoja (MENU-11). El campo <strong>Busca una receta o escribe un plato</strong> filtra los chips mientras se escribe, con la búsqueda de REC-24. Admite 80 caracteres y empieza vacío en cada apertura. La hoja mantiene la altura de su primer dibujo aunque cambien los resultados (MENU-16).</p>
+
+<h3 id="weeks">Semanas pasadas y siguientes</h3>
+<p>Una barra de semana va encima de los días: el icono <code>calendar</code>, <code>‹</code>, la semana en pantalla y <code>›</code> (MENU-23, MENU-26). La semana se llama <code>Esta semana</code>, <code>Semana que viene</code> o <code>Semana del 26 oct</code>, seguida de sus días en forma corta (<code>Esta semana 2–8 nov</code>, MENU-25). Los botones avanzan así (<code>weekSteps</code> de <code>src/menu.js</code>, MENU-23):</p>
+<ul>
+  <li>Desde esta semana, <code>›</code> muestra la semana siguiente, hasta 4 semanas después de esta, donde se desactiva.</li>
+  <li>En una semana posterior, <code>‹</code> muestra la semana anterior. En esta semana, <code>‹</code> muestra la semana pasada más cercana con una comida.</li>
+  <li>En una semana pasada, <code>‹</code> salta a la semana anterior más cercana con una comida, y se desactiva si no hay ninguna. <code>›</code> salta a la semana pasada siguiente con una comida, o a esta semana.</li>
+</ul>
+<p>Una semana posterior funciona como esta semana: sus comidas toman una receta o un plato, y su barra de acciones, su panel y su cabecera actúan sobre ella (MENU-23). Una semana pasada muestra sus días como esta semana. Cada comida es una baldosa sin acción con el nombre en <code>--muted</code>, y una comida vacía muestra <code>—</code>. Su barra de acciones solo tiene <strong>Repetir esta semana</strong>, y no tiene la tarjeta <strong>Generación automática de cesta</strong> (MENU-23). La app no guarda la semana en pantalla: arranca en esta semana. Una semana pasada sin comidas, o una semana posterior fuera de alcance tras un cambio del reloj, muestra esta semana (MENU-23).</p>
+<p><strong>Repetir esta semana</strong> es un botón primario con el icono <code>repeat</code>. Pone las comidas de la semana pasada en lugar de todas las comidas de esta semana, cada una en su día y su comida. Después muestra esta semana, con <code>Deshacer</code> y el mensaje <code>Semana repetida: N comidas.</code> (MENU-24). Poner una comida borra las comidas de las semanas anteriores a las últimas 26, con la suya incluida en las 26. Nada más borra una semana pasada (<code>KEPT_WEEKS</code>, MENU-22).</p>
+
+<h3 id="panels">Paneles</h3>
+<p>Desde 600px, <code>Menú</code> muestra paneles debajo del contenido, y desde 840px a su lado (DSV-9).</p>
+<ul>
+  <li><strong>Semanas anteriores</strong> se ve en cualquier semana mientras otra semana pasada tiene una comida. Lista las 3 semanas pasadas más recientes, la más nueva primero (<code>pastWeeks</code>). Cada semana muestra sus días, las franjas planificadas (<code>8 comidas</code>, o <code>14 comidas completas</code>), los 3 primeros nombres de sus comidas, <code>+N más</code> y el botón <strong>Repetir esta semana</strong>. Ese botón copia la semana en la semana en pantalla, o en esta semana si la semana en pantalla es pasada, y después la muestra (MENU-27).</li>
+  <li><strong>Generación automática de cesta</strong> se ve en esta semana o en una semana posterior con una comida planificada. Dice qué añade <strong>Llenar cesta</strong>: <code>Al pulsar «Llenar cesta», la app añade a «Compra» los 13 productos que faltan de las 6 recetas planificadas.</code> Sin una receta con productos dice <code>panels.fillNone</code>; con todo ya por comprar, <code>panels.fillDone</code>. Desde 1024px su pie es <strong>Almacenamiento local</strong> (MENU-21, LIST-43).</li>
+</ul>
+
+<h3 id="shared">Menú compartido</h3>
+<p>Para un miembro con alcance <code>all</code> (SHARE-12), <code>Menú</code> muestra las comidas de las dos listas. Cada lista tiene su propia semana, así que una franja tiene como máximo una comida de cada lista. Una franja con dos muestra las dos, la propia primero, cada nombre con la etiqueta de su lista (MENU-20, SHARE-14).</p>
+<ul>
+  <li>Una receta puesta en una comida va a la lista de la receta y sustituye solo la comida de esa lista. Un plato va a la lista propia.</li>
+  <li>La hoja de una franja con dos comidas lista las dos encima del campo, cada una con su etiqueta y un <code>✕</code> que vacía solo esa comida.</li>
+  <li><strong>Llenar cesta</strong> llena cada lista desde su propio menú. Los recuentos del mensaje son la suma de los dos.</li>
+  <li><strong>Vaciar menú</strong> actúa solo sobre el menú propio, y <strong>Repetir esta semana</strong> copia cada lista en su propia semana (MENU-24).</li>
+</ul>
+<p>Con alcance <code>list</code>, para el propietario y sin compartir, <code>Menú</code> muestra las comidas propias sin etiqueta (MENU-20).</p>
 
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
-  <li><strong>Llenar con el menú vacío.</strong> Aparece el mensaje <code>El menú está vacío. Pon una receta o un plato en una comida.</code> (<code>error.menuEmpty</code>, MENU-6).</li>
+  <li><strong>Llenar con el menú vacío.</strong> Aparece el mensaje <code>El menú está vacío. Pon una receta o un plato en una comida.</code> (<code>error.menuEmpty</code>, MENU-6). Con alcance <code>all</code> aparece solo si los dos menús están vacíos (MENU-20).</li>
   <li><strong>Llenar con solo platos o recetas sin productos.</strong> Aparece el mensaje <code>Ningún plato del menú tiene productos.</code> (<code>error.menuNoProducts</code>, MENU-6).</li>
-  <li><strong>Un plato con otras mayúsculas.</strong> <strong>Crear receta</strong> sobre <code>Paella</code> también convierte las comidas con <code>paella</code>. La comparación solo pasa a minúsculas; no quita los acentos como la búsqueda (REC-24), así que <code>Crème</code> y <code>creme</code> siguen siendo dos platos.</li>
+  <li><strong>Una receta borrada en otro dispositivo.</strong> Tras la sincronización la comida se ve libre y no cuenta como planificada (MENU-10).</li>
+  <li><strong>Una receta borrada en este dispositivo.</strong> Sus comidas de esta semana y de las semanas siguientes se vacían. En una semana pasada cada comida pasa a ser un plato con el nombre de la receta, recortado a 80 caracteres (REC-6).</li>
+  <li><strong>Un plato con otras mayúsculas.</strong> <strong>Crear receta</strong> sobre <code>Paella</code> también convierte las comidas con <code>paella</code>. La comparación solo pasa a minúsculas; no quita los acentos como la búsqueda (REC-24), así que <code>Crème</code> y <code>creme</code> son dos platos (MENU-17).</li>
   <li><strong>Un texto que es el nombre de una receta.</strong> No aparece <strong>Añadir «texto» sin receta</strong> y <code>Enter</code> no hace nada; hay que tocar el chip (MENU-18).</li>
-  <li><strong>Un plato de más de 80 caracteres.</strong> El campo no lo admite (<code>maxlength="80"</code> en <code>index.html</code>). El nombre se recorta, y un nombre vacío da <code>Escribe un nombre.</code> (MENU-3).</li>
-  <li><strong>Una receta borrada.</strong> Borrar una receta vacía todas las comidas que la contienen (REC-6).</li>
+  <li><strong>Sin recetas y sin texto.</strong> La hoja dice <code>Escribe el nombre de un plato.</code> (MENU-16).</li>
+  <li><strong>Un plato de más de 80 caracteres.</strong> El campo no lo admite (<code>maxlength="80"</code> en <code>index.html</code>, MENU-16). El nombre se recorta, y un nombre vacío da <code>Escribe un nombre.</code> (MENU-3).</li>
+  <li><strong>Una semana pasada que se queda sin comidas.</strong> <code>Menú</code> vuelve a esta semana (MENU-23).</li>
 </ul>
 
 <h2 id="dependencias">Dependencias</h2>
-<p>Llenar la cesta depende de <code>sendRecipe</code> de <code>src/recipes.js</code> (REC-18 a REC-20). Si un envío falla, se mantiene el estado anterior y se muestra ese error. La búsqueda de la hoja usa <code>searchRecipes</code> (REC-24). Los platos se guardan en el menú del estado almacenado, versión 9 (<code>src/storage.js</code>); una app de la versión 8 o anterior rechaza una copia de seguridad con platos.</p>
+<p>Llenar la cesta depende de <code>sendRecipe</code> de <code>src/recipes.js</code> (REC-18 a REC-20). Si un envío falla, se mantiene el estado anterior y se muestra ese error. La búsqueda de la hoja usa <code>searchRecipes</code> (REC-24). Las comidas se guardan con su semana en el estado almacenado, versión 10 (<code>src/storage.js:142</code>). Una comida sin semana, de la versión 1 a la 9, pasa a la semana de hoy (STORE-8). Con una cuenta, el menú se sincroniza con el resto del estado, y el menú de una lista compartida sigue a esa lista (SHARE-12). Los paneles siguen las clases de ancho de DSV-9, y la pantalla de escritorio sigue DSV-30.</p>
 
 <h2 id="decisiones">Decisiones</h2>
 <div class="tablewrap"><table class="decisions" data-plain>
@@ -570,7 +613,9 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     <tr><td>Una comida contiene una receta, un plato (un nombre sin receta) o nada</td><td><a href="../superpowers/specs/2026-10-19-menu-dishes-design.md">Dishes in Menú — design</a></td></tr>
     <tr><td><strong>Llenar cesta</strong> omite los platos, y un menú sin productos da <code>error.menuNoProducts</code></td><td><a href="../superpowers/specs/2026-10-19-menu-dishes-design.md">Dishes in Menú — design</a></td></tr>
     <tr><td><strong>Crear receta</strong> reutiliza una receta con el mismo nombre en lugar de crear otra</td><td><a href="../superpowers/specs/2026-10-19-menu-dishes-design.md">Dishes in Menú — design</a></td></tr>
-    <tr><td>Una semana sin fecha, dos comidas, sin cantidades</td><td><a href="../spec/13-menu.md">13-menu.md, Limits</a></td></tr>
+    <tr><td>Cada comida tiene la fecha de su semana; el cambio de semana no escribe nada; una semana pasada es de solo lectura</td><td><a href="../superpowers/specs/2026-11-03-menu-history-design.md">Menu history — design</a></td></tr>
+    <tr><td>Cada lista compartida tiene su propio menú y su propia semana</td><td><a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md">Separate shared lists — design</a></td></tr>
+    <tr><td>Hasta 4 semanas siguientes, dos comidas, sin cantidades</td><td><a href="../spec/13-menu.md">13-menu.md, Limits</a></td></tr>
   </tbody>
 </table></div>
 
@@ -578,6 +623,16 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td>Borrar una receta vacía sus comidas de esta semana → de esta semana y de las siguientes (REC-6)</td><td>La regla se alinea con <code>src/recipes.js:47</code></td></tr>
+    <tr><td>2026-11-13</td><td>Una comida cuya receta ya no existe pasa de contar como planificada a verse libre y no contar en ningún recuento (MENU-10, MENU-26)</td><td>Corrección: <code>e873e4c</code></td></tr>
+    <tr><td>2026-11-13</td><td>De «no hay semana siguiente» a planificar hasta 4 semanas después de esta; la semana posterior funciona como esta semana (MENU-23)</td><td>Commit <code>9f9b296</code>; <a href="../spec/13-menu.md">13-menu.md, Limits</a></td></tr>
+    <tr><td>2026-11-13</td><td>De una semana sin fecha a semanas con la fecha de su lunes: cada semana empieza vacía, las pasadas se guardan 26 semanas y se consultan con <code>‹</code> y <code>›</code> (MENU-1, MENU-22, MENU-23)</td><td><a href="../superpowers/specs/2026-11-03-menu-history-design.md">Menu history — design</a></td></tr>
+    <tr><td>2026-11-13</td><td>Nuevo: <strong>Repetir esta semana</strong> en la barra de una semana pasada y el panel <strong>Semanas anteriores</strong> (MENU-24, MENU-27)</td><td><a href="../superpowers/specs/2026-11-03-menu-history-design.md">Menu history — design</a></td></tr>
+    <tr><td>2026-11-13</td><td><strong>Vaciar menú</strong> pasa de la hoja del botón <code>⋮</code> a la barra de acciones, junto a <strong>Llenar cesta</strong>; la cabecera ya sin <code>⋮</code> (MENU-12, MENU-13)</td><td>Rediseño Bodega</td></tr>
+    <tr><td>2026-11-13</td><td>El nombre del día pasa de 14 px sin barra a 18 px detrás de una barra esmeralda; la comida con plato pasa de borde atenuado a baldosa <code>--surface-2</code>; nuevas fechas, iconos, línea de estado y resumen de franjas (MENU-9, MENU-25, MENU-26)</td><td><a href="../superpowers/specs/2026-11-03-stitch-restyle-design.md">Stitch restyle — design</a></td></tr>
+    <tr><td>2026-11-13</td><td>Nuevo: la tarjeta <strong>Generación automática de cesta</strong> desde 600px y la pantalla de escritorio desde 1024px (MENU-21, DSV-30)</td><td><a href="../superpowers/specs/2026-11-07-bodega-desktop-design.md">Bodega desktop — design</a></td></tr>
+    <tr><td>2026-11-13</td><td>Nuevo: menú compartido con dos comidas por franja, cada una con la etiqueta de su lista (MENU-20)</td><td><a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md">Separate shared lists — design</a></td></tr>
+    <tr><td>2026-11-13</td><td>El estado almacenado pasa de la versión 9 a la 10: cada comida guarda su semana</td><td><a href="../superpowers/specs/2026-11-03-menu-history-design.md">Menu history — design</a></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
     <tr><td>2026-10-23</td><td>Comidas y días sin color de acento: baldosa de superficie, encabezado en el color del texto, día corto con inicial en mayúscula (MENU-9); la cabecera no muestra anillo (MENU-10); sin dock en <code>Menú</code> (MENU-14)</td><td>Aspecto Ledger (sistema de diseño 0.7.0)</td></tr>
     <tr><td>2026-10-23</td><td>El nombre del día pasa de 13 px a 14 px (MENU-9)</td><td>Aspecto Ledger: todas las cabeceras a 14 px</td></tr>
@@ -586,11 +641,11 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="fuentes">Fuentes</h2>
 <ul>
-  <li><b>Reglas</b> <a href="../spec/13-menu.md"><code>docs/spec/13-menu.md</code></a> (MENU-1 a MENU-19), <a href="../spec/06-recipes.md"><code>docs/spec/06-recipes.md</code></a> (REC-6, REC-18 a REC-20, REC-24, REC-36)</li>
-  <li><b>Código</b> <code>src/menu.js</code>, <code>src/ui/menu.js</code>, <code>src/recipes.js</code>, <code>src/storage.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-19-menu-dishes-design.md"><code>docs/superpowers/specs/2026-10-19-menu-dishes-design.md</code></a></li>
-  <li><b>Commit</b> <code>main</code> @ <code>892bbee</code>, leído el 2026-10-23</li>
-  <li><b>Ejecutado</b> nada: ni tests ni comprobación en el navegador; cada sección se ha leído del código</li>
+  <li><b>Reglas</b> <a href="../spec/13-menu.md"><code>docs/spec/13-menu.md</code></a> (MENU-1 a MENU-27), <a href="../spec/06-recipes.md"><code>docs/spec/06-recipes.md</code></a> (REC-6, REC-18 a REC-20, REC-24, REC-36), <a href="../spec/19-sharing.md"><code>docs/spec/19-sharing.md</code></a> (SHARE-12, SHARE-14), <a href="../spec/15-design-system.md"><code>docs/spec/15-design-system.md</code></a> (DSV-9, DSV-30), <a href="../spec/08-storage.md"><code>docs/spec/08-storage.md</code></a> (STORE-8)</li>
+  <li><b>Código</b> <code>src/menu.js</code>, <code>src/ui/menu.js</code>, <code>src/ui/panels.js</code>, <code>src/ui/context.js</code>, <code>src/ui/list.js</code>, <code>src/recipes.js</code>, <code>src/storage.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
+  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-19-menu-dishes-design.md"><code>2026-10-19-menu-dishes-design.md</code></a>, <a href="../superpowers/specs/2026-11-03-menu-history-design.md"><code>2026-11-03-menu-history-design.md</code></a>, <a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md"><code>2026-10-25-separate-shared-lists-design.md</code></a>, <a href="../superpowers/specs/2026-11-03-stitch-restyle-design.md"><code>2026-11-03-stitch-restyle-design.md</code></a>, <a href="../superpowers/specs/2026-11-07-bodega-desktop-design.md"><code>2026-11-07-bodega-desktop-design.md</code></a></li>
+  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> nada: ni tests ni comprobación en el navegador; cada sección se ha leído del código. Las medidas visuales (18px, 4px, colores) se han leído de la regla y del CSS, sin medirlas en pantalla</li>
   <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>

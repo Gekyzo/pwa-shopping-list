@@ -515,7 +515,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-10-23">2026-10-23</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Secciones de la tienda</h1>
 <p class="meta">
@@ -530,29 +530,27 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="fuera-de-alcance">Fuera de alcance</h2>
 <ul>
-  <li>Los productos de una receta no tienen sección, y la hoja de añadir no tiene campo de sección (Limits).</li>
-  <li>Hay un solo orden de secciones para todas las tiendas (Limits).</li>
+  <li>Los productos de una receta no tienen sección, y la hoja de alta no tiene campo de sección (17-aisles.md, Limits).</li>
+  <li>Hay un solo orden de secciones para todas las tiendas (17-aisles.md, Limits).</li>
   <li>Un artículo tiene una sección como máximo (AISLE-7).</li>
   <li>Las secciones no se arrastran en la hoja: se mueven con <code>↑</code> y <code>↓</code> (AISLE-11).</li>
 </ul>
 
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="list">La lista de secciones</h3>
-<p>Las secciones son una lista del estado, en el orden del recorrido de la tienda. A diferencia de una tienda, una sección existe aunque ningún artículo la tenga (AISLE-1). Un nombre se recorta; un nombre vacío da <code>Escribe el nombre de la sección.</code> y un nombre que ya existe, sin distinguir mayúsculas, da <code>La sección "nombre" ya existe.</code> (AISLE-2). Una sección nueva va al final (AISLE-3). Renombrar una sección también renombra la sección de cada artículo que la tiene; se puede cambiar solo las mayúsculas (AISLE-4). Borrar una sección deja sin sección a sus artículos (AISLE-5). Mover una sección la sube o la baja un lugar; un movimiento más allá de un extremo no cambia nada (AISLE-6).</p>
+<p>Las secciones son una lista del estado, <code>aisles</code>, en el orden del recorrido de la tienda. A diferencia de una tienda, una sección existe aunque ningún artículo la tenga (AISLE-1). Un nombre se recorta. Un nombre vacío da <code>Escribe el nombre de la sección.</code>, y un nombre que ya existe, sin distinguir mayúsculas, da <code>La sección "nombre" ya existe.</code> (AISLE-2). Una sección nueva va al final (AISLE-3). Renombrar una sección también renombra la sección de cada artículo que la tiene. Se pueden cambiar solo las mayúsculas, y renombrar con el mismo nombre no cambia nada (AISLE-4). Borrar una sección deja sin sección a sus artículos (AISLE-5). Mover una sección la sube o la baja un lugar; un movimiento más allá de un extremo no cambia nada (AISLE-6).</p>
 
 <h3 id="sheet">La hoja Secciones de la tienda</h3>
-<p><code>Ajustes</code> tiene el grupo <code>Secciones</code> con la fila <strong>Secciones de la tienda</strong> y el número de secciones. Un toque abre la hoja; <strong>Listo</strong>, un toque fuera de la hoja o <code>Escape</code> la cierran (AISLE-10, NAV-22). La hoja lista cada sección en su orden, con un campo de nombre, <code>↑</code>, <code>↓</code> y <code>✕</code>. El <code>↑</code> de la primera y el <code>↓</code> de la última están desactivados (AISLE-11).</p>
-<p>El campo <strong>Nueva sección</strong> con <strong>Añadir</strong> añade una sección al final. El campo admite 40 caracteres y mantiene el foco después de añadir, para escribir las secciones una tras otra (AISLE-13). Sin secciones, la hoja muestra <code>Añade las secciones en el orden de tu tienda.</code> y el botón <strong>Usar secciones habituales</strong>. Ese botón añade ocho secciones en el idioma de la pantalla, en el orden de un recorrido común: <code>Fruta y verdura</code>, <code>Panadería</code>, <code>Carne y pescado</code>, <code>Lácteos y huevos</code>, <code>Despensa</code>, <code>Bebidas</code>, <code>Congelados</code> y <code>Limpieza e higiene</code> (AISLE-14, AISLE-8).</p>
+<p><code>Ajustes</code> tiene el grupo <strong>Secciones</strong> con la fila <strong>Secciones de la tienda</strong> y el número de secciones. Sin secciones, la fila no muestra número. Un toque abre la hoja; <strong>Listo</strong>, un toque fuera de la hoja o <code>Escape</code> la cierran (AISLE-10, NAV-22). La hoja lista cada sección en su orden, con un campo de nombre, <code>↑</code>, <code>↓</code> y <code>✕</code>. El <code>↑</code> de la primera y el <code>↓</code> de la última están desactivados. Las filas ocupan el ancho de la hoja, como las filas de una lista: el campo de nombre no tiene caja, y una línea bajo cada fila va del inicio del nombre hasta el final (AISLE-11).</p>
+<p>El campo de nombre renombra la sección al perder el foco o con <code>Enter</code>. <code>Escape</code> devuelve el nombre. Un error conserva el nombre anterior (AISLE-12).</p>
+<p>El campo <strong>Nueva sección</strong> con <strong>Añadir</strong> añade una sección al final. El campo admite 40 caracteres y mantiene el foco después de añadir, para escribir las secciones una tras otra. <strong>Añadir</strong> está desactivado mientras el campo no tiene texto (AISLE-13). Sin secciones, la hoja muestra <code>Añade las secciones en el orden de tu tienda.</code> y el botón <strong>Usar secciones habituales</strong>. Ese botón añade ocho secciones en el idioma de la pantalla, en el orden de un recorrido común: <code>Fruta y verdura</code>, <code>Panadería</code>, <code>Carne y pescado</code>, <code>Lácteos y huevos</code>, <code>Despensa</code>, <code>Bebidas</code>, <code>Congelados</code> y <code>Limpieza e higiene</code> (AISLE-14, AISLE-8).</p>
 <p><code>✕</code> borra la sección con el mensaje <code>Sección "nombre" eliminada.</code> y <code>Deshacer</code>. Añadir, renombrar y mover no muestran mensaje (AISLE-15).</p>
 
-<h3 id="rename">Renombrar en la hoja</h3>
-<p>Según AISLE-12, el campo de nombre renombra la sección al perder el foco o con <code>Enter</code>, y <code>Escape</code> devuelve el nombre. Hoy el campo no renombra: al perder el foco, el manejador falla antes de guardar (<code>src/ui/aisles.js:33</code>). El nombre guardado no cambia, y el campo vuelve a mostrarlo en el siguiente dibujado de la hoja. Ver Fuentes → Abierto.</p>
-
 <h3 id="item">La sección de un artículo</h3>
-<p>La hoja <code>Editar</code> muestra, debajo de las tiendas, una línea y el título <code>Sección</code>, y después un chip por sección, en su orden. El chip de la sección del artículo está pulsado (AISLE-16). Un toque en un chip da esa sección al artículo; un toque en el chip pulsado la quita. La hoja sigue abierta. El cambio se guarda al momento, sin mensaje ni <code>Deshacer</code> (AISLE-17); el pie de la hoja muestra <code>Guardado</code> (NAV-22). Sin secciones, la hoja muestra <code>Crea las secciones en Ajustes.</code> (AISLE-18). La sección de un artículo toma la escritura de la lista (AISLE-7).</p>
+<p>La hoja <code>Editar</code> muestra, debajo de las tiendas, una línea y el título <strong>Sección</strong>, y después un chip por sección, en su orden. El chip de la sección del artículo está pulsado (AISLE-16). Un toque en un chip da esa sección al artículo; un toque en el chip pulsado la quita. La hoja sigue abierta. El cambio se guarda al momento, sin mensaje ni <code>Deshacer</code>; el pie de la hoja muestra <code>Guardado</code> (AISLE-17, NAV-22). Sin secciones, la hoja muestra <code>Crea las secciones en Ajustes.</code> (AISLE-18). La sección de un artículo toma la grafía de la lista, y un nombre vacío la quita (AISLE-7).</p>
 
 <h3 id="use">Búsqueda y agrupación</h3>
-<p>La búsqueda de <code>Compra</code> también encuentra un artículo por su sección (AISLE-9, LIST-22). <strong>Agrupar por</strong> <strong>Secciones</strong> muestra un grupo por sección, en el orden de la lista, y los artículos sin sección al final bajo <code>Sin sección</code> (GROUP-17, GROUP-18). Esa agrupación se describe en <a href="arrange.html">Agrupar y ordenar</a>.</p>
+<p>La búsqueda de <code>Compra</code> también encuentra un artículo por su sección (AISLE-9, LIST-22). <strong>Agrupar por</strong> <strong>Secciones</strong> muestra un grupo por sección con artículos, en el orden de la lista, y los artículos sin sección al final bajo <code>Sin sección</code> (GROUP-17, GROUP-18). Una lista por tienda también se puede agrupar por sección, y así sigue el recorrido de esa tienda (GROUP-17). La cabecera de una sección lleva delante un icono según su nombre (<code>aisleKind</code>): la primera palabra que empieza por la raíz de un tipo decide. Un nombre sin palabra conocida lleva el símbolo <code>aisle</code>, y <code>Sin sección</code> no lleva icono (GROUP-22). Esa agrupación se describe en <a href="arrange.html">Agrupar y ordenar</a>.</p>
 
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
@@ -564,7 +562,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 </ul>
 
 <h2 id="dependencias">Dependencias</h2>
-<p>Las secciones se guardan en el estado almacenado, versión 9, y en la copia de seguridad (<code>src/storage.js</code>). Al cargar, se quitan las secciones vacías o repetidas sin distinguir mayúsculas (<code>src/storage.js:60</code>). La sección de un artículo toma la escritura de la lista, y una sección que no está en la lista se borra del artículo (<code>src/storage.js:75</code>). La agrupación usa <code>aisleGroups</code> desde <code>src/ui/list.js</code>, y la búsqueda usa <code>matchesItem</code> de <code>src/store.js</code>.</p>
+<p>Las secciones se guardan en el estado almacenado, versión 10, y en la copia de seguridad (<code>src/storage.js</code>, BACKUP-2). Las versiones 1 a 6 no tienen secciones. Al cargar, se quitan las secciones vacías, las que no son texto y las repetidas sin distinguir mayúsculas. La sección de un artículo toma la grafía de la lista, y una sección que no está en la lista se borra del artículo (STORE-7, DATA-14, DATA-15). La agrupación usa <code>aisleGroups</code> y <code>aisleKind</code> de <code>src/aisles.js</code>, y la búsqueda usa <code>matchesItem</code> de <code>src/store.js</code>.</p>
 
 <h2 id="decisiones">Decisiones</h2>
 <div class="tablewrap"><table class="decisions" data-plain>
@@ -576,6 +574,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     <tr><td>Las ocho secciones habituales son un arranque de un toque, no un estado por defecto</td><td><a href="../superpowers/specs/2026-10-16-aisles-design.md">Store sections — design, Calls of the builder</a></td></tr>
     <tr><td><code>↑</code> y <code>↓</code> en lugar de arrastrar; un solo orden para todas las tiendas</td><td><a href="../superpowers/specs/2026-10-16-aisles-design.md">Store sections — design, Non-goals</a></td></tr>
     <tr><td>La fila de un artículo no muestra su sección: la agrupación ya la muestra</td><td><a href="../superpowers/specs/2026-10-16-aisles-design.md">Store sections — design</a></td></tr>
+    <tr><td>La cabecera de una sección lleva un icono deducido de su nombre</td><td><a href="../spec/04-arrange.md">04-arrange.md, GROUP-22</a></td></tr>
   </tbody>
 </table></div>
 
@@ -583,25 +582,23 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td>Cabecera de una sección: antes, solo el nombre → ahora un icono delante, según el tipo que <code>aisleKind</code> lee del nombre (GROUP-22)</td><td><a href="../spec/04-arrange.md">04-arrange.md, GROUP-22</a></td></tr>
+    <tr><td>2026-11-13</td><td>Filas de la hoja: antes, campo con caja → ahora filas de lista a todo el ancho, con el campo sin caja y una línea debajo (AISLE-11)</td><td>La caja daba dos líneas por fila y nombres en una caja estrecha (commit <code>273fa3a</code>)</td></tr>
+    <tr><td>2026-11-13</td><td>Renombrar en la hoja: antes, el campo no renombraba (<code>TypeError</code> en <code>bindField</code>) → ahora renombra al perder el foco o con <code>Enter</code>, como dice AISLE-12</td><td>Corrección de la llamada a <code>bindField</code> (commit <code>7548708</code>)</td></tr>
+    <tr><td>2026-11-13</td><td>Fila de <code>Ajustes</code> sin secciones y <strong>Añadir</strong> con el campo vacío: antes, sin regla (Abierto) → ahora la fila no muestra número (AISLE-10) y <strong>Añadir</strong> está desactivado (AISLE-13)</td><td><a href="../spec/17-aisles.md">17-aisles.md</a></td></tr>
+    <tr><td>2026-11-13</td><td>Estado almacenado: antes, versión 9 → ahora versión 10; la limpieza de las secciones al cargar tiene regla (STORE-7)</td><td><a href="../spec/08-storage.md">08-storage.md, STORE-7</a></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
   </tbody>
 </table></div>
 
 <h2 id="fuentes">Fuentes</h2>
 <ul>
-  <li><b>Reglas</b> <a href="../spec/17-aisles.md"><code>docs/spec/17-aisles.md</code></a> (AISLE-1 a AISLE-18), <a href="../spec/04-arrange.md"><code>docs/spec/04-arrange.md</code></a> (GROUP-17, GROUP-18), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-22), <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (LIST-22)</li>
-  <li><b>Código</b> <code>src/aisles.js</code>, <code>src/ui/aisles.js</code>, <code>src/ui/controls.js</code>, <code>src/ui/edit.js</code>, <code>src/ui/list.js</code>, <code>src/store.js</code>, <code>src/storage.js</code>, <code>src/app.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
+  <li><b>Reglas</b> <a href="../spec/17-aisles.md"><code>docs/spec/17-aisles.md</code></a> (AISLE-1 a AISLE-18), <a href="../spec/04-arrange.md"><code>docs/spec/04-arrange.md</code></a> (GROUP-17, GROUP-18, GROUP-22), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-22), <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (LIST-22), <a href="../spec/02-data-model.md"><code>docs/spec/02-data-model.md</code></a> (DATA-14, DATA-15), <a href="../spec/08-storage.md"><code>docs/spec/08-storage.md</code></a> (STORE-7, BACKUP-2)</li>
+  <li><b>Código</b> <code>src/aisles.js</code>, <code>src/ui/aisles.js</code>, <code>src/ui/controls.js</code>, <code>src/ui/edit.js</code>, <code>src/storage.js</code>, <code>src/records.js</code>, <code>src/lists.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
   <li><b>Registros</b> <a href="../superpowers/specs/2026-10-16-aisles-design.md"><code>docs/superpowers/specs/2026-10-16-aisles-design.md</code></a></li>
-  <li><b>Commit</b> <code>main</code> @ <code>892bbee</code>, leído el 2026-10-23</li>
-  <li><b>Ejecutado</b> <code>npm test</code> (602 tests, 0 fallos); una prueba en <code>node</code> de la llamada de <code>bindField</code> con la firma posicional, que da <code>read is not a function</code>; sin comprobación en el navegador</li>
-  <li><b>Abierto</b>
-    <ul>
-      <li>AISLE-12 no se cumple. <code>src/ui/aisles.js:33</code> llama a <code>bindField(input, read, write)</code> con argumentos posicionales, pero <code>src/ui/controls.js:56</code> espera <code>{ read, write }</code> desde el commit <code>6e87f39</code>. Al perder el foco, con <code>Enter</code> o con <code>Escape</code>, el manejador lanza <code>TypeError: read is not a function</code> y la sección no se renombra. Ningún test cubre la hoja.</li>
-      <li>AISLE-10 dice que la fila muestra el número de secciones. Con cero secciones la fila no muestra número (<code>src/ui/aisles.js:57</code>).</li>
-      <li><strong>Añadir</strong> está desactivado mientras el campo <strong>Nueva sección</strong> no tiene texto (<code>src/ui/aisles.js:71</code>); ninguna regla lo dice.</li>
-      <li>La limpieza de las secciones al cargar (<code>src/storage.js:60</code>, <code>src/storage.js:75</code>) no tiene identificador de regla.</li>
-    </ul>
-  </li>
+  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> nada: ni tests ni comprobación en el navegador; cada sección se ha leído del código y de las reglas</li>
+  <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>
 </div>

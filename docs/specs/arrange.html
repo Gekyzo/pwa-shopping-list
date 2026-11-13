@@ -515,14 +515,14 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-10-23">2026-10-23</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Agrupar y ordenar</h1>
 <p class="meta">
   <span><b>Estado</b> en uso</span>
   <span><b>Responsable</b> Polaris Works</span>
   <span><b>Código</b> <code>src/ui/arrange.js</code>, <code>src/ui/drag.js</code>, <code>src/reorder.js</code>, <code>src/store.js</code>, <code>tests/reorder.test.js</code></span>
-  <span><b>Reglas</b> <a href="../spec/04-arrange.md">SORT-1 a SORT-9, GROUP-1 a GROUP-21, MOVE-1 a MOVE-12</a></span>
+  <span><b>Reglas</b> <a href="../spec/04-arrange.md">SORT-1 a SORT-9, GROUP-1 a GROUP-22, MOVE-1 a MOVE-12</a></span>
 </p>
 
 <h2 id="proposito">Propósito</h2>
@@ -538,7 +538,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="sheet">La hoja Agrupar y ordenar</h3>
-<p>El botón de la derecha de la cabecera abre la hoja <code>Agrupar y ordenar</code>. Solo aparece en <code>Compra</code>, y solo cuando la hoja tiene algo que ofrecer: una agrupación, un orden o la opción <strong>Listas por tienda</strong> (SORT-1, GROUP-2, SHOP-25). La hoja sigue abierta después de cada elección, para cambiar el grupo y el orden en una visita. Se cierra con <strong>Listo</strong>, con un toque fuera de la hoja o con <code>Escape</code> (SORT-2, NAV-22).</p>
+<p>El botón de la derecha de la cabecera, con el icono <code>sort</code>, abre la hoja <code>Agrupar y ordenar</code>. Solo aparece en <code>Compra</code>, y solo cuando la hoja tiene una parte que mostrar: una agrupación, un orden o la opción <strong>Listas por tienda</strong> (SORT-1, GROUP-2, SHOP-25, LIST-20). La hoja sigue abierta después de cada elección, para cambiar el grupo y el orden en una visita. Se cierra con <strong>Listo</strong>, con un toque fuera de la hoja o con <code>Escape</code> (SORT-2, NAV-8, NAV-22).</p>
 
 <h3 id="order">El orden</h3>
 <p><strong>Ordenar por</strong> tiene <strong>Nombre</strong> y <strong>Personalizado</strong>, y aparece cuando la vista tiene dos artículos o más (SORT-3). La elección es una sola, guardada en el estado; por defecto es <strong>Personalizado</strong> (SORT-4). <strong>Personalizado</strong> es el orden de inserción, con los cambios de los movimientos manuales; un artículo nuevo va al final (SORT-5). <strong>Nombre</strong> es alfabético, sin distinguir mayúsculas ni acentos, y no cambia el orden guardado (SORT-6). Los artículos por comprar van antes que los marcados (SORT-7). El orden también rige dentro de cada grupo (SORT-8). Un cambio de orden no muestra mensaje ni <code>Deshacer</code>: las filas se desplazan a su nuevo lugar con una animación (SORT-9).</p>
@@ -551,37 +551,47 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><strong>Secciones</strong>: cuando un artículo de la vista tiene sección, también en una lista por tienda.</li>
   <li><strong>Nada</strong>: cuando aparece alguno de los otros.</li>
 </ul>
-<p>Si la vista no puede mostrar la agrupación guardada, muestra la lista plana y la hoja marca <strong>Nada</strong>; la elección guardada no cambia (GROUP-3). Un toque en la opción que la vista ya muestra no cambia nada (GROUP-4).</p>
+<p><strong>Agrupar por</strong> contiene solo los botones que aparecen, y la marca de pulsado tiene el ancho y el lugar de uno de ellos (GROUP-2). Si la vista no puede mostrar la agrupación guardada, muestra la lista plana y la hoja marca <strong>Nada</strong>; la elección guardada no cambia (GROUP-3). Un toque en la opción que la vista ya muestra no cambia nada (GROUP-4).</p>
 
 <h3 id="by-recipe">Por receta</h3>
-<p>Los grupos son, en este orden, cada receta enviada en esta compra, en orden de envío, y después cada otra receta con productos que están todos en <code>Compra</code>, marcados o no (GROUP-5). Un artículo pertenece al grupo si su nombre es un producto de la receta, sin distinguir mayúsculas (GROUP-6). Un artículo de dos recetas aparece en los dos grupos, y una marca lo quita de ambos (GROUP-7). Su fila añade debajo del nombre <code>También en</code> con los nombres de los otros grupos, separados por comas (GROUP-20).</p>
-<p>La cabecera muestra el nombre de la receta, <code>marcados de total</code> (<code>1 de 4</code>) o <code>✓</code>, y el icono <code>chevron-down</code>. El grupo lista solo los artículos por comprar; un grupo con todos sus artículos marcados desaparece, y vuelve si uno pierde la marca (GROUP-8). Deslizar la cabecera a la derecha marca todos los artículos del grupo que quedan por comprar; en una lista por tienda, solo los de esa lista. El mensaje es <code>«nombre»: N productos comprados.</code> con <code>Deshacer</code> (GROUP-21). Los artículos sin grupo van bajo <code>Otros</code> (GROUP-9). Los marcados aparecen una sola vez en <code>Comprados (N)</code>, sin grupo (GROUP-10).</p>
+<p>Los grupos son, en este orden, cada receta enviada en esta compra, en orden de envío, y después cada otra receta con productos que están todos en <code>Compra</code>, marcados o no, en el orden de las recetas (GROUP-5). Un artículo pertenece al grupo si su nombre es un producto de la receta, sin distinguir mayúsculas; un grupo sin artículos no aparece (GROUP-6). Un artículo de dos recetas aparece en los dos grupos, y una marca lo quita de ambos (GROUP-7). Su fila añade debajo del nombre <code>También en Paella, Tortilla</code>: los nombres de los otros grupos, en orden de grupo, separados por comas y sin comillas (GROUP-20).</p>
+<p>La cabecera muestra el nombre de la receta, una píldora con los artículos por comprar (<code>3 art.</code>) o <code>✓</code>, y el icono <code>chevron-down</code>. Por debajo de 1024px la píldora está al final de la cabecera; desde 1024px está junto al nombre (GROUP-8, DSV-24). El grupo lista solo los artículos por comprar; un grupo con todos sus artículos marcados desaparece, y vuelve si uno pierde la marca (GROUP-8). Deslizar la cabecera a la derecha marca todos los artículos del grupo que quedan por comprar; en una lista por tienda, solo los de esa lista. El mensaje es <code>«nombre»: N productos comprados.</code> con <code>Deshacer</code> (GROUP-21). Los artículos sin grupo van bajo <code>Otros</code>, una cabecera sin recuento (GROUP-9). Los marcados aparecen una sola vez en <code>Comprados (N)</code>, sin grupo (GROUP-10).</p>
 
 <h3 id="by-shop">Por tienda</h3>
-<p>Los grupos son las tiendas de los artículos de la vista, por orden de nombre, con el recuento <code>marcados de total</code> o <code>✓</code> en la cabecera (GROUP-11). Un artículo de dos tiendas aparece en los dos grupos (GROUP-12). Los artículos sin tienda van bajo <code>Sin tienda</code> (GROUP-13). En esta agrupación la fila no muestra sus tiendas debajo del nombre (GROUP-14). Un grupo de tienda con todos sus artículos marcados mantiene su cabecera con <code>✓</code> y no tiene filas (<code>src/shops.js:50</code>).</p>
+<p>Los grupos son las tiendas de los artículos de la vista, por orden de nombre, con el recuento de GROUP-8 en la cabecera. A diferencia de un grupo de receta, un grupo de tienda con todos sus artículos marcados se queda: su cabecera muestra <code>✓</code> y no tiene filas. Una búsqueda sin coincidencias en él lo quita (GROUP-11). Un artículo de dos tiendas aparece en los dos grupos (GROUP-12). Los artículos sin tienda van bajo <code>Sin tienda</code>, sin recuento (GROUP-13). En esta agrupación la fila no muestra sus tiendas debajo del nombre (GROUP-14).</p>
 
 <h3 id="by-aisle">Por sección</h3>
-<p>Los grupos son las secciones de los artículos de la vista, en el orden de la lista de secciones de <code>Ajustes</code>, no por nombre (GROUP-17, AISLE-1). Así, en una lista por tienda, la lista sigue el recorrido de la tienda. Una sección sin artículos en la vista no aparece; los artículos sin sección van al final, bajo <code>Sin sección</code> (GROUP-18). La fila muestra sus tiendas, como en la lista plana (GROUP-19). Como por tienda, una sección con todos sus artículos marcados mantiene su cabecera con <code>✓</code> (<code>src/aisles.js:85</code>).</p>
+<p>Los grupos son las secciones de los artículos de la vista, en el orden de la lista de secciones de <code>Ajustes</code>, no por nombre. Así, en una lista por tienda, la lista sigue el recorrido de la tienda. Las cabeceras tienen los recuentos de GROUP-11, y una sección con todos sus artículos marcados se queda con <code>✓</code> (GROUP-17, AISLE-1). Una sección sin artículos en la vista no aparece; los artículos sin sección van al final, bajo <code>Sin sección</code>, sin recuento (GROUP-18). La fila muestra sus tiendas, como en la lista plana (GROUP-19).</p>
+<p>La cabecera de una sección tiene un icono en <code>--primary</code> antes del nombre, según el tipo que <code>aisleKind</code> lee del nombre. Decide la primera palabra que empieza por la raíz de un tipo, sin distinguir mayúsculas ni acentos. Los tipos son <code>produce</code>, <code>bakery</code>, <code>meat</code>, <code>fish</code>, <code>dairy</code>, <code>pantry</code>, <code>drinks</code>, <code>frozen</code> y <code>cleaning</code>, cada uno con su símbolo <code>aisle-&lt;tipo&gt;</code>. Un nombre sin palabra conocida tiene el símbolo <code>aisle</code>, y <code>Sin sección</code> no tiene icono (GROUP-22).</p>
 
 <h3 id="effect">Efecto y cabeceras</h3>
-<p>Al abrir una agrupación, las cabeceras y las filas extra se abren y las demás filas se desplazan. Al pasar a <strong>Nada</strong>, los grupos se cierran primero y después la lista queda plana. Un toque en una agrupación mientras los grupos se cierran los mantiene (GROUP-15). Un toque en una cabecera cierra las filas del grupo en 200 ms; la cabecera queda con su recuento y el icono <code>chevron-right</code>, y un segundo toque las abre otra vez. Los grupos cerrados siguen así hasta que la app arranca de nuevo. Una búsqueda muestra todos los grupos abiertos y desactiva sus cabeceras (GROUP-16, LIST-25).</p>
+<p>Al abrir una agrupación, las cabeceras y las filas extra se abren y las demás filas se desplazan. Al pasar a <strong>Nada</strong>, los grupos se cierran primero y después la lista queda plana. Un toque en una agrupación mientras los grupos se cierran los mantiene (GROUP-15). Un toque en una cabecera cierra las filas del grupo en 200 ms; la cabecera queda con su recuento y el icono <code>chevron-right</code>, y un segundo toque las abre otra vez en 200 ms. Los grupos cerrados siguen así hasta que la app arranca de nuevo. Una búsqueda muestra todos los grupos abiertos y desactiva sus cabeceras (GROUP-16, LIST-25).</p>
 
 <h3 id="move">Mover una fila a mano</h3>
-<p>Mantener el dedo 400 ms sobre una fila la levanta; con el ratón basta un arrastre vertical de 10 px. El teléfono vibra 10 ms (MOVE-1). Un dedo que se mueve 10 px antes de los 400 ms no levanta la fila: desplaza la lista o desliza la fila (MOVE-2). La fila se mueve solo entre las filas por comprar de su ámbito: toda la lista plana, o su grupo, <code>Otros</code>, <code>Sin tienda</code> o <code>Sin sección</code> en una lista agrupada (MOVE-3, MOVE-5).</p>
-<p>No se mueven una fila marcada, una fila con su menú lateral abierto, un ámbito de una sola fila, ni ninguna fila mientras el campo de búsqueda tiene texto (MOVE-4). La fila levantada sigue al puntero sin salir de su ámbito, y ocupa el lugar de una vecina cuando su borde delantero pasa el centro de esa vecina; las otras filas abren un hueco (MOVE-6). Un puntero a menos de 56 px del borde superior o inferior desplaza la lista (MOVE-7).</p>
+<p>Mantener el dedo 400 ms sobre una fila la levanta. Con el ratón, un arrastre de 10 px más vertical que horizontal la levanta sin esperar; un arrastre más horizontal desliza la fila. El teléfono vibra 10 ms (MOVE-1). Un dedo que se mueve 10 px antes de los 400 ms no levanta la fila: desplaza la lista o desliza la fila (MOVE-2). La fila se mueve solo entre las filas por comprar de su ámbito: toda la lista plana, o su grupo, <code>Otros</code>, <code>Sin tienda</code> o <code>Sin sección</code> en una lista agrupada (MOVE-3, MOVE-5).</p>
+<p>No se mueve ninguna fila en estos casos (MOVE-4):</p>
+<ul>
+  <li>una fila marcada o una fila con su menú lateral abierto;</li>
+  <li>una fila mientras otra está levantada;</li>
+  <li>un ámbito de una sola fila;</li>
+  <li>cualquier fila mientras el campo de búsqueda tiene texto;</li>
+  <li>cualquier fila en <strong>Todas</strong> de un miembro de una lista compartida (SHARE-14).</li>
+</ul>
+<p>La fila levantada sigue al puntero sin salir de su ámbito. Un movimiento horizontal no la desliza ni cambia de sección. Ocupa el lugar de una vecina cuando su borde delantero pasa el centro de esa vecina; las otras filas abren un hueco (MOVE-6). Un puntero a menos de 56 px del borde superior o inferior desplaza la lista 8 px en cada fotograma (MOVE-7).</p>
 <p>Al soltar, los artículos movidos intercambian sus lugares en el orden guardado y los demás no cambian; soltar en el lugar de salida no escribe nada (MOVE-8). Un movimiento con el orden <strong>Nombre</strong> cambia el orden a <strong>Personalizado</strong>, que parte del orden alfabético de todos los artículos, con el movimiento (MOVE-9). El mensaje es <code>Orden cambiado.</code>, o <code>Orden cambiado a «Personalizado».</code> en ese caso, con <code>Deshacer</code> (MOVE-10). <code>Escape</code>, un puntero perdido o un nuevo dibujado de la lista terminan el movimiento sin cambios (MOVE-11). El clic que sigue a soltar no marca el artículo (MOVE-12).</p>
 
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
   <li><strong>Agrupación guardada que la vista no puede mostrar.</strong> Con <code>group: 'shop'</code> y ningún artículo con tienda, <code>Compra</code> es plana y la hoja marca <strong>Nada</strong>. Un toque en <strong>Nada</strong> no borra la elección guardada (GROUP-3, GROUP-4).</li>
   <li><strong>Un artículo en dos grupos.</strong> Tiene un solo lugar en el orden guardado. Moverlo en un grupo puede cambiar su lugar en el otro grupo (MOVE-8).</li>
-  <li><strong>Mover con el orden Nombre.</strong> El nuevo orden personalizado parte del orden alfabético de todos los artículos, también los guardados fuera de <code>Compra</code>. <code>Deshacer</code> devuelve el orden <strong>Nombre</strong> y el orden personalizado anterior (MOVE-9, MOVE-10).</li>
+  <li><strong>Mover con el orden Nombre.</strong> El nuevo orden personalizado parte del orden alfabético de todos los artículos, también los guardados y pospuestos fuera de <code>Compra</code>. <code>Deshacer</code> devuelve el orden <strong>Nombre</strong> y el orden personalizado anterior (MOVE-9, MOVE-10).</li>
   <li><strong>Una búsqueda activa.</strong> No se mueve ninguna fila, las cabeceras no cierran grupos y la cabecera de una receta no se desliza (MOVE-4, GROUP-16, GROUP-21). La marca <code>También en</code> se calcula antes de la búsqueda y se mantiene (GROUP-20).</li>
+  <li><strong>Un miembro en Todas.</strong> <strong>Todas</strong> muestra los artículos de las dos listas, y ninguna fila se mueve (MOVE-4, SHARE-14).</li>
   <li><strong>Un dibujado durante el movimiento.</strong> La fila vuelve a su lugar y el orden no cambia (MOVE-11).</li>
 </ul>
 
 <h2 id="dependencias">Dependencias</h2>
-<p>Los grupos por receta vienen de <code>recipeGroups</code> y el deslizamiento de la cabecera de <code>buyRecipe</code>, de <code>src/recipes.js</code>. Los grupos por tienda vienen de <code>shopGroups</code> (<code>src/shops.js</code>) y los grupos por sección de <code>aisleGroups</code> (<code>src/aisles.js</code>, ver <a href="aisles.html">Secciones de la tienda</a>). La búsqueda filtra los grupos con <code>filterGroups</code> de <code>src/store.js</code> (LIST-22). <code>sort</code> y <code>group</code> se guardan en el estado almacenado, versión 9 (<code>src/storage.js</code>).</p>
+<p>Los grupos por receta vienen de <code>recipeGroups</code> y el deslizamiento de la cabecera de <code>buyRecipe</code>, de <code>src/recipes.js</code>. Los grupos por tienda vienen de <code>shopGroups</code> (<code>src/shops.js</code>) y los grupos por sección y sus iconos de <code>aisleGroups</code> y <code>aisleKind</code> (<code>src/aisles.js</code>, ver <a href="aisles.html">Secciones de la tienda</a>). La búsqueda filtra los grupos con <code>filterGroups</code> de <code>src/store.js</code> (LIST-22). <code>sort</code> y <code>group</code> se guardan en el estado almacenado, versión 10 (<code>src/storage.js</code>).</p>
 
 <h2 id="decisiones">Decisiones</h2>
 <div class="tablewrap"><table class="decisions" data-plain>
@@ -589,9 +599,10 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <tbody>
     <tr><td>Una sola elección de orden, guardada en el estado; <strong>Nombre</strong> es una vista y no cambia el orden guardado</td><td><a href="../superpowers/specs/2026-10-12-sort-design.md">Sort of the item lists — design</a></td></tr>
     <tr><td>Una sola agrupación a la vez; un artículo de dos tiendas aparece en los dos grupos</td><td><a href="../superpowers/specs/2026-10-13-shops-design.md">Shops of a product, and the group by shop — design</a></td></tr>
-    <tr><td>Un grupo de tienda con todo marcado mantiene su cabecera con <code>✓</code></td><td><a href="../superpowers/specs/2026-10-13-shops-design.md">Shops of a product, and the group by shop — design</a></td></tr>
+    <tr><td>Un grupo de tienda o de sección con todo marcado mantiene su cabecera con <code>✓</code></td><td><a href="../spec/04-arrange.md">04-arrange.md, GROUP-11 y GROUP-17</a></td></tr>
     <tr><td>Grupos por receta enviada y por receta completa; un artículo de dos recetas aparece en los dos grupos</td><td><a href="../superpowers/specs/2026-10-12-recipes-design.md">Recipes — design, Groups in Actual</a></td></tr>
     <tr><td>Un grupo de receta con todo marcado desaparece; deslizar su cabecera marca el grupo</td><td><a href="../spec/04-arrange.md">04-arrange.md, GROUP-8 y GROUP-21</a></td></tr>
+    <tr><td>El recuento de una cabecera es una píldora con los artículos por comprar</td><td><a href="../superpowers/specs/2026-11-07-bodega-desktop-design.md">Bodega desktop — design</a></td></tr>
     <tr><td>Una fila se mueve solo dentro de su grupo, con un toque largo o un arrastre vertical del ratón</td><td><a href="../superpowers/specs/2026-10-13-reorder-design.md">Manual order of the items — design</a></td></tr>
     <tr><td>Un movimiento con el orden <strong>Nombre</strong> pasa a <strong>Personalizado</strong></td><td><a href="../superpowers/specs/2026-10-13-reorder-design.md">Manual order of the items — design, Changes after the first version</a></td></tr>
     <tr><td>Agrupar por sección también en una lista por tienda</td><td><a href="../superpowers/specs/2026-10-16-aisles-design.md">Store sections — design</a></td></tr>
@@ -603,6 +614,11 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td><code>sort</code> y <code>group</code> se guardan en la versión 10 del estado; antes, la versión 9</td><td>El menú guarda las semanas pasadas (STORE-8)</td></tr>
+    <tr><td>2026-11-13</td><td>Ninguna fila se mueve en <strong>Todas</strong> de un miembro, ni mientras otra fila está levantada; antes la regla no tenía estos casos (MOVE-4)</td><td>Listas compartidas (SHARE-14)</td></tr>
+    <tr><td>2026-11-13</td><td>Con el ratón, un arrastre más horizontal que vertical desliza la fila en lugar de levantarla; la fila levantada no se desliza ni cambia de sección (MOVE-1, MOVE-6)</td><td>Uso con ratón en escritorio</td></tr>
+    <tr><td>2026-11-13</td><td>La cabecera de una sección tiene un icono según su tipo; antes no tenía icono (GROUP-22)</td><td>Iconos de sección del rediseño Bodega</td></tr>
+    <tr><td>2026-11-13</td><td>El recuento de una cabecera pasa de <code>1 de 4</code> (marcados de total) a una píldora con los artículos por comprar, <code>3 art.</code>; <code>Otros</code>, <code>Sin tienda</code> y <code>Sin sección</code> no tienen recuento (GROUP-8, GROUP-9, DSV-24)</td><td><a href="../superpowers/specs/2026-11-07-bodega-desktop-design.md">Bodega desktop — design</a></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
     <tr><td>2026-10-23</td><td>El recuento de una cabecera es <code>1 de 4</code> y la cabecera termina con el icono <code>chevron-down</code> abierta y <code>chevron-right</code> cerrada (GROUP-8, GROUP-16)</td><td>Aspecto Ledger: el prototipo escribe el recuento en palabras y usa un icono</td></tr>
   </tbody>
@@ -610,19 +626,12 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="fuentes">Fuentes</h2>
 <ul>
-  <li><b>Reglas</b> <a href="../spec/04-arrange.md"><code>docs/spec/04-arrange.md</code></a> (SORT-1 a SORT-9, GROUP-1 a GROUP-21, MOVE-1 a MOVE-12), <a href="../spec/05-shops.md"><code>docs/spec/05-shops.md</code></a> (SHOP-25), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-22), <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (LIST-22, LIST-25), <a href="../spec/17-aisles.md"><code>docs/spec/17-aisles.md</code></a> (AISLE-1)</li>
-  <li><b>Código</b> <code>src/ui/arrange.js</code>, <code>src/ui/drag.js</code>, <code>src/reorder.js</code>, <code>src/ui/view.js</code>, <code>src/ui/list.js</code>, <code>src/ui/rows.js</code>, <code>src/ui/motion.js</code>, <code>src/ui/context.js</code>, <code>src/store.js</code>, <code>src/recipes.js</code>, <code>src/shops.js</code>, <code>src/aisles.js</code>, <code>src/app.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-sort-design.md"><code>2026-10-12-sort-design.md</code></a>, <a href="../superpowers/specs/2026-10-13-reorder-design.md"><code>2026-10-13-reorder-design.md</code></a>, <a href="../superpowers/specs/2026-10-13-shops-design.md"><code>2026-10-13-shops-design.md</code></a>, <a href="../superpowers/specs/2026-10-12-recipes-design.md"><code>2026-10-12-recipes-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-aisles-design.md"><code>2026-10-16-aisles-design.md</code></a></li>
-  <li><b>Commit</b> <code>main</code> @ <code>892bbee</code>, leído el 2026-10-23</li>
-  <li><b>Ejecutado</b> <code>npm test</code> (602 tests, 0 fallos); sin comprobación en el navegador; cada sección se ha leído del código</li>
-  <li><b>Abierto</b>
-    <ul>
-      <li>SORT-1 dice que el botón aparece solo con una agrupación o un orden. El código también lo muestra cuando solo existe la opción <strong>Listas por tienda</strong> (<code>src/ui/arrange.js:16</code>), como dice GROUP-2.</li>
-      <li>Un grupo de tienda o de sección con todos sus artículos marcados mantiene su cabecera con <code>✓</code> (<code>src/shops.js:53</code>, <code>src/aisles.js:93</code>). GROUP-8 oculta ese grupo solo para las recetas, y GROUP-11 y GROUP-17 no dicen qué pasa.</li>
-      <li>SORT-2 no nombra <strong>Listo</strong>; el botón cierra la hoja (<code>src/app.js:276</code>, NAV-22).</li>
-      <li>MOVE-4 dice que una fila con el nombre en edición no se mueve. La fila no tiene edición del nombre en línea (la edición está en la hoja <code>Editar</code>), y <code>src/ui/drag.js</code> solo comprueba el menú lateral.</li>
-    </ul>
-  </li>
+  <li><b>Reglas</b> <a href="../spec/04-arrange.md"><code>docs/spec/04-arrange.md</code></a> (SORT-1 a SORT-9, GROUP-1 a GROUP-22, MOVE-1 a MOVE-12), <a href="../spec/05-shops.md"><code>docs/spec/05-shops.md</code></a> (SHOP-25), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-8, NAV-22), <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (LIST-20, LIST-22, LIST-25), <a href="../spec/15-design-system.md"><code>docs/spec/15-design-system.md</code></a> (DSV-24), <a href="../spec/19-sharing.md"><code>docs/spec/19-sharing.md</code></a> (SHARE-14), <a href="../spec/17-aisles.md"><code>docs/spec/17-aisles.md</code></a> (AISLE-1)</li>
+  <li><b>Código</b> <code>src/ui/arrange.js</code>, <code>src/ui/drag.js</code>, <code>src/ui/context.js</code>, <code>src/ui/list.js</code>, <code>src/ui/rows.js</code>, <code>src/reorder.js</code>, <code>src/store.js</code>, <code>src/recipes.js</code>, <code>src/shops.js</code>, <code>src/aisles.js</code>, <code>src/storage.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
+  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-sort-design.md"><code>2026-10-12-sort-design.md</code></a>, <a href="../superpowers/specs/2026-10-13-reorder-design.md"><code>2026-10-13-reorder-design.md</code></a>, <a href="../superpowers/specs/2026-10-13-shops-design.md"><code>2026-10-13-shops-design.md</code></a>, <a href="../superpowers/specs/2026-10-12-recipes-design.md"><code>2026-10-12-recipes-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-aisles-design.md"><code>2026-10-16-aisles-design.md</code></a>, <a href="../superpowers/specs/2026-11-07-bodega-desktop-design.md"><code>2026-11-07-bodega-desktop-design.md</code></a></li>
+  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code> (1777 pruebas, 0 fallos). Solo leído: el código de cada sección; sin comprobación en el navegador</li>
+  <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>
 </div>

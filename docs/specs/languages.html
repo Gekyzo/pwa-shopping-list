@@ -515,7 +515,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-10-23">2026-10-23</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Idiomas</h1>
 <p class="meta">
@@ -538,35 +538,35 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="choice">Elección del idioma</h3>
-<p>La pantalla está en catalán, alemán, inglés, español, francés, italiano o portugués europeo (LANG-1). Sin una elección guardada, la app toma el primer idioma de <code>navigator.languages</code> cuyo idioma base tiene: <code>es-MX</code> da <code>es</code>. Sin coincidencia, muestra inglés (LANG-2).</p>
+<p>La pantalla está en catalán, alemán, inglés, español, francés, italiano o portugués europeo (LANG-1). Sin una elección guardada, la app toma el primer idioma de <code>navigator.languages</code> cuyo idioma base tiene. Solo cuenta la subetiqueta base, sin distinguir mayúsculas: <code>es-MX</code> y <code>EN-us</code> dan <code>es</code> y <code>en</code>, <code>ca-ES-valencia</code> da <code>ca</code>, y <code>pt-BR</code> da el catálogo europeo <code>pt</code>. Sin coincidencia, muestra inglés (LANG-2).</p>
 <p><code>Ajustes</code> → <code>Idioma</code> lista <code>Automático</code> y los siete idiomas, cada nombre en su idioma: <code>Català</code>, <code>Deutsch</code>, <code>English</code>, <code>Español</code>, <code>Français</code>, <code>Italiano</code>, <code>Português</code>. La elección se aplica al momento, sin recargar (LANG-3). Se guarda en <code>shopping.lang</code>; <code>Automático</code> borra la clave, y un valor guardado que no es uno de los siete se ignora (LANG-4). El atributo <code>lang</code> de la página sigue al idioma (LANG-6).</p>
 
 <h3 id="catalogs">Catálogos</h3>
 <p>Cada texto de la pantalla es una entrada del catálogo de su idioma, <code>src/locales/&lt;lang&gt;.js</code>: un objeto plano de clave a texto, o a <code>{ one, other }</code> para un plural (LANG-7). <code>es.js</code> es la redacción de origen. Todos los catálogos tienen las mismas claves, la misma forma por clave y los mismos parámetros; <code>tests/i18n.test.js</code> falla si no (LANG-8).</p>
-<p>Una clave que falta en el catálogo del idioma toma el texto inglés. Una clave que no tiene ningún catálogo se muestra como la propia clave (LANG-11). Ningún módulo de <code>src/</code> fuera de los catálogos, ni ningún elemento de <code>index.html</code>, contiene texto para el usuario. Un texto fijo de la página es un atributo <code>data-i18n="clave"</code>, y un atributo es <code>data-i18n-attr="atributo:clave"</code>; <code>tests/markup.test.js</code> lo comprueba (LANG-12).</p>
+<p>Una clave que falta en el catálogo del idioma toma el texto inglés. Una clave que no tiene ningún catálogo se muestra como la propia clave (LANG-11). Ningún módulo de <code>src/</code> fuera de los catálogos, ni ningún elemento de <code>index.html</code>, contiene texto para el usuario. Un texto fijo de la página es un atributo <code>data-i18n="clave"</code>, y un atributo es <code>data-i18n-attr="atributo:clave"</code>; <code>tests/markup.test.js</code> lo comprueba. La excepción son los separadores fijos <code>, </code>, <code>; </code> y <code> · </code>, que unen textos del catálogo y nombres del usuario: <code>sendText</code> de <code>src/ui/recipes.js</code> y la etiqueta de una comida de <code>src/ui/menu.js</code> (LANG-12).</p>
 
 <h3 id="parameters">Parámetros y plurales</h3>
-<p>Un texto recibe parámetros como <code>{nombre}</code>. El parámetro entra tal cual, en una sola pasada: un texto del usuario con <code>{nombre}</code> o <code>$&amp;</code> no se vuelve a leer (LANG-9). Un plural se elige por <code>count</code> con <code>Intl.PluralRules</code> del idioma. El portugués usa la etiqueta <code>pt-PT</code>, para la regla del plural y para la forma de la fecha (LANG-10): la fecha de la versión en <code>Ajustes</code> y los nombres de los días de <code>Menú</code>.</p>
+<p>Un texto recibe parámetros como <code>{nombre}</code>. El parámetro entra tal cual, en una sola pasada: un texto del usuario con <code>{nombre}</code> o <code>$&amp;</code> no se vuelve a leer (LANG-9). Un plural se elige por <code>count</code> con <code>Intl.PluralRules</code> del idioma. Una categoría sin forma propia (<code>many</code> para 1 000 000 en <code>es</code>) y una llamada sin <code>count</code> toman la forma <code>other</code>. El portugués usa la etiqueta <code>pt-PT</code>, para la regla del plural y para la forma de la fecha (LANG-10): la fecha de la versión en <code>Ajustes</code> y los nombres de los días de <code>Menú</code>.</p>
 <p>Un módulo puro devuelve un error como un mensaje <code>{ key, params }</code>. Solo el código de pantalla, <code>src/app.js</code> y <code>src/ui/</code>, convierte el mensaje en texto. Un parámetro <code>list</code> contiene el id de una lista, y la pantalla lo cambia por el nombre de la lista en el idioma: <code>active</code> da <code>Compra</code> (LANG-13).</p>
 
 <h3 id="pseudo">Pseudo-idioma</h3>
 <p>El parámetro de dirección <code>?lang=pseudo</code> muestra cada texto del catálogo español con vocales acentuadas, entre <code>[ ]</code> y rellenado con <code>~</code> hasta 1,4 veces su longitud. Un <code>{nombre}</code> queda igual, y cambia cada forma de un plural. Sirve para comprobar el diseño: no está en la lista de <code>Idioma</code>, no se guarda, ningún valor de <code>navigator.languages</code> lo elige, y el atributo <code>lang</code> mantiene el código real (LANG-18).</p>
 
 <h3 id="untranslated">Lo que no se traduce</h3>
-<p>El orden por nombre usa la ordenación española en todos los idiomas (LANG-15, SORT-6). El nombre de la app es <code>Bodega</code> en todos los idiomas: el nombre corto de <code>manifest.webmanifest</code> y el subtítulo de <code>Ajustes</code>. El título de la página es <code>Bodega - Lista de la compra</code>, con la segunda parte en el idioma de la pantalla (<code>app.title</code>). Antes de que se ejecute el script, el título está en español (LANG-16).</p>
-<p>El nombre, la descripción y los nombres de los accesos directos del manifiesto siguen el idioma de la pantalla a través del worker (SW-13). Antes del primer envío de la página, y sin worker, están en español. Una app instalada muestra un nombre nuevo solo después de la siguiente comprobación de actualización de Chrome, y Android puede pedir confirmación al usuario (LANG-16). El nombre del archivo de copia de seguridad empieza por <code>compra-</code> en todos los idiomas (LANG-17).</p>
+<p>El orden por nombre usa la ordenación española en todos los idiomas (LANG-15, SORT-6). El nombre de la app es <code>Bodega</code> en todos los idiomas: el nombre corto de <code>manifest.webmanifest</code>, el subtítulo de <code>Ajustes</code>, la marca de la barra lateral (NAV-26) y la de la barra de <code>Compra</code> por debajo de 600 px (DSV-33). El título de la página es <code>Lista de la compra - Bodega</code>, con la primera parte en el idioma de la pantalla (<code>app.title</code>). Antes de que se ejecute el script, el título está en español (LANG-16).</p>
+<p>El nombre, la descripción y los nombres de los accesos directos del manifiesto siguen el idioma de la pantalla a través del worker (<code>app.title</code>, <code>app.description</code>, SHORT-3, SW-13). Antes del primer envío de la página, y sin worker, están en español. Una app instalada muestra un nombre nuevo solo después de la siguiente comprobación de actualización de Chrome, y Android puede pedir confirmación al usuario (LANG-16). El nombre del archivo de copia de seguridad empieza por <code>compra-</code> en todos los idiomas (LANG-17).</p>
 
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
   <li><strong>Un teléfono en un idioma sin catálogo.</strong> Con <code>navigator.languages</code> en japonés, la pantalla sale en inglés (LANG-2).</li>
   <li><strong>Un valor guardado desconocido.</strong> Un <code>shopping.lang</code> con <code>ja</code> se lee como sin elección, y la app sigue al teléfono (LANG-4).</li>
-  <li><strong>Sin almacenamiento.</strong> El selector cambia el idioma igualmente; la elección dura hasta que se cierra la app (<code>src/ui/context.js:234</code>).</li>
-  <li><strong>Un mensaje en pantalla al cambiar de idioma.</strong> El mensaje mantiene su texto; el resto de la pantalla cambia (<code>index.html:33</code>, sin <code>data-i18n</code>).</li>
+  <li><strong>Sin almacenamiento.</strong> El selector cambia el idioma igualmente; la elección dura hasta que se cierra la app (STORE-10, <code>src/ui/context.js:349</code>).</li>
+  <li><strong>Un mensaje en pantalla al cambiar de idioma.</strong> El mensaje mantiene su texto; el resto de la pantalla cambia (<code>index.html:42</code>, sin <code>data-i18n</code>).</li>
   <li><strong>Un nombre del usuario con llaves.</strong> Un artículo llamado <code>{count}</code> se muestra tal cual en un mensaje (LANG-9).</li>
 </ul>
 
 <h2 id="dependencias">Dependencias</h2>
-<p>Los siete catálogos son importaciones estáticas, con un alias <code>#locales/&lt;lang&gt;</code> en el mapa de importación de <code>index.html</code>, y forman parte de <code>SHELL</code> en <code>sw.js</code>; así funcionan sin conexión. Añadir un idioma pide su catálogo completo, su entrada en <code>CATALOGS</code> y en <code>LANGUAGE_NAMES</code> de <code>src/i18n.js</code>, su alias y su archivo en <code>SHELL</code>. El manifiesto traducido depende del worker y de su caché <code>shopping-manifest</code> (SW-13); si falla, el manifiesto sale como el archivo, en español.</p>
+<p>Los siete catálogos son importaciones estáticas, con un alias <code>#locales/&lt;lang&gt;</code> en el mapa de importación de <code>index.html</code>, y forman parte de <code>SHELL</code> en <code>sw.js</code>; así funcionan sin conexión. Añadir un idioma pide su catálogo completo, su entrada en <code>CATALOGS</code> y en <code>LANGUAGE_NAMES</code> de <code>src/i18n.js</code>, su alias y su archivo en <code>SHELL</code>. Cada idioma tiene también su archivo de novedades, <code>release-notes/&lt;lang&gt;.md</code> (VER-18). El manifiesto traducido depende del worker y de su caché <code>shopping-manifest</code> (SW-13); si falla, el manifiesto sale como el archivo, en español.</p>
 
 <h2 id="decisiones">Decisiones</h2>
 <div class="tablewrap"><table class="decisions" data-plain>
@@ -585,22 +585,22 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td>Título de la página <code>Bodega - Lista de la compra</code> → <code>Lista de la compra - Bodega</code>, con la primera parte traducida; <code>Bodega</code> también es la marca de la barra lateral y de la barra de <code>Compra</code> (LANG-16)</td><td>El propósito primero en el título; <a href="../spec/09-languages.md">09-languages.md, LANG-16</a></td></tr>
+    <tr><td>2026-11-13</td><td>Separadores fijos <code>, </code>, <code>; </code> y <code> · </code>: sin regla → excepción declarada de LANG-12</td><td><a href="../spec/09-languages.md">09-languages.md, LANG-12</a></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
   </tbody>
 </table></div>
 
 <h2 id="fuentes">Fuentes</h2>
 <ul>
-  <li><b>Reglas</b> <a href="../spec/09-languages.md"><code>docs/spec/09-languages.md</code></a> (LANG-1 a LANG-18), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-13)</li>
-  <li><b>Código</b> <code>src/i18n.js</code>, <code>src/locales/*.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>src/ui/menu.js</code>, <code>src/storage.js</code>, <code>src/store.js</code>, <code>sw.js</code>, <code>index.html</code>, <code>manifest.webmanifest</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-13-languages-design.md"><code>docs/superpowers/specs/2026-10-13-languages-design.md</code></a>, <a href="../superpowers/plans/2026-10-13-languages.md"><code>docs/superpowers/plans/2026-10-13-languages.md</code></a></li>
-  <li><b>Commit</b> <code>main</code> @ <code>892bbee</code>, leído el 2026-10-23</li>
-  <li><b>Ejecutado</b> <code>npm test</code>: 602 tests, 602 correctos. Sin comprobación en el navegador; el resto se ha leído del código</li>
+  <li><b>Reglas</b> <a href="../spec/09-languages.md"><code>docs/spec/09-languages.md</code></a> (LANG-1 a LANG-18), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-13, VER-18)</li>
+  <li><b>Código</b> <code>src/i18n.js</code>, <code>src/locales/*.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>src/ui/menu.js</code>, <code>src/ui/recipes.js</code>, <code>src/storage.js</code>, <code>sw.js</code>, <code>index.html</code>, <code>manifest.webmanifest</code></li>
+  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-13-languages-design.md"><code>docs/superpowers/specs/2026-10-13-languages-design.md</code></a></li>
+  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos. Sin comprobación en el navegador; el resto se ha leído del código</li>
   <li><b>Abierto</b>
     <ul>
-      <li>Sin ID de regla: sin almacenamiento, la elección dura hasta que se cierra la app (<code>src/ui/context.js:234</code>).</li>
       <li>Sin ID de regla: un mensaje en pantalla mantiene su texto al cambiar de idioma. Lo dice el documento de diseño, no el archivo de reglas.</li>
-      <li>LANG-16 nombra el nombre, la descripción y los accesos directos del manifiesto. El worker también cambia el miembro <code>lang</code> (<code>sw.js:67</code>, SW-13).</li>
       <li>El documento de diseño de idiomas deja el manifiesto en español (Out of scope). El código lo traduce (SW-13). Por eso la fila del manifiesto enlaza la regla.</li>
     </ul>
   </li>

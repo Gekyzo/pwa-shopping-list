@@ -515,7 +515,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-10-23">2026-10-23</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Integraciones</h1>
 <p class="meta">
@@ -539,22 +539,23 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="arrival">Aviso al llegar a la tienda</h3>
 <p>Una apertura con <code>?arrival</code> en la dirección muestra <code>N artículos por comprar en Compra.</code> en el idioma de la pantalla, o <code>1 artículo por comprar en Compra.</code> para uno. N es el número de artículos de <code>Compra</code> sin marcar (ARR-1). El mensaje dura 10 segundos, porque la app se abrió sola, y no tiene <code>Deshacer</code> (ARR-2). Sin nada por comprar no hay mensaje (ARR-3). La app quita <code>arrival</code> de la dirección al momento y mantiene el resto de parámetros, así que una recarga no repite el mensaje (ARR-4).</p>
-<p>La app de automatización (MacroDroid, Tasker) tiene el lugar, el radio y la precisión (ARR-5). Su configuración: una geovalla de entrada de 100 a 150 m y la acción de abrir <code>https://bodega.polarisworks.duckdns.org/?arrival</code>. La app debe estar instalada desde Chrome, para que Android abra la dirección en la app instalada y con sus datos.</p>
+<p>La app de automatización (MacroDroid, Tasker) tiene el lugar, el radio y la precisión (ARR-5). Su configuración: una geovalla de entrada de 100 a 150 m y la acción de abrir <code>https://bodega.polarisworks.duckdns.org/?arrival</code>. La app debe estar instalada desde Chrome, para que Android abra la dirección en la app instalada y con sus datos. La app de automatización necesita el permiso de ubicación <strong>Permitir siempre</strong> y ninguna optimización de batería.</p>
 
 <h3 id="shortcuts">Accesos directos del icono</h3>
-<p>Una pulsación larga en el icono de la app instalada muestra cuatro accesos directos, en este orden: <code>Añadir artículo</code> (<code>./?open=add</code>), <code>Compra</code> (<code>./?open=active</code>), <code>Recetas</code> (<code>./?open=recipes</code>) y <code>Menú</code> (<code>./?open=menu</code>) (SHORT-1). Una apertura con <code>?open=&lt;nombre&gt;</code> muestra esa sección; <code>add</code> muestra <code>Compra</code> y abre allí la hoja de añadir. Un nombre desconocido se ignora (SHORT-2).</p>
-<p>Los nombres de los accesos directos son los textos <code>add.item</code>, <code>list.active</code>, <code>nav.recipes</code> y <code>nav.menu</code> en el idioma de la pantalla, a través del worker (SHORT-3, SW-13). Cada acceso directo tiene un icono de 192 px: el icono de línea de su acción, blanco sobre un disco del color del tema (SHORT-4). La app quita <code>open</code> de la dirección al momento y mantiene el resto de parámetros, como con <code>arrival</code> (SHORT-5).</p>
+<p>Una pulsación larga en el icono de la app instalada muestra cuatro accesos directos, en este orden: <code>Añadir artículo</code> (<code>./?open=add</code>), <code>Compra</code> (<code>./?open=active</code>), <code>Recetas</code> (<code>./?open=recipes</code>) y <code>Menú</code> (<code>./?open=menu</code>) (SHORT-1). Una apertura con <code>?open=&lt;nombre&gt;</code> muestra esa sección; <code>add</code> muestra <code>Compra</code> y abre allí la hoja de añadir. Un nombre desconocido se ignora. <code>?open=&lt;nombre&gt;</code> gana sobre el hash de la dirección (SHORT-2, NAV-30).</p>
+<p>Los nombres de los accesos directos son los textos <code>add.item</code>, <code>list.active</code>, <code>nav.recipes</code> y <code>nav.menu</code> en el idioma de la pantalla, a través del worker (SHORT-3, SW-13). Cada acceso directo tiene un icono de 192 px: el icono de línea de su acción, blanco sobre un disco del color del tema (SHORT-4). La app quita <code>open</code> de la dirección al momento y mantiene el resto de parámetros, como con <code>arrival</code> (SHORT-5). La app de Android tiene los mismos accesos directos y uno más, los ajustes del sitio en Chrome (INS-7).</p>
 
 <h3 id="voice">Comandos de voz</h3>
-<p><code>main</code> no tiene comandos de voz. El trabajo está en la rama <code>voice-commands</code>, con 3 commits. VOICE-1 a VOICE-8 describen el diseño de esa rama, y pasan a ser reglas de la app cuando se fusione. En ese diseño, el usuario dice un comando en español (<code>es-ES</code>) por cada toque, y la app dice la respuesta (VOICE-1). Los comandos añaden artículos, leen lo que queda, marcan un artículo, borran un artículo y terminan la compra (VOICE-2). Borrar y terminar la compra piden un «sí» hablado; marcar y añadir no lo piden, porque basta <code>Deshacer</code> (VOICE-3). «macarrones y queso» añade dos artículos (VOICE-5). Una apertura con <code>?voice</code> empieza una conversación (VOICE-7).</p>
+<p><code>main</code> no tiene comandos de voz. El trabajo está en la rama <code>voice-commands</code>, con 3 commits. Esa rama no tiene idiomas, tiendas ni la versión 3 del estado, así que necesita un cambio antes de fusionarla. VOICE-1 a VOICE-8 describen el diseño de esa rama, y pasan a ser reglas de la app cuando se fusione. En ese diseño, el usuario dice un comando en español (<code>es-ES</code>) por cada toque, y la app dice la respuesta (VOICE-1). Los comandos añaden artículos, leen lo que queda, marcan un artículo, borran un artículo y terminan la compra (VOICE-2). Borrar y terminar la compra piden un «sí» hablado; marcar y añadir no lo piden, porque basta <code>Deshacer</code> (VOICE-3). «macarrones y queso» añade dos artículos (VOICE-5). Una apertura con <code>?voice</code> empieza una conversación (VOICE-7).</p>
 
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
   <li><strong>Llegada con la lista ya comprada.</strong> Con todos los artículos de <code>Compra</code> marcados, no hay mensaje (ARR-3).</li>
   <li><strong>Un nombre de acceso directo desconocido.</strong> <code>?open=ajustes</code> no cambia la sección, pero la app quita el parámetro igualmente (SHORT-2, SHORT-5).</li>
   <li><strong>La primera apertura.</strong> Mientras se muestra el recorrido inicial, la sección cambia debajo de él y la hoja de añadir no se abre (SHORT-2).</li>
-  <li><strong>Los dos parámetros juntos.</strong> <code>?arrival&amp;open=recipes</code> muestra el mensaje de <code>Compra</code> y la sección <code>Recetas</code> (<code>src/app.js:284</code>).</li>
-  <li><strong>Sin conexión.</strong> Los accesos directos y <code>?arrival</code> funcionan: el worker ignora la consulta de la dirección (SW-6, SW-7, <code>sw.js:121</code>).</li>
+  <li><strong>Un acceso directo con un hash.</strong> <code>./?open=recipes#menu</code> muestra <code>Recetas</code>: <code>?open</code> gana sobre el hash (SHORT-2, NAV-30).</li>
+  <li><strong>Los dos parámetros juntos.</strong> <code>?arrival&amp;open=recipes</code> muestra el mensaje de <code>Compra</code> y la sección <code>Recetas</code> (<code>src/app.js:431</code>).</li>
+  <li><strong>Sin conexión.</strong> Los accesos directos y <code>?arrival</code> funcionan: el worker ignora la consulta de la dirección (SW-6, SW-7, <code>sw.js:138</code>).</li>
   <li><strong>Un cambio de idioma.</strong> Android muestra los nombres nuevos de los accesos directos solo después de la siguiente comprobación de actualización de Chrome (<a href="../spec/11-integrations.md">11-integrations.md, Limits</a>, LANG-16).</li>
 </ul>
 
@@ -578,21 +579,23 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td><code>?open=&lt;nombre&gt;</code> y el hash de la dirección: sin regla → <code>?open</code> gana sobre el hash (SHORT-2)</td><td>Cada sección tiene su dirección (NAV-30)</td></tr>
+    <tr><td>2026-11-13</td><td>Rama <code>voice-commands</code>: 323 commits por detrás de <code>main</code> → 576; necesita un cambio antes de fusionarla</td><td><code>git rev-list --count voice-commands..main</code></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
   </tbody>
 </table></div>
 
 <h2 id="fuentes">Fuentes</h2>
 <ul>
-  <li><b>Reglas</b> <a href="../spec/11-integrations.md"><code>docs/spec/11-integrations.md</code></a> (ARR-1 a ARR-5, SHORT-1 a SHORT-5, VOICE-1 a VOICE-8), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-6, SW-7, SW-13), <a href="../spec/09-languages.md"><code>docs/spec/09-languages.md</code></a> (LANG-16)</li>
-  <li><b>Código</b> <code>src/app.js</code>, <code>src/store.js</code>, <code>src/sections.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>manifest.webmanifest</code>, <code>sw.js</code>, <code>scripts/make-icons.mjs</code>, <code>src/locales/es.js</code>; la rama <code>voice-commands</code> solo con <code>git log</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-arrival-toast-design.md"><code>docs/superpowers/specs/2026-10-12-arrival-toast-design.md</code></a>, <a href="../superpowers/plans/2026-10-12-arrival-toast.md"><code>docs/superpowers/plans/2026-10-12-arrival-toast.md</code></a>, <a href="../superpowers/specs/2026-10-13-voice-design.md"><code>docs/superpowers/specs/2026-10-13-voice-design.md</code></a></li>
-  <li><b>Commit</b> <code>main</code> @ <code>892bbee</code>, leído el 2026-10-23</li>
-  <li><b>Ejecutado</b> <code>npm test</code>: 602 tests, 602 correctos; <code>git rev-list --count main..voice-commands</code> y al revés. Sin comprobación en el teléfono ni en el navegador</li>
+  <li><b>Reglas</b> <a href="../spec/11-integrations.md"><code>docs/spec/11-integrations.md</code></a> (ARR-1 a ARR-5, SHORT-1 a SHORT-5, VOICE-1 a VOICE-8), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-6, SW-7, SW-13), <a href="../spec/09-languages.md"><code>docs/spec/09-languages.md</code></a> (LANG-16), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-30), <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a> (INS-7)</li>
+  <li><b>Código</b> <code>src/app.js</code>, <code>src/store.js</code>, <code>src/sections.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>manifest.webmanifest</code>, <code>twa/twa-manifest.json</code>, <code>sw.js</code>, <code>scripts/make-icons.mjs</code>, <code>src/locales/es.js</code>; la rama <code>voice-commands</code> solo con <code>git rev-list</code></li>
+  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-arrival-toast-design.md"><code>docs/superpowers/specs/2026-10-12-arrival-toast-design.md</code></a>, <a href="../superpowers/specs/2026-10-13-voice-design.md"><code>docs/superpowers/specs/2026-10-13-voice-design.md</code></a></li>
+  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos; <code>git rev-list --count main..voice-commands</code> (3) y <code>voice-commands..main</code> (576). Sin comprobación en el teléfono ni en el navegador</li>
   <li><b>Abierto</b>
     <ul>
-      <li>Sin ID de regla: <code>?arrival</code> y <code>?open</code> juntos muestran el mensaje y la sección pedida (<code>src/app.js:284</code>).</li>
-      <li>El archivo de reglas dice que la rama <code>voice-commands</code> va 28 commits por detrás de <code>main</code> el 2026-10-13. Hoy va 323 por detrás, con 3 propios.</li>
+      <li>Sin ID de regla: <code>?arrival</code> y <code>?open</code> juntos muestran el mensaje y la sección pedida (<code>src/app.js:431</code>).</li>
+      <li>El archivo de reglas dice que la rama <code>voice-commands</code> va 566 commits por detrás de <code>main</code> el 2026-11-13. Al final del mismo día va 576 por detrás.</li>
       <li>El documento de diseño de voz dice «Status: implemented», pero el código no está en <code>main</code>.</li>
       <li>No hay un documento de diseño para los accesos directos; la fila enlaza el archivo de reglas.</li>
     </ul>

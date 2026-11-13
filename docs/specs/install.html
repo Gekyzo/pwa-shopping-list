@@ -515,24 +515,25 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-10-23">2026-10-23</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Instalación</h1>
 <p class="meta">
   <span><b>Estado</b> en uso</span>
   <span><b>Responsable</b> Polaris Works</span>
-  <span><b>Código</b> <code>src/install.js</code>, <code>src/ui/install.js</code>, <code>manifest.webmanifest</code>, <code>tests/install.test.js</code></span>
-  <span><b>Reglas</b> <a href="../spec/16-install.md">INS-1 a INS-4</a></span>
+  <span><b>Código</b> <code>src/install.js</code>, <code>src/ui/install.js</code>, <code>manifest.webmanifest</code>, <code>twa/twa-manifest.json</code>, <code>.well-known/assetlinks.json</code>, <code>scripts/apk.mjs</code>, <code>tests/install.test.js</code>, <code>tests/twa.test.js</code></span>
+  <span><b>Reglas</b> <a href="../spec/16-install.md">INS-1 a INS-8</a></span>
 </p>
 
 <h2 id="proposito">Propósito</h2>
-<p>La app se instala en el teléfono desde <code>Ajustes</code> con un toque en <strong>Instalar la aplicación</strong>, cuando Chrome lo permite. Una vez instalada, la app gira con el dispositivo. Las reglas, con sus identificadores, están en <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a>. Si esta página y ese archivo no coinciden, manda el archivo.</p>
+<p>La app se instala en el teléfono de dos formas. Desde <code>Ajustes</code>, un toque en <strong>Instalar la aplicación</strong> instala la PWA, cuando Chrome lo permite. La app de Android es un envoltorio (Trusted Web Activity) que abre el sitio en Chrome a pantalla completa. Una vez instalada, la app gira con el dispositivo. Las reglas, con sus identificadores, están en <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a>. Si esta página y ese archivo no coinciden, manda el archivo.</p>
 
 <h2 id="fuera-de-alcance">Fuera de alcance</h2>
 <ul>
   <li>Ningún banner y ningún mensaje ofrecen la instalación: solo el botón de <code>Ajustes</code> (<a href="../spec/16-install.md">16-install.md, Limits</a>).</li>
   <li>La app no puede forzar la oferta. Chrome decide cuándo da <code>beforeinstallprompt</code>, y puede no darlo nunca, por ejemplo en una segunda visita después de un rechazo.</li>
   <li>La app no desinstala ni detecta una desinstalación: el estado <code>installed</code> es final (INS-1).</li>
+  <li>La app de Android no tiene código propio ni copia del paquete: una publicación del sitio le llega como a la PWA instalada, sin versión nueva del envoltorio (INS-5, INS-8).</li>
 </ul>
 
 <h2 id="comportamiento">Comportamiento</h2>
@@ -545,15 +546,30 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <h3 id="installed">La app instalada</h3>
 <p>Una app que se abre en <code>display-mode: standalone</code> empieza en <code>installed</code> y no muestra el botón (INS-3). El evento <code>appinstalled</code> también pasa la oferta a <code>installed</code>, empiece quien empiece la instalación: el botón o el menú de Chrome. La app instalada gira con el dispositivo (<code>"orientation": "any"</code> en <code>manifest.webmanifest</code>), así que una tableta o un teléfono desplegado la muestran derecha en horizontal (INS-4). La distribución de cada anchura está en DSV-8.</p>
 
+<h3 id="android">La app de Android</h3>
+<p>La app de Android es una Trusted Web Activity con el id <code>io.github.polarisworks.bodega</code>. Abre <code>https://bodega.polarisworks.duckdns.org/</code> en Chrome, a pantalla completa, con el almacenamiento de Chrome para ese origen (VER-16). La versión 1.0.0 del envoltorio abría la dirección antigua <code>https://bodega.artisandevs.duckdns.org/</code>. El envoltorio no tiene código ni copia del paquete (INS-5).</p>
+<p><code>.well-known/assetlinks.json</code> concede <code>delegate_permission/common.handle_all_urls</code> a <code>io.github.polarisworks.bodega</code>, con la huella SHA-256 de cada clave que firma una versión publicada: la clave de subida y, en Play, también la clave de firma de Play. Sus huellas son las de <code>twa/twa-manifest.json</code>. Sin coincidencia, Chrome muestra la app con una barra de dirección (INS-6).</p>
+<p><code>twa/twa-manifest.json</code> es la única fuente del envoltorio. Su nombre, nombre del lanzador, colores, iconos, orientación y accesos directos son los de <code>manifest.webmanifest</code>, y sus colores oscuros son el <code>theme-color</code> oscuro de <code>index.html</code>. Android añade un acceso directo más, los ajustes del sitio en Chrome, que el lanzador del envoltorio necesita. <code>npm run apk</code> construye el proyecto a partir de ese archivo, y el proyecto nunca entra en un commit (INS-7).</p>
+<p>Una versión del envoltorio es una construcción de <code>npm run apk</code> con la versión nueva en <code>appVersionName</code> y en <code>appVersion</code>, y un <code>appVersionCode</code> 1 más alto. <code>npm run apk</code> para si los dos nombres no coinciden. Su etiqueta es <code>twa-vX.Y.Z</code>, nunca <code>vX.Y.Z</code> (VER-9), y su GitHub Release lleva el APK firmado. Un cambio del sitio no necesita una versión del envoltorio (INS-8).</p>
+
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
   <li><strong>Sin aviso de Chrome.</strong> El botón no aparece. El menú de Chrome <strong>Añadir a pantalla de inicio → Instalar</strong> sigue funcionando (VER-14), y su evento <code>appinstalled</code> deja la oferta en <code>installed</code> (INS-3).</li>
   <li><strong>Un aviso después de instalar.</strong> Un <code>beforeinstallprompt</code> tardío no muestra el botón: <code>installed</code> es final (INS-1).</li>
   <li><strong>Una pestaña del navegador con la app ya instalada.</strong> La pestaña no está en <code>standalone</code>, así que empieza en <code>idle</code>. El botón solo aparece si Chrome da el aviso (INS-2, INS-3).</li>
+  <li><strong>Una huella que no está en <code>assetlinks.json</code>.</strong> La app de Android se abre con una barra de dirección (INS-6).</li>
+  <li><strong>La app de Android 1.0.0.</strong> Abre la dirección antigua, otro origen con su propio almacenamiento: no ve los datos de la dirección nueva (INS-5, VER-9).</li>
+  <li><strong><code>appVersionName</code> y <code>appVersion</code> distintos.</strong> <code>npm run apk</code> para y nombra los dos valores (INS-8).</li>
+</ul>
+
+<h2 id="limites-operativos">Límites operativos</h2>
+<ul>
+  <li>Versión actual del envoltorio: <code>1.1.0</code>, con <code>appVersionCode</code> 2 (<code>twa/twa-manifest.json</code>, INS-8).</li>
+  <li>Huellas en <code>assetlinks.json</code>: una, la de la clave de subida (INS-6).</li>
 </ul>
 
 <h2 id="dependencias">Dependencias</h2>
-<p>La oferta depende de los eventos <code>beforeinstallprompt</code> y <code>appinstalled</code> de Chrome, y de un manifiesto instalable (VER-14). Sin el aviso, la instalación solo es posible desde el menú de Chrome. La comprobación de <code>standalone</code> usa <code>matchMedia</code> al arrancar.</p>
+<p>La oferta depende de los eventos <code>beforeinstallprompt</code> y <code>appinstalled</code> de Chrome, y de un manifiesto instalable (VER-14). Sin el aviso, la instalación solo es posible desde el menú de Chrome. La comprobación de <code>standalone</code> usa <code>matchMedia</code> al arrancar. La app de Android depende de Chrome en el teléfono, de Bubblewrap para construir el proyecto, de la clave de firma fuera del repositorio y de <code>.well-known/assetlinks.json</code> publicado en la dirección del sitio (INS-6, INS-7).</p>
 
 <h2 id="decisiones">Decisiones</h2>
 <div class="tablewrap"><table class="decisions" data-plain>
@@ -562,6 +578,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     <tr><td>La instalación se ofrece solo con un botón en <code>Ajustes</code>, sin banner ni mensaje</td><td><a href="../spec/16-install.md">16-install.md, Limits</a></td></tr>
     <tr><td>Tres estados, e <code>installed</code> es final</td><td><a href="../spec/16-install.md">16-install.md, INS-1</a></td></tr>
     <tr><td>La app instalada gira con el dispositivo (<code>orientation: any</code>)</td><td><a href="../superpowers/specs/2026-10-18-responsive-design.md">Responsive — design</a></td></tr>
+    <tr><td>La app de Android es una Trusted Web Activity sin código propio, construida desde <code>twa/twa-manifest.json</code>, con etiquetas <code>twa-vX.Y.Z</code></td><td><a href="../superpowers/plans/2026-11-13-android-twa.md">Android TWA — plan</a></td></tr>
   </tbody>
 </table></div>
 
@@ -569,21 +586,21 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td>Solo la PWA instalable desde Chrome (INS-1 a INS-4) → también una app de Android: Trusted Web Activity <code>io.github.polarisworks.bodega</code> que abre <code>bodega.polarisworks.duckdns.org</code>, con <code>assetlinks.json</code>, <code>twa/twa-manifest.json</code> y etiquetas <code>twa-vX.Y.Z</code> (INS-5 a INS-8)</td><td><a href="../superpowers/plans/2026-11-13-android-twa.md">Android TWA — plan</a></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
   </tbody>
 </table></div>
 
 <h2 id="fuentes">Fuentes</h2>
 <ul>
-  <li><b>Reglas</b> <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a> (INS-1 a INS-4), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (VER-14)</li>
-  <li><b>Código</b> <code>src/install.js</code>, <code>src/ui/install.js</code>, <code>manifest.webmanifest</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-18-responsive-design.md"><code>docs/superpowers/specs/2026-10-18-responsive-design.md</code></a></li>
-  <li><b>Commit</b> <code>main</code> @ <code>892bbee</code>, leído el 2026-10-23</li>
-  <li><b>Ejecutado</b> <code>node --test tests/install.test.js</code> (6 pruebas, todas pasan) y <code>tests/spec.test.js</code> (16 pruebas, incluida la de <code>orientation</code>); el botón y el diálogo de Chrome no se han probado en el navegador</li>
+  <li><b>Reglas</b> <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a> (INS-1 a INS-8), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (VER-9, VER-14, VER-16)</li>
+  <li><b>Código</b> <code>src/install.js</code>, <code>src/ui/install.js</code>, <code>manifest.webmanifest</code>, <code>index.html</code>, <code>twa/twa-manifest.json</code>, <code>twa/.gitignore</code>, <code>.well-known/assetlinks.json</code>, <code>scripts/apk.mjs</code>, <code>.githooks/pre-push</code>, <code>src/locales/es.js</code>; etiquetas <code>twa-v1.0.0</code> y <code>twa-v1.1.0</code> con <code>git tag</code></li>
+  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-18-responsive-design.md"><code>docs/superpowers/specs/2026-10-18-responsive-design.md</code></a>, <a href="../superpowers/plans/2026-11-13-android-twa.md"><code>docs/superpowers/plans/2026-11-13-android-twa.md</code></a></li>
+  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos, con <code>tests/install.test.js</code>, <code>tests/twa.test.js</code> y <code>tests/apk.test.js</code>. El botón, el diálogo de Chrome, <code>npm run apk</code> y la app de Android no se han probado</li>
   <li><b>Abierto</b>
     <ul>
-      <li>VER-14 dice que la app instalada se abre «in portrait», pero <code>manifest.webmanifest</code> tiene <code>"orientation": "any"</code> (INS-4).</li>
-      <li>El título de grupo <code>Aplicación</code> se oculta con el botón (<code>#install-group</code> en <code>index.html</code>); ninguna regla lo dice.</li>
+      <li>El título de grupo <code>Aplicación</code> se oculta con el botón (<code>#install-group</code> en <code>index.html:184</code>); ninguna regla lo dice.</li>
       <li>INS-2 nombra el botón en inglés, <strong>Install the app</strong>; el texto en español es <code>Instalar la aplicación</code>.</li>
     </ul>
   </li>

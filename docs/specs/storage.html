@@ -515,7 +515,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-10-23">2026-10-23</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Almacenamiento y copia de seguridad</h1>
 <p class="meta">
@@ -526,85 +526,101 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 </p>
 
 <h2 id="proposito">Propósito</h2>
-<p>La app guarda las listas, las recetas y el menú en el teléfono, sin servidor ni cuenta. Cada cambio se guarda al momento. Al arrancar, la app valida, limpia y migra lo guardado. <strong>Exportar</strong> e <strong>Importar</strong> pasan los datos a un archivo JSON y de vuelta. Las reglas, con sus identificadores, están en <a href="../spec/08-storage.md"><code>docs/spec/08-storage.md</code></a>. Si esta página y ese archivo no coinciden, manda el archivo.</p>
+<p>La app guarda las listas, las recetas y el menú en el <code>localStorage</code> del teléfono. Cada cambio se guarda al momento. Al arrancar, la app valida, limpia y migra lo guardado. <strong>Exportar</strong> e <strong>Importar</strong> pasan los datos a un archivo JSON y de vuelta. Con una sesión, la sincronización copia los mismos datos a la cuenta; sus reglas están en <a href="../spec/18-account-sync.md"><code>docs/spec/18-account-sync.md</code></a>. Las reglas de esta página, con sus identificadores, están en <a href="../spec/08-storage.md"><code>docs/spec/08-storage.md</code></a>. Si esta página y ese archivo no coinciden, manda el archivo.</p>
 
 <h2 id="fuera-de-alcance">Fuera de alcance</h2>
 <ul>
-  <li>No hay copia de seguridad automática. Exportar antes de borrar los datos del sitio es la única protección (<a href="../spec/08-storage.md">08-storage.md, Limits</a>).</li>
+  <li>No hay copia de seguridad automática. Sin cuenta, exportar antes de borrar los datos del sitio es la única protección (<a href="../spec/08-storage.md">08-storage.md, Limits</a>).</li>
   <li>Importar sustituye el estado entero; no mezcla dos estados (BACKUP-5).</li>
-  <li>No hay sincronización entre pestañas ni entre dispositivos. Gana la última pestaña que escribe (STORE-11).</li>
-  <li>La copia no lleva las preferencias del dispositivo: idioma, mano, tema, densidad, <strong>Al terminar la compra</strong> ni el recorrido inicial (BACKUP-2).</li>
+  <li>No hay sincronización entre pestañas. Gana la última pestaña que escribe (STORE-11). La sincronización entre dispositivos es de la cuenta (<a href="../spec/18-account-sync.md">18-account-sync.md</a>).</li>
+  <li>La copia no lleva las preferencias del dispositivo: idioma, mano, tema, densidad, <strong>Al terminar la compra</strong>, la fila de listas por tienda, el recorrido inicial ni la demostración del deslizamiento (BACKUP-2).</li>
+  <li>El paso de <code>localStorage</code> a IndexedDB está abierto (<a href="../spec/08-storage.md">08-storage.md, Limits</a>).</li>
 </ul>
 
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="keys">Claves guardadas</h3>
-<p>El estado está en <code>localStorage</code>, bajo una clave. Cada preferencia del dispositivo tiene su propia clave, y una preferencia con el valor por defecto borra su clave (<code>src/storage.js:421</code>, tabla de claves de <code>08-storage.md</code>). El <code>v1</code> de la clave es la versión de la clave; el estado tiene su propio campo <code>version</code>.</p>
+<p>El estado está en <code>localStorage</code>, bajo una clave. Cada preferencia del dispositivo, la sesión, la sincronización y el espacio compartido tienen su propia clave (tabla de claves de <code>08-storage.md</code>, <code>APP_KEYS</code> en <code>src/storage.js:506</code>). Una preferencia con el valor por defecto borra su clave. El <code>v1</code> de la clave es la versión de la clave; el estado tiene su propio campo <code>version</code>.</p>
 <div class="tablewrap"><table data-plain>
-  <thead><tr><th>Clave</th><th>Contenido</th></tr></thead>
+  <thead><tr><th>Almacén</th><th>Clave</th><th>Contenido</th></tr></thead>
   <tbody>
-    <tr><td><code>shopping.v1</code></td><td>El estado, en JSON</td></tr>
-    <tr><td><code>shopping.v1.corrupt</code></td><td>El último texto guardado que no era un estado válido</td></tr>
-    <tr><td><code>shopping.lang</code></td><td>El idioma elegido</td></tr>
-    <tr><td><code>shopping.hand</code></td><td><code>left</code> con <strong>Izquierda</strong></td></tr>
-    <tr><td><code>shopping.theme</code></td><td><code>light</code> o <code>dark</code> con <strong>Claro</strong> u <strong>Oscuro</strong></td></tr>
-    <tr><td><code>shopping.density</code></td><td><code>compact</code> con <strong>Compacta</strong></td></tr>
-    <tr><td><code>shopping.tripEnd</code></td><td><code>save</code> con <strong>Descartar</strong></td></tr>
-    <tr><td><code>shopping.shopLists</code></td><td><code>hide</code> con la fila de listas por tienda oculta</td></tr>
-    <tr><td><code>shopping.swipeHint</code></td><td><code>1</code> después de la primera demostración del deslizamiento</td></tr>
-    <tr><td><code>shopping.onboarded</code></td><td><code>1</code> después de cerrar el recorrido inicial</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.v1</code></td><td>El estado, en JSON</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.v1.corrupt</code></td><td>El último texto guardado que no era un estado válido</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.lang</code></td><td>El idioma elegido</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.hand</code></td><td><code>left</code> con <strong>Izquierda</strong> (NAV-12)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.theme</code></td><td><code>light</code> o <code>dark</code> con <strong>Claro</strong> u <strong>Oscuro</strong> (NAV-17)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.density</code></td><td><code>compact</code> con <strong>Compacta</strong> (NAV-21)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.tripEnd</code></td><td><code>save</code> con <strong>Descartar</strong> (TRIP-8)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.twinReach</code></td><td><code>both</code> cuando un miembro elige <strong>Las dos</strong> para un artículo de las dos listas (SHARE-16)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.shopLists</code></td><td><code>hide</code> con la fila de listas por tienda oculta (SHOP-25)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.swipeHint</code></td><td><code>1</code> después de la primera demostración del deslizamiento (ROW-14)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.onboarded</code></td><td><code>1</code> después de cerrar el recorrido inicial (ONB-7)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.seen-version</code></td><td>La versión más nueva cuyas novedades vio el usuario (VER-20)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.session</code></td><td>El token y el usuario de la cuenta (ACC-6)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.sync</code></td><td>El espacio, la última lista de comparticiones, el último cursor y el último estado conocido del servidor (SYNC-2, SYNC-4, SHARE-6)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.queue</code></td><td>Los cambios sin enviar al servidor (SYNC-2)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.v1.beforeLogin</code></td><td>El estado local que sustituyó un primer inicio de sesión (SYNC-8)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.offline</code></td><td><code>1</code> cuando el dispositivo funciona sin cuenta (ACC-13)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.shared.v1</code></td><td>El estado del espacio compartido de un miembro, en JSON, junto a <code>shopping.v1</code> (SHARE-12)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.shared.sync</code></td><td>El estado de sincronización del espacio compartido y el <code>scope</code> de su compartición (SHARE-12)</td></tr>
+    <tr><td><code>localStorage</code></td><td><code>shopping.shared.queue</code></td><td>Los cambios del espacio compartido sin enviar al servidor (SHARE-12)</td></tr>
+    <tr><td><code>sessionStorage</code></td><td><code>shopping.oauth</code></td><td>El estado y el verificador de un inicio de sesión con Google, desde la redirección hasta la vuelta (ACC-5)</td></tr>
+    <tr><td>Cache API</td><td><code>shopping-shell-v53</code></td><td>El paquete de la app (<a href="offline-version.html">Uso sin conexión y versión</a>)</td></tr>
+    <tr><td>Cache API</td><td><code>shopping-manifest</code></td><td>El nombre, la descripción y los nombres de los accesos directos del manifiesto en el idioma de la pantalla (SW-13)</td></tr>
   </tbody>
 </table></div>
 
 <h3 id="load-save">Carga y guardado</h3>
-<p>La app lee el estado una vez, al arrancar, antes de pintar nada. Sin estado guardado empieza con el estado vacío (STORE-1). Cada cambio escribe el estado entero al momento, en la misma tarea que el cambio (STORE-2). La pantalla muestra siempre el estado en memoria (STORE-3). En cada arranque la app pide almacenamiento persistente al navegador e ignora la respuesta (STORE-4).</p>
+<p>La app lee el estado una vez, al arrancar, antes de pintar nada. Sin estado guardado empieza con el estado vacío (STORE-1). Cada cambio escribe el estado entero al momento, en la misma tarea que el cambio (STORE-2). La pantalla muestra siempre el estado en memoria (STORE-3). En cada arranque la app pide almacenamiento persistente al navegador e ignora la respuesta (STORE-4, <code>src/app.js:472</code>).</p>
 
 <h3 id="validation">Validación</h3>
-<p>La app solo usa un estado guardado válido. Si no lo es, copia el texto a <code>shopping.v1.corrupt</code> y empieza con el estado vacío; el primer cambio sustituye <code>shopping.v1</code> (STORE-5). Un estado no es válido cuando ocurre una de estas cosas (STORE-6):</p>
+<p>La app solo usa un estado guardado válido. Si no lo es, copia el texto a <code>shopping.v1.corrupt</code> y empieza con el estado vacío; el primer cambio sustituye <code>shopping.v1</code>. Con una sesión, la sincronización vuelve a traer la cuenta entera (STORE-5, ACC-1). Un estado no es válido cuando ocurre una de estas cosas (STORE-6):</p>
 <ul>
-  <li>no es un objeto, su <code>version</code> no es de 1 a 9, o <code>items</code> no es una lista;</li>
-  <li><code>recipes</code> no es una lista, en las versiones 2 a 9;</li>
-  <li>un artículo no tiene <code>id</code> de texto o nombre, su <code>list</code> no es <code>active</code>, <code>saved</code> ni <code>next</code>, <code>recurrent</code> o <code>bought</code> no es booleano, o tiene un <code>again</code> que no es booleano;</li>
-  <li>una receta no tiene <code>id</code> de texto o nombre, o tiene un producto vacío, que no es texto o repetido sin distinguir mayúsculas;</li>
+  <li>no es un objeto, su <code>version</code> no es el número 1 a 10 (el texto <code>"9"</code> no vale), o <code>items</code> no es una lista;</li>
+  <li><code>recipes</code> no es una lista, en las versiones 2 a 10;</li>
+  <li>un artículo no tiene <code>id</code> de texto no vacío o nombre, su <code>list</code> no es <code>active</code>, <code>saved</code>, <code>postponed</code> ni el antiguo <code>next</code>, <code>recurrent</code> o <code>bought</code> no es booleano, o tiene un <code>again</code> que no es booleano;</li>
+  <li>una receta no tiene <code>id</code> de texto no vacío o nombre, su <code>products</code> no es una lista, o tiene un producto vacío, que no es texto o repetido;</li>
   <li>dos artículos o dos recetas tienen el mismo <code>id</code> o el mismo nombre sin distinguir mayúsculas (DATA-2 a DATA-4).</li>
 </ul>
 
 <h3 id="cleanup">Limpieza al leer</h3>
-<p>Un estado válido se limpia al leerlo, sin error (STORE-7). Los nombres pierden los espacios de los extremos. Un artículo guardado no está marcado. Una <code>quantity</code> que no es texto pasa a <code>''</code>. Las tiendas y las secciones pierden las entradas vacías, las que no son texto y las repetidas sin distinguir mayúsculas. La sección de un artículo que no está en <code>aisles</code> pasa a <code>''</code>, y una que sí está toma la escritura de <code>aisles</code>. Cada tienda toma la escritura de su primer uso. Un enlace de receta que no es una dirección web válida pasa a <code>''</code> (REC-14). <code>sent</code> pierde los ids desconocidos, repetidos o que no son texto. El menú pierde las comidas con un día, comida o receta desconocidos, los platos vacíos o de más de 80 caracteres, los platos con receta y el segundo registro de una comida; el resto queda en orden de día y comida. Un <code>group</code> desconocido se deduce de <code>grouped</code>, un <code>sort</code> desconocido pasa a <code>custom</code>, y los campos desconocidos desaparecen.</p>
+<p>Un estado válido se limpia al leerlo, sin error (STORE-7). Los nombres pierden los espacios de los extremos. Un artículo guardado o aplazado no está marcado. Una <code>quantity</code> que no es texto pasa a <code>''</code>. Las tiendas y las secciones pierden las entradas vacías, las que no son texto y las repetidas. La sección de un artículo que no está en <code>aisles</code> pasa a <code>''</code>, y una que sí está toma la escritura de <code>aisles</code>. Cada tienda toma la escritura de su primer uso. Un enlace de receta que no es una dirección web válida pasa a <code>''</code> (REC-14). <code>sent</code> pierde los ids desconocidos, repetidos o que no son texto. El menú pierde las comidas con un día, comida o receta desconocidos, los platos vacíos o de más de 80 caracteres, los platos con receta y el segundo registro de una comida; el resto queda en orden de día y comida. Un <code>group</code> desconocido se deduce de <code>grouped</code>, un <code>sort</code> desconocido pasa a <code>custom</code>, y los campos desconocidos desaparecen.</p>
 
 <h3 id="migration">Migración</h3>
-<p>Un estado antiguo se migra al leerlo y se guarda como versión 9 en el siguiente cambio (STORE-8). La versión 1 recibe <code>recipes: []</code> y <code>sent: []</code>. Las versiones 1 y 2 pasan <code>grouped</code> a <code>group</code>, dan <code>shops: []</code> a cada artículo y <code>sort: 'custom'</code> si falta. Hasta la versión 3 se añade <code>menu: []</code>; hasta la 4, <code>quantity: ''</code>; hasta la 6, <code>aisles: []</code> y <code>aisle: ''</code>. Un artículo de <code>list: 'next'</code>, o uno puntual marcado con <code>again: true</code>, pasa a <code>Compra</code> sin marcar, y todos pierden <code>again</code>. El paso a la versión 6 (la lista de guardados) y a la 9 (el plato de una comida) no cambia datos.</p>
+<p>Un estado antiguo se migra al leerlo y se guarda como versión 10 en el siguiente cambio (STORE-8). La versión 1 recibe <code>recipes: []</code> y <code>sent: []</code>. Las versiones 1 y 2 pasan <code>grouped</code> a <code>group</code>, dan <code>shops: []</code> a cada artículo y <code>sort: 'custom'</code> si falta. Hasta la versión 3 se añade <code>menu: []</code>; hasta la 4, <code>quantity: ''</code>; hasta la 6, <code>aisles: []</code> y <code>aisle: ''</code>. Un artículo de <code>list: 'next'</code>, o uno puntual marcado con <code>again: true</code>, pasa a <code>Compra</code> sin marcar, y todos pierden <code>again</code>. Hasta la versión 9, cada comida recibe <code>week</code>: el lunes de la semana de la carga (MENU-1); una comida con un <code>week</code> que no es un lunes <code>AAAA-MM-DD</code> desaparece. El paso a la versión 6 (la lista de guardados) y a la 9 (el plato de una comida) no cambia datos.</p>
 
 <h3 id="failures">Fallos</h3>
 <p>Si una escritura falla, el cambio se queda en memoria y en pantalla, y el mensaje es <code>El cambio no se ha guardado: el almacenamiento no está disponible.</code> (STORE-9, MSG-8). Sin <code>localStorage</code>, la app funciona en memoria y lo dice al arrancar: <code>El almacenamiento no está disponible: los cambios no se guardan.</code> Una elección de idioma, mano, tema, densidad o <strong>Al terminar la compra</strong> dura entonces hasta cerrar la app, y el recorrido inicial solo se abre desde <code>Ajustes</code> (STORE-10, ONB-8). La app no lee los cambios de otra pestaña (STORE-11).</p>
 
 <h3 id="backup">Exportar e importar</h3>
-<p><strong>Exportar</strong>, en el grupo <code>Copia de seguridad</code> de <code>Ajustes</code>, descarga <code>compra-AAAA-MM-DD-HHMMSS.json</code> con la fecha y la hora locales. El contenido es el estado en JSON, con sangría de 2 espacios (BACKUP-1): artículos con sus tiendas, recetas, <code>sent</code>, <code>group</code>, <code>sort</code> y el menú (BACKUP-2). <strong>Importar</strong> abre la elección de un archivo JSON. Un archivo que no es JSON da <code>El archivo no es un JSON válido.</code> y un JSON que no es un estado válido da <code>El archivo no es una copia de seguridad de la lista.</code> (BACKUP-3). Un archivo válido se limpia y se migra como un estado guardado, así que se aceptan copias de las versiones 1 a 9 (BACKUP-4). Antes de importar, la app pregunta <code>¿Sustituir los datos actuales por los de la copia (N artículos y N recetas)?</code> Un sí sustituye el estado entero (BACKUP-5). El mensaje es <code>Copia importada.</code>, con <code>Deshacer</code> (BACKUP-6).</p>
+<p><strong>Exportar</strong>, en el grupo <code>Copia de seguridad</code> de <code>Ajustes</code>, descarga <code>compra-AAAA-MM-DD-HHMMSS.json</code> con la fecha y la hora locales. El contenido es el estado en JSON, con sangría de 2 espacios (BACKUP-1): artículos con sus tiendas, cantidad y sección, recetas, <code>sent</code>, <code>group</code>, <code>sort</code>, el menú y las secciones (BACKUP-2). Para un miembro de una lista compartida, la copia lleva solo la parte propia (SYNC-9, <code>src/ui/settings.js:154</code>).</p>
+<p><strong>Importar</strong> abre la elección de un archivo JSON. Un archivo que no es JSON da <code>El archivo no es un JSON válido.</code> y un JSON que no es un estado válido da <code>El archivo no es una copia de seguridad de la lista.</code> (BACKUP-3). Un archivo válido se limpia y se migra como un estado guardado, así que se aceptan copias de las versiones 1 a 9 (BACKUP-4). Antes de importar, la app pregunta <code>¿Sustituir los datos actuales por los de la copia (N artículos y N recetas)?</code> Un sí sustituye el estado entero. Con una sesión, la pregunta es <code>¿Sustituir los datos de tu cuenta por los de la copia (N artículos y N recetas)? Se sustituyen en todos tus dispositivos.</code>, y un sí sustituye los datos de la cuenta en todos los dispositivos (BACKUP-5, SYNC-9). El mensaje es <code>Copia importada.</code>, con <code>Deshacer</code> (BACKUP-6).</p>
 
 <h3 id="reset">Borrar todos los datos</h3>
-<p><strong>Borrar todos los datos</strong> pregunta <code>¿Borrar todos los datos? Se borran las listas, las recetas, el menú, las secciones y las preferencias. Exporta una copia antes si quieres conservarlos.</code> Un sí borra cada clave de la tabla y carga la app de nuevo, que arranca como una instalación nueva, con el recorrido inicial (ONB-7). No tiene <code>Deshacer</code>. Si el borrado falla, el mensaje es <code>No se pudieron borrar los datos.</code> y nada más cambia. Las cachés del paquete se quedan (BACKUP-7).</p>
+<p><strong>Borrar todos los datos</strong> pregunta <code>¿Borrar todos los datos? Se borran las listas, las recetas, el menú, las secciones y las preferencias. Exporta una copia antes si quieres conservarlos.</code> Un sí borra cada clave de <code>localStorage</code> de la tabla y carga la app de nuevo, que arranca como una instalación nueva, con el recorrido inicial (ONB-7). No tiene <code>Deshacer</code>. Si el borrado falla, el mensaje es <code>No se pudieron borrar los datos.</code> y nada más cambia. Las cachés se quedan (BACKUP-7).</p>
+<p>Con una sesión, la pregunta es <code>¿Borrar los datos de este dispositivo? Se borran las listas, las recetas, el menú, las secciones y las preferencias, y se cierra la sesión. Los datos de tu cuenta se conservan en el servidor.</code> Un sí también cierra la sesión (SYNC-10). Antes de borrar, la app para la sincronización, para que una sincronización en curso no vuelva a guardar las claves de la cuenta (BACKUP-7, <code>src/ui/settings.js:169</code>).</p>
 
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
-  <li><strong>Un estado guardado roto.</strong> La app arranca vacía y sin mensaje. El texto roto queda en <code>shopping.v1.corrupt</code> hasta el siguiente estado roto o hasta <strong>Borrar todos los datos</strong> (STORE-5, BACKUP-7).</li>
-  <li><strong>Un estado de una versión futura.</strong> Una <code>version</code> mayor que 9 no es válida: la app arranca vacía, e <strong>Importar</strong> da <code>El archivo no es una copia de seguridad de la lista.</code> (STORE-6, BACKUP-3).</li>
+  <li><strong>Un estado guardado roto.</strong> La app arranca vacía y sin mensaje. El texto roto queda en <code>shopping.v1.corrupt</code> hasta el siguiente estado roto o hasta <strong>Borrar todos los datos</strong>. Con una sesión, la sincronización trae la cuenta otra vez (STORE-5, BACKUP-7, ACC-1).</li>
+  <li><strong>Un estado de una versión futura.</strong> Una <code>version</code> mayor que 10 no es válida: la app arranca vacía, e <strong>Importar</strong> da <code>El archivo no es una copia de seguridad de la lista.</code> (STORE-6, BACKUP-3).</li>
   <li><strong>Una entrada mala en tiendas, secciones, <code>sent</code> o menú.</strong> Desaparece y el estado sigue siendo válido. Un artículo o una receta malos invalidan el estado entero (STORE-6, STORE-7).</li>
-  <li><strong>Importar con el almacenamiento lleno.</strong> El estado importado se queda en pantalla y el mensaje es <code>El cambio no se ha guardado: el almacenamiento no está disponible.</code>, sin <code>Deshacer</code> (STORE-9, <code>src/ui/context.js:222</code>).</li>
+  <li><strong>Importar con el almacenamiento lleno.</strong> El estado importado se queda en pantalla y el mensaje es <code>El cambio no se ha guardado: el almacenamiento no está disponible.</code>, sin <code>Deshacer</code> (STORE-9, <code>src/ui/context.js:336</code>).</li>
   <li><strong>Dos exportaciones en el mismo segundo.</strong> Las dos tienen el mismo nombre de archivo; el nombre llega al segundo (BACKUP-1).</li>
-  <li><strong>Una preferencia que no se puede guardar.</strong> El cambio se aplica en pantalla y no aparece ningún mensaje (<code>src/ui/context.js:237</code>).</li>
-  <li><strong>Borrar todos los datos sin <code>localStorage</code>.</strong> La app solo se carga de nuevo; los datos estaban solo en memoria (<code>src/ui/settings.js:172</code>).</li>
-  <li><strong>Clear site data o desinstalar la app.</strong> Borra las listas. Solo una exportación previa las conserva (<a href="../spec/08-storage.md">08-storage.md, Loss of data</a>, VER-16).</li>
+  <li><strong>Una preferencia que no se puede guardar.</strong> El cambio se aplica en pantalla y no aparece ningún mensaje (<code>src/ui/context.js:349</code>).</li>
+  <li><strong>Borrar todos los datos sin <code>localStorage</code>.</strong> La app solo se carga de nuevo; los datos estaban solo en memoria (<code>src/ui/settings.js:170</code>).</li>
+  <li><strong>Clear site data o desinstalar la app.</strong> Borra los datos del dispositivo. Sin cuenta, solo una exportación previa los conserva (<a href="../spec/08-storage.md">08-storage.md, Loss of data</a>, VER-16).</li>
 </ul>
 
 <h2 id="limites-operativos">Límites operativos</h2>
 <ul>
-  <li>Versiones del estado que se leen: 1 a 9. La app escribe siempre la versión 9 (STORE-6, STORE-8).</li>
+  <li>Versiones del estado que se leen: 1 a 10. La app escribe siempre la versión 10 (STORE-6, STORE-8).</li>
   <li>El tamaño del estado lo limita la cuota de <code>localStorage</code> del navegador; la app no fija ningún límite propio. Pasar la cuota es un fallo de escritura (STORE-9).</li>
   <li>Un plato de una comida tiene 80 caracteres como mucho (STORE-7, <code>src/storage.js:112</code>).</li>
   <li>Una copia de seguridad es un único archivo JSON con el estado entero (BACKUP-1).</li>
 </ul>
 
 <h2 id="dependencias">Dependencias</h2>
-<p>El estado vacío viene de <code>emptyState</code> de <code>src/store.js</code>. La validación del enlace de receta usa <code>isWebUrl</code> de <code>src/recipes.js</code> (REC-14), y la del menú usa los días y las comidas de <code>src/menu.js</code> (MENU-1). Una versión nueva del estado que un módulo antiguo no sabe leer necesita un nombre de caché nuevo en <code>sw.js</code> (<a href="offline-version.html">Uso sin conexión y versión</a>, SW-10).</p>
+<p>El estado vacío viene de <code>emptyState</code> de <code>src/store.js</code>. La validación del enlace de receta usa <code>isWebUrl</code> de <code>src/recipes.js</code> (REC-14), y la del menú usa los días, las comidas y las semanas de <code>src/menu.js</code> (MENU-1). La sincronización (<code>src/syncer.js</code>) lee y escribe las claves de la sesión, de la cola y del espacio compartido (<a href="../spec/18-account-sync.md">18-account-sync.md</a>, <a href="../spec/19-sharing.md">19-sharing.md</a>). Una versión nueva del estado que un módulo antiguo no sabe leer necesita un nombre de caché nuevo en <code>sw.js</code> (<a href="offline-version.html">Uso sin conexión y versión</a>, SW-10).</p>
 
 <h2 id="decisiones">Decisiones</h2>
 <div class="tablewrap"><table class="decisions" data-plain>
@@ -616,7 +632,10 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     <tr><td>Versión 6: la lista de guardados</td><td><a href="../superpowers/specs/2026-10-16-saved-items-design.md">Saved items — design</a></td></tr>
     <tr><td>Versión 7: las secciones de la tienda</td><td><a href="../superpowers/specs/2026-10-16-aisles-design.md">Aisles — design</a></td></tr>
     <tr><td>Versión 9: el plato de una comida; una app antigua rechaza la copia en lugar de perder los platos</td><td><a href="../superpowers/specs/2026-10-19-menu-dishes-design.md">Dishes in Menú — design</a></td></tr>
-    <tr><td>Sin copia automática, sin sincronización; el paso a IndexedDB está abierto</td><td><a href="../spec/08-storage.md">08-storage.md, Limits</a></td></tr>
+    <tr><td>Versión 10: cada comida tiene la semana de su lunes</td><td><a href="../superpowers/specs/2026-11-03-menu-history-design.md">Menu history — design</a></td></tr>
+    <tr><td>Con una sesión, los datos se sincronizan con la cuenta; Importar y Borrar actúan sobre la cuenta o sobre el dispositivo</td><td><a href="../superpowers/specs/2026-10-24-account-sync-deploy-design.md">Account sync — design</a></td></tr>
+    <tr><td>El espacio compartido de un miembro tiene sus propias claves, junto al estado propio</td><td><a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md">Separate shared lists — design</a></td></tr>
+    <tr><td>Sin copia automática ni sincronización entre pestañas; el paso a IndexedDB está abierto</td><td><a href="../spec/08-storage.md">08-storage.md, Limits</a></td></tr>
   </tbody>
 </table></div>
 
@@ -624,24 +643,28 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td>Datos en el teléfono «sin servidor ni cuenta» y «sin sincronización entre dispositivos» → con una sesión, los datos también están en la cuenta; Importar sustituye la cuenta y Borrar todos los datos cierra la sesión; un estado roto vuelve a traer la cuenta (STORE-5, BACKUP-5, BACKUP-7)</td><td><a href="../superpowers/specs/2026-10-24-account-sync-deploy-design.md">Account sync — design</a>; <a href="../spec/18-account-sync.md">18-account-sync.md</a></td></tr>
+    <tr><td>2026-11-13</td><td>Tabla de claves: 10 claves de <code>localStorage</code> → 20 claves de <code>localStorage</code> (versión vista, sesión, sincronización, espacio compartido, <code>twinReach</code>, modo sin cuenta), <code>shopping.oauth</code> de <code>sessionStorage</code> y 2 cachés</td><td><a href="../spec/08-storage.md">08-storage.md, Keys</a></td></tr>
+    <tr><td>2026-11-13</td><td>Versión del estado 9 → 10: cada comida tiene <code>week</code>; se leen las versiones 1 a 10 (STORE-6, STORE-8)</td><td><a href="../superpowers/specs/2026-11-03-menu-history-design.md">Menu history — design</a></td></tr>
+    <tr><td>2026-11-13</td><td>Valores válidos de <code>list</code>: <code>active</code>, <code>saved</code>, <code>next</code> → <code>active</code>, <code>saved</code>, <code>postponed</code> y el antiguo <code>next</code> (STORE-6)</td><td>La lista de aplazados (LIST-40)</td></tr>
+    <tr><td>2026-11-13</td><td>Contenido de la copia: sin secciones nombradas → con cantidad, sección y <code>aisles</code>; para un miembro, solo la parte propia (BACKUP-2, SYNC-9)</td><td><a href="../spec/08-storage.md">08-storage.md, BACKUP-2</a></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
   </tbody>
 </table></div>
 
 <h2 id="fuentes">Fuentes</h2>
 <ul>
-  <li><b>Reglas</b> <a href="../spec/08-storage.md"><code>docs/spec/08-storage.md</code></a> (STORE-1 a STORE-11, BACKUP-1 a BACKUP-7), <a href="../spec/02-data-model.md"><code>docs/spec/02-data-model.md</code></a> (DATA-2 a DATA-4), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (MSG-8, ONB-7, ONB-8)</li>
-  <li><b>Código</b> <code>src/storage.js</code>, <code>src/store.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>src/app.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-shopping-list-pwa-design.md"><code>docs/superpowers/specs/2026-10-12-shopping-list-pwa-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-trip-end-choice-design.md"><code>docs/superpowers/specs/2026-10-16-trip-end-choice-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-saved-items-design.md"><code>docs/superpowers/specs/2026-10-16-saved-items-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-aisles-design.md"><code>docs/superpowers/specs/2026-10-16-aisles-design.md</code></a>, <a href="../superpowers/specs/2026-10-19-menu-dishes-design.md"><code>docs/superpowers/specs/2026-10-19-menu-dishes-design.md</code></a></li>
-  <li><b>Commit</b> <code>main</code> @ <code>892bbee</code>, leído el 2026-10-23</li>
-  <li><b>Ejecutado</b> <code>npm test</code>: 602 tests, 602 correctos. Sin comprobación en el navegador; el resto se ha leído del código</li>
+  <li><b>Reglas</b> <a href="../spec/08-storage.md"><code>docs/spec/08-storage.md</code></a> (STORE-1 a STORE-11, BACKUP-1 a BACKUP-7), <a href="../spec/02-data-model.md"><code>docs/spec/02-data-model.md</code></a> (DATA-2 a DATA-4), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (MSG-8, ONB-7, ONB-8), <a href="../spec/18-account-sync.md"><code>docs/spec/18-account-sync.md</code></a> (ACC-1, SYNC-9, SYNC-10), <a href="../spec/19-sharing.md"><code>docs/spec/19-sharing.md</code></a> (SHARE-12)</li>
+  <li><b>Código</b> <code>src/storage.js</code>, <code>src/store.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>src/ui/account.js</code>, <code>src/syncer.js</code>, <code>src/app.js</code>, <code>index.html</code>, <code>sw.js</code>, <code>src/locales/es.js</code></li>
+  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-shopping-list-pwa-design.md"><code>docs/superpowers/specs/2026-10-12-shopping-list-pwa-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-trip-end-choice-design.md"><code>docs/superpowers/specs/2026-10-16-trip-end-choice-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-saved-items-design.md"><code>docs/superpowers/specs/2026-10-16-saved-items-design.md</code></a>, <a href="../superpowers/specs/2026-10-16-aisles-design.md"><code>docs/superpowers/specs/2026-10-16-aisles-design.md</code></a>, <a href="../superpowers/specs/2026-10-19-menu-dishes-design.md"><code>docs/superpowers/specs/2026-10-19-menu-dishes-design.md</code></a>, <a href="../superpowers/specs/2026-11-03-menu-history-design.md"><code>docs/superpowers/specs/2026-11-03-menu-history-design.md</code></a>, <a href="../superpowers/specs/2026-10-24-account-sync-deploy-design.md"><code>docs/superpowers/specs/2026-10-24-account-sync-deploy-design.md</code></a>, <a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md"><code>docs/superpowers/specs/2026-10-25-separate-shared-lists-design.md</code></a></li>
+  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos. Sin comprobación en el navegador; el resto se ha leído del código</li>
   <li><b>Abierto</b>
     <ul>
-      <li>BACKUP-2 no nombra <code>aisles</code> ni <code>version</code>, pero la copia lleva el estado entero, con los dos campos (<code>exportJson</code> de <code>src/storage.js</code>).</li>
-      <li>STORE-8 limita a las versiones 1 a 7 el paso de <code>list: 'next'</code> y de <code>again: true</code> a <code>Compra</code>. El código lo hace en cualquier versión, 8 y 9 incluidas (<code>src/storage.js:45</code>).</li>
-      <li>STORE-7 dice que una tienda repetida desaparece; el código compara sin distinguir mayúsculas, como en las secciones.</li>
-      <li>Sin regla: una preferencia que no se puede guardar no da mensaje (<code>src/ui/context.js:237</code>).</li>
-      <li>Sin regla: <strong>Borrar todos los datos</strong> sin <code>localStorage</code> solo carga la app de nuevo (<code>src/ui/settings.js:172</code>).</li>
+      <li>STORE-8 limita a las versiones 1 a 7 el paso de <code>list: 'next'</code> y de <code>again: true</code> a <code>Compra</code>. El código lo hace en cualquier versión, de la 8 a la 10 incluidas (<code>src/storage.js:45</code>).</li>
+      <li>STORE-7 dice que una tienda repetida desaparece; el código compara sin distinguir mayúsculas, como en las secciones (<code>src/storage.js:20</code>).</li>
+      <li>Sin regla: una preferencia que no se puede guardar no da mensaje (<code>src/ui/context.js:349</code>).</li>
+      <li>Sin regla: <strong>Borrar todos los datos</strong> sin <code>localStorage</code> solo carga la app de nuevo (<code>src/ui/settings.js:170</code>).</li>
     </ul>
   </li>
 </ul>
