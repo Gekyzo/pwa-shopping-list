@@ -528,7 +528,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 </header>
 
 <h2 id="proposito">Propósito</h2>
-<p>La app tiene una sola dirección: <code>https://bodega.polarisworks.duckdns.org/</code> (VER-9). La app no tiene pantalla de traslado desde la dirección antigua ni importación de una copia trasladada. Las ocho reglas de <a href="../spec/20-address.md"><code>docs/spec/20-address.md</code></a> están retiradas y conservan solo su identificador. Si esta página y ese archivo no coinciden, manda el archivo.</p>
+<p>La dirección de la app es <code>https://bodega.polarisworks.duckdns.org/</code>. La dirección antigua <code>https://bodega.artisandevs.duckdns.org/</code> sirve los mismos archivos hasta su retirada (VER-9). La app no tiene pantalla de traslado desde la dirección antigua ni importación de una copia trasladada. Las ocho reglas de <a href="../spec/20-address.md"><code>docs/spec/20-address.md</code></a> están retiradas y conservan solo su identificador. Si esta página y ese archivo no coinciden, manda el archivo.</p>
 
 <h2 id="fuera-de-alcance">Fuera de alcance</h2>
 <ul>
@@ -539,7 +539,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="direccion">La dirección de la app</h3>
-<p>La app es un sitio estático servido por HTTPS en <code>https://bodega.polarisworks.duckdns.org/</code>. Caddy, en pwa-server, sirve esa dirección desde el sitio de GitHub Pages <code>https://polaris-works.github.io/shopping-list/</code> (VER-9). Las reglas ADDR-1 a ADDR-8 están retiradas: la app no tiene código de traslado. En cualquier host que no sea local, la app llama a la API en <code>https://api.polarisworks.duckdns.org</code> (ACC-12, <code>src/config.js:7</code>).</p>
+<p>La app es un sitio estático servido por HTTPS en <code>https://bodega.polarisworks.duckdns.org/</code>. Caddy, en pwa-server, sirve esa dirección desde el sitio de GitHub Pages <code>https://polaris-works.github.io/shopping-list/</code> (VER-9). La dirección antigua <code>https://bodega.artisandevs.duckdns.org/</code> sirve los mismos archivos, sin redirección y con su propio almacenamiento, hasta su retirada (VER-9). Las reglas ADDR-1 a ADDR-8 están retiradas: la app no tiene código de traslado. El usuario lleva sus datos a la dirección nueva al iniciar sesión (ACC-1) o con <strong>Exportar</strong> e <strong>Importar</strong> (BACKUP-1). En cualquier host que no sea local, la app llama a la API en <code>https://api.polarisworks.duckdns.org</code> (ACC-12, <code>src/config.js:7</code>).</p>
 
 <h2 id="dependencias">Dependencias</h2>
 <p>La dirección depende de Caddy en pwa-server y de GitHub Pages (VER-9). La app Android abre la misma dirección (INS-5). Si la dirección no responde, una app ya instalada funciona sin conexión con su caché (SW-2, SW-6).</p>
@@ -557,6 +557,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td>La dirección antigua: «no sirve la app» → sirve los mismos archivos en paralelo hasta su retirada (VER-9)</td><td><code>20-address.md</code> se alinea con VER-9; comprobado con una petición a la dirección antigua</td></tr>
     <tr><td>2026-11-13</td><td>Especificación inicial</td><td>—</td></tr>
   </tbody>
 </table></div>
@@ -566,13 +567,9 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><b>Reglas</b> <a href="../spec/20-address.md"><code>docs/spec/20-address.md</code></a> (ADDR-1 a ADDR-8); <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (VER-9, SW-2, SW-6); referencias a ACC-12, INS-5, BACKUP-5</li>
   <li><b>Código</b> <code>src/config.js</code>; búsqueda en <code>src/</code>, <code>index.html</code>, <code>sw.js</code> y <code>manifest.webmanifest</code> sin resultados para <code>ADDR-</code>, <code>move</code> ni la dirección antigua</li>
   <li><b>Registros</b> <a href="../../CHANGELOG.md"><code>CHANGELOG.md</code></a> (1.13.4, 1.13.6)</li>
-  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
-  <li><b>Ejecutado</b> solo <code>grep</code> sobre el código; ni tests ni comprobación en el navegador</li>
-  <li><b>Abierto</b>
-    <ul>
-      <li><code>docs/spec/20-address.md</code> dice que la dirección antigua <code>bodega.artisandevs.duckdns.org</code> no sirve la app. VER-9 y la entrada 1.13.6 de <code>CHANGELOG.md</code> dicen que la sirve en paralelo, sin redirección, hasta su retirada. Confirmar con el administrador qué texto vale y alinear el otro.</li>
-    </ul>
-  </li>
+  <li><b>Commit</b> <code>main</code> @ <code>29efa93</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>grep</code> sobre el código; el 2026-11-13, una petición a <code>https://bodega.artisandevs.duckdns.org/version.json</code> devuelve 200 y la versión 1.13.6; ni tests ni comprobación en el navegador</li>
+  <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>
 </div>
