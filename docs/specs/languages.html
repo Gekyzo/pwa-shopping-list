@@ -522,7 +522,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <span><b>Estado</b> en uso</span>
   <span><b>Responsable</b> Polaris Works</span>
   <span><b>Código</b> <code>src/i18n.js</code>, <code>src/locales/</code>, <code>src/ui/settings.js</code>, <code>src/ui/context.js</code>, <code>tests/i18n.test.js</code></span>
-  <span><b>Reglas</b> <a href="../spec/09-languages.md">LANG-1 a LANG-18</a></span>
+  <span><b>Reglas</b> <a href="../spec/09-languages.md">LANG-1 a LANG-19</a></span>
 </p>
 
 <h2 id="proposito">Propósito</h2>
@@ -561,7 +561,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><strong>Un teléfono en un idioma sin catálogo.</strong> Con <code>navigator.languages</code> en japonés, la pantalla sale en inglés (LANG-2).</li>
   <li><strong>Un valor guardado desconocido.</strong> Un <code>shopping.lang</code> con <code>ja</code> se lee como sin elección, y la app sigue al teléfono (LANG-4).</li>
   <li><strong>Sin almacenamiento.</strong> El selector cambia el idioma igualmente; la elección dura hasta que se cierra la app (STORE-10, <code>src/ui/context.js:349</code>).</li>
-  <li><strong>Un mensaje en pantalla al cambiar de idioma.</strong> El mensaje mantiene su texto; el resto de la pantalla cambia (<code>index.html:42</code>, sin <code>data-i18n</code>).</li>
+  <li><strong>Un mensaje en pantalla al cambiar de idioma.</strong> El mensaje mantiene su texto en el idioma anterior hasta que se cierra; <code>Deshacer</code> y el resto de la pantalla cambian (LANG-19, <code>index.html:42</code>, sin <code>data-i18n</code>).</li>
   <li><strong>Un nombre del usuario con llaves.</strong> Un artículo llamado <code>{count}</code> se muestra tal cual en un mensaje (LANG-9).</li>
 </ul>
 
@@ -585,6 +585,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td>Un mensaje en pantalla al cambiar de idioma: sin regla → LANG-19; el manifiesto traducido lo dicen LANG-16 y SW-13, que siguen al código</td><td><a href="../spec/09-languages.md">09-languages.md, LANG-16 y LANG-19</a></td></tr>
     <tr><td>2026-11-13</td><td>Título de la página <code>Bodega - Lista de la compra</code> → <code>Lista de la compra - Bodega</code>, con la primera parte traducida; <code>Bodega</code> también es la marca de la barra lateral y de la barra de <code>Compra</code> (LANG-16)</td><td>El propósito primero en el título; <a href="../spec/09-languages.md">09-languages.md, LANG-16</a></td></tr>
     <tr><td>2026-11-13</td><td>Separadores fijos <code>, </code>, <code>; </code> y <code> · </code>: sin regla → excepción declarada de LANG-12</td><td><a href="../spec/09-languages.md">09-languages.md, LANG-12</a></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
@@ -593,17 +594,12 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="fuentes">Fuentes</h2>
 <ul>
-  <li><b>Reglas</b> <a href="../spec/09-languages.md"><code>docs/spec/09-languages.md</code></a> (LANG-1 a LANG-18), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-13, VER-18)</li>
+  <li><b>Reglas</b> <a href="../spec/09-languages.md"><code>docs/spec/09-languages.md</code></a> (LANG-1 a LANG-19), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-13, VER-18)</li>
   <li><b>Código</b> <code>src/i18n.js</code>, <code>src/locales/*.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>src/ui/menu.js</code>, <code>src/ui/recipes.js</code>, <code>src/storage.js</code>, <code>sw.js</code>, <code>index.html</code>, <code>manifest.webmanifest</code></li>
   <li><b>Registros</b> <code>docs/superpowers/specs/2026-10-13-languages-design.md</code></li>
-  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
-  <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos. Sin comprobación en el navegador; el resto se ha leído del código</li>
-  <li><b>Abierto</b>
-    <ul>
-      <li>Sin ID de regla: un mensaje en pantalla mantiene su texto al cambiar de idioma. Lo dice el documento de diseño, no el archivo de reglas.</li>
-      <li>El documento de diseño de idiomas deja el manifiesto en español (Out of scope). El código lo traduce (SW-13). Por eso la fila del manifiesto enlaza la regla.</li>
-    </ul>
-  </li>
+  <li><b>Commit</b> <code>main</code> @ <code>672ba56</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code>: 1781 tests, 1781 correctos. Sin comprobación en el navegador; el resto se ha leído del código</li>
+  <li><b>Abierto</b> ninguno. El documento de diseño de idiomas deja el manifiesto en español; las reglas LANG-16 y SW-13 lo traducen, como el código, y son el registro vigente.</li>
 </ul>
 </main>
 </div>

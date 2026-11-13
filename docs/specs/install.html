@@ -541,7 +541,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <p>La oferta tiene tres estados: <code>idle</code> (sin oferta), <code>available</code> (Chrome ha dado <code>beforeinstallprompt</code>) e <code>installed</code> (INS-1). El aviso de Chrome pasa la oferta a <code>available</code>. Un rechazo la devuelve a <code>idle</code> hasta el siguiente aviso. <code>installed</code> es final: ningún evento lo cambia. Un evento desconocido no cambia el estado.</p>
 
 <h3 id="button">El botón de Ajustes</h3>
-<p><code>Ajustes</code> muestra el grupo <code>Aplicación</code> con el botón <strong>Instalar la aplicación</strong> solo en el estado <code>available</code> (INS-2). Un toque muestra el diálogo de instalación de Chrome. Si el usuario acepta, el estado pasa a <code>installed</code> y el grupo desaparece. Si rechaza, el estado pasa a <code>idle</code> y el grupo también desaparece. El aviso de Chrome sirve una sola vez: después de una respuesta, el botón solo vuelve con un aviso nuevo.</p>
+<p><code>Ajustes</code> muestra el grupo <code>Aplicación</code>, su título y el botón <strong>Instalar la aplicación</strong> solo en el estado <code>available</code> (INS-2, NAV-6). Un toque muestra el diálogo de instalación de Chrome. Si el usuario acepta, el estado pasa a <code>installed</code> y el grupo desaparece. Si rechaza, el estado pasa a <code>idle</code> y el grupo también desaparece. El aviso de Chrome sirve una sola vez: después de una respuesta, el botón solo vuelve con un aviso nuevo.</p>
 
 <h3 id="installed">La app instalada</h3>
 <p>Una app que se abre en <code>display-mode: standalone</code> empieza en <code>installed</code> y no muestra el botón (INS-3). El evento <code>appinstalled</code> también pasa la oferta a <code>installed</code>, empiece quien empiece la instalación: el botón o el menú de Chrome. La app instalada gira con el dispositivo (<code>"orientation": "any"</code> en <code>manifest.webmanifest</code>), así que una tableta o un teléfono desplegado la muestran derecha en horizontal (INS-4). La distribución de cada anchura está en DSV-8.</p>
@@ -586,6 +586,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td>INS-2 nombra el botón <strong>Install the app</strong> y calla el título del grupo → <strong>Instalar la aplicación</strong>; el título <code>Aplicación</code> se oculta con el botón (NAV-6)</td><td><a href="../spec/16-install.md">16-install.md, INS-2</a></td></tr>
     <tr><td>2026-11-13</td><td>Solo la PWA instalable desde Chrome (INS-1 a INS-4) → también una app de Android: Trusted Web Activity <code>io.github.polarisworks.bodega</code> que abre <code>bodega.polarisworks.duckdns.org</code>, con <code>assetlinks.json</code>, <code>twa/twa-manifest.json</code> y etiquetas <code>twa-vX.Y.Z</code> (INS-5 a INS-8)</td><td>Android TWA — plan</td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
   </tbody>
@@ -596,14 +597,9 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><b>Reglas</b> <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a> (INS-1 a INS-8), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (VER-9, VER-14, VER-16)</li>
   <li><b>Código</b> <code>src/install.js</code>, <code>src/ui/install.js</code>, <code>manifest.webmanifest</code>, <code>index.html</code>, <code>twa/twa-manifest.json</code>, <code>twa/.gitignore</code>, <code>.well-known/assetlinks.json</code>, <code>scripts/apk.mjs</code>, <code>.githooks/pre-push</code>, <code>src/locales/es.js</code>; etiquetas <code>twa-v1.0.0</code> y <code>twa-v1.1.0</code> con <code>git tag</code></li>
   <li><b>Registros</b> <code>docs/superpowers/specs/2026-10-18-responsive-design.md</code>, <code>docs/superpowers/plans/2026-11-13-android-twa.md</code></li>
-  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
-  <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos, con <code>tests/install.test.js</code>, <code>tests/twa.test.js</code> y <code>tests/apk.test.js</code>. El botón, el diálogo de Chrome, <code>npm run apk</code> y la app de Android no se han probado</li>
-  <li><b>Abierto</b>
-    <ul>
-      <li>El título de grupo <code>Aplicación</code> se oculta con el botón (<code>#install-group</code> en <code>index.html:184</code>); ninguna regla lo dice.</li>
-      <li>INS-2 nombra el botón en inglés, <strong>Install the app</strong>; el texto en español es <code>Instalar la aplicación</code>.</li>
-    </ul>
-  </li>
+  <li><b>Commit</b> <code>main</code> @ <code>672ba56</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code>: 1781 tests, 1781 correctos, con <code>tests/install.test.js</code>, <code>tests/twa.test.js</code> y <code>tests/apk.test.js</code>. El botón, el diálogo de Chrome, <code>npm run apk</code> y la app de Android no se han probado</li>
+  <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>
 </div>

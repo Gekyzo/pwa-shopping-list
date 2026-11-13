@@ -538,7 +538,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="comportamiento">Comportamiento</h2>
 <h3 id="arrival">Aviso al llegar a la tienda</h3>
-<p>Una apertura con <code>?arrival</code> en la dirección muestra <code>N artículos por comprar en Compra.</code> en el idioma de la pantalla, o <code>1 artículo por comprar en Compra.</code> para uno. N es el número de artículos de <code>Compra</code> sin marcar (ARR-1). El mensaje dura 10 segundos, porque la app se abrió sola, y no tiene <code>Deshacer</code> (ARR-2). Sin nada por comprar no hay mensaje (ARR-3). La app quita <code>arrival</code> de la dirección al momento y mantiene el resto de parámetros, así que una recarga no repite el mensaje (ARR-4).</p>
+<p>Una apertura con <code>?arrival</code> en la dirección muestra <code>N artículos por comprar en Compra.</code> en el idioma de la pantalla, o <code>1 artículo por comprar en Compra.</code> para uno. N es el número de artículos de <code>Compra</code> sin marcar. Con <code>?open</code> también, la app muestra el mensaje y abre la sección de <code>?open</code> (ARR-1, SHORT-2). El mensaje dura 10 segundos, porque la app se abrió sola, y no tiene <code>Deshacer</code> (ARR-2). Sin nada por comprar no hay mensaje (ARR-3). La app quita <code>arrival</code> de la dirección al momento y mantiene el resto de parámetros, así que una recarga no repite el mensaje (ARR-4).</p>
 <p>La app de automatización (MacroDroid, Tasker) tiene el lugar, el radio y la precisión (ARR-5). Su configuración: una geovalla de entrada de 100 a 150 m y la acción de abrir <code>https://bodega.polarisworks.duckdns.org/?arrival</code>. La app debe estar instalada desde Chrome, para que Android abra la dirección en la app instalada y con sus datos. La app de automatización necesita el permiso de ubicación <strong>Permitir siempre</strong> y ninguna optimización de batería.</p>
 
 <h3 id="shortcuts">Accesos directos del icono</h3>
@@ -546,7 +546,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <p>Los nombres de los accesos directos son los textos <code>add.item</code>, <code>list.active</code>, <code>nav.recipes</code> y <code>nav.menu</code> en el idioma de la pantalla, a través del worker (SHORT-3, SW-13). Cada acceso directo tiene un icono de 192 px: el icono de línea de su acción, blanco sobre un disco del color del tema (SHORT-4). La app quita <code>open</code> de la dirección al momento y mantiene el resto de parámetros, como con <code>arrival</code> (SHORT-5). La app de Android tiene los mismos accesos directos y uno más, los ajustes del sitio en Chrome (INS-7).</p>
 
 <h3 id="voice">Comandos de voz</h3>
-<p><code>main</code> no tiene comandos de voz. El trabajo está en la rama <code>voice-commands</code>, con 3 commits. Esa rama no tiene idiomas, tiendas ni la versión 3 del estado, así que necesita un cambio antes de fusionarla. VOICE-1 a VOICE-8 describen el diseño de esa rama, y pasan a ser reglas de la app cuando se fusione. En ese diseño, el usuario dice un comando en español (<code>es-ES</code>) por cada toque, y la app dice la respuesta (VOICE-1). Los comandos añaden artículos, leen lo que queda, marcan un artículo, borran un artículo y terminan la compra (VOICE-2). Borrar y terminar la compra piden un «sí» hablado; marcar y añadir no lo piden, porque basta <code>Deshacer</code> (VOICE-3). «macarrones y queso» añade dos artículos (VOICE-5). Una apertura con <code>?voice</code> empieza una conversación (VOICE-7).</p>
+<p><code>main</code> no tiene comandos de voz. El trabajo está en la rama <code>voice-commands</code>, con 3 commits. La rama sale de <code>main</code> del 2026-10-12 (<code>23e4ce1</code>) y no lo sigue. Esa rama no tiene idiomas, tiendas ni la versión 3 del estado, así que necesita un cambio antes de fusionarla. VOICE-1 a VOICE-8 describen el diseño de esa rama, y pasan a ser reglas de la app cuando se fusione. En ese diseño, el usuario dice un comando en español (<code>es-ES</code>) por cada toque, y la app dice la respuesta (VOICE-1). Los comandos añaden artículos, leen lo que queda, marcan un artículo, borran un artículo y terminan la compra (VOICE-2). Borrar y terminar la compra piden un «sí» hablado; marcar y añadir no lo piden, porque basta <code>Deshacer</code> (VOICE-3). «macarrones y queso» añade dos artículos (VOICE-5). Una apertura con <code>?voice</code> empieza una conversación (VOICE-7).</p>
 
 <h2 id="casos-limite">Casos límite</h2>
 <ul>
@@ -579,6 +579,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-13</td><td><code>?arrival</code> con <code>?open</code>: sin regla → ARR-1; la rama <code>voice-commands</code> «566 commits por detrás de <code>main</code>» → sale de <code>main</code> del 2026-10-12, sin un número que caduca</td><td><a href="../spec/11-integrations.md">11-integrations.md, ARR-1 y Voice commands</a></td></tr>
     <tr><td>2026-11-13</td><td><code>?open=&lt;nombre&gt;</code> y el hash de la dirección: sin regla → <code>?open</code> gana sobre el hash (SHORT-2)</td><td>Cada sección tiene su dirección (NAV-30)</td></tr>
     <tr><td>2026-11-13</td><td>Rama <code>voice-commands</code>: 323 commits por detrás de <code>main</code> → 576; necesita un cambio antes de fusionarla</td><td><code>git rev-list --count voice-commands..main</code></td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
@@ -590,16 +591,9 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><b>Reglas</b> <a href="../spec/11-integrations.md"><code>docs/spec/11-integrations.md</code></a> (ARR-1 a ARR-5, SHORT-1 a SHORT-5, VOICE-1 a VOICE-8), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-6, SW-7, SW-13), <a href="../spec/09-languages.md"><code>docs/spec/09-languages.md</code></a> (LANG-16), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-30), <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a> (INS-7)</li>
   <li><b>Código</b> <code>src/app.js</code>, <code>src/store.js</code>, <code>src/sections.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>manifest.webmanifest</code>, <code>twa/twa-manifest.json</code>, <code>sw.js</code>, <code>scripts/make-icons.mjs</code>, <code>src/locales/es.js</code>; la rama <code>voice-commands</code> solo con <code>git rev-list</code></li>
   <li><b>Registros</b> <code>docs/superpowers/specs/2026-10-12-arrival-toast-design.md</code>, <code>docs/superpowers/specs/2026-10-13-voice-design.md</code></li>
-  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
-  <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos; <code>git rev-list --count main..voice-commands</code> (3) y <code>voice-commands..main</code> (576). Sin comprobación en el teléfono ni en el navegador</li>
-  <li><b>Abierto</b>
-    <ul>
-      <li>Sin ID de regla: <code>?arrival</code> y <code>?open</code> juntos muestran el mensaje y la sección pedida (<code>src/app.js:431</code>).</li>
-      <li>El archivo de reglas dice que la rama <code>voice-commands</code> va 566 commits por detrás de <code>main</code> el 2026-11-13. Al final del mismo día va 576 por detrás.</li>
-      <li>El documento de diseño de voz dice «Status: implemented», pero el código no está en <code>main</code>.</li>
-      <li>No hay un documento de diseño para los accesos directos; la fila enlaza el archivo de reglas.</li>
-    </ul>
-  </li>
+  <li><b>Commit</b> <code>main</code> @ <code>672ba56</code>, leído el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code>: 1781 tests, 1781 correctos; <code>git rev-list --count main..voice-commands</code> (3) y <code>git merge-base main voice-commands</code> (<code>23e4ce1</code>). Sin comprobación en el teléfono ni en el navegador</li>
+  <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>
 </div>
