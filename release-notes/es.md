@@ -4,6 +4,10 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
+No change.
+
+## 1.13.7 - 2026-11-14
+
 - En **Menú**, una comida cuya receta se borró en otro dispositivo ya no cuenta como planificada. La cabecera, el resumen de la semana, **Vaciar menú** y **Llenar cesta** coinciden con lo que ves.
 - La política de privacidad describe ahora la lista compartida y el inicio de sesión con Google.
 

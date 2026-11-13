@@ -4,6 +4,10 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
+No change.
+
+## 1.13.7 - 2026-11-14
+
 - In **Menù**, un pasto la cui ricetta è stata eliminata su un altro dispositivo non conta più come pianificato. L'intestazione, il riepilogo della settimana, **Svuota il menù** e **Riempi cestino** corrispondono a ciò che vedi.
 - L'informativa sulla privacy descrive ora la lista condivisa e l'accesso con Google.
 

@@ -10,6 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
+No change.
+
+## 1.13.7 - 2026-11-14
+
 - A meal whose recipe is gone (deleted on another device, then synced) is not planned (MENU-10): `plannedOf` in `src/menu.js` keeps the meals with a dish or an existing recipe, and `mealCount` and `plannedSlots` use it. The header, the week summary (MENU-26), **Vaciar menú** (MENU-13) and **Llenar cesta** (`error.menuEmpty`, MENU-6) follow the screen.
 - `privacy.html` describes sharing (the shares the server stores, who sees a shared space, the invite email) and keeps the password hash only for accounts made before Google sign-in.
 - Documentation: `README.md` is for users and `CONTRIBUTING.md` holds the developer guide; `docs/spec/` and the conventions match the code; `docs/port/` is removed; the Spanish living spec of `docs/specs/` is updated, with new pages for account and sync, sharing and the address.

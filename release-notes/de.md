@@ -4,6 +4,10 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
+No change.
+
+## 1.13.7 - 2026-11-14
+
 - In **Menü** zählt eine Mahlzeit, deren Rezept auf einem anderen Gerät gelöscht wurde, nicht mehr als geplant. Kopfzeile, Wochenübersicht, **Menü leeren** und **Korb füllen** passen jetzt zu dem, was du siehst.
 - Die Datenschutzerklärung beschreibt jetzt die geteilte Liste und die Anmeldung mit Google.
 
