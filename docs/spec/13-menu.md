@@ -18,13 +18,14 @@ past weeks stay, read only, and the next weeks can be planned ahead.
   recipe that does not exist gives `error.recipeNotFound`; a dish with an empty name gives
   `error.nameRequired`; a day or a meal that does not exist gives `error.unknownMeal`. The name of
   a dish is trimmed.
-- **MENU-4** A meal can be emptied. **Vaciar menú** empties all the meals.
+- **MENU-4** A meal can be emptied. **Vaciar menú** empties all the meals, also a meal whose
+  recipe does not exist any more (MENU-10).
 
 ## Fill the basket
 
 - **MENU-5** **Llenar cesta** sends each recipe of the menu to `Compra`, one time, in day
   and meal order of its first meal. Each send follows REC-18 and REC-19.
-- **MENU-6** A dish and a recipe with no product are skipped. A menu with no meal gives
+- **MENU-6** A dish and a recipe with no product are skipped. A menu with no planned meal (MENU-10) gives
   `error.menuEmpty`. A menu whose meals give no product gives `error.menuNoProducts`.
 - **MENU-7** `añadidos` and `ya estaban` are the sums of the sends (REC-20). A product of two
   recipes counts as added at the first send and as there already at the second.
@@ -53,7 +54,9 @@ past weeks stay, read only, and the next weeks can be planned ahead.
   phone. In the compact density below 600px the name above the meals is the short weekday of
   the language, also in sentence case (`Lun`), and the name of a meal takes up to two lines.
 - **MENU-10** The header shows `Menú` and `N comidas planificadas`, or `Sin comidas
-  planificadas`, for the week in view (MENU-23).
+  planificadas`, for the week in view (MENU-23). A meal whose recipe does not exist any more (a
+  delete on another device, then a sync) is not planned: `Menú` shows it free, with `Elegir receta`,
+  and no count of the menu holds it (`mealCount` of `src/menu.js`, MENU-6, MENU-13, MENU-26).
 - **MENU-11** A tap on a meal opens the meal sheet, `Comida del lunes`. It has one chip for each
   recipe, in the order of the recipes; the chip of the recipe of the meal is on. A tap on a chip
   puts that recipe in the meal and closes the sheet. A meal with a recipe or a dish also has
@@ -65,7 +68,7 @@ past weeks stay, read only, and the next weeks can be planned ahead.
   `Deshacer`. A fill that changes nothing shows `Menú: todo estaba ya en la lista.` and keeps
   the `Deshacer` that is still on the screen.
 - **MENU-13** **Vaciar menú** is an outline button in the danger color. It empties the week in view and
-  shows `Deshacer` with the message `Menú vaciado.` It is disabled while the own menu of that week is empty. The
+  shows `Deshacer` with the message `Menú vaciado.` It is disabled while the own menu of that week has no planned meal (MENU-10). The
   header of `Menú` has no `⋮` button.
 - **MENU-14** `Menú` shows the week also with no recipe, so that a meal can hold a dish. It has no
   empty text. The `+` button does not show in `Menú`, and below 600px `Menú` shows no dock.
@@ -152,7 +155,8 @@ past weeks stay, read only, and the next weeks can be planned ahead.
 - **MENU-26** Above **Llenar cesta** and **Vaciar menú**, a line counts the slots of the week in
   view that hold a meal, of the 14, and the free ones, in small capitals (`menu.summary`:
   `9 de 14 comidas planificadas · 5 libres`). A slot with a meal of each list (MENU-20) counts
-  once (`plannedSlots` of `src/menu.js`). The week bar starts with the icon `calendar`; a planned
+  once (`plannedSlots` of `src/menu.js`). A meal whose recipe does not exist any more is free
+  (MENU-10). The week bar starts with the icon `calendar`; a planned
   meal shows its kind at its top end (cutlery for a recipe, a pencil for a dish); a free meal
   shows `Elegir receta` first and the name of the meal below it; **Vaciar menú** has the icon
   `trash` (DSV-20).

@@ -110,18 +110,22 @@ export const clearMeal = (state, week, day, meal) => {
   return { state: menu.length === state.menu.length ? state : { ...state, menu } };
 };
 
-// Vaciar menú empties the meals of one week; the other weeks stay.
+// Vaciar menú empties the meals of one week, also those of a gone recipe; the other weeks stay.
 export const clearMenu = (state, week) => {
   const menu = state.menu.filter((entry) => entry.week !== week);
   return { state: menu.length === state.menu.length ? state : { ...state, menu } };
 };
 
-export const mealCount = (state, week) => ofWeek(state, week).length;
+// MENU-10: the meals of a week that hold a dish or a recipe that exists. A meal whose recipe is
+// gone (a delete on another device, then a sync) shows free, so it is not planned.
+const plannedOf = (state, week) => ofWeek(state, week).filter((entry) => entry.dish || findRecipe(state, entry.recipe));
+
+export const mealCount = (state, week) => plannedOf(state, week).length;
 
 // MENU-26: the slots of a week, and the slots that hold a meal. A slot with a meal of each list
 // counts once.
 export const SLOTS = DAYS * MEALS.length;
-export const plannedSlots = (state, week) => new Set(ofWeek(state, week).map((entry) => `${entry.day}:${entry.meal}`)).size;
+export const plannedSlots = (state, week) => new Set(plannedOf(state, week).map((entry) => `${entry.day}:${entry.meal}`)).size;
 
 // MENU-24: the meals of `from` in place of the meals of `to`, each in its day and meal. `count` is the
 // number of meals copied. A week with no meal gives `error.menuEmpty`.

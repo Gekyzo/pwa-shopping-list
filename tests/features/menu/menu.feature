@@ -90,6 +90,25 @@ Feature: Menu
       Then the week "2026-11-09" has 2 meals
       And the week "2026-11-09" has 2 planned slots of 14
 
+    @MENU-4 @MENU-6 @MENU-10 @MENU-26
+    Scenario: A meal whose recipe does not exist any more is not planned, and Vaciar menú empties it
+      Given the lunch of Monday in the week "2026-11-09" is the recipe "Tortilla"
+      And the dinner of Monday in the week "2026-11-09" is the recipe "Flan"
+      And the lunch of Monday in the week "2026-11-16" is the recipe "Tortilla"
+      And the lunch of Monday in the week "2026-11-23" is the dish "Pizza"
+      When a sync removes the recipe "Tortilla" that another device deleted
+      Then the week "2026-11-09" has 1 meal
+      And the week "2026-11-09" has 1 planned slot of 14
+      And the week "2026-11-16" has 0 meals
+      And the week "2026-11-16" has 0 planned slots of 14
+      When I fill the basket from the week "2026-11-16"
+      Then the error is "error.menuEmpty"
+      When I empty the menu of the week "2026-11-09"
+      And I empty the menu of the week "2026-11-16"
+      Then the menu is:
+        | week       | day    | meal  | recipe | dish  |
+        | 2026-11-23 | Monday | lunch |        | Pizza |
+
     @MENU-22
     Scenario: A put drops the meals of the weeks before the last 26
       Given the lunch of Monday in the week "2026-05-11" is the dish "Old"

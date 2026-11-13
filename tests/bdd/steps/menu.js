@@ -70,7 +70,12 @@ export const defineMenuSteps = ({ Given, When, Then }) => {
   When('I empty the {word} of {word} in the week {string}', (world, meal, day, week) => {
     apply(world, (state) => clearMeal(state, week, dayOf(day), meal));
   });
-  When('I empty the menu of the week {string}', (world, week) => apply(world, (state) => clearMenu(state, week)));
+  // A delete on another device reaches this one by a sync: the recipe goes, its meals stay.
+  When('a sync removes the recipe {string} that another device deleted', (world, name) => {
+    const { id } = findRecipe(world, name);
+    world.state = { ...world.state, recipes: world.state.recipes.filter((recipe) => recipe.id !== id) };
+  });
+  When('I empty the menu of the week {string}',(world, week) => apply(world, (state) => clearMenu(state, week)));
   When('I fill the basket from the week {string}', (world, week) => apply(world, (state) => fillMenu(state, week, world.newId)));
   When('I turn the dish {string} of the week {string} into a recipe', (world, name, week) => {
     apply(world, (state) => dishRecipe(state, week, name, world.newId));

@@ -104,6 +104,37 @@ test('mealCount counts the planned meals', () => {
   assert.equal(mealCount(plan(start, [[0, 'lunch', lentils], [6, 'dinner', lentils]]), W), 2);
 });
 
+// A delete on another device, then a sync: the recipe goes, its meals stay (MENU-10).
+const withoutRecipe = (state, id) => ({ ...state, recipes: state.recipes.filter((recipe) => recipe.id !== id) });
+
+test('a meal whose recipe does not exist any more is not planned (MENU-10, MENU-26)', () => {
+  const { state: start, lentils, omelette } = kitchen();
+  const state = withoutRecipe(plan(start, [[0, 'lunch', lentils], [0, 'dinner', omelette], [3, 'lunch', lentils]]), lentils);
+  assert.equal(state.menu.length, 3);
+  assert.equal(mealCount(state, W), 1);
+  assert.equal(plannedSlots(state, W), 1);
+  const dishes = setDish(state, W, 3, 'dinner', 'Pizza').state;
+  assert.equal(mealCount(dishes, W), 2);
+  assert.equal(plannedSlots(dishes, W), 2);
+});
+
+test('a slot of a gone recipe and a meal of the other list counts once (MENU-26, MENU-20)', () => {
+  const { state, lentils, omelette } = kitchen();
+  const own = plan(state, [[1, 'lunch', lentils]]);
+  const both = withoutRecipe({ ...own, menu: [...own.menu, { ...own.menu[0], recipe: omelette, shared: true }] }, lentils);
+  assert.equal(plannedSlots(both, W), 1);
+  assert.equal(plannedSlots(withoutRecipe(both, omelette), W), 0);
+});
+
+test('a week with only meals of gone recipes gives error.menuEmpty and clearMenu empties them (MENU-4, MENU-6)', () => {
+  const { state: start, lentils } = kitchen();
+  const state = withoutRecipe(plan(start, [[0, 'lunch', lentils]]), lentils);
+  assert.equal(mealCount(state, W), 0);
+  assert.equal(plannedSlots(state, W), 0);
+  assert.deepEqual(fillMenu(state, W, newId).error, { key: 'error.menuEmpty' });
+  assert.deepEqual(clearMenu(state, W).state.menu, []);
+});
+
 test('menuWeek gives each day with its two meals and their recipes', () => {
   const { state: start, lentils, omelette } = kitchen();
   const state = plan(start, [[0, 'dinner', omelette], [6, 'lunch', lentils]]);
