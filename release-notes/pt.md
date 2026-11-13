@@ -4,7 +4,8 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- Em **Menu**, uma refeição cuja receita foi apagada noutro dispositivo já não conta como planeada. O cabeçalho, o resumo da semana, **Esvaziar o menu** e **Encher cesto** coincidem com o que vês.
+- A política de privacidade descreve agora a lista partilhada e o início de sessão com o Google.
 
 ## 1.13.6 - 2026-11-13
 

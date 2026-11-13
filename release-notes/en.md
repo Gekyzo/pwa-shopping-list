@@ -4,7 +4,8 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- In **Menu**, a meal whose recipe was deleted on another device no longer counts as planned. The header, the week summary, **Clear the menu** and **Fill basket** now match what you see.
+- The privacy policy now describes the shared list and Google sign-in.
 
 ## 1.13.6 - 2026-11-13
 

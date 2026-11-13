@@ -4,7 +4,8 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- A **Menú**, un àpat amb una recepta esborrada en un altre dispositiu ja no compta com a planificat. La capçalera, el resum de la setmana, **Buida el menú** i **Omple cistella** coincideixen amb el que veus.
+- La política de privadesa descriu ara la llista compartida i l'inici de sessió amb Google.
 
 ## 1.13.6 - 2026-11-13
 

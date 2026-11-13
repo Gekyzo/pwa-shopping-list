@@ -4,7 +4,8 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Dans **Menu**, un repas dont la recette a été supprimée sur un autre appareil ne compte plus comme planifié. L'en-tête, le résumé de la semaine, **Vider le menu** et **Remplir panier** correspondent à ce que vous voyez.
+- La politique de confidentialité décrit maintenant la liste partagée et la connexion avec Google.
 
 ## 1.13.6 - 2026-11-13
 
