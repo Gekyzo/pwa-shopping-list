@@ -531,9 +531,9 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <h2 id="fuera-de-alcance">Fuera de alcance</h2>
 <ul>
   <li>La app no usa la geolocalización y no detecta la llegada: la app de automatización tiene la geovalla. El repositorio no tiene coordenadas (ARR-5).</li>
-  <li>No hay notificación del sistema, solo un mensaje por lugar, y ningún ajuste apaga el mensaje (<a href="../superpowers/specs/2026-10-12-arrival-toast-design.md">diseño del aviso</a>).</li>
+  <li>No hay notificación del sistema, solo un mensaje por lugar, y ningún ajuste apaga el mensaje (diseño del aviso).</li>
   <li><code>main</code> no tiene comandos de voz ni el acceso directo <strong>Hablar</strong> (VOICE-7).</li>
-  <li>«Ok Google» y Gemini no pueden añadir a la lista: una app web no registra comandos en el asistente (<a href="../superpowers/specs/2026-10-13-voice-design.md">diseño de voz</a>).</li>
+  <li>«Ok Google» y Gemini no pueden añadir a la lista: una app web no registra comandos en el asistente (diseño de voz).</li>
 </ul>
 
 <h2 id="comportamiento">Comportamiento</h2>
@@ -566,12 +566,12 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="decisions" data-plain>
   <thead><tr><th>Decisión</th><th>Registro</th></tr></thead>
   <tbody>
-    <tr><td>Una app de automatización de Android tiene la geovalla y abre la app con <code>?arrival</code></td><td><a href="../superpowers/specs/2026-10-12-arrival-toast-design.md">Arrival toast — design</a></td></tr>
-    <tr><td>El aviso dura 10 segundos, sin <code>Deshacer</code>, y no aparece sin nada por comprar</td><td><a href="../superpowers/specs/2026-10-12-arrival-toast-design.md">Arrival toast — design</a></td></tr>
-    <tr><td>La app quita el parámetro de la dirección para que una recarga no repita nada</td><td><a href="../superpowers/specs/2026-10-12-arrival-toast-design.md">Arrival toast — design</a></td></tr>
+    <tr><td>Una app de automatización de Android tiene la geovalla y abre la app con <code>?arrival</code></td><td>Arrival toast — design · <a href="../spec/11-integrations.md">11-integrations.md</a></td></tr>
+    <tr><td>El aviso dura 10 segundos, sin <code>Deshacer</code>, y no aparece sin nada por comprar</td><td>Arrival toast — design · <a href="../spec/11-integrations.md">11-integrations.md</a></td></tr>
+    <tr><td>La app quita el parámetro de la dirección para que una recarga no repita nada</td><td>Arrival toast — design · <a href="../spec/11-integrations.md">11-integrations.md</a></td></tr>
     <tr><td>Cuatro accesos directos en el manifiesto, con nombres traducidos por el worker</td><td><a href="../spec/11-integrations.md">11-integrations.md, Launcher shortcuts</a></td></tr>
-    <tr><td>Voz: un comando por toque, en <code>es-ES</code>, con confirmación para borrar y terminar</td><td><a href="../superpowers/specs/2026-10-13-voice-design.md">Voice commands — design</a></td></tr>
-    <tr><td>Sin «Ok Google» ni Gemini; una app nativa no está decidida</td><td><a href="../superpowers/specs/2026-10-13-voice-design.md">Voice commands — design</a></td></tr>
+    <tr><td>Voz: un comando por toque, en <code>es-ES</code>, con confirmación para borrar y terminar</td><td>Voice commands — design · <a href="../spec/11-integrations.md">11-integrations.md</a></td></tr>
+    <tr><td>Sin «Ok Google» ni Gemini; una app nativa no está decidida</td><td>Voice commands — design · <a href="../spec/11-integrations.md">11-integrations.md</a></td></tr>
   </tbody>
 </table></div>
 
@@ -589,7 +589,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <ul>
   <li><b>Reglas</b> <a href="../spec/11-integrations.md"><code>docs/spec/11-integrations.md</code></a> (ARR-1 a ARR-5, SHORT-1 a SHORT-5, VOICE-1 a VOICE-8), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-6, SW-7, SW-13), <a href="../spec/09-languages.md"><code>docs/spec/09-languages.md</code></a> (LANG-16), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-30), <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a> (INS-7)</li>
   <li><b>Código</b> <code>src/app.js</code>, <code>src/store.js</code>, <code>src/sections.js</code>, <code>src/ui/context.js</code>, <code>src/ui/settings.js</code>, <code>manifest.webmanifest</code>, <code>twa/twa-manifest.json</code>, <code>sw.js</code>, <code>scripts/make-icons.mjs</code>, <code>src/locales/es.js</code>; la rama <code>voice-commands</code> solo con <code>git rev-list</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-arrival-toast-design.md"><code>docs/superpowers/specs/2026-10-12-arrival-toast-design.md</code></a>, <a href="../superpowers/specs/2026-10-13-voice-design.md"><code>docs/superpowers/specs/2026-10-13-voice-design.md</code></a></li>
+  <li><b>Registros</b> <code>docs/superpowers/specs/2026-10-12-arrival-toast-design.md</code>, <code>docs/superpowers/specs/2026-10-13-voice-design.md</code></li>
   <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
   <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos; <code>git rev-list --count main..voice-commands</code> (3) y <code>voice-commands..main</code> (576). Sin comprobación en el teléfono ni en el navegador</li>
   <li><b>Abierto</b>

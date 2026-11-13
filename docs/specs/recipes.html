@@ -596,15 +596,15 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="decisions" data-plain>
   <thead><tr><th>Decisión</th><th>Registro</th></tr></thead>
   <tbody>
-    <tr><td>Una receta guarda nombres de producto, no ids de artículo, y el envío va siempre a <code>Compra</code></td><td><a href="../superpowers/specs/2026-10-12-recipes-design.md">Recipes — design</a></td></tr>
-    <tr><td>La fila de una receta no guarda una marca de enviada</td><td><a href="../superpowers/specs/2026-10-12-recipes-design.md">Recipes — design</a></td></tr>
-    <tr><td>La receta se edita en una hoja <code>Receta</code>, y la fila se desliza como la de un artículo</td><td><a href="../superpowers/specs/2026-10-15-recipe-rows-design.md">Recipe rows — design</a></td></tr>
-    <tr><td>La búsqueda busca por nombre y por producto, sin mayúsculas ni acentos, y no se guarda</td><td><a href="../superpowers/specs/2026-10-12-recipe-search-design.md">Recipe search — design</a></td></tr>
-    <tr><td>Las filas nuevas y las borradas se abren, destellan y se cierran</td><td><a href="../superpowers/specs/2026-10-14-recipe-effects-design.md">Recipe effects — design</a></td></tr>
-    <tr><td><code>Recetas</code> lista los platos del menú sin receta y los convierte en receta</td><td><a href="../superpowers/specs/2026-10-19-menu-dishes-design.md">Dishes in Menú — design</a></td></tr>
-    <tr><td>Una semana pasada del menú conserva el nombre de una receta borrada</td><td><a href="../superpowers/specs/2026-11-03-menu-history-design.md">Menu history — design</a></td></tr>
+    <tr><td>Una receta guarda nombres de producto, no ids de artículo, y el envío va siempre a <code>Compra</code></td><td>Recipes — design · <a href="../spec/06-recipes.md">06-recipes.md</a></td></tr>
+    <tr><td>La fila de una receta no guarda una marca de enviada</td><td>Recipes — design · <a href="../spec/06-recipes.md">06-recipes.md</a></td></tr>
+    <tr><td>La receta se edita en una hoja <code>Receta</code>, y la fila se desliza como la de un artículo</td><td>Recipe rows — design · <a href="../spec/06-recipes.md">06-recipes.md</a></td></tr>
+    <tr><td>La búsqueda busca por nombre y por producto, sin mayúsculas ni acentos, y no se guarda</td><td>Recipe search — design · <a href="../spec/06-recipes.md">06-recipes.md</a></td></tr>
+    <tr><td>Las filas nuevas y las borradas se abren, destellan y se cierran</td><td>Recipe effects — design · <a href="../spec/06-recipes.md">06-recipes.md</a></td></tr>
+    <tr><td><code>Recetas</code> lista los platos del menú sin receta y los convierte en receta</td><td>Dishes in Menú — design · <a href="../spec/06-recipes.md">06-recipes.md</a></td></tr>
+    <tr><td>Una semana pasada del menú conserva el nombre de una receta borrada</td><td>Menu history — design · <a href="../spec/06-recipes.md">06-recipes.md</a></td></tr>
     <tr><td>Desde 840px la receta es un panel; desde 1024px las recetas son tarjetas con filtros</td><td><a href="../spec/06-recipes.md">06-recipes.md, REC-39, REC-40</a></td></tr>
-    <tr><td>Un miembro con alcance <code>all</code> ve las recetas de las dos listas, cada una con su etiqueta</td><td><a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md">Separate shared lists — design</a></td></tr>
+    <tr><td>Un miembro con alcance <code>all</code> ve las recetas de las dos listas, cada una con su etiqueta</td><td>Separate shared lists — design · <a href="../spec/06-recipes.md">06-recipes.md</a></td></tr>
     <tr><td>Sin cantidades, pasos ni elección de productos al enviar</td><td><a href="../spec/06-recipes.md">06-recipes.md, Limits</a></td></tr>
   </tbody>
 </table></div>
@@ -613,8 +613,8 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
-    <tr><td>2026-11-13</td><td>Recetas compartidas: antes, solo recetas propias → ahora, con alcance <code>all</code>, las recetas de las dos listas con su etiqueta, y cada operación en la lista de la receta (REC-38)</td><td><a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md">Separate shared lists — design</a></td></tr>
-    <tr><td>2026-11-13</td><td>Borrar una receta: antes, sus comidas del menú quedaban vacías → ahora se quitan las de esta semana en adelante, y las de semanas pasadas pasan a ser un plato con su nombre (REC-6)</td><td><a href="../superpowers/specs/2026-11-03-menu-history-design.md">Menu history — design</a></td></tr>
+    <tr><td>2026-11-13</td><td>Recetas compartidas: antes, solo recetas propias → ahora, con alcance <code>all</code>, las recetas de las dos listas con su etiqueta, y cada operación en la lista de la receta (REC-38)</td><td>Separate shared lists — design</td></tr>
+    <tr><td>2026-11-13</td><td>Borrar una receta: antes, sus comidas del menú quedaban vacías → ahora se quitan las de esta semana en adelante, y las de semanas pasadas pasan a ser un plato con su nombre (REC-6)</td><td>Menu history — design</td></tr>
     <tr><td>2026-11-13</td><td>Fila de receta: antes, <code>N productos · en la lista · con enlace</code> y solo el botón de envío → ahora etiqueta <code>en la lista</code>, línea de productos, botón de enlace (<code>play</code> o cadena) y botón de envío; desde 1024px, tarjetas con pie (REC-4, REC-15, REC-40)</td><td>Rediseño Bodega</td></tr>
     <tr><td>2026-11-13</td><td>Filtros: antes, ninguno → ahora chips <strong>Todas</strong>, <strong>En la lista</strong> y <strong>Con enlace</strong>; desde 1024px, tras el botón <strong>Filtros</strong> (REC-40, DSV-32)</td><td>Pantallas Stitch del rediseño Bodega</td></tr>
     <tr><td>2026-11-13</td><td>Disposición: antes, dos columnas desde 840px y la hoja siempre sobre un velo → ahora desde 840px la receta es un panel de 480px como máximo, y desde 1024px las tarjetas llenan columnas de 288px como mínimo (REC-7, REC-39)</td><td>Clases de ancho del dispositivo (DSV-9)</td></tr>
@@ -631,7 +631,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <ul>
   <li><b>Reglas</b> <a href="../spec/06-recipes.md"><code>docs/spec/06-recipes.md</code></a> (REC-1 a REC-42), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (ROW-11, NAV-7, NAV-25), <a href="../spec/05-shops.md"><code>docs/spec/05-shops.md</code></a> (SHOP-26), <a href="../spec/13-menu.md"><code>docs/spec/13-menu.md</code></a> (MENU-5, MENU-17, MENU-23), <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (LIST-38, TRIP-3), <a href="../spec/04-arrange.md"><code>docs/spec/04-arrange.md</code></a> (GROUP-5), <a href="../spec/15-design-system.md"><code>docs/spec/15-design-system.md</code></a> (DSV-9, DSV-31, DSV-32), <a href="../spec/19-sharing.md"><code>docs/spec/19-sharing.md</code></a> (SHARE-12, SHARE-14)</li>
   <li><b>Código</b> <code>src/recipes.js</code>, <code>src/ui/recipes.js</code>, <code>src/ui/list.js</code>, <code>src/menu.js</code>, <code>src/lists.js</code>, <code>src/store.js</code>, <code>styles.css</code>, <code>index.html</code>, <code>icons.svg</code>, <code>src/locales/es.js</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-12-recipes-design.md"><code>2026-10-12-recipes-design.md</code></a>, <a href="../superpowers/specs/2026-10-15-recipe-rows-design.md"><code>2026-10-15-recipe-rows-design.md</code></a>, <a href="../superpowers/specs/2026-10-12-recipe-search-design.md"><code>2026-10-12-recipe-search-design.md</code></a>, <a href="../superpowers/specs/2026-10-14-recipe-effects-design.md"><code>2026-10-14-recipe-effects-design.md</code></a>, <a href="../superpowers/specs/2026-10-19-menu-dishes-design.md"><code>2026-10-19-menu-dishes-design.md</code></a>, <a href="../superpowers/specs/2026-11-03-menu-history-design.md"><code>2026-11-03-menu-history-design.md</code></a>, <a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md"><code>2026-10-25-separate-shared-lists-design.md</code></a></li>
+  <li><b>Registros</b> <code>2026-10-12-recipes-design.md</code>, <code>2026-10-15-recipe-rows-design.md</code>, <code>2026-10-12-recipe-search-design.md</code>, <code>2026-10-14-recipe-effects-design.md</code>, <code>2026-10-19-menu-dishes-design.md</code>, <code>2026-11-03-menu-history-design.md</code>, <code>2026-10-25-separate-shared-lists-design.md</code></li>
   <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
   <li><b>Ejecutado</b> nada: ni tests ni comprobación en el navegador; cada sección se ha leído del código y de las reglas</li>
   <li><b>Abierto</b> ninguno</li>

@@ -577,8 +577,8 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <tbody>
     <tr><td>La instalación se ofrece solo con un botón en <code>Ajustes</code>, sin banner ni mensaje</td><td><a href="../spec/16-install.md">16-install.md, Limits</a></td></tr>
     <tr><td>Tres estados, e <code>installed</code> es final</td><td><a href="../spec/16-install.md">16-install.md, INS-1</a></td></tr>
-    <tr><td>La app instalada gira con el dispositivo (<code>orientation: any</code>)</td><td><a href="../superpowers/specs/2026-10-18-responsive-design.md">Responsive — design</a></td></tr>
-    <tr><td>La app de Android es una Trusted Web Activity sin código propio, construida desde <code>twa/twa-manifest.json</code>, con etiquetas <code>twa-vX.Y.Z</code></td><td><a href="../superpowers/plans/2026-11-13-android-twa.md">Android TWA — plan</a></td></tr>
+    <tr><td>La app instalada gira con el dispositivo (<code>orientation: any</code>)</td><td>Responsive — design · <a href="../spec/16-install.md">16-install.md</a></td></tr>
+    <tr><td>La app de Android es una Trusted Web Activity sin código propio, construida desde <code>twa/twa-manifest.json</code>, con etiquetas <code>twa-vX.Y.Z</code></td><td>Android TWA — plan · <a href="../spec/16-install.md">16-install.md</a></td></tr>
   </tbody>
 </table></div>
 
@@ -586,7 +586,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
-    <tr><td>2026-11-13</td><td>Solo la PWA instalable desde Chrome (INS-1 a INS-4) → también una app de Android: Trusted Web Activity <code>io.github.polarisworks.bodega</code> que abre <code>bodega.polarisworks.duckdns.org</code>, con <code>assetlinks.json</code>, <code>twa/twa-manifest.json</code> y etiquetas <code>twa-vX.Y.Z</code> (INS-5 a INS-8)</td><td><a href="../superpowers/plans/2026-11-13-android-twa.md">Android TWA — plan</a></td></tr>
+    <tr><td>2026-11-13</td><td>Solo la PWA instalable desde Chrome (INS-1 a INS-4) → también una app de Android: Trusted Web Activity <code>io.github.polarisworks.bodega</code> que abre <code>bodega.polarisworks.duckdns.org</code>, con <code>assetlinks.json</code>, <code>twa/twa-manifest.json</code> y etiquetas <code>twa-vX.Y.Z</code> (INS-5 a INS-8)</td><td>Android TWA — plan</td></tr>
     <tr><td>2026-10-23</td><td>Especificación inicial</td><td>—</td></tr>
   </tbody>
 </table></div>
@@ -595,7 +595,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <ul>
   <li><b>Reglas</b> <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a> (INS-1 a INS-8), <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (VER-9, VER-14, VER-16)</li>
   <li><b>Código</b> <code>src/install.js</code>, <code>src/ui/install.js</code>, <code>manifest.webmanifest</code>, <code>index.html</code>, <code>twa/twa-manifest.json</code>, <code>twa/.gitignore</code>, <code>.well-known/assetlinks.json</code>, <code>scripts/apk.mjs</code>, <code>.githooks/pre-push</code>, <code>src/locales/es.js</code>; etiquetas <code>twa-v1.0.0</code> y <code>twa-v1.1.0</code> con <code>git tag</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-18-responsive-design.md"><code>docs/superpowers/specs/2026-10-18-responsive-design.md</code></a>, <a href="../superpowers/plans/2026-11-13-android-twa.md"><code>docs/superpowers/plans/2026-11-13-android-twa.md</code></a></li>
+  <li><b>Registros</b> <code>docs/superpowers/specs/2026-10-18-responsive-design.md</code>, <code>docs/superpowers/plans/2026-11-13-android-twa.md</code></li>
   <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
   <li><b>Ejecutado</b> <code>npm test</code>: 1777 tests, 1777 correctos, con <code>tests/install.test.js</code>, <code>tests/twa.test.js</code> y <code>tests/apk.test.js</code>. El botón, el diálogo de Chrome, <code>npm run apk</code> y la app de Android no se han probado</li>
   <li><b>Abierto</b>

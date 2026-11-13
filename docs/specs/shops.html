@@ -583,13 +583,13 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="decisions" data-plain>
   <thead><tr><th>Decisión</th><th>Registro</th></tr></thead>
   <tbody>
-    <tr><td>Un artículo tiene cero, una o varias tiendas, escritas a mano con las tiendas en uso como sugerencias</td><td><a href="../superpowers/specs/2026-10-13-shops-design.md">Shops of a product — design</a></td></tr>
-    <tr><td>Sin registros de tienda ni pantalla de tiendas: una tienda existe mientras un artículo la tiene</td><td><a href="../superpowers/specs/2026-10-13-shops-design.md">Shops of a product — design</a></td></tr>
-    <tr><td>La app no recuerda las tiendas de un artículo borrado</td><td><a href="../superpowers/specs/2026-10-13-shops-design.md">Shops of a product — design</a></td></tr>
+    <tr><td>Un artículo tiene cero, una o varias tiendas, escritas a mano con las tiendas en uso como sugerencias</td><td>Shops of a product — design · <a href="../spec/05-shops.md">05-shops.md</a></td></tr>
+    <tr><td>Sin registros de tienda ni pantalla de tiendas: una tienda existe mientras un artículo la tiene</td><td>Shops of a product — design · <a href="../spec/05-shops.md">05-shops.md</a></td></tr>
+    <tr><td>La app no recuerda las tiendas de un artículo borrado</td><td>Shops of a product — design · <a href="../spec/05-shops.md">05-shops.md</a></td></tr>
     <tr><td>Por debajo de 600px, un dock lleva la lista por tienda y la búsqueda al alcance del pulgar</td><td><a href="../spec/05-shops.md">05-shops.md, SHOP-26</a></td></tr>
     <tr><td>Una lista terminada muestra una tarjeta final con la siguiente tienda</td><td><a href="../spec/05-shops.md">05-shops.md, SHOP-23</a></td></tr>
     <tr><td>Una lista por tienda es una vista de <code>Compra</code>, y la elección no se guarda</td><td><a href="../spec/05-shops.md">05-shops.md, Shop lists</a></td></tr>
-    <tr><td>Las listas por tienda funcionan dentro del chip de lista de un miembro</td><td><a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md">Separate shared lists — design</a></td></tr>
+    <tr><td>Las listas por tienda funcionan dentro del chip de lista de un miembro</td><td>Separate shared lists — design · <a href="../spec/05-shops.md">05-shops.md</a></td></tr>
     <tr><td>Sin orden propio de tiendas ni tiendas en los productos de una receta</td><td><a href="../spec/05-shops.md">05-shops.md, Limits</a></td></tr>
   </tbody>
 </table></div>
@@ -598,7 +598,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
-    <tr><td>2026-11-13</td><td>Listas por tienda de un miembro: antes, sin listas compartidas → ahora funcionan dentro del chip de lista, con <code>Todas las tiendas</code> como entrada de todas (SHARE-14)</td><td><a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md">Separate shared lists — design</a></td></tr>
+    <tr><td>2026-11-13</td><td>Listas por tienda de un miembro: antes, sin listas compartidas → ahora funcionan dentro del chip de lista, con <code>Todas las tiendas</code> como entrada de todas (SHARE-14)</td><td>Separate shared lists — design</td></tr>
     <tr><td>2026-11-13</td><td>Preferencia <code>shopping.shopLists</code>: antes, solo <strong>Mostrar</strong> borraba la clave → ahora además cualquier valor distinto de <code>hide</code> se lee como <strong>Mostrar</strong> (SHOP-25)</td><td><a href="../spec/05-shops.md">05-shops.md, SHOP-25</a></td></tr>
     <tr><td>2026-11-13</td><td>Tarjeta final: antes, <code>Siguiente</code> era el botón principal → ahora los dos botones son tonales y el <code>+</code> del dock es el único principal (SHOP-23)</td><td>Rediseño Bodega</td></tr>
     <tr><td>2026-11-13</td><td>Fila de chips: antes, aparecía con cualquier artículo de <code>Compra</code> con tienda, bajo la cabecera → ahora no cuentan los artículos guardados ni pospuestos, y la fila va al pie de la cabecera, con el chip pulsado relleno de <code>--done</code> (SHOP-16, SHOP-17)</td><td>Lista <code>postponed</code> y rediseño Bodega</td></tr>
@@ -613,7 +613,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <ul>
   <li><b>Reglas</b> <a href="../spec/05-shops.md"><code>docs/spec/05-shops.md</code></a> (SHOP-1 a SHOP-27), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (ROW-1, NAV-4, NAV-7, NAV-8, NAV-22, NAV-24), <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (ADD-6, TRIP-2), <a href="../spec/04-arrange.md"><code>docs/spec/04-arrange.md</code></a> (GROUP-2, GROUP-14, GROUP-15), <a href="../spec/15-design-system.md"><code>docs/spec/15-design-system.md</code></a> (DSV-33), <a href="../spec/19-sharing.md"><code>docs/spec/19-sharing.md</code></a> (SHARE-14), <a href="../spec/08-storage.md"><code>docs/spec/08-storage.md</code></a> (STORE-7)</li>
   <li><b>Código</b> <code>src/shops.js</code>, <code>src/ui/edit.js</code>, <code>src/ui/list.js</code>, <code>src/ui/arrange.js</code>, <code>src/ui/add.js</code>, <code>src/ui/context.js</code>, <code>src/app.js</code>, <code>src/storage.js</code>, <code>index.html</code>, <code>styles.css</code>, <code>src/locales/es.js</code></li>
-  <li><b>Registros</b> <a href="../superpowers/specs/2026-10-13-shops-design.md"><code>2026-10-13-shops-design.md</code></a>, <a href="../superpowers/specs/2026-10-25-separate-shared-lists-design.md"><code>2026-10-25-separate-shared-lists-design.md</code></a></li>
+  <li><b>Registros</b> <code>2026-10-13-shops-design.md</code>, <code>2026-10-25-separate-shared-lists-design.md</code></li>
   <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
   <li><b>Ejecutado</b> nada: ni tests ni comprobación en el navegador; cada sección se ha leído del código y de las reglas</li>
   <li><b>Abierto</b> ninguno</li>
