@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- Al iniciar sesión con Google entras al momento: ya no hay que esperar la aprobación de una cuenta.
 
 ## 1.13.7 - 2026-11-14
 

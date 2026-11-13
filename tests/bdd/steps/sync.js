@@ -588,7 +588,9 @@ const accessServer = (world, user) => async (url, init) => {
   if (pathname === '/api/collections/app_access/records' && init.method === 'POST') {
     const body = JSON.parse(init.body);
     const app = world.access.apps.find((candidate) => candidate.id === body.app);
-    const row = { user: body.user, app: app.slug, status: body.status };
+    // An open app saves the own pending row of a user as approved, and answers so.
+    const status = app.open && body.status === 'pending' ? 'approved' : body.status;
+    const row = { user: body.user, app: app.slug, status };
     world.access.rows.push(row);
     return reply(row);
   }
@@ -596,6 +598,9 @@ const accessServer = (world, user) => async (url, init) => {
 };
 
 const defineAccountSteps = ({ Given, When, Then }) => {
+  Given('the app {string} is open', (world, slug) => {
+    world.access.apps.find((app) => app.slug === slug).open = true;
+  });
   Given('the access row of {string} for the app {string} is {word}', (world, user, app, status) => {
     world.access.rows.push({ user, app, status });
   });

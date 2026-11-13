@@ -82,7 +82,15 @@ Feature: Account
         | revoked  | no       |
 
     @ACC-3
-    Scenario: A sign-in with no access row of this app asks for access with a pending row
+    Scenario: A sign-in with no access row of an open app is approved at once
+      Given the app "shopping" is open
+      And the access row of "ana" for the app "bodega" is approved
+      When "ana" signs in to the server
+      Then the session is approved: yes
+      And the access rows of "ana" are "bodega approved, shopping approved"
+
+    @ACC-3
+    Scenario: A sign-in with no access row of a closed app asks for access with a pending row
       Given the access row of "ana" for the app "bodega" is approved
       When "ana" signs in to the server
       Then the session is approved: no

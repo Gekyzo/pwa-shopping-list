@@ -10,7 +10,15 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- ACC-3: Bodega is an open app of the server (pwa-server migration 20): the own `pending` row of a
+  sign-in is saved and answered as `approved`, so a Google sign-in gets in at once. Only a `revoked`
+  row reaches the screen, now **Sin acceso**. No client code change: the app already reads the
+  status from the answer of its POST.
+- ACC-5: drop "the account of an OAuth sign-up is not approved".
+- SHARE-4: an invitee signs in with Google and has access at once; a `revoked` account sees no
+  invite.
+- `account.waiting.*` texts in 7 locales speak of an account with no access, not of an approval to
+  come. README FAQ and `privacy.html` drop the approval and its mails.
 
 ## 1.13.7 - 2026-11-14
 

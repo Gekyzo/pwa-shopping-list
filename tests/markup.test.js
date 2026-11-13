@@ -312,7 +312,7 @@ test('Iniciar sesión has Google and Usar sin cuenta, and no email or password (
   assert.doesNotMatch(auth, /<input|type="password"|id="request"/);
 });
 
-test('Esperando aprobación has Comprobar de nuevo and Cerrar sesión (ACC-2)', () => {
+test('Sin acceso has Comprobar de nuevo and Cerrar sesión (ACC-2)', () => {
   const waiting = viewOf('waiting');
   assert.deepEqual(keysOf(waiting), ['account.waiting.title', 'account.waiting.text', 'account.waiting.check', 'account.logout']);
   assert.match(waiting, /<button id="waiting-check" class="button tonal wide"/);

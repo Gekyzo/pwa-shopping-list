@@ -7,7 +7,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
 
 - **ACC-1** At the start the app routes by the session and the local data:
   - a saved session, approved: the list, online or not;
-  - a saved session, not approved: **Esperando aprobación**;
+  - a saved session, not approved: **Sin acceso**;
   - no session and the offline flag (ACC-13): the list, with no banner, online or not;
   - no session, no flag and no `shopping.v1` data: **Iniciar sesión**;
   - no session, no flag and `shopping.v1` data: the list as before, with the banner of ACC-11.
@@ -23,7 +23,7 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   start or `online` event tries again.
 - **ACC-2** Two screens cover the list. **Iniciar sesión** has the Google button and, while there
   is no session, **Usar sin cuenta** (ACC-13). The app has no email and password sign-in.
-  **Esperando aprobación** has **Comprobar de nuevo** and **Cerrar sesión**. Their texts name the
+  **Sin acceso** has **Comprobar de nuevo** and **Cerrar sesión**. Their texts name the
   one who approves as the administrator, never by a person's name. The screens cover the app, the
   walkthrough too. When the device has a list or the offline flag, **Iniciar sesión** also has
   **Volver a la lista**; `Escape` and the back of the phone close it too, as a layer of NAV-25. A
@@ -32,18 +32,20 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   A login that the account replaces (SYNC-8) then offers the old list as an export file, one time.
 - **ACC-3** One account of the server serves every app of the server; access is approved per app.
   "Approved" is the access row of this app (`app_access`, app `shopping`) with status `approved`.
-  Each sign-in reads that row; with no row, the app asks for access with a `pending` row, and the
-  user then sees **Esperando aprobación**. An account made before with email and password signs in
-  with Google with the same email: the server links the two. A `pending` or `revoked` row shows the same screen.
+  Each sign-in reads that row; with no row, the app asks for access with a `pending` row. Bodega is
+  an open app of the server: the server saves that row as `approved` and answers so, and the user
+  gets in at once. A `revoked` row shows **Sin acceso** (a `pending` row too, which an open app no
+  longer makes). An account made before with email and password signs in with Google with the same
+  email: the server links the two.
 - **ACC-4** An account that is not approved makes no request for data. A device that holds a list
   before that login keeps it stored, unchanged, until the approval. Then SYNC-8 applies.
   **Comprobar de nuevo** refreshes the session: an approved account logs in, else the message
-  `account.waiting.still`. **Cerrar sesión** of **Esperando aprobación** removes only the session when
+  `account.waiting.still`. **Cerrar sesión** of **Sin acceso** removes only the session when
   the account is not the owner of the stored data, so the list stays; the owner logs out as ACC-9.
   With no list and no offline flag it then opens **Iniciar sesión**; else the list.
 - **ACC-5** Google sign-in is a redirect. The app asks the server for the URL of the provider, sends the
   browser there with the URL of the app as the return address, and exchanges the `code` on return.
-  The account of an OAuth sign-up is not approved (ACC-3). The app removes `code`,
+  The app removes `code`,
   `state` and `error` from the URL at once and keeps each other parameter, as ARR-4. A return
   with no `code` (a cancel at Google) or with a `state` that is not the one sent drops the pending
   sign-in and shows **Iniciar sesión** with `account.error.google`.

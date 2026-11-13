@@ -70,7 +70,7 @@ Without an account, clearing Chrome's site data or uninstalling the app deletes 
 
 **Is my data tracked?** No ads, no analytics, no tracking. See the [privacy policy](https://bodega.polarisworks.duckdns.org/privacy.html).
 
-**Why must I wait after I sign up?** An administrator approves each new account. You can use Bodega without an account meanwhile.
+**Do I need an account?** No. Sign in with Google only to sync between devices and share a list; access is immediate.
 
 **Which languages?** Spanish, Catalan, English, French, German, Italian and Portuguese.
 

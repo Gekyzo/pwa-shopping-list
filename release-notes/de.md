@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Wenn du dich mit Google anmeldest, kommst du sofort hinein: Ein Konto wartet nicht mehr auf Freigabe.
 
 ## 1.13.7 - 2026-11-14
 

@@ -18,9 +18,9 @@ person of a share.
     `share_taken`): a person is a member of one space at most. A cancelled share (SHARE-11) does
     not count;
   - an invite by a user who is a member of a space: a share has no chain.
-- **SHARE-4** An invite gives no account. A person with no account requests access (ACC-3), and
-  the administrator approves the account as for any account (ACC-4). An account that is not
-  approved sees no invite.
+- **SHARE-4** An invite gives no account. A person with no account signs in with Google and has
+  access at once (ACC-3); no administrator step. An account with a `revoked` row sees no invite
+  (ACC-4).
 - **SHARE-5** The invitee accepts or declines in the sheet **Compartir lista**. The accept asks
   first (`share.acceptAsk`): `¿Compartir la lista de <email>? Su lista se mostrará junto a la
   tuya.` The sheet shows the warning `share.acceptWarning` above **Aceptar**: `Su lista se

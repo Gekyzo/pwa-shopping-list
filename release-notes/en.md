@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- When you sign in with Google you get in at once: an account no longer waits for approval.
 
 ## 1.13.7 - 2026-11-14
 

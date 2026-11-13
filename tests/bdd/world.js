@@ -27,7 +27,7 @@ export const createWorld = () => {
     // The shares of the rules of src/shares.js.
     shares: [],
     // ACC-3: the apps of the server and the access rows of its accounts, and the session of a sign-in.
-    access: { apps: [{ id: 'app1', slug: 'shopping' }, { id: 'app2', slug: 'bodega' }], rows: [] },
+    access: { apps: [{ id: 'app1', slug: 'shopping', open: false }, { id: 'app2', slug: 'bodega', open: false }], rows: [] },
     session: null,
     // The key of the toast of the last delete of a row of Todas (SHARE-16).
     toast: null,

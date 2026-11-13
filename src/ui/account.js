@@ -1,5 +1,5 @@
 // The account screens (ACC-2): Iniciar sesión, with Google or Usar sin cuenta (ACC-13), and
-// Esperando aprobación, the sync of the
+// Sin acceso, the sync of the
 // device (SYNC-3), its offline note (SYNC-11), the banner of a device with no session (ACC-11) and the
 // row Cuenta of Ajustes (ACC-10).
 import { createClient, PocketBaseError } from '#pocketbase';
@@ -194,7 +194,7 @@ const disconnect = () => {
 const runAndConnect = () => syncer.run().then(connect);
 
 // The login of a session that the server gave: the questions of ACC-8 and SYNC-8, then the list or
-// Esperando aprobación. A failed first pull removes the session (the syncer): Iniciar sesión again.
+// Sin acceso. A failed first pull removes the session (the syncer): Iniciar sesión again.
 const enter = async (session) => {
   const before = hasBeforeLogin();
   let result;
@@ -321,7 +321,7 @@ export const stopSync = async () => {
   await syncer.logout({ online: false, discard: true });
 };
 
-// Cerrar sesión of Esperando aprobación. ACC-4: an account that waits never owned the list of the
+// Cerrar sesión of Sin acceso. ACC-4: an account that waits never owned the list of the
 // device, so only its session goes and the list stays. The owner of the list logs out in full.
 const leaveWaiting = () => {
   const session = sessionNow();

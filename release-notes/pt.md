@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- Quando inicia sessão com o Google entra logo: uma conta já não espera pela aprovação.
 
 ## 1.13.7 - 2026-11-14
 

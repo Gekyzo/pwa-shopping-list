@@ -4,7 +4,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 
 ## Unreleased
 
-No change.
+- Quand vous vous connectez avec Google, vous entrez tout de suite : un compte n’attend plus d’approbation.
 
 ## 1.13.7 - 2026-11-14
 

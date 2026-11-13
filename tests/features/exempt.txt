@@ -207,7 +207,7 @@ INS-7 static tests/twa.test.js checks the wrapper against manifest.webmanifest a
 INS-8 prose A wrapper release is a manual step: npm run apk, the tag twa-vX.Y.Z and gh release create.
 
 # 18-account-sync.md
-ACC-2 screen The screens Iniciar sesión and Esperando aprobación, their buttons, texts, errors and layer.
+ACC-2 screen The screens Iniciar sesión and Sin acceso, their buttons, texts, errors and layer.
 ACC-5 screen The Google redirect, its sessionStorage and the clean-up of the URL; tests/pocketbase.test.js checks oauthStart and oauthFinish.
 ACC-10 screen The row Cuenta of Ajustes: the email, the time of the last sync and Cerrar sesión.
 ACC-11 screen The banner of a device with no session; its route is the banner case of ACC-1.
