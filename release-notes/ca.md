@@ -8,7 +8,7 @@ No change.
 
 ## 1.13.4 - 2026-11-13
 
-- Bodega també és una app d’Android. Baixa el fitxer `bodega-1.0.0.apk` de github.com/polaris-works/pwa-shopping-list/releases i instal·la’l: veuràs les mateixes llistes.
+- Bodega també és una app d’Android. Baixa el fitxer `bodega-1.0.0.apk` de github.com/polaris-works/shopping-list/releases i instal·la’l: veuràs les mateixes llistes.
 
 ## 1.13.2 - 2026-11-09
 

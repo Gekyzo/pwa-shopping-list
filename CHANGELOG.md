@@ -10,7 +10,8 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- The repository is `polaris-works/shopping-list`: GitHub Pages serves it from
+  `https://polaris-works.github.io/shopping-list/`, the path of the manifest `id` (VER-9, VER-14).
 
 ## 1.13.4 - 2026-11-13
 

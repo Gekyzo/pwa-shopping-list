@@ -112,7 +112,7 @@ rules are dropped. The version comparison (VER-3, VER-7) is core if the port sho
 
 ## Deploy
 
-**VER-9** [dropped] [untested] The app is a static site served at `https://polaris-works.github.io/pwa-shopping-list/`. The push of a tag `v*` runs `.github/workflows/pages.yml`, which uploads the repository root of the tagged commit to GitHub Pages (environment `github-pages`, concurrency group `pages`, no cancel). A push to `main` deploys nothing.
+**VER-9** [dropped] [untested] The app is a static site served at `https://polaris-works.github.io/shopping-list/`. The push of a tag `v*` runs `.github/workflows/pages.yml`, which uploads the repository root of the tagged commit to GitHub Pages (environment `github-pages`, concurrency group `pages`, no cancel). A push to `main` deploys nothing.
 - Evidence: `.github/workflows/pages.yml:7-33`.
 - Reason: static-host deploy. Replacement: a tag workflow that builds a signed release (AAB for Play, or an APK attached to a GitHub release).
 

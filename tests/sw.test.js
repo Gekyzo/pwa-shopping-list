@@ -99,7 +99,7 @@ test('SHELL has the release notes of each language, so they show offline (VER-20
 });
 
 test('keyOf drops the query, so a start from a shortcut refreshes the cached page (SW-6)', () => {
-  const page = 'https://example.github.io/pwa-shopping-list/';
+  const page = 'https://example.github.io/shopping-list/';
   assert.equal(keyOf(`${page}?open=active`), page);
   assert.equal(keyOf(page), page);
   assert.equal(keyOf(`${page}src/app.js?v=1#top`), `${page}src/app.js#top`);

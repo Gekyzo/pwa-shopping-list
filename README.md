@@ -74,7 +74,7 @@ To install it on Android:
 3. Start the app from the home screen. It works with no network connection after the first load.
 
 Or install the Android app: download `bodega-<version>.apk` from the
-[GitHub releases](https://github.com/polaris-works/pwa-shopping-list/releases) (tags `twa-v*`) and open
+[GitHub releases](https://github.com/polaris-works/shopping-list/releases) (tags `twa-v*`) and open
 it on the phone. It is the same site in Chrome, full screen, with the same lists (INS-5). Remove
 the icon that Chrome installed only after the app shows your lists, and never clear the site data
 of Chrome: the app keeps its lists there.

@@ -8,7 +8,7 @@ No change.
 
 ## 1.13.4 - 2026-11-13
 
-- Bodega ist jetzt auch eine Android-App. Lade die Datei `bodega-1.0.0.apk` von github.com/polaris-works/pwa-shopping-list/releases herunter und installiere sie: Du siehst dieselben Listen.
+- Bodega ist jetzt auch eine Android-App. Lade die Datei `bodega-1.0.0.apk` von github.com/polaris-works/shopping-list/releases herunter und installiere sie: Du siehst dieselben Listen.
 
 ## 1.13.2 - 2026-11-09
 
