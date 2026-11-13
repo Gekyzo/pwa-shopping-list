@@ -8,6 +8,9 @@ Planned features, not in order of priority. `CHANGELOG.md` records what shipped.
 - **Recipe categories.** Give each recipe one or more categories, such as
   lunch, dinner or healthy, and filter the recipes by category.
 - **Buy me a coffee.** Add support link
+- **Barcode scan.** Add an item from its barcode in the add sheet. Built on the branch
+  `barcode-scanner` (2 commits), which is far behind `main` and needs a rebase, a rule and
+  a scenario before a merge.
 
 ### Deferred
 
@@ -18,10 +21,16 @@ Not needed yet. Each item names what makes it needed.
   photos or recipe pictures, which do not fit in `localStorage`.
 - **Price estimation.** Estimate the price of a list. Unnecessary until the
   products have prices, from a price field or from **Purchase history**.
-- **Send a copy.** Send a list to a contact as a link, through the Android
-  share sheet. The list travels in the link fragment, with no server and no
-  login. The contact gets a copy; later changes do not sync. Unnecessary until a
-  second person shops from the lists.
+
+## Shipped free
+
+These were candidates for the paid version below. They shipped in the free version.
+
+- **Sync between devices.** The lists stay the same on a phone, a tablet and the
+  web, with a Google account.
+- **Live shared list.** An invite by email between two accounts: the member sees the
+  shared list beside the own one, and the owner chooses whether recipes and the menu
+  are shared too. It also covers the deferred **Send a copy**.
 
 ## Pro
 
@@ -38,15 +47,6 @@ link, with no login. The features below need its server.
   before. On a phone with no data, the app offers to restore the backup. A
   backup in the phone does not survive **Clear site data** or an uninstall, and
   a PWA cannot replace or read a file in `Descargas` on its own.
-
-- [x] **Sync between devices.** Keep the lists the same on a phone, a tablet and the
-  web. Shipped with a Google account on the PocketBase server, not with a recovery
-  link.
-- [x] **Live shared list.** Share a list with a contact so that both edit the same
-  list. Shipped as an invite by email between two accounts: the member sees the
-  shared list beside the own one, and the owner chooses whether recipes and the
-  menu are shared too. User feedback: a family needs the same list on several
-  devices every day.
 
 ### AI integration
 
