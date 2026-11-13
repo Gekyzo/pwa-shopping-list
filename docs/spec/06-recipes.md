@@ -21,8 +21,8 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   left shows **Eliminar**, an icon button 72 px wide with its name under the icon. Its text for a screen reader
   is `Eliminar {name}`. A slide to the right sends the recipe at the
   release (REC-17), with the rule and the backdrop of ROW-11 and the icon `cart-add`.
-- **REC-6** A delete removes the recipe, its id from `sent` and its meals of this week from the
-  menu. Each of its meals of a past week becomes a dish of its name, cut to 80 characters, so that
+- **REC-6** A delete removes the recipe, its id from `sent` and its meals of this week and of the
+  next weeks from the menu. Each of its meals of a past week becomes a dish of its name, cut to 80 characters, so that
   the past week keeps it (MENU-23). It has `Deshacer`. The items that the recipe sent stay in the lists.
 - **REC-7** The recipes show in the order of their creation. Below 840px wide they stand in one column; from
   840px in two, filled row by row, so more of them fit on the screen of a tablet. An unfolded phone

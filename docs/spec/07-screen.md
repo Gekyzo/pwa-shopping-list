@@ -47,8 +47,9 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
   tienda**); **Aplicación** (**Instalar la aplicación**); and **Ayuda** (**Ver la introducción**,
   **Novedades** (VER-22), **Borrar la receta de ejemplo**). A group title ends with an icon, and
   each row starts with one (DSV-21). A row is `--tap-l` high or more: 56 px, 48 px in `Compacta`.
-  It has its name at the start. A row that opens something ends with a `›`; **Exportar**,
-  **Importar**, **Secciones de la tienda** and **Ver la introducción** do. A row of **Preferencias**
+  It has its name at the start. A row that opens something ends with a `›`; **Compartir lista**,
+  **Inicia sesión para sincronizar**, **Exportar**, **Importar**, **Secciones de la tienda**,
+  **Instalar la aplicación**, **Ver la introducción** and **Novedades** do. A row of **Preferencias**
   also shows its current value before the `›`, and a tap on the row opens the picker of the device
   (a `select` laid over the row). **Secciones de la tienda** shows the number of sections.
   **Borrar la receta de ejemplo** and **Borrar todos los datos** (BACKUP-7) have the colour of

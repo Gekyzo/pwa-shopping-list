@@ -7,7 +7,8 @@ bottom bar (NAV-1).
 ## Rules
 
 - **AISLE-1** The aisles are one list of the state, `aisles`, in the order of the walk through the
-  store. Unlike a shop (DATA-12), an aisle has a record: it exists with no item.
+  store. Unlike a shop (DATA-12), an aisle has a record: it exists with no item. The aisles are
+  never shared: a member sees and orders by their own aisles only (`combine`, SHARE-12).
 - **AISLE-2** An aisle name is trimmed. An empty name gives `error.aisleRequired`. A name that is
   an aisle already, with no case distinction, gives `error.duplicateAisle`.
 - **AISLE-3** A new aisle goes to the end of the list.
