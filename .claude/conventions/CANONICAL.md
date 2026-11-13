@@ -22,17 +22,19 @@ for that kind, use it — the template is the exemplar made executable.
 
 ## Patterns
 
-- **Immutable state.** One object `{ version, items, recipes, sent, group, sort }`. An operation returns a new
-  object and never changes its input.
+- **Immutable state.** One object `{ version, items, recipes, sent, group, sort, menu, aisles }`
+  (`emptyState` of `src/store.js`). An operation returns a new object and never changes its input.
 - **Errors as values.** A rejected operation returns `{ state, error }` with the
   same state object. Nothing throws for a user error. `error` is a message `{ key, params }`: the
   key of an entry of the catalogs of `src/locales/`. Only the screen code (`src/app.js` and
   `src/ui/`) turns a message into text.
 - **Render from state.** A view of `src/ui/` applies an operation through `apply` of
   `src/ui/context.js`, which saves, then builds the screen again from the state. The DOM holds no data of its own.
-- **Derived views.** The `Next` view is computed by `nextItems`, and the groups of `Active` by
-  `recipeGroups`. The groups of a list by shop are computed by `shopGroups`. The name order is computed by `sortItems`; `items` keeps the insertion order. An item is one
-  record and is never copied between lists.
+- **Derived views.** The list `Compra` is computed by `activeItems` and the postponed items by
+  `postponedItems` (`src/store.js`). The groups of a list by recipe are computed by `recipeGroups`,
+  by shop by `shopGroups` and by aisle by `aisleGroups`. The name order is computed by `sortItems`;
+  `items` keeps the insertion order. An item is one record: its `list` (`active`, `saved` or
+  `postponed`) says where it is, and it is never copied between lists.
 - **Text only.** DOM nodes get user text through `textContent`, never `innerHTML`.
 
 ## Do not copy
