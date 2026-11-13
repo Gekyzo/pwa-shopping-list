@@ -5,28 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Integraciones</title>
 <meta name="description" content="El aviso al llegar a la tienda, los accesos directos del icono y los comandos de voz.">
-<style>
+<style>/* Palette: "decision brief" (cool neutral, one blue accent). Dark tokens follow the OS unless
+   html[data-theme] (the contents' ◐ button) forces one. --faint keeps 4.5:1 on --bg in both. */
 :root {
-  --bg: #f7f5f0;
-  --surface: #fffdf8;
-  --sunk: #efece4;
-  --ink: #1f1d1a;
-  --muted: #5d5850;
-  --faint: #8f887c;
-  --rule: #e2ddd2;
-  --rule-strong: #cbc4b5;
-  --accent: #2f6f8f;
-  --accent-soft: #e3eef3;
+  color-scheme: light;
+  --bg: #f3f4f3;
+  --surface: #ffffff;
+  --sunk: #e9ebe9;
+  --ink: #141817;
+  --muted: #4f5755;
+  --faint: #646e6b;
+  --rule: #dde0dd;
+  --rule-strong: #c3c8c3;
+  --accent: #2a5f82;
+  --accent-soft: #dde9f0;
   --red: #b3372b;    --red-soft: #f8e5e1;
   --amber: #9a6410;  --amber-soft: #f7ecd6;
   --green: #2e7a45;  --green-soft: #e2f1e5;
-  --code-bg: #fbf9f4;
+  --code-bg: #f9faf9;
   --line-mark: #fdf3cf;
-  --tk-kw: #8b3fa8;  --tk-str: #2e7a45;  --tk-com: #948d80;
+  --shadow: 0 6px 20px rgb(0 0 0 / 0.12);
+  --tk-kw: #8b3fa8;  --tk-str: #2e7a45;  --tk-com: #6b7471;
   --tk-num: #b0521b; --tk-fn: #2f5fa8;   --tk-type: #9a6410;
-  --tk-var: #b3372b; --tk-prop: #2f6f8f;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --tk-var: #b3372b; --tk-prop: #2a5f82;
+  --sans: "Segoe UI Variable Text", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "SF Mono", "SFMono-Regular", "SF Mono Ligaturized", ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #111413; --surface: #191d1c; --sunk: #222726; --ink: #e8ebe9; --muted: #aab2af; --faint: #808a87;
+  --rule: #262c2a; --rule-strong: #3a423f; --accent: #8cbbd8; --accent-soft: #1d2f3b;
+  --red: #ef8b7c; --red-soft: #3b2220; --amber: #dfae4f; --amber-soft: #3a2f14; --green: #7ccc93; --green-soft: #17301f;
+  --code-bg: #151918; --line-mark: #3a3418; --shadow: 0 6px 20px rgb(0 0 0 / 0.5);
+  --tk-kw: #c792d8; --tk-str: #8fc9a0; --tk-com: #808a87; --tk-num: #e0a070; --tk-fn: #8ab4f0; --tk-type: #d9b26a; --tk-var: #e8907f; --tk-prop: #8cbbd8;
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111413; --surface: #191d1c; --sunk: #222726; --ink: #e8ebe9; --muted: #aab2af; --faint: #808a87;
+  --rule: #262c2a; --rule-strong: #3a423f; --accent: #8cbbd8; --accent-soft: #1d2f3b;
+  --red: #ef8b7c; --red-soft: #3b2220; --amber: #dfae4f; --amber-soft: #3a2f14; --green: #7ccc93; --green-soft: #17301f;
+  --code-bg: #151918; --line-mark: #3a3418; --shadow: 0 6px 20px rgb(0 0 0 / 0.5);
+  --tk-kw: #c792d8; --tk-str: #8fc9a0; --tk-com: #808a87; --tk-num: #e0a070; --tk-fn: #8ab4f0; --tk-type: #d9b26a; --tk-var: #e8907f; --tk-prop: #8cbbd8;
 }
 
 * { box-sizing: border-box; }
@@ -37,33 +56,53 @@ code, pre, kbd { font-family: var(--mono); font-size: 0.86em; }
 :not(pre) > code { background: var(--sunk); padding: 0.08em 0.35em; border-radius: 4px; }
 /* long identifiers and paths break instead of widening the page on narrow screens */
 :not(pre) > code, article.finding > header .where { overflow-wrap: anywhere; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.skip { position: absolute; left: -999px; top: 0.5rem; z-index: 50; padding: 0.4rem 0.8rem; border-radius: 6px; background: var(--ink); color: var(--bg); }
+.skip:focus { left: 0.5rem; }
 
 /* ── layout ─────────────────────────────────────────────── */
-.shell { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2.5rem; max-width: 84rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.shell { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2.5rem; max-width: 82rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 nav.toc { position: sticky; top: 1.5rem; align-self: start; max-height: calc(100vh - 3rem); overflow: auto; font-size: 0.85rem; }
 nav.toc .toc-title { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin: 0 0 0.5rem; }
-nav.toc ol { list-style: none; margin: 0; padding: 0; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; counter-reset: toc; }
 nav.toc li a { display: block; padding: 0.2rem 0.6rem; border-left: 2px solid var(--rule); color: var(--muted); text-decoration: none; }
+nav.toc li.sec { counter-increment: toc; }
+nav.toc li.sec > a::before { content: counter(toc); display: inline-block; min-width: 1.9em; font: 500 0.78em var(--mono); color: var(--faint); }
 nav.toc li.sub a { padding-left: 1.4rem; font-size: 0.8rem; }
 nav.toc li a:hover { color: var(--ink); }
 nav.toc li a[aria-current="true"] { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
-main { min-width: 0; }
+main { min-width: 0; counter-reset: sec; }
 
 /* ── masthead ───────────────────────────────────────────── */
-.kicker { font: 600 0.72rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); margin: 0 0 0.4rem; }
-h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 0.6rem; letter-spacing: -0.01em; }
-.meta { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; color: var(--muted); font-size: 0.85rem; margin: 0 0 1.5rem; padding: 0 0 1rem; border-bottom: 1px solid var(--rule); }
-.meta b { color: var(--ink); font-weight: 600; }
+.masthead { margin: 0 0 1.6rem; }
+.kicker { font: 600 0.72rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.4rem; }
+h1, h2, h3 { text-wrap: balance; }
+h1 { font-size: 2rem; font-weight: 700; line-height: 1.2; margin: 0 0 0.6rem; letter-spacing: -0.02em; }
+dl.meta { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; margin: 0.6rem 0 0; font-size: 0.85rem; }
+dl.meta > div { display: grid; gap: 0.1rem; }
+dl.meta dt { font: 700 0.66rem var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+dl.meta dd { margin: 0; }
+/* the older one-line form, still on pages made before the masthead */
+p.meta { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; color: var(--muted); font-size: 0.85rem; margin: 0 0 1.5rem; padding: 0 0 1rem; border-bottom: 1px solid var(--rule); }
+p.meta b { color: var(--ink); font-weight: 600; }
 
-h2 { font-size: 1.3rem; margin: 2.8rem 0 0.8rem; padding-top: 0.2rem; border-top: 1px solid var(--rule); padding-top: 1.2rem; }
+/* Section numbers are CSS counters; a typed <span class="n"> in an h2 (older pages) is hidden. */
+h2 { margin: 3rem 0 0.8rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+main > h2 { counter-increment: sec; }
+main > h2::before, main > h2.foldable .fold::after { content: counter(sec); font: 600 0.85rem var(--mono); color: var(--faint); margin-right: 0.55rem; }
+main > h2.foldable::before { content: none; }
+main > h2.foldable .fold::after { margin: 0 0.55rem 0 0.35rem; }
+main > h2 > .n { display: none; }
 h3 { font-size: 1.05rem; margin: 1.8rem 0 0.5rem; }
-h2 .n, h3 .n { font-family: var(--mono); color: var(--faint); font-weight: 500; margin-right: 0.4rem; }
+h3 .n { font-family: var(--mono); color: var(--faint); font-weight: 500; margin-right: 0.4rem; }
+h2[id] .anchor, h3[id] .anchor { margin-left: 0.4rem; font: 400 0.85em var(--mono); color: var(--faint); text-decoration: none; opacity: 0; transition: opacity 0.15s; }
+h2[id]:hover .anchor, h3[id]:hover .anchor, .anchor:focus-visible { opacity: 1; }
 
 /* ── TL;DR ──────────────────────────────────────────────── */
-.tldr { background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 0.9rem 1.2rem; margin: 0 0 1.5rem; }
+.tldr { background: var(--surface); box-shadow: 0 0 0 1px var(--rule); border-left: 4px solid var(--accent); border-radius: 12px; padding: 0.9rem 1.2rem; margin: 0 0 1.5rem; }
 .tldr .label { font: 700 0.7rem var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.3rem; }
 .tldr ul { margin: 0; padding-left: 1.1rem; }
-.tldr li + li { margin-top: 0.25rem; }
+.tldr li + li { margin-top: 0.4rem; }
 
 /* ── code excerpts ──────────────────────────────────────── */
 figure.code { margin: 1rem 0 1.4rem; border: 1px solid var(--rule); border-radius: 8px; background: var(--code-bg); overflow: hidden; }
@@ -83,6 +122,10 @@ figure.code.numbered .ln::before { content: attr(data-n); display: inline-block;
 figure.code .ln.mark { background: var(--line-mark); border-left-color: var(--amber); }
 figure.code .ln.add { background: var(--accent-soft); border-left-color: var(--accent); }
 figure.code .ln.del { background: var(--red-soft); border-left-color: var(--red); }
+/* long excerpts clamp to ~24 lines behind a button (engine.js) */
+figure.code.clamped pre { max-height: 31rem; overflow-y: hidden; position: relative; }
+figure.code.clamped pre::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4rem; background: linear-gradient(transparent, var(--code-bg)); }
+figure.code .expand { display: block; width: 100%; padding: 0.4rem; background: var(--sunk); border: 0; border-top: 1px solid var(--rule); color: var(--accent); font: 600 0.78rem var(--sans); cursor: pointer; }
 figure.code figcaption { padding: 0.45rem 0.9rem; border-top: 1px solid var(--rule); font-size: 0.84rem; color: var(--muted); background: var(--surface); }
 .tk-kw { color: var(--tk-kw); } .tk-str { color: var(--tk-str); } .tk-com { color: var(--tk-com); font-style: italic; }
 .tk-num { color: var(--tk-num); } .tk-fn { color: var(--tk-fn); } .tk-type { color: var(--tk-type); }
@@ -105,11 +148,18 @@ ol.flow .step-what { font-weight: 600; }
 ol.flow .step-why { color: var(--muted); }
 
 /* ── findings ───────────────────────────────────────────── */
-article.finding { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 0.3rem 1.2rem 0.6rem; margin: 1rem 0 1.4rem; }
+/* a card with a severity rail: data-sev on the article (engine.js derives it from the header's .sev) */
+article.finding { --rail: var(--rule-strong); background: var(--surface); border-left: 4px solid var(--rail); border-radius: 12px; box-shadow: 0 0 0 1px var(--rule); padding: 0.3rem 1.2rem 0.6rem; margin: 1rem 0 1.4rem; }
+article.finding[data-sev="high"] { --rail: var(--red); }
+article.finding[data-sev="med"] { --rail: var(--amber); }
+article.finding[data-sev="low"] { --rail: var(--green); }
+article.finding[data-sev="info"] { --rail: var(--accent); }
 article.finding > header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; margin: 0.8rem 0 0.4rem; }
 article.finding > header h3 { margin: 0; }
-article.finding > header .where { margin-left: auto; font: 0.78rem var(--mono); color: var(--faint); }
-.sev { font: 700 0.66rem var(--sans); letter-spacing: 0.06em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+article.finding > header .where { margin-left: auto; font: 0.74rem var(--mono); color: var(--faint); }
+article.finding > header a.where { text-decoration: none; }
+article.finding > header a.where:hover { color: var(--accent); text-decoration: underline; }
+.sev { font: 700 0.66rem var(--sans); letter-spacing: 0.06em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 6px; white-space: nowrap; }
 .sev.high { background: var(--red-soft); color: var(--red); }
 .sev.med  { background: var(--amber-soft); color: var(--amber); }
 .sev.low  { background: var(--green-soft); color: var(--green); }
@@ -123,9 +173,16 @@ article.finding > header .where { margin-left: auto; font: 0.78rem var(--mono); 
 .tag.red   { background: var(--red-soft);   color: var(--red);   border-color: transparent; }
 .tag.blue  { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
 .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0 0 0.6rem; }
+/* inside a finding, tags are metadata: a coloured dot and the word */
+article.finding .tags { gap: 0.2rem 0.9rem; }
+article.finding .tags .tag { background: none; border: 0; padding: 0; font-weight: 500; color: var(--muted); }
+article.finding .tags .tag::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--faint); margin-right: 0.35rem; vertical-align: 0.05em; }
+article.finding .tags .tag.green::before { background: var(--green); } article.finding .tags .tag.amber::before { background: var(--amber); }
+article.finding .tags .tag.red::before { background: var(--red); } article.finding .tags .tag.blue::before { background: var(--accent); }
+article.finding .tags .tag:is(.green, .amber, .red, .blue) { color: var(--ink); }
 
 /* ── collapsible ───────────────────────────────────────── */
-details.more { margin: 0.9rem 0 1rem; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+details.more { margin: 0.9rem 0 1rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
 details.more > summary { cursor: pointer; list-style: none; padding: 0.45rem 0.9rem; font-size: 0.85rem; font-weight: 600; color: var(--muted); }
 details.more > summary::-webkit-details-marker { display: none; }
 details.more > summary::before { content: "▸"; display: inline-block; width: 1.1em; transition: transform 0.15s; }
@@ -145,12 +202,16 @@ main > h2.foldable:hover .fold, .toc-fold:hover { color: var(--ink); }
 nav.toc li.has-subs { display: flex; }
 nav.toc li.has-subs > a { flex: 1; min-width: 0; }
 .toc-fold { flex: none; padding: 0 0.5rem; font-size: 0.8rem; }
-nav.toc .toc-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin: 0 0 0.5rem; }
+nav.toc .toc-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 0.5rem; }
 nav.toc .toc-head .toc-title { margin: 0; }
-.toc-toggle { flex: none; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; padding: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 5px; color: var(--faint); font: 0.9rem/1 var(--sans); cursor: pointer; }
+.toc-toggle, .theme-toggle { flex: none; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; padding: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 5px; color: var(--faint); font: 0.9rem/1 var(--sans); cursor: pointer; }
 .toc-toggle::before { content: "«"; }
 .toc-toggle[aria-expanded="false"]::before { content: "»"; }
-.toc-toggle:hover { color: var(--ink); border-color: var(--rule-strong); }
+.toc-toggle:hover, .theme-toggle:hover { color: var(--ink); border-color: var(--rule-strong); }
+.theme-toggle::before { content: "◐"; }
+nav.toc .toc-head { gap: 0.3rem; }
+nav.toc .toc-head .toc-title { flex: 1; }
+.shell.toc-hidden nav.toc .toc-head { flex-direction: column; }
 .shell.toc-hidden { grid-template-columns: 1.6rem minmax(0, 1fr); }
 .shell.toc-hidden nav.toc { overflow: visible; }
 .shell.toc-hidden nav.toc .toc-title, .shell.toc-hidden nav.toc ol { display: none; }
@@ -165,10 +226,11 @@ aside > :first-child { margin-top: 0; } aside > :last-child { margin-bottom: 0; 
 ul.questions { list-style: none; padding: 0; }
 ul.questions li { position: relative; padding: 0.35rem 0 0.35rem 1.6rem; border-bottom: 1px dashed var(--rule); }
 ul.questions li::before { content: "?"; position: absolute; left: 0.2rem; top: 0.35rem; font: 700 0.9rem var(--mono); color: var(--amber); }
-.tablewrap { overflow-x: auto; margin: 1rem 0 1.4rem; border: 1px solid var(--rule); border-radius: 8px; }
+.tablewrap { overflow-x: auto; margin: 1rem 0 1.4rem; background: var(--surface); border-radius: 12px; box-shadow: 0 0 0 1px var(--rule); }
 table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
 th, td { text-align: left; padding: 0.45rem 0.8rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
-th { background: var(--sunk); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+th { font: 600 0.74rem var(--sans); color: var(--muted); }
+tbody tr:hover td { background: var(--sunk); }
 tr:last-child td { border-bottom: 0; }
 td.num { text-align: right; font-variant-numeric: tabular-nums; }
 th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
@@ -176,12 +238,12 @@ th.sortable:hover { color: var(--ink); }
 th.sortable::after { content: "↕"; margin-left: 0.35rem; color: var(--faint); font-size: 0.8em; }
 th.sortable[aria-sort="ascending"]::after { content: "↑"; color: var(--accent); }
 th.sortable[aria-sort="descending"]::after { content: "↓"; color: var(--accent); }
-tr.filter-row th { background: var(--surface); padding: 0.3rem 0.4rem; text-transform: none; letter-spacing: 0; }
+tr.filter-row th { padding: 0.3rem 0.4rem; }
 tr.filter-row input[type="search"], tr.filter-row .ms-btn { width: 100%; min-width: 5rem; font: 0.78rem var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--rule-strong); border-radius: 5px; padding: 0.2rem 0.35rem; }
 tr.filter-row .active { border-color: var(--accent); background: var(--accent-soft); }
 .ms-btn { text-align: left; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 1.2rem !important; position: relative; }
 .ms-btn::after { content: "▾"; position: absolute; right: 0.4rem; color: var(--faint); }
-.ms-panel { position: fixed; z-index: 20; max-height: 50vh; overflow: auto; background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 6px; box-shadow: 0 6px 20px rgb(0 0 0 / 0.12); padding: 0.3rem 0; font: 0.8rem var(--sans); text-transform: none; letter-spacing: 0; color: var(--ink); }
+.ms-panel { position: fixed; z-index: 20; max-height: 50vh; overflow: auto; background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 6px; box-shadow: var(--shadow); padding: 0.3rem 0; font: 0.8rem var(--sans); text-transform: none; letter-spacing: 0; color: var(--ink); }
 .ms-panel label { display: flex; justify-content: flex-start; align-items: center; gap: 0.45rem; padding: 0.2rem 0.7rem; cursor: pointer; white-space: nowrap; font-weight: 400; }
 .ms-panel label:hover { background: var(--sunk); }
 .ms-actions { display: flex; gap: 0.3rem; padding: 0.15rem 0.5rem 0.35rem; margin-bottom: 0.2rem; border-bottom: 1px solid var(--rule); }
@@ -192,7 +254,7 @@ tr.filter-row .active { border-color: var(--accent); background: var(--accent-so
 footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.8rem; color: var(--faint); }
 
 /* ── architecture diagram: a JSON spec the script draws as one SVG ── */
-figure.arch { margin: 1rem 0 1.4rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--bg); overflow: hidden; }
+figure.arch { margin: 1rem 0 1.4rem; border: 1px solid var(--rule); border-radius: 12px; background: var(--bg); overflow: hidden; }
 figure.arch > script { display: none; }
 .arch-canvas { overflow-x: auto; padding: 1.1rem 1rem 0.8rem; }
 .arch-canvas svg { display: block; width: 100%; min-width: 760px; height: auto; font-family: var(--sans); }
@@ -247,22 +309,29 @@ figure.arch.focus .an.dim { opacity: 0.35; }
 figure.arch > figcaption { padding: 0.45rem 0.9rem; border-top: 1px solid var(--rule); font-size: 0.84rem; color: var(--muted); background: var(--surface); }
 
 /* ── responsive + print ─────────────────────────────────── */
+/* narrow: the contents is a sticky bar, closed on a first visit (engine.js), title always shown */
 @media (max-width: 62rem) {
-  .shell { grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 3rem 1rem 3rem; }
-  nav.toc { position: static; max-height: none; border: 1px solid var(--rule); border-radius: 8px; padding: 0.8rem; background: var(--surface); }
+  html { scroll-padding-top: 4.5rem; }
+  .shell { grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 0.8rem 1rem 3rem; }
+  nav.toc { position: sticky; top: 0; z-index: 30; max-height: 70vh; margin: 0 0 1rem; border: 1px solid var(--rule); border-radius: 8px; padding: 0.5rem 0.8rem; background: var(--surface); }
+  nav.toc .toc-head, .shell.toc-hidden nav.toc .toc-head { flex-direction: row; margin: 0; }
+  .shell:not(.toc-hidden) nav.toc .toc-head { margin-bottom: 0.5rem; }
   nav.toc ol { columns: 2; column-gap: 1rem; }
   nav.toc li.sub { display: none; }
   .toc-fold { display: none; }
   .shell.toc-hidden { grid-template-columns: minmax(0, 1fr); }
-  .shell.toc-hidden nav.toc { justify-self: start; padding: 0.4rem; }
+  .shell.toc-hidden nav.toc .toc-title { display: block; }
 }
 @media (max-width: 45rem) {
-  .diff { grid-template-columns: minmax(0, 1fr); }
+  /* a diff stacks as one unified block: before over after */
+  .diff { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .diff figure.code[data-role="before"] { border-radius: 8px 8px 0 0; border-bottom: 0; }
+  .diff figure.code[data-role="after"] { border-radius: 0 0 8px 8px; }
   nav.toc ol { columns: 1; }
   h1 { font-size: 1.5rem; }
 }
 /* ── plan: task slips (a <details>, so links and printing open it) ── */
-details.task { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; margin: 1rem 0 1.2rem; }
+details.task { background: var(--surface); box-shadow: 0 0 0 1px var(--rule); border-radius: 12px; margin: 1rem 0 1.2rem; }
 details.task > summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; padding: 0.7rem 1.2rem; }
 details.task > summary::-webkit-details-marker { display: none; }
 details.task > summary::before { content: "▸"; color: var(--faint); transition: transform 0.15s; }
@@ -313,13 +382,42 @@ ul.done > li.closed::before { content: "☑"; color: var(--green); }
   :root { --bg: #fff; --surface: #fff; }
   th.sortable::after { content: none !important; }
   body { font-size: 11pt; }
-  nav.toc, .toc-toggle, .code-head .copy, tr.filter-row, .table-count, .fold { display: none !important; }
+  nav.toc, .toc-toggle, .theme-toggle, .code-head .copy, tr.filter-row, .table-count, .fold, .anchor, .skip, figure.code .expand { display: none !important; }
+  figure.code.clamped pre { max-height: none; }
+  figure.code.clamped pre::after { content: none; }
+  main > h2.foldable::before { content: counter(sec); }
   .shell { display: block; padding: 0; max-width: none; }
   figure.code, article.finding, aside { break-inside: avoid; }
   figure.code pre { white-space: pre-wrap; overflow: visible; }
   figure.code pre > code { min-width: 0; }
   a { color: inherit; }
 }
+
+/* Screenshot: one picture with its caption. */
+figure.shot { margin: 16px 0; }
+figure.shot img { display: block; max-width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); }
+figure.shot figcaption { margin-top: 6px; color: var(--faint); font-size: 13px; }
+
+/* Image viewer (engine.js): a picture in main opens full screen; zoom and pan inside. */
+main img.zoomable { cursor: zoom-in; }
+main img.zoomable:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+dialog.lightbox { position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #0a0c0c; color: #f2f4f3; display: none; grid-template-rows: 1fr auto; overflow: hidden; }
+dialog.lightbox[open] { display: grid; }
+dialog.lightbox::backdrop { background: transparent; }
+.lb-stage { position: relative; overflow: hidden; touch-action: none; cursor: zoom-in; min-height: 0; }
+.lb-stage.lb-zoomed { cursor: grab; }
+.lb-stage.lb-zoomed:active { cursor: grabbing; }
+.lb-stage img { position: absolute; top: 0; left: 0; max-width: none; transform-origin: 0 0; user-select: none; -webkit-user-drag: none; }
+html:has(dialog.lightbox[open]) { overflow: hidden; }
+.lb-bar { background: #0a0c0c; display: flex; align-items: center; gap: 8px; margin: 0; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); font: 13px/1.4 var(--sans); }
+.lb-caption { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #c9cecc; }
+.lb-count { color: #9aa29f; font-variant-numeric: tabular-nums; }
+.lb-bar button { min-width: 44px; height: 40px; padding: 0 10px; border: 0; border-radius: 6px; background: rgb(255 255 255 / 0.1); color: inherit; font: 500 15px/1 var(--sans); font-variant-numeric: tabular-nums; cursor: pointer; }
+.lb-bar button:hover { background: rgb(255 255 255 / 0.18); }
+.lb-bar button:focus-visible { outline: 2px solid #8cbbd8; outline-offset: 2px; }
+.lb-bar button[hidden] { display: none; }
+@media (max-width: 480px) { .lb-bar { gap: 4px; padding-inline: 8px; } .lb-bar button { min-width: 40px; padding: 0 6px; } .lb-count { display: none; } }
+@media print { dialog.lightbox { display: none !important; } }
 
 /* ══ spec layout: a living feature spec drawn as one sheet on paper ═════════
    A layer on engine.css. The contents sidebar stays; the main element becomes the sheet. */
@@ -352,7 +450,12 @@ html[data-layout="spec"] main {
 html[data-layout="spec"] .kicker { color: var(--stamp); letter-spacing: .15em; font-size: .7rem; }
 html[data-layout="spec"] h1 { font: 600 1.45rem/1.2 var(--mono); letter-spacing: -.015em; max-width: 24ch; }
 html[data-layout="spec"] main .meta { flex-direction: column; gap: 0; font: .74rem/1.85 var(--mono); max-width: none; }
-html[data-layout="spec"] main > .meta + h2 { border-top: 0; padding-top: 0; margin-top: 2rem; }
+html[data-layout="spec"] main > .meta + h2, html[data-layout="spec"] main > .masthead + h2 { border-top: 0; padding-top: 0; margin-top: 2rem; }
+/* dl.meta keeps the sheet's one line per fact: the label, then its value beside it. */
+html[data-layout="spec"] main dl.meta > div { display: flex; gap: .6rem; align-items: baseline; }
+html[data-layout="spec"] main dl.meta dt { font: 600 .74rem/1.85 var(--mono); letter-spacing: 0; text-transform: none; color: var(--ink); }
+html[data-layout="spec"] main dl.meta dd { color: var(--muted); }
+html[data-layout="spec"] main > .masthead { padding-bottom: 1rem; border-bottom: 1px solid var(--rule); margin-bottom: 1.5rem; }
 
 .stamp {
   position: absolute; top: -1.05rem; right: -1.05rem; z-index: 3; text-align: center; line-height: 1.35;
@@ -504,10 +607,13 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
   const root = document.documentElement;
   const I18N = {
-    es: { contents: 'Contenido', copy: 'Copiar', copied: 'Copiado', filter: 'Filtrar…', all: 'Todos', none: 'Ninguno', picked: (n, m) => `${n} de ${m}`, shown: (n, m) => `${n} de ${m} filas`, before: 'Antes', after: 'Después', sketch: 'boceto', fold: 'Plegar o desplegar', tocToggle: 'Mostrar u ocultar el índice', station: { ask: 'Petición', symptom: 'Síntoma', deadend: 'Vía muerta', cause: 'Causa', fix: 'Arreglo', built: 'Construido', proof: 'Prueba' }, verdict: { pass: 'pasa', fail: 'falla', 'not-run': 'sin ejecutar' } },
-    en: { contents: 'Contents', copy: 'Copy', copied: 'Copied', filter: 'Filter…', all: 'All', none: 'None', picked: (n, m) => `${n} of ${m}`, shown: (n, m) => `${n} of ${m} rows`, before: 'Before', after: 'After', sketch: 'sketch', fold: 'Collapse or expand', tocToggle: 'Show or hide the contents', station: { ask: 'Ask', symptom: 'Symptom', deadend: 'Dead end', cause: 'Cause', fix: 'Fix', built: 'Built', proof: 'Proof' }, verdict: { pass: 'pass', fail: 'fail', 'not-run': 'not run' } },
+    es: { contents: 'Contenido', copy: 'Copiar', copied: 'Copiado', filter: 'Filtrar…', all: 'Todos', none: 'Ninguno', picked: (n, m) => `${n} de ${m}`, shown: (n, m) => `${n} de ${m} filas`, before: 'Antes', after: 'Después', sketch: 'boceto', fold: 'Plegar o desplegar', tocToggle: 'Mostrar u ocultar el índice', theme: 'Tema claro u oscuro', anchor: 'Enlace a esta sección', more: 'Mostrar todo', less: 'Plegar', skip: 'Ir al contenido', zoom: 'Ampliar la imagen', viewer: 'Visor de imágenes', close: 'Cerrar (Esc)', prev: 'Anterior (←)', next: 'Siguiente (→)', fit: 'Ajustar o ampliar (clic)', station: { ask: 'Petición', symptom: 'Síntoma', deadend: 'Vía muerta', cause: 'Causa', fix: 'Arreglo', built: 'Construido', proof: 'Prueba' }, verdict: { pass: 'pasa', fail: 'falla', 'not-run': 'sin ejecutar' } },
+    en: { contents: 'Contents', copy: 'Copy', copied: 'Copied', filter: 'Filter…', all: 'All', none: 'None', picked: (n, m) => `${n} of ${m}`, shown: (n, m) => `${n} of ${m} rows`, before: 'Before', after: 'After', sketch: 'sketch', fold: 'Collapse or expand', tocToggle: 'Show or hide the contents', theme: 'Light or dark theme', anchor: 'Link to this section', more: 'Show all', less: 'Collapse', skip: 'Skip to content', zoom: 'Enlarge the image', viewer: 'Image viewer', close: 'Close (Esc)', prev: 'Previous (←)', next: 'Next (→)', fit: 'Fit or zoom in (click)', station: { ask: 'Ask', symptom: 'Symptom', deadend: 'Dead end', cause: 'Cause', fix: 'Fix', built: 'Built', proof: 'Proof' }, verdict: { pass: 'pass', fail: 'fail', 'not-run': 'not run' } },
   };
   const t = I18N[(root.lang || 'es').slice(0, 2)] ?? I18N.en;
+  // A theme picked with the contents' ◐ button wins over the OS preference, in every report.
+  const THEME_KEY = 'report:theme';
+  try { const theme = localStorage.getItem(THEME_KEY); if (theme === 'dark' || theme === 'light') root.dataset.theme = theme; } catch { /* storage blocked */ }
 
 
   /* ── syntax highlighting ───────────────────────────────── */
@@ -536,6 +642,12 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     },
     json: { kw: words('true false null'), com: [], prop: [/"(?:\\.|[^"\\])*"(?=\s*:)/y], str: [DQ] },
     yaml: { kw: words('true false null yes no'), com: [/#[^\n]*/y], prop: [/[\w.-]+(?=\s*:(?:\s|$))/y], str: [DQ, SQ] },
+    // Keywords only at the start of a line, so "y" or "pero" inside a description stays plain.
+    gherkin: {
+      kw: new Set(), type: false, com: [/(?<=^[ \t]*)#[^\n]*/my], str: [DQ], vari: [/@[\w:-]+/y],
+      kwre: [/(?<=^[ \t]*)(?:Característica|Antecedentes|Esquema del escenario|Escenario|Ejemplos|Feature|Background|Scenario Outline|Scenario|Examples)(?=:)/my,
+        /(?<=^[ \t]*)(?:Dad[oa]s?|Cuando|Entonces|Pero|Y|E|Given|When|Then|And|But)(?= )/my],
+    },
   };
 
   const tokenize = (src, lang) => {
@@ -547,7 +659,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     const flush = () => { if (plain) { out.push(['', plain]); plain = ''; } };
     const emit = (cls, text) => { flush(); out.push([cls, text]); i += text.length; };
     const at = (re) => { re.lastIndex = i; const m = re.exec(src); return m && m[0] ? m[0] : null; };
-    const groups = [['com', rules.com], ['str', rules.str], ['prop', rules.prop], ['var', rules.vari]];
+    const groups = [['com', rules.com], ['kw', rules.kwre], ['str', rules.str], ['prop', rules.prop], ['var', rules.vari]];
 
     scan: while (i < src.length) {
       for (const [cls, list] of groups) {
@@ -564,7 +676,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
         const next = src.slice(i + word.length).match(/^\s*\(/);
         const cls = rules.kw.has(key) ? 'kw'
           : next ? 'fn'
-          : !rules.ci && /^[A-Z]/.test(word) ? 'type'
+          : !rules.ci && rules.type !== false && /^[A-Z]/.test(word) ? 'type'
           : '';
         if (cls) emit(cls, word); else { plain += word; i += word.length; }
         continue;
@@ -660,6 +772,41 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   };
 
   document.querySelectorAll('figure.code').forEach(renderFigure);
+
+  // Past 24 lines an excerpt is clamped behind a show-all button.
+  const CLAMP = 24;
+  document.querySelectorAll('figure.code').forEach((fig) => {
+    const pre = fig.querySelector('pre');
+    if (!pre || fig.querySelectorAll('.ln').length <= CLAMP) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'expand';
+    const set = (clamped) => {
+      fig.classList.toggle('clamped', clamped);
+      btn.textContent = clamped ? t.more : t.less;
+      btn.setAttribute('aria-expanded', String(!clamped));
+    };
+    btn.addEventListener('click', () => set(!fig.classList.contains('clamped')));
+    pre.after(btn);
+    set(true);
+  });
+
+  // ── findings: severity rail from the header's chip, location as a link ──
+  document.querySelectorAll('article.finding').forEach((art) => {
+    const sev = art.querySelector(':scope > header .sev');
+    if (!art.dataset.sev && sev) art.dataset.sev = ['high', 'med', 'low', 'info'].find((c) => sev.classList.contains(c)) ?? '';
+    const where = art.querySelector(':scope > header .where');
+    // Only a real path links: data-src on the element, or text like "dir/File.php:65" (no "…", no spaces).
+    const m = where && (where.dataset.src ?? where.textContent.trim()).match(/^([\w.@~-]*\/[\w.@/-]+?)(?::(\d+))?(?:[–-]\d+)?$/);
+    const href = m && pathLink(m[1], m[2] ?? 1);
+    if (!href) return;
+    const a = document.createElement('a');
+    a.className = where.className;
+    a.href = href;
+    a.title = m[1];
+    a.append(...where.childNodes);
+    where.replaceWith(a);
+  });
 
   // ── recap: station labels, diffstat bars ──
   document.querySelectorAll('ol.trail > li.station').forEach((li) => {
@@ -978,8 +1125,10 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
   /* ── tables: sort + filter on every column ─────────────── */
   const collator = new Intl.Collator(root.lang || undefined, { numeric: true, sensitivity: 'base' });
-  const cellKey = (cell) => (cell?.dataset.sort ?? cell?.textContent ?? '').trim();
+  const frozenKey = new WeakMap();
+  const cellKey = (cell) => frozenKey.get(cell) ?? (cell?.dataset.sort ?? cell?.textContent ?? '').trim();
   const MAX_CHOICES = 12;
+  const FILTER_MIN = 8;
   /* "Modelo, Repositorio" is two values. Only a comma followed by a space splits, so a
      decimal like "1,5" stays whole. */
   const cellParts = (cell) => cellKey(cell).toLowerCase().split(/,\s+/).filter(Boolean);
@@ -1059,6 +1208,9 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     const body = table.tBodies[0];
     if (!headRow || !body) return;
     const rows = [...body.rows];
+    /* Freeze each cell's key now: later passes (the status-chip labels) add text to the
+       cells, and the filter must compare against the text its choices were built from. */
+    rows.forEach((r) => [...r.cells].forEach((c) => frozenKey.set(c, cellKey(c))));
     const original = rows.slice();
     const cols = [...headRow.cells];
     const filters = cols.map(() => '');
@@ -1095,14 +1247,16 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
       body.append(...ordered);
     };
 
-    const filterRow = document.createElement('tr');
-    filterRow.className = 'filter-row';
+    // Every table sorts; only one long enough to need it (FILTER_MIN rows) gets the filter row.
+    const filterRow = rows.length >= FILTER_MIN && document.createElement('tr');
+    if (filterRow) filterRow.className = 'filter-row';
     cols.forEach((th, i) => {
       th.classList.add('sortable');
       th.setAttribute('aria-sort', 'none');
       th.tabIndex = 0;
       th.addEventListener('click', () => sortBy(i));
       th.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); sortBy(i); } });
+      if (!filterRow) return;
 
       const byLower = new Map();
       rows.forEach((r) => cellKey(r.cells[i]).split(/,\s+/).filter(Boolean).forEach((v) => { if (!byLower.has(v.toLowerCase())) byLower.set(v.toLowerCase(), v); }));
@@ -1126,7 +1280,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
       cell.append(control);
       filterRow.append(cell);
     });
-    table.tHead.append(filterRow);
+    if (filterRow) table.tHead.append(filterRow);
   };
 
   document.querySelectorAll('main table:not([data-plain])').forEach(enhanceTable);
@@ -1171,7 +1325,17 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   tocToggle.setAttribute('aria-controls', 'toc-list');
   tocToggle.setAttribute('aria-label', t.tocToggle);
   tocToggle.title = t.tocToggle;
-  tocHead.append(tocTitle, tocToggle);
+  const themeToggle = document.createElement('button');
+  themeToggle.type = 'button';
+  themeToggle.className = 'theme-toggle';
+  themeToggle.setAttribute('aria-label', t.theme);
+  themeToggle.title = t.theme;
+  themeToggle.addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem(THEME_KEY, root.dataset.theme); } catch { /* storage blocked: session-only */ }
+  });
+  tocHead.append(tocTitle, themeToggle, tocToggle);
   toc.id = 'toc-list';
   const TOC_KEY = 'report:toc-hidden';
   const setToc = (open, remember) => {
@@ -1179,8 +1343,9 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     tocToggle.setAttribute('aria-expanded', String(open));
     if (remember) try { localStorage.setItem(TOC_KEY, open ? '0' : '1'); } catch { /* storage blocked: session-only */ }
   };
-  let tocHidden = false;
-  try { tocHidden = localStorage.getItem(TOC_KEY) === '1'; } catch { /* storage blocked */ }
+  // No choice yet: open beside the page, closed as the bar on a narrow screen.
+  let tocHidden = matchMedia('(max-width: 62rem)').matches;
+  try { const saved = localStorage.getItem(TOC_KEY); if (saved !== null) tocHidden = saved === '1'; } catch { /* storage blocked */ }
   setToc(!tocHidden, false);
   tocToggle.addEventListener('click', () => setToc(shell.classList.contains('toc-hidden'), true));
   const heads = [...document.querySelectorAll('main h2[id], main h3[id]')].filter((h) => !h.closest('details'));
@@ -1195,7 +1360,8 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.href = `#${h.id}`;
-    a.textContent = [...h.childNodes].map((n) => n.textContent.trim()).filter(Boolean).join(' ');
+    const skip = (n) => n.nodeType === 1 && (n.matches('.fold, .anchor') || (h.tagName === 'H2' && n.matches('.n')));
+    a.textContent = [...h.childNodes].filter((n) => !skip(n)).map((n) => n.textContent.trim()).filter(Boolean).join(' ');
     li.append(a);
     toc.append(li);
     links.set(h, a);
@@ -1204,6 +1370,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
       if (group) { group.subs.push(li); groupOf.set(li, group); }
     } else {
       group = { li, subs: [] };
+      if (h.parentElement.tagName === 'MAIN') li.className = 'sec';
     }
   }
   // A section's h3 entries start collapsed behind a toggle on the section's own entry.
@@ -1229,6 +1396,25 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   }, { rootMargin: '0px 0px -70% 0px' });
   heads.forEach((h) => spy.observe(h));
 
+  // ── heading anchors (after the contents, so its text stays clean) and a skip link ──
+  for (const h of document.querySelectorAll('main h2[id], main h3[id]')) {
+    const a = document.createElement('a');
+    a.className = 'anchor';
+    a.href = `#${h.id}`;
+    a.textContent = '#';
+    a.setAttribute('aria-label', t.anchor);
+    h.append(a);
+  }
+  const main = document.querySelector('main');
+  if (main) {
+    main.id ||= 'main';
+    const skipLink = document.createElement('a');
+    skipLink.className = 'skip';
+    skipLink.href = `#${main.id}`;
+    skipLink.textContent = t.skip;
+    document.body.prepend(skipLink);
+  }
+
   /* ── collapsibles: open on #hash, open all when printing ── */
   const revealHash = () => {
     const id = decodeURIComponent(location.hash.slice(1));
@@ -1247,6 +1433,124 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
     if (a && a.hash === location.hash) revealHash();
   });
   revealHash();
+
+  /* ── image viewer: any picture in main opens full screen, to zoom and pan ── */
+  // Click or Enter opens it. In the viewer a click toggles fit and a 2x zoom, the wheel and a pinch
+  // zoom around the pointer, a drag pans, the arrows step through the page's pictures, Escape closes.
+  // A picture inside a link, or marked data-no-zoom, keeps its own behaviour.
+  const zoomable = [...document.querySelectorAll('main img')].filter((img) => !img.closest('a, [data-no-zoom]'));
+  if (zoomable.length) {
+    const box = document.createElement('dialog');
+    box.className = 'lightbox';
+    box.setAttribute('aria-label', t.viewer);
+    box.innerHTML = '<div class="lb-stage"><img alt="" draggable="false"></div>'
+      + '<p class="lb-bar"><span class="lb-caption"></span><span class="lb-count"></span>'
+      + '<button type="button" class="lb-prev">‹</button><button type="button" class="lb-next">›</button>'
+      + '<button type="button" class="lb-scale"></button><button type="button" class="lb-close">×</button></p>';
+    document.body.append(box);
+    const stage = box.querySelector('.lb-stage');
+    const pic = stage.firstElementChild;
+    const [caption, count, prevBtn, nextBtn, scaleBtn, closeBtn] = box.querySelectorAll('.lb-bar > *');
+    prevBtn.title = prevBtn.ariaLabel = t.prev; nextBtn.title = nextBtn.ariaLabel = t.next;
+    scaleBtn.title = scaleBtn.ariaLabel = t.fit; closeBtn.title = closeBtn.ariaLabel = t.close;
+    let index = 0; let fit = 1; let view = { s: 1, x: 0, y: 0 };
+    const MAX = 8;
+    const paint = () => {
+      pic.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.s})`;
+      scaleBtn.textContent = `${Math.round(view.s * 100)}%`;
+      stage.classList.toggle('lb-zoomed', view.s > fit + 1e-3);
+    };
+    // Keeps the picture on screen: centred on an axis where it is smaller than the stage, else no gap at an edge.
+    const clamp = () => {
+      const { width: w, height: h } = stage.getBoundingClientRect();
+      const pw = pic.naturalWidth * view.s; const ph = pic.naturalHeight * view.s;
+      view.x = pw <= w ? (w - pw) / 2 : Math.min(0, Math.max(w - pw, view.x));
+      view.y = ph <= h ? (h - ph) / 2 : Math.min(0, Math.max(h - ph, view.y));
+    };
+    const zoomAt = (s, cx, cy) => {
+      const next = Math.min(MAX, Math.max(fit, s));
+      view.x = cx - (cx - view.x) * (next / view.s); view.y = cy - (cy - view.y) * (next / view.s); view.s = next;
+      clamp(); paint();
+    };
+    const reset = () => {
+      const { width: w, height: h } = stage.getBoundingClientRect();
+      fit = Math.min(1, w / pic.naturalWidth, h / pic.naturalHeight) || 1;
+      view = { s: fit, x: 0, y: 0 }; clamp(); paint();
+    };
+    const show = (i) => {
+      index = (i + zoomable.length) % zoomable.length;
+      const src = zoomable[index];
+      const text = src.alt || src.closest('figure')?.querySelector('figcaption')?.textContent.trim() || '';
+      caption.textContent = text; count.textContent = zoomable.length > 1 ? `${index + 1} / ${zoomable.length}` : '';
+      prevBtn.hidden = nextBtn.hidden = zoomable.length < 2;
+      pic.alt = src.alt;
+      pic.onload = reset;
+      pic.src = src.currentSrc || src.src;
+      if (pic.complete && pic.naturalWidth) reset();
+    };
+    const open = (i) => { if (!box.open) box.showModal(); show(i); };
+    zoomable.forEach((img, i) => {
+      img.classList.add('zoomable'); img.tabIndex = 0; img.setAttribute('role', 'button');
+      if (!img.title) img.title = t.zoom;
+      img.addEventListener('click', () => open(i));
+      img.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); open(i); } });
+    });
+    prevBtn.addEventListener('click', () => show(index - 1));
+    nextBtn.addEventListener('click', () => show(index + 1));
+    closeBtn.addEventListener('click', () => box.close());
+    const centre = () => { const r = stage.getBoundingClientRect(); return [r.width / 2, r.height / 2]; };
+    // Fit, then twice the fit (at least the actual size), so a click always zooms in visibly.
+    const toggle = (cx, cy) => zoomAt(view.s > fit + 1e-3 ? fit : Math.max(1, fit * 2), cx, cy);
+    scaleBtn.addEventListener('click', () => toggle(...centre()));
+    box.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowLeft') show(index - 1);
+      else if (ev.key === 'ArrowRight') show(index + 1);
+      else if (ev.key === '+' || ev.key === '=') zoomAt(view.s * 1.25, ...centre());
+      else if (ev.key === '-') zoomAt(view.s / 1.25, ...centre());
+      else if (ev.key === '0') reset();
+      else return;
+      ev.preventDefault();
+    });
+    stage.addEventListener('wheel', (ev) => {
+      ev.preventDefault();
+      const r = stage.getBoundingClientRect();
+      zoomAt(view.s * Math.exp(-ev.deltaY * 0.0015), ev.clientX - r.left, ev.clientY - r.top);
+    }, { passive: false });
+    // Pointers: one drags, two pinch. A press that does not move is a click.
+    const pointers = new Map(); let moved = false; let pinch = null;
+    stage.addEventListener('pointerdown', (ev) => {
+      stage.setPointerCapture(ev.pointerId);
+      pointers.set(ev.pointerId, [ev.clientX, ev.clientY]); moved = false;
+      if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), s: view.s }; }
+    });
+    stage.addEventListener('pointermove', (ev) => {
+      const last = pointers.get(ev.pointerId); if (!last) return;
+      const dx = ev.clientX - last[0]; const dy = ev.clientY - last[1];
+      if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+      pointers.set(ev.pointerId, [ev.clientX, ev.clientY]);
+      const r = stage.getBoundingClientRect();
+      if (pinch && pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        zoomAt(pinch.s * Math.hypot(a[0] - b[0], a[1] - b[1]) / pinch.d, (a[0] + b[0]) / 2 - r.left, (a[1] + b[1]) / 2 - r.top);
+      } else if (pointers.size === 1 && moved) { view.x += dx; view.y += dy; clamp(); paint(); }
+    });
+    const release = (ev) => {
+      if (!pointers.delete(ev.pointerId)) return;
+      if (pointers.size < 2) pinch = null;
+      if (ev.type === 'pointerup' && !moved && pointers.size === 0) {
+        const r = stage.getBoundingClientRect();
+        // A click on the dark ground around a fitted picture closes; on the picture it zooms.
+        const p = pic.getBoundingClientRect();
+        const onPic = ev.clientX >= p.left && ev.clientX <= p.right && ev.clientY >= p.top && ev.clientY <= p.bottom;
+        if (onPic || view.s > fit + 1e-3) toggle(ev.clientX - r.left, ev.clientY - r.top); else box.close();
+      }
+    };
+    stage.addEventListener('pointerup', release);
+    stage.addEventListener('pointercancel', release);
+    addEventListener('resize', () => { if (box.open) reset(); });
+    box.addEventListener('close', () => { pic.removeAttribute('src'); zoomable[index].focus({ preventScroll: true }); });
+  }
+
   const openedForPrint = [];
   const foldedForPrint = [];
   addEventListener('beforeprint', () => {
