@@ -44,9 +44,10 @@ next trip is almost ready.
 | Add with search, with no duplicate | [03-lists.md](03-lists.md) |
 | Search in `Compra` | [03-lists.md](03-lists.md) |
 | Order by name or custom, with a manual move | [04-arrange.md](04-arrange.md) |
-| Groups by recipe or by shop | [04-arrange.md](04-arrange.md) |
+| Groups by recipe, by shop or by aisle | [04-arrange.md](04-arrange.md) |
 | Shops of an item | [05-shops.md](05-shops.md) |
 | A list for each shop, in `Compra` | [05-shops.md](05-shops.md) |
+| Aisles of the store, in the order of the walk | [17-aisles.md](17-aisles.md) |
 | Recipes that send their products to `Compra` | [06-recipes.md](06-recipes.md) |
 | A menu of the week that fills `Compra` | [13-menu.md](13-menu.md) |
 | Backup to a file and from a file | [08-storage.md](08-storage.md) |
