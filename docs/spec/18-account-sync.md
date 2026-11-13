@@ -79,7 +79,8 @@ PocketBase. The app talks to it with `fetch` and `EventSource`, with no SDK (PRO
   **Inicia sesión para sincronizar**. The device works local-only until the user logs in. Its button
   opens **Iniciar sesión** with **Volver a la lista**.
 - **ACC-12** The API URL is one config value. When the app is served from `localhost`, `127.0.0.1` or
-  `[::1]`, it is `http://localhost:8090`. Else it is `https://api.artisandevs.duckdns.org`.
+  `[::1]`, it is `http://localhost:8090`. Else it is `https://api.polarisworks.duckdns.org`, the legacy
+  host `bodega.artisandevs.duckdns.org` included.
 - **ACC-13** The offline flag is `shopping.offline` = `1`: the device works with no account and
   sends nothing. **Usar sin cuenta** writes it. A login that opens the list removes it, and
   **Borrar todos los datos** removes it with the other keys (BACKUP-7). A storage that refuses

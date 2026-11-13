@@ -10,7 +10,10 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- The app moves to `https://bodega.polarisworks.duckdns.org/` and calls the API at
+  `https://api.polarisworks.duckdns.org` (`PRODUCTION_API`, ACC-12, VER-9). pwa-server serves the
+  legacy `bodega.artisandevs.duckdns.org` in parallel, with no redirect, and its migration 18 moves
+  `apps.url`.
 
 ## 1.13.5 - 2026-11-13
 

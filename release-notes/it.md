@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Bodega ha un nuovo indirizzo: `bodega.polarisworks.duckdns.org`. Installa l'app da lì e togli la vecchia icona. Con un account, le tue liste tornano quando accedi. Senza account, spostale con **Esporta** e **Importa** in **Impostazioni**.
 
 ## 1.13.4 - 2026-11-13
 

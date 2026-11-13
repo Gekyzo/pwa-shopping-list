@@ -5,7 +5,7 @@ or use it in any browser, on a phone, a tablet or a desktop. It keeps one list, 
 current trip. At the end of a trip it keeps the recurrent items and, if you choose, the items you
 did not buy, so the list for the next trip is almost ready.
 
-- App: https://bodega.artisandevs.duckdns.org/
+- App: https://bodega.polarisworks.duckdns.org/
 - Specification: [`docs/spec/`](docs/spec/README.md). Each rule has an identifier, such as `TRIP-2`.
 - Changes by version: [`CHANGELOG.md`](CHANGELOG.md). What a user reads in the app:
   [`release-notes/`](release-notes/).

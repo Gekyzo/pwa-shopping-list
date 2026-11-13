@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Bodega hat eine neue Adresse: `bodega.polarisworks.duckdns.org`. Installiere die App von dort und entferne das alte Symbol. Mit einem Konto kommen deine Listen nach der Anmeldung zurück. Ohne Konto überträgst du sie mit **Exportieren** und **Importieren** in **Optionen**.
 
 ## 1.13.4 - 2026-11-13
 

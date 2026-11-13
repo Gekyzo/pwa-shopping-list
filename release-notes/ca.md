@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- Bodega té una adreça nova: `bodega.polarisworks.duckdns.org`. Instal·la l'app des d'allà i treu la icona antiga. Amb un compte, les teves llistes tornen quan inicies la sessió. Sense compte, passa-les amb **Exporta** i **Importa** a **Configuració**.
 
 ## 1.13.4 - 2026-11-13
 

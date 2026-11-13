@@ -274,8 +274,9 @@ Feature: Account
       Then the API URL for the host "<host>" is "<url>"
 
       Examples:
-        | host                           | url                                |
-        | localhost                      | http://localhost:8090              |
-        | 127.0.0.1                      | http://localhost:8090              |
-        | [::1]                          | http://localhost:8090              |
-        | bodega.artisandevs.duckdns.org | https://api.artisandevs.duckdns.org |
+        | host                            | url                                  |
+        | localhost                       | http://localhost:8090                |
+        | 127.0.0.1                       | http://localhost:8090                |
+        | [::1]                           | http://localhost:8090                |
+        | bodega.polarisworks.duckdns.org | https://api.polarisworks.duckdns.org |
+        | bodega.artisandevs.duckdns.org  | https://api.polarisworks.duckdns.org |
