@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { apkName, bundleName, missingSecrets, apksignerArgs, jarsignerArgs } from '../scripts/apk.mjs';
+import { apkName, bundleName, missingSecrets, apksignerArgs, jarsignerArgs, versionMismatch } from '../scripts/apk.mjs';
 
 // The pure parts of npm run apk (INS-7); the build itself runs Bubblewrap.
 test('the build files are named after the wrapper version', () => {
@@ -38,4 +38,16 @@ test('the bundle is signed with the passwords read from the environment', () => 
     '-storepass:env', 'BUBBLEWRAP_KEYSTORE_PASSWORD', '-keypass:env', 'BUBBLEWRAP_KEY_PASSWORD',
     '-signedjar', 'out.aab', 'in.aab', 'bodega',
   ]);
+});
+
+// Bubblewrap 1.27 builds with `appVersion` and names nothing from `appVersionName`, while the file
+// names come from `appVersionName`: a bump of one key only gives an APK with the wrong version.
+test('a wrapper whose two version names agree builds', () => {
+  assert.equal(versionMismatch({ appVersionName: '1.1.0', appVersion: '1.1.0' }), null);
+});
+
+test('a wrapper whose two version names differ is refused, with both names', () => {
+  const message = versionMismatch({ appVersionName: '1.1.0', appVersion: '1.0.0' });
+  assert.match(message, /appVersionName 1\.1\.0/);
+  assert.match(message, /appVersion 1\.0\.0/);
 });

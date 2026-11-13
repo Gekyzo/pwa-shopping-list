@@ -15,6 +15,11 @@ export const apkName = ({ appVersionName }) => `bodega-${appVersionName}.apk`;
 export const bundleName = ({ appVersionName }) => `bodega-${appVersionName}.aab`;
 export const missingSecrets = (env) => [STORE_SECRET, KEY_SECRET].filter((name) => !env[name]);
 
+// Bubblewrap 1.27 builds with `appVersion`; the file names come from `appVersionName`.
+export const versionMismatch = ({ appVersionName, appVersion }) => (appVersionName === appVersion
+  ? null
+  : `twa/twa-manifest.json has appVersionName ${appVersionName} but appVersion ${appVersion}. Set both to the new version.`);
+
 // Bubblewrap 1.27 passes the passwords through a shell, which changes a `$`, a backtick or a `\`
 // in them. These name the env vars instead, so a password never reaches a command line.
 export const apksignerArgs = ({ path, alias }, input, output) => [
@@ -38,6 +43,11 @@ const main = () => {
   const env = { ...process.env, JAVA_HOME: jdkPath, PATH: `${jdkPath}/bin:${process.env.PATH}` };
   const twa = fileURLToPath(new URL('../twa/', import.meta.url));
   const manifest = JSON.parse(readFileSync(`${twa}twa-manifest.json`, 'utf8'));
+  const mismatch = versionMismatch(manifest);
+  if (mismatch) {
+    console.error(`apk: ${mismatch}`);
+    process.exit(1);
+  }
   const unsigned = {
     apk: `${twa}app-release-unsigned-aligned.apk`,
     bundle: `${twa}app/build/outputs/bundle/release/app-release.aab`,

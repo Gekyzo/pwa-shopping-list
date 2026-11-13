@@ -140,7 +140,7 @@
 | `tests/whatsnew.test.js` | The parse of the release notes and the unseen versions |
 | `tests/release-notes-files.test.js` | One release-notes file for each language, with the same versions (VER-18) |
 | `tests/install.test.js` | The install offer states (INS-1) |
-| `tests/apk.test.js` | The file names and the signing secrets of `scripts/apk.mjs` (INS-7) |
+| `tests/apk.test.js` | The file names, the signing secrets, the signing arguments and the two version names of `scripts/apk.mjs` (INS-7, INS-8) |
 | `tests/twa.test.js` | The Android wrapper `twa/twa-manifest.json` against `manifest.webmanifest`, and `.well-known/assetlinks.json` against the wrapper (INS-5 to INS-7) |
 | `tests/i18n.test.js` | The language choice, the translator, the parity of the catalogs |
 | `tests/markup.test.js` | `index.html` holds no text of its own; the sheets, `Ajustes` and the walkthrough markup, also the **Novedades** sheet and its row (VER-21, VER-22) |

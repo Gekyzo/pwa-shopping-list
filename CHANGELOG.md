@@ -12,7 +12,6 @@ no change has no entry.
 
 - The Android app 1.0.0 (`twa-v1.0.0`): a Trusted Web Activity built by `npm run apk`, released
   on GitHub with its signed APK (INS-5, INS-7, INS-8).
-No change.
 
 ## 1.13.3 - 2026-11-13
 

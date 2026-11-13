@@ -29,8 +29,9 @@ Android wrapper of `twa/`.
   colours, icons, orientation and shortcuts are those of `manifest.webmanifest`; Android adds one
   more shortcut, the site settings of Chrome, which the launcher of the wrapper needs. `npm run apk`
   builds the project from it, and the project is never committed.
-- **INS-8** A wrapper release is a build of `npm run apk` with a new `appVersionName` and an
-  `appVersionCode` 1 higher. Its tag is `twa-vX.Y.Z`, never `vX.Y.Z` (VER-9), and its GitHub
+- **INS-8** A wrapper release is a build of `npm run apk` with a new version in both
+  `appVersionName` and `appVersion` (Bubblewrap builds with the second) and an `appVersionCode` 1
+  higher; `npm run apk` stops when the two names differ. Its tag is `twa-vX.Y.Z`, never `vX.Y.Z` (VER-9), and its GitHub
   Release carries the signed APK. A change of the site needs no wrapper release.
 
 ## Limits

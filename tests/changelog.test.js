@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { releaseChangelog, hasUnreleased, localDate } from '../scripts/changelog.mjs';
 
 const INTRO = '# Changelog\n\nThe changes of the app.\n\n';
@@ -51,4 +52,13 @@ test('hasUnreleased is true when Unreleased holds a change', () => {
 
 test('hasUnreleased is false for no change, an empty Unreleased or no Unreleased heading', () => {
   for (const unreleased of [EMPTY, '## Unreleased\n\n', '']) assert.equal(hasUnreleased(build(unreleased)), false);
+});
+
+// The placeholder goes when the first change of a version comes; left under a bullet, the next
+// release ships it as part of that version.
+test('CHANGELOG.md has no placeholder next to a change of Unreleased', () => {
+  const text = readFileSync(new URL('../CHANGELOG.md', import.meta.url), 'utf8');
+  const [, unreleased = ''] = text.split('\n## Unreleased\n');
+  const body = unreleased.split('\n## ')[0];
+  if (body.split('\n').some((line) => line.startsWith('- '))) assert.doesNotMatch(body, /^No change\.?$/m);
 });

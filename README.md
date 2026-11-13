@@ -161,5 +161,14 @@ Build:
 npm run apk      # twa/out/bodega-<version>.apk and .aab, both signed
 ```
 
+Release a new wrapper (INS-8), only when `twa/` changes; a site release needs none:
+
+1. In `twa/twa-manifest.json`, set `appVersionName` and `appVersion` to the new version and add 1
+   to `appVersionCode`.
+2. `npm run apk`, then install the APK on the phone and check it.
+3. Commit, then `git tag -a twa-vX.Y.Z -m "Android wrapper X.Y.Z"` and `git push --follow-tags`.
+   Never a `vX.Y.Z` tag: that one deploys the site.
+4. `gh release create twa-vX.Y.Z twa/out/bodega-X.Y.Z.apk --title "Bodega Android X.Y.Z"`.
+
 `npm run apk` signs the files itself: Bubblewrap 1.27 passes the passwords through a shell, which
 changes a `$`, a backtick or a `\` in them.
