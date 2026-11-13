@@ -1,6 +1,6 @@
 {
   "packageId": "io.github.polarisworks.bodega",
-  "host": "bodega.artisandevs.duckdns.org",
+  "host": "bodega.polarisworks.duckdns.org",
   "name": "Lista de la compra - Bodega",
   "launcherName": "Bodega",
   "display": "standalone",
@@ -13,43 +13,43 @@
   "backgroundColor": "#F4F3F1",
   "enableNotifications": false,
   "startUrl": "/",
-  "iconUrl": "https://bodega.artisandevs.duckdns.org/icons/icon-512.png",
-  "maskableIconUrl": "https://bodega.artisandevs.duckdns.org/icons/icon-maskable-512.png",
+  "iconUrl": "https://bodega.polarisworks.duckdns.org/icons/icon-512.png",
+  "maskableIconUrl": "https://bodega.polarisworks.duckdns.org/icons/icon-maskable-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "~/.local/share/bodega/android.keystore",
     "alias": "bodega"
   },
-  "appVersionName": "1.0.0",
-  "appVersionCode": 1,
+  "appVersionName": "1.1.0",
+  "appVersionCode": 2,
   "shortcuts": [
     {
       "name": "Añadir artículo",
       "shortName": "Añadir artículo",
-      "url": "https://bodega.artisandevs.duckdns.org/?open=add",
-      "chosenIconUrl": "https://bodega.artisandevs.duckdns.org/icons/shortcut-add.png"
+      "url": "https://bodega.polarisworks.duckdns.org/?open=add",
+      "chosenIconUrl": "https://bodega.polarisworks.duckdns.org/icons/shortcut-add.png"
     },
     {
       "name": "Compra",
       "shortName": "Compra",
-      "url": "https://bodega.artisandevs.duckdns.org/?open=active",
-      "chosenIconUrl": "https://bodega.artisandevs.duckdns.org/icons/shortcut-active.png"
+      "url": "https://bodega.polarisworks.duckdns.org/?open=active",
+      "chosenIconUrl": "https://bodega.polarisworks.duckdns.org/icons/shortcut-active.png"
     },
     {
       "name": "Recetas",
       "shortName": "Recetas",
-      "url": "https://bodega.artisandevs.duckdns.org/?open=recipes",
-      "chosenIconUrl": "https://bodega.artisandevs.duckdns.org/icons/shortcut-recipes.png"
+      "url": "https://bodega.polarisworks.duckdns.org/?open=recipes",
+      "chosenIconUrl": "https://bodega.polarisworks.duckdns.org/icons/shortcut-recipes.png"
     },
     {
       "name": "Menú",
       "shortName": "Menú",
-      "url": "https://bodega.artisandevs.duckdns.org/?open=menu",
-      "chosenIconUrl": "https://bodega.artisandevs.duckdns.org/icons/shortcut-menu.png"
+      "url": "https://bodega.polarisworks.duckdns.org/?open=menu",
+      "chosenIconUrl": "https://bodega.polarisworks.duckdns.org/icons/shortcut-menu.png"
     }
   ],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://bodega.artisandevs.duckdns.org/manifest.webmanifest",
+  "webManifestUrl": "https://bodega.polarisworks.duckdns.org/manifest.webmanifest",
   "fallbackType": "customtabs",
   "features": {},
   "alphaDependencies": {
@@ -58,7 +58,7 @@
   "enableSiteSettingsShortcut": true,
   "isChromeOSOnly": false,
   "isMetaQuest": false,
-  "fullScopeUrl": "https://bodega.artisandevs.duckdns.org/",
+  "fullScopeUrl": "https://bodega.polarisworks.duckdns.org/",
   "minSdkVersion": 24,
   "orientation": "any",
   "fingerprints": [
@@ -70,5 +70,5 @@
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
   "displayOverride": [],
-  "appVersion": "1.0.0"
+  "appVersion": "1.1.0"
 }

@@ -5,6 +5,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 ## Unreleased
 
 - Bodega a une nouvelle adresse : `bodega.polarisworks.duckdns.org`. Installez l'app depuis cette adresse et retirez l'ancienne icône. Avec un compte, vos listes reviennent quand vous vous connectez. Sans compte, transférez-les avec **Exporter** et **Importer** dans **Réglages**.
+- L'app Android 1.1.0 ouvre la nouvelle adresse. Téléchargez `bodega-1.1.0.apk` sur github.com/polaris-works/shopping-list/releases et installez-la par-dessus l'ancienne. Elle démarre vide : connectez-vous pour retrouver vos listes, ou utilisez **Importer**.
 
 ## 1.13.4 - 2026-11-13
 

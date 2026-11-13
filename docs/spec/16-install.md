@@ -18,8 +18,8 @@ Android wrapper of `twa/`.
 ## Android app
 
 - **INS-5** The Android app is a Trusted Web Activity with id `io.github.polarisworks.bodega`. It opens
-  `https://bodega.artisandevs.duckdns.org/` in Chrome, full screen, with Chrome's storage for that
-  origin (VER-16). It holds no code and no copy of the shell: a site release reaches it as it
+  `https://bodega.polarisworks.duckdns.org/` in Chrome, full screen, with Chrome's storage for that
+  origin (VER-16). Version 1.0.0 opened the legacy `https://bodega.artisandevs.duckdns.org/`. It holds no code and no copy of the shell: a site release reaches it as it
   reaches the installed PWA.
 - **INS-6** `.well-known/assetlinks.json` grants `delegate_permission/common.handle_all_urls` to
   `io.github.polarisworks.bodega`, with the SHA-256 fingerprint of each key that signs a published build:

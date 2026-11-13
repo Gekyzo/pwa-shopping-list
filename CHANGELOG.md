@@ -14,6 +14,9 @@ no change has no entry.
   `https://api.polarisworks.duckdns.org` (`PRODUCTION_API`, ACC-12, VER-9). pwa-server serves the
   legacy `bodega.artisandevs.duckdns.org` in parallel, with no redirect, and its migration 18 moves
   `apps.url`.
+- The Android wrapper 1.1.0 (code 2) opens `https://bodega.polarisworks.duckdns.org/` (INS-5): host,
+  icons, shortcuts and scope of `twa/twa-manifest.json`. Same package id and key, so it installs
+  over 1.0.0; the Play listing draft names the new host.
 
 ## 1.13.5 - 2026-11-13
 

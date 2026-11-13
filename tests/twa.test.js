@@ -9,14 +9,16 @@ const json = (path) => JSON.parse(read(path));
 
 const web = json('manifest.webmanifest');
 const twa = json('twa/twa-manifest.json');
-const origin = 'https://bodega.artisandevs.duckdns.org/';
+const origin = 'https://bodega.polarisworks.duckdns.org/';
 // Bubblewrap writes colours back in uppercase.
 const colour = (value) => value.toLowerCase();
 const darkTheme = read('index.html').match(/name="theme-color" media="\(prefers-color-scheme: dark\)" content="([^"]+)"/)[1];
 
 test('the wrapper has the package id and the host of the app', () => {
   assert.equal(twa.packageId, 'io.github.polarisworks.bodega');
-  assert.equal(twa.host, 'bodega.artisandevs.duckdns.org');
+  assert.equal(twa.host, 'bodega.polarisworks.duckdns.org');
+  assert.equal(twa.fullScopeUrl, origin);
+  assert.equal(twa.webManifestUrl, `${origin}manifest.webmanifest`);
   assert.equal(twa.startUrl, '/');
   assert.equal(twa.display, 'standalone');
 });
@@ -64,6 +66,12 @@ test('the wrapper version is semver and its code is a positive integer', () => {
   assert.ok(Number.isInteger(twa.appVersionCode) && twa.appVersionCode > 0);
   // Bubblewrap 1.27 reads the name from `appVersion` and writes both keys.
   assert.equal(twa.appVersion, twa.appVersionName);
+});
+
+// 1.1.0 moves the wrapper to bodega.polarisworks.duckdns.org (INS-5); a code 1 higher installs over 1.0.0.
+test('the wrapper release is 1.1.0 with the code 2', () => {
+  assert.equal(twa.appVersionName, '1.1.0');
+  assert.equal(twa.appVersionCode, 2);
 });
 
 // LauncherActivity of android-browser-helper 2.7.4 always enables ManageDataLauncherActivity. With
