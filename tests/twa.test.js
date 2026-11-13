@@ -62,6 +62,11 @@ test('the wrapper version is semver and its code is a positive integer', () => {
   assert.equal(twa.appVersion, twa.appVersionName);
 });
 
+// android-browser-helper 2.7.4, which Bubblewrap 1.27 builds with, declares minSdk 24.
+test('the wrapper min SDK is the one of android-browser-helper', () => {
+  assert.equal(twa.minSdkVersion, 24);
+});
+
 test('the wrapper signs with the key outside the repository', () => {
   assert.equal(twa.signingKey.path, '~/.local/share/bodega/android.keystore');
   assert.equal(twa.signingKey.alias, 'bodega');

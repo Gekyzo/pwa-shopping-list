@@ -112,8 +112,48 @@ npm run test:features  # the Gherkin scenarios of tests/features/, as a tree
 npm run serve    # http://localhost:8080
 npm run pair     # two users on :8081 and :8082 (docs/two-users.md)
 npm run release  # bump, commit and tag vX.Y.Z; git push --follow-tags deploys
+npm run apk      # build the signed APK and AAB of the Android app into twa/out/
 ```
 
 A change of behaviour changes its rule in `docs/spec/` in the same commit. The deploy is in
 [10-offline-version](docs/spec/10-offline-version.md) (VER-9), the design system in
 [15-design-system](docs/spec/15-design-system.md).
+
+## Android app
+
+The Android app is a Trusted Web Activity: Chrome opens the deployed site full screen
+([16-install](docs/spec/16-install.md), INS-5). `twa/twa-manifest.json` is its only source; Bubblewrap
+generates the rest of `twa/`, which git ignores (INS-7).
+
+Prerequisites, one time:
+
+- JDK 17 at `/usr/lib/jvm/java-17-openjdk-amd64` and the Android SDK at `~/Android/Sdk`, named in
+  `~/.bubblewrap/config.json`. Bubblewrap 1.27 wants `tools/` at the SDK root
+  (`ln -s cmdline-tools/latest ~/Android/Sdk/tools`) and build-tools `36.1.0`.
+- The signing key `~/.local/share/bodega/android.keystore`, alias `bodega`, outside the
+  repository. Keep the keystore file and its password in the password manager: a lost key means
+  no update can be published again.
+
+Set the password from the password manager, with no quoting and no shell history:
+
+```sh
+read -rsp 'Keystore password: ' BUBBLEWRAP_KEYSTORE_PASSWORD; echo
+export BUBBLEWRAP_KEYSTORE_PASSWORD BUBBLEWRAP_KEY_PASSWORD="$BUBBLEWRAP_KEYSTORE_PASSWORD"
+```
+
+The key was made from that variable, so the keystore and the password manager cannot differ:
+
+```sh
+keytool -genkeypair -keystore ~/.local/share/bodega/android.keystore -alias bodega \
+  -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Bodega" \
+  -storepass:env BUBBLEWRAP_KEYSTORE_PASSWORD
+```
+
+Build:
+
+```sh
+npm run apk      # twa/out/bodega-<version>.apk and .aab, both signed
+```
+
+`npm run apk` signs the files itself: Bubblewrap 1.27 passes the passwords through a shell, which
+changes a `$`, a backtick or a `\` in them.
