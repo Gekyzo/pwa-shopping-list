@@ -51,6 +51,7 @@ two origins, or when the superuser cannot log in.
 | `no PocketBase at http://localhost:8090` | Start the local stack. |
 | `PocketBase refuses http://localhost:808x` | Add the origin to `PB_ORIGINS`, recreate the container. |
 | `the superuser ... cannot log in` | Create the dev superuser, or set `PAIR_SU_EMAIL` and `PAIR_SU_PASSWORD`. |
+| `the server has no shopping app` | Run the migrations of `pwa-server`. |
 | `the server of user X stopped (port ... in use?)` | Stop what listens on 8081 or 8082. |
 
 ## Check: separate shared lists (SHARE-5 to SHARE-15)

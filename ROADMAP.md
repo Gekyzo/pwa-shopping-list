@@ -26,7 +26,7 @@ Not needed yet. Each item names what makes it needed.
 ## Pro
 
 Candidate features for a paid version. Nothing here is committed. The free
-version keeps `Actual`, `Recetas`, `Menú` and offline use.
+version keeps `Compra`, `Recetas`, `Menú` and offline use.
 
 ### Cloud storage
 
@@ -40,12 +40,13 @@ link, with no login. The features below need its server.
   a PWA cannot replace or read a file in `Descargas` on its own.
 
 - [x] **Sync between devices.** Keep the lists the same on a phone, a tablet and the
-  web.
+  web. Shipped with a Google account on the PocketBase server, not with a recovery
+  link.
 - [x] **Live shared list.** Share a list with a contact so that both edit the same
-  list. The link is the access: a random list id and an encryption key in the
-  link fragment, with no login. The server stores only encrypted changes; the
-  phones merge them item by item. Recipes are shared the same way. User
-  feedback: a family needs the same list on several devices every day.
+  list. Shipped as an invite by email between two accounts: the member sees the
+  shared list beside the own one, and the owner chooses whether recipes and the
+  menu are shared too. User feedback: a family needs the same list on several
+  devices every day.
 
 ### AI integration
 
@@ -55,7 +56,7 @@ model.
 
 - **Automatic recipes and menus.** Generate recipes and a weekly menu from
   preferences, diets and the products at home, and add the missing products to
-  `Actual`.
+  `Compra`.
 - **Receipt scan.** Read a photo of a receipt to tick the items, record the
   prices and keep the total.
 

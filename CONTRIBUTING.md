@@ -32,6 +32,7 @@ npm test         # unit tests
 npm run test:features  # the Gherkin scenarios of tests/features/, as a tree
 npm run serve    # http://localhost:8080
 npm run pair     # two users on :8081 and :8082 (docs/two-users.md)
+npm run icons    # write the PNG icons of icons/ again
 npm run release  # bump, commit and tag vX.Y.Z; git push --follow-tags deploys
 npm run apk      # build the signed APK and AAB of the Android app into twa/out/
 ```
