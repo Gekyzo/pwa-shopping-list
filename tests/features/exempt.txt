@@ -155,6 +155,7 @@ LANG-6 screen The lang attribute of the page.
 LANG-7 static tests/i18n.test.js checks the shape of each catalog of src/locales/.
 LANG-8 static tests/i18n.test.js checks that each catalog has the keys, forms and placeholders of es.js.
 LANG-12 static tests/markup.test.js checks that index.html holds no text of its own.
+LANG-19 screen A message on the screen keeps its text at a change of language; Deshacer takes the new one.
 
 # 10-offline-version.md
 SW-1 screen src/app.js registers sw.js at each start.

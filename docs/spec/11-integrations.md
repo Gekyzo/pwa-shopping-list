@@ -8,7 +8,8 @@ A PWA gets a position only while it is open, so it cannot detect an arrival. An 
 app (MacroDroid, Tasker) owns the geofence and opens the app with a parameter.
 
 - **ARR-1** A start with `?arrival` in the URL shows `N artículos por comprar en Compra.`, in the
-  language of the screen, where N is the count of items of `Compra` that are not ticked.
+  language of the screen, where N is the count of items of `Compra` that are not ticked. With
+  `?open` too, the message shows and the start opens the section of `?open` (SHORT-2).
 - **ARR-2** The message stays 10 seconds, because the app opened by itself.
 - **ARR-3** With nothing left to buy the app shows no message.
 - **ARR-4** The app removes `arrival` from the URL at once and keeps each other parameter, so a
@@ -53,8 +54,9 @@ ignores the query of the URL.
 
 Status: **not on `main`**. The work is on the branch `voice-commands` (3 commits:
 `Add the rules of the spoken commands`, `Add the wrapper of the speech classes of the browser`,
-`Add voice commands to the app`). On 2026-11-13 that branch is 566 commits behind `main`: it has no
-languages, no shops and no state version 3, so it needs a rework before a merge. The rules below
+`Add voice commands to the app`). That branch forks from `main` of 2026-10-12 (`23e4ce1`) and does
+not follow it: it has no languages, no shops and no state version 3, so it needs a rework before a
+merge. The rules below
 state the design of that branch. They become rules of the app when the branch is merged, and they
 need a review at that time.
 

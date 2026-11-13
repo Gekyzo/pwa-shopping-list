@@ -8,7 +8,7 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **SW-1** `src/app.js` registers `sw.js` at each start. With no service worker the app works with
   a connection only.
 - **SW-2** The app shell is the list `SHELL` of `sw.js`: the page, the two stylesheets (DSV-2),
-  the font of the design system (`geist.woff2`), the font files of the app (`fonts/*.woff2`, DSV-10), the manifest, each module of `src/`, each catalog, `version.json`, the release notes of each language (VER-20), the icons of the app, `icons/logo.png`, the four
+  the module of the design system (`design-system/sheet.js`), the font of the design system (`geist.woff2`), the font files of the app (`fonts/*.woff2`, DSV-10), the manifest, each module of `src/`, each catalog, `version.json`, the release notes of each language (VER-20), the icons of the app, `icons/logo.png`, the four
   shortcut icons (VER-15) and the icon sprite `icons.svg`. A file that the app loads and that is not in `SHELL` does not work offline at the
   first start.
 - **SW-3** At its install the worker downloads the full shell past the HTTP cache, so the shell is
@@ -21,7 +21,10 @@ Rules of `sw.js`, `src/version.js`, `version.json`, `scripts/bump-version.mjs`,
 - **SW-6** A request is answered stale-while-revalidate: the cached copy at once, and a fresh copy
   goes into the cache in the background for the next start. The cache key is the URL with no
   query, for the match and for the store, so the fresh copy replaces the cached one: a start from
-  a shortcut (`./?open=add`) refreshes the page of `./`.
+  a shortcut (`./?open=add`) refreshes the page of `./`. Each file refreshes on its own, when it is
+  requested. A refresh that fails, or a deploy between two refreshes, can thus leave a shell with
+  files of two deploys until the next refreshes; only an install (SW-3) and `refresh` (SW-9) load
+  the full shell at once.
 - **SW-7** A request with no cached copy goes to the network. If a navigation fails, the worker
   answers with the cached `index.html`.
 - **SW-8** A request with the `latest` parameter goes to the network only (VER-5).

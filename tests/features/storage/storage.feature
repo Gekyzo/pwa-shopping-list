@@ -183,10 +183,10 @@ Feature: Browser storage
       | 1       | true    | recipe |
 
   @STORE-8
-  Scenario: Version 7 brings back the items of next, and a ticked item with again
+  Scenario Outline: Version <version> brings back the items of next, and a ticked item with again
     Given the key "shopping.v1" holds:
       """
-      {"version": 7, "items": [
+      {"version": <version>, "items": [
         {"id": "a", "name": "Milk", "list": "next", "recurrent": false, "bought": true},
         {"id": "b", "name": "Eggs", "list": "active", "recurrent": false, "bought": true, "again": true},
         {"id": "c", "name": "Ham", "list": "active", "recurrent": false, "bought": true, "again": false}
@@ -198,6 +198,11 @@ Feature: Browser storage
       | Milk | active | no     |
       | Eggs | active | no     |
       | Ham  | active | yes    |
+
+    Examples:
+      | version |
+      | 7       |
+      | 10      |
 
   @STORE-8
   Scenario: A meal of version 9 gets the week of the load; a meal with a bad week is dropped

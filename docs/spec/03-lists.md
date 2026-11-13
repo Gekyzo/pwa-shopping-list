@@ -114,6 +114,11 @@ In a shop list the title is the name of the list, and the figures are those of i
 | `Menú` | `Menú` | `N comidas planificadas` or `Sin comidas planificadas`, for the week in view | None |
 | `Ajustes` | `Ajustes` | `Bodega` | None |
 
+- **LIST-44** The subtitle of `Compra` counts the items of `Compra` only (LIST-33): N is the
+  count of items that are not ticked, M the count of ticked ones (`tripSummary` of `src/store.js`). With no item it
+  is `La lista está vacía`, with N = 0 it is `Todo comprado`, else `N por comprar · M comprados`
+  (`headerOf` of `src/ui/list.js`).
+
 ## Add sheet
 
 The `+` button opens the sheet in `Compra` and `Recetas`. In `Recetas` it creates a recipe (see

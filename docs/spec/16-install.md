@@ -6,8 +6,8 @@ Android wrapper of `twa/`.
 - **INS-1** The install offer has three states: `idle` (no offer), `available` (Chrome gave
   `beforeinstallprompt`) and `installed`. `installNext` moves among them: `prompt` makes it
   `available`, `dismissed` makes it `idle` until the next prompt, and `installed` is final.
-- **INS-2** Settings shows the button **Install the app** only in the state `available`. A tap
-  shows the prompt of Chrome. An accepted prompt makes the state `installed`; a dismissed one
+- **INS-2** Settings shows the group **Aplicación**, its title and its button **Instalar la
+  aplicación**, only in the state `available` (NAV-6). A tap shows the prompt of Chrome. An accepted prompt makes the state `installed`; a dismissed one
   makes it `idle`.
 - **INS-3** An app that starts in `display-mode: standalone` starts `installed`. The event
   `appinstalled` also makes it `installed`, whoever started the install.

@@ -42,6 +42,23 @@ Feature: Saved items
       | total | left | back | saved |
       | 1     | 1    | 0    | 1     |
 
+  @LIST-44
+  Scenario Outline: The subtitle of Compra counts the items to buy and the ticked ones (<case>)
+    Given the list has items:
+      | name  | list   | bought   |
+      | Bread | active | <bread>  |
+      | Eggs  | active | <eggs>   |
+      | Pilas | saved  | no       |
+    Then the trip figures are:
+      | total | left   | back | saved |
+      | 2     | <left> | 0    | 2     |
+
+    Examples:
+      | case             | bread | eggs | left |
+      | N por comprar    | no    | no   | 2    |
+      | one of each      | yes   | no   | 1    |
+      | Todo comprado    | yes   | yes  | 0    |
+
   @DATA-1
   Scenario: An item is one record: a bring back moves it, it does not copy it
     Given the list has items:

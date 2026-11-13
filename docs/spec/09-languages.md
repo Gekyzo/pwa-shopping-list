@@ -47,6 +47,12 @@ Rules of `src/i18n.js`, `src/locales/` and of the language setting in `src/ui/se
   and each plural form changes. It is a tool for layout checks: it is not in the list of Idioma, it
   is not stored, no `navigator.languages` value selects it, and the `lang` attribute stays the real resolved language code.
 
+## Change of language
+
+- **LANG-19** A change of language translates each fixed text of the page at once (LANG-3). A
+  message that shows at that time keeps its text in the old language until it closes; the
+  `Deshacer` of the message takes the new language.
+
 ## Not translated
 
 - **LANG-14** The data of the user: the names of items, recipes, products and shops stay as typed.

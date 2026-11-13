@@ -64,7 +64,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Names of items, recipes, products, shops | Trimmed |
   | `bought` of an item of `list: 'saved'` or `list: 'postponed'` | `false` |
   | `quantity` | Not text: `''`. Text: trimmed |
-  | `shops` | Not a list: empty. An entry that is not text, is empty or is a duplicate: dropped |
+  | `shops` | Not a list: empty. An entry that is not text, is empty or is a duplicate with no case distinction: dropped. The rest trimmed |
   | `aisles` | Not a list: empty. An entry that is not text, is empty or is a duplicate with no case distinction: dropped. The rest trimmed |
   | `aisle` of an item | Not text, or not an aisle of `aisles`: `''`. An aisle: the spelling of `aisles` |
   | Shop spellings | Each shop gets the spelling of its first use |
@@ -86,14 +86,16 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Version 1 to 4 | Each item gets `quantity: ''` |
   | Version 1 to 5 | No change of the data: version 6 adds `list: 'saved'` |
   | Version 1 to 6 | `aisles: []`, and each item gets `aisle: ''` |
-  | Version 1 to 7 | An item of `list: 'next'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. A ticked recurrent item keeps its tick. Each item loses `again` |
+  | Any version | An item of `list: 'next'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. A ticked recurrent item keeps its tick. Each item loses `again`. Versions 1 to 7 write these values; a state of version 8 to 10 that holds them is migrated too |
   | Version 1 to 8 | No change of the data: version 9 adds the dish of a meal |
   | Version 1 to 9 | Each meal gets `week`: the Monday of the week of the load (MENU-1). A meal whose `week` is not a Monday `YYYY-MM-DD` is dropped |
 
 ## Failures
 
 - **STORE-9** When a write fails, the change stays in memory and on the screen, and a message says
-  that it was not saved (MSG-8).
+  that it was not saved (MSG-8). A preference of the device (language, hand, theme, density,
+  **Al terminar la compra**, the row of shop lists, **Las dos**) that fails to save gives no
+  message: the choice applies and lasts until the app closes.
 - **STORE-10** When `localStorage` is not available, the app works in memory and says so at the
   start: `El almacenamiento no está disponible: los cambios no se guardan.` A choice of language,
   of hand, of theme, of density or of **Al terminar la compra** then lasts until the app closes, and the walkthrough shows only from `Ajustes`
@@ -125,7 +127,8 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   conservarlos.` A yes removes each `localStorage` key of the table above and loads the app again,
   which then starts as a new install, with the walkthrough (ONB-7). It has no `Deshacer`. When the
   removal fails, the message `error.resetFailed` says `No se pudieron borrar los datos.` and nothing
-  else changes. The caches stay. With a session the question is `reset.confirmLocal`: `¿Borrar los datos de
+  else changes. With no `localStorage` (STORE-10) a yes only loads the app again, which drops the
+  state in memory. The caches stay. With a session the question is `reset.confirmLocal`: `¿Borrar los datos de
   este dispositivo? Se borran las listas, las recetas, el menú, las secciones y las preferencias, y
   se cierra la sesión. Los datos de tu cuenta se conservan en el servidor.` A yes also logs out
   (SYNC-10, [18-account-sync.md](18-account-sync.md)). A yes first stops the sync, so that a sync in
