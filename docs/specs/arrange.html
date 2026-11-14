@@ -515,7 +515,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-14">2026-11-14</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Agrupar y ordenar</h1>
 <p class="meta">
@@ -584,7 +584,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <ul>
   <li><strong>Agrupación guardada que la vista no puede mostrar.</strong> Con <code>group: 'shop'</code> y ningún artículo con tienda, <code>Compra</code> es plana y la hoja marca <strong>Nada</strong>. Un toque en <strong>Nada</strong> no borra la elección guardada (GROUP-3, GROUP-4).</li>
   <li><strong>Un artículo en dos grupos.</strong> Tiene un solo lugar en el orden guardado. Moverlo en un grupo puede cambiar su lugar en el otro grupo (MOVE-8).</li>
-  <li><strong>Mover con el orden Nombre.</strong> El nuevo orden personalizado parte del orden alfabético de todos los artículos, también los guardados y pospuestos fuera de <code>Compra</code>. <code>Deshacer</code> devuelve el orden <strong>Nombre</strong> y el orden personalizado anterior (MOVE-9, MOVE-10).</li>
+  <li><strong>Mover con el orden Nombre.</strong> El nuevo orden personalizado parte del orden alfabético de todos los artículos, también los guardados fuera de <code>Compra</code>. <code>Deshacer</code> devuelve el orden <strong>Nombre</strong> y el orden personalizado anterior (MOVE-9, MOVE-10).</li>
   <li><strong>Una búsqueda activa.</strong> No se mueve ninguna fila, las cabeceras no cierran grupos y la cabecera de una receta no se desliza (MOVE-4, GROUP-16, GROUP-21). La marca <code>También en</code> se calcula antes de la búsqueda y se mantiene (GROUP-20).</li>
   <li><strong>Un miembro en Todas.</strong> <strong>Todas</strong> muestra los artículos de las dos listas, y ninguna fila se mueve (MOVE-4, SHARE-14).</li>
   <li><strong>Un dibujado durante el movimiento.</strong> La fila vuelve a su lugar y el orden no cambia (MOVE-11).</li>
@@ -629,8 +629,8 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><b>Reglas</b> <a href="../spec/04-arrange.md"><code>docs/spec/04-arrange.md</code></a> (SORT-1 a SORT-9, GROUP-1 a GROUP-22, MOVE-1 a MOVE-12), <a href="../spec/05-shops.md"><code>docs/spec/05-shops.md</code></a> (SHOP-25), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-8, NAV-22), <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (LIST-20, LIST-22, LIST-25), <a href="../spec/15-design-system.md"><code>docs/spec/15-design-system.md</code></a> (DSV-24), <a href="../spec/19-sharing.md"><code>docs/spec/19-sharing.md</code></a> (SHARE-14), <a href="../spec/17-aisles.md"><code>docs/spec/17-aisles.md</code></a> (AISLE-1)</li>
   <li><b>Código</b> <code>src/ui/arrange.js</code>, <code>src/ui/drag.js</code>, <code>src/ui/context.js</code>, <code>src/ui/list.js</code>, <code>src/ui/rows.js</code>, <code>src/reorder.js</code>, <code>src/store.js</code>, <code>src/recipes.js</code>, <code>src/shops.js</code>, <code>src/aisles.js</code>, <code>src/storage.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
   <li><b>Registros</b> <code>2026-10-12-sort-design.md</code>, <code>2026-10-13-reorder-design.md</code>, <code>2026-10-13-shops-design.md</code>, <code>2026-10-12-recipes-design.md</code>, <code>2026-10-16-aisles-design.md</code>, <code>2026-11-07-bodega-desktop-design.md</code></li>
-  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
-  <li><b>Ejecutado</b> <code>npm test</code> (1777 pruebas, 0 fallos). Solo leído: el código de cada sección; sin comprobación en el navegador</li>
+  <li><b>Commit</b> <code>main</code> @ <code>98b7d8f</code>, leído el 2026-11-14 para Casos límite; el resto, @ <code>f20b6d3</code> el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code> (1761 pruebas, 0 fallos) y los escenarios (644, 0 fallos) en <code>98b7d8f</code>. Solo leído: el código de cada sección; sin comprobación en el navegador</li>
   <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>

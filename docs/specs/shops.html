@@ -515,7 +515,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-14">2026-11-14</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Tiendas</h1>
 <p class="meta">
@@ -547,7 +547,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h3 id="shop-lists">Listas por tienda</h3>
 <p>Desde 600px, <code>Compra</code> tiene una fila de chips al pie de la cabecera, bajo el título: <strong>Todas</strong>, cada tienda de la vista en orden de nombre y <strong>Sin tienda</strong>. Un toque en un chip muestra esa lista. El chip de la lista visible está pulsado: una píldora rellena de <code>--done</code>, con su número sobre <code>--done-soft</code>. Los demás chips son píldoras con borde (SHOP-16). Por debajo de 600px, el dock ocupa el lugar de la fila (SHOP-26).</p>
-<p>La fila aparece cuando un artículo de <code>Compra</code> de la vista tiene tienda. La tienda de un artículo guardado o pospuesto no da chip. <strong>Sin tienda</strong> aparece cuando un artículo de la vista no tiene ninguna. La fila se desplaza en horizontal, y deslizarla no cambia de sección. <code>Izquierda</code> no cambia la fila (SHOP-17, NAV-4). Cada chip muestra cuántos artículos quedan por comprar, o <code>✓</code> si no queda ninguno (SHOP-18).</p>
+<p>La fila aparece cuando un artículo de <code>Compra</code> de la vista tiene tienda. La tienda de un artículo guardado no da chip. <strong>Sin tienda</strong> aparece cuando un artículo de la vista no tiene ninguna. La fila se desplaza en horizontal, y deslizarla no cambia de sección. <code>Izquierda</code> no cambia la fila (SHOP-17, NAV-4). Cada chip muestra cuántos artículos quedan por comprar, o <code>✓</code> si no queda ninguno (SHOP-18).</p>
 <p>Una lista por tienda muestra los artículos con esa tienda; <strong>Sin tienda</strong>, los que no tienen ninguna. Un artículo de dos tiendas sale en las dos listas, y una marca vale en las dos. La búsqueda, el orden y los grupos por receta funcionan dentro de la lista; agrupar por <strong>Tiendas</strong> no es una opción ahí (SHOP-19, GROUP-2). La cabecera muestra el nombre de la lista como título, y el subtítulo y la barra cuentan solo sus artículos (SHOP-20). <strong>Terminar compra</strong> sigue actuando sobre todo el estado, y el aviso <code>¿Has terminado?</code> solo sale en <strong>Todas</strong> (SHOP-21, TRIP-2).</p>
 <p>La lista elegida es un estado de la pantalla y no se guarda. Al arrancar, la app muestra <strong>Todas</strong>. La elección dura mientras la app sigue abierta, con la grafía de su chip. Si el chip elegido desaparece, por quitar una tienda, <code>Deshacer</code>, <strong>Terminar compra</strong> o una importación, la app vuelve a <strong>Todas</strong> (SHOP-22).</p>
 
@@ -571,7 +571,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <ul>
   <li><strong>Grafías con acentos.</strong> <code>Dia</code> y <code>Día</code> son dos tiendas: la comparación solo pasa a minúsculas (SHOP-3). Aun así, el orden las trata como iguales (SHOP-6).</li>
   <li><strong>Quitar la última tienda de su último artículo.</strong> La tienda deja de existir y su chip desaparece. Si esa lista estaba visible, la app vuelve a <strong>Todas</strong> (SHOP-1, SHOP-22).</li>
-  <li><strong>Solo artículos pospuestos con tienda.</strong> Sus tiendas no dan chip; sin otro artículo con tienda, la fila no aparece (SHOP-17).</li>
+  <li><strong>Solo artículos guardados con tienda.</strong> Sus tiendas no dan chip; sin otro artículo con tienda, la fila no aparece (SHOP-17).</li>
   <li><strong>Tarjeta final de Sin tienda.</strong> El título es <code>Sin tienda: todo comprado</code> (SHOP-23).</li>
   <li><strong>Un nombre de más de 40 caracteres.</strong> El campo no lo admite (<code>maxlength="40"</code> en <code>index.html</code>, SHOP-10).</li>
 </ul>
@@ -598,6 +598,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-14</td><td>Fila de chips: antes no daban chip las tiendas de los artículos guardados ni pospuestos → ahora solo las de los guardados, porque no hay pospuestos (SHOP-17)</td><td>Sin <strong>Posponer</strong> (<a href="../spec/03-lists.md">03-lists.md, LIST-40</a>)</td></tr>
     <tr><td>2026-11-13</td><td>Listas por tienda de un miembro: antes, sin listas compartidas → ahora funcionan dentro del chip de lista, con <code>Todas las tiendas</code> como entrada de todas (SHARE-14)</td><td>Separate shared lists — design</td></tr>
     <tr><td>2026-11-13</td><td>Preferencia <code>shopping.shopLists</code>: antes, solo <strong>Mostrar</strong> borraba la clave → ahora además cualquier valor distinto de <code>hide</code> se lee como <strong>Mostrar</strong> (SHOP-25)</td><td><a href="../spec/05-shops.md">05-shops.md, SHOP-25</a></td></tr>
     <tr><td>2026-11-13</td><td>Tarjeta final: antes, <code>Siguiente</code> era el botón principal → ahora los dos botones son tonales y el <code>+</code> del dock es el único principal (SHOP-23)</td><td>Rediseño Bodega</td></tr>
@@ -614,8 +615,8 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><b>Reglas</b> <a href="../spec/05-shops.md"><code>docs/spec/05-shops.md</code></a> (SHOP-1 a SHOP-27), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (ROW-1, NAV-4, NAV-7, NAV-8, NAV-22, NAV-24), <a href="../spec/03-lists.md"><code>docs/spec/03-lists.md</code></a> (ADD-6, TRIP-2), <a href="../spec/04-arrange.md"><code>docs/spec/04-arrange.md</code></a> (GROUP-2, GROUP-14, GROUP-15), <a href="../spec/15-design-system.md"><code>docs/spec/15-design-system.md</code></a> (DSV-33), <a href="../spec/19-sharing.md"><code>docs/spec/19-sharing.md</code></a> (SHARE-14), <a href="../spec/08-storage.md"><code>docs/spec/08-storage.md</code></a> (STORE-7)</li>
   <li><b>Código</b> <code>src/shops.js</code>, <code>src/ui/edit.js</code>, <code>src/ui/list.js</code>, <code>src/ui/arrange.js</code>, <code>src/ui/add.js</code>, <code>src/ui/context.js</code>, <code>src/app.js</code>, <code>src/storage.js</code>, <code>index.html</code>, <code>styles.css</code>, <code>src/locales/es.js</code></li>
   <li><b>Registros</b> <code>2026-10-13-shops-design.md</code>, <code>2026-10-25-separate-shared-lists-design.md</code></li>
-  <li><b>Commit</b> <code>main</code> @ <code>f20b6d3</code>, leído el 2026-11-13</li>
-  <li><b>Ejecutado</b> nada: ni tests ni comprobación en el navegador; cada sección se ha leído del código y de las reglas</li>
+  <li><b>Commit</b> <code>main</code> @ <code>98b7d8f</code>, leído el 2026-11-14 para Listas por tienda y Casos límite; el resto, @ <code>f20b6d3</code> el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code> (1761 pruebas, 0 fallos) y los escenarios (644, 0 fallos) en <code>98b7d8f</code>; la fila de chips en el navegador a 700, 900 y 1440px. El resto se ha leído del código y de las reglas</li>
   <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>

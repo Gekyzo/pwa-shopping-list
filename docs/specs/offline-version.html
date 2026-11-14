@@ -515,7 +515,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="shell">
 <nav class="toc" aria-label="Contents"><p class="toc-title"></p><ol></ol></nav>
 <main>
-<div class="stamp">Verificado<time datetime="2026-11-13">2026-11-13</time></div>
+<div class="stamp">Verificado<time datetime="2026-11-14">2026-11-14</time></div>
 <p class="kicker">Especificación de funcionalidad</p>
 <h1>Uso sin conexión y versión</h1>
 <p class="meta">
@@ -598,7 +598,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 
 <h2 id="limites-operativos">Límites operativos</h2>
 <ul>
-  <li>Caché del paquete: <code>shopping-shell-v53</code> (SW-4). Cada nombre nuevo descarga el paquete entero.</li>
+  <li>Caché del paquete: <code>shopping-shell-v55</code> (SW-4). Cada nombre nuevo descarga el paquete entero.</li>
   <li>Comprobación de la versión publicada: 8 segundos como mucho (<code>CHECK_MS</code> de <code>src/ui/context.js</code>, VER-5).</li>
   <li>Espera de <strong>Actualizar</strong>: 15 segundos como mucho, para toda la actualización (<code>UPDATE_MS</code> de <code>src/update.js</code>, VER-8).</li>
   <li>Una versión publicada llega al usuario en el segundo arranque, o al momento con <strong>Actualizar</strong> (SW-12).</li>
@@ -628,6 +628,7 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
 <div class="tablewrap"><table class="changelog" data-plain>
   <thead><tr><th>Fecha</th><th>Cambio</th><th>Por qué</th></tr></thead>
   <tbody>
+    <tr><td>2026-11-14</td><td>Caché del paquete <code>shopping-shell-v53</code> → <code>shopping-shell-v55</code> (SW-4)</td><td>Filas de <code>Compra</code> de borde a borde por debajo de 600px (<code>a04cb1a</code>) y sin <strong>Posponer</strong> (<code>98b7d8f</code>)</td></tr>
     <tr><td>2026-11-13</td><td>SW-2 sin <code>design-system/sheet.js</code> → con él; un refresco en segundo plano que falla a medias: sin regla → SW-6 dice que puede mezclar archivos de dos versiones</td><td><code>SHELL</code> y <code>refresh</code> de <code>sw.js</code></td></tr>
     <tr><td>2026-11-13</td><td>Caché del paquete <code>shopping-shell-v20</code> → <code>shopping-shell-v53</code>; <code>SHELL</code> añade las fuentes de la app, las novedades de cada idioma, <code>icons/logo.png</code> y los iconos de los accesos directos (SW-2, SW-4)</td><td><a href="../spec/10-offline-version.md">10-offline-version.md, SW-2</a></td></tr>
     <tr><td>2026-11-13</td><td>Dirección <code>https://polaris-works.github.io/shopping-list/</code> → <code>https://bodega.polarisworks.duckdns.org/</code>, servida por Caddy desde Pages; la dirección antigua <code>bodega.artisandevs.duckdns.org</code> sigue hasta su retirada (VER-9)</td><td><a href="../spec/10-offline-version.md">10-offline-version.md, VER-9</a></td></tr>
@@ -647,8 +648,8 @@ html[data-layout="spec"] #fuentes-body > ul li + li, html[data-layout="spec"] #f
   <li><b>Reglas</b> <a href="../spec/10-offline-version.md"><code>docs/spec/10-offline-version.md</code></a> (SW-1 a SW-13, VER-1 a VER-22), <a href="../spec/16-install.md"><code>docs/spec/16-install.md</code></a> (INS-2, INS-4), <a href="../spec/07-screen.md"><code>docs/spec/07-screen.md</code></a> (NAV-25), <a href="../spec/11-integrations.md"><code>docs/spec/11-integrations.md</code></a> (SHORT-3), <a href="../spec/18-account-sync.md"><code>docs/spec/18-account-sync.md</code></a> (ACC-2, ACC-12)</li>
   <li><b>Código</b> <code>sw.js</code>, <code>src/version.js</code>, <code>src/update.js</code>, <code>src/whatsnew.js</code>, <code>src/ui/whatsnew.js</code>, <code>version.json</code>, <code>release-notes/*.md</code>, <code>.github/workflows/pages.yml</code>, <code>scripts/release.mjs</code>, <code>scripts/bump-version.mjs</code>, <code>.githooks/pre-push</code>, <code>manifest.webmanifest</code>, <code>src/app.js</code>, <code>src/config.js</code>, <code>src/ui/settings.js</code>, <code>src/ui/context.js</code>, <code>index.html</code>, <code>src/locales/es.js</code></li>
   <li><b>Registros</b> <code>docs/superpowers/specs/2026-10-12-shopping-list-pwa-design.md</code>, <code>docs/superpowers/specs/2026-10-13-shops-design.md</code>, <code>docs/superpowers/specs/2026-10-18-responsive-design.md</code></li>
-  <li><b>Commit</b> <code>main</code> @ <code>c6f0696</code>, leído el 2026-11-13</li>
-  <li><b>Ejecutado</b> <code>npm test</code>: 1781 tests, 1781 correctos. Sin comprobación en el navegador ni publicación; el resto se ha leído del código</li>
+  <li><b>Commit</b> <code>main</code> @ <code>98b7d8f</code>, leído el 2026-11-14 para Límites operativos; el resto, @ <code>c6f0696</code> el 2026-11-13</li>
+  <li><b>Ejecutado</b> <code>npm test</code> (1761 pruebas, 0 fallos) y los escenarios (644, 0 fallos) en <code>98b7d8f</code>. En el navegador, con el servidor parado, la app carga a 390px desde la caché <code>shopping-shell-v55</code>. Sin publicación; el resto se ha leído del código</li>
   <li><b>Abierto</b> ninguno</li>
 </ul>
 </main>
