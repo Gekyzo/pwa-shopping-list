@@ -85,14 +85,16 @@ This document holds the rules of the app only.
   is 16px with tabular figures. `tests/look.test.js` checks the values.
 - **DSV-12** The components of `DESIGN.md`, as versions of the app (DSV-3). The name of a row is
   18px at weight 500 (`--text-row`, `--weight-row`), and its quantity keeps one line. The check of
-  a row is a round tick of 32px (`--tick`) with a `--struck` border, filled with `--done` when
+  a row is a round tick of 32px (`--tick`; 24px below 600px, DSV-33) with a `--struck` border, filled with `--done` when
   checked, with a short scale snap. A bought row stands on `--surface-2`, with its name in
   `--struck` and struck through. An input has a 1.5px `--control` border and a 2px `--done` border
   on focus. The head of a group is 18px (`--text-group`), with its count as muted second text
   (`group-head-end`).
 - **DSV-13** The screens of the Stitch project `Shopping`, with no change of behaviour. The rows of
-  a list group stand in a card: an inset `--line` border with 6px corners, 16px from the edge
-  below 600px, below a head on the canvas with its count as a pill (`group-head-count`). The groups
+  a list group stand in a card from 600px: an inset `--line` border with 6px corners
+  (`--row-edge`, `--row-corner`). Below 600px the rows of `Compra` run from edge to
+  edge, with no border and no corners (DSV-33), and the cards of `Recetas` stand 16px from the
+  edge. The card is below a head on the canvas with its count as a pill (`group-head-count`). The groups
   of `Ajustes` are `list-group card`, under a head in small capitals. The quantity of a row is a
   tonal chip, and the mark of a recurrent item (`item-row-repeat`) is `--warning`. The header is
   `--surface` with its tools as bordered tiles. The bar is `--surface`, and its current section is
@@ -115,8 +117,8 @@ its screens disagree, `docs/bodega-inconsistencies.html` records the choice: the
 each part.
 
 - **DSV-15** The name of a row of `Compra` keeps one line, then ends with an ellipsis; its
-  quantity is a tonal chip on `--secondary` with no edge and 4px corners, 15px with tabular
-  figures (DSV-33). Below 1024px a bought quantity keeps the tonal chip and fades with its row
+  quantity is 15px with tabular figures: from 600px a tonal chip on `--secondary` with no edge and
+  4px corners, below 600px plain `--muted` text (DSV-33). Below 1024px a bought quantity keeps the tonal chip and fades with its row
   (DSV-33); from 1024px it is drawn: a `--line` edge on `--surface`, in `--struck`.
 - **DSV-16** `Comprados (N)` (LIST-12) is a card of its own: its head (`bought-head`) is the top
   of a box with a 1px `--line` border, 6px corners and a `--surface-2` ground, with a check in
@@ -193,7 +195,8 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   of a group head is 15px (`--text-label-lg`) at weight 600, with its count pill beside it and the
   chevron at the end. At every width the edit button of a row is the grip `grip`, an 18px mark in
   `--struck` (`row-handle`, DSV-33), and a bought row has none. Below 1024px a row and a head keep the phone screen: the count at the end of
-  the head, the recurrence in the meta line, a sans quantity chip. This reverses the "no
+  the head, the recurrence in the meta line (beside the name below 600px, DSV-33), a sans
+  quantity chip (plain text below 600px). This reverses the "no
   monospace" choice of `docs/bodega-inconsistencies.html` for the desktop row.
 - **DSV-25** The sidebar of the desktop screens of Bodega, from 1024px: the frame fills the width
   (`--frame-max: 100vw`), the sidebar is tinted `--surface-2` with a `--line` at its end drawn as a
@@ -294,8 +297,13 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
      From 600px it stands at the bottom, as in the design system.
   3. The dock holds the shop chip at its start: a white pill with the icon `store` in `--done`, the
      name of the list, its count and `▾`. The search button and the `+` stand at its end (SHOP-26).
-  4. Below 1024px a row is 60px: the 32px tick with 14px above and below it. The quantity chip is
-     15px (DSV-15) and the grip an 18px mark in `--struck`. A bought row has no grip: **Editar**
+  4. Below 600px a row of `Compra` is 48px (`--tap`): the 24px tick with 12px above and below it,
+     the name at 16px, and the list from edge to edge with no card (DSV-13). The quantity is plain
+     `--muted` text at 15px (DSV-15). A meta line that holds only the mark of a recurrent item does
+     not show: the mark stands after the name as `↻` alone, and a screen reader hears its words. A
+     meta line with shops keeps the mark. From 600px to 1023px a row is 60px: the 32px tick with
+     14px above and below it, the 18px name and the 15px quantity chip. The grip is an 18px mark in
+     `--struck`. A bought row has no grip: **Editar**
      stays in its side actions (ROW-7). Its content is at 65% opacity on its opaque ground, so
      the action below it never shows through, and only its name is struck.
   5. `Comprados (N)` is open at first (LIST-12).

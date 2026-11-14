@@ -104,7 +104,7 @@ The data model and the behaviour rules are in `docs/spec/`: the state in
   `shopping.queue`, `shopping.v1.beforeLogin` (the list that a first login replaced) and
   `shopping.offline` (`1` after `Usar sin cuenta`, ACC-13). `sessionStorage` key `shopping.oauth`
   holds the state and the verifier for the time of the Google redirect only (ACC-5).
-- **Cache API**, cache `shopping-shell-v53`: the app shell, served
+- **Cache API**, cache `shopping-shell-v54`: the app shell, served
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers
   `{ ok }` on the message port. Cache `shopping-manifest` holds the text of the manifest in the

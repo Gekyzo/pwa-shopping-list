@@ -27,7 +27,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.shared.sync` | The sync state of the shared space, and the `scope` of its share (SHARE-12) |
 | `localStorage` | `shopping.shared.queue` | The changes of the shared space not sent to the server (SHARE-12) |
 | `sessionStorage` | `shopping.oauth` | The state and the verifier of a Google sign-in, from the redirect to the return ([18-account-sync.md](18-account-sync.md), ACC-5) |
-| Cache API | `shopping-shell-v53` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-shell-v54` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 | Cache API | `shopping-manifest` | The name, the description and the shortcut names of the manifest in the language of the screen (SW-13) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.

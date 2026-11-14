@@ -10,7 +10,12 @@ no change has no entry.
 
 ## Unreleased
 
-No change.
+- DSV-33, DSV-13, DSV-15: below 600px the rows of `Compra` run from edge to edge with no card
+  (`--row-edge` and `--row-corner` are 0 there; the cards of `Recetas` keep theirs and their 16px
+  gutter). A row is 48px: a 24px tick (`--tick`), the name at 16px, and the quantity as plain
+  `--muted` text in place of the chip. A meta line with only the recurrent mark is hidden, and the
+  mark shows as `↻` after the name, with its words still read by a screen reader. From 600px the
+  rows are as before. Shell cache `shopping-shell-v54`.
 
 ## 1.13.8 - 2026-11-14
 

@@ -4,7 +4,7 @@ What changes for you in each version of the app. The newest version is first.
 
 ## Unreleased
 
-No change.
+- On a phone, the rows of Shopping fill the width of the screen and are shorter: more products fit, and long names show in full. A product that repeats shows ↻ beside its name.
 
 ## 1.13.8 - 2026-11-14
 

@@ -64,7 +64,9 @@
     --text-l: 1.625rem; /* headline-lg-mobile: 26px, the screen title */
     --weight-row: 500;
     --weight-book: 500; /* font-medium of the screens: the name of a postponed row from 1024px */
-    --tick: 32px; /* the round tick of a row */
+    --tick: 24px; /* the round tick of a row: 24px below 600px (DSV-33), 32px from 600px */
+    --row-edge: 0px; /* the side and top edge of a row card (DSV-13): none below 600px (DSV-33) */
+    --row-corner: 0px; /* the corners of a row card: none below 600px */
     --icon-tile: 32px; /* the tile of a row icon of Ajustes from 1024px */
     --icon-xs: 16px; /* the icon of a group head of Ajustes from 1024px */
     --tick-stroke: 2.5px; /* the mark inside a checked tick */
@@ -114,6 +116,9 @@
      (LAY-1). */
   @media (min-width: 600px) {
     :root {
+      --tick: 32px;
+      --row-edge: 1px;
+      --row-corner: var(--radius-l);
       /* The column of the panels of Compra and Menú from 840px (LIST-38). */
       --panel-width: clamp(240px, 30vw, 320px);
       /* The column of Ajustes from 840px (NAV-27). */
@@ -903,15 +908,18 @@
                             in it (ROW-16).
      @variant repeat-only   On item-row-meta: the meta line holds only the mark of a recurrent item,
                             so it goes from 1024px. */
-  /* The rows of a group stand in a card (DSV-13): an inset box with a border and 6px corners below
-     its head. A row that starts a group takes the top of the card, one that ends it the bottom. */
-  /* A list with only the postponed items (LIST-41) keeps the same gutter. */
-  .item-list:has(> :is(.item-row, .postponed-head)) {
+  /* The rows of a group stand in a card (DSV-13): a box with a border and 6px corners below its
+     head. A row that starts a group takes the top of the card, one that ends it the bottom. Below
+     600px the rows of Compra run from edge to edge: --row-edge and --row-corner are
+     0 there (DSV-33). The cards of Recetas keep their edge, corners and 16px gutter. */
+  .item-list:has(> .item-row.recipe) {
+    --row-edge: 1px;
+    --row-corner: var(--radius-l);
     margin-inline: var(--space-4);
   }
 
   @media (min-width: 600px) {
-    .item-list:has(> :is(.item-row, .postponed-head)) {
+    .item-list:has(> .item-row.recipe) {
       margin-inline: 0;
     }
   }
@@ -920,22 +928,22 @@
      to the padding box: the divider of a row with a check is a border-image, which takes the place
      of every border of the row, and the body covers anything drawn inside the row. */
   .item-list > .item-row {
-    padding-inline: 1px;
+    padding-inline: var(--row-edge);
     background: var(--line);
     background-clip: padding-box;
   }
 
   .item-list > .item-row:first-child,
   .item-list > :is(.group-head, .section-head) + .item-row {
-    padding-top: 1px;
-    border-start-start-radius: var(--radius-l);
-    border-start-end-radius: var(--radius-l);
+    padding-top: var(--row-edge);
+    border-start-start-radius: var(--row-corner);
+    border-start-end-radius: var(--row-corner);
   }
 
   .item-list > .item-row:last-child,
   .item-list > .item-row:has(+ :is(.group-head, .section-head)) {
-    border-end-start-radius: var(--radius-l);
-    border-end-end-radius: var(--radius-l);
+    border-end-start-radius: var(--row-corner);
+    border-end-end-radius: var(--row-corner);
     overflow: hidden;
   }
 
@@ -949,6 +957,41 @@
   .item-list > .item-row:has(+ :is(.group-head, .section-head)) {
     border-image: none;
     border-bottom: 1px solid var(--line);
+  }
+
+  /* DSV-33: below 600px a meta line that holds only the mark of a recurrent item goes, and the mark
+     stands after the name as ↻ alone, so the row keeps one line. The screen reader hears the words
+     of the mark; the ↻ drawn before them has empty alternative text. A meta line with shops keeps
+     the mark in it. From 600px the meta line comes back, and from 1024px the pill of DSV-24, later
+     in this layer, takes the place beside the name. */
+  .item-row-meta.repeat-only {
+    display: none;
+  }
+
+  .item-row-name:where(:has(> .item-row-meta.repeat-only)) > .item-row-title > .item-row-repeat {
+    display: inline;
+    flex: none;
+    font-size: 0;
+  }
+
+  .item-row-name:where(:has(> .item-row-meta.repeat-only)) > .item-row-title > .item-row-repeat::before {
+    content: "↻" / "";
+    font-size: var(--text-label-lg);
+  }
+
+  @media (min-width: 600px) {
+    .item-row-meta.repeat-only {
+      display: block;
+    }
+
+    .item-row-name:where(:has(> .item-row-meta.repeat-only)) > .item-row-title > .item-row-repeat {
+      display: none;
+      font-size: inherit;
+    }
+
+    .item-row-name > .item-row-title > .item-row-repeat::before {
+      content: none;
+    }
   }
 
   /* DSV-22: from 1024px the head of a group is the tinted top of its card, the meta of a row a small
@@ -1110,18 +1153,27 @@
     }
   }
 
-  /* The quantity is a 15px tonal chip with no edge and 4px corners, as in the Bodega screens
-     (DSV-15, DSV-33). */
+  /* The quantity is 15px with tabular figures. Below 600px it is plain --muted text at the end of
+     the name (DSV-33); from 600px a tonal chip with no edge and 4px corners, as in the Bodega
+     screens (DSV-15). */
   .item-row-qty {
     justify-self: end;
-    padding: var(--space-1) calc(var(--space-2) + var(--space-half));
+    padding: 0;
     border: 0;
     border-radius: var(--radius-s);
-    background: var(--secondary);
-    color: var(--text);
+    background: none;
+    color: var(--muted);
     font-size: var(--text-label-lg);
     font-variant-numeric: tabular-nums;
     font-weight: var(--weight-medium);
+  }
+
+  @media (min-width: 600px) {
+    .item-row-qty {
+      padding: var(--space-1) calc(var(--space-2) + var(--space-half));
+      background: var(--secondary);
+      color: var(--text);
+    }
   }
 
   /* A bought quantity is drawn, not filled: a --line edge on --surface, in --struck. */
@@ -1432,9 +1484,35 @@
     bottom: auto;
   }
 
-  /* A row is 60px: the 32px tick with 14px above and below it. */
+  /* A row is 48px below 600px: the 24px tick with 12px above and below it, and the name at 16px
+     (DSV-33). From 600px it is 60px: the 32px tick with 14px above and below it, and the name at
+     18px (DSV-12). */
   .item-row-check {
-    margin-block: calc(var(--space-3) + var(--space-half));
+    margin-block: var(--space-3);
+  }
+
+  .item-row-body:has(> .item-row-check),
+  .item-row-body:has(> .item-row-check) > .item-row-name {
+    min-height: var(--tap);
+  }
+
+  .item-row-body:has(> .item-row-check) > .item-row-name {
+    font-size: var(--text-m);
+  }
+
+  @media (min-width: 600px) {
+    .item-row-check {
+      margin-block: calc(var(--space-3) + var(--space-half));
+    }
+
+    .item-row-body:has(> .item-row-check),
+    .item-row-body:has(> .item-row-check) > .item-row-name {
+      min-height: var(--tap-l);
+    }
+
+    .item-row-body:has(> .item-row-check) > .item-row-name {
+      font-size: var(--text-row);
+    }
   }
 
   /* A bought row fades as a whole on its opaque ground, so the action below it never shows
@@ -1453,7 +1531,13 @@
 
   .item-row.bought .item-row-qty {
     box-shadow: none;
-    background: var(--secondary);
+    background: none;
+  }
+
+  @media (min-width: 600px) {
+    .item-row.bought .item-row-qty {
+      background: var(--secondary);
+    }
   }
 
   /* From 1024px the rows of the desktop screen (DSV-24): the tick with 12px above and below it, and

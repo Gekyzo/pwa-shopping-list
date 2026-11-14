@@ -4,7 +4,7 @@ Was sich für dich in jeder Version der App ändert. Die neueste Version steht o
 
 ## Unreleased
 
-No change.
+- Auf dem Handy füllen die Zeilen des Einkaufs die ganze Bildschirmbreite und sind niedriger: Es passen mehr Produkte darauf, und lange Namen sind ganz lesbar. Ein Produkt, das sich wiederholt, zeigt ↻ neben seinem Namen.
 
 ## 1.13.8 - 2026-11-14
 

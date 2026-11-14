@@ -4,7 +4,7 @@ El que canvia per a tu en cada versió de l’app. La versió més nova va prime
 
 ## Unreleased
 
-No change.
+- Al mòbil, les files de Compra ocupen tota l’amplada de la pantalla i són més baixes: hi caben més productes i els noms llargs es llegeixen sencers. Un producte que es repeteix mostra ↻ al costat del nom.
 
 ## 1.13.8 - 2026-11-14
 

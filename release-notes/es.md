@@ -4,7 +4,7 @@ Lo que cambia para ti en cada versión de la app. La versión más nueva va prim
 
 ## Unreleased
 
-No change.
+- En el móvil, las filas de Compra ocupan todo el ancho de la pantalla y son más bajas: caben más productos y los nombres largos se leen enteros. Un producto que se repite muestra ↻ junto a su nombre.
 
 ## 1.13.8 - 2026-11-14
 

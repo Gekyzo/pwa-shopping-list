@@ -4,7 +4,7 @@ Cosa cambia per te in ogni versione dell’app. La versione più recente viene p
 
 ## Unreleased
 
-No change.
+- Sul telefono, le righe della Spesa occupano tutta la larghezza dello schermo e sono più basse: entrano più prodotti e i nomi lunghi si leggono per intero. Un prodotto che si ripete mostra ↻ accanto al nome.
 
 ## 1.13.8 - 2026-11-14
 

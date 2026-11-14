@@ -4,7 +4,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 
 ## Unreleased
 
-No change.
+- No telemóvel, as linhas das Compras ocupam toda a largura do ecrã e são mais baixas: cabem mais produtos e os nomes longos leem-se por inteiro. Um produto que se repete mostra ↻ junto ao nome.
 
 ## 1.13.8 - 2026-11-14
 

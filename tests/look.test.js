@@ -85,11 +85,12 @@ test('the name of a row of Compra keeps one line, then ends with an ellipsis (DS
   assert.match(body, /display:\s*block/);
 });
 
-test('the quantity of a row is a tonal chip with no border (DSV-15)', () => {
+test('the quantity of a row is a tonal chip with no border from 600px, plain text below (DSV-15, DSV-33)', () => {
   const rules = [...plain.matchAll(/(^|\})\s*\.item-row-qty\s*\{([^{}]*)\}/g)].map(([, , body]) => body);
   const last = rules.at(-1);
   assert.match(last, /border:\s*0/);
-  assert.match(last, /background:\s*var\(--secondary\)/);
+  assert.match(last, /background:\s*none/);
+  assert.match(block('.item-row-qty', from600), /background:\s*var\(--secondary\)/);
 });
 
 test('no hex colour outside the tokens layer', () => {
@@ -392,8 +393,8 @@ test('below 600px the toast stands at the top, and from 600px at the bottom (DSV
   assert.match(block('.toast.done > .toast-icon'), /display:\s*block/);
 });
 
-test('below 1024px a row is 60px, its quantity a 15px chip, and a bought row fades with only its name struck (DSV-33)', () => {
-  assert.match(block('.item-row-check', narrow), /margin-block:\s*calc\(var\(--space-3\) \+ var\(--space-half\)\)/);
+test('below 1024px a row is 60px from 600px, its quantity 15px, and a bought row fades with only its name struck (DSV-33)', () => {
+  assert.match(block('.item-row-check', from600), /margin-block:\s*calc\(var\(--space-3\) \+ var\(--space-half\)\)/);
   assert.match(block('.item-row-qty', narrow), /font-size:\s*var\(--text-label-lg\)/);
   assert.match(block('.item-row.bought .item-row-body > *', narrow), /opacity:\s*0\.65/);
   assert.match(block('.item-row.bought .item-row-label', narrow), /line-through/);
@@ -417,4 +418,38 @@ test('from 1024px the foot of the sidebar is a tonal chip below a line (DSV-25)'
 
 test('an empty count of the sidebar takes no room (NAV-26)', () => {
   assert.match(readFileSync(new URL('../design-system/design-system.css', import.meta.url), 'utf8'), /\.nav-count:empty \{\s*display:\s*none;/);
+});
+
+test('below 600px a row of Compra is 48px with a 24px tick and a 16px name, and 60px from 600px (DSV-33)', () => {
+  const body = '.item-row-body:has(> .item-row-check)';
+  const name = '.item-row-body:has(> .item-row-check) > .item-row-name';
+  assert.match(css.slice(0, tokensEnd), /--tick:\s*24px/);
+  assert.match(block(':root', from600), /--tick:\s*32px/);
+  assert.match(block('.item-row-check', narrow), /margin-block:\s*var\(--space-3\)/);
+  assert.match(block(body, narrow), /min-height:\s*var\(--tap\)/);
+  assert.match(block(name, narrow), /font-size:\s*var\(--text-m\)/);
+  assert.match(block(body, from600), /min-height:\s*var\(--tap-l\)/);
+  assert.match(block(name, from600), /font-size:\s*var\(--text-row\)/);
+});
+
+test('below 600px the rows of Compra run from edge to edge, and the cards of Recetas keep their gutter (DSV-13, DSV-33)', () => {
+  assert.match(css.slice(0, tokensEnd), /--row-edge:\s*0px/);
+  assert.match(css.slice(0, tokensEnd), /--row-corner:\s*0px/);
+  assert.match(block(':root', from600), /--row-edge:\s*1px/);
+  assert.match(block(':root', from600), /--row-corner:\s*var\(--radius-l\)/);
+  assert.match(block('.item-list > .item-row'), /padding-inline:\s*var\(--row-edge\)/);
+  const recipes = block('.item-list:has(> .item-row.recipe)', narrow);
+  assert.match(recipes, /--row-edge:\s*1px/);
+  assert.match(recipes, /margin-inline:\s*var\(--space-4\)/);
+  assert.doesNotMatch(narrow, /\.item-list:has\(> :is\(\.item-row, \.postponed-head\)\) \{[^}]*margin-inline/);
+});
+
+test('below 600px the mark of a recurrent item is ↻ after the name, and its meta line goes (DSV-33)', () => {
+  const mark = '.item-row-name:where(:has(> .item-row-meta.repeat-only)) > .item-row-title > .item-row-repeat';
+  assert.match(block('.item-row-meta.repeat-only', narrow), /display:\s*none/);
+  assert.match(block(mark, narrow), /display:\s*inline/);
+  assert.match(block(`${mark}::before`, narrow), /content:\s*"↻" \/ ""/);
+  assert.match(block('.item-row-meta.repeat-only', from600), /display:\s*block/);
+  assert.match(block(mark, from600), /display:\s*none/);
+  assert.match(block('.item-row-name > .item-row-title > .item-row-repeat::before', from600), /content:\s*none/);
 });
