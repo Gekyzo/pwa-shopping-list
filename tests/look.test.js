@@ -441,7 +441,7 @@ test('below 600px the rows of Compra run from edge to edge, and the cards of Rec
   const recipes = block('.item-list:has(> .item-row.recipe)', narrow);
   assert.match(recipes, /--row-edge:\s*1px/);
   assert.match(recipes, /margin-inline:\s*var\(--space-4\)/);
-  assert.doesNotMatch(narrow, /\.item-list:has\(> :is\(\.item-row, \.postponed-head\)\) \{[^}]*margin-inline/);
+  assert.doesNotMatch(narrow, /\.item-list:not\(:has\(> \.item-row\.recipe\)\):has\(> \.item-row\) \{[^}]*margin-inline/);
 });
 
 test('below 600px the mark of a recurrent item is ↻ after the name, and its meta line goes (DSV-33)', () => {

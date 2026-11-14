@@ -863,16 +863,18 @@ test('normalizeState dates a meal of version 9 to the week of its date', () => {
   assert.deepEqual(normalizeState(v9, new Date(2026, 10, 8)).menu, [{ week: '2026-11-02', day: 2, meal: 'dinner', recipe: 'r1' }]);
 });
 
-test('importJson keeps a postponed item (LIST-40)', () => {
-  const data = { ...sample(), items: [{ ...sample().items[0], list: 'postponed', bought: false }] };
-  const { state } = importJson(JSON.stringify(data));
-  assert.equal(state.items[0].list, 'postponed');
-  assert.equal(state.items[0].bought, false);
+test('importJson puts a postponed item of an older app in Compra, not ticked (STORE-8)', () => {
+  for (const bought of [false, true]) {
+    const data = { ...sample(), items: [{ ...sample().items[0], list: 'postponed', bought }] };
+    const { state } = importJson(JSON.stringify(data));
+    assert.equal(state.items[0].list, 'active');
+    assert.equal(state.items[0].bought, false);
+  }
 });
 
-test('importJson never ticks a postponed item (DATA-6)', () => {
-  const data = { ...sample(), items: [{ ...sample().items[0], list: 'postponed', bought: true }] };
-  assert.equal(importJson(JSON.stringify(data)).state.items[0].bought, false);
+test('normalizeState still refuses an unknown list', () => {
+  const data = { ...sample(), items: [{ ...sample().items[0], list: 'later' }] };
+  assert.equal(normalizeState(data), null);
 });
 
 test('storedBytes counts the UTF-8 bytes of the keys and values of the app (LIST-43)', () => {

@@ -43,7 +43,6 @@ next trip is almost ready.
 | Function | Document |
 |---|---|
 | The list `Compra` and the trip cycle | [03-lists.md](03-lists.md) |
-| Postpone an item to the next trip | [03-lists.md](03-lists.md) |
 | Add with search, with no duplicate | [03-lists.md](03-lists.md) |
 | Search in `Compra` | [03-lists.md](03-lists.md) |
 | Order by name or custom, with a manual move | [04-arrange.md](04-arrange.md) |

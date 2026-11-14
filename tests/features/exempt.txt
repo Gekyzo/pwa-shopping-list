@@ -20,7 +20,6 @@ LIST-24 screen The search text is not stored; a section change or an add closes 
 LIST-26 screen The text of a search with no match.
 LIST-37 screen The search field of the dock below 600px and its Cancelar.
 LIST-38 screen The panel Recetas en la lista; its counts are recipe rules (REC-41).
-LIST-39 screen The panel Próxima compra and the head Pospuestos (N); the postponed items are LIST-40 to LIST-42.
 TRIP-5 screen After Terminar compra the screen shows Compra; Deshacer restores the full state.
 TRIP-7 screen The buttons Descartar and Aplazar of Ajustes; the stored choice is TRIP-8.
 

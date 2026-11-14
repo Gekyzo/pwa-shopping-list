@@ -9,7 +9,7 @@ Feature: Search of a list
       | Leche       | Mercadona | Lácteos  | active    | no     |
       | Pan de molde | Lidl     | Panadería | active   | yes    |
       | Café        |           |          | active    | no     |
-      | Té verde    |           |          | postponed | no     |
+      | Té verde    |           |          | saved     | no     |
       | Pilas       |           |          | saved     | no     |
 
   @LIST-22 @LIST-25 @AISLE-9
@@ -30,8 +30,8 @@ Feature: Search of a list
   Scenario: An empty text shows every item of Compra
     Then the list search for "  " finds "Leche, Café, Pan de molde"
 
-  @LIST-41
-  Scenario: A postponed or a saved item is not found by the search of the list
+  @LIST-22
+  Scenario: A saved item is not found by the search of the list
     Then the list search for "verde" finds ""
     And the list search for "pilas" finds ""
 

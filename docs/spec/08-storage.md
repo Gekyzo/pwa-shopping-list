@@ -27,7 +27,7 @@ Rules of `src/storage.js`, and of its use in `src/ui/context.js` and `src/ui/set
 | `localStorage` | `shopping.shared.sync` | The sync state of the shared space, and the `scope` of its share (SHARE-12) |
 | `localStorage` | `shopping.shared.queue` | The changes of the shared space not sent to the server (SHARE-12) |
 | `sessionStorage` | `shopping.oauth` | The state and the verifier of a Google sign-in, from the redirect to the return ([18-account-sync.md](18-account-sync.md), ACC-5) |
-| Cache API | `shopping-shell-v54` | The app shell ([10-offline-version.md](10-offline-version.md)) |
+| Cache API | `shopping-shell-v55` | The app shell ([10-offline-version.md](10-offline-version.md)) |
 | Cache API | `shopping-manifest` | The name, the description and the shortcut names of the manifest in the language of the screen (SW-13) |
 
 The `v1` of the key is the version of the key, not of the state. The state has its own `version`.
@@ -52,7 +52,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
     or `items` is not a list;
   - `recipes` is not a list, in version 2 to 10;
   - an item has no non-empty string `id`, no name, a `list` that is not `active`, `saved`,
-    `postponed` or the old `next` (STORE-8), a flag (`recurrent`, `bought`) that is not a boolean,
+    or the old `postponed` or `next` (STORE-8), a flag (`recurrent`, `bought`) that is not a boolean,
     or an `again` that is present and not a boolean;
   - a recipe has no non-empty string `id`, no name, a `products` that is not a list, an empty
     product, a product that is not text, or two products with the same name;
@@ -62,7 +62,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Field | Repair |
   |---|---|
   | Names of items, recipes, products, shops | Trimmed |
-  | `bought` of an item of `list: 'saved'` or `list: 'postponed'` | `false` |
+  | `bought` of an item of `list: 'saved'` | `false` |
   | `quantity` | Not text: `''`. Text: trimmed |
   | `shops` | Not a list: empty. An entry that is not text, is empty or is a duplicate with no case distinction: dropped. The rest trimmed |
   | `aisles` | Not a list: empty. An entry that is not text, is empty or is a duplicate with no case distinction: dropped. The rest trimmed |
@@ -86,7 +86,7 @@ The `v1` of the key is the version of the key, not of the state. The state has i
   | Version 1 to 4 | Each item gets `quantity: ''` |
   | Version 1 to 5 | No change of the data: version 6 adds `list: 'saved'` |
   | Version 1 to 6 | `aisles: []`, and each item gets `aisle: ''` |
-  | Any version | An item of `list: 'next'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. A ticked recurrent item keeps its tick. Each item loses `again`. Versions 1 to 7 write these values; a state of version 8 to 10 that holds them is migrated too |
+  | Any version | An item of `list: 'next'` or `list: 'postponed'` goes to `Compra`, not ticked. A ticked one-time item with `again: true` goes to `Compra`, not ticked. A ticked recurrent item keeps its tick. Each item loses `again`. Versions 1 to 7 write `next` and `again`, and 1.13.8 and earlier write `postponed` (LIST-40); a state of any version that holds them is migrated |
   | Version 1 to 8 | No change of the data: version 9 adds the dish of a meal |
   | Version 1 to 9 | Each meal gets `week`: the Monday of the week of the load (MENU-1). A meal whose `week` is not a Monday `YYYY-MM-DD` is dropped |
 

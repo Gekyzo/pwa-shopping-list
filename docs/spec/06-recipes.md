@@ -62,7 +62,7 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-10** While the user types a product, the recipe lists up to 5 names that contain the text,
   with no case and no accent distinction: the names of the items, then the products of the
   recipes, each name one time with no case distinction, with the spelling of the item first. Two
-  names that differ by an accent both show (`Azúcar`, `Azucar`). Saved and postponed items count too. The
+  names that differ by an accent both show (`Azúcar`, `Azucar`). Saved items count too. The
   products of the recipe do not show. The exact match goes first, then the names that start with
   the text. A tap adds that name.
 - **REC-11** After an add the product field is empty and keeps the focus, for the next product.
@@ -94,7 +94,7 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
   button `cart-add` at the end of the row, named `Añadir a Compra`, with the same toast. A recipe with no product gives `error.recipeEmpty`.
 - **REC-18** For each product, in order:
   - an item with that name exists, with no case distinction: the item becomes "to buy" in `Compra`
-    (it comes back from the saved or postponed items, or it loses its tick, or it stays as it is);
+    (it comes back from the saved items, or it loses its tick, or it stays as it is);
   - no such item exists: a one-time item with that name is created in `Compra`.
 - **REC-19** The send adds the id of the recipe to `sent`, one time. A send never makes a
   duplicate item.
@@ -107,7 +107,7 @@ in `Compra` are in [04-arrange.md](04-arrange.md).
 - **REC-22** `sent` lasts until **Terminar compra** (TRIP-3). The row of a recipe has no "sent"
   mark.
 - **REC-41** The progress of a recipe in `Compra` (`recipeProgress`) is the number of its products
-  that are items of `Compra`, ticked or not, of all its products. A saved or postponed item does not
+  that are items of `Compra`, ticked or not, of all its products. A saved item does not
   count. Only a recipe with one product in `Compra` at least has a progress. The sent recipes come
   first, in send order, then the others in name order.
 

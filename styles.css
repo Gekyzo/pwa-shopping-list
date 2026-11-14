@@ -63,7 +63,6 @@
     --text-h: 1.375rem; /* headline-md: 22px */
     --text-l: 1.625rem; /* headline-lg-mobile: 26px, the screen title */
     --weight-row: 500;
-    --weight-book: 500; /* font-medium of the screens: the name of a postponed row from 1024px */
     --tick: 24px; /* the round tick of a row: 24px below 600px (DSV-33), 32px from 600px */
     --row-edge: 0px; /* the side and top edge of a row card (DSV-13): none below 600px (DSV-33) */
     --row-corner: 0px; /* the corners of a row card: none below 600px */
@@ -998,7 +997,7 @@
      outlined pill, and the quantity an outlined chip, as in the desktop screen of Compra. */
   @media (min-width: 1024px) {
     /* DSV-26: the list starts 32px below the header, and its cards stand 24px apart. */
-    .item-list:not(:has(> .item-row.recipe)):has(> :is(.item-row, .postponed-head)) {
+    .item-list:not(:has(> .item-row.recipe)):has(> .item-row) {
       margin-top: var(--space-7);
     }
 
@@ -1320,45 +1319,6 @@
     color: var(--done);
   }
 
-  /* @extends section-head
-     @part postponed-head      The head of the postponed items below 600px, on the card of the
-                               bought items' look (LIST-41). From 600px the panel shows them.
-     @part postponed-row       A postponed item, or Mover todos, in that card.
-     @part postponed-row-name  Its name and, below, its quantity and shops. */
-  .postponed-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-2) var(--space-4);
-    border-inline: 1px solid var(--line);
-    background: var(--surface);
-  }
-
-  .postponed-row:last-child {
-    padding-block: var(--space-3);
-    border-bottom: 1px solid var(--line);
-    border-end-start-radius: var(--radius-l);
-    border-end-end-radius: var(--radius-l);
-  }
-
-  .postponed-row-name {
-    display: grid;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .item-list > .postponed-head:has(+ .postponed-row) {
-    border-end-start-radius: 0;
-    border-end-end-radius: 0;
-  }
-
-  @media (min-width: 600px) {
-    .item-list > .postponed-head,
-    .postponed-row {
-      display: none;
-    }
-  }
-
   /* A bought tick is filled, but quieter than the rows still to buy. */
   .item-row.bought .item-row-check {
     opacity: 0.7;
@@ -1603,7 +1563,7 @@
 
   /* @component side-panels
      @scope list
-     @summary The panels of Compra (Por tienda, Próxima compra) and Menú (Semanas anteriores, Generación automática de cesta), from 600px: below the content until 840px, then a sticky column beside it (LIST-38, LIST-39, MENU-21).
+     @summary The panels of Compra (Recetas en la lista, Almacenamiento local) and Menú (Semanas anteriores, Generación automática de cesta), from 600px: below the content until 840px, then a sticky column beside it (LIST-38, LIST-43, MENU-21).
      @part side-panel        One panel on --surface: a head, an optional note, a list.
      @part side-panel-head   The title and, at its end, a count or a unit in --muted.
      @part side-panel-end    The end of the head.
@@ -1614,13 +1574,10 @@
      @part side-panel-bar    A 4px track.
      @part side-panel-fill   The fill of the track, at the true ratio.
      @part side-panel-more   The last line: how many more rows there are, or that the list is empty.
-     @part side-panel-icon   The emerald icon before the title of the head (LIST-38, LIST-39).
+     @part side-panel-icon   The emerald icon before the title of the head (LIST-38).
      @part side-panel-card   A bordered tile of Recetas en la lista: the name, the link, the count, the bar.
-     @part side-panel-name   The name of a row or a tile, with an optional detail below it.
-     @part side-panel-detail The quantity and the shops of a postponed item, in --muted.
+     @part side-panel-name   The name of a row or a tile.
      @part side-panel-link   The emerald text button Ver of a tile, with its arrow.
-     @part side-panel-action The button across the panel below its list: Mover todos.
-     @part bring-back        The emerald plus that brings a postponed item back to Compra (LIST-42).
      @part side-panel-storage The small card below the panels of Compra from 1024px: the bytes the app stores (LIST-43).
      @part side-panel-storage-used The figure at its end, in monospace.
      @part side-panel-tile   The 32px tinted tile of the icon before a title with a subtitle (MENU-27).
@@ -1684,12 +1641,6 @@
     font-weight: var(--weight-strong);
   }
 
-  .side-panel-detail {
-    color: var(--muted);
-    font-size: var(--text-xs);
-    font-weight: var(--weight-normal);
-  }
-
   .side-panel-link {
     display: inline-flex;
     align-items: center;
@@ -1703,19 +1654,6 @@
     font-size: var(--text-xs);
     font-weight: var(--weight-strong);
     cursor: pointer;
-  }
-
-  .side-panel-action {
-    margin-top: var(--space-4);
-    font-size: var(--text-s);
-  }
-
-  .bring-back {
-    color: var(--done);
-  }
-
-  .side-panel-row:has(> .bring-back) {
-    align-items: center;
   }
 
   .side-panel-head {
@@ -2026,20 +1964,6 @@
       background: var(--done);
     }
 
-    .side-panel-row:has(> .bring-back) {
-      padding-block: calc(var(--space-2) + var(--space-half));
-    }
-
-    .side-panel-row:has(> .bring-back) .side-panel-name {
-      font-weight: var(--weight-book);
-    }
-
-    .side-panel-row:has(> .bring-back) .side-panel-detail {
-      color: var(--control);
-      font-size: var(--text-label-sm);
-      font-weight: var(--weight-medium);
-    }
-
     .side-panel-storage:not([hidden]) {
       display: flex;
       align-items: center;
@@ -2099,13 +2023,6 @@
       border-top: 1px solid var(--line);
       border-radius: 0;
       background: none;
-    }
-
-    .side-panel-action {
-      border-color: var(--control);
-      background: var(--surface-2);
-      font-size: var(--text-label-md);
-      font-weight: var(--weight-strong);
     }
   }
 

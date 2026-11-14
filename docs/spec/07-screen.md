@@ -96,7 +96,7 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 
   | Row | Slide to the left |
   |---|---|
-  | `Compra` | **Editar**, **Posponer** (not for a ticked item, LIST-40), **Repetir** (`No repetir` for a recurrent item, LIST-7), **Eliminar** |
+  | `Compra` | **Editar**, **Repetir** (`No repetir` for a recurrent item, LIST-7), **Eliminar** |
 
 - **ROW-4** A drag becomes a slide after 10 px of horizontal move. A drag that is first vertical
   scrolls the list.
@@ -109,7 +109,7 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 - **ROW-7** The edit sheet `Editar` has the field **Nombre**, 80 characters at most, the field
   **Cantidad**, 20 characters at most (LIST-27), the switch **Repetir en cada compra** (LIST-7) with the hint `Vuelve a la lista en cada compra`,
   then the shops (SHOP-9 to SHOP-15) and the aisle **Sección** (AISLE-16). Its foot has
-  **Posponer** for an item still to buy (LIST-40) and **Eliminar** (NAV-22). The name of a field stays inside its box, above the value
+  **Eliminar** (NAV-22). The name of a field stays inside its box, above the value
   (DSV-18). `Enter` or a
   loss of focus saves a field (LIST-5); an error shows its message and the field shows the old
   value again. `Escape` in a field puts the value back and keeps the sheet open. A change of
@@ -164,7 +164,7 @@ left of it (NAV-26). The rules below name it the bottom bar at each width.
 
   | Area | Changes |
   |---|---|
-  | Items | Tick, by a tap on the row (ROW-1) or by a slide (ROW-11), delete, an existing item brought by the add sheet, a saved item brought back (LIST-35), a postpone and a bring back of one or all postponed items (LIST-40 to LIST-42), a manual move |
+  | Items | Tick, by a tap on the row (ROW-1) or by a slide (ROW-11), delete, an existing item brought by the add sheet, a saved item brought back (LIST-35), a manual move |
   | Groups | The slide of a recipe head that buys the group (GROUP-21) |
   | Trip | **Terminar compra** |
   | Recipes | Send, delete, removal of a product, save and removal of a link, a recipe made from a dish (REC-37, MENU-19) |

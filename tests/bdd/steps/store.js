@@ -8,12 +8,10 @@ import {
   renameItem,
   toggleBought,
   toggleRecurrent,
-  postpone,
   startNewShopping,
   deleteItem,
   setQuantity,
   bringToList,
-  bringAllBack,
   findByName,
   activeItems,
   matchesItem,
@@ -21,9 +19,6 @@ import {
   canStartNewShopping,
   tripSummary,
   tripOutcome,
-  postponedItems,
-  openItems,
-  comingBack,
   setGroup,
   setSort,
 } from '#store';
@@ -93,10 +88,6 @@ export const defineStoreSteps = ({ Given, When, Then }) => {
     const { id } = find(world, name);
     apply(world, (state) => toggleRecurrent(state, id));
   });
-  When('I postpone {string}', (world, name) => {
-    const { id } = find(world, name);
-    apply(world, (state) => postpone(state, id));
-  });
   When('I delete {string}', (world, name) => {
     const { id } = find(world, name);
     apply(world, (state) => deleteItem(state, id));
@@ -149,11 +140,6 @@ export const defineStoreSteps = ({ Given, When, Then }) => {
     const { id } = find(world, name);
     apply(world, (state) => bringToList(state, id));
   });
-  When('I bring back all postponed items', (world) => apply(world, (state) => bringAllBack(state)));
-  When('I bring back the postponed items {string}', (world, text) => {
-    const wanted = ids(world, list(text));
-    apply(world, (state) => bringAllBack(state, wanted));
-  });
   // The add of the sheet, as src/ui/add.js does it: the name of an item brings that item back
   // (ADD-5), any other name creates an item.
   When('I add {string} from the add sheet', (world, name) => {
@@ -167,16 +153,8 @@ export const defineStoreSteps = ({ Given, When, Then }) => {
   Then('the bring back changed nothing', (world) => {
     assert.equal(world.result.changed, false);
   });
-  Then('{int} item(s) came back', (world, count) => {
-    assert.equal(world.result.count, count);
-  });
   Then('the items shown are {string}', (world, text) => {
     assert.equal(nameList(activeItems(world.state)), list(text).join(', '));
-  });
-  Then('the {word} items are {string}', (world, kind, text) => {
-    const views = { postponed: postponedItems, open: openItems, 'coming-back': comingBack };
-    assert.ok(views[kind], `No view of ${kind} items`);
-    assert.equal(nameList(views[kind](world.state)), list(text).join(', '));
   });
   Then('the list search for {string} finds {string}', (world, query, text) => {
     const found = activeItems(world.state).filter((item) => matchesItem(item, query));

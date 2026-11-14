@@ -205,6 +205,21 @@ Feature: Browser storage
       | 10      |
 
   @STORE-8
+  Scenario: A postponed item of an older app goes to Compra, not ticked
+    Given the key "shopping.v1" holds:
+      """
+      {"version": 10, "items": [
+        {"id": "a", "name": "Tea", "list": "postponed", "recurrent": false, "bought": false, "shops": ["Lidl"], "quantity": "2"},
+        {"id": "b", "name": "Salt", "list": "postponed", "recurrent": true, "bought": true}
+      ], "recipes": []}
+      """
+    When the app loads the state
+    Then the items are:
+      | name | list   | recurrent | bought | shops | quantity |
+      | Tea  | active | no        | no     | Lidl  | 2        |
+      | Salt | active | yes       | no     |       |          |
+
+  @STORE-8
   Scenario: A meal of version 9 gets the week of the load; a meal with a bad week is dropped
     Given the key "shopping.v1" holds:
       """

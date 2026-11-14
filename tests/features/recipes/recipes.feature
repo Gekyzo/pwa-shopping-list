@@ -249,7 +249,7 @@ Feature: Recipes
         | name   | list      |
         | Huevos | active    |
         | Leche  | active    |
-        | Arroz  | postponed |
+        | Arroz  | saved     |
         | Azúcar | saved     |
       And a recipe "Tortilla" with "Huevos, Patata"
       And a recipe "Flan" with "Huevos, Leche, Azúcar"

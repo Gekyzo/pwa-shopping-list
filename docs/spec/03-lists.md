@@ -53,8 +53,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
 
 ## Trip
 
-- **TRIP-1** **Terminar compra** is available when an item is ticked, an item is open (TRIP-6) or an
-  item is postponed (LIST-40).
+- **TRIP-1** **Terminar compra** is available when an item is ticked or an item is open (TRIP-6).
   If not, the operation gives `error.nothingToStart`.
 - **TRIP-2** **Terminar compra** does this to each item:
 
@@ -63,7 +62,6 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
   | Ticked, recurrent | Stays in `Compra`, not ticked |
   | Ticked, one-time | Saved: `list: 'saved'`, not ticked (LIST-30) |
   | Saved | Does not change |
-  | Postponed | Back in `Compra`, not ticked (LIST-42) |
   | In `Compra`, not ticked, recurrent | Stays |
   | In `Compra`, not ticked, one-time | Stays in `Compra`, not ticked, with `Aplazar`, or is saved with `Descartar` (TRIP-6) |
 
@@ -78,8 +76,7 @@ Rules of `src/store.js`, and of the rows and the add sheet in `src/ui/rows.js` a
      the items of `Compra` by where each one goes, one row for each outcome with an icon and its
      count: recurrent items that come back (icon `repeat`, `2 con ↻ vuelven`), open items kept with
      `Aplazar` (`cart`, `1 sin comprar se aplaza`), open items saved with `Descartar` (`download`,
-     `1 sin comprar se guarda`), ticked one-time items (`check`, `4 comprados salen de la lista`) and
-     postponed items (`calendar`, `2 pospuestos vuelven`). An outcome with no item has no row.
+     `1 sin comprar se guarda`), ticked one-time items (`check`, `4 comprados salen de la lista`). An outcome with no item has no row.
      The banner and the sheet use the same text for each outcome. Below the rows, the primary
      button **Terminar compra** is disabled when TRIP-1 does not hold, and the tonal button
      **Seguir comprando** closes the sheet. The trip button of the header shows in `Compra` at all
@@ -143,7 +140,6 @@ the header and of the sidebar stays (NAV-8).
   | Ticked | `ya comprado · repetir` | Removes the tick |
   | To buy in `Compra` | `ya en la lista` | Nothing |
   | Saved | `comprado antes · añadir` | Goes to `Compra`, not ticked (LIST-32) |
-  | Postponed | `pospuesto · añadir` | Goes to `Compra`, not ticked (LIST-42) |
 
 - **ADD-4** When no item has the typed name, the list ends with `+ Crear «name»`, which does the
   same as **Añadir**.
@@ -174,19 +170,15 @@ the header and of the sidebar stays (NAV-8).
   **Cancelar**. **Cancelar**, `Escape` and the back of the phone (NAV-25), or a loss of focus with an
   empty field close it; a close clears the text. The list keeps its place at the top while the
   field is open. A group head keeps its colour.
-- **LIST-38** From 600px wide, `Compra` with an item or a postponed item shows the panel
+- **LIST-38** From 600px wide, `Compra` with an item shows the panel
   **Recetas en la lista** when a recipe has a product in `Compra` (REC-41): the count `N activas` in
   a pill, then one bordered tile for each such recipe with its name, the link **Ver** that opens it
   in `Recetas`, `N de M ingredientes en lista` and an emerald bar at N/M; at N = M the line starts with `✓`
   and takes `--done`. The panel shows six tiles at most, then `y N más`. Below 1024px the bar is `--text` until N = M. Below 840px the panels stand below the list; from 840px
   they are a column beside it that stays in sight while the list scrolls. Below 600px there is no
   panel.
-- **LIST-39** Below it, the panel **Próxima compra** · `Pospuestos` lists the postponed items
-  (LIST-40), when there is one: the line `Productos reservados para la siguiente salida al
-  supermercado:`, then each item with its quantity and its shops below its name and a `+` that
-  brings it back (LIST-42), six rows at most, then `y N más`; and the outlined button **Mover todos
-  a la compra actual**. Below 600px, where there is no panel, the list of `Compra` ends with a
-  closed head `Pospuestos (N)` that opens the same rows and button.
+- **LIST-39** Removed: `Compra` has no panel **Próxima compra** and no head `Pospuestos (N)`: no
+  item is postponed (LIST-40).
 - **LIST-43** From 1024px, below these panels, the small card **Almacenamiento local** shows
   `N KB usados`: the keys and values that the app keeps in the storage of the browser (each key
   that starts with `shopping.`), in UTF-8 bytes, rounded up to the next KB. It follows each save.
@@ -223,20 +215,15 @@ the header and of the sidebar stays (NAV-8).
 
 ## Postponed items
 
-- **LIST-40** **Posponer** takes an item of `Compra` that is not ticked out of `Compra` for the next
-  trip: `list: 'postponed'`. A ticked or saved item gives `error.onlyOpenPostpone`. `recurrent`, the
-  shops and the quantity do not change.
-- **LIST-41** A postponed item has no row in the list of `Compra` from 600px, counts in no header
-  figure and is not found by the search of the list. The add sheet finds it (ADD-3), and an add of
-  its name brings it back.
-- **LIST-42** A bring back puts a postponed item in `Compra`, not ticked; from a merged row of
-  `Todas` it reaches the twin as Posponer does (SHARE-16). **Mover todos a la compra actual** brings
-  back every postponed item of the list in view (the list chip of a member, SHARE-14). **Terminar
-  compra** brings back every postponed item (TRIP-2).
+- **LIST-40** Removed: the app has no **Posponer**. An item to buy at the next trip stays open in
+  `Compra` and **Terminar compra** keeps it with `Aplazar` (TRIP-6); an item bought elsewhere is
+  ticked. A stored postponed item goes to `Compra`, not ticked (STORE-8).
+- **LIST-41** Removed: no item is postponed (LIST-40).
+- **LIST-42** Removed: no item is postponed (LIST-40).
 
 ## Limits
 
-One list for the trip: no list for a later trip. A postponed item (LIST-40) is the one mark for a later trip. No unit
+One list for the trip: no list for a later trip. `↻` (LIST-7) and `Aplazar` (TRIP-6) are the only marks for a later trip. No unit
 and no arithmetic of quantities, no quantity on the products of a recipe, no note. No add of
 several items from one text. No ranking of the results of a list search, and no match by the
 recipe of an item.

@@ -9,7 +9,7 @@ Feature: Add sheet
       | Pan           | active    | yes    |
       | Pan de molde  | active    | no     |
       | Empanada      | saved     | no     |
-      | Panela        | postponed | no     |
+      | Panela        | saved     | no     |
 
   @ADD-2 @ADD-4
   Scenario: Create first, then the exact match, the names that start with the text, then the others
@@ -58,9 +58,8 @@ Feature: Add sheet
 
     Examples:
       | case      | typed    | pan bought | empanada list | panela list |
-      | ticked    | PAN      | no         | saved         | postponed   |
-      | saved     | empanada | yes        | active        | postponed   |
-      | postponed | Panela   | yes        | saved         | active      |
+      | ticked    | PAN      | no         | saved         | saved       |
+      | saved     | empanada | yes        | active        | saved       |
 
   @ADD-3 @ADD-5 @ENG-3
   Scenario: An add of the name of an item to buy in Compra changes nothing

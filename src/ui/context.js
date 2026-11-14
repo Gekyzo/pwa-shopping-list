@@ -169,7 +169,6 @@ export const ui = {
   onboarding: firstStart ? 0 : null,
   // Comprados (N) is open at first (LIST-12).
   boughtOpen: true,
-  postponedOpen: false,
   // The groups of a list that the user closed, as `<view>:<group key>`. Not stored.
   closedGroups: new Set(),
   // The recipe whose sheet is open, or null.

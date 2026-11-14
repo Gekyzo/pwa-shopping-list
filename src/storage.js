@@ -5,12 +5,13 @@ import { DAYS, MEALS, isWeek, weekOf, mealOrder } from '#menu';
 export const STORAGE_KEY = 'shopping.v1';
 export const CORRUPT_KEY = `${STORAGE_KEY}.corrupt`;
 
-const LISTS = ['active', 'saved', 'postponed'];
+const LISTS = ['active', 'saved'];
 
 // Versions 1 to 7 have a second list, `next`, and `again`, the mark of a ticked one-time item that
 // comes back at the next trip. Both are items to buy at the next trip now: they go to Compra, not
-// ticked.
-const OLD_LISTS = ['next'];
+// ticked. 1.13.8 and earlier have `postponed`, an item kept out of Compra for the next trip: it goes
+// to Compra too, not ticked (STORE-8).
+const OLD_LISTS = ['next', 'postponed'];
 
 const unique = (values) => new Set(values).size === values.length;
 
@@ -42,12 +43,12 @@ const normalizeItem = (item) => {
     [recurrent, bought].every((flag) => typeof flag === 'boolean') &&
     (again === undefined || typeof again === 'boolean');
   if (!valid) return null;
-  const comesBack = list === 'next' || (list === 'active' && bought && !recurrent && again === true);
+  const comesBack = OLD_LISTS.includes(list) || (list === 'active' && bought && !recurrent && again === true);
   return {
     id,
     name: name.trim(),
     recurrent,
-    list: list === 'saved' || list === 'postponed' ? list : 'active',
+    list: list === 'saved' ? list : 'active',
     bought: list === 'active' && bought && !comesBack,
     shops: normalizeShops(shops),
     quantity: typeof quantity === 'string' ? quantity.trim() : '',

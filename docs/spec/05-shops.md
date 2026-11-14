@@ -46,8 +46,8 @@ apply in it.
   The chip of the list in view is pressed: a pill filled with `--done`, its count on `--done-soft`;
   the other chips are outlined pills. Below 600px the dock holds the shop lists instead
   (SHOP-26).
-- **SHOP-17** The row shows when an item of `Compra` in the view has a shop: a shop of a saved or
-  postponed item gives no chip. **Sin tienda** shows when an item
+- **SHOP-17** The row shows when an item of `Compra` in the view has a shop: a shop of a saved item
+  gives no chip. **Sin tienda** shows when an item
   of the view has no shop. The row scrolls horizontally, and a slide on it does not change the
   section (NAV-4). `Izquierda` does not change the row.
 - **SHOP-18** A chip shows the count of its items to buy, or `✓` for none.

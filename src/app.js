@@ -32,7 +32,7 @@ import { closeEdit, renderEdit, bind as bindEdit } from '#ui/edit';
 import { reorder, endReorder, bind as bindDrag } from '#ui/drag';
 import { moveRow, openRowMenu, rowGroup } from '#ui/rows';
 import { renderRecipe, closeRecipe, bind as bindRecipe } from '#ui/recipes';
-import { renderPanels, bind as bindPanels } from '#ui/panels';
+import { renderPanels } from '#ui/panels';
 import { renderMeal, renderMenuActions, closeMeal, bind as bindMenu } from '#ui/menu';
 import { renderArrange, closeArrange, bind as bindArrange } from '#ui/arrange';
 import {
@@ -195,7 +195,6 @@ new ResizeObserver(([entry]) => {
 // Events
 
 bindNav();
-bindPanels();
 bindOnboarding();
 bindWhatsNew();
 bindAdd();

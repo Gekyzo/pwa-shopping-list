@@ -5,6 +5,7 @@ O que muda para si em cada versão da app. A versão mais recente vem primeiro.
 ## Unreleased
 
 - No telemóvel, as linhas das Compras ocupam toda a largura do ecrã e são mais baixas: cabem mais produtos e os nomes longos leem-se por inteiro. Um produto que se repete mostra ↻ junto ao nome.
+- **Adiar** deixa de existir nas linhas e em **Editar**. Marca como comprado o que não compras nesta ida, ou deixa-o por marcar e escolhe **Adiar** ao terminar as compras para o teres na próxima. Os produtos que tinhas adiado voltam às Compras.
 
 ## 1.13.8 - 2026-11-14
 

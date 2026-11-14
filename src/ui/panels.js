@@ -1,4 +1,3 @@
-import { postponedItems } from '#store';
 import { recipeProgress } from '#recipes';
 import { SLOTS, basketPreview, filledRecipes, pastWeeks, mealCount, weekDay } from '#menu';
 import { storedBytes, kilobytes } from '#storage';
@@ -7,7 +6,6 @@ import { listState } from '#ui/view';
 import { icon } from '#ui/controls';
 import { showView } from '#ui/nav';
 import { openRecipe } from '#ui/recipes';
-import { bringBackButton, bringAll, postponedDetail } from '#ui/rows';
 import { dateFormat, repeatInto } from '#ui/menu';
 
 // The rows a panel shows before its `y N más` line.
@@ -50,19 +48,6 @@ const renderRecipes = (view) => {
       bar(inList / total, done),
     ]);
   }));
-};
-
-// Próxima compra (LIST-39): the postponed items, each with its bring back, and Mover todos.
-const renderPostponed = (view) => {
-  const items = postponedItems(view);
-  $('panel-postponed').hidden = items.length === 0;
-  rows($('panel-postponed-list'), items.map((item) => el('li', { className: 'side-panel-row' }, [
-    el('span', { className: 'side-panel-name' }, [
-      el('span', { textContent: item.name }),
-      ...(postponedDetail(item) ? [el('small', { className: 'side-panel-detail', textContent: postponedDetail(item) })] : []),
-    ]),
-    bringBackButton(item),
-  ])));
 };
 
 // Almacenamiento local (LIST-43): what the app keeps in the storage of the browser, from 1024px. On
@@ -127,8 +112,7 @@ const renderAuto = () => {
 };
 
 // The panels of Compra and Menú, from 600px (DSV-9): below the content until 840px, then beside it.
-// Compra shows them while its list has an item to buy or a postponed item, so that a list with only
-// postponed items can still bring them back. Menú shows Semanas anteriores while a past week other
+// Compra shows them while its list has an item. Menú shows Semanas anteriores while a past week other
 // than the week in view has a meal, and the card of the fill while the week in view, this week or a
 // later one, has a meal (MENU-21, MENU-27).
 export const renderPanels = () => {
@@ -136,20 +120,15 @@ export const renderPanels = () => {
   const view = listState();
   const fill = ui.view === 'menu' && !pastShown() && mealCount(state, shownWeek()) > 0;
   const weeks = ui.view === 'menu' && pastWeeks(state, thisWeek(), pastShown() ? shownWeek() : null, 1).length > 0;
-  const shown = compra ? view.items.some((item) => item.list === 'active' || item.list === 'postponed') : fill || weeks;
+  const shown = compra ? view.items.some((item) => item.list === 'active') : fill || weeks;
   $('panels').hidden = !shown;
-  for (const id of ['panel-recipes', 'panel-postponed', 'panel-storage', 'panel-weeks', 'panel-auto']) $(id).hidden = true;
+  for (const id of ['panel-recipes', 'panel-storage', 'panel-weeks', 'panel-auto']) $(id).hidden = true;
   if (!shown) return;
   if (compra) {
     renderRecipes(view);
-    renderPostponed(view);
     renderStorage('panel-storage', 'panel-storage-used');
     return;
   }
   if (weeks) renderWeeks();
   if (fill) renderAuto();
-};
-
-export const bind = () => {
-  $('postponed-all').addEventListener('click', bringAll);
 };

@@ -26,7 +26,7 @@ The empty state is `{ version: 10, items: [], recipes: [], sent: [], group: 'rec
   id: string,         // crypto.randomUUID()
   name: string,       // trimmed, not empty
   recurrent: boolean, // comes back at each trip
-  list: 'active' | 'saved' | 'postponed', // 'saved': kept after a trip, out of Compra; 'postponed': out of Compra until the next trip (LIST-40)
+  list: 'active' | 'saved', // 'saved': kept after a trip, out of Compra
   bought: boolean,    // ticked
   shops: [string],    // shop names
   quantity: string,   // free text, such as '2' or '1 kg'; trimmed; '' for none
@@ -71,7 +71,7 @@ A meal has a `recipe` or a `dish`, never both. A meal with no recipe and no dish
   `leche` are one name; `Cafe` and `Café` are two.
 - **DATA-4** Recipe names are unique with no case distinction.
 - **DATA-5** The products of one recipe are unique with no case distinction.
-- **DATA-6** `bought` is true only for an item of `list: 'active'`. A saved or postponed item is never ticked.
+- **DATA-6** `bought` is true only for an item of `list: 'active'`. A saved item is never ticked.
 - **DATA-7** Removed: an item has no `again` field (STORE-8).
 - **DATA-8** The shops of one item are unique with no case distinction, trimmed and not empty.
 - **DATA-9** One shop has one spelling in the full state: the spelling of its first use.
@@ -93,20 +93,18 @@ No view is stored.
 |---|---|---|
 | `Compra` | `activeItems` | The items of `list: 'active'`, those to buy first, then those ticked |
 | Trip figures | `tripSummary` | `total`, `left`, `back`, `saved` |
-| Trip outcome | `tripOutcome` | `recurrent`, `kept`, `open`, `bought`, `postponed` |
+| Trip outcome | `tripOutcome` | `recurrent`, `kept`, `open`, `bought` |
 | Recipe groups | `recipeGroups` | `Compra` by recipe |
 | Shop groups | `shopGroups` | `Compra` by shop |
 | Shops in use | `shopNames` | Each shop of an item, in name order |
 | Aisle groups | `aisleGroups` | `Compra` by aisle, in the order of `aisles` |
-| Postponed | `postponedItems` | The items of `list: 'postponed'` (LIST-40) |
 
 `tripSummary` gives: `total`, the items of `Compra`; `left`, those not ticked; `back`, the
 recurrent items, ticked or not, and the open items kept with `Aplazar` (TRIP-6); `saved`, the
 other one-time items of `Compra`, ticked or not. `tripOutcome` splits the items of `Compra` by
 where each one goes (TRIP-4): `recurrent` come back; `kept`, open items kept with `Aplazar`;
 `open`, the other open items, saved; `bought`, ticked one-time items, saved. The four add up to
-`total`. `postponed` counts the postponed items, which are out of `Compra` and come back
-(LIST-42).
+`total`.
 
 ## Name rules
 

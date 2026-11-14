@@ -5,6 +5,7 @@ Ce qui change pour vous dans chaque version de l’app. La version la plus réce
 ## Unreleased
 
 - Sur le téléphone, les lignes des Courses occupent toute la largeur de l’écran et sont moins hautes : plus de produits tiennent à l’écran et les noms longs se lisent en entier. Un produit qui revient affiche ↻ à côté de son nom.
+- **Reporter** disparaît des lignes et de **Modifier**. Cochez ce que vous n’achetez pas cette fois, ou laissez-le non coché et choisissez **Reporter** en terminant les courses pour le garder pour les prochaines. Les produits que vous aviez reportés reviennent dans les Courses.
 
 ## 1.13.8 - 2026-11-14
 

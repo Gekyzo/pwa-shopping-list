@@ -30,11 +30,9 @@ for that kind, use it — the template is the exemplar made executable.
   `src/ui/`) turns a message into text.
 - **Render from state.** A view of `src/ui/` applies an operation through `apply` of
   `src/ui/context.js`, which saves, then builds the screen again from the state. The DOM holds no data of its own.
-- **Derived views.** The list `Compra` is computed by `activeItems` and the postponed items by
-  `postponedItems` (`src/store.js`). The groups of a list by recipe are computed by `recipeGroups`,
+- **Derived views.** The list `Compra` is computed by `activeItems` (`src/store.js`). The groups of a list by recipe are computed by `recipeGroups`,
   by shop by `shopGroups` and by aisle by `aisleGroups`. The name order is computed by `sortItems`;
-  `items` keeps the insertion order. An item is one record: its `list` (`active`, `saved` or
-  `postponed`) says where it is, and it is never copied between lists.
+  `items` keeps the insertion order. An item is one record: its `list` (`active` or `saved`) says where it is, and it is never copied between lists.
 - **Text only.** DOM nodes get user text through `textContent`, never `innerHTML`.
 
 ## Do not copy

@@ -4,7 +4,7 @@ Feature: Terminar compra
   Terminar compra ends a trip: each item of Compra goes where TRIP-2 says.
 
   @TRIP-1
-  Scenario Outline: Terminar compra is offered when an item is ticked, open or postponed (<case>)
+  Scenario Outline: Terminar compra is offered when an item is ticked or open (<case>)
     Given the list has items:
       | name  | list   | recurrent | bought |
       | Salt  | active | yes       | no     |
@@ -15,12 +15,11 @@ Feature: Terminar compra
       | case             | list      | recurrent | bought | offered |
       | ticked           | active    | yes       | yes    | yes     |
       | open             | active    | no        | no     | yes     |
-      | postponed        | postponed | no        | no     | yes     |
       | saved            | saved     | no        | no     | no      |
       | recurrent to buy | active    | yes       | no     | no      |
 
   @TRIP-1 @ENG-2
-  Scenario: Nothing to finish when no item is ticked, open or postponed
+  Scenario: Nothing to finish when no item is ticked or open
     Given the list has items:
       | name      | list   | recurrent |
       | Batteries | saved  | no        |
@@ -29,14 +28,13 @@ Feature: Terminar compra
     Then the error is "error.nothingToStart"
     And the state did not change
 
-  @TRIP-2 @TRIP-3 @LIST-30 @LIST-42 @ENG-1
+  @TRIP-2 @TRIP-3 @LIST-30 @ENG-1
   Scenario: Each item goes where TRIP-2 says, in the same order
     Given the list has items:
       | name      | list      | recurrent | bought |
       | Milk      | active    | yes       | yes    |
       | Bread     | active    | no        | yes    |
       | Batteries | saved     | no        | no     |
-      | Tea       | postponed | no        | no     |
       | Salt      | active    | yes       | no     |
       | Eggs      | active    | no        | no     |
     And the list is grouped by shop in name order
@@ -48,7 +46,6 @@ Feature: Terminar compra
       | Milk      | active | yes       | no     |
       | Bread     | saved  | no        | no     |
       | Batteries | saved  | no        | no     |
-      | Tea       | active | no        | no     |
       | Salt      | active | yes       | no     |
       | Eggs      | saved  | no        | no     |
     And the sent recipes are empty
@@ -80,11 +77,10 @@ Feature: Terminar compra
       | Bread     | active    | no        | yes    |
       | Eggs      | active    | no        | no     |
       | Jam       | active    | no        | no     |
-      | Tea       | postponed | no        | no     |
       | Batteries | saved     | no        | yes    |
     Then the trip outcome keeping "Eggs" is:
-      | recurrent | kept | open | bought | postponed |
-      | 2         | 1    | 1    | 1      | 1         |
+      | recurrent | kept | open | bought |
+      | 2         | 1    | 1    | 1      |
     And the trip figures keeping "Eggs" are:
       | total | left | back | saved |
       | 5     | 3    | 3    | 2     |

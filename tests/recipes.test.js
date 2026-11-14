@@ -713,9 +713,8 @@ test('recipeProgress lists each recipe with a product in Compra, ticked or not',
   assert.deepEqual(progressOf(state), [['Lentejas con chorizo', 2, 3]]);
 });
 
-test('recipeProgress does not count a saved or postponed product', () => {
+test('recipeProgress does not count a saved product', () => {
   let state = withItem(emptyState(), 'Lentejas', 'saved');
-  state = withItem(state, 'Chorizo', 'postponed');
   state = withItem(state, 'Patatas', 'active');
   state = withRecipe(state, 'Lentejas con chorizo', ['Lentejas', 'Chorizo', 'Patatas']).state;
   assert.deepEqual(progressOf(state), [['Lentejas con chorizo', 1, 3]]);

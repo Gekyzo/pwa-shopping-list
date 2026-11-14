@@ -111,9 +111,6 @@ test('each of the nine sheets has the grab, then a head with its title and Listo
   }
 });
 
-// LIST-40: the foot of Editar starts with Posponer.
-const POSTPONE = '<button id="edit-postpone" class="button outline" type="button"><svg [^>]*><use href="icons.svg#clock"\\/><\\/svg><span data-i18n="row.postpone"><\\/span><\\/button>';
-
 // REC-42: the foot of a recipe starts with its send and the hint of what the send adds.
 const SEND = '<button id="recipe-send" class="button primary recipe-send" type="button"><svg [^>]*><use href="icons.svg#cart-add"\\/><\\/svg><span data-i18n="recipe.send"><\\/span><\\/button><p id="recipe-send-hint" class="recipe-send-hint"><\\/p>';
 
@@ -124,7 +121,7 @@ test('the edit and recipe sheets have a foot with Eliminar and Guardado; the oth
     const { part } = sheetParts().find((sheet) => sheet.id === id);
     assert.match(
       part,
-      new RegExp(`<\\/div>\\s*<footer class="sheet-foot">${prefix === 'edit' ? POSTPONE : SEND}<button id="${prefix}-delete" class="button outline danger" type="button"><svg [^>]*><use href="icons.svg#trash"\\/><\\/svg><span data-i18n="sheet.delete"><\\/span><\\/button><span class="sheet-saved"><svg [^>]*><use href="icons.svg#check"\\/><\\/svg><span data-i18n="sheet.saved"><\\/span><\\/span><\\/footer>\\s*<\\/(div|form)>`),
+      new RegExp(`<\\/div>\\s*<footer class="sheet-foot">${prefix === 'edit' ? '' : SEND}<button id="${prefix}-delete" class="button outline danger" type="button"><svg [^>]*><use href="icons.svg#trash"\\/><\\/svg><span data-i18n="sheet.delete"><\\/span><\\/button><span class="sheet-saved"><svg [^>]*><use href="icons.svg#check"\\/><\\/svg><span data-i18n="sheet.saved"><\\/span><\\/span><\\/footer>\\s*<\\/(div|form)>`),
       id,
     );
   }
@@ -269,7 +266,7 @@ test('each nav item shows its name', () => {
 
 // DSV-23: an outline button is a destructive one, or one of the outlined secondary actions of the
 // Bodega screens; other secondary actions are tonal.
-const OUTLINED = ['edit-postpone', 'postponed-all', 'filter-button'];
+const OUTLINED = ['filter-button'];
 
 test('an outline button is a destructive one or an outlined action of the screens; other secondary actions are tonal', () => {
   for (const [, id, classes] of html.matchAll(/<button(?: id="([^"]*)")?[^>]*class="(button outline[^"]*)"/g)) {

@@ -10,7 +10,7 @@ import { listName } from '#shares';
 import { $, el, state, sharing, ui, t, shopLists, tripEnd, apply, render, thisWeek, shownWeek } from '#ui/context';
 import { inList, listChoice, listState, viewState, found, searching, shownGroup, endSearch } from '#ui/view';
 import { icon } from '#ui/controls';
-import { itemNode, boughtSection, postponedSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
+import { itemNode, boughtSection, groupHead, groupNodes, hintSwipe } from '#ui/rows';
 import { recipeNode, dishNode, sendToList } from '#ui/recipes';
 import { weekNodes } from '#ui/menu';
 import { leaveNode } from '#ui/motion';
@@ -102,18 +102,11 @@ const pendingNodes = () => {
 
 const listNodes = (items) => {
   const bought = items.filter((item) => item.bought && found(item));
-  // The search finds no postponed item (LIST-41).
-  // The same items as the panel Próxima compra: those of the list chip, with no shop filter (LIST-39).
-  const postponed = ui.view !== 'active' || searching() ? [] : store.postponedItems(listState());
-  return [
-    ...pendingNodes(),
-    ...(bought.length ? boughtSection(bought) : []),
-    ...(postponed.length ? postponedSection(postponed) : []),
-  ];
+  return [...pendingNodes(), ...(bought.length ? boughtSection(bought) : [])];
 };
 
 // One part for each place an item goes, in this order; a part with no item does not show (TRIP-4).
-const OUTCOMES = [['recurrent', 'repeat'], ['kept', 'cart'], ['open', 'download'], ['bought', 'check'], ['postponed', 'calendar']];
+const OUTCOMES = [['recurrent', 'repeat'], ['kept', 'cart'], ['open', 'download'], ['bought', 'check']];
 
 const outcomeRows = () => {
   const outcome = store.tripOutcome(state, keptItems());
@@ -284,9 +277,7 @@ export const renderList = (summary) => {
   $('items').replaceChildren(...nodes);
   if (ui.view === 'active') hintSwipe();
 
-  // The postponed items are not the list: with only them, Compra still says it is empty (LIST-41).
-  const postponedOnly = nodes.every((node) => node.matches('.postponed-head, .postponed-row'));
-  renderEmpty(ui.view !== 'settings' && postponedOnly);
+  renderEmpty(ui.view !== 'settings' && nodes.length === 0);
 
   $('menu-actions').hidden = ui.view !== 'menu';
 

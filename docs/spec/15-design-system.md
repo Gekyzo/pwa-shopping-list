@@ -56,7 +56,7 @@ This document holds the rules of the app only.
 - **DSV-9** The app has the four width classes of LAY-1. Its own columns: from 600px the panels of
   `Compra` and `Menú` (`side-panels`) stand below the content, and from 840px beside it,
   `--gutter` apart, with `--page-max` at `100%` so the content fills the area as a pane does
-  (LIST-38, LIST-39, MENU-21, MENU-27). From 840px the recipe sheet is a pane (`side-pane`, REC-39), and
+  (LIST-38, MENU-21, MENU-27). From 840px the recipe sheet is a pane (`side-pane`, REC-39), and
   `Ajustes` sets `--page-max` to `--settings-max` (NAV-27). From 1024px every screen but
   `Ajustes` fills the area (DSV-28); `Ajustes` is a centred 720px column (DSV-29). The code reads the class from
   `ui.device` (NAV-28), which `src/ui/device.js` keeps with one media query for each breakpoint; no
@@ -184,8 +184,7 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
 | components | versions of `app-header`, `nav-bar`, `sheet`, `dock`, `field`, `switch`, `cluster`, `input`, `item-row`, `section-head`, `group-head`, `empty-state`, `list-group`, `toast` (DSV-3) |
 | screens | list: `shop-lists`, `search`, `hint`, `trip-open` · recipes: `product-form`, `product-add`, `products` · menu: `day`, `meal` · settings: `settings`, `about`, `version-status` · onboarding: `onboarding`, `onboarding-art` |
 - **DSV-23** An outline button that is not a danger one is an outlined secondary action of the
-  Stitch screens: **Posponer** of `Editar`, **Mover todos a la compra actual** and **Filtros** of
-  `Recetas` (DSV-32). The other
+  Stitch screens: **Filtros** of `Recetas` (DSV-32). The other
   secondary actions stay tonal. The side panels are bordered cards on `--surface`; a recipe tile
   of **Recetas en la lista** is a bordered tile on `--bg` (LIST-38).
 - **DSV-24** The rows and group cards of the desktop screen of `Compra`, from 1024px: a 28px tick
@@ -214,9 +213,7 @@ The parts of `styles.css`, by layer. The shared parts are in the design system.
   with 2px corners, in `--muted`. The grip is 18px in `--control`. A panel has 20px of padding and
   a line below its head; its second texts are 11px; a tile of **Recetas en la lista** is on
   `--surface-2` with 4px corners and an 8px emerald bar on `--surface-high`, and its link **Ver**
-  ends with the icon `arrow-right`; the name of a row of **Próxima compra** is at weight 500
-  (`--weight-book`); the button **Mover todos a la compra actual** has a `--control` edge on
-  `--surface-2` and the icon `list-add`, at every width. The card **Almacenamiento IndexedDB** of
+  ends with the icon `arrow-right`. The card **Almacenamiento IndexedDB** of
   the screen is **Almacenamiento local** (LIST-43), as the app stores in `localStorage`: 14px of
   padding, 4px corners, a `--line` edge on `--surface-2`, 11px text in `--control`, the icon
   `database` and the figure in `--font-mono`.

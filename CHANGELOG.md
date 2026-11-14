@@ -16,6 +16,14 @@ no change has no entry.
   `--muted` text in place of the chip. A meta line with only the recurrent mark is hidden, and the
   mark shows as `↻` after the name, with its words still read by a screen reader. From 600px the
   rows are as before. Shell cache `shopping-shell-v54`.
+- **Posponer** is removed (LIST-39 to LIST-42): the slide action and the button of the foot of
+  `Editar`, the panel **Próxima compra**, the closed head `Pospuestos (N)` below 600px, the row of
+  postponed items of the trip sheet and the add sheet text `pospuesto · añadir`. `postpone`,
+  `postponedItems`, `bringAllBack` and the unused `comingBack` leave `src/store.js`;
+  `tripOutcome` loses `postponed`. `list: 'postponed'` is now an old list: a stored, imported or
+  synced postponed item goes to `Compra`, not ticked, as the old `next` does (STORE-8). Thirteen
+  text keys, the icons `clock` and `list-add`, and the CSS of the postponed rows go. The state
+  stays version 10. Shell cache `shopping-shell-v55`.
 
 ## 1.13.8 - 2026-11-14
 

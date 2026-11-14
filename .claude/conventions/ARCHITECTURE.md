@@ -9,8 +9,7 @@ description: The shape of this component - its boundaries, its seams, and what i
 # Architecture
 
 An offline-first shopping list PWA, mobile first. One list, `Compra`, holds the items of the
-current trip; an item can also be saved for later (`saved`) or postponed to the next trip
-(`postponed`). A `Recetas` section holds recipes: a recipe is a name and a list of product names,
+current trip; an item can also be saved for later (`saved`). A `Recetas` section holds recipes: a recipe is a name and a list of product names,
 and one tap sends them to `Compra`. `Menú` plans the meals of the week and fills `Compra`. A
 Google account syncs the data between devices and shares a list by email.
 
@@ -62,7 +61,7 @@ repository root.
 | `src/ui/menu.js` | The section `Menú` and its meal sheet | `recipes`, `menu`, `lists`, `i18n`, `ui/context`, `ui/controls`, `ui/recipes`, `ui/nav`, `ui/rows`, `ui/view` |
 | `src/ui/arrange.js` | The arrange sheet: the grouping, the order, the row of shop lists | `store`, `shops`, `ui/context`, `ui/view`, `ui/motion` |
 | `src/ui/list.js` | The list `Compra`: rows, search, list chips, shop lists, the dock and its shop picker, header, trip sheet | `store`, `recipes`, `shops`, `lists`, `shares`, `aisles`, `menu`, `sections`, `device`, `ui/context`, `ui/view`, `ui/controls`, `ui/motion`, `ui/rows`, `ui/recipes`, `ui/menu`, `ui/add`, `ui/nav` |
-| `src/ui/panels.js` | The side panels of `Compra` and `Menú`: `Recetas en la lista`, `Próxima compra` and `Almacenamiento local` (LIST-38, LIST-39, LIST-43) | `menu`, `recipes`, `storage`, `store`, `ui/context`, `ui/controls`, `ui/menu`, `ui/nav`, `ui/recipes`, `ui/rows`, `ui/view` |
+| `src/ui/panels.js` | The side panels of `Compra` and `Menú`: `Recetas en la lista` and `Almacenamiento local` (LIST-38, LIST-43) | `menu`, `recipes`, `storage`, `store`, `ui/context`, `ui/controls`, `ui/menu`, `ui/nav`, `ui/recipes`, `ui/rows`, `ui/view` |
 | `src/ui/add.js` | The add sheet | `store`, `recipes`, `shops`, `suggest`, `ui/context`, `ui/view` |
 | `src/ui/onboarding.js` | The walkthrough and the load of the sample recipe | `onboarding`, `recipes`, `sections`, `storage`, `ui/context`, `ui/controls` |
 | `src/ui/aisles.js` | The sheet of the aisles of `Ajustes` | `aisles`, `ui/context`, `ui/controls` |
@@ -104,7 +103,7 @@ The data model and the behaviour rules are in `docs/spec/`: the state in
   `shopping.queue`, `shopping.v1.beforeLogin` (the list that a first login replaced) and
   `shopping.offline` (`1` after `Usar sin cuenta`, ACC-13). `sessionStorage` key `shopping.oauth`
   holds the state and the verifier for the time of the Google redirect only (ACC-5).
-- **Cache API**, cache `shopping-shell-v54`: the app shell, served
+- **Cache API**, cache `shopping-shell-v55`: the app shell, served
   stale-while-revalidate. A request with the `latest` parameter goes to the network
   only. The message `{ type: 'refresh' }` loads the full shell again and answers
   `{ ok }` on the message port. Cache `shopping-manifest` holds the text of the manifest in the
